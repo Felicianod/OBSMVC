@@ -1,0 +1,50 @@
+﻿@model OBSMVC.Models.DSC_LC
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>DSC_LC</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_lc_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_lc_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_lc_code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_lc_code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_lc_timezone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_lc_timezone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_lc_eff_end_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_lc_eff_end_date)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.dsc_lc_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

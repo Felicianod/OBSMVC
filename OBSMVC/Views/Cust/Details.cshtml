@@ -1,0 +1,42 @@
+﻿@model OBSMVC.DSC_CUSTOMER
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>DSC_CUSTOMER</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_cust_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_cust_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_cust_parent_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_cust_parent_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_cust_eff_end_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_cust_eff_end_date)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.dsc_cust_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,52 @@
+﻿@model IEnumerable<OBSMVC.Models.CustViewModel>
+
+@{
+    ViewBag.Title = "Customer List";
+}
+
+<h2>Customer List</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.dsc_cust_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.dsc_cust_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.dsc_cust_parent_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.active)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model)
+{
+     
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.dsc_cust_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.dsc_cust_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.dsc_cust_parent_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.active)
+        </td>
+        <td>
+            @Html.ActionLink(item.actionText, "Activate", new { id = item.dsc_cust_id, actionText = item.actionText })
+
+        </td>
+       
+    </tr>
+        
+    }
+
+</table>

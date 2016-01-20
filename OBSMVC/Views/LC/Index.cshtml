@@ -1,0 +1,52 @@
+﻿@model IEnumerable<OBSMVC.Models.LCViewModel>
+
+@{
+    ViewBag.Title = "LC List";
+}
+
+<h2>LC List</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.dsc_lc_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.dsc_lc_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.dsc_lc_code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.dsc_lc_timezone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.active)
+        </th>        
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.dsc_lc_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.dsc_lc_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.dsc_lc_code)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.dsc_lc_timezone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.active)
+        </td>
+        <td>
+            @Html.ActionLink(item.actionText, "Activate", new { id = item.dsc_lc_id, actionText = item.actionText })
+        </td>
+    </tr>
+}
+
+</table>

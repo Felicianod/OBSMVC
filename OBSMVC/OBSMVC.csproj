@@ -277,6 +277,8 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\DSCHome_Logo.gif" />
+    <Content Include="Images\iconNoAvatar.png" />
+    <Content Include="Images\KPogany.jpg" />
     <Content Include="Models\DSC_OBS_ENTITY.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DSC_OBS_ENTITY.edmx</DependentUpon>
@@ -367,9 +369,9 @@
     <Content Include="Views\Shared\_NavMenu.cshtml" />
     <Content Include="Views\Employee\Create.cshtml" />
     <Content Include="Views\Employee\Delete.cshtml" />
-    <Content Include="Views\Employee\Edit.cshtml" />
+    <Content Include="Views\Employee\Edit_OLD.cshtml" />
     <Content Include="Views\Employee\Index.cshtml" />
-    <Content Include="Views\Employee\UpdateEmployee.cshtml" />
+    <Content Include="Views\Employee\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

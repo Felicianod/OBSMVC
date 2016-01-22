@@ -1,173 +1,111 @@
 ﻿@model OBSMVC.Models.EMPLOYEE
-
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit Employee Profile";
 }
-
-<h2>Edit</h2>
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>EMPLOYEE</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.dsc_emp_id)
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_assigned_lc_id, "Employee LC", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("dsc_assigned_lc_id", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.dsc_assigned_lc_id, "", new { @class = "text-danger" })
-            </div>
+<br />
+<div class="container">
+    <h1>Edit Profile</h1>
+    <hr>
+    <div class="row">
+       @* <div class="alert alert-info alert-dismissable">
+            <a class="panel-close close" data-dismiss="alert">×</a>
+            <i class="fa fa-coffee"></i>
+        </div>*@
         </div>
+        <div class="row">
+            <!-- left column -->
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_emp_perm_id, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dsc_emp_perm_id, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dsc_emp_perm_id, "", new { @class = "text-danger" })
+            <div class="col-md-3">
+                <div class="text-left">
+                  @*  <img src="~/Images/iconNoAvatar.png" class="avatar img-circle" alt="avatar">*@
+                    @if(Model.dsc_emp_last_name.Trim()== "Pogany")
+                    { <img src="~/Images/KPogany.jpg" class="avatar img-circle" alt="avatar">}
+                    else {
+                    <img src="~/Images/iconNoAvatar.png" class="avatar img-circle" alt="avatar">
+                    }
+                </div>
+                <h3>@Model.dsc_emp_first_name @Model.dsc_emp_last_name</h3>
+                <h5>@Model.dsc_emp_email_addr</h5>
+                <h5>ADP ID: @Model.dsc_emp_adp_id</h5>
             </div>
-        </div>
+            <!-- edit form column -->
+            <div class="col-md-9 personal-info">
+                
+               
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_emp_wms_clock_nbr, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dsc_emp_wms_clock_nbr, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dsc_emp_wms_clock_nbr, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                <form class="form-horizontal" role="form" method="post">
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">JDE ID:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control" type="text" value="@Model.dsc_emp_perm_id">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Title:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control" type="text" value="@Model.dsc_emp_title">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Facility:</label>
+                        <div class="col-lg-8">
+                            <div class="ui-select">
+                                                              
+                                   @Html.DropDownList("dsc_assigned_lc_id", null, htmlAttributes: new { @class = "form-control" })                                    
+                               
+                            </div>
+                        </div>
+                    </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Hire Date:</label>
+                            <div class="input-group date col-lg-8" id="datetimepicker1">
+                                <input class="form-control" type="text" value="@Model.dsc_emp_hire_dt">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </div>
+                        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_emp_first_name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dsc_emp_first_name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dsc_emp_first_name, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Term Date:</label>
+                            <div class="input-group date col-lg-8" id="datetimepicker2">
+                                <input class="form-control" type="text" value="@Model.dsc_emp_term_dt">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </div>
+                        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_emp_last_name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dsc_emp_last_name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dsc_emp_last_name, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Observable:</label>
+                            <div class="col-md-8 checkbox">
+                                <input class="form-control" type="checkbox" @if (Model.dsc_emp_can_be_obs_yn == "Y") { <text> checked="checked" </text> }>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Hourly:</label>
+                            <div class="col-md-8 checkbox">
+                                <input class="form-control" type="checkbox" @if (Model.dsc_emp_hourly_yn == "Y") { <text> checked="checked" </text>  }>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Temp:</label>
+                            <div class="col-md-8 checkbox">
+                                <input class="form-control" type="checkbox" @if (Model.dsc_emp_temp_yn == "Y") { <text> checked="checked" </text>  }>
+                            </div>
+                        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_emp_email_addr, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dsc_emp_email_addr, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dsc_emp_email_addr, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_emp_title, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dsc_emp_title, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dsc_emp_title, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_emp_adp_id, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dsc_emp_adp_id, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dsc_emp_adp_id, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_emp_hire_dt, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dsc_emp_hire_dt, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dsc_emp_hire_dt, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_emp_init_work_dt, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dsc_emp_init_work_dt, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dsc_emp_init_work_dt, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_emp_term_dt, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dsc_emp_term_dt, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dsc_emp_term_dt, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_emp_can_be_obs_yn, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dsc_emp_can_be_obs_yn, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dsc_emp_can_be_obs_yn, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_emp_temp_yn, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dsc_emp_temp_yn, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dsc_emp_temp_yn, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_emp_hourly_yn, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dsc_emp_hourly_yn, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dsc_emp_hourly_yn, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_emp_added_id, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dsc_emp_added_id, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dsc_emp_added_id, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_emp_added_dtm, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dsc_emp_added_dtm, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dsc_emp_added_dtm, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_emp_upd_uid, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dsc_emp_upd_uid, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dsc_emp_upd_uid, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_emp_upd_dtm, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dsc_emp_upd_dtm, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.dsc_emp_upd_dtm, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                        <br />
+                        <div class="form-group">
+                            <label class="col-md-3 control-label"></label>
+                            <div class="col-md-8">
+                                <input type="submit" class="btn btn-primary" value="Save Changes">
+                                <span></span>
+                                <input type="reset" class="btn btn-default" value="Cancel">
+                            </div>
+                        </div>
+                    <input type="hidden" value="@Model.dsc_emp_id" name="dsc_emp_id" id="dsc_emp_id">
+</form>
             </div>
         </div>
     </div>
-}
-
+<hr>
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to Employee List", "Index")
 </div>

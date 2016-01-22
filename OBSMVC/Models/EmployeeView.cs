@@ -42,7 +42,7 @@ namespace OBSMVC.Models
         public string dsc_emp_term_dt { get; set; }
         [Display(Name = "Observable")]
         public string dsc_emp_can_be_obs_yn { get; set; }
-        [Display(Name = "Temp")]
+        [Display(Name = "Temporary")]
         public string dsc_emp_temp_yn { get; set; }
         [Display(Name = "Hourly")]
         public string dsc_emp_hourly_yn { get; set; }

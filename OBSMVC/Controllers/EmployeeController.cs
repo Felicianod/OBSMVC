@@ -75,6 +75,7 @@ namespace OBSMVC.Controllers
         }
 
         // GET: Employee/Edit/5
+        [HttpGet]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -86,25 +87,45 @@ namespace OBSMVC.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name", eMPLOYEE.dsc_assigned_lc_id);
-            return View("UpdateEmployee", eMPLOYEE);
+            ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id>0), "dsc_lc_id", "dsc_lc_name", eMPLOYEE.dsc_assigned_lc_id);
+            return View(eMPLOYEE);
         }
 
         // POST: Employee/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "dsc_emp_id,dsc_assigned_lc_id,dsc_emp_perm_id,dsc_emp_wms_clock_nbr,dsc_emp_first_name,dsc_emp_last_name,dsc_emp_email_addr,dsc_emp_title,dsc_emp_adp_id,dsc_emp_hire_dt,dsc_emp_init_work_dt,dsc_emp_term_dt,dsc_emp_can_be_obs_yn,dsc_emp_temp_yn,dsc_emp_hourly_yn,dsc_emp_added_id,dsc_emp_added_dtm,dsc_emp_upd_uid,dsc_emp_upd_dtm")] EMPLOYEE eMPLOYEE)
+       
+        public ActionResult Edit([Bind(Include = "dsc_emp_id,dsc_assigned_lc_id,dsc_emp_perm_id,dsc_emp_wms_clock_nbr,dsc_emp_first_name,dsc_emp_last_name,dsc_emp_email_addr,dsc_emp_title,dsc_emp_adp_id,dsc_emp_hire_dt,dsc_emp_init_work_dt,dsc_emp_term_dt,dsc_emp_can_be_obs_yn,dsc_emp_temp_yn,dsc_emp_hourly_yn,dsc_emp_added_id,dsc_emp_added_dtm,dsc_emp_upd_uid,dsc_emp_upd_dtm")] EMPLOYEE formEmployee)
         {
-            if (ModelState.IsValid)
+            
+                //EMPLOYEE user = db.EMPLOYEEs.Where(x => x.dsc_emp_id == formEmployee.dsc_emp_id).Single();
+            //user.dsc_emp_perm_id = formEmployee.dsc_emp_perm_id;
+           // user.dsc_emp_title = formEmployee.dsc_emp_title;
+            //user.dsc_emp_hire_dt = Convert.ToDateTime(formEmployee.dsc_emp_hire_dt);
+            //user.dsc_emp_term_dt = Convert.ToDateTime(formEmployee.dsc_emp_term_dt);
+            using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
-                db.Entry(eMPLOYEE).State = EntityState.Modified;
+                
+                var employee = db.EMPLOYEEs.Single(x => x.dsc_emp_id == formEmployee.dsc_emp_id);
+                employee.dsc_emp_title = formEmployee.dsc_emp_title;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                formEmployee = employee;
+                ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id>0).ToList(), "dsc_lc_id", "dsc_lc_name", formEmployee.dsc_assigned_lc_id);
+                return View(employee);
             }
-            ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name", eMPLOYEE.dsc_assigned_lc_id);
-            return View(eMPLOYEE);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public String UpdateEmployee(FormCollection EmployeeForm)
+        {
+            string res = string.Empty;
+            foreach (string key in EmployeeForm )
+            {
+                res = key + "is " + EmployeeForm[key] + "<br\\>";
+            }
+            return res;
         }
 
         // GET: Employee/Delete/5

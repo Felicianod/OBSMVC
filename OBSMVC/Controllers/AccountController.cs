@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using OBSMVC.Models;
+using System.Web.Security;
 
 namespace OBSMVC.Controllers
 {
@@ -392,7 +393,8 @@ namespace OBSMVC.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            FormsAuthentication.SignOut();
+            return RedirectToAction("OBSLogin", "Login");
         }
 
         //

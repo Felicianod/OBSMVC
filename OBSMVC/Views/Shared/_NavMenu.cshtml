@@ -1,4 +1,4 @@
-﻿<nav class="navbar navbar-inverse">
+﻿<nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -7,7 +7,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="/home">
-                <img src="~/Images/DSCHome_Logo.gif"/>
+                <img height="35" src="~/Images/DSCHome_Logo.gif"/>
             </a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
@@ -20,7 +20,7 @@
                     <ul class="dropdown-menu">
                         <li>@Html.ActionLink("Customers", "Index", "Cust")</li>
                         <li>@Html.ActionLink("LC", "Index", "LC")</li>
-                        <li><a href="#">Sub_menu 3</a></li>
+                        <li>@Html.ActionLink("Employees", "Index", "Employee")</li>
                     </ul>
                 </li>
 
@@ -28,7 +28,13 @@
                 <li><a href="#">Menu 3</a></li>
                 <li><a href="#">Menu 4</a></li>
             </ul>
-            
+            <ul class="nav navbar-nav navbar-right">              
+                <li>
+                  @Html.ActionLink("Logout", "OBSLogout", "Login")
+                  <span class="glyphicon glyphicon-log-in"></span>
+               </li>
+            </ul>  
         </div>
+        
     </div>
 </nav>

@@ -13,6 +13,7 @@ using System.Web.Security;
 
 namespace OBSMVC.Controllers
 {
+    [AllowAnonymous]
     public class LoginController : Controller
     {
         // GET: Login
@@ -55,8 +56,9 @@ namespace OBSMVC.Controllers
                 Session.Add("session_id", JsonObject["session_id"]);
                 Session.Add("first_name", JsonObject["first_name"]);
                 Session.Add("last_name", JsonObject["last_name"]);
+                Session.Add("username",username);
                 Session.Add("email", JsonObject["email"]);
-               /* FormsAuthentication.SetAuthCookie(username, true);
+                FormsAuthentication.SetAuthCookie(username, true);
                 if (Url.IsLocalUrl(ReturnUrl) && ReturnUrl.Length > 1 && ReturnUrl.StartsWith("/")
                     && !ReturnUrl.StartsWith("//") && !ReturnUrl.StartsWith("/\\"))
                 {
@@ -65,8 +67,8 @@ namespace OBSMVC.Controllers
                 else
                 {
                     return RedirectToAction("Index", "Home");
-                }*/
-                return RedirectToAction("Index", "Home");
+                }
+                //return RedirectToAction("Index", "Home");
             }//end of try
             catch (WebException ex)
             {
@@ -85,5 +87,12 @@ namespace OBSMVC.Controllers
                 return View();
             }//end of catch
         }//end of OBSLogin
+
+        public ActionResult OBSLogout()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("OBSLogin", "Login");
+        }
     }
+
 }

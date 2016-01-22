@@ -49,6 +49,14 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -182,6 +190,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CustController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LCController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -209,9 +218,6 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CustViewModel.cs" />
-    <Compile Include="Models\DSC_EMPLOYEE.cs">
-      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\DSC_LC.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
@@ -230,6 +236,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DSC_OBS_ENTITY.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\EMPLOYEE.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EmployeeView.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LCViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -251,6 +261,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="CustomerModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>CustomerModel.edmx</DependentUpon>
@@ -321,18 +332,18 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\SendCode.cshtml" />
-    <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Customer\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Customer\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Customer\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Customer\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Customer\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Customer\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Customer\Account\Login.cshtml" />
+    <Content Include="Views\Customer\Account\Register.cshtml" />
+    <Content Include="Views\Customer\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Customer\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Customer\Account\SendCode.cshtml" />
+    <Content Include="Views\Customer\Account\VerifyCode.cshtml" />
     <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
     <Content Include="Views\Manage\ChangePassword.cshtml" />
     <Content Include="Views\Manage\Index.cshtml" />
@@ -354,6 +365,11 @@
     <Content Include="Views\LC\Edit.cshtml" />
     <Content Include="Views\LC\Index.cshtml" />
     <Content Include="Views\Shared\_NavMenu.cshtml" />
+    <Content Include="Views\Employee\Create.cshtml" />
+    <Content Include="Views\Employee\Delete.cshtml" />
+    <Content Include="Views\Employee\Details.cshtml" />
+    <Content Include="Views\Employee\Edit.cshtml" />
+    <Content Include="Views\Employee\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

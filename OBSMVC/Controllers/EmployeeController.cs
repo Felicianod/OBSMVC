@@ -49,21 +49,6 @@ namespace OBSMVC.Controllers
             }
         }
 
-        // GET: Employee/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            EMPLOYEE eMPLOYEE = db.EMPLOYEEs.Find(id);
-            if (eMPLOYEE == null)
-            {
-                return HttpNotFound();
-            }
-            return View(eMPLOYEE);
-        }
-
         // GET: Employee/Create
         public ActionResult Create()
         {
@@ -102,7 +87,7 @@ namespace OBSMVC.Controllers
                 return HttpNotFound();
             }
             ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name", eMPLOYEE.dsc_assigned_lc_id);
-            return View(eMPLOYEE);
+            return View("UpdateEmployee", eMPLOYEE);
         }
 
         // POST: Employee/Edit/5

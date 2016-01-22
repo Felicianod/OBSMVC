@@ -70,7 +70,7 @@ foreach (var item in Model)
 {
     <tr>
         <td>
-            @Html.ActionLink("Details", "Details", new { id = item.dsc_emp_id })
+            @Html.ActionLink("Details", "Edit", new { id = item.dsc_emp_id })
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.dsc_emp_first_name)

@@ -32,11 +32,13 @@ namespace OBSMVC.Models
         [Display(Name = "ADP Id")]
         public string dsc_emp_adp_id { get; set; }
         [Display(Name = "Hire Date")]
-        [DisplayFormat(DataFormatString = "MMM dd, yyyy")]
+        [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"))]
         public DateTime? dsc_emp_hire_dt { get; set; }
         [Display(Name = "Work Start Date")]
+        [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"))]
         public DateTime dsc_emp_init_work_dt { get; set; }
         [Display(Name = "Termination Date")]
+        [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"))]
         public string dsc_emp_term_dt { get; set; }
         [Display(Name = "Observable")]
         public string dsc_emp_can_be_obs_yn { get; set; }
@@ -45,12 +47,14 @@ namespace OBSMVC.Models
         [Display(Name = "Hourly")]
         public string dsc_emp_hourly_yn { get; set; }
         [Display(Name = "Emp Added By")]
-        public DateTime dsc_emp_added_id { get; set; }
+        public string dsc_emp_added_id { get; set; }
         [Display(Name = "Emp Added Date-Time")]
-        public string dsc_emp_added_dtm { get; set; }
+        [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"))]
+        public DateTime dsc_emp_added_dtm { get; set; }
         [Display(Name = "Emp Updated By")]
-        public DateTime dsc_emp_upd_uid { get; set; }
+        public string dsc_emp_upd_uid { get; set; }
         [Display(Name = "Emp Updated Date-Time")]
+        [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"))]
         public DateTime? dsc_emp_upd_dtm { get; set; }
     }
 }

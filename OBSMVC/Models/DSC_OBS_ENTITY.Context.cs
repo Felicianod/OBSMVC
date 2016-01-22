@@ -25,7 +25,7 @@ namespace OBSMVC.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<DSC_EMPLOYEE> DSC_EMPLOYEE { get; set; }
+        public virtual DbSet<EMPLOYEE> EMPLOYEEs { get; set; }
         public virtual DbSet<DSC_LC> DSC_LC { get; set; }
         public virtual DbSet<OBS_ANS_TYPE> OBS_ANS_TYPE { get; set; }
         public virtual DbSet<OBS_SUB_TYPE> OBS_SUB_TYPE { get; set; }

@@ -22,6 +22,12 @@
           <Property Name="dsc_emp_init_work_dt" Type="date" Nullable="false" />
           <Property Name="dsc_emp_term_dt" Type="date" />
           <Property Name="dsc_emp_can_be_obs_yn" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="dsc_emp_temp_yn" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="dsc_emp_hourly_yn" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="dsc_emp_added_id" Type="varchar" MaxLength="70" Nullable="false" />
+          <Property Name="dsc_emp_added_dtm" Type="datetime" Nullable="false" />
+          <Property Name="dsc_emp_upd_uid" Type="varchar" MaxLength="70" />
+          <Property Name="dsc_emp_upd_dtm" Type="datetime" />
         </EntityType>
         <EntityType Name="DSC_LC">
           <Key>
@@ -119,7 +125,7 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="DSC_EMPLOYEE">
+        <EntityType Name="EMPLOYEE">
           <Key>
             <PropertyRef Name="dsc_emp_id" />
           </Key>
@@ -137,6 +143,12 @@
           <Property Name="dsc_emp_term_dt" Type="DateTime" Precision="0" />
           <Property Name="dsc_emp_can_be_obs_yn" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="DSC_LC" Relationship="Self.relationship45" FromRole="DSC_EMPLOYEE" ToRole="DSC_LC" />
+          <Property Name="dsc_emp_temp_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_hourly_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_added_id" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_added_dtm" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="dsc_emp_upd_uid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_upd_dtm" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="DSC_LC">
           <Key>
@@ -195,7 +207,7 @@
         </EntityType>
         <Association Name="relationship45">
           <End Role="DSC_LC" Type="Self.DSC_LC" Multiplicity="0..1" />
-          <End Role="DSC_EMPLOYEE" Type="Self.DSC_EMPLOYEE" Multiplicity="*" />
+          <End Role="DSC_EMPLOYEE" Type="Models.EMPLOYEE" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="DSC_LC">
               <PropertyRef Name="dsc_lc_id" />
@@ -218,7 +230,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="DSC_OBS_DB_ENTITY" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="DSC_EMPLOYEE" EntityType="Self.DSC_EMPLOYEE" />
+          <EntitySet Name="EMPLOYEEs" EntityType="Models.EMPLOYEE" />
           <EntitySet Name="DSC_LC" EntityType="Self.DSC_LC" />
           <EntitySet Name="OBS_ANS_TYPE" EntityType="Self.OBS_ANS_TYPE" />
           <EntitySet Name="OBS_SUB_TYPE" EntityType="Self.OBS_SUB_TYPE" />
@@ -226,7 +238,7 @@
           <EntitySet Name="OBS_TYPE" EntityType="Self.OBS_TYPE" />
           <AssociationSet Name="relationship45" Association="Self.relationship45">
             <End Role="DSC_LC" EntitySet="DSC_LC" />
-            <End Role="DSC_EMPLOYEE" EntitySet="DSC_EMPLOYEE" />
+            <End Role="DSC_EMPLOYEE" EntitySet="EMPLOYEEs" />
           </AssociationSet>
           <AssociationSet Name="obs_super_type_type" Association="Self.obs_super_type_type">
             <End Role="OBS_SUPER_TYPE" EntitySet="OBS_SUPER_TYPE" />
@@ -239,9 +251,15 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ModelsStoreContainer" CdmEntityContainer="DSC_OBS_DB_ENTITY">
-          <EntitySetMapping Name="DSC_EMPLOYEE">
-            <EntityTypeMapping TypeName="Models.DSC_EMPLOYEE">
+          <EntitySetMapping Name="EMPLOYEEs">
+            <EntityTypeMapping TypeName="Models.EMPLOYEE">
               <MappingFragment StoreEntitySet="DSC_EMPLOYEE">
+                <ScalarProperty Name="dsc_emp_upd_dtm" ColumnName="dsc_emp_upd_dtm" />
+                <ScalarProperty Name="dsc_emp_upd_uid" ColumnName="dsc_emp_upd_uid" />
+                <ScalarProperty Name="dsc_emp_added_dtm" ColumnName="dsc_emp_added_dtm" />
+                <ScalarProperty Name="dsc_emp_added_id" ColumnName="dsc_emp_added_id" />
+                <ScalarProperty Name="dsc_emp_hourly_yn" ColumnName="dsc_emp_hourly_yn" />
+                <ScalarProperty Name="dsc_emp_temp_yn" ColumnName="dsc_emp_temp_yn" />
                 <ScalarProperty Name="dsc_emp_id" ColumnName="dsc_emp_id" />
                 <ScalarProperty Name="dsc_assigned_lc_id" ColumnName="dsc_assigned_lc_id" />
                 <ScalarProperty Name="dsc_emp_perm_id" ColumnName="dsc_emp_perm_id" />

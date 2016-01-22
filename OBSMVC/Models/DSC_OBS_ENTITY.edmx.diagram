@@ -5,7 +5,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="351439614754467e91eec7e236a9b3c6" Name="Diagram1">
-        <EntityTypeShape EntityType="Models.DSC_EMPLOYEE" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.EMPLOYEE" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.DSC_LC" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.OBS_ANS_TYPE" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.OBS_SUB_TYPE" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />

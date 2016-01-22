@@ -1,0 +1,168 @@
+﻿@model OBSMVC.Models.EMPLOYEE
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>EMPLOYEE</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_emp_perm_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_emp_perm_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_emp_wms_clock_nbr)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_emp_wms_clock_nbr)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_emp_first_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_emp_first_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_emp_last_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_emp_last_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_emp_email_addr)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_emp_email_addr)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_emp_title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_emp_title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_emp_adp_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_emp_adp_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_emp_hire_dt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_emp_hire_dt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_emp_init_work_dt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_emp_init_work_dt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_emp_term_dt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_emp_term_dt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_emp_can_be_obs_yn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_emp_can_be_obs_yn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_emp_temp_yn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_emp_temp_yn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_emp_hourly_yn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_emp_hourly_yn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_emp_added_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_emp_added_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_emp_added_dtm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_emp_added_dtm)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_emp_upd_uid)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_emp_upd_uid)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dsc_emp_upd_dtm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dsc_emp_upd_dtm)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DSC_LC.dsc_lc_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DSC_LC.dsc_lc_name)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

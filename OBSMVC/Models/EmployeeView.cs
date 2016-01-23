@@ -7,29 +7,27 @@ using System.Web;
 namespace OBSMVC.Models
 {
     [MetadataType(typeof(EmployeeMetaData))]
-    public partial class EMPLOYEE
-    {
+    public partial class EMPLOYEE {}
 
-    }
     public class EmployeeMetaData
     {
         [Display(Name = "Employee Id")]
         public int dsc_emp_id { get; set; }
-        [Display(Name = "Employee LC")]
+        [Required]  [Display(Name = "Employee LC")]
         public int? dsc_assigned_lc_id { get; set; }
         [Display(Name = "JDE Id")]
         public string dsc_emp_perm_id { get; set; }
         [Display(Name = "Clock Nbr")]
         public int? dsc_emp_wms_clock_nbr { get; set; }
-        [Display(Name = "First Name")]
+        [Required]  [Display(Name = "First Name")]
         public string dsc_emp_first_name { get; set; }
-        [Display(Name = "Last Name")]
+        [Required]  [Display(Name = "Last Name")]
         public string dsc_emp_last_name { get; set; }
         [Display(Name = "Email Address")]
         public string dsc_emp_email_addr { get; set; }
         [Display(Name = "Title")]
         public string dsc_emp_title { get; set; }
-        [Display(Name = "ADP Id")]
+        [Required]  [Display(Name = "ADP Id")]
         public string dsc_emp_adp_id { get; set; }
         [Display(Name = "Hire Date")]
         [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"))]

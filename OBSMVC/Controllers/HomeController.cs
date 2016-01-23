@@ -10,33 +10,12 @@ namespace OBSMVC.Controllers
     {
         public ActionResult Index()
         {
-            
-            try
-            {
-                if (!String.IsNullOrEmpty(Session["session_id"].ToString()))
-                {
-                    return View();
-                }
-
-            }
-            catch
-            {
-            }
-           return RedirectToAction("OBSLogin", "Login");
-           
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
+            //try
+            //{
+            //    if (!String.IsNullOrEmpty(Session["session_id"].ToString()))   { return View();}
+            //}
+            //catch{}
+            //return RedirectToAction("OBSLogin", "Login");
             return View();
         }
     }

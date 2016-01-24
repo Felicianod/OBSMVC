@@ -20,7 +20,7 @@ namespace OBSMVC.Controllers
         // GET: Employee
         public ActionResult Index( string search, int? page)
         {
-            if (!String.IsNullOrEmpty(search.Trim()))
+            if (!String.IsNullOrWhiteSpace(search))
             {
                 var employeeList = db.EMPLOYEEs.Include(e => e.DSC_LC);
                 if (employeeList.Where(emp => emp.dsc_emp_last_name.Contains(search) || emp.dsc_emp_first_name.Contains(search) || emp.DSC_LC.dsc_lc_name.Contains(search) || emp.dsc_emp_perm_id.ToString().Contains(search) || emp.dsc_emp_adp_id.Contains(search) || emp.dsc_emp_email_addr.Contains(search)).ToList().Count != 0)

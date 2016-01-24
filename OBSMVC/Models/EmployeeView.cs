@@ -33,13 +33,13 @@ namespace OBSMVC.Models
         [Required]  [Display(Name = "ADP Id")]
         public string dsc_emp_adp_id { get; set; }
         [Display(Name = "Hire Date")]
-        [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"))]
+        [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? dsc_emp_hire_dt { get; set; }
         [Display(Name = "Work Start Date")]
-        [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"))]
+        [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy}", ApplyFormatInEditMode = true)]
         public DateTime dsc_emp_init_work_dt { get; set; }
         [Display(Name = "Termination Date")]
-        [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"))]
+        [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy}", ApplyFormatInEditMode = true)]
         public string dsc_emp_term_dt { get; set; }
         [Display(Name = "Observable")]
         public string dsc_emp_can_be_obs_yn { get; set; }

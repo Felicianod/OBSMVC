@@ -211,6 +211,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CustomerModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="CustomHtmlHelpers\CustomeHtmlHelpers.cs" />
     <Compile Include="DSC_CUSTOMER.cs">
       <DependentUpon>CustomerModel.tt</DependentUpon>
     </Compile>
@@ -406,6 +407,18 @@
     <Content Include="Scripts\jquery-2.2.0.min.map" />
     <Content Include="Views\Shared\DisplayTemplates\URLinNewWindow.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\SendCode.cshtml" />
+    <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

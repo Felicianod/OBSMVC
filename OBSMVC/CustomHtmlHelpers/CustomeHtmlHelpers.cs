@@ -24,6 +24,5 @@ namespace OBSMVC.CustomHtmlHelpers
             tb.Attributes.Add("alt", alt);
             return new MvcHtmlString(tb.ToString(TagRenderMode.SelfClosing));
         }
-
     }
 }

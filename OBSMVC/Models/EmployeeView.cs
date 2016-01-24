@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace OBSMVC.Models
 {
@@ -12,16 +14,17 @@ namespace OBSMVC.Models
     public class EmployeeMetaData
     {
         [Display(Name = "Employee Id")]
+        [HiddenInput(DisplayValue =false)]
         public int dsc_emp_id { get; set; }
-        [Required]  [Display(Name = "Employee LC")]
+        [Required] [Display(Name = "Employee LC")]
         public int? dsc_assigned_lc_id { get; set; }
         [Display(Name = "JDE Id")]
         public string dsc_emp_perm_id { get; set; }
         [Display(Name = "Clock Nbr")]
         public int? dsc_emp_wms_clock_nbr { get; set; }
-        [Required]  [Display(Name = "First Name")]
+        [Required] [ReadOnly(true)] [Display(Name = "First Name")]
         public string dsc_emp_first_name { get; set; }
-        [Required]  [Display(Name = "Last Name")]
+        [Required] [ReadOnly(true)] [Display(Name = "Last Name")]
         public string dsc_emp_last_name { get; set; }
         [Display(Name = "Email Address")]
         public string dsc_emp_email_addr { get; set; }

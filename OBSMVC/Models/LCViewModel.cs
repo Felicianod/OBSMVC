@@ -10,7 +10,6 @@ namespace OBSMVC.Models
 {
     public class LCViewModel
     {
-
         [Required]
         [Display(Name = "LC ID")]
         public int dsc_lc_id { get; }

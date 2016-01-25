@@ -107,6 +107,11 @@ namespace OBSMVC.Controllers
                 employee.dsc_emp_can_be_obs_yn = formEmployee.dsc_emp_can_be_obs_yn=="on"?"Y":"N";
                 employee.dsc_emp_hourly_yn = formEmployee.dsc_emp_hourly_yn == "on" ? "Y" : "N";
                 employee.dsc_emp_temp_yn = formEmployee.dsc_emp_temp_yn == "on" ? "Y" : "N";
+                employee.dsc_emp_hire_dt = formEmployee.dsc_emp_hire_dt;
+                employee.dsc_emp_term_dt = formEmployee.dsc_emp_term_dt;
+                employee.dsc_emp_upd_dtm = DateTime.Now;
+                employee.dsc_emp_upd_uid = User.Identity.Name;
+
                 db.SaveChanges();
                 formEmployee = employee;
                 ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id > 0).ToList(), "dsc_lc_id", "dsc_lc_name", formEmployee.dsc_assigned_lc_id);

@@ -67,6 +67,7 @@ namespace OBSMVC.Controllers
             {
                 db.EMPLOYEEs.Add(newEmployee);
                 db.SaveChanges();
+                ViewBag["ConfMsg"] = "Success";
                 return RedirectToAction("Index");
             }
 

@@ -51,13 +51,13 @@
             <div class="form-group row">
                 <label class="col-lg-3 control-label">JDE ID:</label>
                 <div class="col-lg-8">
-                    <input class="form-control" type="text" value="@Model.dsc_emp_perm_id">
+                    <input class="form-control" type="text" value="@Model.dsc_emp_perm_id" name="dsc_perm_id">
                 </div>
             </div>
             <div class="form-group  row">
                 <label class="col-lg-3 control-label">Title:</label>
                 <div class="col-lg-8">
-                    <input class="form-control" type="text" value="@Model.dsc_emp_title">
+                    <input class="form-control" type="text" value="@Model.dsc_emp_title" name="dsc_emp_title">
                 </div>
             </div>
             <div class="form-group row">
@@ -91,15 +91,15 @@
                 <div class="form-group col-lg-8">
                     <label class="col-sm-3 text-center" for="dsc_emp_can_be_obs_yn">
                         Observable:
-                        <input type="checkbox" class="form-control input-sm" id="dsc_emp_can_be_obs_yn" @if (Model.dsc_emp_can_be_obs_yn == "Y") { <text> checked="checked" </text>        }>
+                        <input type="checkbox" class="form-control input-sm" id="dsc_emp_can_be_obs_yn" @if (Model.dsc_emp_can_be_obs_yn == "Y") { <text> checked="checked" </text>        } name="dsc_emp_can_be_obs_yn">
                     </label>
                     <label class="col-sm-3 text-center" for="dsc_emp_hourly_yn">
                         Hourly:
-                        <input type="checkbox" class="form-control input-sm" id="dsc_emp_hourly_yn" @if (Model.dsc_emp_hourly_yn == "Y") { <text> checked="checked" </text>         }>
+                        <input type="checkbox" class="form-control input-sm" id="dsc_emp_hourly_yn" @if (Model.dsc_emp_hourly_yn == "Y") { <text> checked="checked" </text>         } name="dsc_emp_hourly_yn">
                     </label>
                     <label class="col-sm-3 text-center" for="dsc_emp_temp_yn">
                         Temp:
-                        <input type="checkbox" class="form-control input-sm" id="dsc_emp_temp_yn" @if (Model.dsc_emp_temp_yn == "Y") { <text> checked="checked" </text>         }>
+                        <input type="checkbox" class="form-control input-sm" id="dsc_emp_temp_yn" @if (Model.dsc_emp_temp_yn == "Y") { <text> checked="checked" </text>         } name="dsc_emp_temp_yn">
                     </label>
                 </div>
             </div>

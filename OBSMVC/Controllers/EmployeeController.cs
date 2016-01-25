@@ -1,4 +1,7 @@
-﻿using System;
+﻿using OBSMVC.Models;
+using PagedList;
+using PagedList.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -6,10 +9,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using OBSMVC.Models;
-using PagedList;
-using PagedList.Mvc;
-
 
 namespace OBSMVC.Controllers
 {   [Authorize]
@@ -95,37 +94,52 @@ namespace OBSMVC.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-       
         public ActionResult Edit([Bind(Include = "dsc_emp_id,dsc_assigned_lc_id,dsc_emp_perm_id,dsc_emp_wms_clock_nbr,dsc_emp_first_name,dsc_emp_last_name,dsc_emp_email_addr,dsc_emp_title,dsc_emp_adp_id,dsc_emp_hire_dt,dsc_emp_init_work_dt,dsc_emp_term_dt,dsc_emp_can_be_obs_yn,dsc_emp_temp_yn,dsc_emp_hourly_yn,dsc_emp_added_id,dsc_emp_added_dtm,dsc_emp_upd_uid,dsc_emp_upd_dtm")] EMPLOYEE formEmployee)
         {
-            
-                //EMPLOYEE user = db.EMPLOYEEs.Where(x => x.dsc_emp_id == formEmployee.dsc_emp_id).Single();
-            //user.dsc_emp_perm_id = formEmployee.dsc_emp_perm_id;
-           // user.dsc_emp_title = formEmployee.dsc_emp_title;
-            //user.dsc_emp_hire_dt = Convert.ToDateTime(formEmployee.dsc_emp_hire_dt);
-            //user.dsc_emp_term_dt = Convert.ToDateTime(formEmployee.dsc_emp_term_dt);
-            using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
+            EMPLOYEE employeeFromFB = new EMPLOYEE();
+            employeeFromFB = db.EMPLOYEEs.Find(formEmployee.dsc_emp_id);
+            formEmployee.dsc_emp_first_name = employeeFromFB.dsc_emp_first_name;
+            formEmployee.dsc_emp_last_name = employeeFromFB.dsc_emp_last_name;
+            //formEmployee.dsc_assigned_lc_id = "";
+            formEmployee.dsc_emp_adp_id = employeeFromFB.dsc_emp_adp_id;
+            formEmployee.dsc_emp_email_addr = employeeFromFB.dsc_emp_email_addr;
+            //formEmployee.dsc_emp_hire_dt = "";
+            //formEmployee.dsc_emp_hourly_yn = "";
+            //formEmployee.dsc_emp_perm_id = "";
+            //formEmployee.dsc_emp_temp_yn = "";
+            //formEmployee.dsc_emp_term_dt = "";
+            //formEmployee.dsc_emp_title = "";
+            formEmployee.dsc_emp_upd_dtm = DateTime.Today;
+            formEmployee.dsc_emp_upd_uid = User.Identity.Name;
+            //formEmployee.dsc_emp_wms_clock_nbr = "";
+
+            if (ModelState.IsValid)
             {
-                
-                var employee = db.EMPLOYEEs.Single(x => x.dsc_emp_id == formEmployee.dsc_emp_id);
-                employee.dsc_emp_title = formEmployee.dsc_emp_title;
+                db.Entry(formEmployee).State = EntityState.Modified;
                 db.SaveChanges();
-                formEmployee = employee;
-                ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id>0).ToList(), "dsc_lc_id", "dsc_lc_name", formEmployee.dsc_assigned_lc_id);
-                return View(employee);
+                ViewBag.ConfMsg = "Success";
+                //return RedirectToAction("Index");
             }
 
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public String UpdateEmployee(FormCollection EmployeeForm)
-        {
-            string res = string.Empty;
-            foreach (string key in EmployeeForm )
-            {
-                res = key + "is " + EmployeeForm[key] + "<br\\>";
-            }
-            return res;
+            ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name", formEmployee.dsc_assigned_lc_id);
+            return View(formEmployee);
+
+            ////using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
+            ////{
+
+            ////    var employee = db.EMPLOYEEs.Single(x => x.dsc_emp_id == formEmployee.dsc_emp_id);
+            ////    employee.dsc_emp_title = formEmployee.dsc_emp_title;
+            ////    db.SaveChanges();
+            ////    formEmployee = employee;
+            ////    ViewBag.
+            ////    ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id>0).ToList(), "dsc_lc_id", "dsc_lc_name", formEmployee.dsc_assigned_lc_id);
+            ////    return View(employee);
+            ////}
+
+            ////if (ModelState.IsValid) { }
+            //db.ObjectStateManager.ChangeObjectState(dbEmployee, EntityState.Modified);
+            //db.SaveChanges();
+            //return View(dbEmployee);
         }
 
         // GET: Employee/Delete/5

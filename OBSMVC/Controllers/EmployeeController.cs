@@ -102,10 +102,15 @@ namespace OBSMVC.Controllers
 
                 var employee = db.EMPLOYEEs.Single(x => x.dsc_emp_id == formEmployee.dsc_emp_id);
                 employee.dsc_emp_title = formEmployee.dsc_emp_title;
-                formEmployee = employee;
+                employee.dsc_emp_perm_id = formEmployee.dsc_emp_perm_id;
+                employee.dsc_assigned_lc_id = formEmployee.dsc_assigned_lc_id;
+                employee.dsc_emp_can_be_obs_yn = formEmployee.dsc_emp_can_be_obs_yn=="on"?"Y":"N";
+                employee.dsc_emp_hourly_yn = formEmployee.dsc_emp_hourly_yn == "on" ? "Y" : "N";
+                employee.dsc_emp_temp_yn = formEmployee.dsc_emp_temp_yn == "on" ? "Y" : "N";
                 db.SaveChanges();
                 formEmployee = employee;
                 ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id > 0).ToList(), "dsc_lc_id", "dsc_lc_name", formEmployee.dsc_assigned_lc_id);
+                ViewBag.ConfMsg = "Success";
                 return View(employee);
             }
             //==========================================================

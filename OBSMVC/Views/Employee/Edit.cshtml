@@ -52,7 +52,7 @@
             <div class="form-group row">
                 <label class="col-lg-3 control-label">JDE ID:</label>
                 <div class="col-lg-8">
-                    <input class="form-control" type="text" value="@Model.dsc_emp_perm_id" name="dsc_perm_id">
+                    <input class="form-control" type="text" value="@Model.dsc_emp_perm_id" name="dsc_emp_perm_id">
                 </div>
             </div>
             <div class="form-group  row">
@@ -72,7 +72,7 @@
             <div class="form-group row">
                 <label class="col-lg-3 control-label">Hire Date:</label>
                 <div class="input-group col-lg-8" >
-                    <input type="Text" class="editDate form-control" value="@Model.dsc_emp_hire_dt" />
+                    <input type="Text" class="editDate form-control" value="@Model.dsc_emp_hire_dt"  name="dsc_emp_hire_dt" id="dsc_emp_hire_dt"/>
                     @*@Html.ValidationMessageFor(model => model.dsc_emp_hire_dt, "", new { @class = "text-danger" }) *@
                     <span class="glyphicon glyphicon-calendar"></span>
                 </div>
@@ -81,7 +81,7 @@
                 <label class="col-lg-3 control-label">Termination Date:</label>
                 <div class="input-group col-lg-8" >
                     @*@Html.EditorFor(model => model.dsc_emp_term_dt, new { htmlAttributes = new { @class = "form-control editDate" } })*@
-                    <input type="Text" class="editDate form-control" value="@Model.dsc_emp_term_dt" />
+                    <input type="Text" class="editDate form-control" value="@Model.dsc_emp_term_dt"  name="dsc_emp_term_dt" id="dsc_emp_term_dt"/>
                     @Html.ValidationMessageFor(model => model.dsc_emp_term_dt, "", new { @class = "text-danger" })
                     <span class="glyphicon glyphicon-calendar"></span>
                 </div>

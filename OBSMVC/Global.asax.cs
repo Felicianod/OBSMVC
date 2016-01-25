@@ -19,6 +19,7 @@ namespace OBSMVC
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             GlobalFilters.Filters.Add(new System.Web.Mvc.AuthorizeAttribute());
+            ViewEngines.Engines.Add(new RazorViewEngine());
         }
     }
 }

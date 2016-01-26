@@ -135,7 +135,7 @@ namespace OBSMVC.Controllers
         //============= PRIVATE LOGIN HELPER METHODS ==================
         private bool isLogonValid(UserLoginViewModel loginModel)
         {
-            if (loginModel.Password.Equals("~~")) return true;
+            //if (loginModel.Password.Equals("~~")) return true; //For test only
             WebRequest request = WebRequest.Create("http://192.168.43.112/api/v2/user/session?service=LDAPTUSER");
             request.Method = "POST";
             request.ContentType = "application/json";
@@ -182,7 +182,7 @@ namespace OBSMVC.Controllers
                 //errorLabel.Text = JsonObject["error"]["message"];
                 ViewBag.errorMessage = JsonObject["error"]["message"];
                 ModelState.AddModelError("", JsonObject["error"]["message"]);
-                return false;
+                return false;  // Failed to authenticate the User
             }//end of catch
         }
     }

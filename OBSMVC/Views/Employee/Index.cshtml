@@ -6,13 +6,13 @@
 @{
     ViewBag.Title = "Employee Maintenance";
 }
-<br />
-<h2>Employee Maintenance</h2>
+<br/>
+<div class="well well-sm"><h3>Employee Maintenance</h3></div>
 
 <p>
 @using(Html.BeginForm("Index","Employee",FormMethod.Get))
  {
-   
+  
     @Html.TextBox("search") <input type="submit" value="Search" />
     <br />
 

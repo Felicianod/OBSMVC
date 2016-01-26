@@ -115,7 +115,8 @@ foreach (var item in Model)
 }
 
 </table>
-<div>
-    @if (!String.IsNullOrWhiteSpace(Request.QueryString["search"])){ Html.ActionLink("Show All Employees", "Index"); }
-</div>
+
+    @if (!String.IsNullOrWhiteSpace(Request.QueryString["search"]))
+    {<p> @Html.ActionLink("Show All Employees", "Index")</p> }
+
 @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"] }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded })

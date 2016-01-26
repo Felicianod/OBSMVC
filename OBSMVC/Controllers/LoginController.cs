@@ -10,6 +10,8 @@ using System.Net;
 using System.IO;
 using System.Text;
 using System.Web.Security;
+using OBSMVC.Models;
+using System.Threading.Tasks;
 
 namespace OBSMVC.Controllers
 {
@@ -88,6 +90,100 @@ namespace OBSMVC.Controllers
             FormsAuthentication.SignOut();
             return RedirectToAction("OBSLogin", "Login");
         }
-    }
 
+        // This is a new Login Page Using Modal View (GET)
+        [HttpGet]
+        public ActionResult login(string returnUrl) { ViewBag.ReturnUrl = returnUrl; return View(); }
+
+        // This is a new Login Page Using Modal View (POST)
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult login(UserLoginViewModel loginModel, string ReturnUrl)
+        {
+            if (!ModelState.IsValid)  { return View(loginModel); }
+            
+            //Model State is Valid. Check Password
+            if (isLogonValid(loginModel))
+            {  // Is password is Valid, set the Authorization cookie and redirect
+               // the user to the link it came from (Or the Home page is noreturn URL was specified)
+                FormsAuthentication.SetAuthCookie(loginModel.Username, true);
+                if (Url.IsLocalUrl(ReturnUrl) && ReturnUrl.Length > 1 && ReturnUrl.StartsWith("/")
+                    && !ReturnUrl.StartsWith("//") && !ReturnUrl.StartsWith("/\\"))
+                     { return Redirect(ReturnUrl); }
+                else { return RedirectToAction("Index", "Home"); }
+                //return RedirectToAction("Index", "Home") as default;
+            }
+            else
+            {
+                ViewBag.ReturnUrl = ReturnUrl;
+                ModelState.AddModelError("", "Cannot Logon");
+                return View(loginModel);
+            }
+
+            //if (ModelState.IsValid)
+            //{
+            //    ViewBag.errorMessage = "Model State is Valid!";
+            //    return View();
+            //}
+            //else {
+            //    ViewBag.errorMessage = "Model State is not Valid";
+            //    return View();
+            //}
+        }
+
+        //============= PRIVATE LOGIN HELPER METHODS ==================
+        private bool isLogonValid(UserLoginViewModel loginModel)
+        {
+            if (loginModel.Password.Equals("~~")) return true;
+            WebRequest request = WebRequest.Create("http://192.168.43.112/api/v2/user/session?service=LDAPTUSER");
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            string parsedContent = "{\"username\":\"" + loginModel.Username.Trim() + "\",\"password\":\"" + loginModel.Password + "\"}";
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            string JsonString;
+            string errorJsonString;
+            Byte[] bytes = encoding.GetBytes(parsedContent);
+            try
+            {
+                Stream newStream = request.GetRequestStream();
+                newStream.Write(bytes, 0, bytes.Length);
+                newStream.Close();
+
+                WebResponse response = request.GetResponse();
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+                    JsonString = reader.ReadToEnd();
+                }//end of using
+
+                JavaScriptSerializer ScriptSerializer = new JavaScriptSerializer();
+                dynamic JsonObject = ScriptSerializer.Deserialize<Dictionary<string, string>>(JsonString);
+                //use JsonObject to retrieve json data
+                Session.Add("session_token", JsonObject["session_token"]);
+                Session.Add("session_id", JsonObject["session_id"]);
+                Session.Add("first_name", JsonObject["first_name"]);
+                Session.Add("last_name", JsonObject["last_name"]);
+                Session.Add("username", loginModel.Username);
+                Session.Add("email", JsonObject["email"]);
+                return true;  /// Authenticasion was sucessful!!
+            }//end of try
+            catch (WebException ex)
+            {
+                WebResponse errorResponse = ex.Response;
+                using (Stream responseStream = errorResponse.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.GetEncoding("utf-8"));
+                    errorJsonString = reader.ReadToEnd();
+                }//end of using
+
+                JavaScriptSerializer ScriptSerializer = new JavaScriptSerializer();
+                dynamic JsonObject = ScriptSerializer.Deserialize<Dictionary<string, dynamic>>(errorJsonString);
+                //errorLabel.Text = JsonObject["error"]["message"];
+                ViewBag.errorMessage = JsonObject["error"]["message"];
+                ModelState.AddModelError("", JsonObject["error"]["message"]);
+                return false;
+            }//end of catch
+        }
+    }
 }

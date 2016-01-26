@@ -61,13 +61,23 @@ namespace OBSMVC.Models
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
-        
-            [Required]
-            [Display(Name = "Username")]
-            public string Username { get; set; }
-        
+
+        [Required]
+        [Display(Name = "Username")]
+        public string Username { get; set; }
     }
 
+    public class UserLoginViewModel
+    {
+        [Required]
+        [Display(Name = "User Name")]
+        public string Username { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+    }
     public class RegisterViewModel
     {
         [Required]

@@ -66,6 +66,7 @@ namespace OBSMVC.Controllers
             {
                 db.EMPLOYEEs.Add(newEmployee);
                 db.SaveChanges();
+                ViewBag["ConfMsg"] = "Success";
                 return RedirectToAction("Index");
             }
 
@@ -96,34 +97,64 @@ namespace OBSMVC.Controllers
         [HttpPost]
         public ActionResult Edit([Bind(Include = "dsc_emp_id,dsc_assigned_lc_id,dsc_emp_perm_id,dsc_emp_wms_clock_nbr,dsc_emp_first_name,dsc_emp_last_name,dsc_emp_email_addr,dsc_emp_title,dsc_emp_adp_id,dsc_emp_hire_dt,dsc_emp_init_work_dt,dsc_emp_term_dt,dsc_emp_can_be_obs_yn,dsc_emp_temp_yn,dsc_emp_hourly_yn,dsc_emp_added_id,dsc_emp_added_dtm,dsc_emp_upd_uid,dsc_emp_upd_dtm")] EMPLOYEE formEmployee)
         {
-            EMPLOYEE employeeFromFB = new EMPLOYEE();
-            employeeFromFB = db.EMPLOYEEs.Find(formEmployee.dsc_emp_id);
-            formEmployee.dsc_emp_first_name = employeeFromFB.dsc_emp_first_name;
-            formEmployee.dsc_emp_last_name = employeeFromFB.dsc_emp_last_name;
-            //formEmployee.dsc_assigned_lc_id = "";
-            formEmployee.dsc_emp_adp_id = employeeFromFB.dsc_emp_adp_id;
-            formEmployee.dsc_emp_email_addr = employeeFromFB.dsc_emp_email_addr;
-            //formEmployee.dsc_emp_hire_dt = "";
-            //formEmployee.dsc_emp_hourly_yn = "";
-            //formEmployee.dsc_emp_perm_id = "";
-            //formEmployee.dsc_emp_temp_yn = "";
-            //formEmployee.dsc_emp_term_dt = "";
-            //formEmployee.dsc_emp_title = "";
-            formEmployee.dsc_emp_upd_dtm = DateTime.Today;
-            formEmployee.dsc_emp_upd_uid = User.Identity.Name;
-            //formEmployee.dsc_emp_wms_clock_nbr = "";
-
-            if (ModelState.IsValid)
+            using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
-                db.Entry(formEmployee).State = EntityState.Modified;
+
+                var employee = db.EMPLOYEEs.Single(x => x.dsc_emp_id == formEmployee.dsc_emp_id);
+                employee.dsc_emp_title = formEmployee.dsc_emp_title;
+                employee.dsc_emp_perm_id = formEmployee.dsc_emp_perm_id;
+                employee.dsc_assigned_lc_id = formEmployee.dsc_assigned_lc_id;
+                employee.dsc_emp_can_be_obs_yn = formEmployee.dsc_emp_can_be_obs_yn=="on"?"Y":"N";
+                employee.dsc_emp_hourly_yn = formEmployee.dsc_emp_hourly_yn == "on" ? "Y" : "N";
+                employee.dsc_emp_temp_yn = formEmployee.dsc_emp_temp_yn == "on" ? "Y" : "N";
+                employee.dsc_emp_hire_dt = formEmployee.dsc_emp_hire_dt;
+                employee.dsc_emp_term_dt = formEmployee.dsc_emp_term_dt;
+                employee.dsc_emp_upd_dtm = DateTime.Now;
+                employee.dsc_emp_upd_uid = User.Identity.Name;
+
                 db.SaveChanges();
+                formEmployee = employee;
+                ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id > 0).ToList(), "dsc_lc_id", "dsc_lc_name", formEmployee.dsc_assigned_lc_id);
                 ViewBag.ConfMsg = "Success";
-                //return RedirectToAction("Index");
+                return View(employee);
             }
+            //==========================================================
+            //EMPLOYEE employeeFromFB = new EMPLOYEE();
+            //employeeFromFB = db.EMPLOYEEs.Find(formEmployee.dsc_emp_id);
 
-            ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name", formEmployee.dsc_assigned_lc_id);
-            return View(formEmployee);
+            //employeeFromFB.dsc_emp_perm_id = formEmployee.dsc_emp_perm_id;
+            //employeeFromFB.dsc_emp_title = formEmployee.dsc_emp_title;
+            //employeeFromFB.dsc_assigned_lc_id = formEmployee.dsc_assigned_lc_id;
+            //employeeFromFB.dsc_emp_hire_dt = formEmployee.dsc_emp_hire_dt;
+            //employeeFromFB.dsc_emp_term_dt = formEmployee.dsc_emp_term_dt;
+            //employeeFromFB.dsc_emp_can_be_obs_yn = formEmployee.dsc_emp_can_be_obs_yn;
+            //employeeFromFB.dsc_emp_hourly_yn = formEmployee.dsc_emp_hourly_yn;
+            //employeeFromFB.dsc_emp_temp_yn = formEmployee.dsc_emp_temp_yn;
+            //employeeFromFB.dsc_emp_upd_dtm = DateTime.Today;
+            //employeeFromFB.dsc_emp_upd_uid = User.Identity.Name;
 
+            //try
+            //{
+            //    db.Entry(employeeFromFB).State = EntityState.Modified;
+            //    db.SaveChanges();
+            //    ViewBag.ConfMsg = "Success";
+            //}
+            //catch { }
+            //    //return RedirectToAction("Index");
+
+
+            ////if (ModelState.IsValid)
+            ////{
+            ////    db.Entry(employeeFromFB).State = EntityState.Modified;
+            ////    db.SaveChanges();
+            ////    ViewBag.ConfMsg = "Success";
+            ////    //return RedirectToAction("Index");
+            ////}
+
+            //ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name", formEmployee.dsc_assigned_lc_id);
+            //return View(employeeFromFB);
+
+            // ===========================================================================================
             ////using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             ////{
 

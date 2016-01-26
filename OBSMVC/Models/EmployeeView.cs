@@ -18,7 +18,7 @@ namespace OBSMVC.Models
         public int dsc_emp_id { get; set; }
         [Required] [Display(Name = "Employee LC")]
         public int? dsc_assigned_lc_id { get; set; }
-        [Display(Name = "JDE Id")]
+        [Display(Name = "JDE ID")]
         public string dsc_emp_perm_id { get; set; }
         [Display(Name = "Clock Nbr")]
         public int? dsc_emp_wms_clock_nbr { get; set; }
@@ -30,7 +30,7 @@ namespace OBSMVC.Models
         public string dsc_emp_email_addr { get; set; }
         [Display(Name = "Title")]
         public string dsc_emp_title { get; set; }
-        [Required]  [Display(Name = "ADP Id")]
+        [Required]  [Display(Name = "ADP ID")]
         public string dsc_emp_adp_id { get; set; }
         [Display(Name = "Hire Date")]
         [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy}", ApplyFormatInEditMode = true)]

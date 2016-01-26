@@ -19,7 +19,8 @@
             @Html.DisplayNameFor(model => model.dsc_cust_parent_name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.active)
+            @*@Html.DisplayNameFor(model => model.active)*@
+            Active
         </th>
         <th></th>
     </tr>
@@ -38,7 +39,8 @@
             @Html.DisplayFor(modelItem => item.dsc_cust_parent_name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.active)
+            <input type="checkbox" disabled="disabled" @if (item.active.Equals("YES")) { <TEXT> checked="checked" </TEXT>  } />
+            @*@Html.DisplayFor(modelItem => item.active)*@
         </td>
         <td>
             @Html.ActionLink(item.actionText, "Activate", new { id = item.dsc_cust_id, actionText = item.actionText })

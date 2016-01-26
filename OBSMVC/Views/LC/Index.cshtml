@@ -4,23 +4,24 @@
     ViewBag.Title = "LC List";
 }
 
-<h2>LC List</h2>
+<br />
+<div class="well well-sm"><h3>Logistic Center Maintenance</h3></div>
 
 <table class="table">
     <tr>
-        <th>
+        <th style="text-align:center">
             @Html.DisplayNameFor(model => model.dsc_lc_id)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.dsc_lc_name)
         </th>
-        <th>
+        <th style="text-align:center">
             @Html.DisplayNameFor(model => model.dsc_lc_code)
         </th>
-        <th>
+        <th style="text-align:center">
             @Html.DisplayNameFor(model => model.dsc_lc_timezone)
         </th>
-        <th>
+        <th style="text-align:center">
             @Html.DisplayNameFor(model => model.active)
         </th>        
         <th></th>
@@ -28,19 +29,19 @@
 
 @foreach (var item in Model) {
     <tr>
-        <td>
+        <td style="text-align:center">
             @Html.DisplayFor(modelItem => item.dsc_lc_id)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.dsc_lc_name)
         </td>
-        <td>
+        <td style="text-align:center">
             @Html.DisplayFor(modelItem => item.dsc_lc_code)
         </td>
-        <td>
+        <td style="text-align:center">
             @Html.DisplayFor(modelItem => item.dsc_lc_timezone)
         </td>
-        <td>
+        <td style="text-align:center">
             @Html.DisplayFor(modelItem => item.active)
         </td>
         <td>

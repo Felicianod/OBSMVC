@@ -4,12 +4,12 @@
     ViewBag.Title = "Customer List";
 }
 
-<h2>Customer List</h2>
-
+<br />
+<div class="well well-sm"><h3>Customer Maintenance</h3></div>
 
 <table class="table">
     <tr>
-        <th>
+        <th style="text-align:center">
             @Html.DisplayNameFor(model => model.dsc_cust_id)
         </th>
         <th>
@@ -18,8 +18,9 @@
         <th>
             @Html.DisplayNameFor(model => model.dsc_cust_parent_name)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.active)
+        <th style="text-align:center">
+            @*@Html.DisplayNameFor(model => model.active)*@
+            Active
         </th>
         <th></th>
     </tr>
@@ -28,7 +29,7 @@
 {
      
     <tr>
-        <td>
+        <td style="text-align:center">
             @Html.DisplayFor(modelItem => item.dsc_cust_id)
         </td>
         <td>
@@ -37,8 +38,9 @@
         <td>
             @Html.DisplayFor(modelItem => item.dsc_cust_parent_name)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.active)
+        <td style="text-align:center">
+            <input type="checkbox" disabled="disabled" @if (item.active.Equals("YES")) { <TEXT> checked="checked" </TEXT>   } />
+            @*@Html.DisplayFor(modelItem => item.active)*@
         </td>
         <td>
             @Html.ActionLink(item.actionText, "Activate", new { id = item.dsc_cust_id, actionText = item.actionText })

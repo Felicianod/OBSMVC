@@ -6,28 +6,23 @@
 <div class="container">
     <h1>Edit Profile</h1>
     <hr>
-    @if (ViewBag.ConfMsg != null)
-    {
-        <div class="row">
-            <div id="ConfMsg">
-                <div class="alert alert-success alert-dismissable fade in">
-                    <a href="#" class="panel-close close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong>@ViewBag.ConfMsg !</strong>
-                    <i class="fa fa-coffee">Employee Information Saved Successfully.</i>
-                </div>
-            </div>
-        </div>
-        <script>
-            $(function () {
-                setTimeout(function () {
-                    $("#ConfMsg").hide();
-                }, 3000);
-            });
-        </script>
-    }
     <script type="text/javascript">
+        //$(function () {
+        //    $("input:text.editDate").datepicker();
+        //});
         $(function () {
-            $("input:text.editDate").datepicker();
+            $("#dsc_emp_hire_dt").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'M dd, yy'
+            });
+        });
+        $(function () {
+            $("#dsc_emp_term_dt").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'M dd, yy'
+            });
         });
     </script>
     <!-- left column -->
@@ -72,22 +67,21 @@
             <div class="form-group row">
                 <label class="col-lg-3 control-label">Hire Date:</label>
                 <div class="input-group col-lg-8" >                                  
-                    <input type="Text" class="editDate form-control" value="@Model.dsc_emp_hire_dt"  name="dsc_emp_hire_dt" id="dsc_emp_hire_dt"/>
-                    @*@Html.ValidationMessageFor(model => model.dsc_emp_hire_dt, "", new { @class = "text-danger" }) *@
+                    @*<input type="Text" class="editDate form-control" value="@Model.dsc_emp_hire_dt"  name="dsc_emp_hire_dt" id="dsc_emp_hire_dt"/>*@
+                    @Html.EditorFor(model => Model.dsc_emp_hire_dt, new { htmlAttributes = new { @class = "form-control editDate", name="dsc_emp_hire_dt", id="dsc_emp_hire_dt" } })
+                    @Html.ValidationMessageFor(model => model.dsc_emp_hire_dt, "", new { @class = "text-danger" })
                     <span class="glyphicon glyphicon-calendar"></span>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-lg-3 control-label">Termination Date:</label>
                 <div class="input-group col-lg-8" >
-                    @*@Html.EditorFor(model => model.dsc_emp_term_dt, new { htmlAttributes = new { @class = "form-control editDate" } })*@
-                    <input type="Text" class="editDate form-control" value="@Model.dsc_emp_term_dt"  name="dsc_emp_term_dt" id="dsc_emp_term_dt"/>
+                    @*<input type="Text" class="editDate form-control" value="@Model.dsc_emp_term_dt"  name="dsc_emp_term_dt" id="dsc_emp_term_dt"/>*@
+                    @Html.EditorFor(model => Model.dsc_emp_term_dt, new { htmlAttributes = new { @class = "form-control editDate", name="dsc_emp_term_dt", id="dsc_emp_term_dt" } })
                     @Html.ValidationMessageFor(model => model.dsc_emp_term_dt, "", new { @class = "text-danger" })
                     <span class="glyphicon glyphicon-calendar"></span>
                 </div>
             </div>
-
-
             <div class="form-group row">
                 <label class="col-lg-3 control-label">Employee Flags:</label>
                 <div class="form-group col-lg-8">
@@ -125,3 +119,23 @@
 <div>
     @Html.ActionLink("Back to Employee List", "Index")
 </div>
+@if (ViewBag.ConfMsg != null)
+{
+    <div class="row">
+        <div id="ConfMsg">
+            <div class="alert alert-success alert-dismissable fade in">
+                <a href="#" class="panel-close close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>@ViewBag.ConfMsg !</strong>
+                <i class="fa fa-coffee">Employee Information Saved Successfully.</i>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            setTimeout(function () {
+                $("#ConfMsg").hide();
+            }, 3000);
+        });
+    </script>
+}
+

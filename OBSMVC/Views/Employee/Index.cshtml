@@ -15,8 +15,7 @@
    
     @Html.TextBox("search") <input type="submit" value="Search" />
     <br />
-    <br />
-    @Html.DropDownList("PageSize", new SelectList(new Dictionary<string, int> { { "10", 10 }, { "25", 25 }, { "50", 50 }}, "Key", "Value", Model.PageSize),new { id = "pagesizelist" })
+
 }
 </p>
 <table class="table" border="1">
@@ -115,8 +114,31 @@ foreach (var item in Model)
 }
 
 </table>
+<table style="width:100%">
+    <tr>
+        <td style="text-align:left">
 
-    @if (!String.IsNullOrWhiteSpace(Request.QueryString["search"]))
-    {<p> @Html.ActionLink("Show All Employees", "Index")</p> }
+            @if (!String.IsNullOrWhiteSpace(Request.QueryString["search"]))
+            {
+               <p> @Html.ActionLink("Show All Employees", "Index")</p> }
+       </td>
+        <td style="text-align:right">
+            @using(Html.BeginForm("Index", "Employee", FormMethod.Get))
+            {
+                <input type="hidden" value="@Request.QueryString["search"]" id="search" name="search" />
+                <b>Rows Per Page</b>
+                @Html.DropDownList("PageSize", new SelectList(new Dictionary<string, int> { { "10", 10 }, { "25", 25 }, { "50", 50 } }, "Key", "Value", ViewBag.CurrentItemsPerPage), new { id = "PageSize" })
 
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"] }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded })
+                <script type="text/javascript">
+
+                    $('#PageSize').on('change', function (event) {
+                        var form = $(event.target).parents('form');
+                        form.submit();
+                    });
+
+                </script>
+            }
+        </td>
+    </tr>
+</table>
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, pageSize = ViewBag.CurrentItemsPerPage, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"] }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded })

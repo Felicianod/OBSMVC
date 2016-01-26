@@ -22,9 +22,9 @@ namespace OBSMVC.Models
         public string dsc_emp_perm_id { get; set; }
         [Display(Name = "Clock Nbr")]
         public int? dsc_emp_wms_clock_nbr { get; set; }
-        [Required] [ReadOnly(true)] [Display(Name = "First Name")]
+        [Required] [Display(Name = "First Name")]  //[ReadOnly(true)]
         public string dsc_emp_first_name { get; set; }
-        [Required] [ReadOnly(true)] [Display(Name = "Last Name")]
+        [Required] [Display(Name = "Last Name")]   //[ReadOnly(true)]
         public string dsc_emp_last_name { get; set; }
         [Display(Name = "Email Address")]
         public string dsc_emp_email_addr { get; set; }

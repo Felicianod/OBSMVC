@@ -17,8 +17,10 @@ namespace OBSMVC.Controllers
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
 
         // GET: Employee
-        public ActionResult Index( string search, int? page)
+        public ActionResult Index( string search, int? page, int? PageSize)
         {
+           // SelectList ItemsPerPageList = new SelectList(new Dictionary<string, int> { { "10", 10 }, { "25", 25 }, { "50", 50 } }, selectedValue: 10);
+
             if (!String.IsNullOrWhiteSpace(search))
             {
                 var employeeList = db.EMPLOYEEs.Include(e => e.DSC_LC);
@@ -43,7 +45,7 @@ namespace OBSMVC.Controllers
             else
             {
                 var employeeList = db.EMPLOYEEs.Include(e => e.DSC_LC);
-               return View(employeeList.ToList().ToPagedList(page ?? 1, 10));               
+               return View(employeeList.ToList().ToPagedList(page ?? 1, PageSize ?? 10));               
             }
         }
 
@@ -208,4 +210,5 @@ namespace OBSMVC.Controllers
             base.Dispose(disposing);
         }
     }
+
 }

@@ -15,7 +15,9 @@
    
     @Html.TextBox("search") <input type="submit" value="Search" />
     <br />
- }
+    <br />
+    @Html.DropDownList("PageSize", new SelectList(new Dictionary<string, int> { { "10", 10 }, { "25", 25 }, { "50", 50 }}, "Key", "Value", Model.PageSize),new { id = "pagesizelist" })
+}
 </p>
 <table class="table" border="1">
     <tr>
@@ -113,4 +115,7 @@ foreach (var item in Model)
 }
 
 </table>
+<div>
+    @if (!String.IsNullOrWhiteSpace(Request.QueryString["search"])){ Html.ActionLink("Show All Employees", "Index"); }
+</div>
 @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"] }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded })

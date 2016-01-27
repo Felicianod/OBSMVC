@@ -14,8 +14,7 @@
             <ul class="nav navbar-nav">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        Reference Data
-                        <span class="caret"></span>
+                        Reference Data<span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
                         <li>@Html.ActionLink("Customers", "Index", "Cust")</li>
@@ -25,7 +24,14 @@
                         <li>@Html.ActionLink("Observation Subtypes", "Index", "OBSsubtype")</li>
                     </ul>
                 </li>
-                <li class="dropdown disabled"><a data-toggle="tab" href="#" >Menu 2</a></li>
+                <li class="dropdown ">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        Questions Library<span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink("Manage Questions", "Index", "Cust")</li>
+                    </ul>
+                </li>
                 <li class="dropdown disabled"><a data-toggle="tab" href="#">Menu 3</a></li>
                 <li class="dropdown disabled"><a data-toggle="tab" href="#">Menu 4</a></li>
             </ul>

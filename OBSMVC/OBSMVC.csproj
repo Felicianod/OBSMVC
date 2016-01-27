@@ -250,6 +250,21 @@
     <Compile Include="Models\OBS_ANS_TYPE.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\OBS_QUESTION.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_QUESTION_METADATA.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_QUEST_ANS_TYPES.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_QUEST_ASSGND_MD.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_QUEST_SLCT_ANS.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OBS_SUB_TYPE.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>

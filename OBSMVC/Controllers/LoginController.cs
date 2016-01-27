@@ -88,7 +88,7 @@ namespace OBSMVC.Controllers
         public ActionResult OBSLogout()
         {
             FormsAuthentication.SignOut();
-            return RedirectToAction("OBSLogin", "Login");
+            return RedirectToAction("Login", "Login");
         }
 
         // This is a new Login Page Using Modal View (GET)

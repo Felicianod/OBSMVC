@@ -13,6 +13,16 @@
         <EntityTypeShape EntityType="Models.OBS_TYPE" Width="1.5" PointX="2.875" PointY="0.5" IsExpanded="true" />
         <AssociationConnector Association="Models.relationship45" ManuallyRouted="false" />
         <AssociationConnector Association="Models.obs_super_type_type" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Models.OBS_QUEST_ANS_TYPES" Width="1.5" PointX="8.625" PointY="3.75" />
+        <EntityTypeShape EntityType="Models.OBS_QUEST_ASSGND_MD" Width="1.5" PointX="8.625" PointY="7.875" />
+        <EntityTypeShape EntityType="Models.OBS_QUEST_SLCT_ANS" Width="1.5" PointX="10.875" PointY="3.625" />
+        <EntityTypeShape EntityType="Models.OBS_QUESTION" Width="1.5" PointX="6.375" PointY="6.625" />
+        <EntityTypeShape EntityType="Models.OBS_QUESTION_METADATA" Width="1.5" PointX="6.375" PointY="11.125" />
+        <AssociationConnector Association="Models.relationship43" />
+        <AssociationConnector Association="Models.relationship41" />
+        <AssociationConnector Association="Models.relationship44" />
+        <AssociationConnector Association="Models.rel_metadata_quest_assgnd" />
+        <AssociationConnector Association="Models.rel_quest_assgnd_meta" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

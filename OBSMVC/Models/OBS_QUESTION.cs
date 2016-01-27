@@ -12,23 +12,27 @@ namespace OBSMVC.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class OBS_ANS_TYPE
+    public partial class OBS_QUESTION
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public OBS_ANS_TYPE()
+        public OBS_QUESTION()
         {
             this.OBS_QUEST_ANS_TYPES = new HashSet<OBS_QUEST_ANS_TYPES>();
+            this.OBS_QUEST_ASSGND_MD = new HashSet<OBS_QUEST_ASSGND_MD>();
         }
     
-        public short obs_ans_type_id { get; set; }
-        public string obs_ans_type_name { get; set; }
-        public string obs_ans_type_desc { get; set; }
-        public string obs_ans_type_has_fxd_ans_yn { get; set; }
-        public string obs_ans_type_free_text_yn { get; set; }
-        public string obs_ans_type_comment_mand_yn { get; set; }
-        public string obs_ans_type_api_tag_val { get; set; }
+        public int obs_question_id { get; set; }
+        public short obs_question_ver { get; set; }
+        public string obs_question_full_text { get; set; }
+        public string obs_question_short_text { get; set; }
+        public string obs_question_desc { get; set; }
+        public string obs_question_mm_url { get; set; }
+        public System.DateTime obs_question_eff_st_dt { get; set; }
+        public System.DateTime obs_question_eff_end_dt { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_QUEST_ANS_TYPES> OBS_QUEST_ANS_TYPES { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OBS_QUEST_ASSGND_MD> OBS_QUEST_ASSGND_MD { get; set; }
     }
 }

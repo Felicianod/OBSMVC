@@ -8,15 +8,17 @@ using System.Web.Mvc;
 namespace OBSMVC.Models
 {
     [MetadataType(typeof(OuestionMetaData))]
-    public partial class OBS_QUESTION { }
-    public partial class OuestionMetaData
+    public partial class OBS_QUESTION {}
+
+    public class OuestionMetaData
     {
-       [Display(Name = "Question Id")]
-       [HiddenInput(DisplayValue = false)]
+        [Display(Name = "Question Id")]
+        [HiddenInput(DisplayValue = false)]
         public int obs_question_id { get; set; }
 
         [Display(Name = "Question Version")]
         public short obs_question_ver { get; set; }
+
         [Display(Name = "Full Text")]
         public string obs_question_full_text { get; set; }
 
@@ -28,6 +30,7 @@ namespace OBSMVC.Models
 
         [Display(Name = "MultiMedia URL")]
         public string obs_question_mm_url { get; set; }
+        
         [Display(Name = "Effective Start Date")]
         [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"))]
         public DateTime obs_question_eff_st_dt { get; set; }
@@ -49,6 +52,5 @@ namespace OBSMVC.Models
         [Display(Name = "Date Updated")]
         [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"))]
         public DateTime? obs_question_upd_dtm { get; set; }
-
     }
 }

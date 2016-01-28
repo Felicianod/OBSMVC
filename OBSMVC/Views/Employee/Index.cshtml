@@ -1,22 +1,17 @@
 ﻿@using PagedList;
 @using PagedList.Mvc;
-
 @model IPagedList<OBSMVC.Models.EMPLOYEE>
 
-@{
-    ViewBag.Title = "Employee Maintenance";
-}
-<br/>
+@{  ViewBag.Title = "Employee Maintenance"; }
+<br />
 <div class="well well-sm"><h3>Employee Maintenance</h3></div>
 
 <p>
-@using(Html.BeginForm("Index","Employee",FormMethod.Get))
- {
-  
-    @Html.TextBox("search") <input type="submit" value="Search" />
-    <br />
-
-}
+    @using (Html.BeginForm("Index", "Employee", FormMethod.Get))
+    {
+        @Html.TextBox("search") <input type="submit" value="Search" />
+        <br />
+    }
 </p>
 <table class="table table-condensed table-hover" border="1">
     <tr>
@@ -25,7 +20,7 @@
             @Html.DisplayNameFor(model => model.First().dsc_emp_first_name)
         </th>
         <th>
-           @Html.DisplayNameFor(model => model.First().dsc_emp_last_name)
+            @Html.DisplayNameFor(model => model.First().dsc_emp_last_name)
         </th>
         <th style="text-align:center">
             @*@Html.DisplayNameFor(model => model.DSC_LC.First().dsc_lc_name)*@
@@ -38,107 +33,104 @@
             @Html.DisplayNameFor(model => model.First().dsc_emp_adp_id)
         </th>
         @*<th style="text-align:center">
-            @Html.DisplayNameFor(model => model.First().dsc_emp_email_addr)
-        </th>          
-        <th style="text-align:center">
-            @Html.DisplayNameFor(model => model.First().dsc_emp_title)
-        </th>*@      
+                @Html.DisplayNameFor(model => model.First().dsc_emp_email_addr)
+            </th>
+            <th style="text-align:center">
+                @Html.DisplayNameFor(model => model.First().dsc_emp_title)
+            </th>*@
         <th style="text-align:center">
             @Html.DisplayNameFor(model => model.First().dsc_emp_can_be_obs_yn)
-        </th>  
-        @*<th style="text-align:center">
-            @Html.DisplayNameFor(model => model.First().dsc_emp_hire_dt)
         </th>
-        <th style="text-align:center">
-            @Html.DisplayNameFor(model => model.First().dsc_emp_term_dt)
-        </th>*@ 
+        @*<th style="text-align:center">
+                @Html.DisplayNameFor(model => model.First().dsc_emp_hire_dt)
+            </th>
+            <th style="text-align:center">
+                @Html.DisplayNameFor(model => model.First().dsc_emp_term_dt)
+            </th>*@
         <th style="text-align:center">
             @Html.DisplayNameFor(model => model.First().dsc_emp_temp_yn)
-        </th>  
+        </th>
         <th style="text-align:center">
             @Html.DisplayNameFor(model => model.First().dsc_emp_hourly_yn)
-        </th>               
+        </th>
     </tr>
-@if (Model.Count() == 0)
-{
-    <tr>
-        <td colspan="14"><font color="red">Employee not found</font></td>
-    </tr>
-}
-else {
-
-foreach (var item in Model)
-{
-    <tr>
-        <td>
-            @Html.ActionLink("Details", "Edit", new { id = item.dsc_emp_id })
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.dsc_emp_first_name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.dsc_emp_last_name)
-        </td>
-        <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.DSC_LC.dsc_lc_name)
-        </td>
-        <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.dsc_emp_perm_id)
-        </td>
-        <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.dsc_emp_adp_id)
-        </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.dsc_emp_email_addr)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.dsc_emp_title)
-        </td>*@ 
-        <td style="text-align:center">
-            <input type="checkbox" disabled="disabled" @if (item.dsc_emp_can_be_obs_yn.Equals("Y")) { <TEXT> checked="checked" </TEXT> } />
-            @*@Html.DisplayFor(modelItem => item.dsc_emp_can_be_obs_yn)*@
-        </td>      
-        @*<td>
-            @Html.DisplayFor(modelItem => item.dsc_emp_hire_dt)
-       </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.dsc_emp_term_dt)
-        </td>*@
-        <td style="text-align:center">
-            <input type="checkbox" disabled="disabled" @if (item.dsc_emp_temp_yn.Equals("Y")) { <TEXT> checked="checked" </TEXT> } />
-            @*@Html.DisplayFor(modelItem => item.dsc_emp_temp_yn)*@
-        </td>       
-        <td style="text-align:center">
-            <input type="checkbox" disabled="disabled" @if (item.dsc_emp_hourly_yn.Equals("Y")) { <TEXT> checked="checked" </TEXT> } />
-            @*@Html.DisplayFor(modelItem => item.dsc_emp_hourly_yn)*@
-        </td>    
-    </tr>
-}
-}
+    @if (Model.Count() == 0)
+    {
+        <tr>
+            <td colspan="14"><font color="red">Employee not found</font></td>
+        </tr>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink("Details", "Edit", new { id = item.dsc_emp_id })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.dsc_emp_first_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.dsc_emp_last_name)
+                </td>
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.DSC_LC.dsc_lc_name)
+                </td>
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.dsc_emp_perm_id)
+                </td>
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.dsc_emp_adp_id)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.dsc_emp_email_addr)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.dsc_emp_title)
+                    </td>*@
+                <td style="text-align:center">
+                    <input type="checkbox" disabled="disabled" @if (item.dsc_emp_can_be_obs_yn.Equals("Y")) { <TEXT> checked="checked" </TEXT>  } />
+                    @*@Html.DisplayFor(modelItem => item.dsc_emp_can_be_obs_yn)*@
+                </td>
+                @*<td>
+                         @Html.DisplayFor(modelItem => item.dsc_emp_hire_dt)
+                    </td>
+                     <td>
+                         @Html.DisplayFor(modelItem => item.dsc_emp_term_dt)
+                     </td>*@
+                <td style="text-align:center">
+                    <input type="checkbox" disabled="disabled" @if (item.dsc_emp_temp_yn.Equals("Y")) { <TEXT> checked="checked" </TEXT>  } />
+                    @*@Html.DisplayFor(modelItem => item.dsc_emp_temp_yn)*@
+                </td>
+                <td style="text-align:center">
+                    <input type="checkbox" disabled="disabled" @if (item.dsc_emp_hourly_yn.Equals("Y")) { <TEXT> checked="checked" </TEXT>  } />
+                    @*@Html.DisplayFor(modelItem => item.dsc_emp_hourly_yn)*@
+                </td>
+            </tr>
+        }
+    }
 
 </table>
 <table style="width:100%">
     <tr>
         <td style="text-align:left">
-
             @if (!String.IsNullOrWhiteSpace(Request.QueryString["search"]))
             {
-               <p> @Html.ActionLink("Show All Employees", "Index")</p> }
-       </td>
+                <p> @Html.ActionLink("Show All Employees", "Index")</p>
+            }
+        </td>
         <td style="text-align:right">
-            @using(Html.BeginForm("Index", "Employee", FormMethod.Get))
+            @using (Html.BeginForm("Index", "Employee", FormMethod.Get))
             {
                 <input type="hidden" value="@Request.QueryString["search"]" id="search" name="search" />
                 <b>Rows Per Page</b>
                 @Html.DropDownList("PageSize", new SelectList(new Dictionary<string, int> { { "10", 10 }, { "25", 25 }, { "50", 50 } }, "Key", "Value", ViewBag.CurrentItemsPerPage), new { id = "PageSize" })
-
                 <script type="text/javascript">
-
                     $('#PageSize').on('change', function (event) {
                         var form = $(event.target).parents('form');
                         form.submit();
                     });
-
                 </script>
             }
         </td>

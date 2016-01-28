@@ -7,12 +7,12 @@
 <br />
 <div class="well well-sm"><h3>Logistic Center Maintenance</h3></div>
 
-<table class="table">
+<table class="table table-condensed table-hover">
     <tr>
         <th style="text-align:center">
             @Html.DisplayNameFor(model => model.dsc_lc_id)
         </th>
-        <th>
+        <th style="text-align:center">
             @Html.DisplayNameFor(model => model.dsc_lc_name)
         </th>
         <th style="text-align:center">
@@ -22,32 +22,35 @@
             @Html.DisplayNameFor(model => model.dsc_lc_timezone)
         </th>
         <th style="text-align:center">
-            @Html.DisplayNameFor(model => model.active)
-        </th>        
+            @*@Html.DisplayNameFor(model => model.active)*@
+            Active
+        </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.dsc_lc_id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.dsc_lc_name)
-        </td>
-        <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.dsc_lc_code)
-        </td>
-        <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.dsc_lc_timezone)
-        </td>
-        <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.active)
-        </td>
-        <td>
-            @Html.ActionLink(item.actionText, "Activate", new { id = item.dsc_lc_id, actionText = item.actionText })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td style="text-align:center">
+                @Html.DisplayFor(modelItem => item.dsc_lc_id)
+            </td>
+            <td style="text-align:center">
+                @Html.DisplayFor(modelItem => item.dsc_lc_name)
+            </td>
+            <td style="text-align:center">
+                @Html.DisplayFor(modelItem => item.dsc_lc_code)
+            </td>
+            <td style="text-align:center">
+                @Html.DisplayFor(modelItem => item.dsc_lc_timezone)
+            </td>
+            <td style="text-align:center">
+                <input type="checkbox" disabled="disabled" @if (item.active.Equals("YES")) { <TEXT> checked="checked" </TEXT>     } />
+                @*@Html.DisplayFor(modelItem => item.active)*@
+            </td>
+            <td>
+                @Html.ActionLink(item.actionText, "Activate", new { id = item.dsc_lc_id, actionText = item.actionText })
+            </td>
+        </tr>
+    }
 
 </table>

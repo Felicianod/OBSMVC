@@ -7,9 +7,13 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="/home">
-                <img class="img-responsive" src="~/Images/DSCHome_Logo.gif"/>
+                Observations DM Tool&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                @*<img class="img-responsive" src="~/Images/DSCHome_Logo.gif"/>*@
             </a>
         </div>
+        <a style="position:fixed; top:0; left:0" href="/home">
+            <img class="img-responsive" src="~/Images/DSCHome_Logo.gif" />
+        </a>
         <div class="collapse navbar-collapse" id="myNavbar" style="font-size:large" >
             <ul class="nav navbar-nav">
                 <li class="dropdown">
@@ -38,8 +42,8 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">              
                 <li>
-                  @Html.ActionLink("Logout", "OBSLogout", "Login")
-                  <span class="glyphicon glyphicon-log-in"></span>
+                    <span class="glyphicon glyphicon-log-in" style="font-size:large">@Html.ActionLink(" [Logout] ", "OBSLogout", "Login")</span>
+                    
                </li>
             </ul>  
         </div>

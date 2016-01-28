@@ -96,6 +96,10 @@
           <Property Name="obs_question_mm_url" Type="varchar" MaxLength="250" />
           <Property Name="obs_question_eff_st_dt" Type="datetime" Nullable="false" />
           <Property Name="obs_question_eff_end_dt" Type="datetime" Nullable="false" />
+          <Property Name="obs_question_added_uid" Type="varchar" MaxLength="70" Nullable="false" />
+          <Property Name="obs_question_added_dtm" Type="datetime" Nullable="false" />
+          <Property Name="obs_question_upd_uid" Type="varchar" MaxLength="70" />
+          <Property Name="obs_question_upd_dtm" Type="datetime" />
         </EntityType>
         <EntityType Name="OBS_QUESTION_METADATA">
           <Key>
@@ -463,6 +467,10 @@
           <Property Name="obs_question_eff_end_dt" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="OBS_QUEST_ANS_TYPES" Relationship="Models.relationship41" FromRole="OBS_QUESTION" ToRole="OBS_QUEST_ANS_TYPES" />
           <NavigationProperty Name="OBS_QUEST_ASSGND_MD" Relationship="Models.rel_quest_assgnd_meta" FromRole="OBS_QUESTION" ToRole="OBS_QUEST_ASSGND_MD" />
+          <Property Name="obs_question_added_uid" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="obs_question_added_dtm" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="obs_question_upd_uid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="obs_question_upd_dtm" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="OBS_QUESTION_METADATA">
           <Key>
@@ -660,6 +668,10 @@
           <EntitySetMapping Name="OBS_QUESTION">
             <EntityTypeMapping TypeName="Models.OBS_QUESTION">
               <MappingFragment StoreEntitySet="OBS_QUESTION">
+                <ScalarProperty Name="obs_question_upd_dtm" ColumnName="obs_question_upd_dtm" />
+                <ScalarProperty Name="obs_question_upd_uid" ColumnName="obs_question_upd_uid" />
+                <ScalarProperty Name="obs_question_added_dtm" ColumnName="obs_question_added_dtm" />
+                <ScalarProperty Name="obs_question_added_uid" ColumnName="obs_question_added_uid" />
                 <ScalarProperty Name="obs_question_eff_end_dt" ColumnName="obs_question_eff_end_dt" />
                 <ScalarProperty Name="obs_question_eff_st_dt" ColumnName="obs_question_eff_st_dt" />
                 <ScalarProperty Name="obs_question_mm_url" ColumnName="obs_question_mm_url" />

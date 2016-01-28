@@ -1,0 +1,74 @@
+﻿@model OBSMVC.Models.OBS_QUESTION
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>OBS_QUESTION</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_question_ver)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_question_ver)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_question_full_text)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_question_full_text)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_question_short_text)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_question_short_text)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_question_desc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_question_desc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_question_mm_url)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_question_mm_url)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_question_eff_st_dt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_question_eff_st_dt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_question_eff_end_dt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_question_eff_end_dt)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.obs_question_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

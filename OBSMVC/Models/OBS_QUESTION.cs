@@ -29,6 +29,10 @@ namespace OBSMVC.Models
         public string obs_question_mm_url { get; set; }
         public System.DateTime obs_question_eff_st_dt { get; set; }
         public System.DateTime obs_question_eff_end_dt { get; set; }
+        public string obs_question_added_uid { get; set; }
+        public System.DateTime obs_question_added_dtm { get; set; }
+        public string obs_question_upd_uid { get; set; }
+        public Nullable<System.DateTime> obs_question_upd_dtm { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_QUEST_ANS_TYPES> OBS_QUEST_ANS_TYPES { get; set; }

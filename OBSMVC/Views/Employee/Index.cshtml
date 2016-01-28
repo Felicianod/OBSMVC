@@ -18,7 +18,7 @@
 
 }
 </p>
-<table class="table" border="1">
+<table class="table table-condensed table-hover" border="1">
     <tr>
         <th></th>
         <th>
@@ -37,21 +37,21 @@
         <th style="text-align:center">
             @Html.DisplayNameFor(model => model.First().dsc_emp_adp_id)
         </th>
-        <th style="text-align:center">
+        @*<th style="text-align:center">
             @Html.DisplayNameFor(model => model.First().dsc_emp_email_addr)
         </th>          
         <th style="text-align:center">
             @Html.DisplayNameFor(model => model.First().dsc_emp_title)
-        </th>      
+        </th>*@      
         <th style="text-align:center">
             @Html.DisplayNameFor(model => model.First().dsc_emp_can_be_obs_yn)
         </th>  
-        <th style="text-align:center">
+        @*<th style="text-align:center">
             @Html.DisplayNameFor(model => model.First().dsc_emp_hire_dt)
         </th>
         <th style="text-align:center">
             @Html.DisplayNameFor(model => model.First().dsc_emp_term_dt)
-        </th> 
+        </th>*@ 
         <th style="text-align:center">
             @Html.DisplayNameFor(model => model.First().dsc_emp_temp_yn)
         </th>  
@@ -79,7 +79,7 @@ foreach (var item in Model)
         <td>
             @Html.DisplayFor(modelItem => item.dsc_emp_last_name)
         </td>
-        <td>
+        <td style="text-align:center">
             @Html.DisplayFor(modelItem => item.DSC_LC.dsc_lc_name)
         </td>
         <td style="text-align:center">
@@ -88,26 +88,29 @@ foreach (var item in Model)
         <td style="text-align:center">
             @Html.DisplayFor(modelItem => item.dsc_emp_adp_id)
         </td>
-        <td>
+        @*<td>
             @Html.DisplayFor(modelItem => item.dsc_emp_email_addr)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.dsc_emp_title)
-        </td> 
+        </td>*@ 
         <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.dsc_emp_can_be_obs_yn)
+            <input type="checkbox" disabled="disabled" @if (item.dsc_emp_can_be_obs_yn.Equals("Y")) { <TEXT> checked="checked" </TEXT> } />
+            @*@Html.DisplayFor(modelItem => item.dsc_emp_can_be_obs_yn)*@
         </td>      
-        <td>
+        @*<td>
             @Html.DisplayFor(modelItem => item.dsc_emp_hire_dt)
        </td>
         <td>
             @Html.DisplayFor(modelItem => item.dsc_emp_term_dt)
-        </td>
+        </td>*@
         <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.dsc_emp_temp_yn)
+            <input type="checkbox" disabled="disabled" @if (item.dsc_emp_temp_yn.Equals("Y")) { <TEXT> checked="checked" </TEXT> } />
+            @*@Html.DisplayFor(modelItem => item.dsc_emp_temp_yn)*@
         </td>       
         <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.dsc_emp_hourly_yn)
+            <input type="checkbox" disabled="disabled" @if (item.dsc_emp_hourly_yn.Equals("Y")) { <TEXT> checked="checked" </TEXT> } />
+            @*@Html.DisplayFor(modelItem => item.dsc_emp_hourly_yn)*@
         </td>    
     </tr>
 }

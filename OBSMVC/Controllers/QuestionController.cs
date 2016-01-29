@@ -15,9 +15,25 @@ namespace OBSMVC.Controllers
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
 
         // GET: Question
-        public ActionResult Index()
+        public ActionResult Index( string search, string includeActiveOnly)
         {
-            return View(db.OBS_QUESTION.ToList());
+
+            if (!String.IsNullOrWhiteSpace(search) && includeActiveOnly == "on")
+            {
+
+                return View(db.OBS_QUESTION.Where(ques => ques.obs_question_full_text.Contains(search) && DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt).ToList());
+            }
+            else if (!String.IsNullOrWhiteSpace(search) && String.IsNullOrWhiteSpace(includeActiveOnly))
+            {
+                return View(db.OBS_QUESTION.Where(ques => ques.obs_question_full_text.Contains(search)).ToList());
+            }
+            else if (String.IsNullOrWhiteSpace(search) && includeActiveOnly == "on")
+            {
+                return View(db.OBS_QUESTION.Where(ques => DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt).ToList());
+            }
+
+            else { return View(db.OBS_QUESTION.Where(ques => DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt).ToList()); }
+            
         }
 
         // GET: Question/Details/5

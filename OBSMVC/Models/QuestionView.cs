@@ -7,10 +7,10 @@ using System.Web.Mvc;
 
 namespace OBSMVC.Models
 {
-    [MetadataType(typeof(OuestionMetaData))]
+    [MetadataType(typeof(QuestionMetaData))]
     public partial class OBS_QUESTION {}
 
-    public class OuestionMetaData
+    public class QuestionMetaData
     {
         [Display(Name = "Question Id")]
         [HiddenInput(DisplayValue = false)]

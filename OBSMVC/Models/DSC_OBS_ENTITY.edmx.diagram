@@ -14,10 +14,10 @@
         <AssociationConnector Association="Models.relationship45" ManuallyRouted="false" />
         <AssociationConnector Association="Models.obs_super_type_type" ManuallyRouted="false" />
         <EntityTypeShape EntityType="Models.OBS_QUEST_ANS_TYPES" Width="1.5" PointX="6.875" PointY="2.75" />
-        <EntityTypeShape EntityType="Models.OBS_QUEST_ASSGND_MD" Width="1.5" PointX="7.375" PointY="5.875" />
+        <EntityTypeShape EntityType="Models.OBS_QUEST_ASSGND_MD" Width="2" PointX="7.375" PointY="5.875" />
         <EntityTypeShape EntityType="Models.OBS_QUEST_SLCT_ANS" Width="1.5" PointX="8.75" PointY="2.875" />
         <EntityTypeShape EntityType="Models.OBS_QUESTION" Width="1.5" PointX="5.5" PointY="5.875" />
-        <EntityTypeShape EntityType="Models.OBS_QUESTION_METADATA" Width="1.5" PointX="9.5" PointY="6" />
+        <EntityTypeShape EntityType="Models.OBS_QUESTION_METADATA" Width="2" PointX="9.75" PointY="6" />
         <AssociationConnector Association="Models.relationship43" />
         <AssociationConnector Association="Models.relationship41" />
         <AssociationConnector Association="Models.relationship44" />

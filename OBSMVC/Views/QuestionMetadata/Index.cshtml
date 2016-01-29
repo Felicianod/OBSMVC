@@ -1,0 +1,39 @@
+﻿@model IEnumerable<OBSMVC.Models.OBS_QUESTION_METADATA>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.obs_quest_md_value)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.obs_quest_md_cat)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.obs_quest_md_value)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.obs_quest_md_cat)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.obs_quest_md_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.obs_quest_md_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.obs_quest_md_id })
+        </td>
+    </tr>
+}
+
+</table>

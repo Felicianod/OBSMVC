@@ -1,0 +1,40 @@
+﻿@model OBSMVC.Models.OBS_QUESTION_METADATA
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>OBS_QUESTION_METADATA</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_quest_md_value)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_quest_md_value)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_quest_md_cat)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_quest_md_cat)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

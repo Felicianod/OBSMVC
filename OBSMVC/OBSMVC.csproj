@@ -199,6 +199,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OBSTYPEController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
+    <Compile Include="Controllers\QuestionMetadataController.cs" />
     <Compile Include="CustomerModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -275,6 +276,7 @@
     <Compile Include="Models\OBS_TYPE.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\QuestionMetadataView.cs" />
     <Compile Include="Models\QuestionView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -431,6 +433,11 @@
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Shared\NotFound.cshtml" />
     <Content Include="Views\Login\login.cshtml" />
+    <Content Include="Views\QuestionMetadata\Create.cshtml" />
+    <Content Include="Views\QuestionMetadata\Delete.cshtml" />
+    <Content Include="Views\QuestionMetadata\Details.cshtml" />
+    <Content Include="Views\QuestionMetadata\Edit.cshtml" />
+    <Content Include="Views\QuestionMetadata\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

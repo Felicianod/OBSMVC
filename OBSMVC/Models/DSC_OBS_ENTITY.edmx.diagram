@@ -23,7 +23,6 @@
         <AssociationConnector Association="Models.rel_metadata_quest_assgnd" />
         <AssociationConnector Association="Models.rel_quest_assgnd_meta" />
         <EntityTypeShape EntityType="Models.OBS_ANS_TYPE" Width="1.5" PointX="0.75" PointY="10" />
-        <AssociationConnector Association="Models.relationship43" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

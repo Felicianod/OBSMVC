@@ -109,10 +109,15 @@ namespace OBSMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "obs_question_id,obs_question_ver,obs_question_full_text,obs_question_short_text,obs_question_desc,obs_question_mm_url,obs_question_eff_st_dt,obs_question_eff_end_dt, obs_question_added_dtm, obs_question_added_uid")] OBS_QUESTION oBS_QUESTION)
+        public ActionResult Edit([Bind(Include = "obs_question_id, obs_question_ver,obs_question_full_text,obs_question_short_text,obs_question_desc,obs_question_mm_url,obs_question_eff_st_dt,obs_question_eff_end_dt, obs_question_added_dtm, obs_question_added_uid")] OBS_QUESTION oBS_QUESTION)
         {
-            using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
+            if(!ModelState.IsValid) // Model State is not Valid return Errors
             {
+                return View(oBS_QUESTION);            
+            }
+
+            using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
+            {                
                 var question = db.OBS_QUESTION.Single(x => x.obs_question_id == oBS_QUESTION.obs_question_id);
 
                 if (!oBS_QUESTION.obs_question_full_text.Equals(question.obs_question_full_text))

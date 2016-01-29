@@ -26,7 +26,7 @@
                     <div class="panel-body">
                         <div class="list-group">
                             <div class="list-group-item">
-                                <form role="form" class="form-inline">
+                                <form role="form" class="form-inline" method="get">
                                     @*<div class="form-group has-feedback">
                                         <label class="control-label col-sm-2">Search</label>
                                         <div class=" col-md-8">
@@ -46,6 +46,9 @@
                                     @foreach (var item in Model)
                                     {
                                         <tr>
+                                            <td>
+                                                @Html.ActionLink("Details", "Edit")
+                                            </td>
                                             <td>
                                                 <span class="glyphicon-asterisk"></span>
                                                 @Html.DisplayFor(modelItem => item.obs_question_full_text)

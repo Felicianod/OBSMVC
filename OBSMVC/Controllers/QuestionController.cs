@@ -121,18 +121,41 @@ namespace OBSMVC.Controllers
 
         [HttpGet]
         public ActionResult Manage(string searchKeyWords)
-        {            
-            if (String.IsNullOrEmpty(searchKeyWords))
-            { // Default pulls all Question Data in a list.
+        {
+            if (!String.IsNullOrEmpty(searchKeyWords))
+            {// Default pulls all Question Data in a list.
                 ViewBag.searchTerm = "";
                 return View(db.OBS_QUESTION.ToList());
             }
             else
-            { // Filter view by search Keywords
+            {
+                // Filter view by search Keywords
                 ViewBag.searchTerm = searchKeyWords;
-                return View(db.OBS_QUESTION.Where(x => x.obs_question_full_text.Contains(searchKeyWords)).ToList());
+                var questionList = db.OBS_QUESTION.Where(x => x.obs_question_full_text.Contains(searchKeyWords));
+                //if (questionList.ToList().Count > 0)
+                //{
+                //    return View(questionList.ToList());
+                //}
+                return View(questionList.ToList());
+                //else
+                //{
+                //    try
+                //    {
+                //        string[] words = search.Split(' ');
+                //        string word0 = words[0];
+                //        string word1 = words[1];
+                //        return View(employeeList.Where(emp => (emp.dsc_emp_first_name.Contains(word0) && emp.dsc_emp_last_name.Contains(word1)) || (emp.dsc_emp_first_name.Contains(word1) && emp.dsc_emp_last_name.Contains(word0))).ToList().ToPagedList(page ?? 1, PageSize ?? 10));
+                //    }
+                //    catch
+                //    {
+                //        return View(employeeList.Where(emp => emp.dsc_emp_last_name.Contains(search) || emp.dsc_emp_first_name.Contains(search) || emp.DSC_LC.dsc_lc_name.Contains(search) || emp.dsc_emp_perm_id.ToString().Contains(search) || emp.dsc_emp_adp_id.Contains(search) || emp.dsc_emp_email_addr.Contains(search)).ToList().ToPagedList(page ?? 1, PageSize ?? 10));
+                //    }
+                //}
+                
+                
             }
         }
+
 
         protected override void Dispose(bool disposing)
         {

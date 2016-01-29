@@ -8,13 +8,14 @@
 
 
 <p>
-@using (Html.BeginForm("Index", "Questions", FormMethod.Get))
+@using (Html.BeginForm("Index", "Question", FormMethod.Get))
 {
     <table style="width:100%">
        
        <tr>
            <td style="text-align:left">
                @Html.TextBox("search") <input type="submit" value="Search" />
+               <label><input type="checkbox" name="includeActiveOnly" id="includeActiveOnly" checked>Only Search Active</label>
            </td>
            <td style="text-align:end">
                <b>@Html.ActionLink("Create New", "Create")</b>
@@ -49,7 +50,7 @@
            @Html.DisplayFor(modelItem => item.obs_question_full_text)
         </td>       
         <td style="text-align:center">
-            <input type="checkbox" disabled="disabled" @if (DateTime.Now >item.obs_question_eff_st_dt && DateTime.Now<=item.obs_question_eff_end_dt) { <TEXT> checked="checked" </TEXT>     } />           
+            <input type="checkbox" disabled="disabled" @if (DateTime.Today >=item.obs_question_eff_st_dt && DateTime.Today<item.obs_question_eff_end_dt) { <TEXT> checked="checked" </TEXT>     } />           
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id = item.obs_question_id, obs_question_id = item.obs_question_id, obs_question_added_dtm = item.obs_question_added_dtm, obs_question_added_uid = item.obs_question_added_uid })  

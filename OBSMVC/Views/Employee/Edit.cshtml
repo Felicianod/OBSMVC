@@ -31,7 +31,7 @@
             var isChanged = false;
             $('input, select, textarea').change(function () {
                 //$("input[type='submit']").removeAttr("disabled");
-                $("#btnSubmit").removeAttr('disabled');               
+                $("#btnSubmit").removeAttr('disabled');
                 isChanged = true;
             });
             $(window).bind('beforeunload', function () {
@@ -43,7 +43,12 @@
             });
             $("#btnSubmit").click(function () {
                 isChanged = false;
+                $(this).button('loading');
             });
+            //$(".btn").click(function () {
+            //    isChanged = false;
+            //    $(this).button('loading');
+            //});
         });
     </script>
     <!-- left column -->
@@ -52,10 +57,10 @@
             @*  <img src="~/Images/iconNoAvatar.png" class="avatar img-circle" alt="avatar">*@
             <img src="~/Images/iconNoAvatar.png" class="avatar img-circle" alt="avatar">
             @*@if (Model.dsc_emp_last_name.Trim() == "Pogany")
-            { <img src="~/Images/KPogany.jpg" class="avatar img-circle" alt="avatar">}
-            else {
-                <img src="~/Images/iconNoAvatar.png" class="avatar img-circle" alt="avatar">
-            }*@
+                { <img src="~/Images/KPogany.jpg" class="avatar img-circle" alt="avatar">}
+                else {
+                    <img src="~/Images/iconNoAvatar.png" class="avatar img-circle" alt="avatar">
+                }*@
         </div>
         <h3>@Model.dsc_emp_first_name @Model.dsc_emp_last_name</h3>
         <h5>@Model.dsc_emp_email_addr</h5>
@@ -86,46 +91,63 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-lg-3 control-label">Hire Date:</label>
-                <div class="input-group col-lg-8" >                                  
+                <label class="col-md-3 control-label">Hire Date:</label>
+                <div class="input-group col-md-8">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                     @*<input type="Text" class="editDate form-control" value="@Model.dsc_emp_hire_dt"  name="dsc_emp_hire_dt" id="dsc_emp_hire_dt"/>*@
-                    @Html.EditorFor(model => Model.dsc_emp_hire_dt, new { htmlAttributes = new { @class = "form-control editDate", name="dsc_emp_hire_dt", id="dsc_emp_hire_dt" } })
+                    @Html.EditorFor(model => Model.dsc_emp_hire_dt, new { htmlAttributes = new { @class = "form-control editDate", name = "dsc_emp_hire_dt", id = "dsc_emp_hire_dt" } })
                     @Html.ValidationMessageFor(model => model.dsc_emp_hire_dt, "", new { @class = "text-danger" })
-                    <span class="glyphicon glyphicon-calendar"></span>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-lg-3 control-label">Termination Date:</label>
-                <div class="input-group col-lg-8" >
+                <div class="input-group col-lg-8">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                     @*<input type="Text" class="editDate form-control" value="@Model.dsc_emp_term_dt"  name="dsc_emp_term_dt" id="dsc_emp_term_dt"/>*@
-                    @Html.EditorFor(model => Model.dsc_emp_term_dt, new { htmlAttributes = new { @class = "form-control editDate", name="dsc_emp_term_dt", id="dsc_emp_term_dt" } })
+                    @Html.EditorFor(model => Model.dsc_emp_term_dt, new { htmlAttributes = new { @class = "form-control editDate", name = "dsc_emp_term_dt", id = "dsc_emp_term_dt" } })
                     @Html.ValidationMessageFor(model => model.dsc_emp_term_dt, "", new { @class = "text-danger" })
-                    <span class="glyphicon glyphicon-calendar"></span>
+                </div>
+            </div>
+            @*<div class="form-group row">
+                    <label class="col-lg-3 control-label">Employee Flags:</label>
+                    <div class="form-group col-lg-8">
+                        <label class="col-sm-3 text-center" for="dsc_emp_can_be_obs_yn">
+                            Observable:
+                            <input type="checkbox" class="form-control input-sm" id="dsc_emp_can_be_obs_yn" @if (Model.dsc_emp_can_be_obs_yn == "Y") { <text> checked="checked" </text>  } name="dsc_emp_can_be_obs_yn">
+                        </label>
+                        <label class="col-sm-3 text-center" for="dsc_emp_hourly_yn">
+                            Hourly:
+                            <input type="checkbox" class="form-control input-sm" id="dsc_emp_hourly_yn" @if (Model.dsc_emp_hourly_yn == "Y") { <text> checked="checked" </text> } name="dsc_emp_hourly_yn">
+                        </label>
+                        <label class="col-sm-3 text-center" for="dsc_emp_temp_yn">
+                            Temp:
+                            <input type="checkbox" class="form-control input-sm" id="dsc_emp_temp_yn" @if (Model.dsc_emp_temp_yn == "Y") { <text> checked="checked" </text>  } name="dsc_emp_temp_yn">
+                        </label>
+                    </div>
+                </div>*@
+            <div class="form-group row">
+                <label class="col-lg-3 control-label">Observable:</label>
+                <div class="col-lg-8">
+                    <input type="checkbox" class="form-control input-sm" id="dsc_emp_can_be_obs_yn" @if (Model.dsc_emp_can_be_obs_yn == "Y") { <text> checked="checked" </text>  } name="dsc_emp_can_be_obs_yn">
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-lg-3 control-label">Employee Flags:</label>
-                <div class="form-group col-lg-8">
-                    <label class="col-sm-3 text-center" for="dsc_emp_can_be_obs_yn">
-                        Observable:
-                        <input type="checkbox" class="form-control input-sm" id="dsc_emp_can_be_obs_yn" @if (Model.dsc_emp_can_be_obs_yn == "Y") { <text> checked="checked" </text>        } name="dsc_emp_can_be_obs_yn">
-                    </label>
-                    <label class="col-sm-3 text-center" for="dsc_emp_hourly_yn">
-                        Hourly:
-                        <input type="checkbox" class="form-control input-sm" id="dsc_emp_hourly_yn" @if (Model.dsc_emp_hourly_yn == "Y") { <text> checked="checked" </text>         } name="dsc_emp_hourly_yn">
-                    </label>
-                    <label class="col-sm-3 text-center" for="dsc_emp_temp_yn">
-                        Temp:
-                        <input type="checkbox" class="form-control input-sm" id="dsc_emp_temp_yn" @if (Model.dsc_emp_temp_yn == "Y") { <text> checked="checked" </text>         } name="dsc_emp_temp_yn">
-                    </label>
+                <label class="col-lg-3 control-label">Hourly:</label>
+                <div class="col-lg-8">
+                    <input type="checkbox" class="form-control input-sm" id="dsc_emp_hourly_yn" @if (Model.dsc_emp_hourly_yn == "Y") { <text> checked="checked" </text>   } name="dsc_emp_hourly_yn">
                 </div>
             </div>
-
+            <div class="form-group row">
+                <label class="col-lg-3 control-label">Temp:</label>
+                <div class="col-lg-8">
+                    <input type="checkbox" class="form-control input-sm" id="dsc_emp_temp_yn" @if (Model.dsc_emp_temp_yn == "Y") { <text> checked="checked" </text>    } name="dsc_emp_temp_yn">
+                </div>
+            </div>
             <br />
             <div class="form-group">
                 <label class="col-md-3 control-label"></label>
                 <div class="col-md-8">
-                    <button type="submit" class="btn btn-primary" disabled="disabled" id="btnSubmit" >Save Changes</button>
+                    <button type="submit" class="btn btn-primary" disabled="disabled" id="btnSubmit">Save Changes</button>
                     @*<input type="submit" class="btn btn-primary" value="Save Changes">*@
                     <span></span>
                     <input type="reset" class="btn btn-default" value="Cancel">

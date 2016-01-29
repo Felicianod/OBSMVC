@@ -35,7 +35,7 @@ namespace OBSMVC.Controllers
             return View(oBS_QUESTION);
         }
 
-        // GET: Question/Create
+        [HttpGet]  // GET: Question/Create
         public ActionResult Create()
         {
             return View();
@@ -44,12 +44,16 @@ namespace OBSMVC.Controllers
         // POST: Question/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "obs_question_id,obs_question_ver,obs_question_full_text,obs_question_short_text,obs_question_desc,obs_question_mm_url,obs_question_eff_st_dt,obs_question_eff_end_dt")] OBS_QUESTION oBS_QUESTION)
         {
             if (ModelState.IsValid)
             {
+                oBS_QUESTION.obs_question_added_uid = User.Identity.Name;
+                oBS_QUESTION.obs_question_added_dtm = DateTime.Now;
+
                 db.OBS_QUESTION.Add(oBS_QUESTION);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -115,6 +119,21 @@ namespace OBSMVC.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public ActionResult Manage(string searchKeyWords)
+        {            
+            if (String.IsNullOrEmpty(searchKeyWords))
+            { // Default pulls all Question Data in a list.
+                ViewBag.searchTerm = "";
+                return View(db.OBS_QUESTION.ToList());
+            }
+            else
+            { // Filter view by search Keywords
+                ViewBag.searchTerm = searchKeyWords;
+                return View(db.OBS_QUESTION.Where(x => x.obs_question_full_text.Contains(searchKeyWords)).ToList());
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -123,5 +142,7 @@ namespace OBSMVC.Controllers
             }
             base.Dispose(disposing);
         }
+
+
     }
 }

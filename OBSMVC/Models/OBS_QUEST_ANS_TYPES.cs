@@ -26,9 +26,9 @@ namespace OBSMVC.Models
         public Nullable<System.DateTime> obs_qat_end_eff_dt { get; set; }
         public string obs_qat_default_ans_type { get; set; }
     
-        public virtual OBS_ANS_TYPE OBS_ANS_TYPE { get; set; }
         public virtual OBS_QUESTION OBS_QUESTION { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_QUEST_SLCT_ANS> OBS_QUEST_SLCT_ANS { get; set; }
+        public virtual OBS_ANS_TYPE OBS_ANS_TYPE { get; set; }
     }
 }

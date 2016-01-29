@@ -14,6 +14,7 @@
           <Property Name="dsc_emp_perm_id" Type="varchar" MaxLength="20" />
           <Property Name="dsc_emp_wms_clock_nbr" Type="int" />
           <Property Name="dsc_emp_first_name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="dsc_emp_mid_name" Type="varchar" MaxLength="30" />
           <Property Name="dsc_emp_last_name" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="dsc_emp_email_addr" Type="varchar" MaxLength="100" />
           <Property Name="dsc_emp_title" Type="varchar" MaxLength="50" />
@@ -47,8 +48,8 @@
           <Property Name="obs_ans_type_name" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="obs_ans_type_desc" Type="varchar" MaxLength="100" />
           <Property Name="obs_ans_type_has_fxd_ans_yn" Type="varchar" MaxLength="1" Nullable="false" />
-          <Property Name="obs_ans_type_free_text_yn" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="obs_ans_type_comment_mand_yn" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="obs_ans_type_category" Type="varchar" MaxLength="20" />
           <Property Name="obs_ans_type_api_tag_val" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="OBS_QUEST_ANS_TYPES">
@@ -292,6 +293,7 @@
           <Property Name="dsc_emp_added_dtm" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="dsc_emp_upd_uid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
           <Property Name="dsc_emp_upd_dtm" Type="DateTime" Precision="3" />
+          <Property Name="dsc_emp_mid_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="DSC_LC">
           <Key>
@@ -303,19 +305,6 @@
           <Property Name="dsc_lc_timezone" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="dsc_lc_eff_end_date" Type="DateTime" Precision="3" />
           <NavigationProperty Name="DSC_EMPLOYEE" Relationship="Self.relationship45" FromRole="DSC_LC" ToRole="DSC_EMPLOYEE" />
-        </EntityType>
-        <EntityType Name="OBS_ANS_TYPE">
-          <Key>
-            <PropertyRef Name="obs_ans_type_id" />
-          </Key>
-          <Property Name="obs_ans_type_id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="obs_ans_type_name" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="obs_ans_type_desc" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="obs_ans_type_has_fxd_ans_yn" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="obs_ans_type_free_text_yn" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="obs_ans_type_comment_mand_yn" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="obs_ans_type_api_tag_val" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="OBS_QUEST_ANS_TYPES" Relationship="Models.relationship43" FromRole="OBS_ANS_TYPE" ToRole="OBS_QUEST_ANS_TYPES" />
         </EntityType>
         <EntityType Name="OBS_SUB_TYPE">
           <Key>
@@ -376,7 +365,6 @@
         <EntityContainer Name="DSC_OBS_DB_ENTITY" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="EMPLOYEEs" EntityType="Models.EMPLOYEE" />
           <EntitySet Name="DSC_LC" EntityType="Self.DSC_LC" />
-          <EntitySet Name="OBS_ANS_TYPE" EntityType="Self.OBS_ANS_TYPE" />
           <EntitySet Name="OBS_SUB_TYPE" EntityType="Self.OBS_SUB_TYPE" />
           <EntitySet Name="OBS_SUPER_TYPE" EntityType="Self.OBS_SUPER_TYPE" />
           <EntitySet Name="OBS_TYPE" EntityType="Self.OBS_TYPE" />
@@ -393,10 +381,6 @@
           <EntitySet Name="OBS_QUEST_SLCT_ANS" EntityType="Models.OBS_QUEST_SLCT_ANS" />
           <EntitySet Name="OBS_QUESTION" EntityType="Models.OBS_QUESTION" />
           <EntitySet Name="OBS_QUESTION_METADATA" EntityType="Models.OBS_QUESTION_METADATA" />
-          <AssociationSet Name="relationship43" Association="Models.relationship43">
-            <End Role="OBS_ANS_TYPE" EntitySet="OBS_ANS_TYPE" />
-            <End Role="OBS_QUEST_ANS_TYPES" EntitySet="OBS_QUEST_ANS_TYPES" />
-          </AssociationSet>
           <AssociationSet Name="relationship41" Association="Models.relationship41">
             <End Role="OBS_QUESTION" EntitySet="OBS_QUESTION" />
             <End Role="OBS_QUEST_ANS_TYPES" EntitySet="OBS_QUEST_ANS_TYPES" />
@@ -413,6 +397,11 @@
             <End Role="OBS_QUESTION" EntitySet="OBS_QUESTION" />
             <End Role="OBS_QUEST_ASSGND_MD" EntitySet="OBS_QUEST_ASSGND_MD" />
           </AssociationSet>
+          <EntitySet Name="OBS_ANS_TYPE" EntityType="Models.OBS_ANS_TYPE" />
+          <AssociationSet Name="relationship43" Association="Models.relationship43">
+            <End Role="OBS_ANS_TYPE" EntitySet="OBS_ANS_TYPE" />
+            <End Role="OBS_QUEST_ANS_TYPES" EntitySet="OBS_QUEST_ANS_TYPES" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="OBS_QUEST_ANS_TYPES">
           <Key>
@@ -423,9 +412,9 @@
           <Property Name="obs_ans_type_id" Type="Int16" Nullable="false" />
           <Property Name="obs_qat_end_eff_dt" Type="DateTime" Precision="3" />
           <Property Name="obs_qat_default_ans_type" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="OBS_ANS_TYPE" Relationship="Models.relationship43" FromRole="OBS_QUEST_ANS_TYPES" ToRole="OBS_ANS_TYPE" />
           <NavigationProperty Name="OBS_QUESTION" Relationship="Models.relationship41" FromRole="OBS_QUEST_ANS_TYPES" ToRole="OBS_QUESTION" />
           <NavigationProperty Name="OBS_QUEST_SLCT_ANS" Relationship="Models.relationship44" FromRole="OBS_QUEST_ANS_TYPES" ToRole="OBS_QUEST_SLCT_ANS" />
+          <NavigationProperty Name="OBS_ANS_TYPE" Relationship="Models.relationship43" FromRole="OBS_QUEST_ANS_TYPES" ToRole="OBS_ANS_TYPE" />
         </EntityType>
         <EntityType Name="OBS_QUEST_ASSGND_MD">
           <Key>
@@ -481,18 +470,6 @@
           <Property Name="obs_quest_md_cat" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="OBS_QUEST_ASSGND_MD" Relationship="Models.rel_metadata_quest_assgnd" FromRole="OBS_QUESTION_METADATA" ToRole="OBS_QUEST_ASSGND_MD" />
         </EntityType>
-        <Association Name="relationship43">
-          <End Type="Models.OBS_ANS_TYPE" Role="OBS_ANS_TYPE" Multiplicity="1" />
-          <End Type="Models.OBS_QUEST_ANS_TYPES" Role="OBS_QUEST_ANS_TYPES" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_ANS_TYPE">
-              <PropertyRef Name="obs_ans_type_id" />
-            </Principal>
-            <Dependent Role="OBS_QUEST_ANS_TYPES">
-              <PropertyRef Name="obs_ans_type_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="relationship41">
           <End Type="Models.OBS_QUESTION" Role="OBS_QUESTION" Multiplicity="1" />
           <End Type="Models.OBS_QUEST_ANS_TYPES" Role="OBS_QUEST_ANS_TYPES" Multiplicity="*" />
@@ -541,6 +518,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="OBS_ANS_TYPE">
+          <Key>
+            <PropertyRef Name="obs_ans_type_id" />
+          </Key>
+          <Property Name="obs_ans_type_id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="obs_ans_type_name" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="obs_ans_type_desc" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="obs_ans_type_has_fxd_ans_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="obs_ans_type_comment_mand_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="obs_ans_type_category" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="obs_ans_type_api_tag_val" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OBS_QUEST_ANS_TYPES" Relationship="Models.relationship43" FromRole="OBS_ANS_TYPE" ToRole="OBS_QUEST_ANS_TYPES" />
+        </EntityType>
+        <Association Name="relationship43">
+          <End Type="Models.OBS_ANS_TYPE" Role="OBS_ANS_TYPE" Multiplicity="1" />
+          <End Type="Models.OBS_QUEST_ANS_TYPES" Role="OBS_QUEST_ANS_TYPES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_ANS_TYPE">
+              <PropertyRef Name="obs_ans_type_id" />
+            </Principal>
+            <Dependent Role="OBS_QUEST_ANS_TYPES">
+              <PropertyRef Name="obs_ans_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -550,6 +552,7 @@
           <EntitySetMapping Name="EMPLOYEEs">
             <EntityTypeMapping TypeName="Models.EMPLOYEE">
               <MappingFragment StoreEntitySet="DSC_EMPLOYEE">
+                <ScalarProperty Name="dsc_emp_mid_name" ColumnName="dsc_emp_mid_name" />
                 <ScalarProperty Name="dsc_emp_upd_dtm" ColumnName="dsc_emp_upd_dtm" />
                 <ScalarProperty Name="dsc_emp_upd_uid" ColumnName="dsc_emp_upd_uid" />
                 <ScalarProperty Name="dsc_emp_added_dtm" ColumnName="dsc_emp_added_dtm" />
@@ -580,19 +583,6 @@
                 <ScalarProperty Name="dsc_lc_code" ColumnName="dsc_lc_code" />
                 <ScalarProperty Name="dsc_lc_timezone" ColumnName="dsc_lc_timezone" />
                 <ScalarProperty Name="dsc_lc_eff_end_date" ColumnName="dsc_lc_eff_end_date" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OBS_ANS_TYPE">
-            <EntityTypeMapping TypeName="Models.OBS_ANS_TYPE">
-              <MappingFragment StoreEntitySet="OBS_ANS_TYPE">
-                <ScalarProperty Name="obs_ans_type_id" ColumnName="obs_ans_type_id" />
-                <ScalarProperty Name="obs_ans_type_name" ColumnName="obs_ans_type_name" />
-                <ScalarProperty Name="obs_ans_type_desc" ColumnName="obs_ans_type_desc" />
-                <ScalarProperty Name="obs_ans_type_has_fxd_ans_yn" ColumnName="obs_ans_type_has_fxd_ans_yn" />
-                <ScalarProperty Name="obs_ans_type_free_text_yn" ColumnName="obs_ans_type_free_text_yn" />
-                <ScalarProperty Name="obs_ans_type_comment_mand_yn" ColumnName="obs_ans_type_comment_mand_yn" />
-                <ScalarProperty Name="obs_ans_type_api_tag_val" ColumnName="obs_ans_type_api_tag_val" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -689,6 +679,19 @@
                 <ScalarProperty Name="obs_quest_md_cat" ColumnName="obs_quest_md_cat" />
                 <ScalarProperty Name="obs_quest_md_value" ColumnName="obs_quest_md_value" />
                 <ScalarProperty Name="obs_quest_md_id" ColumnName="obs_quest_md_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OBS_ANS_TYPE">
+            <EntityTypeMapping TypeName="Models.OBS_ANS_TYPE">
+              <MappingFragment StoreEntitySet="OBS_ANS_TYPE">
+                <ScalarProperty Name="obs_ans_type_api_tag_val" ColumnName="obs_ans_type_api_tag_val" />
+                <ScalarProperty Name="obs_ans_type_category" ColumnName="obs_ans_type_category" />
+                <ScalarProperty Name="obs_ans_type_comment_mand_yn" ColumnName="obs_ans_type_comment_mand_yn" />
+                <ScalarProperty Name="obs_ans_type_has_fxd_ans_yn" ColumnName="obs_ans_type_has_fxd_ans_yn" />
+                <ScalarProperty Name="obs_ans_type_desc" ColumnName="obs_ans_type_desc" />
+                <ScalarProperty Name="obs_ans_type_name" ColumnName="obs_ans_type_name" />
+                <ScalarProperty Name="obs_ans_type_id" ColumnName="obs_ans_type_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

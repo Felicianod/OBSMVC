@@ -101,6 +101,8 @@ namespace OBSMVC.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.mdTags = db.OBS_QUESTION_METADATA.ToList();
+
             return View(oBS_QUESTION);
         }
 

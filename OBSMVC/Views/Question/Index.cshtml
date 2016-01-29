@@ -53,7 +53,7 @@
             <input type="checkbox" disabled="disabled" @if (DateTime.Today >=item.obs_question_eff_st_dt && DateTime.Today<item.obs_question_eff_end_dt) { <TEXT> checked="checked" </TEXT>     } />           
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.obs_question_id })  
+            @Html.ActionLink("Edit", "Edit", new { id = item.obs_question_id, obs_question_id = item.obs_question_id, obs_question_added_dtm = item.obs_question_added_dtm, obs_question_added_uid = item.obs_question_added_uid })  
         </td>
     </tr>
 }

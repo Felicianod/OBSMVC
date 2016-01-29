@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
@@ -8,15 +9,24 @@ using System.Web.Mvc;
 namespace OBSMVC.Models
 {
     [MetadataType(typeof(QuestionMetaData))]
-    public partial class OBS_QUESTION {}
+    public partial class OBS_QUESTION {
+        //public OBS_QUESTION()
+        //{
+        //    obs_question_eff_st_dt = DateTime.Now;
+        //    obs_question_eff_end_dt = Convert.ToDateTime("2060/12/31");
+        //    obs_question_added_dtm = DateTime.Now;
+        //}
+    }
 
     public class QuestionMetaData
     {
         [Display(Name = "Question Id")]
+        [ReadOnly(true)]
         [HiddenInput(DisplayValue = false)]
         public int obs_question_id { get; set; }
 
         [Display(Name = "Question Version")]
+        [ReadOnly(true)]
         public short obs_question_ver { get; set; }
 
         [Display(Name = "Full Text")]
@@ -38,7 +48,7 @@ namespace OBSMVC.Models
 
         [Display(Name = "Effective End Date")]
         [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"))]
-        public DateTime obs_question_eff_end_dt { get; set; }
+        public DateTime? obs_question_eff_end_dt { get; set; }
 
         [Display(Name = "Question Added By")]
         public string obs_question_added_uid { get; set; }

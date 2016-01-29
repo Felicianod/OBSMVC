@@ -21,7 +21,6 @@ namespace OBSMVC.Models
     public class QuestionMetaData
     {
         [Display(Name = "Question Id")]
-        [ReadOnly(true)]
         [HiddenInput(DisplayValue = false)]
         public int obs_question_id { get; set; }
 

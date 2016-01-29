@@ -2,6 +2,52 @@
 
 @{  ViewBag.Title = "Create"; }
 
+<script type="text/javascript">
+        //$(function () {
+        //    $("input:text.editDate").datepicker();
+        //});
+        $(function () {
+            $("#obs_question_eff_st_dt").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'M dd, yy'
+            });
+        });
+        $(function () {
+            $("#obs_question_eff_end_dt").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'M dd, yy'
+            });
+        });
+</script>
+<!-- Form Edit State Change Validation -->
+<script>
+        $(document).ready(function () {
+            var isChanged = false;
+            $('input, select, textarea').change(function () {
+                //$("input[type='submit']").removeAttr("disabled");
+                $("#btnAdd").removeAttr('disabled');
+                isChanged = true;
+            });
+            $(window).bind('beforeunload', function () {
+                if (isChanged) {
+                    return 'There are unsaved changed. Do you want to discard Changes and Exit?';
+                } else {
+                    return undefined;
+                }
+            });
+            $("#btnAdd").click(function () {
+                isChanged = false;
+                $(this).button('loading');
+            });
+            //$(".btn").click(function () {
+            //    isChanged = false;
+            //    $(this).button('loading');
+            //});
+            
+        });
+</script>
 <div class="well well-sm"><h3>Add New Question</h3></div>
 
 @using (Html.BeginForm()) 
@@ -49,17 +95,18 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group row">
             @Html.LabelFor(model => model.obs_question_eff_st_dt, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.obs_question_eff_st_dt, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="input-group col-md-10">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                @Html.EditorFor(model => model.obs_question_eff_st_dt, new { htmlAttributes = new { @class = "form-control", name = "obs_question_eff_st_dt", id = "obs_question_eff_st_dt" } })
                 @Html.ValidationMessageFor(model => model.obs_question_eff_st_dt, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        <div class="form-group">
+        <div class="form-group row">
             @Html.LabelFor(model => model.obs_question_eff_end_dt, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            <div class="input-group col-md-10">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                 <input class="form-control text-box single-line" data-val="flase" id="obs_question_eff_end_dt" name="obs_question_eff_end_dt" type="datetime" value="" />
                 @*<input class="form-control text-box single-line" data-val="true" data-val-date="The field Effective End Date must be a date." data-val-required="The Effective End Date field is required." id="obs_question_eff_end_dt" name="obs_question_eff_end_dt" type="datetime" value="2060/12/31" />*@
                 @*@Html.EditorFor(model => model.obs_question_eff_end_dt, new { htmlAttributes = new { @class = "form-control" } })*@
@@ -69,7 +116,9 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <button type="submit" class="btn btn-primary" disabled="disabled" id="btnAdd">Add Question</button>
+                <span></span>
+                <input type="reset" class="btn btn-default" value="Reset Form">
             </div>
         </div>
     </div>

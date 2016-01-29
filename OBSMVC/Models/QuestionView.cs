@@ -26,7 +26,6 @@ namespace OBSMVC.Models
         public int obs_question_id { get; set; }
 
         [Display(Name = "Question Version")]
-        [ReadOnly(true)]
         public short obs_question_ver { get; set; }
 
         [Display(Name = "Full Text")]
@@ -51,9 +50,10 @@ namespace OBSMVC.Models
         public DateTime? obs_question_eff_end_dt { get; set; }
 
         [Display(Name = "Question Added By")]
+        [Required]
         public string obs_question_added_uid { get; set; }
 
-        [Display(Name = "Date Added")]
+        [Display(Name = "Date Added")] [Required]
         [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"))]
         public DateTime obs_question_added_dtm { get; set; }
 

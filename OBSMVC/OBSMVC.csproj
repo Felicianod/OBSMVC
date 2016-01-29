@@ -438,6 +438,16 @@
     <Content Include="Views\QuestionMetadata\Details.cshtml" />
     <Content Include="Views\QuestionMetadata\Edit.cshtml" />
     <Content Include="Views\QuestionMetadata\Index.cshtml" />
+    <Content Include="Views\OBSTYPE\Delete.cshtml" />
+    <Content Include="Views\OBSTYPE\Details.cshtml" />
+    <Content Include="Views\OBSTYPE\Edit.cshtml" />
+    <Content Include="Views\OBSTYPE\Index.cshtml" />
+    <Content Include="Views\Question\Create.cshtml" />
+    <Content Include="Views\Question\Delete.cshtml" />
+    <Content Include="Views\Question\Details.cshtml" />
+    <Content Include="Views\Question\Edit.cshtml" />
+    <Content Include="Views\Question\Index.cshtml" />
+    <Content Include="Views\Question\Manage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

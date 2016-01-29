@@ -1,0 +1,29 @@
+﻿@model IEnumerable<OBSMVC.Models.OBS_QUESTION_METADATA>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.obs_quest_md_value)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.obs_quest_md_cat)
+        </th>
+      
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.obs_quest_md_value)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.obs_quest_md_cat)
+        </td>
+        
+    </tr>
+}
+
+</table>

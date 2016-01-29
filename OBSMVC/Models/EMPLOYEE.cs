@@ -33,6 +33,7 @@ namespace OBSMVC.Models
         public System.DateTime dsc_emp_added_dtm { get; set; }
         public string dsc_emp_upd_uid { get; set; }
         public Nullable<System.DateTime> dsc_emp_upd_dtm { get; set; }
+        public string dsc_emp_mid_name { get; set; }
     
         public virtual DSC_LC DSC_LC { get; set; }
     }

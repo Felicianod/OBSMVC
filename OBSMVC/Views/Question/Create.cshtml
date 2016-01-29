@@ -22,7 +22,6 @@
                 @Html.ValidationMessageFor(model => model.obs_question_ver, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.obs_question_full_text, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -30,7 +29,6 @@
                 @Html.ValidationMessageFor(model => model.obs_question_full_text, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.obs_question_short_text, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -38,7 +36,6 @@
                 @Html.ValidationMessageFor(model => model.obs_question_short_text, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.obs_question_desc, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -46,7 +43,6 @@
                 @Html.ValidationMessageFor(model => model.obs_question_desc, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.obs_question_mm_url, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -66,7 +62,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.obs_question_eff_end_dt, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.obs_question_eff_end_dt, new { htmlAttributes = new { @class = "form-control" } })
+                <input class="form-control text-box single-line" data-val="true" data-val-date="The field Effective End Date must be a date." data-val-required="The Effective End Date field is required." id="obs_question_eff_end_dt" name="obs_question_eff_end_dt" type="datetime" value="2060/12/31" />
+                @*@Html.EditorFor(model => model.obs_question_eff_end_dt, new { htmlAttributes = new { @class = "form-control" } })*@
                 @Html.ValidationMessageFor(model => model.obs_question_eff_end_dt, "", new { @class = "text-danger" })
             </div>
         </div>

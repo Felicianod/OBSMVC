@@ -1,0 +1,78 @@
+﻿@model IEnumerable<OBSMVC.Models.OBS_QUESTION>
+<br />
+<p> @Html.ActionLink("Add New Question", "Create") </p>
+<script>
+    //Make all inner panel the same hight as the tallest panel (For proportional display)
+    $(document).ready(function () {
+        var heightTallest = Math.max.apply(null, $(".panel-info").map(function () {
+            return $(this).outerHeight();
+        }).get());
+        $('.panel-info').css({ height: heightTallest + 'px' });
+    });
+</script>
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading">Observations "Question" Management</div>
+        <div class="row">
+            <div class="col-xs-8">
+                <div class="panel panel-info">
+                    <div class="panel-heading">Available Questions:
+                      @if(!String.IsNullOrEmpty(@ViewBag.searchTerm))
+                      {
+                          <text>[This is a filtered View]</text>
+                          @Html.ActionLink("Show all Questions", "Manage")
+                      }
+                    </div>
+                    <div class="panel-body">
+                        <div class="list-group">
+                            <div class="list-group-item">
+                                <form role="form" class="form-inline">
+                                    @*<div class="form-group has-feedback">
+                                        <label class="control-label col-sm-2">Search</label>
+                                        <div class=" col-md-8">
+                                            <input type="text" class="form-control" placeholder="Keyword Search" />
+                                            <i class="form-control-feedback glyphicon glyphicon-user"></i>
+                                        </div>
+                                    </div>*@
+                                    <div class="form-group">
+                                        <label class="control-label" for="searchKeyWords">Keyword Search:</label>
+                                        <input type="text" class="form-control" id="searchKeyWords" />
+                                        <button class="btn-default glyphicon glyphicon-search"></button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="list-group-item">
+                                <table class="table table-condensed table-responsive table-hover">
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <span class="glyphicon-asterisk"></span>
+                                                @Html.DisplayFor(modelItem => item.obs_question_full_text)
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                <br />
+            </div>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="panel panel-info">
+                <div class="panel-heading">Question Metadata</div>
+                <div class="panel-body">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            Test Metadata<br />
+                            Test Metadata<br />
+                            Tets Metadata<br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

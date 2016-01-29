@@ -27,7 +27,6 @@ namespace OBSMVC.Models
     
         public virtual DbSet<EMPLOYEE> EMPLOYEEs { get; set; }
         public virtual DbSet<DSC_LC> DSC_LC { get; set; }
-        public virtual DbSet<OBS_ANS_TYPE> OBS_ANS_TYPE { get; set; }
         public virtual DbSet<OBS_SUB_TYPE> OBS_SUB_TYPE { get; set; }
         public virtual DbSet<OBS_SUPER_TYPE> OBS_SUPER_TYPE { get; set; }
         public virtual DbSet<OBS_TYPE> OBS_TYPE { get; set; }
@@ -36,5 +35,6 @@ namespace OBSMVC.Models
         public virtual DbSet<OBS_QUEST_SLCT_ANS> OBS_QUEST_SLCT_ANS { get; set; }
         public virtual DbSet<OBS_QUESTION> OBS_QUESTION { get; set; }
         public virtual DbSet<OBS_QUESTION_METADATA> OBS_QUESTION_METADATA { get; set; }
+        public virtual DbSet<OBS_ANS_TYPE> OBS_ANS_TYPE { get; set; }
     }
 }

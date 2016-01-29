@@ -24,8 +24,8 @@ namespace OBSMVC.Models
         public string obs_ans_type_name { get; set; }
         public string obs_ans_type_desc { get; set; }
         public string obs_ans_type_has_fxd_ans_yn { get; set; }
-        public string obs_ans_type_free_text_yn { get; set; }
         public string obs_ans_type_comment_mand_yn { get; set; }
+        public string obs_ans_type_category { get; set; }
         public string obs_ans_type_api_tag_val { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

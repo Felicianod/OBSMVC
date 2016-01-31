@@ -141,6 +141,15 @@ namespace OBSMVC.Controllers
             }
         }
 
+        // GET: QuestionMetadata
+        [ChildActionOnly]
+        [OutputCache(Duration =2000)]
+        public ActionResult qMetaDataList()
+        {
+            return View(db.OBS_QUESTION_METADATA.ToList());
+        }
+
+
         // GET: Question/Delete/5
         public ActionResult Delete(int? id)
         {

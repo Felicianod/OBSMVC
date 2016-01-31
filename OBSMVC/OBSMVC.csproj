@@ -449,6 +449,7 @@
     <Content Include="Views\Question\Index.cshtml" />
     <Content Include="Views\Question\Manage.cshtml" />
     <Content Include="Views\Question\_MDView.cshtml" />
+    <Content Include="Views\Question\qMetaDataList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

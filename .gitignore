@@ -210,3 +210,6 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+/OBSMVC/Scripts/jquery-2.2.0.min.map
+/OBSMVC/Scripts/jquery-2.2.0.min.js
+/OBSMVC/Scripts/jquery-2.2.0.js

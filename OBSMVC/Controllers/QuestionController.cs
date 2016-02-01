@@ -20,18 +20,27 @@ namespace OBSMVC.Controllers
 
             if (!String.IsNullOrWhiteSpace(search) && includeActiveOnly == "on")
             {
-                /*var full_text_list = db.OBS_QUESTION.Where(ques => ques.obs_question_full_text.Contains(search) && DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt).ToList();               
-                var md_list = db.OBS_QUESTION_METADATA.Where(md => md.obs_quest_md_cat.Contains(search) || md.obs_quest_md_value.Contains(search)).ToList();
-                var temp_list = db.OBS_QUEST_ASSGND_MD.Where(x => md_list.Contains(x.obs_quest_md_id));
-                var res = from q in db.OBS_QUESTION
-                           join jt in db.OBS_QUEST_ASSGND_MD on q.obs_question_id equals jt.obs_question_id
-                          join md in db.OBS_QUESTION_METADATA on jt.obs_quest_md_id equals md.obs_quest_md_id
-                          where q.obs_question_full_text.Contains(search)|| md.obs_quest_md_cat.Contains(search)||md.obs_quest_md_value.Contains(search)
+               /* List<OBS_QUESTION> full_text_list = db.OBS_QUESTION.Where(ques => ques.obs_question_full_text.Contains(search) && DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt).ToList();
+                //var md_list = db.OBS_QUESTION_METADATA.Where(md => md.obs_quest_md_cat.Contains(search) || md.obs_quest_md_value.Contains(search)).ToList();
+              
+                var res = from  jt in db.OBS_QUEST_ASSGND_MD join md in db.OBS_QUESTION_METADATA on jt.obs_quest_md_id equals md.obs_quest_md_id
+                          where md.obs_quest_md_cat.Contains(search)||md.obs_quest_md_value.Contains(search)
                           select new
-                          { full_ques = q.obs_question_full_text, q_id = q.obs_question_id, md_value = md.obs_quest_md_value, md_category = md.obs_quest_md_cat };*/
+                          { q_id = jt.obs_question_id, md_value = md.obs_quest_md_value, md_category = md.obs_quest_md_cat };
+                List<int> quest_ids = new List<int>();
+                foreach(var r in res)
+                {
+                    quest_ids.Add(r.q_id);
+                }
+             foreach (OBS_QUESTION question in full_text_list)
+                {
+                    if (quest_ids.Contains(question.obs_question_id))
+                    {
 
+                    }
+                }*/
 
-                          return View(db.OBS_QUESTION.Where(ques => ques.obs_question_full_text.Contains(search) && DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt).ToList());
+                return View(db.OBS_QUESTION.Where(ques => ques.obs_question_full_text.Contains(search) && DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt).ToList());
             }
             else if (!String.IsNullOrWhiteSpace(search) && String.IsNullOrWhiteSpace(includeActiveOnly))
             {

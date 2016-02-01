@@ -148,15 +148,9 @@
 
                           <table class="table table-condensed table-hover">
                               <tr>
-                                  <th>
-                                      
-                                  </th>
-                                  <th>
-                                      Value
-                                  </th>
-                                  <th>
-                                      Category
-                                  </th>
+                                  <th></th>
+                                  <th>Value</th>
+                                  <th>Category</th>
                               </tr>
 
                               @foreach (var item in ViewBag.mdTags)
@@ -175,6 +169,11 @@
 
                                   </tr>
                               }
+                              <tr>
+                                  <td colspan="3">
+                                      @Html.ActionLink("Back to List", "Index")
+                                  </td>
+                              </tr>
 
                           </table>
 

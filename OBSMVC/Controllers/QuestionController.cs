@@ -103,7 +103,7 @@ namespace OBSMVC.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             OBS_QUESTION oBS_QUESTION = db.OBS_QUESTION.Find(id);
             if (oBS_QUESTION == null)
@@ -111,8 +111,10 @@ namespace OBSMVC.Controllers
                 return HttpNotFound();
             }
             ViewBag.mdTags = db.OBS_QUESTION_METADATA.ToList();
+            // Populate the new QuestionMD Model from the selected Id and forward it to the View
 
             return View(oBS_QUESTION);
+
         }
 
         // POST: Question/Edit/5

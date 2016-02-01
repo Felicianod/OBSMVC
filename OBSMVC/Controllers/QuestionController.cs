@@ -122,7 +122,9 @@ namespace OBSMVC.Controllers
 
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {                
-                var question = db.OBS_QUESTION.Single(x => x.obs_question_id == oBS_QUESTION.obs_question_id);
+                //var question = db.OBS_QUESTION.Single(x => x.obs_question_id == oBS_QUESTION.obs_question_id);
+                var question = db.OBS_QUESTION.Find(oBS_QUESTION.obs_question_id);
+                QuestionMDViewModel test = new QuestionMDViewModel(oBS_QUESTION.obs_question_id);
 
                 if (!oBS_QUESTION.obs_question_full_text.Equals(question.obs_question_full_text))
                 {

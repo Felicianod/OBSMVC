@@ -134,7 +134,6 @@ namespace OBSMVC.Controllers
             QuestionMDView.q.obs_question_eff_end_dt = Convert.ToDateTime(postedData["q.obs_question_eff_end_dt"]);
             QuestionMDView.q.obs_question_eff_st_dt = Convert.ToDateTime(postedData["q.obs_question_eff_st_dt"]);
 
-
             if (!ModelState.IsValid) // Model State is not Valid return Errors
             {
                 return View(QuestionMDView);

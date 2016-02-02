@@ -11,11 +11,9 @@ namespace OBSMVC.Models
     public class QuestionMDViewModel
     {
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
-
-        public QuestionMDViewModel()
-        {
-        }
-
+        //= = = = = = = = = = = = = =  (DEFAULT CONSTRUCTOR)  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+        public QuestionMDViewModel() {    }
+        //= = = = = = = = = = = = = = = CONSTRUCTOR FULL METADATA LIST = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
         public QuestionMDViewModel( int qId )
         {
             q = db.OBS_QUESTION.Find(qId);
@@ -57,6 +55,7 @@ namespace OBSMVC.Models
                 }
             }
         }
+        //= = = = = = = = = = = = = = = CONSTRUCTOR FILTERED METADATA LIST  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
         public QuestionMDViewModel(int qId, bool isDetail)
         {
             q = db.OBS_QUESTION.Find(qId);       
@@ -84,13 +83,14 @@ namespace OBSMVC.Models
                     x.mdSelected = mdNew.mdSelected;
                     if(mdNew.mdSelected)
                     { qMD.Add(x); }
-                    
                 }
             }
         }
 
-        public OBS_QUESTION q { get; set; }
+        // ----------------------------------- PUBLIC CLASS PROPERTIES ----------------------------------------------
+        public OBS_QUESTION q = new OBS_QUESTION();
         public List<metaData> qMD = new List<metaData>();
+        public List<int> preMetaDataIds = new List<int>();
     }
 
     public class metaData

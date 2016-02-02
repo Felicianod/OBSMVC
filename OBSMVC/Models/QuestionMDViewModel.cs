@@ -57,6 +57,37 @@ namespace OBSMVC.Models
                 }
             }
         }
+        public QuestionMDViewModel(int qId, bool isDetail)
+        {
+            q = db.OBS_QUESTION.Find(qId);       
+            if (q != null)
+            {
+                // Add all Metadata List to the QuestionMD Object
+                var tempMD = from t1 in db.OBS_QUESTION_METADATA
+                             join t2 in db.OBS_QUEST_ASSGND_MD.Where(item => item.obs_question_id == qId)
+                             on t1.obs_quest_md_id equals t2.obs_quest_md_id into t1Group
+                             from t2 in t1Group.DefaultIfEmpty()
+                             select new
+                             {
+                                 md_id = t1.obs_quest_md_id,
+                                 mdValue = t1.obs_quest_md_value,
+                                 mdCat = t1.obs_quest_md_cat,
+                                 mdSelected = (t2 == null) ? false : true
+                                 //xmdSelected = (t1Group == null) ? false : true
+                             };
+                foreach (var mdNew in tempMD)
+                {
+                    metaData x = new metaData();
+                    x.obs_quest_md_id = mdNew.md_id;
+                    x.obs_quest_md_value = mdNew.mdValue;
+                    x.obs_quest_md_cat = mdNew.mdCat;
+                    x.mdSelected = mdNew.mdSelected;
+                    if(mdNew.mdSelected)
+                    { qMD.Add(x); }
+                    
+                }
+            }
+        }
 
         public OBS_QUESTION q { get; set; }
         public List<metaData> qMD = new List<metaData>();

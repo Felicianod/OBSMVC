@@ -247,13 +247,15 @@
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EmployeeView.cs" />
-    <Compile Include="fonts\IdentityModels.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LCViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\OBS_ANS_TYPE.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\OBS_QUESTION.cs" />
+    <Compile Include="Models\OBS_QUESTION.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OBS_QUESTION_METADATA.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
@@ -275,6 +277,7 @@
     <Compile Include="Models\OBS_TYPE.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\QuestionMDViewModel.cs" />
     <Compile Include="Models\QuestionMetadataView.cs" />
     <Compile Include="Models\QuestionView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

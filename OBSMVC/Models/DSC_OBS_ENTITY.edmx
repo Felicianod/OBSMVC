@@ -56,7 +56,7 @@
           <Key>
             <PropertyRef Name="obs_qat_id" />
           </Key>
-          <Property Name="obs_qat_id" Type="int" Nullable="false" />
+          <Property Name="obs_qat_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="obs_question_id" Type="int" Nullable="false" />
           <Property Name="obs_ans_type_id" Type="smallint" Nullable="false" />
           <Property Name="obs_qat_end_eff_dt" Type="datetime" />

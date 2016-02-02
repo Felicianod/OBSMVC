@@ -1,12 +1,12 @@
-﻿@model IEnumerable<OBSMVC.Models.OBS_QUESTION>
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<OBSMVC.Models.OBS_QUESTION>
 
 @{
     ViewBag.Title = "Question Maintenance";
 }
 <br/>
 <h2>Question Maintenance</h2>
-
-
 <p>
 @using (Html.BeginForm("Index", "Question", FormMethod.Get))
 {
@@ -20,42 +20,69 @@
            <td style="text-align:end">
                <b>@Html.ActionLink("Add New Question", "Create")</b>
            </td>
-       </tr>
-        
-        
-        
-    
+       </tr>   
      </table>
-       
-   }
+}
 </p>
 <table class="table" border="1">
-    <tr>        
+    <tr>
         <th></th>
         <th>
-            @Html.DisplayNameFor(model => model.obs_question_full_text)
+            @Html.DisplayNameFor(model => model.First().obs_question_full_text)
         </th>
         <th style="text-align:center">
-           Active
+            Active
         </th>
         <th></th>
     </tr>
-
-@foreach (var item in Model) {
+    @if (Model.Count() == 0)
+    {
+        <tr>
+            <td colspan="4"><font color="red">Question not found</font></td>
+        </tr>
+    }
+    else { 
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.obs_question_id })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.obs_question_full_text)
+            </td>
+            <td style="text-align:center">
+                <input type="checkbox" disabled="disabled" @if (DateTime.Today >= item.obs_question_eff_st_dt && DateTime.Today < item.obs_question_eff_end_dt) { <TEXT> checked="checked" </TEXT>      } />
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.obs_question_id, obs_question_id = item.obs_question_id, obs_question_added_dtm = item.obs_question_added_dtm, obs_question_added_uid = item.obs_question_added_uid })
+            </td>
+        </tr>
+    }
+    }
+</table>
+<table style="width:100%">
     <tr>
-        <td>
-            @Html.ActionLink("Details", "Details", new { id = item.obs_question_id })
+        <td style="text-align:left">
+            @if (!String.IsNullOrWhiteSpace(Request.QueryString["search"]))
+            {
+                <p> @Html.ActionLink("Show All Questions", "Index")</p>
+            }
         </td>
-        <td>
-           @Html.DisplayFor(modelItem => item.obs_question_full_text)
-        </td>       
-        <td style="text-align:center">
-            <input type="checkbox" disabled="disabled" @if (DateTime.Today >=item.obs_question_eff_st_dt && DateTime.Today<item.obs_question_eff_end_dt) { <TEXT> checked="checked" </TEXT>     } />           
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.obs_question_id, obs_question_id = item.obs_question_id, obs_question_added_dtm = item.obs_question_added_dtm, obs_question_added_uid = item.obs_question_added_uid })  
+        <td style="text-align:right">
+            @using (Html.BeginForm("Index", "Question", FormMethod.Get))
+            {
+                <input type="hidden" value="@Request.QueryString["search"]" id="search" name="search" />
+                <b>Rows Per Page</b>
+                @Html.DropDownList("PageSize", new SelectList(new Dictionary<string, int> { { "10", 10 }, { "25", 25 }, { "50", 50 } }, "Key", "Value", ViewBag.CurrentItemsPerPage), new { id = "PageSize" })
+                <script type="text/javascript">
+                    $('#PageSize').on('change', function (event) {
+                        var form = $(event.target).parents('form');
+                        form.submit();
+                    });
+                </script>
+            }
         </td>
     </tr>
-}
-
 </table>
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, pageSize = ViewBag.CurrentItemsPerPage, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"] }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded })

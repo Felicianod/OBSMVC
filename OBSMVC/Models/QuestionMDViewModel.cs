@@ -35,7 +35,7 @@ namespace OBSMVC.Models
             {
                 // Add all Metadata List to the QuestionMD Object
                 var tempMD = from t1 in db.OBS_QUESTION_METADATA
-                             join t2 in db.OBS_QUEST_ASSGND_MD.Where(item => item.obs_question_id == qId)
+                             join t2 in db.OBS_QUEST_ASSGND_MD.Where(item => item.obs_question_id == qId && DateTime.Today >= item.obs_qad_eff_st_dt && DateTime.Today < item.obs_qad_eff_end_dt)
                              on t1.obs_quest_md_id equals t2.obs_quest_md_id into t1Group
                              from t2 in t1Group.DefaultIfEmpty()
                              select new
@@ -64,7 +64,9 @@ namespace OBSMVC.Models
 
     public class metaData
     {
+        [Required]
         public int obs_quest_md_id { get; set; }
+        [Display(Name="Selected")]
         public bool mdSelected { get; set; }
         [Display(Name = "Metadata Value")]
         public string obs_quest_md_value { get; set; }

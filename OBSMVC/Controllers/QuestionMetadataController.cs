@@ -36,8 +36,9 @@ namespace OBSMVC.Controllers
         }
 
         // GET: QuestionMetadata/Create
-        public ActionResult Create()
+        public ActionResult Create(int qId)
         {
+            ViewBag.qId = qId;
             return View();
         }
 
@@ -46,13 +47,15 @@ namespace OBSMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "obs_quest_md_id,obs_quest_md_value,obs_quest_md_cat")] OBS_QUESTION_METADATA oBS_QUESTION_METADATA)
+        public ActionResult Create([Bind(Include = "obs_quest_md_id,obs_quest_md_value,obs_quest_md_cat, qId")] OBS_QUESTION_METADATA oBS_QUESTION_METADATA)
         {
             if (ModelState.IsValid)
             {
                 db.OBS_QUESTION_METADATA.Add(oBS_QUESTION_METADATA);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                string returnId = Request.QueryString["qId"];
+                return RedirectToAction("Edit", "Question", new{id = returnId});
             }
 
             return View(oBS_QUESTION_METADATA);

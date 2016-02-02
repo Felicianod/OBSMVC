@@ -1,18 +1,16 @@
 ﻿@model OBSMVC.Models.OBS_QUESTION_METADATA
 
-@{
-    ViewBag.Title = "Create";
-}
+@{ ViewBag.Title = "Metadata Create"; }
 
-<h2>Create</h2>
-
+<div class="container">
+    <div class="well well-sm"><h3>Question Metadata Maintenance</h3></div>
+</div>
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>OBS_QUESTION_METADATA</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -30,7 +28,7 @@
                 @Html.ValidationMessageFor(model => model.obs_quest_md_cat, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        @Html.Hidden("qId", @ViewBag.qId)
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
@@ -40,7 +38,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to Questions", "Edit", "Question", new { id = @ViewBag.qId }, null)
 </div>
 
 @section Scripts {

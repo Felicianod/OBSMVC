@@ -54,7 +54,8 @@ namespace OBSMVC.Controllers
                 db.OBS_QUESTION_METADATA.Add(oBS_QUESTION_METADATA);
                 db.SaveChanges();
 
-                return RedirectToAction("Edit", "Question", new{id = qId});
+                string returnId = Request.QueryString["qId"];
+                return RedirectToAction("Edit", "Question", new{id = returnId});
             }
 
             return View(oBS_QUESTION_METADATA);

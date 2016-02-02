@@ -28,7 +28,7 @@
                 @Html.ValidationMessageFor(model => model.obs_quest_md_cat, "", new { @class = "text-danger" })
             </div>
         </div>
-        @Html.Hidden("qId", @ViewBag.qId)
+        <input type="hidden" name="qId" id="qId" value="@ViewBag.qId" />
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />

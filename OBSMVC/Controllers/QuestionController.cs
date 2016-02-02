@@ -114,39 +114,41 @@ namespace OBSMVC.Controllers
             {
                 return RedirectToAction("Index");
             }
-            OBS_QUESTION oBS_QUESTION = db.OBS_QUESTION.Find(id);
-            if (oBS_QUESTION == null)
-            {
+            //OBS_QUESTION oBS_QUESTION = db.OBS_QUESTION.Find(id);
+            //if (oBS_QUESTION == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            //ViewBag.mdTags = db.OBS_QUESTION_METADATA.ToList();
+            
+            // Populate the new QuestionMD Model from the selected Id and forward it to the View
+            QuestionMDViewModel obsQMD = new QuestionMDViewModel((int)id);
+            if (obsQMD == null) {
                 return HttpNotFound();
             }
-            ViewBag.mdTags = db.OBS_QUESTION_METADATA.ToList();
-            // Populate the new QuestionMD Model from the selected Id and forward it to the View
-
-            return View(oBS_QUESTION);
+            return View(obsQMD);
 
         }
 
-        // POST: Question/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "obs_question_id, obs_question_ver,obs_question_full_text,obs_question_short_text,obs_question_desc,obs_question_mm_url,obs_question_eff_st_dt,obs_question_eff_end_dt, obs_question_added_dtm, obs_question_added_uid")] OBS_QUESTION oBS_QUESTION)
         {
-            if(!ModelState.IsValid) // Model State is not Valid return Errors
+            if (!ModelState.IsValid) // Model State is not Valid return Errors
             {
-                return View(oBS_QUESTION);            
+                return View(oBS_QUESTION);
             }
 
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
-            {                
+            {
                 //var question = db.OBS_QUESTION.Single(x => x.obs_question_id == oBS_QUESTION.obs_question_id);
                 var question = db.OBS_QUESTION.Find(oBS_QUESTION.obs_question_id);
-                QuestionMDViewModel test = new QuestionMDViewModel(oBS_QUESTION.obs_question_id);
 
                 if (!oBS_QUESTION.obs_question_full_text.Equals(question.obs_question_full_text))
                 {
-                    question.obs_question_ver++;               
+                    question.obs_question_ver++;
                 }
                 question.obs_question_full_text = oBS_QUESTION.obs_question_full_text;
                 question.obs_question_short_text = oBS_QUESTION.obs_question_short_text;
@@ -159,9 +161,12 @@ namespace OBSMVC.Controllers
 
                 db.SaveChanges();
                 ViewBag.ConfMsg = "Success";
+                ViewBag.mdTags = db.OBS_QUESTION_METADATA.ToList();
                 return View(question);
             }
         }
+
+
 
         // GET: QuestionMetadata
         [ChildActionOnly]

@@ -199,6 +199,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OBSTYPEController.cs" />
+    <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\QuestionMetadataController.cs" />
     <Compile Include="CustomerModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -252,6 +253,7 @@
     <Compile Include="Models\OBS_ANS_TYPE.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\OBS_QUESTION.cs" />
     <Compile Include="Models\OBS_QUESTION_METADATA.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>

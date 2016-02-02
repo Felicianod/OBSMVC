@@ -4,71 +4,109 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h4>OBS_QUESTION</h4>
+<div class="container">
+  <div class="row">
+     <!-- Display A single edit form column -->
+     <div class="col-md-8 personal-info">
+         <dl class="dl-horizontal">
+             <dt>
+                 @Html.DisplayNameFor(model => model.obs_question_ver)
+             </dt>
 
-<div>
-    <h4>OBS_QUESTION</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.obs_question_ver)
-        </dt>
+             <dd>
+                 @Html.DisplayFor(model => model.obs_question_ver)
+             </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.obs_question_ver)
-        </dd>
+             <dt>
+                 @Html.DisplayNameFor(model => model.obs_question_full_text)
+             </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.obs_question_full_text)
-        </dt>
+             <dd>
+                 @Html.DisplayFor(model => model.obs_question_full_text)
+             </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.obs_question_full_text)
-        </dd>
+             <dt>
+                 @Html.DisplayNameFor(model => model.obs_question_short_text)
+             </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.obs_question_short_text)
-        </dt>
+             <dd>
+                 @Html.DisplayFor(model => model.obs_question_short_text)
+             </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.obs_question_short_text)
-        </dd>
+             <dt>
+                 @Html.DisplayNameFor(model => model.obs_question_desc)
+             </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.obs_question_desc)
-        </dt>
+             <dd>
+                 @Html.DisplayFor(model => model.obs_question_desc)
+             </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.obs_question_desc)
-        </dd>
+             <dt>
+                 @Html.DisplayNameFor(model => model.obs_question_mm_url)
+             </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.obs_question_mm_url)
-        </dt>
+             <dd>
+                 @Html.DisplayFor(model => model.obs_question_mm_url)
+             </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.obs_question_mm_url)
-        </dd>
+             <dt>
+                 @Html.DisplayNameFor(model => model.obs_question_eff_st_dt)
+             </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.obs_question_eff_st_dt)
-        </dt>
+             <dd>
+                 @Html.DisplayFor(model => model.obs_question_eff_st_dt)
+             </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.obs_question_eff_st_dt)
-        </dd>
+             <dt>
+                 @Html.DisplayNameFor(model => model.obs_question_eff_end_dt)
+             </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.obs_question_eff_end_dt)
-        </dt>
+             <dd>
+                 @Html.DisplayFor(model => model.obs_question_eff_end_dt)
+             </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.obs_question_eff_end_dt)
-        </dd>
+         </dl>
+     </div>
+     <div class="col-md-4 personal-info">
+         <div class="panel panel-info">
+            <div class="panel-heading">Question Metadata</div>
+            <div class="panel-body">
+               <div class="list-group">
+                  <div class="list-group-item">
+                      <table class="table table-condensed table-hover">
+                          <tr>
+                             <th></th>
+                             <th>Value</th>
+                             <th>Category</th>
+                          </tr>
+                              @*@foreach (var item in ViewBag.mdTags)
+                              {
+                                  <tr>
+                                      <td>
+                                          <input type="checkbox" id="mdSelected" />
+                                          <input type="hidden" value="@item.obs_quest_md_id" id="obs_quest_md_id">
+                                      </td>
+                                      <td>
+                                          @item.obs_quest_md_value
+                                      </td>
+                                      <td>
+                                          @item.obs_quest_md_cat
+                                      </td>
 
-    </dl>
+                                  </tr>
+                              }*@
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="row">
+      <div class="col-md-12">
+          @Html.ActionLink("Edit", "Edit", new { id = Model.obs_question_id }) |
+          @Html.ActionLink("Back to List", "Index")
+      </div>
+  </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.obs_question_id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using OBSMVC.Models;
+using PagedList;
+using PagedList.Mvc;
 
 namespace OBSMVC.Controllers
 {
@@ -15,49 +17,30 @@ namespace OBSMVC.Controllers
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
 
         // GET: Question
-        public ActionResult Index( string search, string includeActiveOnly)
+        public ActionResult Index( string search, string includeActiveOnly, int? page, int? PageSize)
         {
-
+            ViewBag.CurrentItemsPerPage = PageSize ?? 10;
             if (!String.IsNullOrWhiteSpace(search) && includeActiveOnly == "on")
             {
-                /* List<OBS_QUESTION> full_text_list = db.OBS_QUESTION.Where(ques => ques.obs_question_full_text.Contains(search) && DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt).ToList();
-                 //var md_list = db.OBS_QUESTION_METADATA.Where(md => md.obs_quest_md_cat.Contains(search) || md.obs_quest_md_value.Contains(search)).ToList();
 
-                 var res = from  jt in db.OBS_QUEST_ASSGND_MD join md in db.OBS_QUESTION_METADATA on jt.obs_quest_md_id equals md.obs_quest_md_id
-                           where md.obs_quest_md_cat.Contains(search)||md.obs_quest_md_value.Contains(search)
-                           select new
-                           { q_id = jt.obs_question_id, md_value = md.obs_quest_md_value, md_category = md.obs_quest_md_cat };
-                 List<int> quest_ids = new List<int>();
-                 foreach(var r in res)
-                 {
-                     quest_ids.Add(r.q_id);
-                 }
-              foreach (OBS_QUESTION question in full_text_list)
-                 {
-                     if (quest_ids.Contains(question.obs_question_id))
-                     {
-
-                     }
-                 }*/
                 List<OBS_QUESTION> l1 = db.OBS_QUESTION.Where(ques => ques.obs_question_full_text.Contains(search) && DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt).ToList();
                 List<OBS_QUESTION> l2 = db.OBS_QUESTION.Where(ques => ques.OBS_QUEST_ASSGND_MD.Any(e =>(e.OBS_QUESTION_METADATA.obs_quest_md_cat.Contains(search)|| e.OBS_QUESTION_METADATA.obs_quest_md_value.Contains(search)) && DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt)).ToList();
-                var combined = l1.Union(l2);
-                //return View(db.OBS_QUESTION.Where(ques => ques.obs_question_full_text.Contains(search) && DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt).ToList());
-                return View(combined);
+                var combined = l1.Union(l2);               
+                return View(combined.ToPagedList(page ?? 1, PageSize ?? 10));
             }
             else if (!String.IsNullOrWhiteSpace(search) && String.IsNullOrWhiteSpace(includeActiveOnly))
             {
                 List<OBS_QUESTION> l1 = db.OBS_QUESTION.Where(ques => ques.obs_question_full_text.Contains(search)).ToList();
                 List<OBS_QUESTION> l2 = db.OBS_QUESTION.Where(ques => ques.OBS_QUEST_ASSGND_MD.Any(e => e.OBS_QUESTION_METADATA.obs_quest_md_cat.Contains(search) || e.OBS_QUESTION_METADATA.obs_quest_md_value.Contains(search))).ToList();
                 var combined = l1.Union(l2);
-                return View(combined);
+                return View(combined.ToPagedList(page ?? 1, PageSize ?? 10));
             }
             else if (String.IsNullOrWhiteSpace(search) && includeActiveOnly == "on")
             {
-                return View(db.OBS_QUESTION.Where(ques => DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt).ToList());
+                return View(db.OBS_QUESTION.Where(ques => DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt).ToList().ToPagedList(page ?? 1, PageSize ?? 10));
             }
 
-            else { return View(db.OBS_QUESTION.Where(ques => DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt).ToList()); }
+            else { return View(db.OBS_QUESTION.Where(ques => DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt).ToList().ToPagedList(page ?? 1, PageSize ?? 10)); }
             
         }
 
@@ -140,34 +123,34 @@ namespace OBSMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "obs_question_id, obs_question_ver,obs_question_full_text,obs_question_short_text,obs_question_desc,obs_question_mm_url,obs_question_eff_st_dt,obs_question_eff_end_dt, obs_question_added_dtm, obs_question_added_uid")] OBS_QUESTION oBS_QUESTION)
+        public ActionResult Edit([Bind(Include = "obs_question_id, obs_question_ver,obs_question_full_text,obs_question_short_text,obs_question_desc,obs_question_mm_url,obs_question_eff_st_dt,obs_question_eff_end_dt, obs_question_added_dtm, obs_question_added_uid")]  QuestionMDViewModel QuestionMDView)
         {
             if (!ModelState.IsValid) // Model State is not Valid return Errors
             {
-                return View(oBS_QUESTION);
+                return View(QuestionMDView);
             }
 
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
                 //var question = db.OBS_QUESTION.Single(x => x.obs_question_id == oBS_QUESTION.obs_question_id);
-                var question = db.OBS_QUESTION.Find(oBS_QUESTION.obs_question_id);
+                var question = db.OBS_QUESTION.Find(QuestionMDView.q.obs_question_id);
 
-                if (!oBS_QUESTION.obs_question_full_text.Equals(question.obs_question_full_text))
+                if (!QuestionMDView.q.obs_question_full_text.Equals(question.obs_question_full_text))
                 {
                     question.obs_question_ver++;
                 }
-                question.obs_question_full_text = oBS_QUESTION.obs_question_full_text;
-                question.obs_question_short_text = oBS_QUESTION.obs_question_short_text;
-                question.obs_question_desc = oBS_QUESTION.obs_question_desc;
-                question.obs_question_mm_url = oBS_QUESTION.obs_question_mm_url;
-                question.obs_question_eff_st_dt = oBS_QUESTION.obs_question_eff_st_dt;
-                question.obs_question_eff_end_dt = oBS_QUESTION.obs_question_eff_end_dt;
+                question.obs_question_full_text = QuestionMDView.q.obs_question_full_text;
+                question.obs_question_short_text = QuestionMDView.q.obs_question_short_text;
+                question.obs_question_desc = QuestionMDView.q.obs_question_desc;
+                question.obs_question_mm_url = QuestionMDView.q.obs_question_mm_url;
+                question.obs_question_eff_st_dt = QuestionMDView.q.obs_question_eff_st_dt;
+                question.obs_question_eff_end_dt = QuestionMDView.q.obs_question_eff_end_dt;
                 question.obs_question_upd_dtm = DateTime.Now;
                 question.obs_question_upd_uid = User.Identity.Name;
 
                 db.SaveChanges();
                 ViewBag.ConfMsg = "Success";
-                ViewBag.mdTags = db.OBS_QUESTION_METADATA.ToList();
+
                 return View(question);
             }
         }

@@ -15,7 +15,7 @@ namespace OBSMVC.Controllers
     public class QuestionController : Controller
     {
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
-
+        //-----------------------------------------------------------------------------------------------------------------
         // GET: Question
         public ActionResult Index( string search, string includeActiveOnly, int? page, int? PageSize)
         {
@@ -43,7 +43,7 @@ namespace OBSMVC.Controllers
             else { return View(db.OBS_QUESTION.Where(ques => DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt).ToList().ToPagedList(page ?? 1, PageSize ?? 10)); }
             
         }
-
+        //-----------------------------------------------------------------------------------------------------------------
         // GET: Question/Details/5
         public ActionResult Details(int? id)
         {
@@ -67,17 +67,16 @@ namespace OBSMVC.Controllers
 
 
         }
-
+        //-----------------------------------------------------------------------------------------------------------------
         [HttpGet]  // GET: Question/Create
         public ActionResult Create()
         {
             return View();
         }
-
+        //-----------------------------------------------------------------------------------------------------------------
         // POST: Question/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "obs_question_id,obs_question_ver,obs_question_full_text,obs_question_short_text,obs_question_desc,obs_question_mm_url,obs_question_eff_st_dt,obs_question_eff_end_dt")] OBS_QUESTION oBS_QUESTION)
@@ -96,6 +95,7 @@ namespace OBSMVC.Controllers
             return View(oBS_QUESTION);
         }
 
+        //-----------------------------------------------------------------------------------------------------------------
         // GET: Question/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -119,12 +119,22 @@ namespace OBSMVC.Controllers
 
         }
 
+        //-----------------------------------------------------------------------------------------------------------------
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "obs_question_id, obs_question_ver,obs_question_full_text,obs_question_short_text,obs_question_desc,obs_question_mm_url,obs_question_eff_st_dt,obs_question_eff_end_dt, obs_question_added_dtm, obs_question_added_uid")]  QuestionMDViewModel QuestionMDView)
+        public ActionResult Edit(FormCollection postedData, QuestionMDViewModel QuestionMDView)
         {
+            QuestionMDView.q.obs_question_full_text = (string)postedData["obs_question_full_text"];
+            QuestionMDView.q.obs_question_id = Convert.ToInt32(postedData["obs_question_id"]);
+            QuestionMDView.q.obs_question_short_text = (string)postedData["q.obs_question_short_text"];
+            QuestionMDView.q.obs_question_desc = (string)postedData["q.obs_question_desc"];
+            QuestionMDView.q.obs_question_mm_url = (string)postedData["q.obs_question_mm_url"];
+            QuestionMDView.q.obs_question_eff_end_dt = Convert.ToDateTime(postedData["q.obs_question_eff_end_dt"]);
+            QuestionMDView.q.obs_question_eff_st_dt = Convert.ToDateTime(postedData["q.obs_question_eff_st_dt"]);
+
+
             if (!ModelState.IsValid) // Model State is not Valid return Errors
             {
                 return View(QuestionMDView);
@@ -149,14 +159,16 @@ namespace OBSMVC.Controllers
                 question.obs_question_upd_uid = User.Identity.Name;
 
                 db.SaveChanges();
+
+                QuestionMDView.q = question;
                 ViewBag.ConfMsg = "Success";
 
-                return View(question);
+                //return View(QuestionMDView);
+                return RedirectToAction("Edit", "Question", new { id = question.obs_question_id });
             }
         }
 
-
-
+        //-----------------------------------------------------------------------------------------------------------------
         // GET: QuestionMetadata
         [ChildActionOnly]
         [OutputCache(Duration =2000)]
@@ -164,8 +176,7 @@ namespace OBSMVC.Controllers
         {
             return View(db.OBS_QUESTION_METADATA.ToList());
         }
-
-
+        //-----------------------------------------------------------------------------------------------------------------
         // GET: Question/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -180,7 +191,7 @@ namespace OBSMVC.Controllers
             }
             return View(oBS_QUESTION);
         }
-
+        //-----------------------------------------------------------------------------------------------------------------
         // POST: Question/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -191,7 +202,7 @@ namespace OBSMVC.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
+        //-----------------------------------------------------------------------------------------------------------------
         [HttpGet]
         public ActionResult Manage(string searchKeyWords)
         {
@@ -229,7 +240,7 @@ namespace OBSMVC.Controllers
             }
         }
 
-
+        //-----------------------------------------------------------------------------------------------------------------
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -238,7 +249,7 @@ namespace OBSMVC.Controllers
             }
             base.Dispose(disposing);
         }
-
+        //-----------------------------------------------------------------------------------------------------------------
 
     }
 }

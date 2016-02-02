@@ -68,15 +68,21 @@ namespace OBSMVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            OBS_QUESTION oBS_QUESTION = db.OBS_QUESTION.Find(id);
+            /*OBS_QUESTION oBS_QUESTION = db.OBS_QUESTION.Find(id);
              if (oBS_QUESTION == null)
              {
                  return HttpNotFound();
              }
-            return View(oBS_QUESTION);
+            return View(oBS_QUESTION);*/
+            bool isDetails = true;
+            QuestionMDViewModel obsQMD = new QuestionMDViewModel((int)id, isDetails);
+            if (obsQMD == null)
+            {
+                return HttpNotFound();
+            }
+            return View(obsQMD);
 
-            /*  var questions = db.OBS_QUESTION.Where(quest => ques.OBS_QUEST_ASSGND_MD.)
-              return View(oBS_QUESTION);*/
+
         }
 
         [HttpGet]  // GET: Question/Create

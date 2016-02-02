@@ -1,69 +1,69 @@
-﻿@model OBSMVC.Models.OBS_QUESTION
+﻿@model OBSMVC.Models.QuestionMDViewModel
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h4>OBS_QUESTION</h4>
+<h4>Question Detail</h4>
 <div class="container">
   <div class="row">
      <!-- Display A single edit form column -->
      <div class="col-md-8 personal-info">
          <dl class="dl-horizontal">
              <dt>
-                 @Html.DisplayNameFor(model => model.obs_question_ver)
+                 @Html.DisplayNameFor(model => model.q.obs_question_ver)
              </dt>
 
              <dd>
-                 @Html.DisplayFor(model => model.obs_question_ver)
+                 @Html.DisplayFor(model => model.q.obs_question_ver)
              </dd>
 
              <dt>
-                 @Html.DisplayNameFor(model => model.obs_question_full_text)
+                 @Html.DisplayNameFor(model => model.q.obs_question_full_text)
              </dt>
 
              <dd>
-                 @Html.DisplayFor(model => model.obs_question_full_text)
+                 @Html.DisplayFor(model => model.q.obs_question_full_text)
              </dd>
 
              <dt>
-                 @Html.DisplayNameFor(model => model.obs_question_short_text)
+                 @Html.DisplayNameFor(model => model.q.obs_question_short_text)
              </dt>
 
              <dd>
-                 @Html.DisplayFor(model => model.obs_question_short_text)
+                 @Html.DisplayFor(model => model.q.obs_question_short_text)
              </dd>
 
              <dt>
-                 @Html.DisplayNameFor(model => model.obs_question_desc)
+                 @Html.DisplayNameFor(model => model.q.obs_question_desc)
              </dt>
 
              <dd>
-                 @Html.DisplayFor(model => model.obs_question_desc)
+                 @Html.DisplayFor(model => model.q.obs_question_desc)
              </dd>
 
              <dt>
-                 @Html.DisplayNameFor(model => model.obs_question_mm_url)
+                 @Html.DisplayNameFor(model => model.q.obs_question_mm_url)
              </dt>
 
              <dd>
-                 @Html.DisplayFor(model => model.obs_question_mm_url)
+                 @Html.DisplayFor(model => model.q.obs_question_mm_url)
              </dd>
 
              <dt>
-                 @Html.DisplayNameFor(model => model.obs_question_eff_st_dt)
+                 @Html.DisplayNameFor(model => model.q.obs_question_eff_st_dt)
              </dt>
 
              <dd>
-                 @Html.DisplayFor(model => model.obs_question_eff_st_dt)
+                 @Html.DisplayFor(model => model.q.obs_question_eff_st_dt)
              </dd>
 
              <dt>
-                 @Html.DisplayNameFor(model => model.obs_question_eff_end_dt)
+                 @Html.DisplayNameFor(model => model.q.obs_question_eff_end_dt)
              </dt>
 
              <dd>
-                 @Html.DisplayFor(model => model.obs_question_eff_end_dt)
+                 @Html.DisplayFor(model => model.q.obs_question_eff_end_dt)
              </dd>
 
          </dl>
@@ -75,27 +75,29 @@
                <div class="list-group">
                   <div class="list-group-item">
                       <table class="table table-condensed table-hover">
-                          <tr>
-                             <th></th>
+                          <tr>                            
                              <th>Value</th>
-                             <th>Category</th>
+                             <th>Category</th>                            
                           </tr>
-                              @*@foreach (var item in ViewBag.mdTags)
-                              {
-                                  <tr>
+                            @if (Model.qMD.Count == 0)
+                            {
+                                  <tr>                                       
                                       <td>
-                                          <input type="checkbox" id="mdSelected" />
-                                          <input type="hidden" value="@item.obs_quest_md_id" id="obs_quest_md_id">
                                       </td>
-                                      <td>
-                                          @item.obs_quest_md_value
+                                      <td>                                         
                                       </td>
-                                      <td>
-                                          @item.obs_quest_md_cat
-                                      </td>
-
                                   </tr>
-                              }*@
+                            }
+                            else
+                            {
+                                foreach (var md in Model.qMD)
+                                {
+                                    <tr>
+                                        <td>@md.obs_quest_md_value</td>
+                                        <td>@md.obs_quest_md_cat</td>
+                                    </tr>
+                                }
+                            }
                           </table>
                       </div>
                   </div>
@@ -105,7 +107,7 @@
   </div>
   <div class="row">
       <div class="col-md-12">
-          @Html.ActionLink("Edit", "Edit", new { id = Model.obs_question_id }) |
+          @Html.ActionLink("Edit", "Edit", new { id = Model.q.obs_question_id }) |
           @Html.ActionLink("Back to List", "Index")
       </div>
   </div>

@@ -47,7 +47,10 @@ namespace OBSMVC.Controllers
             }
             else if (!String.IsNullOrWhiteSpace(search) && String.IsNullOrWhiteSpace(includeActiveOnly))
             {
-                return View(db.OBS_QUESTION.Where(ques => ques.obs_question_full_text.Contains(search)).ToList());
+                List<OBS_QUESTION> l1 = db.OBS_QUESTION.Where(ques => ques.obs_question_full_text.Contains(search)).ToList();
+                List<OBS_QUESTION> l2 = db.OBS_QUESTION.Where(ques => ques.OBS_QUEST_ASSGND_MD.Any(e => e.OBS_QUESTION_METADATA.obs_quest_md_cat.Contains(search) || e.OBS_QUESTION_METADATA.obs_quest_md_value.Contains(search))).ToList();
+                var combined = l1.Union(l2);
+                return View(combined);
             }
             else if (String.IsNullOrWhiteSpace(search) && includeActiveOnly == "on")
             {

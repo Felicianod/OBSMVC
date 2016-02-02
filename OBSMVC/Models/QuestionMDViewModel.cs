@@ -20,24 +20,41 @@ namespace OBSMVC.Models
         {
             q = db.OBS_QUESTION.Find(qId);
 
-            var tempMD = from t1 in db.OBS_QUESTION_METADATA
-                         join t2 in db.OBS_QUEST_ASSGND_MD
-                         on t1.obs_quest_md_id equals t2.obs_quest_md_id
-                         select new
-                         {
-                             md_id = t1.obs_quest_md_id,
-                             mdSelected = t2.obs_question_id,
-                             mdValue = t1.obs_quest_md_value,
-                             mdCat = t1.obs_quest_md_cat
-                         };
-            foreach (var mdNew in tempMD)
+            //var tempMD = from t1 in db.OBS_QUESTION_METADATA
+            //             join t2 in db.OBS_QUEST_ASSGND_MD 
+            //             on t1.obs_quest_md_id equals t2.obs_quest_md_id into t1Group
+            //             from t2 in t1Group.DefaultIfEmpty()
+            //             select new
+            //             {
+            //                 md_id = t1.obs_quest_md_id,
+            //                 mdValue = t1.obs_quest_md_value,
+            //                 mdCat = t1.obs_quest_md_cat,
+            //                 mdSelected = (t2 ==null)?false:true
+            //             };
+            if (q != null)
             {
-                metaData x = new metaData();
-                x.obs_quest_md_id = mdNew.md_id;
-                x.obs_quest_md_value = mdNew.mdValue;
-                x.obs_quest_md_cat = mdNew.mdCat;
-                x.mdSelected =  mdNew.mdSelected == qId?true:false;
-                qMD.Add(x);
+                // Add all Metadata List to the QuestionMD Object
+                var tempMD = from t1 in db.OBS_QUESTION_METADATA
+                             join t2 in db.OBS_QUEST_ASSGND_MD.Where(item => item.obs_question_id == qId)
+                             on t1.obs_quest_md_id equals t2.obs_quest_md_id into t1Group
+                             from t2 in t1Group.DefaultIfEmpty()
+                             select new
+                             {
+                                 md_id = t1.obs_quest_md_id,
+                                 mdValue = t1.obs_quest_md_value,
+                                 mdCat = t1.obs_quest_md_cat,
+                                 mdSelected = (t2 == null) ? false : true
+                                 //xmdSelected = (t1Group == null) ? false : true
+                             };
+                foreach (var mdNew in tempMD)
+                {
+                    metaData x = new metaData();
+                    x.obs_quest_md_id = mdNew.md_id;
+                    x.obs_quest_md_value = mdNew.mdValue;
+                    x.obs_quest_md_cat = mdNew.mdCat;
+                    x.mdSelected = mdNew.mdSelected;
+                    qMD.Add(x);
+                }
             }
         }
 

@@ -18,6 +18,8 @@ namespace OBSMVC.Models
         public DSC_LC()
         {
             this.DSC_EMPLOYEE = new HashSet<EMPLOYEE>();
+            this.OBS_INST = new HashSet<OBS_INST>();
+            this.OBS_COLLECT_FORM_TMPLT = new HashSet<OBS_COLLECT_FORM_TMPLT>();
         }
     
         public int dsc_lc_id { get; set; }
@@ -28,5 +30,9 @@ namespace OBSMVC.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EMPLOYEE> DSC_EMPLOYEE { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OBS_INST> OBS_INST { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OBS_COLLECT_FORM_TMPLT> OBS_COLLECT_FORM_TMPLT { get; set; }
     }
 }

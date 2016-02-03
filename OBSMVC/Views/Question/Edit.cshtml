@@ -57,7 +57,6 @@
     });
 </script>*@
 
-
 <hr />
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -76,6 +75,9 @@
                </div>
            </div>*@
 
+           <div class="form-group row">
+               <input type="hidden" value="@Model.q.obs_question_id" name="q.obs_question_id" id="q.obs_question_id">
+           </div>
            <div class="form-group row">               
                @Html.LabelFor(model => model.q.obs_question_full_text, htmlAttributes: new { @class = "control-label col-md-2" })
                <div class="input-group col-md-6">
@@ -93,7 +95,7 @@
                </div>
            </div>
 
-           <div class="form-group row">
+           @*<div class="form-group row">
                @Html.LabelFor(model => model.q.obs_question_desc, htmlAttributes: new { @class = "control-label col-md-2" })
                <div class="input-group col-md-6">
                    @Html.EditorFor(model => model.q.obs_question_desc, new { htmlAttributes = new { @class = "form-control" } })
@@ -106,13 +108,13 @@
                    @Html.EditorFor(model => model.q.obs_question_mm_url, new { htmlAttributes = new { @class = "form-control" } })
                    @Html.ValidationMessageFor(model => model.q.obs_question_mm_url, "", new { @class = "text-danger" })
                </div>
-           </div>
+           </div>*@
 
            <div class="form-group row">
                @Html.LabelFor(model => model.q.obs_question_eff_st_dt, htmlAttributes: new { @class = "control-label col-md-2" })
                <div class="input-group col-md-6">
                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                   @Html.EditorFor(model => model.q.obs_question_eff_st_dt, new { htmlAttributes = new { @class = "form-control", name = "obs_question_eff_st_dt", id = "obs_question_eff_st_dt" } })
+                   @Html.EditorFor(model => model.q.obs_question_eff_st_dt, new { htmlAttributes = new { @class = "form-control" } })
                    @Html.ValidationMessageFor(model => model.q.obs_question_eff_st_dt, "", new { @class = "text-danger" })
                </div>
            </div>
@@ -120,7 +122,7 @@
                @Html.LabelFor(model => model.q.obs_question_eff_end_dt, htmlAttributes: new { @class = "control-label col-md-2" })
                <div class="input-group col-md-  6">
                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                   @Html.EditorFor(model => model.q.obs_question_eff_end_dt, new { htmlAttributes = new { @class = "form-control", name = "obs_question_eff_end_dt", id = "obs_question_eff_end_dt" } })
+                   @Html.EditorFor(model => model.q.obs_question_eff_end_dt, new { htmlAttributes = new { @class = "form-control" } })
                    @Html.ValidationMessageFor(model => model.q.obs_question_eff_end_dt, "", new { @class = "text-danger" })
                </div>
            </div>
@@ -133,11 +135,24 @@
                    <input type="reset" class="btn btn-default" value="Cancel">
                </div>
            </div>
-           <div class="form-group row">
-               <input type="hidden" value="@Model.q.obs_question_id" name="obs_question_id" id="obs_question_id">
-           </div>
        </form>
+        @if (ViewBag.ConfMsg != null)
+        {
+            <div id="ConfMsg" style="text-align:center; font-weight: bold; color:green">
+                'Question' Information Saved Successfully !
+            </div>
+            <script>
+                $(function () {
+                    setTimeout(function () {
+                        $("#ConfMsg").hide();
+                    }, 3000);
+                });
+            </script>
+        }
     </div>
+
+
+
     <div class="col-md-4 personal-info">
        <div class="panel panel-info">
            <div class="panel-heading">Question Metadata</div>
@@ -152,11 +167,11 @@
                                   <th>Category</th>
                               </tr>
 
-                              @foreach (var item in Model.qMD)
+                              @foreach (var item in Model.qAssignedMD)
                               {
                                   <tr>
                                       <td>
-                                          <input type="checkbox" id="mdSelected" @if(item.mdSelected){<TEXT> checked="checked" </TEXT> } />
+                                          <input type="checkbox" id="mdSelected" checked="checked" } />
                                           <input type="hidden" value="@item.obs_quest_md_id" id="obs_quest_md_id">
                                       </td>
                                       <td>
@@ -168,6 +183,22 @@
 
                                   </tr>
                               }
+                              @foreach (var item in Model.qUnassignedMD)
+                              {
+                                  <tr>
+                                      <td>
+                                          <input type="checkbox" id="mdSelected" } />
+                                          <input type="hidden" value="@item.obs_quest_md_id" id="obs_quest_md_id">
+                                      </td>
+                                      <td>
+                                          @item.obs_quest_md_value
+                                      </td>
+                                      <td>
+                                          @item.obs_quest_md_cat
+                                      </td>
+                                  </tr>
+                              }
+
                           </table>
 
                           <br />

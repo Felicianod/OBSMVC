@@ -57,8 +57,8 @@ namespace OBSMVC.Controllers
                  return HttpNotFound();
              }
             return View(oBS_QUESTION);*/
-            bool isDetails = true;
-            QuestionMDViewModel obsQMD = new QuestionMDViewModel((int)id, isDetails);
+
+            QuestionMDViewModel obsQMD = new QuestionMDViewModel((int)id);
             if (obsQMD == null)
             {
                 return HttpNotFound();
@@ -124,15 +124,17 @@ namespace OBSMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(FormCollection postedData, QuestionMDViewModel QuestionMDView)
+        public ActionResult Edit(FormCollection postedData, QuestionMDViewModel QuestionMDView,
+                                 [Bind(Prefix = "q")] OBS_QUESTION questionHdr)
         {
-            QuestionMDView.q.obs_question_full_text = (string)postedData["obs_question_full_text"];
-            QuestionMDView.q.obs_question_id = Convert.ToInt32(postedData["obs_question_id"]);
-            QuestionMDView.q.obs_question_short_text = (string)postedData["q.obs_question_short_text"];
-            QuestionMDView.q.obs_question_desc = (string)postedData["q.obs_question_desc"];
-            QuestionMDView.q.obs_question_mm_url = (string)postedData["q.obs_question_mm_url"];
-            QuestionMDView.q.obs_question_eff_end_dt = Convert.ToDateTime(postedData["q.obs_question_eff_end_dt"]);
-            QuestionMDView.q.obs_question_eff_st_dt = Convert.ToDateTime(postedData["q.obs_question_eff_st_dt"]);
+            QuestionMDView.q = questionHdr;
+            //QuestionMDView.q.obs_question_full_text = (string)postedData["q.obs_question_full_text"];
+            //QuestionMDView.q.obs_question_id = Convert.ToInt32(postedData["q.obs_question_id"]);
+            //QuestionMDView.q.obs_question_short_text = (string)postedData["q.obs_question_short_text"];
+            //QuestionMDView.q.obs_question_desc = (string)postedData["q.obs_question_desc"];
+            //QuestionMDView.q.obs_question_mm_url = (string)postedData["q.obs_question_mm_url"];
+            //QuestionMDView.q.obs_question_eff_end_dt = Convert.ToDateTime(postedData["q.obs_question_eff_end_dt"]);
+            //QuestionMDView.q.obs_question_eff_st_dt = Convert.ToDateTime(postedData["q.obs_question_eff_st_dt"]);
 
             if (!ModelState.IsValid) // Model State is not Valid return Errors
             {
@@ -150,8 +152,8 @@ namespace OBSMVC.Controllers
                 }
                 question.obs_question_full_text = QuestionMDView.q.obs_question_full_text;
                 question.obs_question_short_text = QuestionMDView.q.obs_question_short_text;
-                question.obs_question_desc = QuestionMDView.q.obs_question_desc;
-                question.obs_question_mm_url = QuestionMDView.q.obs_question_mm_url;
+                //question.obs_question_desc = QuestionMDView.q.obs_question_desc;
+                //question.obs_question_mm_url = QuestionMDView.q.obs_question_mm_url;
                 question.obs_question_eff_st_dt = QuestionMDView.q.obs_question_eff_st_dt;
                 question.obs_question_eff_end_dt = QuestionMDView.q.obs_question_eff_end_dt;
                 question.obs_question_upd_dtm = DateTime.Now;

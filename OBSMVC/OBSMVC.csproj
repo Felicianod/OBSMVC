@@ -226,9 +226,6 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CustViewModel.cs" />
-    <Compile Include="Models\del_dsc_employee.cs">
-      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\DSC_CUSTOMER.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>

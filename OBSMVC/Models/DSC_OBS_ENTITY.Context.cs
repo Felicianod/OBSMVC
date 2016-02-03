@@ -56,6 +56,5 @@ namespace OBSMVC.Models
         public virtual DbSet<OBS_MULTIMEDIA_TYPE> OBS_MULTIMEDIA_TYPE { get; set; }
         public virtual DbSet<OBS_RVW_FORM_INST> OBS_RVW_FORM_INST { get; set; }
         public virtual DbSet<OBS_TYPE_SUB_TYPES> OBS_TYPE_SUB_TYPES { get; set; }
-        public virtual DbSet<del_dsc_employee> del_dsc_employee { get; set; }
     }
 }

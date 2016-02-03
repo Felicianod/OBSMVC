@@ -2,9 +2,8 @@
 @using PagedList.Mvc;
 @model IPagedList<OBSMVC.Models.OBS_QUESTION>
 
-@{
-    ViewBag.Title = "Question Maintenance";
-}
+@{  ViewBag.Title = "Question Maintenance";  }
+
 <div class="well well-sm"><h3>Question Maintenance</h3></div>
 <p>
 @using (Html.BeginForm("Index", "Question", FormMethod.Get))

@@ -43,7 +43,6 @@
         <EntityTypeShape EntityType="Models.OBS_MULTIMEDIA_TYPE" Width="1.5" PointX="15.5" PointY="20.5" />
         <EntityTypeShape EntityType="Models.OBS_RVW_FORM_INST" Width="1.5" PointX="15.5" PointY="7.25" />
         <EntityTypeShape EntityType="Models.OBS_TYPE_SUB_TYPES" Width="1.5" PointX="16" PointY="0.75" />
-        <EntityTypeShape EntityType="Models.del_dsc_employee" Width="1.5" PointX="7.375" PointY="15.625" />
         <AssociationConnector Association="Models.relationship34" />
         <AssociationConnector Association="Models.relationship8" />
         <AssociationConnector Association="Models.relationship15" />

@@ -79,7 +79,7 @@
                              <th>Value</th>
                              <th>Category</th>                            
                           </tr>
-                            @if (Model.qMD.Count == 0)
+                            @if (Model.qAssignedMD.Count == 0)
                             {
                                   <tr>                                       
                                       <td>
@@ -90,7 +90,7 @@
                             }
                             else
                             {
-                                foreach (var md in Model.qMD)
+                                foreach (var md in Model.qAssignedMD)
                                 {
                                     <tr>
                                         <td>@md.obs_quest_md_value</td>

@@ -46,12 +46,19 @@ namespace OBSMVC.Models
                              };
                 foreach (var mdNew in tempMD)
                 {
+                    
                     metaData x = new metaData();
                     x.obs_quest_md_id = mdNew.md_id;
                     x.obs_quest_md_value = mdNew.mdValue;
                     x.obs_quest_md_cat = mdNew.mdCat;
-                    x.mdSelected = mdNew.mdSelected;
-                    qMD.Add(x);
+                    if(mdNew.mdSelected)
+                    { qAssignedMD.Add(x);
+                        preMetaDataIds.Add(mdNew.md_id);
+                     }
+                    else
+                    {
+                        qUnassignedMD.Add(x);
+                    }               
                 }
             }
         }
@@ -63,7 +70,7 @@ namespace OBSMVC.Models
             {
                 // Add all Metadata List to the QuestionMD Object
                 var tempMD = from t1 in db.OBS_QUESTION_METADATA
-                             join t2 in db.OBS_QUEST_ASSGND_MD.Where(item => item.obs_question_id == qId)
+                             join t2 in db.OBS_QUEST_ASSGND_MD.Where(item => item.obs_question_id == qId && DateTime.Today >= item.obs_qad_eff_st_dt && DateTime.Today < item.obs_qad_eff_end_dt)
                              on t1.obs_quest_md_id equals t2.obs_quest_md_id into t1Group
                              from t2 in t1Group.DefaultIfEmpty()
                              select new
@@ -80,16 +87,20 @@ namespace OBSMVC.Models
                     x.obs_quest_md_id = mdNew.md_id;
                     x.obs_quest_md_value = mdNew.mdValue;
                     x.obs_quest_md_cat = mdNew.mdCat;
-                    x.mdSelected = mdNew.mdSelected;
-                    if(mdNew.mdSelected)
-                    { qMD.Add(x); }
+                    if (mdNew.mdSelected)
+                    {
+                        qAssignedMD.Add(x);
+
+                    }
                 }
             }
         }
 
         // ----------------------------------- PUBLIC CLASS PROPERTIES ----------------------------------------------
         public OBS_QUESTION q = new OBS_QUESTION();
-        public List<metaData> qMD = new List<metaData>();
+        public List<metaData> qAssignedMD = new List<metaData>();
+        public List<metaData> qUnassignedMD = new List<metaData>();
+    
         public List<int> preMetaDataIds = new List<int>();
     }
 
@@ -98,8 +109,7 @@ namespace OBSMVC.Models
         [Required]
         public int obs_quest_md_id { get; set; }
         [Display(Name="Selected")]
-        public bool mdSelected { get; set; }
-        [Display(Name = "Metadata Value")]
+        
         public string obs_quest_md_value { get; set; }
         [Display(Name = "Metadata Category")]
         public string obs_quest_md_cat { get; set; }

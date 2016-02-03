@@ -5,42 +5,6 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'DSC_OBS_DEV.dbo.del_dsc_employee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="del_dsc_employee">
-          <Key>
-            <PropertyRef Name="dsc_emp_id" />
-            <PropertyRef Name="dsc_emp_first_name" />
-            <PropertyRef Name="dsc_emp_last_name" />
-            <PropertyRef Name="dsc_emp_adp_id" />
-            <PropertyRef Name="dsc_emp_init_work_dt" />
-            <PropertyRef Name="dsc_emp_can_be_obs_yn" />
-            <PropertyRef Name="dsc_emp_temp_yn" />
-            <PropertyRef Name="dsc_emp_hourly_yn" />
-            <PropertyRef Name="dsc_emp_added_id" />
-            <PropertyRef Name="dsc_emp_added_dtm" />
-          </Key>
-          <Property Name="dsc_emp_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="dsc_assigned_lc_id" Type="int" />
-          <Property Name="dsc_emp_perm_id" Type="varchar" MaxLength="20" />
-          <Property Name="dsc_emp_wms_clock_nbr" Type="int" />
-          <Property Name="dsc_emp_first_name" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="dsc_emp_mid_name" Type="varchar" MaxLength="30" />
-          <Property Name="dsc_emp_last_name" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="dsc_emp_email_addr" Type="varchar" MaxLength="100" />
-          <Property Name="dsc_emp_title" Type="varchar" MaxLength="50" />
-          <Property Name="dsc_emp_adp_id" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="dsc_emp_hire_dt" Type="date" />
-          <Property Name="dsc_emp_init_work_dt" Type="date" Nullable="false" />
-          <Property Name="dsc_emp_term_dt" Type="date" />
-          <Property Name="dsc_emp_can_be_obs_yn" Type="varchar" MaxLength="1" Nullable="false" />
-          <Property Name="dsc_emp_temp_yn" Type="varchar" MaxLength="1" Nullable="false" />
-          <Property Name="dsc_emp_hourly_yn" Type="varchar" MaxLength="1" Nullable="false" />
-          <Property Name="dsc_emp_added_id" Type="varchar" MaxLength="70" Nullable="false" />
-          <Property Name="dsc_emp_added_dtm" Type="datetime" Nullable="false" />
-          <Property Name="dsc_emp_upd_uid" Type="varchar" MaxLength="70" />
-          <Property Name="dsc_emp_upd_dtm" Type="datetime" />
-        </EntityType>
         <EntityType Name="DSC_CUSTOMER">
           <Key>
             <PropertyRef Name="dsc_cust_id" />
@@ -911,30 +875,6 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.del_dsc_employee' does not have a 
           <EntitySet Name="OBS_SUPER_TYPE" EntityType="Self.OBS_SUPER_TYPE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_TYPE" EntityType="Self.OBS_TYPE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_TYPE_SUB_TYPES" EntityType="Self.OBS_TYPE_SUB_TYPES" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="del_dsc_employee" EntityType="Self.del_dsc_employee" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [del_dsc_employee].[dsc_emp_id] AS [dsc_emp_id], 
-    [del_dsc_employee].[dsc_assigned_lc_id] AS [dsc_assigned_lc_id], 
-    [del_dsc_employee].[dsc_emp_perm_id] AS [dsc_emp_perm_id], 
-    [del_dsc_employee].[dsc_emp_wms_clock_nbr] AS [dsc_emp_wms_clock_nbr], 
-    [del_dsc_employee].[dsc_emp_first_name] AS [dsc_emp_first_name], 
-    [del_dsc_employee].[dsc_emp_mid_name] AS [dsc_emp_mid_name], 
-    [del_dsc_employee].[dsc_emp_last_name] AS [dsc_emp_last_name], 
-    [del_dsc_employee].[dsc_emp_email_addr] AS [dsc_emp_email_addr], 
-    [del_dsc_employee].[dsc_emp_title] AS [dsc_emp_title], 
-    [del_dsc_employee].[dsc_emp_adp_id] AS [dsc_emp_adp_id], 
-    [del_dsc_employee].[dsc_emp_hire_dt] AS [dsc_emp_hire_dt], 
-    [del_dsc_employee].[dsc_emp_init_work_dt] AS [dsc_emp_init_work_dt], 
-    [del_dsc_employee].[dsc_emp_term_dt] AS [dsc_emp_term_dt], 
-    [del_dsc_employee].[dsc_emp_can_be_obs_yn] AS [dsc_emp_can_be_obs_yn], 
-    [del_dsc_employee].[dsc_emp_temp_yn] AS [dsc_emp_temp_yn], 
-    [del_dsc_employee].[dsc_emp_hourly_yn] AS [dsc_emp_hourly_yn], 
-    [del_dsc_employee].[dsc_emp_added_id] AS [dsc_emp_added_id], 
-    [del_dsc_employee].[dsc_emp_added_dtm] AS [dsc_emp_added_dtm], 
-    [del_dsc_employee].[dsc_emp_upd_uid] AS [dsc_emp_upd_uid], 
-    [del_dsc_employee].[dsc_emp_upd_dtm] AS [dsc_emp_upd_dtm]
-    FROM [dbo].[del_dsc_employee] AS [del_dsc_employee]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="obs_super_type_type" Association="Self.obs_super_type_type">
             <End Role="OBS_SUPER_TYPE" EntitySet="OBS_SUPER_TYPE" />
             <End Role="OBS_TYPE" EntitySet="OBS_TYPE" />
@@ -1267,7 +1207,6 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.del_dsc_employee' does not have a 
           <EntitySet Name="OBS_MULTIMEDIA_TYPE" EntityType="Models.OBS_MULTIMEDIA_TYPE" />
           <EntitySet Name="OBS_RVW_FORM_INST" EntityType="Models.OBS_RVW_FORM_INST" />
           <EntitySet Name="OBS_TYPE_SUB_TYPES" EntityType="Models.OBS_TYPE_SUB_TYPES" />
-          <EntitySet Name="del_dsc_employee" EntityType="Models.del_dsc_employee" />
           <AssociationSet Name="relationship34" Association="Models.relationship34">
             <End Role="DSC_CUSTOMER" EntitySet="DSC_CUSTOMER" />
             <End Role="OBS_INST" EntitySet="OBS_INST" />
@@ -1813,40 +1752,6 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.del_dsc_employee' does not have a 
           <Property Name="obs_sub_type_end_eff_dt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="OBS_SUB_TYPE" Relationship="Models.rel_sub_type_types" FromRole="OBS_TYPE_SUB_TYPES" ToRole="OBS_SUB_TYPE" />
           <NavigationProperty Name="OBS_TYPE" Relationship="Models.rel_obs_type_sub_type" FromRole="OBS_TYPE_SUB_TYPES" ToRole="OBS_TYPE" />
-        </EntityType>
-        <EntityType Name="del_dsc_employee">
-          <Key>
-            <PropertyRef Name="dsc_emp_id" />
-            <PropertyRef Name="dsc_emp_first_name" />
-            <PropertyRef Name="dsc_emp_last_name" />
-            <PropertyRef Name="dsc_emp_adp_id" />
-            <PropertyRef Name="dsc_emp_init_work_dt" />
-            <PropertyRef Name="dsc_emp_can_be_obs_yn" />
-            <PropertyRef Name="dsc_emp_temp_yn" />
-            <PropertyRef Name="dsc_emp_hourly_yn" />
-            <PropertyRef Name="dsc_emp_added_id" />
-            <PropertyRef Name="dsc_emp_added_dtm" />
-          </Key>
-          <Property Name="dsc_emp_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="dsc_assigned_lc_id" Type="Int32" />
-          <Property Name="dsc_emp_perm_id" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_wms_clock_nbr" Type="Int32" />
-          <Property Name="dsc_emp_first_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_mid_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_last_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_email_addr" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_adp_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_hire_dt" Type="DateTime" Precision="0" />
-          <Property Name="dsc_emp_init_work_dt" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="dsc_emp_term_dt" Type="DateTime" Precision="0" />
-          <Property Name="dsc_emp_can_be_obs_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_temp_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_hourly_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_added_id" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_added_dtm" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="dsc_emp_upd_uid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_upd_dtm" Type="DateTime" Precision="3" />
         </EntityType>
         <Association Name="relationship34">
           <End Type="Models.DSC_CUSTOMER" Role="DSC_CUSTOMER" Multiplicity="0..1" />
@@ -2636,32 +2541,6 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.del_dsc_employee' does not have a 
                 <ScalarProperty Name="obs_sub_type_id" ColumnName="obs_sub_type_id" />
                 <ScalarProperty Name="obs_type_id" ColumnName="obs_type_id" />
                 <ScalarProperty Name="otst_id" ColumnName="otst_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="del_dsc_employee">
-            <EntityTypeMapping TypeName="Models.del_dsc_employee">
-              <MappingFragment StoreEntitySet="del_dsc_employee">
-                <ScalarProperty Name="dsc_emp_upd_dtm" ColumnName="dsc_emp_upd_dtm" />
-                <ScalarProperty Name="dsc_emp_upd_uid" ColumnName="dsc_emp_upd_uid" />
-                <ScalarProperty Name="dsc_emp_added_dtm" ColumnName="dsc_emp_added_dtm" />
-                <ScalarProperty Name="dsc_emp_added_id" ColumnName="dsc_emp_added_id" />
-                <ScalarProperty Name="dsc_emp_hourly_yn" ColumnName="dsc_emp_hourly_yn" />
-                <ScalarProperty Name="dsc_emp_temp_yn" ColumnName="dsc_emp_temp_yn" />
-                <ScalarProperty Name="dsc_emp_can_be_obs_yn" ColumnName="dsc_emp_can_be_obs_yn" />
-                <ScalarProperty Name="dsc_emp_term_dt" ColumnName="dsc_emp_term_dt" />
-                <ScalarProperty Name="dsc_emp_init_work_dt" ColumnName="dsc_emp_init_work_dt" />
-                <ScalarProperty Name="dsc_emp_hire_dt" ColumnName="dsc_emp_hire_dt" />
-                <ScalarProperty Name="dsc_emp_adp_id" ColumnName="dsc_emp_adp_id" />
-                <ScalarProperty Name="dsc_emp_title" ColumnName="dsc_emp_title" />
-                <ScalarProperty Name="dsc_emp_email_addr" ColumnName="dsc_emp_email_addr" />
-                <ScalarProperty Name="dsc_emp_last_name" ColumnName="dsc_emp_last_name" />
-                <ScalarProperty Name="dsc_emp_mid_name" ColumnName="dsc_emp_mid_name" />
-                <ScalarProperty Name="dsc_emp_first_name" ColumnName="dsc_emp_first_name" />
-                <ScalarProperty Name="dsc_emp_wms_clock_nbr" ColumnName="dsc_emp_wms_clock_nbr" />
-                <ScalarProperty Name="dsc_emp_perm_id" ColumnName="dsc_emp_perm_id" />
-                <ScalarProperty Name="dsc_assigned_lc_id" ColumnName="dsc_assigned_lc_id" />
-                <ScalarProperty Name="dsc_emp_id" ColumnName="dsc_emp_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

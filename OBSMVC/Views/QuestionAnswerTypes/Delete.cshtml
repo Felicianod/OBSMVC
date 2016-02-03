@@ -1,0 +1,56 @@
+﻿@model OBSMVC.Models.OBS_QUEST_ANS_TYPES
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>OBS_QUEST_ANS_TYPES</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_qat_end_eff_dt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_qat_end_eff_dt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_qat_default_ans_type_yn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_qat_default_ans_type_yn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OBS_QUESTION.obs_question_full_text)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OBS_QUESTION.obs_question_full_text)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OBS_ANS_TYPE.obs_ans_type_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OBS_ANS_TYPE.obs_ans_type_name)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

@@ -1,0 +1,50 @@
+﻿@model OBSMVC.Models.OBS_QUEST_ANS_TYPES
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>OBS_QUEST_ANS_TYPES</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_qat_end_eff_dt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_qat_end_eff_dt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_qat_default_ans_type_yn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_qat_default_ans_type_yn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OBS_QUESTION.obs_question_full_text)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OBS_QUESTION.obs_question_full_text)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OBS_ANS_TYPE.obs_ans_type_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OBS_ANS_TYPE.obs_ans_type_name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.obs_qat_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

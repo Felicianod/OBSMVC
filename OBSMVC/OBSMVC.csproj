@@ -199,6 +199,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OBSTYPEController.cs" />
+    <Compile Include="Controllers\QuestionAnswerTypesController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\QuestionMetadataController.cs" />
     <Compile Include="CustomerModel.Context.cs">
@@ -225,6 +226,12 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CustViewModel.cs" />
+    <Compile Include="Models\del_dsc_employee.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DSC_CUSTOMER.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DSC_LC.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
@@ -253,6 +260,57 @@
     <Compile Include="Models\OBS_ANS_TYPE.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\OBS_APPLICATION.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_APP_EVENT_LOG.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_ATTRIB_DATA_TYPES.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_COLLECT_FORM_INST.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_COLLECT_FORM_TMPLT.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_COL_FORM_INST_ACT_ANS.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_COL_FORM_INST_ATTRIB_VALS.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_COL_FORM_INST_MM_ATTACH.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_COL_FORM_INST_SIGS.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_COL_FORM_QUESTIONS.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_COL_FORM_TMPLT_ATTRIBS.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_EVENT_TYPE.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_FORM_ATTRIBS.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_FORM_SECTION.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_INST.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_INST_EVENT_LOG.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_MULTIMEDIA_TYPE.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OBS_QUESTION.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
@@ -268,6 +326,9 @@
     <Compile Include="Models\OBS_QUEST_SLCT_ANS.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\OBS_RVW_FORM_INST.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OBS_SUB_TYPE.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
@@ -275,6 +336,9 @@
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OBS_TYPE.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_TYPE_SUB_TYPES.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\QuestionMDViewModel.cs" />
@@ -452,6 +516,11 @@
     <Content Include="Views\Question\Manage.cshtml" />
     <Content Include="Views\Question\_MDView.cshtml" />
     <Content Include="Views\Question\qMetaDataList.cshtml" />
+    <Content Include="Views\QuestionAnswerTypes\Create.cshtml" />
+    <Content Include="Views\QuestionAnswerTypes\Delete.cshtml" />
+    <Content Include="Views\QuestionAnswerTypes\Details.cshtml" />
+    <Content Include="Views\QuestionAnswerTypes\Edit.cshtml" />
+    <Content Include="Views\QuestionAnswerTypes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

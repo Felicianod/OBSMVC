@@ -12,21 +12,23 @@ namespace OBSMVC.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class OBS_SUB_TYPE
+    public partial class DSC_CUSTOMER
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public OBS_SUB_TYPE()
+        public DSC_CUSTOMER()
         {
-            this.OBS_TYPE_SUB_TYPES = new HashSet<OBS_TYPE_SUB_TYPES>();
+            this.OBS_INST = new HashSet<OBS_INST>();
+            this.OBS_COLLECT_FORM_TMPLT = new HashSet<OBS_COLLECT_FORM_TMPLT>();
         }
     
-        public int obs_sub_type_id { get; set; }
-        public string obs_sub_type_name { get; set; }
-        public string obs_sub_type_desc { get; set; }
-        public string obs_sub_type_group { get; set; }
-        public Nullable<System.DateTime> obs_sub_type_eff_end_dt { get; set; }
+        public int dsc_cust_id { get; set; }
+        public string dsc_cust_name { get; set; }
+        public string dsc_cust_parent_name { get; set; }
+        public string dsc_cust_eff_end_date { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OBS_TYPE_SUB_TYPES> OBS_TYPE_SUB_TYPES { get; set; }
+        public virtual ICollection<OBS_INST> OBS_INST { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OBS_COLLECT_FORM_TMPLT> OBS_COLLECT_FORM_TMPLT { get; set; }
     }
 }

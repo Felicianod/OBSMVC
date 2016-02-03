@@ -18,17 +18,20 @@ namespace OBSMVC.Models
         public OBS_QUEST_ANS_TYPES()
         {
             this.OBS_QUEST_SLCT_ANS = new HashSet<OBS_QUEST_SLCT_ANS>();
+            this.OBS_COL_FORM_QUESTIONS = new HashSet<OBS_COL_FORM_QUESTIONS>();
         }
     
         public int obs_qat_id { get; set; }
         public int obs_question_id { get; set; }
         public short obs_ans_type_id { get; set; }
         public Nullable<System.DateTime> obs_qat_end_eff_dt { get; set; }
-        public string obs_qat_default_ans_type { get; set; }
+        public string obs_qat_default_ans_type_yn { get; set; }
     
         public virtual OBS_QUESTION OBS_QUESTION { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_QUEST_SLCT_ANS> OBS_QUEST_SLCT_ANS { get; set; }
         public virtual OBS_ANS_TYPE OBS_ANS_TYPE { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OBS_COL_FORM_QUESTIONS> OBS_COL_FORM_QUESTIONS { get; set; }
     }
 }

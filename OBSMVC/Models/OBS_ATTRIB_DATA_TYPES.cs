@@ -12,21 +12,19 @@ namespace OBSMVC.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class OBS_SUB_TYPE
+    public partial class OBS_ATTRIB_DATA_TYPES
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public OBS_SUB_TYPE()
+        public OBS_ATTRIB_DATA_TYPES()
         {
-            this.OBS_TYPE_SUB_TYPES = new HashSet<OBS_TYPE_SUB_TYPES>();
+            this.OBS_FORM_ATTRIBS = new HashSet<OBS_FORM_ATTRIBS>();
         }
     
-        public int obs_sub_type_id { get; set; }
-        public string obs_sub_type_name { get; set; }
-        public string obs_sub_type_desc { get; set; }
-        public string obs_sub_type_group { get; set; }
-        public Nullable<System.DateTime> obs_sub_type_eff_end_dt { get; set; }
+        public short obs_attrib_data_type_id { get; set; }
+        public string obs_attrib_data_type_name { get; set; }
+        public string obs_attrib_data_type_len_yn { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OBS_TYPE_SUB_TYPES> OBS_TYPE_SUB_TYPES { get; set; }
+        public virtual ICollection<OBS_FORM_ATTRIBS> OBS_FORM_ATTRIBS { get; set; }
     }
 }

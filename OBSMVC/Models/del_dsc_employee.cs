@@ -12,22 +12,14 @@ namespace OBSMVC.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class EMPLOYEE
+    public partial class del_dsc_employee
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public EMPLOYEE()
-        {
-            this.OBS_COLLECT_FORM_INST = new HashSet<OBS_COLLECT_FORM_INST>();
-            this.OBS_COL_FORM_INST_SIGS = new HashSet<OBS_COL_FORM_INST_SIGS>();
-            this.OBS_RVW_FORM_INST = new HashSet<OBS_RVW_FORM_INST>();
-            this.OBS_INST = new HashSet<OBS_INST>();
-        }
-    
         public int dsc_emp_id { get; set; }
         public Nullable<int> dsc_assigned_lc_id { get; set; }
         public string dsc_emp_perm_id { get; set; }
         public Nullable<int> dsc_emp_wms_clock_nbr { get; set; }
         public string dsc_emp_first_name { get; set; }
+        public string dsc_emp_mid_name { get; set; }
         public string dsc_emp_last_name { get; set; }
         public string dsc_emp_email_addr { get; set; }
         public string dsc_emp_title { get; set; }
@@ -42,16 +34,5 @@ namespace OBSMVC.Models
         public System.DateTime dsc_emp_added_dtm { get; set; }
         public string dsc_emp_upd_uid { get; set; }
         public Nullable<System.DateTime> dsc_emp_upd_dtm { get; set; }
-        public string dsc_emp_mid_name { get; set; }
-    
-        public virtual DSC_LC DSC_LC { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OBS_COLLECT_FORM_INST> OBS_COLLECT_FORM_INST { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OBS_COL_FORM_INST_SIGS> OBS_COL_FORM_INST_SIGS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OBS_RVW_FORM_INST> OBS_RVW_FORM_INST { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OBS_INST> OBS_INST { get; set; }
     }
 }

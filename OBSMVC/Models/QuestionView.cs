@@ -28,6 +28,7 @@ namespace OBSMVC.Models
         public short obs_question_ver { get; set; }
 
         [Display(Name = "Full Text")]
+        [DataType(DataType.MultilineText)]
         [Required]
         public string obs_question_full_text { get; set; }
 

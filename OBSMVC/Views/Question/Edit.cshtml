@@ -8,14 +8,14 @@
     //    $("input:text.editDate").datepicker();
     //});
     $(function () {
-        $("#obs_question_eff_st_dt").datepicker({
+        $("#b.obs_question_eff_st_dt").datepicker({
             changeMonth: true,
             changeYear: true,
             dateFormat: 'M dd, yy'
         });
     });
     $(function () {
-        $("#obs_question_eff_end_dt").datepicker({
+        $("#b.obs_question_eff_end_dt").datepicker({
             changeMonth: true,
             changeYear: true,
             dateFormat: 'M dd, yy'
@@ -114,7 +114,7 @@
                @Html.LabelFor(model => model.q.obs_question_eff_st_dt, htmlAttributes: new { @class = "control-label col-md-2" })
                <div class="input-group col-md-6">
                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                   @Html.EditorFor(model => model.q.obs_question_eff_st_dt, new { htmlAttributes = new { @class = "form-control" } })
+                   @Html.EditorFor(model => model.q.obs_question_eff_st_dt, new { htmlAttributes = new { @class = "form-control", id="q.obs_question_eff_st_dt", name="q.obs_question_eff_st_dt" } })
                    @Html.ValidationMessageFor(model => model.q.obs_question_eff_st_dt, "", new { @class = "text-danger" })
                </div>
            </div>
@@ -122,7 +122,7 @@
                @Html.LabelFor(model => model.q.obs_question_eff_end_dt, htmlAttributes: new { @class = "control-label col-md-2" })
                <div class="input-group col-md-  6">
                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                   @Html.EditorFor(model => model.q.obs_question_eff_end_dt, new { htmlAttributes = new { @class = "form-control" } })
+                   @Html.EditorFor(model => model.q.obs_question_eff_end_dt, new { htmlAttributes = new { @class = "form-control", id = "q.obs_question_eff_end_dt", name = "q.obs_question_eff_end_dt" } })
                    @Html.ValidationMessageFor(model => model.q.obs_question_eff_end_dt, "", new { @class = "text-danger" })
                </div>
            </div>
@@ -139,7 +139,7 @@
         @if (ViewBag.ConfMsg != null)
         {
             <div id="ConfMsg" style="text-align:center; font-weight: bold; color:green">
-                'Question' Information Saved Successfully !
+                @ViewBag.ConfMsg
             </div>
             <script>
                 $(function () {

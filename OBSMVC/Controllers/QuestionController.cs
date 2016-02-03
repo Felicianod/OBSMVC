@@ -127,6 +127,7 @@ namespace OBSMVC.Controllers
         public ActionResult Edit(FormCollection postedData, QuestionMDViewModel QuestionMDView,
                                  [Bind(Prefix = "q")] OBS_QUESTION questionHdr)
         {
+            questionHdr.obs_question_added_uid = "999";
             QuestionMDView.q = questionHdr;
             //QuestionMDView.q.obs_question_full_text = (string)postedData["q.obs_question_full_text"];
             //QuestionMDView.q.obs_question_id = Convert.ToInt32(postedData["q.obs_question_id"]);
@@ -136,36 +137,43 @@ namespace OBSMVC.Controllers
             //QuestionMDView.q.obs_question_eff_end_dt = Convert.ToDateTime(postedData["q.obs_question_eff_end_dt"]);
             //QuestionMDView.q.obs_question_eff_st_dt = Convert.ToDateTime(postedData["q.obs_question_eff_st_dt"]);
 
-            if (!ModelState.IsValid) // Model State is not Valid return Errors
+            QuestionMDViewModel newQMD = new QuestionMDViewModel(questionHdr.obs_question_id);
+
+            //if (!ModelState.IsValid) // Model State is not Valid return Errors
+            if (questionHdr.obs_question_id < 1) // Model State is not Valid return Errors
             {
-                return View(QuestionMDView);
+                newQMD.q = QuestionMDView.q;
+                ViewBag.ConfMsg = "Failed to Update Information!";
+                return View(newQMD);
             }
 
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
                 //var question = db.OBS_QUESTION.Single(x => x.obs_question_id == oBS_QUESTION.obs_question_id);
-                var question = db.OBS_QUESTION.Find(QuestionMDView.q.obs_question_id);
 
-                if (!QuestionMDView.q.obs_question_full_text.Equals(question.obs_question_full_text))
+
+                //var question = newQMD.q;
+
+                if (!QuestionMDView.q.obs_question_full_text.Equals(newQMD.q.obs_question_full_text))
                 {
-                    question.obs_question_ver++;
+                    newQMD.q.obs_question_ver++;
                 }
-                question.obs_question_full_text = QuestionMDView.q.obs_question_full_text;
-                question.obs_question_short_text = QuestionMDView.q.obs_question_short_text;
+                newQMD.q.obs_question_full_text = QuestionMDView.q.obs_question_full_text;
+                newQMD.q.obs_question_short_text = QuestionMDView.q.obs_question_short_text;
                 //question.obs_question_desc = QuestionMDView.q.obs_question_desc;
                 //question.obs_question_mm_url = QuestionMDView.q.obs_question_mm_url;
-                question.obs_question_eff_st_dt = QuestionMDView.q.obs_question_eff_st_dt;
-                question.obs_question_eff_end_dt = QuestionMDView.q.obs_question_eff_end_dt;
-                question.obs_question_upd_dtm = DateTime.Now;
-                question.obs_question_upd_uid = User.Identity.Name;
+                newQMD.q.obs_question_eff_st_dt = QuestionMDView.q.obs_question_eff_st_dt;
+                newQMD.q.obs_question_eff_end_dt = QuestionMDView.q.obs_question_eff_end_dt;
+                newQMD.q.obs_question_upd_dtm = DateTime.Now;
+                newQMD.q.obs_question_upd_uid = User.Identity.Name;
 
                 db.SaveChanges();
 
-                QuestionMDView.q = question;
-                ViewBag.ConfMsg = "Success";
+                //QuestionMDView.q = newQMD.q;
+                ViewBag.ConfMsg = "Success! Data Saved Successfully";
 
                 //return View(QuestionMDView);
-                return RedirectToAction("Edit", "Question", new { id = question.obs_question_id });
+                return RedirectToAction("Edit", "Question", new { id = newQMD.q.obs_question_id });
             }
         }
 

@@ -50,6 +50,7 @@ namespace OBSMVC.Models
                 }
             }
         }
+
         ////= = = = = = = = = = = = = = = CONSTRUCTOR FILTERED METADATA LIST  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
         //public QuestionMDViewModel(int qId, bool isDetail)
         //{
@@ -92,8 +93,7 @@ namespace OBSMVC.Models
     {
         [Required]
         public int obs_quest_md_id { get; set; }
-        [Display(Name="Selected")]
-        
+        [Display(Name="Selected")]        
         public string obs_quest_md_value { get; set; }
         [Display(Name = "Metadata Category")]
         public string obs_quest_md_cat { get; set; }

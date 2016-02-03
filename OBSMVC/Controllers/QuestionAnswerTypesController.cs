@@ -17,7 +17,7 @@ namespace OBSMVC.Controllers
         // GET: QuestionAnswerTypes
         public ActionResult Index()
         {
-            var oBS_QUEST_ANS_TYPES = db.OBS_QUEST_ANS_TYPES.Include(o => o.OBS_QUESTION).Include(o => o.OBS_ANS_TYPE);
+            var oBS_QUEST_ANS_TYPES = db.OBS_QUEST_ANS_TYPES.Include(o => o.OBS_QUESTION).Include(o => o.OBS_ANS_TYPE);        
             return View(oBS_QUEST_ANS_TYPES.ToList());
         }
 

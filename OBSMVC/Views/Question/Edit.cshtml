@@ -152,11 +152,11 @@
                                   <th>Category</th>
                               </tr>
 
-                              @foreach (var item in Model.qMD)
+                              @foreach (var item in Model.qAssignedMD)
                               {
                                   <tr>
                                       <td>
-                                          <input type="checkbox" id="mdSelected" @if(item.mdSelected){<TEXT> checked="checked" </TEXT> } />
+                                          <input type="checkbox" id="mdSelected" checked="checked"  />
                                           <input type="hidden" value="@item.obs_quest_md_id" id="obs_quest_md_id">
                                       </td>
                                       <td>

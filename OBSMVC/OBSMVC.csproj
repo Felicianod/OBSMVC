@@ -199,6 +199,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OBSTYPEController.cs" />
+    <Compile Include="Controllers\QuestionAnswerTypeDefaultController.cs" />
     <Compile Include="Controllers\QuestionAnswerTypesController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\QuestionMetadataController.cs" />
@@ -338,6 +339,7 @@
     <Compile Include="Models\OBS_TYPE_SUB_TYPES.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\QuestAnsTypes.cs" />
     <Compile Include="Models\QuestionMDViewModel.cs" />
     <Compile Include="Models\QuestionMetadataView.cs" />
     <Compile Include="Models\QuestionView.cs" />
@@ -518,6 +520,7 @@
     <Content Include="Views\QuestionAnswerTypes\Details.cshtml" />
     <Content Include="Views\QuestionAnswerTypes\Edit.cshtml" />
     <Content Include="Views\QuestionAnswerTypes\Index.cshtml" />
+    <Content Include="Views\QuestionAnswerTypeDefault\_listAnswerTypes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

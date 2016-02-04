@@ -1,0 +1,29 @@
+﻿@model IEnumerable<SelectListItem>
+@{
+    Layout = null;
+}
+@*@Html.DropDownList("list_of_answers","None")
+    <br />
+    <br />
+    @foreach(var x in ViewBag.question_selected_ans_type)
+    {
+        <li>@x.obs_qsa_text</li>
+    }*@
+@using (Html.BeginForm("Index", "Question", FormMethod.Get))
+{
+
+                <b>Default Answer Type</b><br/>
+                @Html.DropDownList("list_of_answers",null, "None", new { id= "DefaultAnswer" })
+                
+    foreach (var x in ViewBag.question_selected_ans_type)
+    {
+                    <li>@x.obs_qsa_text</li>
+                }
+                
+}
+<script type="text/javascript">
+                    $('#DefaultAnswer').on('change', function (event) {
+                        var form = $(event.target).parents('form');
+                        form.submit();
+                    });
+                  </script>

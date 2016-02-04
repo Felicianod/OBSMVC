@@ -271,7 +271,7 @@
             <PropertyRef Name="obs_qsa_id" />
           </Key>
           <Property Name="obs_qsa_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="obs_quest_ans_types_id" Type="int" />
+          <Property Name="obs_qat_id" Type="int" />
           <Property Name="obs_qsa_text" Type="varchar" MaxLength="40" Nullable="false" />
           <Property Name="obs_qsa_order" Type="smallint" Nullable="false" />
           <Property Name="obs_qsa_wt" Type="smallint" />
@@ -803,7 +803,7 @@
               <PropertyRef Name="obs_qat_id" />
             </Principal>
             <Dependent Role="OBS_QUEST_SLCT_ANS">
-              <PropertyRef Name="obs_quest_ans_types_id" />
+              <PropertyRef Name="obs_qat_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1163,16 +1163,11 @@
           </AssociationSet>
           <EntitySet Name="OBS_QUEST_ANS_TYPES" EntityType="Models.OBS_QUEST_ANS_TYPES" />
           <EntitySet Name="OBS_QUEST_ASSGND_MD" EntityType="Models.OBS_QUEST_ASSGND_MD" />
-          <EntitySet Name="OBS_QUEST_SLCT_ANS" EntityType="Models.OBS_QUEST_SLCT_ANS" />
           <EntitySet Name="OBS_QUESTION" EntityType="Models.OBS_QUESTION" />
           <EntitySet Name="OBS_QUESTION_METADATA" EntityType="Models.OBS_QUESTION_METADATA" />
           <AssociationSet Name="relationship41" Association="Models.relationship41">
             <End Role="OBS_QUESTION" EntitySet="OBS_QUESTION" />
             <End Role="OBS_QUEST_ANS_TYPES" EntitySet="OBS_QUEST_ANS_TYPES" />
-          </AssociationSet>
-          <AssociationSet Name="relationship44" Association="Models.relationship44">
-            <End Role="OBS_QUEST_ANS_TYPES" EntitySet="OBS_QUEST_ANS_TYPES" />
-            <End Role="OBS_QUEST_SLCT_ANS" EntitySet="OBS_QUEST_SLCT_ANS" />
           </AssociationSet>
           <AssociationSet Name="rel_metadata_quest_assgnd" Association="Models.rel_metadata_quest_assgnd">
             <End Role="OBS_QUESTION_METADATA" EntitySet="OBS_QUESTION_METADATA" />
@@ -1343,6 +1338,11 @@
             <End Role="OBS_TYPE" EntitySet="OBS_TYPE" />
             <End Role="OBS_TYPE_SUB_TYPES" EntitySet="OBS_TYPE_SUB_TYPES" />
           </AssociationSet>
+          <EntitySet Name="OBS_QUEST_SLCT_ANS" EntityType="Models.OBS_QUEST_SLCT_ANS" />
+          <AssociationSet Name="relationship44" Association="Models.relationship44">
+            <End Role="OBS_QUEST_ANS_TYPES" EntitySet="OBS_QUEST_ANS_TYPES" />
+            <End Role="OBS_QUEST_SLCT_ANS" EntitySet="OBS_QUEST_SLCT_ANS" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="OBS_QUEST_ANS_TYPES">
           <Key>
@@ -1353,10 +1353,10 @@
           <Property Name="obs_ans_type_id" Type="Int16" Nullable="false" />
           <Property Name="obs_qat_end_eff_dt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="OBS_QUESTION" Relationship="Models.relationship41" FromRole="OBS_QUEST_ANS_TYPES" ToRole="OBS_QUESTION" />
-          <NavigationProperty Name="OBS_QUEST_SLCT_ANS" Relationship="Models.relationship44" FromRole="OBS_QUEST_ANS_TYPES" ToRole="OBS_QUEST_SLCT_ANS" />
           <NavigationProperty Name="OBS_ANS_TYPE" Relationship="Models.relationship43" FromRole="OBS_QUEST_ANS_TYPES" ToRole="OBS_ANS_TYPE" />
           <Property Name="obs_qat_default_ans_type_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="OBS_COL_FORM_QUESTIONS" Relationship="Models.relationship42" FromRole="OBS_QUEST_ANS_TYPES" ToRole="OBS_COL_FORM_QUESTIONS" />
+          <NavigationProperty Name="OBS_QUEST_SLCT_ANS" Relationship="Models.relationship44" FromRole="OBS_QUEST_ANS_TYPES" ToRole="OBS_QUEST_SLCT_ANS" />
         </EntityType>
         <EntityType Name="OBS_QUEST_ASSGND_MD">
           <Key>
@@ -1369,20 +1369,6 @@
           <Property Name="obs_qad_eff_end_dt" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="OBS_QUESTION_METADATA" Relationship="Models.rel_metadata_quest_assgnd" FromRole="OBS_QUEST_ASSGND_MD" ToRole="OBS_QUESTION_METADATA" />
           <NavigationProperty Name="OBS_QUESTION" Relationship="Models.rel_quest_assgnd_meta" FromRole="OBS_QUEST_ASSGND_MD" ToRole="OBS_QUESTION" />
-        </EntityType>
-        <EntityType Name="OBS_QUEST_SLCT_ANS">
-          <Key>
-            <PropertyRef Name="obs_qsa_id" />
-          </Key>
-          <Property Name="obs_qsa_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="obs_quest_ans_types_id" Type="Int32" />
-          <Property Name="obs_qsa_text" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Name="obs_qsa_order" Type="Int16" Nullable="false" />
-          <Property Name="obs_qsa_wt" Type="Int16" />
-          <Property Name="obs_qsa_dflt_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="obs_qsa_eff_st_dt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="obs_qsa_eff_end_dt" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="OBS_QUEST_ANS_TYPES" Relationship="Models.relationship44" FromRole="OBS_QUEST_SLCT_ANS" ToRole="OBS_QUEST_ANS_TYPES" />
         </EntityType>
         <EntityType Name="OBS_QUESTION">
           <Key>
@@ -1423,18 +1409,6 @@
             </Principal>
             <Dependent Role="OBS_QUEST_ANS_TYPES">
               <PropertyRef Name="obs_question_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="relationship44">
-          <End Type="Models.OBS_QUEST_ANS_TYPES" Role="OBS_QUEST_ANS_TYPES" Multiplicity="0..1" />
-          <End Type="Models.OBS_QUEST_SLCT_ANS" Role="OBS_QUEST_SLCT_ANS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_QUEST_ANS_TYPES">
-              <PropertyRef Name="obs_qat_id" />
-            </Principal>
-            <Dependent Role="OBS_QUEST_SLCT_ANS">
-              <PropertyRef Name="obs_quest_ans_types_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2161,6 +2135,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="OBS_QUEST_SLCT_ANS">
+          <Key>
+            <PropertyRef Name="obs_qsa_id" />
+          </Key>
+          <Property Name="obs_qsa_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="obs_qat_id" Type="Int32" />
+          <Property Name="obs_qsa_text" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="obs_qsa_order" Type="Int16" Nullable="false" />
+          <Property Name="obs_qsa_wt" Type="Int16" />
+          <Property Name="obs_qsa_dflt_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="obs_qsa_eff_st_dt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="obs_qsa_eff_end_dt" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="OBS_QUEST_ANS_TYPES" Relationship="Models.relationship44" FromRole="OBS_QUEST_SLCT_ANS" ToRole="OBS_QUEST_ANS_TYPES" />
+        </EntityType>
+        <Association Name="relationship44">
+          <End Type="Models.OBS_QUEST_ANS_TYPES" Role="OBS_QUEST_ANS_TYPES" Multiplicity="0..1" />
+          <End Type="Models.OBS_QUEST_SLCT_ANS" Role="OBS_QUEST_SLCT_ANS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_QUEST_ANS_TYPES">
+              <PropertyRef Name="obs_qat_id" />
+            </Principal>
+            <Dependent Role="OBS_QUEST_SLCT_ANS">
+              <PropertyRef Name="obs_qat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2256,20 +2256,6 @@
                 <ScalarProperty Name="obs_question_id" ColumnName="obs_question_id" />
                 <ScalarProperty Name="obs_quest_md_id" ColumnName="obs_quest_md_id" />
                 <ScalarProperty Name="obs_qad_id" ColumnName="obs_qad_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OBS_QUEST_SLCT_ANS">
-            <EntityTypeMapping TypeName="Models.OBS_QUEST_SLCT_ANS">
-              <MappingFragment StoreEntitySet="OBS_QUEST_SLCT_ANS">
-                <ScalarProperty Name="obs_qsa_eff_end_dt" ColumnName="obs_qsa_eff_end_dt" />
-                <ScalarProperty Name="obs_qsa_eff_st_dt" ColumnName="obs_qsa_eff_st_dt" />
-                <ScalarProperty Name="obs_qsa_dflt_yn" ColumnName="obs_qsa_dflt_yn" />
-                <ScalarProperty Name="obs_qsa_wt" ColumnName="obs_qsa_wt" />
-                <ScalarProperty Name="obs_qsa_order" ColumnName="obs_qsa_order" />
-                <ScalarProperty Name="obs_qsa_text" ColumnName="obs_qsa_text" />
-                <ScalarProperty Name="obs_quest_ans_types_id" ColumnName="obs_quest_ans_types_id" />
-                <ScalarProperty Name="obs_qsa_id" ColumnName="obs_qsa_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2541,6 +2527,20 @@
                 <ScalarProperty Name="obs_sub_type_id" ColumnName="obs_sub_type_id" />
                 <ScalarProperty Name="obs_type_id" ColumnName="obs_type_id" />
                 <ScalarProperty Name="otst_id" ColumnName="otst_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OBS_QUEST_SLCT_ANS">
+            <EntityTypeMapping TypeName="Models.OBS_QUEST_SLCT_ANS">
+              <MappingFragment StoreEntitySet="OBS_QUEST_SLCT_ANS">
+                <ScalarProperty Name="obs_qsa_eff_end_dt" ColumnName="obs_qsa_eff_end_dt" />
+                <ScalarProperty Name="obs_qsa_eff_st_dt" ColumnName="obs_qsa_eff_st_dt" />
+                <ScalarProperty Name="obs_qsa_dflt_yn" ColumnName="obs_qsa_dflt_yn" />
+                <ScalarProperty Name="obs_qsa_wt" ColumnName="obs_qsa_wt" />
+                <ScalarProperty Name="obs_qsa_order" ColumnName="obs_qsa_order" />
+                <ScalarProperty Name="obs_qsa_text" ColumnName="obs_qsa_text" />
+                <ScalarProperty Name="obs_qat_id" ColumnName="obs_qat_id" />
+                <ScalarProperty Name="obs_qsa_id" ColumnName="obs_qsa_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

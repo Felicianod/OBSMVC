@@ -17,8 +17,8 @@ namespace OBSMVC.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public OBS_QUEST_ANS_TYPES()
         {
-            this.OBS_QUEST_SLCT_ANS = new HashSet<OBS_QUEST_SLCT_ANS>();
             this.OBS_COL_FORM_QUESTIONS = new HashSet<OBS_COL_FORM_QUESTIONS>();
+            this.OBS_QUEST_SLCT_ANS = new HashSet<OBS_QUEST_SLCT_ANS>();
         }
     
         public int obs_qat_id { get; set; }
@@ -28,10 +28,10 @@ namespace OBSMVC.Models
         public string obs_qat_default_ans_type_yn { get; set; }
     
         public virtual OBS_QUESTION OBS_QUESTION { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OBS_QUEST_SLCT_ANS> OBS_QUEST_SLCT_ANS { get; set; }
         public virtual OBS_ANS_TYPE OBS_ANS_TYPE { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_COL_FORM_QUESTIONS> OBS_COL_FORM_QUESTIONS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OBS_QUEST_SLCT_ANS> OBS_QUEST_SLCT_ANS { get; set; }
     }
 }

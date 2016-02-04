@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\OBSMVC\OBSMVC\Models\DSC_OBS_ENTITY.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Observation_Project\OBSMVC\Models\DSC_OBS_ENTITY.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

@@ -4,23 +4,29 @@
 <div class="well well-sm" style="text-align:center"><h3>Edit Question Information</h3></div>
 <script type="text/javascript">
     //$(function () {
-    //    $("input:text.editDate").datepicker();
+    //    $("input:text.editDate").datepicker({
+    //        changeMonth: true,
+    //        changeYear: true,
+    //        dateFormat: 'M dd, yy'
+    //    });
     //});
     $(function () {
-        $("#b.obs_question_eff_st_dt").datepicker({
+        $("#obs_question_eff_st_dt").datepicker({
             changeMonth: true,
             changeYear: true,
             dateFormat: 'M dd, yy'
         });
     });
     $(function () {
-        $("#b.obs_question_eff_end_dt").datepicker({
+        $("#obs_question_eff_end_dt").datepicker({
             changeMonth: true,
             changeYear: true,
             dateFormat: 'M dd, yy'
         });
     });
+
 </script>
+
 <!-- Form Edit State Change Validation -->
 <script>
     $(document).ready(function () {
@@ -107,12 +113,12 @@
                             @Html.ValidationMessageFor(model => model.q.obs_question_mm_url, "", new { @class = "text-danger" })
                         </div>
                     </div>*@
-
                 <div class="form-group row">
                     @Html.LabelFor(model => model.q.obs_question_eff_st_dt, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="input-group col-md-6">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                        @Html.EditorFor(model => model.q.obs_question_eff_st_dt, new { htmlAttributes = new { @class = "form-control", id = "q.obs_question_eff_st_dt", name = "q.obs_question_eff_st_dt" } })
+                        @*@Html.EditorFor(model => model.q.obs_question_eff_st_dt, new { htmlAttributes = new { @class = "form-control", id = "q.obs_question_eff_st_dt", name = "q.obs_question_eff_st_dt" } })*@
+                        <input type='text' class="form-control" id='obs_question_eff_st_dt' name="q.obs_question_eff_st_dt" value="@Model.q.obs_question_eff_st_dt" />
                         @Html.ValidationMessageFor(model => model.q.obs_question_eff_st_dt, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -120,12 +126,13 @@
                     @Html.LabelFor(model => model.q.obs_question_eff_end_dt, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="input-group col-md-  6">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                        @Html.EditorFor(model => model.q.obs_question_eff_end_dt, new { htmlAttributes = new { @class = "form-control", id = "q.obs_question_eff_end_dt", name = "q.obs_question_eff_end_dt" } })
+                        <input type='text' class="form-control" id='obs_question_eff_end_dt' name="q.obs_question_eff_st_dt" value="@Model.q.obs_question_eff_end_dt" />
+                        @*@Html.EditorFor(model => model.q.obs_question_eff_end_dt, new { htmlAttributes = new { @class = "form-control", id = "q.obs_question_eff_end_dt", name = "q.obs_question_eff_end_dt" } })*@
                         @Html.ValidationMessageFor(model => model.q.obs_question_eff_end_dt, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <br />
-            </div>
+                    <br />
+                </div>
         </div>
 
         <div class="row">

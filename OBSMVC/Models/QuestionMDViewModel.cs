@@ -29,7 +29,7 @@ namespace OBSMVC.Models
                                  md_id = t1.obs_quest_md_id,
                                  mdValue = t1.obs_quest_md_value,
                                  mdCat = t1.obs_quest_md_cat,
-                                 mdSelected = (t2 == null) ? false : true
+                                 mdSelected =( (t2 != null) || (DateTime.Today >= t2.obs_qad_eff_st_dt && DateTime.Today < t2.obs_qad_eff_end_dt )? true : false)                                 
                                  //xmdSelected = (t1Group == null) ? false : true
                              };
                 foreach (var mdNew in tempMD)

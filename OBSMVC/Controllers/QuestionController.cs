@@ -115,6 +115,8 @@ namespace OBSMVC.Controllers
             if (obsQMD == null) {
                 return HttpNotFound();
             }
+
+            _listAnswerTypes((int)id);
             return View(obsQMD);
 
         }
@@ -173,23 +175,31 @@ namespace OBSMVC.Controllers
                 editedQuestion.obs_question_upd_uid = User.Identity.Name;
 
                 //db.Entry(editQuestion).State = EntityState.Modified;
+                
+                 db.SaveChanges();
+            }
 
+
+            using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
+            {
                 // Soft Delete all Metadata tags that are no longer used by the question
                 foreach (string deleteId in mdIDsToDelete)
                 {
-                    OBS_QUEST_ASSGND_MD oBS_QUEST_ASSGND_MD = db.OBS_QUEST_ASSGND_MD.Find(deleteId);
-                    oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = DateTime.Now;
+                    int tempId = Convert.ToInt32(deleteId);
+                    //int joitemp = db.OBS_QUEST_ASSGND_MD.Where(x => x.obs_quest_md_id == Convert.ToInt32(deleteId) && x.obs_question_id == questionHdr.obs_question_id).Select(x => x.obs_qad_id);
+                    OBS_QUEST_ASSGND_MD oBS_QUEST_ASSGND_MD = db.OBS_QUEST_ASSGND_MD.FirstOrDefault(x => x.obs_quest_md_id == tempId && x.obs_question_id == questionHdr.obs_question_id);
+                    oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = DateTime.Today;
                     //db.OBS_QUESTION_METADATA.Remove(oBS_QUESTION_METADATA);
                 }
-                
-                 db.SaveChanges();
 
                 //QuestionMDView.q = newQMD.q;
-                ViewBag.ConfMsg = "Success! Data Saved Successfully";
-
-                //return View(QuestionMDView);
-                return RedirectToAction("Edit", "Question", new { id = editedQuestion.obs_question_id });
+                db.SaveChanges();           
             }
+
+            ViewBag.ConfMsg = "Success! Data Saved Successfully";
+
+            //return View(QuestionMDView);
+            return RedirectToAction("Edit", "Question", new { id = questionHdr.obs_question_id });
         }
 
 
@@ -275,6 +285,53 @@ namespace OBSMVC.Controllers
             base.Dispose(disposing);
         }
         //-----------------------------------------------------------------------------------------------------------------
+
+
+        // ==================================================================================================
+        [ChildActionOnly]
+        public void _listAnswerTypes(int question_id)
+        {
+            var all_answer_types = db.OBS_ANS_TYPE.Where(item => item.obs_ans_type_id > 0).ToList();
+            var default_answer_type = (from qat in db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == question_id && x.obs_qat_default_ans_type_yn == "Y")
+                                       select new { qat.obs_ans_type_id, qat.obs_qat_id }).ToList();
+            int default_answer_id = -1;
+            int default_answer_qat_id = -1;
+            List<OBS_QUEST_SLCT_ANS> question_selected_ans_type = new List<OBS_QUEST_SLCT_ANS>();
+
+            try
+            {
+                default_answer_id = default_answer_type.FirstOrDefault().obs_ans_type_id;
+                default_answer_qat_id = default_answer_type.FirstOrDefault().obs_qat_id;
+            }
+            catch (NullReferenceException)
+            { }
+
+            List<SelectListItem> list_of_answers = new List<SelectListItem>();
+            foreach (var x in all_answer_types)
+            {
+                SelectListItem answer_type = new SelectListItem();
+                answer_type.Value = x.obs_ans_type_id.ToString();
+                answer_type.Text = x.obs_ans_type_name;
+                if (x.obs_ans_type_id == default_answer_id)
+                {
+                    answer_type.Selected = true;
+                    if (x.obs_ans_type_has_fxd_ans_yn == "Y")
+                    {
+                        question_selected_ans_type = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == default_answer_qat_id).ToList();
+                    }
+
+                }
+                else
+                {
+                    answer_type.Selected = false;
+                }
+                list_of_answers.Add(answer_type);
+            }
+            ViewBag.list_of_answers = list_of_answers;
+            ViewBag.question_selected_ans_type = question_selected_ans_type;
+
+        }
+        // =================================================================================
 
     }
 }

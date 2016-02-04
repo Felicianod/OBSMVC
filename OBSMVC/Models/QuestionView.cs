@@ -50,7 +50,6 @@ namespace OBSMVC.Models
         public DateTime? obs_question_eff_end_dt { get; set; }
 
         [Display(Name = "Question Added By")]
-        [Required]
         public string obs_question_added_uid { get; set; }
 
         [Display(Name = "Date Added")] [Required]

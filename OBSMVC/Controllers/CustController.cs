@@ -64,12 +64,7 @@ namespace OBSMVC.Controllers
             return View(viewCustomers);
             
         }
-
-
-     
-
-       
-       
+  
         [HttpGet]
         public ActionResult Activate(int id, string actionText)
         {

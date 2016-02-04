@@ -120,14 +120,11 @@ namespace OBSMVC.Controllers
         }
 
         //-----------------------------------------------------------------------------------------------------------------
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(FormCollection postedData, QuestionMDViewModel QuestionMDView,
                                  [Bind(Prefix = "q")] OBS_QUESTION questionHdr)
         {
-            questionHdr.obs_question_added_uid = "999";
             QuestionMDView.q = questionHdr;
             //QuestionMDView.q.obs_question_full_text = (string)postedData["q.obs_question_full_text"];
             //QuestionMDView.q.obs_question_id = Convert.ToInt32(postedData["q.obs_question_id"]);
@@ -137,13 +134,10 @@ namespace OBSMVC.Controllers
             //QuestionMDView.q.obs_question_eff_end_dt = Convert.ToDateTime(postedData["q.obs_question_eff_end_dt"]);
             //QuestionMDView.q.obs_question_eff_st_dt = Convert.ToDateTime(postedData["q.obs_question_eff_st_dt"]);
 
-            QuestionMDViewModel newQMD = new QuestionMDViewModel(questionHdr.obs_question_id);
-
             if (!ModelState.IsValid) // Model State is not Valid return Errors
             {
-                newQMD.q = QuestionMDView.q;
                 ViewBag.ConfMsg = "Failed to Update Information!";
-                return View(newQMD);
+                return View(QuestionMDView);
             }
 
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
@@ -152,30 +146,30 @@ namespace OBSMVC.Controllers
 
 
                 //var question = newQMD.q;
+                //QuestionMDViewModel newQMD = new QuestionMDViewModel(questionHdr.obs_question_id);
+                OBS_QUESTION editedQuestion = db.OBS_QUESTION.Single(x => x.obs_question_id == questionHdr.obs_question_id);
 
-                if (!QuestionMDView.q.obs_question_full_text.Equals(newQMD.q.obs_question_full_text))
+                if (!editedQuestion.obs_question_full_text.Equals(questionHdr.obs_question_full_text))
                 {
-                    newQMD.q.obs_question_ver++;
+                    editedQuestion.obs_question_ver++;
                 }
-                newQMD.q.obs_question_full_text = QuestionMDView.q.obs_question_full_text;
-                newQMD.q.obs_question_short_text = QuestionMDView.q.obs_question_short_text;
+                editedQuestion.obs_question_full_text = QuestionMDView.q.obs_question_full_text;
+                editedQuestion.obs_question_short_text = QuestionMDView.q.obs_question_short_text;
                 //question.obs_question_desc = QuestionMDView.q.obs_question_desc;
                 //question.obs_question_mm_url = QuestionMDView.q.obs_question_mm_url;
-                newQMD.q.obs_question_eff_st_dt = QuestionMDView.q.obs_question_eff_st_dt;
-                newQMD.q.obs_question_eff_end_dt = QuestionMDView.q.obs_question_eff_end_dt;
-                newQMD.q.obs_question_upd_dtm = DateTime.Now;
-                newQMD.q.obs_question_upd_uid = User.Identity.Name;
+                editedQuestion.obs_question_eff_st_dt = QuestionMDView.q.obs_question_eff_st_dt;
+                editedQuestion.obs_question_eff_end_dt = QuestionMDView.q.obs_question_eff_end_dt;
+                editedQuestion.obs_question_upd_dtm = DateTime.Now;
+                editedQuestion.obs_question_upd_uid = User.Identity.Name;
 
-                OBS_QUESTION editQuestion = newQMD.q;
-                db.Entry(editQuestion).State = EntityState.Modified;
-
+                //db.Entry(editQuestion).State = EntityState.Modified;
                 db.SaveChanges();
 
                 //QuestionMDView.q = newQMD.q;
                 ViewBag.ConfMsg = "Success! Data Saved Successfully";
 
                 //return View(QuestionMDView);
-                return RedirectToAction("Edit", "Question", new { id = newQMD.q.obs_question_id });
+                return RedirectToAction("Edit", "Question", new { id = editedQuestion.obs_question_id });
             }
         }
 

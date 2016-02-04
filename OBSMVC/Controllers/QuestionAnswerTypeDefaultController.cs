@@ -47,17 +47,16 @@ namespace OBSMVC.Controllers
                 {
                     answer_type.Selected = false;
                 }
-                    //answer_type.Selected = x.obs_ans_type_id == default_answer_id ? true : false;
                list_of_answers.Add(answer_type);
             }
             ViewBag.list_of_answers = list_of_answers;
-            ViewBag.question_selected_ans_type= question_selected_ans_type;
+            ViewBag.question_selected_ans_type= question_selected_ans_type;            
             return View(list_of_answers);
         }
 
         // POST: Default Answer Type
         [HttpPost]
-        public ActionResult _assignDefaultAnswerTyle(int answer_type_id, int question_id)
+        public ActionResult _assignDefaultAnswerType(int answer_type_id, int question_id)
         {
             return null;
         }

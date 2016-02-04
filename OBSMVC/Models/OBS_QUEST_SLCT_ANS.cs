@@ -15,7 +15,7 @@ namespace OBSMVC.Models
     public partial class OBS_QUEST_SLCT_ANS
     {
         public long obs_qsa_id { get; set; }
-        public Nullable<int> obs_quest_ans_types_id { get; set; }
+        public Nullable<int> obs_qat_id { get; set; }
         public string obs_qsa_text { get; set; }
         public short obs_qsa_order { get; set; }
         public Nullable<short> obs_qsa_wt { get; set; }

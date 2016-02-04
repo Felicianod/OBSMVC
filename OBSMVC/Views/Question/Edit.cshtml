@@ -135,16 +135,23 @@
                     <div class="panel-body">
                         <div class="list-group">
                             <div class="list-group-item">
+                                @foreach (int item in Model.preMetaDataIds)
+                                {
+                                    <input type="hidden" id="origTags" name="origTags" value="@item" />
+                                }                                
                                 <table class="table table-condensed table-hover">
                                     <tr>
+                                        <th></th>
                                         <th>Value</th>
                                         <th>Category</th>
-                                    </tr>
+                                    </tr>                                    
                                     @foreach (var item in Model.qAssignedMD)
                         {
                                     <tr>
                                         <td>
-                                            <input type="hidden" value="@item.obs_quest_md_id" id="selectedMDid">
+                                            @*<input type="hidden" value="@item.obs_quest_md_id" id="selectedMDid">*@
+                                            @*<input type="hidden" id="origTags" name="origTags" value="@item.obs_quest_md_id" />*@
+                                            <input type="hidden" id="qAssignedMD" name="qAssignedMD" value="@item.obs_quest_md_id" />
                                             @item.obs_quest_md_value
                                         </td>
                                         <td>

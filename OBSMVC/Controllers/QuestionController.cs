@@ -123,8 +123,15 @@ namespace OBSMVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(FormCollection postedData, QuestionMDViewModel QuestionMDView,
-                                 [Bind(Prefix = "q")] OBS_QUESTION questionHdr)
+                                 [Bind(Prefix = "q")] OBS_QUESTION questionHdr )
         {
+            string MDlistBefore = postedData["origTags"];
+            string MDlistAfter = postedData["qAssignedMD"];
+            List<string> originalMDList = new List<string>();
+            List<string> mewMDList = new List<string>();
+            if (MDlistBefore != null)  { originalMDList = MDlistBefore.Split(',').ToList(); }
+            if (MDlistAfter != null) { mewMDList = MDlistAfter.Split(',').ToList(); }
+            
             QuestionMDView.q = questionHdr;
             //QuestionMDView.q.obs_question_full_text = (string)postedData["q.obs_question_full_text"];
             //QuestionMDView.q.obs_question_id = Convert.ToInt32(postedData["q.obs_question_id"]);

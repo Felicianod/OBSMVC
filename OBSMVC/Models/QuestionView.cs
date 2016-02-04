@@ -42,11 +42,11 @@ namespace OBSMVC.Models
         public string obs_question_mm_url { get; set; }
         
         [Display(Name = "Effective Start Date")]
-        [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"))]
+        [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"), ApplyFormatInEditMode = true)]
         public DateTime obs_question_eff_st_dt { get; set; }
 
         [Display(Name = "Effective End Date")]
-        [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"))]
+        [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"), ApplyFormatInEditMode=true)]
         public DateTime? obs_question_eff_end_dt { get; set; }
 
         [Display(Name = "Question Added By")]

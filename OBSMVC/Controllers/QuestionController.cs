@@ -139,8 +139,7 @@ namespace OBSMVC.Controllers
 
             QuestionMDViewModel newQMD = new QuestionMDViewModel(questionHdr.obs_question_id);
 
-            //if (!ModelState.IsValid) // Model State is not Valid return Errors
-            if (questionHdr.obs_question_id < 1) // Model State is not Valid return Errors
+            if (!ModelState.IsValid) // Model State is not Valid return Errors
             {
                 newQMD.q = QuestionMDView.q;
                 ViewBag.ConfMsg = "Failed to Update Information!";
@@ -166,6 +165,9 @@ namespace OBSMVC.Controllers
                 newQMD.q.obs_question_eff_end_dt = QuestionMDView.q.obs_question_eff_end_dt;
                 newQMD.q.obs_question_upd_dtm = DateTime.Now;
                 newQMD.q.obs_question_upd_uid = User.Identity.Name;
+
+                OBS_QUESTION editQuestion = newQMD.q;
+                db.Entry(editQuestion).State = EntityState.Modified;
 
                 db.SaveChanges();
 

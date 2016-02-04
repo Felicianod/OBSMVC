@@ -50,178 +50,186 @@
 </script>
 
 @*<script>
-    $(function () {
-        setTimeout(function () {
-            $("#ConfMsg").hide();
-        }, 3000);
-    });
-</script>*@
+        $(function () {
+            setTimeout(function () {
+                $("#ConfMsg").hide();
+            }, 3000);
+        });
+    </script>*@
 
 <hr />
-@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+@Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
 <div class="container">
   <div class="row">
-    <!-- Display A single edit form column -->
-    <div class="col-md-8 personal-info">
-       <form class="form-horizontal" role="form" method="post">
-           @Html.AntiForgeryToken()
-
-           @*<div class="form-group row">
+     <!-- Display A single edit form column -->
+     <div class="col-md-8 personal-info">
+        <form class="form-horizontal" role="form" method="post">
+            @Html.AntiForgeryToken()
+            @*<div class="form-group row">
                @Html.LabelFor(model => model.obs_question_ver, htmlAttributes: new { @class = "control-label col-md-3" })
-               <div class="col-md-9">
-                   @Html.EditorFor(model => model.obs_question_ver, new { htmlAttributes = new { @class = "form-control" } })
-                   @Html.ValidationMessageFor(model => model.obs_question_ver, "", new { @class = "text-danger" })
-               </div>
-           </div>*@
+                 <div class="col-md-9">
+                      @Html.EditorFor(model => model.obs_question_ver, new { htmlAttributes = new { @class = "form-control" } })
+                      @Html.ValidationMessageFor(model => model.obs_question_ver, "", new { @class = "text-danger" })
+                 </div>
+              </div>*@
 
-           <div class="form-group row">
-               <input type="hidden" value="@Model.q.obs_question_id" name="q.obs_question_id" id="q.obs_question_id">
-           </div>
-           <div class="form-group row">               
-               @Html.LabelFor(model => model.q.obs_question_full_text, htmlAttributes: new { @class = "control-label col-md-2" })
-               <div class="input-group col-md-6">
+            <div class="form-group row">
+                <input type="hidden" value="@Model.q.obs_question_id" name="q.obs_question_id" id="q.obs_question_id">
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(model => model.q.obs_question_full_text, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="input-group col-md-6">
                    @*<input type="text" value="@Model.q.obs_question_full_text" class="form-control" name="obs_question_full_text" id="obs_question_full_text" />*@
-                      @Html.EditorFor(model => model.q.obs_question_full_text, new { htmlAttributes = new { @class = "form-control ", @cols=80, @rows=3 } })
-                      @Html.ValidationMessageFor(model => model.q.obs_question_full_text, "", new { @class = "text-danger" })
-               </div>
-          </div>
+                   @Html.EditorFor(model => model.q.obs_question_full_text, new { htmlAttributes = new { @class = "form-control ", @cols=80, @rows=3 } })
+                   @Html.ValidationMessageFor(model => model.q.obs_question_full_text, "Error", new { @class = "text-danger" })
+                </div>
+            </div>
 
-           <div class="form-group row">
-               @Html.LabelFor(model => model.q.obs_question_short_text, htmlAttributes: new { @class = "control-label col-md-2" })
-               <div class="input-group col-md-6">
-                   @Html.EditorFor(model => model.q.obs_question_short_text, new { htmlAttributes = new { @class = "form-control" } })
-                   @Html.ValidationMessageFor(model => model.q.obs_question_short_text, "", new { @class = "text-danger" })
-               </div>
-           </div>
+            <div class="form-group row">
+                @Html.LabelFor(model => model.q.obs_question_short_text, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="input-group col-md-6">
+                    @Html.EditorFor(model => model.q.obs_question_short_text, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.q.obs_question_short_text, "Error", new { @class = "text-danger" })
+                </div>
+            </div>
 
-           @*<div class="form-group row">
-               @Html.LabelFor(model => model.q.obs_question_desc, htmlAttributes: new { @class = "control-label col-md-2" })
-               <div class="input-group col-md-6">
-                   @Html.EditorFor(model => model.q.obs_question_desc, new { htmlAttributes = new { @class = "form-control" } })
-                   @Html.ValidationMessageFor(model => model.q.obs_question_desc, "", new { @class = "text-danger" })
-               </div>
-           </div>
-           <div class="form-group row">
-               @Html.LabelFor(model => model.q.obs_question_mm_url, htmlAttributes: new { @class = "control-label col-md-2" })
-               <div class="input-group col-md-6">
-                   @Html.EditorFor(model => model.q.obs_question_mm_url, new { htmlAttributes = new { @class = "form-control" } })
-                   @Html.ValidationMessageFor(model => model.q.obs_question_mm_url, "", new { @class = "text-danger" })
-               </div>
-           </div>*@
+             @*<div class="form-group row">
+                    @Html.LabelFor(model => model.q.obs_question_desc, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="input-group col-md-6">
+                        @Html.EditorFor(model => model.q.obs_question_desc, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.q.obs_question_desc, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.q.obs_question_mm_url, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="input-group col-md-6">
+                        @Html.EditorFor(model => model.q.obs_question_mm_url, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.q.obs_question_mm_url, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
 
-           <div class="form-group row">
-               @Html.LabelFor(model => model.q.obs_question_eff_st_dt, htmlAttributes: new { @class = "control-label col-md-2" })
-               <div class="input-group col-md-6">
-                   <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                   @Html.EditorFor(model => model.q.obs_question_eff_st_dt, new { htmlAttributes = new { @class = "form-control", id="q.obs_question_eff_st_dt", name="q.obs_question_eff_st_dt" } })
-                   @Html.ValidationMessageFor(model => model.q.obs_question_eff_st_dt, "", new { @class = "text-danger" })
-               </div>
-           </div>
-           <div class="form-group row">
-               @Html.LabelFor(model => model.q.obs_question_eff_end_dt, htmlAttributes: new { @class = "control-label col-md-2" })
-               <div class="input-group col-md-  6">
-                   <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                   @Html.EditorFor(model => model.q.obs_question_eff_end_dt, new { htmlAttributes = new { @class = "form-control", id = "q.obs_question_eff_end_dt", name = "q.obs_question_eff_end_dt" } })
-                   @Html.ValidationMessageFor(model => model.q.obs_question_eff_end_dt, "", new { @class = "text-danger" })
-               </div>
-           </div>
-           <br />
+             <div class="form-group row">
+                @Html.LabelFor(model => model.q.obs_question_eff_st_dt, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="input-group col-md-6">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    @Html.EditorFor(model => model.q.obs_question_eff_st_dt, new { htmlAttributes = new { @class = "form-control", id="q.obs_question_eff_st_dt", name="q.obs_question_eff_st_dt" } })
+                    @Html.ValidationMessageFor(model => model.q.obs_question_eff_st_dt, "Error", new { @class = "text-danger" })
+                </div>
+             </div>
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.q.obs_question_eff_end_dt, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="input-group col-md-  6">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        @Html.EditorFor(model => model.q.obs_question_eff_end_dt, new { htmlAttributes = new { @class = "form-control", id = "q.obs_question_eff_end_dt", name = "q.obs_question_eff_end_dt" } })
+                        @Html.ValidationMessageFor(model => model.q.obs_question_eff_end_dt, "Error", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <br />
 
-           <div class="form-group row">
-               <div class="col-md-offset-2 col-md-6">
-                   <button type="submit" class="btn btn-primary" disabled="disabled" id="btnSave">Save Changes</button>
-                   <span></span>
-                   <input type="reset" class="btn btn-default" value="Cancel">
-               </div>
-           </div>
-       </form>
+                <div class="form-group row">
+                    <div class="col-md-offset-2 col-md-6">
+                        <button type="submit" class="btn btn-primary" disabled="disabled" id="btnSave">Save Changes</button>
+                        <span></span>
+                        <input type="reset" class="btn btn-default" value="Cancel">
+                    </div>
+                </div>
+            </form>
         @if (ViewBag.ConfMsg != null)
         {
-            <div id="ConfMsg" style="text-align:center; font-weight: bold; color:green">
-                @ViewBag.ConfMsg
-            </div>
-            <script>
-                $(function () {
-                    setTimeout(function () {
-                        $("#ConfMsg").hide();
-                    }, 3000);
-                });
-            </script>
-        }
-    </div>
-
-
-
-    <div class="col-md-4 personal-info">
-       <div class="panel panel-info">
-           <div class="panel-heading">Question Metadata</div>
-           <div style="text-align:center; background-color: lightgray">@Html.ActionLink("Add New Metadata Tag", "Create", "QuestionMetadata", new { qId = Model.q.obs_question_id}, null)</div>
-              <div class="panel-body">
-                  <div class="list-group">
-                      <div class="list-group-item">
-                          <table class="table table-condensed table-hover">
-                              <tr>
-                                  <th></th>
-                                  <th>Value</th>
-                                  <th>Category</th>
-                              </tr>
-
-                              @foreach (var item in Model.qAssignedMD)
-                              {
-                                  <tr>
-                                      <td>
-                                          <input type="checkbox" id="mdSelected" checked="checked" } />
-                                          <input type="hidden" value="@item.obs_quest_md_id" id="obs_quest_md_id">
-                                      </td>
-                                      <td>
-                                          @item.obs_quest_md_value
-                                      </td>
-                                      <td>
-                                          @item.obs_quest_md_cat
-                                      </td>
-
-                                  </tr>
-                              }
-                              @foreach (var item in Model.qUnassignedMD)
-                              {
-                                  <tr>
-                                      <td>
-                                          <input type="checkbox" id="mdSelected" } />
-                                          <input type="hidden" value="@item.obs_quest_md_id" id="obs_quest_md_id">
-                                      </td>
-                                      <td>
-                                          @item.obs_quest_md_value
-                                      </td>
-                                      <td>
-                                          @item.obs_quest_md_cat
-                                      </td>
-                                  </tr>
-                              }
-
-                          </table>
-
-                          <br />
-                          @*@{Html.RenderAction("qMetaDataList", new { postId = p.Id });}*@
-                          @*@{Html.RenderAction("qMetaDataList");}*@
-
-                      </div>
-                  </div>
-              </div>
+          <div id="ConfMsg" style="text-align:center; font-weight: bold; color:green">
+            @ViewBag.ConfMsg
           </div>
-    </div>
+          <script>
+              $(function () {
+                  setTimeout(function () {
+                      $("#ConfMsg").hide();
+                  }, 3000);
+              });
+        </script>
+        }
+        </div>
+  </div>
+
+  <div class="row">
+     <div class="col-md-6 personal-info">
+        <div class="panel panel-info">
+           <div class="panel-heading">Question Metadata</div>
+           <div class="panel-body">
+              <div class="list-group">
+                 <div class="list-group-item">
+                     <table class="table table-condensed table-hover">
+                         <tr>
+                            <th>Value</th>
+                            <th>Category</th>
+                         </tr>
+                        @foreach (var item in Model.qAssignedMD)
+                        {
+                          <tr>
+                             <td>
+                                 <input type="hidden" value="@item.obs_quest_md_id" id="obs_quest_md_id">
+                                 @item.obs_quest_md_value
+                             </td>
+                             <td>
+                                 @item.obs_quest_md_cat
+                             </td>
+                          </tr>
+                         }
+                     </table>
+                     <br />
+                        @*@{Html.RenderAction("qMetaDataList", new { postId = p.Id });}*@
+                        @*@{Html.RenderAction("qMetaDataList");}*@
+                 </div>
+              </div>
+           </div>
+        </div>
+     </div>
+     <div class="col-md-6 personal-info">
+        <div class="panel panel-info">
+           <div class="panel-heading">Available Metadata Tags</div>
+           <div class="panel-body">
+              <div class="list-group">
+              <div class="list-group-item">
+                 <table class="table table-condensed table-hover">
+                      <tr>
+                         <th>Value</th>
+                         <th>Category</th>
+                      </tr>
+                   @foreach (var item in Model.qUnassignedMD)
+                   {
+                      <tr>
+                         <td>
+                            <input type="checkbox" id="mdSelected" } />
+                            <input type="hidden" value="@item.obs_quest_md_id" id="obs_quest_md_id">
+                         </td>
+                         <td>
+                            @item.obs_quest_md_value
+                         </td>
+                         <td>
+                            @item.obs_quest_md_cat
+                         </td>
+                         </tr>
+                   }
+                 </table>
+                 <br />
+                   @*@{Html.RenderAction("qMetaDataList", new { postId = p.Id });}*@
+                   @*@{Html.RenderAction("qMetaDataList");}*@
+              </div>
+           </div>
+        </div>
+           <div style="text-align:center; background-color: lightgray">@Html.ActionLink("Add New Metadata Tag", "Create", "QuestionMetadata", new { qId = Model.q.obs_question_id }, null)</div>
+        </div>
+     </div>
   </div>
   @*<div class="row">
-      @if (ViewBag.ConfMsg != null)
-      {
-          <div id="ConfMsg" style="text-align:center; font-weight: bold; color:green">
-              Employee Information Saved Successfully.
-          </div>
-      }
+     @if (ViewBag.ConfMsg != null)
+     {
+        <div id="ConfMsg" style="text-align:center; font-weight: bold; color:green">
+            Employee Information Saved Successfully.
+        </div>
+     }
   </div>*@
   <div class="row">
-      @Html.ActionLink("Back to List", "Index")
+     @Html.ActionLink("Back to List", "Index")
   </div>
 </div>
-
-

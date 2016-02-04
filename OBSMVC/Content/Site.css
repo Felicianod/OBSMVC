@@ -16,6 +16,18 @@
     white-space: normal;
 }
 
+/* styles for validation helpers */
+.field-validation-error {
+    color: #ff0000;
+    font-weight: bold;
+}
+
+/* Set the border color of the validation error box */
+.input.input-validation-error {
+    border: 1px solid #ff0000;
+}
+
+
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,

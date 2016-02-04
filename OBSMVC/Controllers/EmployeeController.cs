@@ -101,8 +101,8 @@ namespace OBSMVC.Controllers
         {
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
-
-                var employee = db.EMPLOYEEs.Single(x => x.dsc_emp_id == formEmployee.dsc_emp_id);
+                //var employee = db.EMPLOYEEs.Single(x => x.dsc_emp_id == formEmployee.dsc_emp_id);
+                EMPLOYEE employee = db.EMPLOYEEs.Find(formEmployee.dsc_emp_id);
                 employee.dsc_emp_title = formEmployee.dsc_emp_title;
                 employee.dsc_emp_perm_id = formEmployee.dsc_emp_perm_id;
                 employee.dsc_assigned_lc_id = formEmployee.dsc_assigned_lc_id;

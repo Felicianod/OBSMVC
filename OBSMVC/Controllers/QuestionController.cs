@@ -128,10 +128,13 @@ namespace OBSMVC.Controllers
             string MDlistBefore = postedData["origTags"];
             string MDlistAfter = postedData["qAssignedMD"];
             List<string> originalMDList = new List<string>();
-            List<string> mewMDList = new List<string>();
+            List<string> newMDList = new List<string>();
             if (MDlistBefore != null)  { originalMDList = MDlistBefore.Split(',').ToList(); }
-            if (MDlistAfter != null) { mewMDList = MDlistAfter.Split(',').ToList(); }
-            
+            if (MDlistAfter != null) { newMDList = MDlistAfter.Split(',').ToList(); }
+
+            string[] mdIDsToDelete = originalMDList.Except(newMDList).ToArray();
+            string[] mdIDsToAdd = newMDList.Except(originalMDList).ToArray();
+
             QuestionMDView.q = questionHdr;
             //QuestionMDView.q.obs_question_full_text = (string)postedData["q.obs_question_full_text"];
             //QuestionMDView.q.obs_question_id = Convert.ToInt32(postedData["q.obs_question_id"]);
@@ -170,7 +173,16 @@ namespace OBSMVC.Controllers
                 editedQuestion.obs_question_upd_uid = User.Identity.Name;
 
                 //db.Entry(editQuestion).State = EntityState.Modified;
-                db.SaveChanges();
+
+                // Soft Delete all Metadata tags that are no longer used by the question
+                foreach (string deleteId in mdIDsToDelete)
+                {
+                    OBS_QUEST_ASSGND_MD oBS_QUEST_ASSGND_MD = db.OBS_QUEST_ASSGND_MD.Find(deleteId);
+                    oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = DateTime.Now;
+                    //db.OBS_QUESTION_METADATA.Remove(oBS_QUESTION_METADATA);
+                }
+                
+                 db.SaveChanges();
 
                 //QuestionMDView.q = newQMD.q;
                 ViewBag.ConfMsg = "Success! Data Saved Successfully";

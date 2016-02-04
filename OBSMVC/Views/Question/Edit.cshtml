@@ -72,13 +72,7 @@
             <div class="col-md-8 personal-info">
 
                 @Html.AntiForgeryToken()
-                @*<div class="form-group row">
-                     @Html.LabelFor(model => model.obs_question_ver, htmlAttributes: new { @class = "control-label col-md-3" })
-                       <div class="col-md-9">
-                            @Html.EditorFor(model => model.obs_question_ver, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.obs_question_ver, "", new { @class = "text-danger" })
-                       </div>
-                    </div>*@
+
                 <div class="form-group row">
                     <input type="hidden" value="@Model.q.obs_question_id" name="q.obs_question_id" id="q.obs_question_id">
                 </div>
@@ -90,7 +84,6 @@
                         @Html.ValidationMessageFor(model => model.q.obs_question_full_text, "", new { @class = "text-danger" })
                     </div>
                 </div>
-
                 <div class="form-group row">
                     @Html.LabelFor(model => model.q.obs_question_short_text, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="input-group col-md-6">
@@ -98,21 +91,6 @@
                         @Html.ValidationMessageFor(model => model.q.obs_question_short_text, "", new { @class = "text-danger" })
                     </div>
                 </div>
-
-                @*<div class="form-group row">
-                        @Html.LabelFor(model => model.q.obs_question_desc, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="input-group col-md-6">
-                            @Html.EditorFor(model => model.q.obs_question_desc, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.q.obs_question_desc, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        @Html.LabelFor(model => model.q.obs_question_mm_url, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="input-group col-md-6">
-                            @Html.EditorFor(model => model.q.obs_question_mm_url, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.q.obs_question_mm_url, "", new { @class = "text-danger" })
-                        </div>
-                    </div>*@
                 <div class="form-group row">
                     @Html.LabelFor(model => model.q.obs_question_eff_st_dt, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="input-group col-md-6">
@@ -131,10 +109,20 @@
                         @Html.ValidationMessageFor(model => model.q.obs_question_eff_end_dt, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                    <br />
+                <br />
+            </div>
+            <div class="col-md-8 personal-info">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        Rasul Section
+                    </div>
+                    <div class="panel-body">
+                        @Html.Partial("_listAnswerTypes")
+                    </div>
                 </div>
-        </div>
+            </div>
 
+        </div>
         <div class="row">
             <div class="col-md-6 personal-info">
                 <div class="panel panel-info">
@@ -145,27 +133,28 @@
                                 @foreach (int item in Model.preMetaDataIds)
                                 {
                                     <input type="hidden" id="origTags" name="origTags" value="@item" />
-                                }                                
+                                }
                                 <table class="table table-condensed table-hover">
                                     <tr>
                                         <th></th>
                                         <th>Value</th>
                                         <th>Category</th>
-                                    </tr>                                    
-                                    @foreach (var item in Model.qAssignedMD)
-                        {
-                                    <tr>
-                                        <td>
-                                            @*<input type="hidden" value="@item.obs_quest_md_id" id="selectedMDid">*@
-                                            @*<input type="hidden" id="origTags" name="origTags" value="@item.obs_quest_md_id" />*@
-                                            <input type="hidden" id="qAssignedMD" name="qAssignedMD" value="@item.obs_quest_md_id" />
-                                            @item.obs_quest_md_value
-                                        </td>
-                                        <td>
-                                            @item.obs_quest_md_cat
-                                        </td>
                                     </tr>
-                         }
+                                    @foreach (var item in Model.qAssignedMD)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" id="qAssignedMD" name="qAssignedMD" checked="checked" value="@item.obs_quest_md_id" />
+                                            </td>
+                                            <td>
+                                                @*<input type="hidden" id="qAssignedMD" name="qAssignedMD" value="@item.obs_quest_md_id" />*@
+                                                @item.obs_quest_md_value
+                                            </td>
+                                            <td>
+                                                @item.obs_quest_md_cat
+                                            </td>
+                                        </tr>
+                                    }
                                 </table>
                                 <br />
                                 @*@{Html.RenderAction("qMetaDataList", new { postId = p.Id });}*@
@@ -194,6 +183,7 @@
                             <div class="list-group-item">
                                 <table class="table table-condensed table-hover">
                                     <tr>
+                                        <th></th>
                                         <th>Value</th>
                                         <th>Category</th>
                                     </tr>
@@ -201,7 +191,9 @@
                                     {
                                         <tr>
                                             <td>
-                                                <input type="hidden" value="@item.obs_quest_md_id" id="obs_quest_md_id">
+                                                <input type="checkbox" value="@item.obs_quest_md_id" id="qAssignedMD" name="qAssignedMD">
+                                            </td>
+                                            <td>                                                
                                                 @item.obs_quest_md_value
                                             </td>
                                             <td>

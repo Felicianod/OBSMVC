@@ -54,6 +54,16 @@
     });
 </script>
 
+<script>
+    //Make all inner panel the same hight as the tallest panel (For proportional display)
+    $(document).ready(function () {
+        var heightTallest = Math.max.apply(null, $(".panel-info").map(function () {
+            return $(this).outerHeight();
+        }).get());
+        $('.panel-info').css({ height: heightTallest + 'px' });
+    });
+</script>
+
 @*<script>
         $(function () {
             setTimeout(function () {

@@ -199,6 +199,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OBSTYPEController.cs" />
+    <Compile Include="Controllers\TestQuestionAnswerTypeDefaultController.cs" />
     <Compile Include="Controllers\QuestionAnswerTypeDefaultController.cs" />
     <Compile Include="Controllers\QuestionAnswerTypesController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
@@ -521,6 +522,8 @@
     <Content Include="Views\QuestionAnswerTypes\Edit.cshtml" />
     <Content Include="Views\QuestionAnswerTypes\Index.cshtml" />
     <Content Include="Views\Shared\_listAnswerTypes.cshtml" />
+    <Content Include="Views\QuestionAnswerTypeDefault\View.cshtml" />
+    <Content Include="Views\TestQuestionAnswerTypeDefault\_TestlistAnswerTypes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -533,7 +536,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\themes\base\images\" />
     <Folder Include="Views\Error\" />
-    <Folder Include="Views\QuestionAnswerTypeDefault\" />
     <Folder Include="Views\Shared\EditorTemplates\" />
   </ItemGroup>
   <PropertyGroup>

@@ -54,6 +54,16 @@
     });
 </script>
 
+<script>
+    //Make all inner panel the same hight as the tallest panel (For proportional display)
+    $(document).ready(function () {
+        var heightTallest = Math.max.apply(null, $(".panel-info").map(function () {
+            return $(this).outerHeight();
+        }).get());
+        $('.panel-info').css({ height: heightTallest + 'px' });
+    });
+</script>
+
 @*<script>
         $(function () {
             setTimeout(function () {
@@ -61,7 +71,6 @@
             }, 3000);
         });
     </script>*@
-
 <hr />
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -69,7 +78,7 @@
     <form class="form-horizontal" role="form" method="post">
         <div class="row">
             <!-- Display A single edit form column -->
-            <div class="col-md-8 personal-info">
+            <div class="col-md-6 personal-info">
 
                 @Html.AntiForgeryToken()
 
@@ -111,12 +120,12 @@
                 </div>
                 <br />
             </div>
-            <div class="col-md-8 personal-info">
+            <div class="col-md-6 personal-info">
                 <div class="panel panel-info">
                     <div class="panel-heading">
                         Rasul Section
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body" id="answerSection">
                         @Html.Partial("_listAnswerTypes")
                     </div>
                 </div>
@@ -126,7 +135,7 @@
         <div class="row">
             <div class="col-md-6 personal-info">
                 <div class="panel panel-info">
-                    <div class="panel-heading">Question Metadata</div>
+                    <div class="panel-heading">Assigned Question Metadata</div>
                     <div class="panel-body">
                         <div class="list-group">
                             <div class="list-group-item">

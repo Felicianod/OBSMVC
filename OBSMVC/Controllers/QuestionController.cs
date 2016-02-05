@@ -127,15 +127,6 @@ namespace OBSMVC.Controllers
         public ActionResult Edit(FormCollection postedData, QuestionMDViewModel QuestionMDView,
                                  [Bind(Prefix = "q")] OBS_QUESTION questionHdr )
         {
-            string MDlistBefore = postedData["origTags"];
-            string MDlistAfter = postedData["qAssignedMD"];
-            List<string> originalMDList = new List<string>();
-            List<string> newMDList = new List<string>();
-            if (MDlistBefore != null)  { originalMDList = MDlistBefore.Split(',').ToList(); }
-            if (MDlistAfter != null) { newMDList = MDlistAfter.Split(',').ToList(); }
-
-            string[] mdIDsToDelete = originalMDList.Except(newMDList).ToArray();
-            string[] mdIDsToAdd = newMDList.Except(originalMDList).ToArray();
 
             QuestionMDView.q = questionHdr;
             //QuestionMDView.q.obs_question_full_text = (string)postedData["q.obs_question_full_text"];
@@ -152,13 +143,9 @@ namespace OBSMVC.Controllers
                 return View(QuestionMDView);
             }
 
+            //-------- Save the Question Information ----
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
-                //var question = db.OBS_QUESTION.Single(x => x.obs_question_id == oBS_QUESTION.obs_question_id);
-
-
-                //var question = newQMD.q;
-                //QuestionMDViewModel newQMD = new QuestionMDViewModel(questionHdr.obs_question_id);
                 OBS_QUESTION editedQuestion = db.OBS_QUESTION.Single(x => x.obs_question_id == questionHdr.obs_question_id);
 
                 if (!editedQuestion.obs_question_full_text.Equals(questionHdr.obs_question_full_text))
@@ -179,20 +166,52 @@ namespace OBSMVC.Controllers
                  db.SaveChanges();
             }
 
+            // ------- Save the Question Metadata Changes ----
+            string MDlistBefore = postedData["origTags"];
+            string MDlistAfter = postedData["qAssignedMD"];
+            List<string> originalMDList = new List<string>();
+            List<string> newMDList = new List<string>();
+            if (MDlistBefore != null) { originalMDList = MDlistBefore.Split(',').ToList(); }
+            if (MDlistAfter != null) { newMDList = MDlistAfter.Split(',').ToList(); }
+            string[] mdIDsToDelete = originalMDList.Except(newMDList).ToArray();
+            string[] mdIDsToAdd = newMDList.Except(originalMDList).ToArray();
 
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
-                // Soft Delete all Metadata tags that are no longer used by the question
+                //---- Soft Delete all Metadata tags that are no longer used by the question
                 foreach (string deleteId in mdIDsToDelete)
                 {
                     int tempId = Convert.ToInt32(deleteId);
                     //int joitemp = db.OBS_QUEST_ASSGND_MD.Where(x => x.obs_quest_md_id == Convert.ToInt32(deleteId) && x.obs_question_id == questionHdr.obs_question_id).Select(x => x.obs_qad_id);
                     OBS_QUEST_ASSGND_MD oBS_QUEST_ASSGND_MD = db.OBS_QUEST_ASSGND_MD.FirstOrDefault(x => x.obs_quest_md_id == tempId && x.obs_question_id == questionHdr.obs_question_id);
                     oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = DateTime.Today;
-                    //db.OBS_QUESTION_METADATA.Remove(oBS_QUESTION_METADATA);
+                    //db.OBS_QUESTION_METADATA.Remove(oBS_QUESTION_METADATA);  //No hard deletes
                 }
 
-                //QuestionMDView.q = newQMD.q;
+                //---- Enable or Add the New metadata (MD) that will be assigned to the question ---
+                //-- Process each metadata entry to add for the selected question
+                foreach (string mdIdtoAdd in mdIDsToAdd)
+                {
+                    int tempId = Convert.ToInt32(mdIdtoAdd);
+                    //-- Look for an entry in OBS_QUEST_ASSGND_MD usign the Question Id and the metadata it.
+                    OBS_QUEST_ASSGND_MD oBS_QUEST_ASSGND_MD = db.OBS_QUEST_ASSGND_MD.FirstOrDefault(x => x.obs_quest_md_id == tempId && x.obs_question_id == questionHdr.obs_question_id);
+                    //-- If an entry is found in the junction table for that question, just enable it
+                    if (oBS_QUEST_ASSGND_MD != null && tempId > 0)
+                    {
+                        oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                    }
+                    else
+                    { //-- If selected MD does not exist in the junction table for that question, add it.
+                        oBS_QUEST_ASSGND_MD = new OBS_QUEST_ASSGND_MD();
+                        oBS_QUEST_ASSGND_MD.obs_quest_md_id = tempId;
+                        oBS_QUEST_ASSGND_MD.obs_question_id = questionHdr.obs_question_id;
+                        oBS_QUEST_ASSGND_MD.obs_qad_eff_st_dt = DateTime.Today;
+                        oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                        db.OBS_QUEST_ASSGND_MD.Add(oBS_QUEST_ASSGND_MD);                    
+                    }
+                }
+
+                //---- Save All Changes ------
                 db.SaveChanges();           
             }
 

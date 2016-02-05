@@ -56,7 +56,7 @@ namespace OBSMVC.Controllers
 
         // POST: Default Answer Type
         [HttpPost]
-        public ActionResult _assignDefaultAnswerType(int answer_type_id, int question_id)
+        public ActionResult _updateDefaultAnswerType(int answer_type_id, int question_id)
         {
             return null;
         }

@@ -1,0 +1,15 @@
+﻿@{
+    Layout = null;
+}
+
+<b>Default Answer Type</b><br />
+
+@Html.DropDownList("list_of_answers","None")
+<br />
+<br />
+    @foreach(var x in ViewBag.question_selected_ans_type)
+    {
+       <li>@x.obs_qsa_text</li>
+    }
+
+@*TEST NEW*@

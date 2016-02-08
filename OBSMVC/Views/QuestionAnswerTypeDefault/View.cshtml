@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "View";
+    Layout = "TestlistAnswerTypes.cshtml";
+}
+
+@using (Html.BeginForm("Index", "Question", FormMethod.Get))
+{
+
+    <b>Default Answer Type</b><br />
+                @Html.DropDownList("list_of_answe", null, "Non", new { id = "DefaultAnswer" })
+    <script type="text/javascript">
+                    $('#DefaultAnswer').on('change', function (event) {
+                        var form = $(event.target).parents('form');
+                        form.submit();
+                    });
+    </script>
+
+    foreach (var x in ViewBag.question_selected_ans_type)
+    {
+        <li>@x.obs_qsa_text</li>
+    }
+
+}
+
+

@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "_TestlistAnswerTypes";
+   
+}
+
+<h2>_TestlistAnswerTypes</h2>
+
+
+@using (Html.BeginForm("_TestlistAnswerTypes", "TestQuestionAnswerTypeDefault", FormMethod.Post))
+{
+
+    <b>Default Answer Type</b><br />
+    @Html.DropDownList("list_of_answers", null, "None", new { id = "DefaultAnswer" })
+    <br />
+    <br />
+ 
+
+    <input type="hidden" value="@Request.QueryString["question_id"]" id="question_id" name="question_id" />
+    <input type="hidden" value="false" id="save" name="save" />
+    <script type="text/javascript">
+                    $('#DefaultAnswer').on('change', function (event) {
+                        var form = $(event.target).parents('form');
+                        form.submit();
+                    });
+    </script>
+
+    if (ViewBag.question_selected_ans_type == null && ViewBag.q_selected_ans_type!=null)
+    {
+        for (int i = 0; i < ViewBag.q_selected_ans_type.Count; i++)
+        {
+            <li>@ViewBag.q_selected_ans_type[i]</li>
+            
+
+        }
+    }
+    else if(ViewBag.question_selected_ans_type != null)
+    {
+        foreach (var x in ViewBag.question_selected_ans_type)
+        {
+            <li>@x.obs_qsa_text</li>
+
+        }
+    }
+    <button type="submit" id="btnSaveDefQuest" onclick="">Save</button>
+    <script type="text/javascript">
+    $('#btnSaveDefQuest').on('click', function (event) {
+        var form = $(event.target).parents('form');
+        document.getElementById('save').value ='true'
+        ;                 form.submit();
+                    });
+    </script>
+
+
+}
+

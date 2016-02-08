@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+
 namespace OBSMVC.Controllers
 {
     public class TestQuestionAnswerTypeDefaultController : Controller
@@ -63,6 +64,8 @@ namespace OBSMVC.Controllers
             var all_answer_types = db.OBS_ANS_TYPE.Where(item => item.obs_ans_type_id > 0).ToList();
             string answer_type_id = formData["list_of_answers"];
             string question_id = formData["question_id"];
+            string isSave = formData["save"];
+
             if (String.IsNullOrEmpty(answer_type_id))
             {
                 foreach (var x in all_answer_types)
@@ -107,33 +110,38 @@ namespace OBSMVC.Controllers
                         else if(x.obs_ans_type_has_fxd_ans_yn == "Y")
                         {
                             List<string> q_selected_ans_type = new List<string>();
-                            switch (x.obs_ans_type_category)
-                            {
-                               
-                                case "3 Val Range":                           
-                                     q_selected_ans_type.Add("Bad");
-                                     q_selected_ans_type.Add("OK");
-                                     q_selected_ans_type.Add("Good");
-                                break;
-                                case "5 Val Range":
-                                    q_selected_ans_type.Add("Monday");
-                                    q_selected_ans_type.Add("Tuesday");
-                                    q_selected_ans_type.Add("Wednesday");
-                                    q_selected_ans_type.Add("Thursday");
-                                    q_selected_ans_type.Add("Friday");
+                             switch (x.obs_ans_type_category)
+                             {
+
+                                 case "3 Val Range":                           
+                                      q_selected_ans_type.Add("Bad");
+                                      q_selected_ans_type.Add("OK");
+                                      q_selected_ans_type.Add("Good");
                                  break;
-                                case "MS List":
-                                    q_selected_ans_type.Add("MS List Item 1");
-                                    q_selected_ans_type.Add("MS List Item 2");
-                                    q_selected_ans_type.Add("MS List Item 3");
-                                    q_selected_ans_type.Add("MS List Item 4");
-                                    q_selected_ans_type.Add("MS List Item 5");
-                                 break;
-                                case "SS List":
-                                    q_selected_ans_type.Add("Single Selected List Item");
+                                 case "5 Val Range":
+                                     q_selected_ans_type.Add("Monday");
+                                     q_selected_ans_type.Add("Tuesday");
+                                     q_selected_ans_type.Add("Wednesday");
+                                     q_selected_ans_type.Add("Thursday");
+                                     q_selected_ans_type.Add("Friday");
+                                  break;
+                                 case "MS List":
+                                     q_selected_ans_type.Add("MS List Item 1");
+                                     q_selected_ans_type.Add("MS List Item 2");
+                                     q_selected_ans_type.Add("MS List Item 3");
+                                     q_selected_ans_type.Add("MS List Item 4");
+                                     q_selected_ans_type.Add("MS List Item 5");
+                                  break;
+                                 case "SS List":
+                                    q_selected_ans_type.Add("Single Selected List Item 1");
+                                    q_selected_ans_type.Add("Single Selected List Item 2");
+                                    q_selected_ans_type.Add("Single Selected List Item 3");
+                                    q_selected_ans_type.Add("Single Selected List Item 4");
                                     break;
 
-                            }//end of switch
+                             }//end of switch
+                            
+                            //QuestionHelpers.getDefault_Selected_Ans_list(x.obs_ans_type_category);
                             ViewBag.q_selected_ans_type = q_selected_ans_type;
                         }//end of else if(x.obs_ans_type_has_fxd_ans_yn == "Y")
 
@@ -148,7 +156,46 @@ namespace OBSMVC.Controllers
                 ViewBag.list_of_answers = list_of_answers;
                 return View(list_of_answers);
             }
-            
+                    
         }
+
+        // POST: Save default Answer Type.
+        [HttpPost]
+        public ActionResult _SaveDefaultAnswerType(FormCollection formData)
+        {
+            string answer_type_id = formData["list_of_answers"];
+            int question_id = Convert.ToInt32(formData["question_id"]);
+            //first lets check if user submitted None as a default answer type 
+            if (String.IsNullOrEmpty(answer_type_id))
+            {
+              
+                OBS_QUEST_ANS_TYPES oBS_QUEST_ANS_TYPES = new OBS_QUEST_ANS_TYPES();
+                try {
+                    oBS_QUEST_ANS_TYPES = db.OBS_QUEST_ANS_TYPES.Single(item => item.obs_question_id == question_id && item.obs_qat_default_ans_type_yn == "Y");
+                    oBS_QUEST_ANS_TYPES.obs_qat_default_ans_type_yn = "N";
+                    db.SaveChanges();
+                }
+                catch { }
+            }//end if
+            else 
+            {
+                int selected_ans_type_id = Convert.ToInt32(formData["list_of_answers"]);
+
+
+            }
+            return null;
+        }
+        public bool isQuest_Slct_Ans_Required(int ans_type_id)
+        {
+            short temp = (short)ans_type_id;
+            bool isRequired = db.OBS_ANS_TYPE.Where(item => item.obs_ans_type_id == temp).Select(x => x.obs_ans_type_has_fxd_ans_yn).Equals("Y") ? true : false;
+            return isRequired;
+        }
+        /*public bool isNew_Quest_Ans_Type(int ans_type_id, int question_id)
+        {
+            short temp = (short)ans_type_id;
+           // bool isRequired = db.OBS_QUEST_ANS_TYPES.
+            return isRequired;
+        }*/
     }
 }

@@ -82,13 +82,17 @@
     //    },
     //    error: function () { alert('error'); }
     //});
-    $(function(){
-        $('#refresh').click(function(){
-            $.post('@Url.Action("displayAnswerSection", "Question/" + Model.q.obs_question_id)')
-        });
-    });
-
-    <li>@Html.ActionLink("Temp ObsQA", "DisplayAnswerSection", "Question")</li>
+</script>
+<script>
+    function refreshAnswerWindow() {
+        $("#answerSection").
+        alert("This option is still under maintenance!");
+        @*$.post('@Url.Action("displayAnswerSection", "Question")').always(function () {
+            $('#answerSection').Load('/Question/displayAnswerSection/3');
+        })*@
+            //document.getElementById("refresh")
+        @*$.post('@Url.Action("displayAnswerSection", "Question/" + Model.q.obs_question_id)');*@
+    }
 </script>
 
 @*<script>
@@ -152,11 +156,11 @@
                     <div class="panel-heading">
                         Rasul Section
                     </div>
-                    <div class="target" id="answerSection">
+                    <div id="answerSection">
                         @*@Html.Partial("_listAnswerTypes")*@
                         @{ Html.RenderAction("displayAnswerSection", new { question_id = Model.q.obs_question_id});}
                     </div>
-                    <input type="button" id="refresh" value="Change Answer Type" />
+                    <input type="button" id="refresh" value="Change Answer Type" onclick="refreshAnswerWindow()" />
                 </div>
             </div>
 

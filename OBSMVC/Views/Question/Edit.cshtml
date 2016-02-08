@@ -63,6 +63,33 @@
         $('.panel-info').css({ height: heightTallest + 'px' });
     });
 </script>
+<script type="text/javascript">
+    @*$(function(){
+        $('#refresh').click(function(){
+            $.post('@Url.Action("displayAnswerSection", "Question")').always(function(){
+                $('.target').Load('/Question/displayAnswerSection/3');
+            })
+        });
+    });*@
+    //$.ajax({
+    //    url: '/Question/displayAnswerSection/3',
+    //    type: "GET",
+    //    dataType: "html",
+    //    data: $("#FormId").serialize(),
+    //    success: function (data) {
+    //        //Fill div with results
+    //        $("#answerSection").html(data);
+    //    },
+    //    error: function () { alert('error'); }
+    //});
+    $(function(){
+        $('#refresh').click(function(){
+            $.post('@Url.Action("displayAnswerSection", "Question/" + Model.q.obs_question_id)')
+        });
+    });
+
+    <li>@Html.ActionLink("Temp ObsQA", "DisplayAnswerSection", "Question")</li>
+</script>
 
 @*<script>
         $(function () {
@@ -125,9 +152,11 @@
                     <div class="panel-heading">
                         Rasul Section
                     </div>
-                    <div class="panel-body" id="answerSection">
-                        @Html.Partial("_listAnswerTypes")
+                    <div class="target" id="answerSection">
+                        @*@Html.Partial("_listAnswerTypes")*@
+                        @{ Html.RenderAction("displayAnswerSection", new { question_id = Model.q.obs_question_id});}
                     </div>
+                    <input type="button" id="refresh" value="Change Answer Type" />
                 </div>
             </div>
 

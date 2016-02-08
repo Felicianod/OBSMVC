@@ -87,9 +87,9 @@
     function refreshAnswerWindow() {
         //$("#answerSection").
         alert("This option is still under maintenance!");
-        @*$.post('@Url.Action("displayAnswerSection", "Question")').always(function () {
+        $.post('@Url.Action("displayAnswerSection", "Question")').always(function () {
             $('#answerSection').Load('/Question/displayAnswerSection/3');
-        })*@
+        })
             //document.getElementById("refresh")
         @*$.post('@Url.Action("displayAnswerSection", "Question/" + Model.q.obs_question_id)');*@
     }

@@ -523,6 +523,7 @@
     <Content Include="Views\QuestionAnswerTypes\Index.cshtml" />
     <Content Include="Views\Shared\_listAnswerTypes.cshtml" />
     <Content Include="Views\QuestionAnswerTypeDefault\View.cshtml" />
+    <Content Include="Views\Question\displayAnswerSection.cshtml" />
     <Content Include="Views\TestQuestionAnswerTypeDefault\_TestlistAnswerTypes.cshtml" />
   </ItemGroup>
   <ItemGroup>

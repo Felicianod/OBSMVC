@@ -63,6 +63,37 @@
         $('.panel-info').css({ height: heightTallest + 'px' });
     });
 </script>
+<script type="text/javascript">
+    @*$(function(){
+        $('#refresh').click(function(){
+            $.post('@Url.Action("displayAnswerSection", "Question")').always(function(){
+                $('.target').Load('/Question/displayAnswerSection/3');
+            })
+        });
+    });*@
+    //$.ajax({
+    //    url: '/Question/displayAnswerSection/3',
+    //    type: "GET",
+    //    dataType: "html",
+    //    data: $("#FormId").serialize(),
+    //    success: function (data) {
+    //        //Fill div with results
+    //        $("#answerSection").html(data);
+    //    },
+    //    error: function () { alert('error'); }
+    //});
+</script>
+<script>
+    function refreshAnswerWindow() {
+        //$("#answerSection").
+        alert("This option is still under maintenance!");
+        @*$.post('@Url.Action("displayAnswerSection", "Question")').always(function () {
+            $('#answerSection').Load('/Question/displayAnswerSection/3');
+        })*@
+            //document.getElementById("refresh")
+        @*$.post('@Url.Action("displayAnswerSection", "Question/" + Model.q.obs_question_id)');*@
+    }
+</script>
 
 @*<script>
         $(function () {
@@ -125,9 +156,11 @@
                     <div class="panel-heading">
                        <b>Default Answer Type</b>
                     </div>
-                    <div class="panel-body" id="answerSection">
-                        @Html.Partial("_listAnswerTypes")
+                    <div id="answerSection">
+                        @*@Html.Partial("_listAnswerTypes")*@
+                        @{ Html.RenderAction("displayAnswerSection", new { question_id = Model.q.obs_question_id});}
                     </div>
+                    <input type="button" id="refresh" value="Change Answer Type" onclick="refreshAnswerWindow()" />
                 </div>
             </div>
 

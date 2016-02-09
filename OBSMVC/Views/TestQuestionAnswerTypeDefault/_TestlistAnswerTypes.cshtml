@@ -29,7 +29,7 @@
     {
         for (int i = 0; i < ViewBag.q_selected_ans_type.Count; i++)
         {
-            <li>@ViewBag.q_selected_ans_type[i]</li>
+            <li><input type="hidden" id="default_selected_ans_types" name="default_selected_ans_types" value="@ViewBag.q_selected_ans_type[i]">@ViewBag.q_selected_ans_type[i]</li>
             
 
         }

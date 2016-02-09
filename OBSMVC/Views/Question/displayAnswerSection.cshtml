@@ -1,7 +1,19 @@
-﻿@{
+﻿@model OBSMVC.Controllers.QuestionController.OBSQuestion
+
+@{
     Layout = null;
 }
 
-@Html.DropDownList("list_of_answers", "None")
+<br /><br /><br />
+@Html.DropDownList("SelectedAnswerTypes", Model.fullAnswerTypeDDL, "None")
 <br />
-@DateTime.Now
+<ul>
+    @foreach (OBSMVC.Models.OBS_QUEST_SLCT_ANS selAnswer in Model.obsQA_List[Model.indexOfDefaultQA].selectableAnsList)
+    {
+        <li>
+            @selAnswer.obs_qsa_text
+        </li>
+    }
+</ul>
+
+<br />

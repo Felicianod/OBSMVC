@@ -99,7 +99,6 @@ namespace OBSMVC.Controllers
         // GET: Question/Edit/5
         public ActionResult Edit(int id)
         {
-            OBSQuestion test = new OBSQuestion(id);
             if (id == null)
             {
                 return RedirectToAction("Index");
@@ -119,7 +118,6 @@ namespace OBSMVC.Controllers
 
             _listAnswerTypes((int)id);
             return View(obsQMD);
-
         }
 
         //-----------------------------------------------------------------------------------------------------------------
@@ -265,46 +263,49 @@ namespace OBSMVC.Controllers
             // This is a test method that accepts a question Id and the selected Index of the dropdown list 
             // and returns the section for Answers
 
-            // Retrieve alist of all the observation answer types from the database to populate the dropdown list
-            //var all_answer_types = db.OBS_ANS_TYPE.Where(item => item.obs_ans_type_id > 0).ToList();
-            var default_answer_type = (from qat in db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == id && x.obs_qat_default_ans_type_yn == "Y")
-                                       select new
-                                       {
-                                           qat_Id = qat.obs_qat_id,
-                                           at_Id = qat.obs_ans_type_id
-                                       }).ToList().FirstOrDefault();
+            OBSQuestion obsQuestion = new OBSQuestion(id);
 
-            int at_Id = -1;
-            int qat_Id = -1;
-            try { at_Id = default_answer_type.at_Id; }
-            catch { }
-            try { qat_Id = default_answer_type.qat_Id; }
-            catch { }
+            //// Retrieve alist of all the observation answer types from the database to populate the dropdown list
+            ////var all_answer_types = db.OBS_ANS_TYPE.Where(item => item.obs_ans_type_id > 0).ToList();
+            //var default_answer_type = (from qat in db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == id && x.obs_qat_default_ans_type_yn == "Y")
+            //                           select new
+            //                           {
+            //                               qat_Id = qat.obs_qat_id,
+            //                               at_Id = qat.obs_ans_type_id
+            //                           }).ToList().FirstOrDefault();
 
-            List<SelectListItem> list_of_answers = new List<SelectListItem>();
-            foreach (var x in db.OBS_ANS_TYPE.Where(item => item.obs_ans_type_id > 0).ToList())
-            {
-                SelectListItem answer_typeDDL = new SelectListItem();
-                answer_typeDDL.Value = x.obs_ans_type_id.ToString();
-                answer_typeDDL.Text = x.obs_ans_type_name;
-                if (x.obs_ans_type_id == at_Id)
-                {
-                    answer_typeDDL.Selected = true;
-                    //if (x.obs_ans_type_has_fxd_ans_yn == "Y")
-                    //{
-                    //    question_selected_ans_type = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == default_answer_qat_id).ToList();
-                    //}
-                }
-                else
-                {
-                    answer_typeDDL.Selected = false;
-                }
-                list_of_answers.Add(answer_typeDDL);
-            }
-            ViewBag.list_of_answers = list_of_answers;
+            //int at_Id = -1;
+            //int qat_Id = -1;
+            //try { at_Id = default_answer_type.at_Id; }
+            //catch { }
+            //try { qat_Id = default_answer_type.qat_Id; }
+            //catch { }
 
+            //List<SelectListItem> list_of_answers = new List<SelectListItem>();
+            //foreach (var x in db.OBS_ANS_TYPE.Where(item => item.obs_ans_type_id > 0).ToList())
+            //{
+            //    SelectListItem answer_typeDDL = new SelectListItem();
+            //    answer_typeDDL.Value = x.obs_ans_type_id.ToString();
+            //    answer_typeDDL.Text = x.obs_ans_type_name;
+            //    if (x.obs_ans_type_id == at_Id)
+            //    {
+            //        answer_typeDDL.Selected = true;
+            //        //if (x.obs_ans_type_has_fxd_ans_yn == "Y")
+            //        //{
+            //        //    question_selected_ans_type = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == default_answer_qat_id).ToList();
+            //        //}
+            //    }
+            //    else
+            //    {
+            //        answer_typeDDL.Selected = false;
+            //    }
+            //    list_of_answers.Add(answer_typeDDL);
+            //}
+            //ViewBag.list_of_answers = list_of_answers;
 
-            return View();
+            ViewBag.list_of_answers = obsQuestion.fullAnswerTypeDDL;
+
+            return View(obsQuestion);
         }
 
         [HttpPost]
@@ -416,6 +417,9 @@ namespace OBSMVC.Controllers
             int default_answer_qat_id = -1;
             List<OBS_QUEST_SLCT_ANS> question_selected_ans_type = new List<OBS_QUEST_SLCT_ANS>();
 
+            
+            
+
             try
             {
                 default_answer_id = default_answer_type.FirstOrDefault().obs_ans_type_id;
@@ -425,6 +429,7 @@ namespace OBSMVC.Controllers
             { }
 
             List<SelectListItem> list_of_answers = new List<SelectListItem>();
+            
             foreach (var x in all_answer_types)
             {
                 SelectListItem answer_type = new SelectListItem();
@@ -437,7 +442,6 @@ namespace OBSMVC.Controllers
                     {
                         question_selected_ans_type = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == default_answer_qat_id).ToList();
                     }
-
                 }
                 else
                 {
@@ -473,13 +477,16 @@ namespace OBSMVC.Controllers
                 fullAnswerTypeList = OBSdb.OBS_ANS_TYPE.ToList();
                 indexOfDefaultQA = -1;     //Set Initial Default to "No Default Found or -1"
                 obsQA_List = retrieveQAtypes(); // This method also sets the correct 'indexOfDefaultQA' and the 'hasInstances' properties.
+                setAnswerTypeDDL();
             }
+
             // --- Properties ----
             // All Properties are set at Constructor Time
             public int questionId { get; set; }
             public int indexOfDefaultQA { get; set; }
             public bool hasInstances { get; set; }
             public List<OBSQA> obsQA_List = new List<OBSQA>();
+            public List<SelectListItem> fullAnswerTypeDDL = new List<SelectListItem>();
             public List<OBS_ANS_TYPE> fullAnswerTypeList = new List<OBS_ANS_TYPE>();
 
             // --- Methods -------
@@ -505,6 +512,7 @@ namespace OBSMVC.Controllers
                     {
                         OBSQA myQAinstance = new OBSQA();
                         myQAinstance.isDefaultQA = qaInstanceTemp.obs_qat_default_ans_type_yn == "Y" ? true : false;
+                        // Check if this instance is the default. If so, set the Drop down select list to the correct default selected value
                         if (myQAinstance.isDefaultQA) { indexOfDefaultQA = index; }  // Set the Index of the default type Instance
                         myQAinstance.answerTypeId = qaInstanceTemp.obs_ans_type_id;
                         myQAinstance.selectableAnsList = OBSdb.OBS_QUEST_SLCT_ANS.Where(x => x.obs_qat_id == qaInstanceTemp.obs_qat_id).OrderBy(y => y.obs_qsa_order).ToList();
@@ -513,6 +521,23 @@ namespace OBSMVC.Controllers
                     }
                 }
                 return returnList;
+            }
+
+            private void setAnswerTypeDDL()
+            {
+                foreach (OBS_ANS_TYPE ansTypeEntry in fullAnswerTypeList)
+                {
+                    SelectListItem ddlListItem = new SelectListItem();
+                    ddlListItem.Value = ansTypeEntry.obs_ans_type_id.ToString();
+                    ddlListItem.Text = ansTypeEntry.obs_ans_type_name;
+                    fullAnswerTypeDDL.Add(ddlListItem);
+                    // Check if this entry is the one that should be displayed as selected
+                    if ( (indexOfDefaultQA >= 0) && (ansTypeEntry.obs_ans_type_id == obsQA_List[indexOfDefaultQA].answerTypeId) )
+                    {
+                        ddlListItem.Selected = true;
+                    }
+                }
+                //fullAnswerTypeDDL.ElementAt(indexOfDefaultQA).Selected = true;
             }
         }
 

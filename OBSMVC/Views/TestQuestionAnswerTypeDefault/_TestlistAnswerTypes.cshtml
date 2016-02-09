@@ -29,14 +29,15 @@
     {
         for (int i = 0; i < ViewBag.q_selected_ans_type.Count; i++)
         {
-            <li>@ViewBag.q_selected_ans_type[i]</li>            
+            <li>@ViewBag.q_selected_ans_type[i]</li>
+            
+
         }
     }
     else if(ViewBag.question_selected_ans_type != null)
     {
         foreach (var x in ViewBag.question_selected_ans_type)
         {
-           
             <li>@x.obs_qsa_text</li>
 
         }
@@ -49,6 +50,4 @@
         ;                 form.submit();
                     });
     </script>
-    
-            }
-
+}

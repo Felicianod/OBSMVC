@@ -97,8 +97,9 @@ namespace OBSMVC.Controllers
 
         //-----------------------------------------------------------------------------------------------------------------
         // GET: Question/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
+            OBSQuestion test = new OBSQuestion(id);
             if (id == null)
             {
                 return RedirectToAction("Index");
@@ -449,6 +450,71 @@ namespace OBSMVC.Controllers
 
         }
         // =================================================================================
+
+        //========= HELPER METHODS FOR OBS_QUESTION ============================
+
+        public class OBSQA {
+            // Constructor
+            public OBSQA() { }
+            // --- Properties ----
+            public bool isDefaultQA { get; set; } 
+            public int answerTypeId { get; set; }
+            public List<OBS_QUEST_SLCT_ANS> selectableAnsList = new List<OBS_QUEST_SLCT_ANS>();
+            // --- Methods -------        
+        }
+
+        public class OBSQuestion
+        {       
+            private DSC_OBS_DB_ENTITY OBSdb = new DSC_OBS_DB_ENTITY();
+
+            // Constructor
+            public OBSQuestion(int Id) {
+                questionId = Id;
+                fullAnswerTypeList = OBSdb.OBS_ANS_TYPE.ToList();
+                indexOfDefaultQA = -1;     //Set Initial Default to "No Default Found or -1"
+                obsQA_List = retrieveQAtypes(); // This method also sets the correct 'indexOfDefaultQA' and the 'hasInstances' properties.
+            }
+            // --- Properties ----
+            // All Properties are set at Constructor Time
+            public int questionId { get; set; }
+            public int indexOfDefaultQA { get; set; }
+            public bool hasInstances { get; set; }
+            public List<OBSQA> obsQA_List = new List<OBSQA>();
+            public List<OBS_ANS_TYPE> fullAnswerTypeList = new List<OBS_ANS_TYPE>();
+
+            // --- Methods -------
+            private List<OBSQA> retrieveQAtypes()
+            {
+                List<OBSQA> returnList = new List<OBSQA>();
+                
+                // Firt get a list of all the QAType Instances for this Question Id (If Any) in the 'OBS_QUEST_ANS_TYPES' Table
+                List<OBS_QUEST_ANS_TYPES> QAInstances = OBSdb.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == questionId).ToList();
+
+                if (QAInstances.Count() == 0)  //There were no records found in the 'OBS_QUEST_ANS_TYPES' Table for this question Id
+                {
+                    hasInstances = false;
+                    indexOfDefaultQA = -1;             //There is no default instance (Nothing Found)
+                    fullAnswerTypeList = null;         // There are no QustionAnswer instances Found
+                }
+                else  //The Selected Question Id has at least on insyance in the 'OBS_QUEST_ANS_TYPES' Table
+                {
+                    hasInstances = true;
+                    int index = 0;
+                    // loop through each of the instances found and build the "obsQA_List" list property of the "OBSQuestion" Object
+                    foreach (OBS_QUEST_ANS_TYPES qaInstanceTemp in QAInstances)
+                    {
+                        OBSQA myQAinstance = new OBSQA();
+                        myQAinstance.isDefaultQA = qaInstanceTemp.obs_qat_default_ans_type_yn == "Y" ? true : false;
+                        if (myQAinstance.isDefaultQA) { indexOfDefaultQA = index; }  // Set the Index of the default type Instance
+                        myQAinstance.answerTypeId = qaInstanceTemp.obs_ans_type_id;
+                        myQAinstance.selectableAnsList = OBSdb.OBS_QUEST_SLCT_ANS.Where(x => x.obs_qat_id == qaInstanceTemp.obs_qat_id).OrderBy(y => y.obs_qsa_order).ToList();
+                        returnList.Add(myQAinstance);
+                        index++;
+                    }
+                }
+                return returnList;
+            }
+        }
 
     }
 }

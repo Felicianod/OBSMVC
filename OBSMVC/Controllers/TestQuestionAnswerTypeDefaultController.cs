@@ -65,6 +65,8 @@ namespace OBSMVC.Controllers
             string answer_type_id = formData["list_of_answers"];
             string question_id = formData["question_id"];
             string isSave = formData["save"];
+            
+            string passed_selected_ans_types = formData["question_selected_ans_type"];
             if (isSave == "false")
             {
                 if (String.IsNullOrEmpty(answer_type_id))
@@ -179,12 +181,56 @@ namespace OBSMVC.Controllers
                     db.SaveChanges();
                 }
                 catch { }
-            }//end if
-            else 
+            }//end  if (String.IsNullOrEmpty(answer_type_id))
+            else //if we're here, that means user submetted  answer type that <>None
             {
                 int selected_ans_type_id = Convert.ToInt32(formData["list_of_answers"]);
+                //now we need to check if this question/answer type combination already exist in obs_quest_ans_type table
+                if (isNew_Quest_Ans_Type(selected_ans_type_id, question_id))
+                {
+                    //if we're here, that means we need to insert a new record in OBS_QUEST_ANS_TYPE table
+                    //first we need to check if this selected answer type requires a record in OBS_QUEST_SLCT_ANS
+                    if (isQuest_Slct_Ans_Required(selected_ans_type_id)) {
+                        //so we are here, that means we need to save both OBS_QUEST_ANS_TYPE and OBS_QUEST_SLCT_ANS
+                        OBS_QUEST_ANS_TYPES oBS_QUEST_ANS_TYPES = new OBS_QUEST_ANS_TYPES();
+                        oBS_QUEST_ANS_TYPES.obs_question_id = question_id;
+                        oBS_QUEST_ANS_TYPES.obs_ans_type_id = (short)selected_ans_type_id;
+                        oBS_QUEST_ANS_TYPES.obs_qat_default_ans_type_yn = "Y";
+                        oBS_QUEST_ANS_TYPES.obs_qat_end_eff_dt = Convert.ToDateTime("12/31/2060");
+                        db.OBS_QUEST_ANS_TYPES.Add(oBS_QUEST_ANS_TYPES);
+                        db.SaveChanges();
+                        
 
+                    }//end of if (isQuest_Slct_Ans_Required(selected_ans_type_id))
+                    else {
+                        OBS_QUEST_ANS_TYPES oBS_QUEST_ANS_TYPES = new OBS_QUEST_ANS_TYPES();
+                        oBS_QUEST_ANS_TYPES.obs_question_id = question_id;
+                        oBS_QUEST_ANS_TYPES.obs_ans_type_id = (short)selected_ans_type_id;
+                        oBS_QUEST_ANS_TYPES.obs_qat_default_ans_type_yn = "Y";
+                        oBS_QUEST_ANS_TYPES.obs_qat_end_eff_dt = Convert.ToDateTime("12/31/2060");
+                        db.OBS_QUEST_ANS_TYPES.Add(oBS_QUEST_ANS_TYPES);
+                        db.SaveChanges();
 
+                    }
+
+                }//if (isNew_Quest_Ans_Type(selected_ans_type_id, question_id))
+                else // this branch should take care of the scenario where this question/answer type exists in the obs_quest_ans_type table
+                {
+                    OBS_QUEST_ANS_TYPES oBS_QUEST_ANS_TYPES = new OBS_QUEST_ANS_TYPES();
+                    try
+                    {    //set default flag the existing default answer type id to N
+                        // we need try/catch block in case there's no existing default answer type 
+                        oBS_QUEST_ANS_TYPES = db.OBS_QUEST_ANS_TYPES.Single(item => item.obs_question_id == question_id && item.obs_qat_default_ans_type_yn == "Y");
+                        oBS_QUEST_ANS_TYPES.obs_qat_default_ans_type_yn = "N";
+                        db.SaveChanges();
+                    }
+                    catch { }
+                    //now let's set the selected answer type to be default one 
+                    oBS_QUEST_ANS_TYPES = db.OBS_QUEST_ANS_TYPES.Single(item => item.obs_ans_type_id == selected_ans_type_id && item.obs_question_id == question_id);
+                    oBS_QUEST_ANS_TYPES.obs_qat_default_ans_type_yn = "Y";
+                    db.SaveChanges();
+                }
+                
             }
             return null;
         }
@@ -194,10 +240,16 @@ namespace OBSMVC.Controllers
             bool isRequired = db.OBS_ANS_TYPE.Where(item => item.obs_ans_type_id == temp).Select(x => x.obs_ans_type_has_fxd_ans_yn).Equals("Y") ? true : false;
             return isRequired;
         }
+        /*
+        *This method checks if there's existing record in OBS_QUEST_ANS_TYPES table for passed answer type id
+        *if returns true: This is a new question id/answer type id combination
+        *if returns false: The record with this question id/answer type id combination already exists in the table
+         */
         public bool isNew_Quest_Ans_Type(int ans_type_id, int question_id)
         {
             short temp = (short)ans_type_id;
-            bool isNew_Quest_Ans_Type = false;
+            int number_of_records = db.OBS_QUEST_ANS_TYPES.Where(item => item.obs_ans_type_id == temp && item.obs_question_id == question_id).ToList().Count;
+            bool isNew_Quest_Ans_Type = number_of_records==0?true:false;
             return isNew_Quest_Ans_Type;
         }
     }

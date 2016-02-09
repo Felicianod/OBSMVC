@@ -1,7 +1,50 @@
-﻿@{
+﻿@model OBSMVC.Controllers.QuestionController.OBSQuestion
+
+@*@{
     Layout = null;
+}*@
+
+<script type="text/javascript">
+    $('#AnswerTypesDDL').on('change', function (event) {
+        var form = $(event.target).parents('form');
+        form.submit();
+    });
+</script>
+
+
+
+@using (Html.BeginForm())
+{
+    <input type="hidden" id="question_id" name="question_id"  value="@Model.questionId" />
+    <input type="hidden" id="save" name="save" value="false" />
+    <br /><br /><br />
+    @Html.DropDownList("AnswerTypesDDL", Model.fullAnswerTypeDDL, "None")
+    <br />
+    <ul>
+        @if (Model.userATselId > 0)
+        {
+            foreach (OBSMVC.Models.OBS_QUEST_SLCT_ANS selAnswer in Model.OBSQA_List[Model.indexOfDefaultQA].selectableAnsList)
+            {
+                <li>
+                    @selAnswer.obs_qsa_text
+                </li>
+            }
+
+        }
+        else
+        {
+            foreach (string selAnswer in Model.userSelectableAnsList)
+            {
+                <li>
+                    @selAnswer
+                </li>
+            }
+        }
+    </ul>
+    <br />
 }
 
-@Html.DropDownList("list_of_answers", "None")
-<br />
-@DateTime.Now
+
+
+
+

@@ -1,50 +1,65 @@
 ﻿@model OBSMVC.Controllers.QuestionController.OBSQuestion
-
-@*@{
-    Layout = null;
-}*@
-
-<script type="text/javascript">
-    $('#AnswerTypesDDL').on('change', function (event) {
-        var form = $(event.target).parents('form');
-        form.submit();
-    });
-</script>
+@{  ViewBag.Title = "Question Answer Selection"; }
 
 
-
-@using (Html.BeginForm())
+<br/>
+<div>@ViewBag.Message</div>
+@using (Html.BeginForm("displayAnswerSection", "Question", FormMethod.Post))
 {
-    <input type="hidden" id="question_id" name="question_id"  value="@Model.questionId" />
-    <input type="hidden" id="save" name="save" value="false" />
-    <br /><br /><br />
-    @Html.DropDownList("AnswerTypesDDL", Model.fullAnswerTypeDDL, "None")
-    <br />
-    <ul>
-        @if (Model.userATselId > 0)
-        {
-            foreach (OBSMVC.Models.OBS_QUEST_SLCT_ANS selAnswer in Model.OBSQA_List[Model.indexOfDefaultQA].selectableAnsList)
-            {
-                <li>
-                    @selAnswer.obs_qsa_text
-                </li>
-            }
+<table style="width:80%; border:1px">
+  <tr>
+      <td style="width:50%; vertical-align:top">
 
-        }
-        else
-        {
-            foreach (string selAnswer in Model.userSelectableAnsList)
-            {
-                <li>
-                    @selAnswer
-                </li>
-            }
-        }
-    </ul>
-    <br />
+
+          <input type="hidden" id="question_id" name="question_id" value="@Model.questionId" />
+          <input type="hidden" id="save" name="save" value="false" />
+
+          <br /><br /><br />
+          @Html.DropDownList("AnswerTypesDDL", Model.fullAnswerTypeDDL, "None")
+          <br />
+          <script type="text/javascript">
+              $('#AnswerTypesDDL').on('change', function (event) {
+                  var form = $(event.target).parents('form');
+                  form.submit();
+              });
+          </script>
+
+          @if (Model.selectedAT.hasSelectableAnswers)
+          {
+              <b style="color:blue">Current Selectable Answers</b>
+          }
+          else
+          {
+              @:<b style="color:red">No Selectable Answers Found</b>
+              <br />
+              @:(Sugested Values)
+          }
+          <ul>
+              @foreach (string selEntry in Model.selectedAT.selAnsList)
+             {
+                  <li>
+                      @selEntry
+                  </li>
+             }
+          </ul>
+          <br />
+
+      </td>
+    <td style="width:50%; vertical-align:top">
+       SUGGESTED TEMPLATES
+    </td>
+  </tr>
+  <tr>
+    <td>        
+        <button type="submit" id="btnSaveDefQuest" onclick="">Save Changes</button>
+        <script type="text/javascript">
+            $('#btnSaveDefQuest').on('click', function (event) {
+                var form = $(event.target).parents('form');
+                document.getElementById('save').value = 'true';
+            });
+        </script>
+    </td>
+  </tr>
+</table>
 }
-
-
-
-
 

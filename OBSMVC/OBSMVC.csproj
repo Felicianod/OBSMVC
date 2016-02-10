@@ -204,25 +204,7 @@
     <Compile Include="Controllers\QuestionAnswerTypesController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\QuestionMetadataController.cs" />
-    <Compile Include="CustomerModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CustomerModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CustomerModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CustomerModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CustomerModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CustomerModel.edmx</DependentUpon>
-    </Compile>
     <Compile Include="CustomHtmlHelpers\CustomeHtmlHelpers.cs" />
-    <Compile Include="DSC_CUSTOMER.cs">
-      <DependentUpon>CustomerModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -358,16 +340,6 @@
     <Content Include="Content\jquery-ui.theme.css" />
     <Content Include="Content\jquery-ui.theme.min.css" />
     <Content Include="Content\PagedList.css" />
-    <Content Include="CustomerModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CustomerModel.edmx</DependentUpon>
-      <LastGenOutput>CustomerModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="CustomerModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CustomerModel.edmx</DependentUpon>
-      <LastGenOutput>CustomerModel.cs</LastGenOutput>
-    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -387,13 +359,6 @@
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="CustomerModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>CustomerModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="CustomerModel.edmx.diagram">
-      <DependentUpon>CustomerModel.edmx</DependentUpon>
-    </Content>
     <EntityDeploy Include="Models\DSC_OBS_ENTITY.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DSC_OBS_ENTITY.Designer.cs</LastGenOutput>

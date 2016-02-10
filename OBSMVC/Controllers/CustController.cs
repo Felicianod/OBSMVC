@@ -15,7 +15,7 @@ namespace OBSMVC.Controllers
    
     public class CustController : Controller
     {
-        private DSC_OBS_DEVEntities db = new DSC_OBS_DEVEntities();
+        private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
 
         // GET: Cust
         [HttpGet]
@@ -24,10 +24,9 @@ namespace OBSMVC.Controllers
             var customers = new List<DSC_CUSTOMER>();
             var viewCustomers = new List<CustViewModel>();
 
-            using (DSC_OBS_DEVEntities cust_ent = new DSC_OBS_DEVEntities())
+            using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
-                customers = cust_ent.DSC_CUSTOMER.Where(cust_id => cust_id.dsc_cust_id > 0).ToList();
-
+                customers = db.DSC_CUSTOMER.Where(cust_id => cust_id.dsc_cust_id > 0).ToList();
             }
             DateTime active_date;
             foreach (DSC_CUSTOMER customer in customers)
@@ -70,22 +69,22 @@ namespace OBSMVC.Controllers
         {
             if (actionText == "Activate")
             {
-                using (DSC_OBS_DEVEntities cust_ent = new DSC_OBS_DEVEntities())
+                using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
                 {
-                    var customer = cust_ent.DSC_CUSTOMER.Single(cust_id => cust_id.dsc_cust_id == id);
+                    var customer = db.DSC_CUSTOMER.Single(cust_id => cust_id.dsc_cust_id == id);
                     customer.dsc_cust_eff_end_date = null;
-                    cust_ent.SaveChanges();
+                    db.SaveChanges();
                 }
                 return RedirectToAction("Index");
             }
             else if (actionText == "Deactivate")
             {
-                using (DSC_OBS_DEVEntities cust_ent = new DSC_OBS_DEVEntities())
+                using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
                 {
                     DateTime today = DateTime.Today;
-                    var customer = cust_ent.DSC_CUSTOMER.Single(cust_id => cust_id.dsc_cust_id == id);
+                    var customer = db.DSC_CUSTOMER.Single(cust_id => cust_id.dsc_cust_id == id);
                     customer.dsc_cust_eff_end_date = today.ToString("d");
-                    cust_ent.SaveChanges();
+                    db.SaveChanges();
                 }
                 return RedirectToAction("Index");
             }

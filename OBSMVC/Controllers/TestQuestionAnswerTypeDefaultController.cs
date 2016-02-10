@@ -317,6 +317,9 @@ namespace OBSMVC.Controllers
                 db1.SaveChanges();
             }
         }
+
+
+
         public  List<String> getDefault_Selected_Ans_list(string answer_type_category)
         {
             List<string> q_selected_ans_type = new List<string>();

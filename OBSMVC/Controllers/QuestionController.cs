@@ -283,14 +283,14 @@ namespace OBSMVC.Controllers
 
             //set the ddl to the new index value based on the posted form
             obsQuestion.fullAnswerTypeDDL.Clear();
-            obsQuestion.setAnswerTypeDDL((short)newSelIndex);
-            obsQuestion.templates = obsQuestion.getTemplates(obsQuestion.selectedAT.ATcathegory);
+            obsQuestion.setAnswerTypeDDL((short)newSelIndex);            
 
             if (postedData["save"].Equals("true"))
             {
                 SaveDefaultAnswerType(obsQuestion);
                 obsQuestion = new OBSQuestion(id);
-            }            
+            }
+            obsQuestion.templates = obsQuestion.getTemplates(obsQuestion.selectedAT.ATcathegory);
             return View(obsQuestion);
         }
 

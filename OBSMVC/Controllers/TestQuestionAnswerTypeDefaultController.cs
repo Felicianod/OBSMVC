@@ -59,16 +59,17 @@ namespace OBSMVC.Controllers
         [HttpPost]
         public ActionResult _TestlistAnswerTypes(FormCollection formData)
         {
-            List<SelectListItem> list_of_answers = new List<SelectListItem>();
-            List<OBS_QUEST_SLCT_ANS> question_selected_ans_type = new List<OBS_QUEST_SLCT_ANS>();
-            var all_answer_types = db.OBS_ANS_TYPE.Where(item => item.obs_ans_type_id > 0).ToList();
-            string answer_type_id = formData["list_of_answers"];
-            string question_id = formData["question_id"];
+           
             string isSave = formData["save"];           
 
             string passed_selected_ans_types = formData["question_selected_ans_type"];
             if (isSave == "false")
             {
+                List<SelectListItem> list_of_answers = new List<SelectListItem>();
+                List<OBS_QUEST_SLCT_ANS> question_selected_ans_type = new List<OBS_QUEST_SLCT_ANS>();
+                var all_answer_types = db.OBS_ANS_TYPE.Where(item => item.obs_ans_type_id > 0).ToList();
+                string answer_type_id = formData["list_of_answers"];
+                string question_id = formData["question_id"];
                 if (String.IsNullOrEmpty(answer_type_id))
                 {
                     foreach (var x in all_answer_types)
@@ -163,16 +164,17 @@ namespace OBSMVC.Controllers
             else
             {//HERE, LETS SAVE THE DB CHANGES
                 SaveDefaultAnswerType(formData);
+                return RedirectToAction("_TestlistAnswerTypes");
             }        
-            ViewBag.list_of_answers = list_of_answers;
-            return View(list_of_answers);
+           // ViewBag.list_of_answers = list_of_answers;
+           // return RedirectToAction("_TestlistAnswerTypes(59)");
         }
 
       
         public void SaveDefaultAnswerType(FormCollection formData)
         {
             string answer_type_id = formData["list_of_answers"];
-            int question_id = 58;         
+            int question_id = 59;         
             //string default_sel_ans_types = formData["default_selected_ans_types"];
             //first lets check if user submitted None as a default answer type 
             if (String.IsNullOrEmpty(answer_type_id))
@@ -197,8 +199,8 @@ namespace OBSMVC.Controllers
                     if (isQuest_Slct_Ans_Required(selected_ans_type_id)) {
                         //so we are here, that means we need to save both OBS_QUEST_ANS_TYPE and OBS_QUEST_SLCT_ANS
 
-                       //using (var transaction = db.Database.BeginTransaction())
-                        //{//need to create a transaction variable to rollback the changes for both tables if something goes wrong
+                       using (var transaction = db.Database.BeginTransaction())
+                        {//need to create a transaction variable to rollback the changes for both tables if something goes wrong
                             try {
                                 setExistingDefaultToN(question_id);
                                 string default_sel_ans_types = formData["default_selected_ans_types"];                              
@@ -212,8 +214,7 @@ namespace OBSMVC.Controllers
                                 db.OBS_QUEST_ANS_TYPES.Add(oBS_QUEST_ANS_TYPES);
                                 db.SaveChanges();
                                 short temp_selected_ans_type_id = (short)selected_ans_type_id;
-                                int qat_id = db.OBS_QUEST_ANS_TYPES.SingleOrDefault(item => item.obs_ans_type_id == temp_selected_ans_type_id && item.obs_question_id == question_id && item.obs_qat_end_eff_dt > DateTime.Today).obs_qat_id;
-                               
+                                int qat_id = db.OBS_QUEST_ANS_TYPES.SingleOrDefault(item => item.obs_ans_type_id == temp_selected_ans_type_id && item.obs_question_id == question_id && item.obs_qat_end_eff_dt > DateTime.Today).obs_qat_id;                               
                                 short order = 1;
                                 foreach (string str in selected_new_sel_ans_types)
                                 {
@@ -221,23 +222,23 @@ namespace OBSMVC.Controllers
                                     oBS_QUEST_SLCT_ANS.obs_qat_id = qat_id;
                                     oBS_QUEST_SLCT_ANS.obs_qsa_text = str;
                                     oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
+                                    oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
                                     oBS_QUEST_SLCT_ANS.obs_qsa_dflt_yn = "N";
                                     oBS_QUEST_SLCT_ANS.obs_qsa_eff_st_dt = DateTime.Today;
                                     oBS_QUEST_SLCT_ANS.obs_qsa_eff_end_dt = Convert.ToDateTime("12/31/2060");
-                                    db.OBS_QUEST_SLCT_ANS.Add(oBS_QUEST_SLCT_ANS);
-                                   
-                                order++;
+                                    db.OBS_QUEST_SLCT_ANS.Add(oBS_QUEST_SLCT_ANS);                                   
+                                    order++;
                                 }
                                db.SaveChanges();
                               }
                             catch(Exception e)
                             {
                                 string error = e.Message;
-                               // transaction.Rollback();
-                                //ViewBag.ResultMessage = "Error occured, records rolledback.";
+                                transaction.Rollback();
+                                ViewBag.ResultMessage = "Error occured, records rolledback.";
                             }
                            
-                       // }//end of using (var transaction = db.Database.BeginTransaction())
+                        }//end of using (var transaction = db.Database.BeginTransaction())
 
                     }//end of if (isQuest_Slct_Ans_Required(selected_ans_type_id))
                     else {
@@ -285,16 +286,10 @@ namespace OBSMVC.Controllers
         public bool isNew_Quest_Ans_Type(int ans_type_id, int question_id)
         {
             short temp = (short)ans_type_id;
-            try
-            {
+           
                 int number_of_records = db.OBS_QUEST_ANS_TYPES.Where(item => item.obs_ans_type_id == temp && item.obs_question_id == question_id).ToList().Count;
                 bool isNew_Quest_Ans_Type = number_of_records == 0 ? true : false;
-                return isNew_Quest_Ans_Type;
-            }
-            catch
-            {
-                return false;
-            }
+                return isNew_Quest_Ans_Type;           
             
         }
         public void setExistingDefaultToN( int question_id)

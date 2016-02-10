@@ -384,9 +384,6 @@ namespace OBSMVC.Controllers
             int default_answer_qat_id = -1;
             List<OBS_QUEST_SLCT_ANS> question_selected_ans_type = new List<OBS_QUEST_SLCT_ANS>();
 
-            
-            
-
             try
             {
                 default_answer_id = default_answer_type.FirstOrDefault().obs_ans_type_id;
@@ -446,9 +443,8 @@ namespace OBSMVC.Controllers
                 setAnswerTypeDDL();
             }
 
-            
-
-            // --- Properties ----
+            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \\
+            //- - - - - - - - - - Properties - - - - - - - - - - - - - - - - - - - - |
             // All Properties are set at Constructor Time
             public int questionId { get; set; }
             public int indexOfDefaultQA { get; set; }
@@ -457,7 +453,7 @@ namespace OBSMVC.Controllers
             public List<SelectListItem> fullAnswerTypeDDL = new List<SelectListItem>();
             public List<OBS_ANS_TYPE> fullAnswerTypeList = new List<OBS_ANS_TYPE>();
             public int userATselId = -1;
-            public string userATtype;
+            public string userATcathegory;
             public List<string> userSelectableAnsList = new List<string>();
             
             // --- Methods -------
@@ -524,8 +520,8 @@ namespace OBSMVC.Controllers
                 }
                 else {
                     // There is no entry in "OBS_QUEST_SLCT_ANS" table. Grab some harcoded Values
-                    userATtype = OBSdb.OBS_ANS_TYPE.FirstOrDefault(x => x.obs_ans_type_id == userATselId).obs_ans_type_category;
-                    userSelectableAnsList = getDefaultSLCT(userATtype);
+                    userATcathegory = OBSdb.OBS_ANS_TYPE.FirstOrDefault(x => x.obs_ans_type_id == userATselId).obs_ans_type_category;
+                    userSelectableAnsList = getDefaultSLCT(userATcathegory);
                 }                            
             }
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

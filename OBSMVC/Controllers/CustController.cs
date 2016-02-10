@@ -27,7 +27,6 @@ namespace OBSMVC.Controllers
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
                 customers = db.DSC_CUSTOMER.Where(cust_id => cust_id.dsc_cust_id > 0).ToList();
-
             }
             DateTime active_date;
             foreach (DSC_CUSTOMER customer in customers)

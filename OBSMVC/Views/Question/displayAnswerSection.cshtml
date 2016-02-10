@@ -1,8 +1,8 @@
 ﻿@model OBSMVC.Controllers.QuestionController.OBSQuestion
 
 @*@{
-    Layout = null;
-}*@
+        Layout = null;
+    }*@
 
 <script type="text/javascript">
     $('#AnswerTypesDDL').on('change', function (event) {
@@ -11,40 +11,44 @@
     });
 </script>
 
+<table style="width:80%">
+  <tr>
+    <td style="width:50%">
+       @using (Html.BeginForm())
+       {
+          <input type="hidden" id="question_id" name="question_id" value="@Model.questionId" />
+          <input type="hidden" id="save" name="save" value="false" />
+          <br /><br /><br />
+          @Html.DropDownList("AnswerTypesDDL", Model.fullAnswerTypeDDL, "None")
+          <br />
 
+          if (Model.selectedAT.hasSelectableAnswers)
+          {
+             @:Currect Selectable Answers
+          }
+          else
+          {
+             @:No Selectable Answers Found <br />(Sugested Values)
+          }
 
-@using (Html.BeginForm())
-{
-    <input type="hidden" id="question_id" name="question_id"  value="@Model.questionId" />
-    <input type="hidden" id="save" name="save" value="false" />
-    <br /><br /><br />
-    @Html.DropDownList("AnswerTypesDDL", Model.fullAnswerTypeDDL, "None")
-    <br />
-    <ul>
-        @if (Model.userATselId > 0)
-        {
-            foreach (OBSMVC.Models.OBS_QUEST_SLCT_ANS selAnswer in Model.OBSQA_List[Model.indexOfDefaultQA].selectableAnsList)
-            {
+          <ul>
+             @foreach (string selEntry in Model.selectedAT.selAnsList)
+             {
                 <li>
-                    @selAnswer.obs_qsa_text
+                  @selEntry
                 </li>
-            }
-
-        }
-        else
-        {
-            foreach (string selAnswer in Model.userSelectableAnsList)
-            {
-                <li>
-                    @selAnswer
-                </li>
-            }
-        }
-    </ul>
-    <br />
-}
-
-
-
-
-
+             }
+          </ul>
+          <br />
+       }
+    </td>
+    <td style="width:50%">
+       SUGGESTED TEMPLATES
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <button type="submit" id="btnSave" value="Save Changes"></button>
+    </td>
+  </tr>
+</table>

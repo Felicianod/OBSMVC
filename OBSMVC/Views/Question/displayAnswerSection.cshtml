@@ -3,7 +3,7 @@
 
 
 <br/>
-<div>@ViewBag.Message</div>
+@*<div>@ViewBag.Message</div>*@
 @using (Html.BeginForm("displayAnswerSection", "Question", FormMethod.Post))
 {
 <table style="width:80%; border:1px">
@@ -47,7 +47,15 @@
       </td>
     <td style="width:50%; vertical-align:top">
        SUGGESTED TEMPLATES
-    </td>
+        <ul>
+            @foreach (string template in Model.templates)
+            {
+                <li>
+                    @template
+                </li>
+            }
+        </ul>
+</td>
   </tr>
   <tr>
     <td>        

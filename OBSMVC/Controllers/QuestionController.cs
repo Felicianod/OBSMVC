@@ -264,14 +264,14 @@ namespace OBSMVC.Controllers
 
             OBSQuestion obsQuestion = new OBSQuestion(id);
             //ViewBag.list_of_answers = obsQuestion.fullAnswerTypeDDL;
-            ViewBag.Message = "This is the [GET] Method";
+            //ViewBag.Message = "This is the [GET] Method";
             return View(obsQuestion);
         }
 
         [HttpPost]
         public ActionResult displayAnswerSection(FormCollection postedData)
         {
-            ViewBag.Message = "This is the [POST] Method";
+            //ViewBag.Message = "This is the [POST] Method";
 
             // Rebuild the Question Object for reuse
             int id = Convert.ToInt32(postedData["question_id"]);
@@ -284,6 +284,7 @@ namespace OBSMVC.Controllers
             //set the ddl to the new index value based on the posted form
             obsQuestion.fullAnswerTypeDDL.Clear();
             obsQuestion.setAnswerTypeDDL((short)newSelIndex);
+            obsQuestion.templates = obsQuestion.getTemplates(obsQuestion.selectedAT.ATcathegory);
 
             if (postedData["save"].Equals("true"))
             {
@@ -421,7 +422,8 @@ namespace OBSMVC.Controllers
                 questionId = Id;
                 //fullAnswerTypeList = OBSdb.OBS_ANS_TYPE.ToList();
                 indexOfDefaultQA = -1;     //Set Initial Default to "No Default Found or -1"
-                OBSQA_List = retrieveQAInstances(); // This method also sets the correct 'indexOfDefaultQA' and the 'hasInstances' properties.                
+                OBSQA_List = retrieveQAInstances(); // This method also sets the correct 'indexOfDefaultQA' and the 'hasInstances' properties.
+                templates = getTemplates(selectedAT.ATcathegory);
             }
 
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \\
@@ -437,6 +439,7 @@ namespace OBSMVC.Controllers
             //public string userATcathegory;
             //public List<string> userSelectableAnsList = new List<string>();
             public SelAnswerType selectedAT = new SelAnswerType();
+            public List<string> templates = new List<string>();
 
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\\
             //- - - - - - - - - - - - CLASS METHODS - - - - - - - - - - - - - - - - |
@@ -583,6 +586,39 @@ namespace OBSMVC.Controllers
 
                 }//end of switch    
                 return q_selected_ans_type;        
+            }
+
+            public List<string> getTemplates(string category)
+            {
+
+                List<string> templateList = new List<string>();
+                switch (category)
+                {
+
+                    case "3 Val Range":
+                        templateList.Add("1, 2, 3");
+                        templateList.Add("YES, NO, MAYBE");
+                        templateList.Add("LOW, MEDIUM, HIGH");
+                        templateList.Add("NEVER, SOMETIMES, ALWAYS");
+                        templateList.Add("ALWAYS, SOMETIMES, NEVER");
+                        break;
+                    case "5 Val Range":
+                        templateList.Add("1, 2, 3, 4, 5");
+                        templateList.Add("NEVER, RARELY, SOMETIMES, OFTEN, ALWAYS");
+                        templateList.Add("STRONGLY DISAGREE, DISAGREE, N/A, AGREE, STRONGLY AGREE");
+                        break;
+                    case "MS List":
+                        templateList.Add("NO SUGESTION, YOU'RE ON YOUR OWN");
+                        break;
+                    case "SS List":
+                        templateList.Add("I CAN'T COME UP WITH ANYTHING.");
+                        break;
+                    default:
+                        templateList.Add("NO TEMPLATES NEEDED");
+                        break;
+
+                }//end of switch    
+                return templateList;
             }
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         }

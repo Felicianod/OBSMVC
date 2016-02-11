@@ -30,15 +30,20 @@
                 }
                 else
                 {
-                    if(Model.selectedAT.ATcathegory.Equals("3 Val"))
-                    @:<b style="color:red">No Selectable Answers Found - Enter New Values</b>                    
+                    if(Model.selectedAT.ATcathegory.Equals("3 Val Range"))
+                    { 
+                        @:<b style="color:red">No Selectable Answers Found - Enter New Values</b>                    
+                    }
+                    
                 }
                 <br /><br />
+                @{var counter = 1;}
                 @foreach (string selEntry in Model.selectedAT.selAnsList)
-                {
+                {                    
+                    var something = "userSelAnsList" + counter;
                     if (selEntry.Equals("Enter a Value"))
                     {
-                        <br /><input type="text" id="userSelAnsList" name="userSelAnsList" value="@selEntry" />
+                        <br /><input type="text" id="@something" name="userSelAnsList" value="@selEntry" />                        
                     }
                     else
                     {
@@ -48,6 +53,7 @@
                             </li>
                         </ul>
                     }
+                    counter++;
                 }
                 <br />
 
@@ -61,15 +67,21 @@
                             </div>
                             <div class="panel-body" id="QATtemplates">
                                 <br />
-                                <ul>
+                                <table style="width:100%">
                                     @foreach (string template in Model.templates)
                                     {
-                                        <li>
-                                            @template
-                                        </li>
+                                        <tr>
+                                            <td style="width:80%">
+                                                @template
+                                            </td>
+                                            <td style="width:20%">
+                                                <input type="button" id="TemplateLInk" value="Use This Template" onclick="testFunction('@template')" />
+                                            </td>
+                                        </tr>
                                     }
-                                </ul>
-                            </div>
+                                </table>
+
+</div>
                         </div>
                     </div>
                 </div>
@@ -85,8 +97,15 @@
                         document.getElementById('save').value = 'true';
                     });
                 </script>
+                <script type="text/javascript">
+                    function testFunction(something)
+                        {
+                            alert("You selected " + something);
+                        }
+                    
+                </script>
             </td>
         </tr>
-    </table>
+    </table>    
 }
 

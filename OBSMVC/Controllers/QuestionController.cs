@@ -95,7 +95,7 @@ namespace OBSMVC.Controllers
             return View(oBS_QUESTION);
         }
 
-        //-----------------------------------------------------------------------------------------------------------------
+        //-----------------------------------------[ "EDIT"   Action: GET ] ---------------------------------------------------
         // GET: Question/Edit/5
         public ActionResult Edit(int id)
         {
@@ -120,7 +120,7 @@ namespace OBSMVC.Controllers
             return View(obsQMD);
         }
 
-        //-----------------------------------------------------------------------------------------------------------------
+        //-----------------------------------------[ "EDIT"  Action: POST ] ---------------------------------------------------
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(FormCollection postedData, QuestionMDViewModel QuestionMDView,
@@ -218,8 +218,7 @@ namespace OBSMVC.Controllers
 
             //return View(QuestionMDView);
             return RedirectToAction("Edit", "Question", new { id = questionHdr.obs_question_id });
-        }
-        
+        }        
         //-----------------------------------------------------------------------------------------------------------------
         // GET: QuestionMetadata
         [ChildActionOnly]
@@ -228,7 +227,7 @@ namespace OBSMVC.Controllers
         {
             return View(db.OBS_QUESTION_METADATA.ToList());
         }
-        //-----------------------------------------------------------------------------------------------------------------
+        //------------------------------------------------- [ DELETE  Action: GET]-----------------------------------------------
         // GET: Question/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -243,10 +242,11 @@ namespace OBSMVC.Controllers
             }
             return View(oBS_QUESTION);
         }
-        //-----------------------------------------------------------------------------------------------------------------
+        //--------------------------------------------------[ DELETE  Action: POST ] --------------------------------------------
         // POST: Question/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        //----------------------------------------------------[ DELETECONFIRMED ] -----------------------------------------------
         public ActionResult DeleteConfirmed(int id)
         {
             OBS_QUESTION oBS_QUESTION = db.OBS_QUESTION.Find(id);
@@ -254,8 +254,7 @@ namespace OBSMVC.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-        //-----------------------------------------------------------------------------------------------------------------
-
+        //---------------------------------------- [ displayAnswerSection  Actio: GET ]------------------------------------------
         [HttpGet]
         public ActionResult displayAnswerSection(int id)
         {
@@ -267,7 +266,7 @@ namespace OBSMVC.Controllers
             //ViewBag.Message = "This is the [GET] Method";
             return View(obsQuestion);
         }
-
+        //---------------------------------------- [ displayAnswerSection  Actio: POST ]-----------------------------------------
         [HttpPost]
         public ActionResult displayAnswerSection(FormCollection postedData)
         {
@@ -299,8 +298,7 @@ namespace OBSMVC.Controllers
             obsQuestion.templates = obsQuestion.getTemplates(obsQuestion.selectedAT.ATcathegory);
             return View(obsQuestion);
         }
-
-
+        //---------------------------------------- [ Manage   <NOT USED> ]------------------------------------------------------
         [HttpGet]
         public ActionResult Manage(string searchKeyWords)
         {
@@ -338,7 +336,7 @@ namespace OBSMVC.Controllers
             }
         }
 
-        //-----------------------------------------------------------------------------------------------------------------
+        //------------------------------------------ [ DISPOSE  Used as Garbage Collector on Delete Action]-----------------------
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -396,7 +394,7 @@ namespace OBSMVC.Controllers
         }
         // =================================================================================================
         // ============================ HELPER METHODS FOR OBS_QUESTION ====================================
-        //== CLASES===
+        //******** CLASES *******************************
         public class OBSQA {
             // Constructor
             public OBSQA() { }
@@ -635,7 +633,7 @@ namespace OBSMVC.Controllers
             }
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         }
-        //== Helper Methods ====
+        // ******* Helper Methods ***********************
         public void SaveDefaultAnswerType(OBSQuestion obsQuestion)
         {
             int selected_ans_type_id = obsQuestion.selectedAT.ATid;

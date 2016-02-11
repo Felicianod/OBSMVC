@@ -63,26 +63,6 @@
         $('.panel-info').css({ height: heightTallest + 'px' });
     });
 </script>
-<script type="text/javascript">
-    @*$(function(){
-        $('#refresh').click(function(){
-            $.post('@Url.Action("displayAnswerSection", "Question")').always(function(){
-                $('.target').Load('/Question/displayAnswerSection/3');
-            })
-        });
-    });*@
-    //$.ajax({
-    //    url: '/Question/displayAnswerSection/3',
-    //    type: "GET",
-    //    dataType: "html",
-    //    data: $("#FormId").serialize(),
-    //    success: function (data) {
-    //        //Fill div with results
-    //        $("#answerSection").html(data);
-    //    },
-    //    error: function () { alert('error'); }
-    //});
-</script>
 <script>
     function refreshAnswerWindow() {
         //$("#answerSection").
@@ -152,15 +132,18 @@
                 <br />
             </div>
             <div class="col-md-6 personal-info">
-                <div class="panel panel-info">
+                <div class="panel panel-info " >
                     <div class="panel-heading">
                        <b>Default Answer Type</b>
                     </div>
-                    <div id="answerSection">
+                    <div class="panel-body" id="answerSection">
                         @*@Html.Partial("_listAnswerTypes")*@
-                        @{ Html.RenderAction("displayAnswerSection", new { question_id = Model.q.obs_question_id});}
+                        @*@{ Html.RenderAction("displayAnswerSection", new { question_id = Model.q.obs_question_id});}*@
+                        <div style="text-align: center">
+                            <br /><br /><br />
+                            <input type="button" id="refresh" value="Review-Change Answer Type" onclick="@("window.location.href='" + @Url.Action("displayAnswerSection", "Question", new { id = Model.q.obs_question_id }) + "'");" />
+                        </div>
                     </div>
-                    <input type="button" id="refresh" value="Change Answer Type" onclick="@("window.location.href='" + @Url.Action("displayAnswerSection", "Question", new { id = Model.q.obs_question_id }) + "'");" />
                 </div>
             </div>
 

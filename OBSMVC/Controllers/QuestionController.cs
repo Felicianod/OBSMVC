@@ -287,9 +287,7 @@ namespace OBSMVC.Controllers
             obsQuestion.setAnswerTypeDDL((short)newSelIndex);            
 
             if (postedData["save"].Equals("true"))
-            {
-                string usr_sel_ans_types = "";
-                
+            {          
                 try
                 {
                     obsQuestion.selectedAT.selAnsList = assign_new_selAnsList_to_OBSQuestion(postedData["userSelAnsList"]);

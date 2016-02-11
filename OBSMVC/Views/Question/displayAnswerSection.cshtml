@@ -32,16 +32,23 @@
                 {
                     @:<b style="color:red">No Selectable Answers Found</b>
                     <br />
-                    @:(Sugested Values)
                 }
-                <ul>
-                    @foreach (string selEntry in Model.selectedAT.selAnsList)
+
+                @foreach (string selEntry in Model.selectedAT.selAnsList)
+                {
+                    if (selEntry.Equals("Enter a Value"))
                     {
-                        <li>
-                            @selEntry
-                        </li>
+                        <br /><input type="text" id="userSelAnsList" name="userSelAnsList" value="@selEntry" />
                     }
-                </ul>
+                    else
+                    {
+                        <ul>
+                            <li>
+                                @selEntry
+                            </li>
+                        </ul>
+                    }
+                }
                 <br />
 
             </td>
@@ -70,6 +77,7 @@
         </tr>
         <tr>
             <td>
+                <br /><br />
                 <button type="submit" id="btnSaveDefQuest" onclick="">Save Changes</button>
                 <script type="text/javascript">
                     $('#btnSaveDefQuest').on('click', function (event) {

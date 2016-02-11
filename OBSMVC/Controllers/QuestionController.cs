@@ -559,29 +559,36 @@ namespace OBSMVC.Controllers
                 {
 
                     case "3 Val Range":
-                        q_selected_ans_type.Add("Bad");
-                        q_selected_ans_type.Add("OK");
-                        q_selected_ans_type.Add("Good");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
                         break;
                     case "5 Val Range":
-                        q_selected_ans_type.Add("Monday");
-                        q_selected_ans_type.Add("Tuesday");
-                        q_selected_ans_type.Add("Wednesday");
-                        q_selected_ans_type.Add("Thursday");
-                        q_selected_ans_type.Add("Friday");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
                         break;
                     case "MS List":
-                        q_selected_ans_type.Add("MS List Item 1");
-                        q_selected_ans_type.Add("MS List Item 2");
-                        q_selected_ans_type.Add("MS List Item 3");
-                        q_selected_ans_type.Add("MS List Item 4");
-                        q_selected_ans_type.Add("MS List Item 5");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
                         break;
                     case "SS List":
-                        q_selected_ans_type.Add("Single Selected List Item 1");
-                        q_selected_ans_type.Add("Single Selected List Item 2");
-                        q_selected_ans_type.Add("Single Selected List Item 3");
-                        q_selected_ans_type.Add("Single Selected List Item 4");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
+                        q_selected_ans_type.Add("Enter a Value");
                         break;
 
                 }//end of switch    

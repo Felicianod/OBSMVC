@@ -607,22 +607,22 @@ namespace OBSMVC.Controllers
                 {
 
                     case "3 Val Range":
-                        templateList.Add("1, 2, 3");
-                        templateList.Add("YES, NO, MAYBE");
-                        templateList.Add("LOW, MEDIUM, HIGH");
-                        templateList.Add("NEVER, SOMETIMES, ALWAYS");
-                        templateList.Add("ALWAYS, SOMETIMES, NEVER");
+                        templateList.Add("1,2,3");
+                        templateList.Add("YES,NO,MAYBE");
+                        templateList.Add("LOW,MEDIUM,HIGH");
+                        templateList.Add("NEVER,SOMETIMES,ALWAYS");
+                        templateList.Add("ALWAYS,SOMETIMES,NEVER");
                         break;
                     case "5 Val Range":
-                        templateList.Add("1, 2, 3, 4, 5");
-                        templateList.Add("NEVER, RARELY, SOMETIMES, OFTEN, ALWAYS");
-                        templateList.Add("STRONGLY DISAGREE, DISAGREE, N/A, AGREE, STRONGLY AGREE");
+                        templateList.Add("1,2,3,4,5");
+                        templateList.Add("NEVER,RARELY,SOMETIMES,OFTEN,ALWAYS");
+                        templateList.Add("STRONGLY DISAGREE,DISAGREE,N/A,AGREE,STRONGLY AGREE");
                         break;
                     case "MS List":
-                        templateList.Add("NO SUGESTION, YOU'RE ON YOUR OWN");
+                        templateList.Add("Forklift,Hat,Steel toe shoes,Gloves");
                         break;
                     case "SS List":
-                        templateList.Add("I CAN'T COME UP WITH ANYTHING.");
+                        templateList.Add("FIRST SHIFT,SECOND SHIFT,THIRD SHIFT");
                         break;
                     default:
                         templateList.Add("NO TEMPLATES NEEDED");

@@ -30,10 +30,10 @@
                 }
                 else
                 {
-                    @:<b style="color:red">No Selectable Answers Found</b>
-                    <br />
+                    if(Model.selectedAT.ATcathegory.Equals("3 Val"))
+                    @:<b style="color:red">No Selectable Answers Found - Enter New Values</b>                    
                 }
-
+                <br /><br />
                 @foreach (string selEntry in Model.selectedAT.selAnsList)
                 {
                     if (selEntry.Equals("Enter a Value"))
@@ -78,7 +78,7 @@
         <tr>
             <td>
                 <br /><br />
-                <button type="submit" id="btnSaveDefQuest" onclick="">Save Changes</button>
+                <button type="submit" id="btnSaveDefQuest" onclick=""  disabled="disabled">Save Changes</button>
                 <script type="text/javascript">
                     $('#btnSaveDefQuest').on('click', function (event) {
                         var form = $(event.target).parents('form');

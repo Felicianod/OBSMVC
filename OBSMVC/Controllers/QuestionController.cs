@@ -656,7 +656,7 @@ namespace OBSMVC.Controllers
                         oBS_QUEST_ANS_TYPES.obs_question_id = question_id;
                         oBS_QUEST_ANS_TYPES.obs_ans_type_id = (short)selected_ans_type_id;
                         oBS_QUEST_ANS_TYPES.obs_qat_default_ans_type_yn = "Y";
-                        oBS_QUEST_ANS_TYPES.obs_qat_end_eff_dt = Convert.ToDateTime("12/31/2060");
+                        //oBS_QUEST_ANS_TYPES.obs_qat_end_eff_dt = Convert.ToDateTime("12/31/2060");
                         db.OBS_QUEST_ANS_TYPES.Add(oBS_QUEST_ANS_TYPES);
                         db.SaveChanges();
 
@@ -688,7 +688,7 @@ namespace OBSMVC.Controllers
                         oBS_QUEST_ANS_TYPES.obs_question_id = question_id;
                         oBS_QUEST_ANS_TYPES.obs_ans_type_id = (short)selected_ans_type_id;
                         oBS_QUEST_ANS_TYPES.obs_qat_default_ans_type_yn = "Y";
-                        oBS_QUEST_ANS_TYPES.obs_qat_end_eff_dt = Convert.ToDateTime("12/31/2060");
+                       // oBS_QUEST_ANS_TYPES.obs_qat_end_eff_dt = Convert.ToDateTime("12/31/2060");
                         db.OBS_QUEST_ANS_TYPES.Add(oBS_QUEST_ANS_TYPES);
                         db.SaveChanges();
                     }
@@ -724,7 +724,7 @@ namespace OBSMVC.Controllers
                         oBS_QUEST_ANS_TYPES.obs_question_id = question_id;
                         oBS_QUEST_ANS_TYPES.obs_ans_type_id = (short)selected_ans_type_id;
                         oBS_QUEST_ANS_TYPES.obs_qat_default_ans_type_yn = "Y";
-                        oBS_QUEST_ANS_TYPES.obs_qat_end_eff_dt = Convert.ToDateTime("12/31/2060");
+                        //oBS_QUEST_ANS_TYPES.obs_qat_end_eff_dt = Convert.ToDateTime("12/31/2060");
                         db.OBS_QUEST_ANS_TYPES.Add(oBS_QUEST_ANS_TYPES);
                         db.SaveChanges();
 

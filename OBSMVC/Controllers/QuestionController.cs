@@ -275,6 +275,7 @@ namespace OBSMVC.Controllers
 
             // Rebuild the Question Object for reuse
             int id = Convert.ToInt32(postedData["question_id"]);
+            
             int newSelIndex = -1;
             try { newSelIndex = Convert.ToInt16(postedData["AnswerTypesDDL"]); }
             catch { }
@@ -287,6 +288,13 @@ namespace OBSMVC.Controllers
 
             if (postedData["save"].Equals("true"))
             {
+                string usr_sel_ans_types = "";
+                
+                try
+                {
+                    obsQuestion.selectedAT.selAnsList = assign_new_selAnsList_to_OBSQuestion(postedData["userSelAnsList"]);
+                }
+                catch { }
                 SaveDefaultAnswerType(obsQuestion);
                 obsQuestion = new OBSQuestion(id);
             }
@@ -669,7 +677,7 @@ namespace OBSMVC.Controllers
 
                         //-- Second Insert record into 'OBS_QUEST_SLCT_ANS' Table
                         //short temp_selected_ans_type_id = (short)selected_ans_type_id;
-                        int createdQAT_id = db.OBS_QUEST_ANS_TYPES.SingleOrDefault(item => item.obs_ans_type_id == obsQuestion.selectedAT.ATid && item.obs_question_id == question_id && item.obs_qat_end_eff_dt > DateTime.Today).obs_qat_id;
+                        int createdQAT_id = db.OBS_QUEST_ANS_TYPES.SingleOrDefault(item => item.obs_ans_type_id == obsQuestion.selectedAT.ATid && item.obs_question_id == question_id).obs_qat_id;
 
                         short order = 1;
                         foreach (string str in obsQuestion.selectedAT.selAnsList)
@@ -740,7 +748,7 @@ namespace OBSMVC.Controllers
 
                             //-- Second Insert record into 'OBS_QUEST_SLCT_ANS' Table
                             //short temp_selected_ans_type_id = (short)selected_ans_type_id;
-                            int createdQAT_id = db.OBS_QUEST_ANS_TYPES.SingleOrDefault(item => item.obs_ans_type_id == obsQuestion.selectedAT.ATid && item.obs_question_id == question_id && item.obs_qat_end_eff_dt > DateTime.Today).obs_qat_id;
+                            int createdQAT_id = db.OBS_QUEST_ANS_TYPES.SingleOrDefault(item => item.obs_ans_type_id == obsQuestion.selectedAT.ATid && item.obs_question_id == question_id).obs_qat_id;
 
                             short order = 1;
                             foreach (string str in obsQuestion.selectedAT.selAnsList)
@@ -797,6 +805,18 @@ namespace OBSMVC.Controllers
                 db.SaveChanges();
             }
             catch { }
+        }
+        public List<string> assign_new_selAnsList_to_OBSQuestion(string user_input_from_form)
+        {
+            List<string> selAnsList_from_form = new List<string>();
+            string[] splitterm = { "," };
+            string[] selected_new_sel_ans_types = user_input_from_form.Split(splitterm, StringSplitOptions.RemoveEmptyEntries);
+            foreach(string s in selected_new_sel_ans_types)
+            {
+                if (s != "Enter a Value") { selAnsList_from_form.Add(s); }
+
+            }
+            return selAnsList_from_form;
         }
 
     }

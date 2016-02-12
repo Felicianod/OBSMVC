@@ -1,7 +1,5 @@
 ﻿@model OBSMVC.Controllers.QuestionController.OBSQuestion
 @{  ViewBag.Title = "Question Answer Selection"; }
-
-
 <br />
 @*<div>@ViewBag.Message</div>*@
 @using (Html.BeginForm("displayAnswerSection", "Question", FormMethod.Post))
@@ -31,12 +29,17 @@
                 else
                 {
                     <br />
-                    @:<b style="color:red">No Selectable Answers Found - Enter New Values</b>                                        
+                    if (Model.selectedAT.requiresSelectableAnswers){
+                        @:<b style="color:red">No Selectable Answers Found - Enter New Values</b>
+                    }
+                    else {
+                        @:<b style="color:red">No Selectable Answers required.</b>
+                    }
                 }
                 <br />
                 @{var counter = 1;}
                 @foreach (string selEntry in Model.selectedAT.selAnsList)
-                {                    
+                {
                     var something = "userSelAnsList" + counter;
                     if (selEntry.Equals("Enter a Value"))
                     {
@@ -65,7 +68,7 @@
                             <div class="panel-body" id="QATtemplates">
                                 <br />
 
-                                
+
 
                                 <table style="width:100%">
                                     @foreach (string template in Model.templates)
@@ -83,7 +86,7 @@
                                                     }
 
                                                 }
-                                                
+
                                             </td>
                                         </tr>
                                     }
@@ -97,7 +100,7 @@
         <tr>
             <td>
                 <br /><br />
-                <button type="submit" id="btnSaveDefQuest" onclick=""  disabled="disabled">Save Changes</button>
+                <button type="submit" id="btnSaveDefQuest" onclick="" disabled="disabled">Save Changes</button>
                 <script type="text/javascript">
                     $('#btnSaveDefQuest').on('click', function (event) {
                         var form = $(event.target).parents('form');
@@ -105,24 +108,23 @@
                     });
                 </script>
                 <script type="text/javascript">
-                    function testFunction(something)
-                    {
+                    function testFunction(something) {
                         var templateList = something.split(",");
-                        //var message = "You selected:\n ";                        
+                        //var message = "You selected:\n ";
                         for (var i = 0; i < templateList.length; i++) {
-                            var textboxName = "userSelAnsList" + (i+1);
+                            var textboxName = "userSelAnsList" + (i + 1);
                             document.getElementById(textboxName).value = templateList[i];
                             document.getElementById(textboxName).style.fontStyle = "normal";
                             document.getElementById(textboxName).style.color = "black";
                             //message = message + templateList[i].trim() + "\n";
                         }
                         document.getElementById("btnSaveDefQuest").disabled = false;
-                    }                    
+                    }
                 </script>
             </td>
         </tr>
-    </table>    
-}
+    </table>
+                    }
 <br /><br /><br />
 <div>
     @Html.ActionLink("Back to Question Maintenance", "Edit", "Question", new { id = Model.questionId }, null)

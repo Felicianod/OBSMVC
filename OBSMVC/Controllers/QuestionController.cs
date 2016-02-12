@@ -417,6 +417,7 @@ namespace OBSMVC.Controllers
             public string ATvalue = String.Empty;
             public string ATcathegory = String.Empty;
             public bool hasSelectableAnswers = false;
+            public bool requiresSelectableAnswers = false;
             public List<string> selAnsList = new List<string>();
         }
         public class OBSQuestion
@@ -481,6 +482,7 @@ namespace OBSMVC.Controllers
                         selectedAT.ATid = ansTypeEntry.obs_ans_type_id;               //int
                         selectedAT.ATvalue = ansTypeEntry.obs_ans_type_name;  //string
                         selectedAT.ATcathegory = ansTypeEntry.obs_ans_type_category; //string
+                        selectedAT.requiresSelectableAnswers = ansTypeEntry.obs_ans_type_has_fxd_ans_yn.Equals("Y") ? true : false ; 
                         //Check if the QuestionId/AnsTypeid combination exist in the "OBS_QUEST_ANS_TYPE" Table
                         // Get the Id from the "OBS_QUEST_ANS_TYPE" table
                         int QATinstanceId = 0;

@@ -30,7 +30,7 @@
                 {
                     <br />
                     if (Model.selectedAT.requiresSelectableAnswers){
-                        @:<b style="color:red">No Selectable Answers Found - Enter New Values</b>
+                        @:<b style="color:red">Enter New Values</b>
                     }
                     else {
                         @:<b style="color:red">No Selectable Answers required.</b>
@@ -83,7 +83,6 @@
                                                     }
 
                                                 }
-
                                             </td>
                                         </tr>
                                     }
@@ -97,7 +96,11 @@
         <tr>
             <td>
                 <br /><br />
-                <button type="submit" id="btnSaveDefQuest" onclick="" disabled="disabled">Save Changes</button>
+                <button type="submit" id="btnSaveDefQuest" onclick="" 
+                        @if (Model.selectedAT.requiresSelectableAnswers) { 
+                            @:disabled= "disabled"
+                        }
+                >Save Changes</button>
                 <script type="text/javascript">
                     $('#btnSaveDefQuest').on('click', function (event) {
                         var form = $(event.target).parents('form');

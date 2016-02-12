@@ -161,8 +161,8 @@ namespace OBSMVC.Controllers
                 editedQuestion.obs_question_upd_uid = User.Identity.Name;
 
                 //db.Entry(editQuestion).State = EntityState.Modified;
-                
-                 db.SaveChanges();
+
+                db.SaveChanges();
             }
 
             // ------- Save the Question Metadata Changes ----
@@ -214,10 +214,10 @@ namespace OBSMVC.Controllers
                 db.SaveChanges();           
             }
 
-            ViewBag.ConfMsg = "Success! Data Saved Successfully";
+            ViewBag.ConfMsg = "Data Saved Successfully.";
 
             //return View(QuestionMDView);
-            return RedirectToAction("Edit", "Question", new { id = questionHdr.obs_question_id });
+            return RedirectToAction("Edit", "Question", new { id = questionHdr.obs_question_id, msg = "DataSaved" });
         }        
         //-----------------------------------------------------------------------------------------------------------------
         // GET: QuestionMetadata

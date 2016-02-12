@@ -155,8 +155,6 @@ namespace OBSMVC.Controllers
                 }
                 editedQuestion.obs_question_full_text = QuestionMDView.q.obs_question_full_text;
                 editedQuestion.obs_question_short_text = QuestionMDView.q.obs_question_short_text;
-                //question.obs_question_desc = QuestionMDView.q.obs_question_desc;
-                //question.obs_question_mm_url = QuestionMDView.q.obs_question_mm_url;
                 editedQuestion.obs_question_eff_st_dt = QuestionMDView.q.obs_question_eff_st_dt;
                 editedQuestion.obs_question_eff_end_dt = QuestionMDView.q.obs_question_eff_end_dt;
                 editedQuestion.obs_question_upd_dtm = DateTime.Now;
@@ -417,6 +415,7 @@ namespace OBSMVC.Controllers
             public string ATvalue = String.Empty;
             public string ATcathegory = String.Empty;
             public bool hasSelectableAnswers = false;
+            public bool requiresSelectableAnswers = false;
             public List<string> selAnsList = new List<string>();
         }
         public class OBSQuestion
@@ -481,6 +480,7 @@ namespace OBSMVC.Controllers
                         selectedAT.ATid = ansTypeEntry.obs_ans_type_id;               //int
                         selectedAT.ATvalue = ansTypeEntry.obs_ans_type_name;  //string
                         selectedAT.ATcathegory = ansTypeEntry.obs_ans_type_category; //string
+                        selectedAT.requiresSelectableAnswers = ansTypeEntry.obs_ans_type_has_fxd_ans_yn.Equals("Y") ? true : false ; 
                         //Check if the QuestionId/AnsTypeid combination exist in the "OBS_QUEST_ANS_TYPE" Table
                         // Get the Id from the "OBS_QUEST_ANS_TYPE" table
                         int QATinstanceId = 0;

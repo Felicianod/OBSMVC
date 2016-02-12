@@ -155,8 +155,6 @@ namespace OBSMVC.Controllers
                 }
                 editedQuestion.obs_question_full_text = QuestionMDView.q.obs_question_full_text;
                 editedQuestion.obs_question_short_text = QuestionMDView.q.obs_question_short_text;
-                //question.obs_question_desc = QuestionMDView.q.obs_question_desc;
-                //question.obs_question_mm_url = QuestionMDView.q.obs_question_mm_url;
                 editedQuestion.obs_question_eff_st_dt = QuestionMDView.q.obs_question_eff_st_dt;
                 editedQuestion.obs_question_eff_end_dt = QuestionMDView.q.obs_question_eff_end_dt;
                 editedQuestion.obs_question_upd_dtm = DateTime.Now;

@@ -59,8 +59,10 @@
     $(document).ready(function () {
         var heightTallest = Math.max.apply(null, $(".panel-info").map(function () {
             return $(this).outerHeight();
-        }).get());
+        }).get());        
         $('.panel-info').css({ height: heightTallest + 'px' });
+        heightTallest = 50;
+        $('#partialPanel').css({ height: heightTallest + 'px' });
     });
 </script>
 <script>
@@ -132,7 +134,7 @@
                 <br />
             </div>
             <div class="col-md-6 personal-info">
-                <div class="panel panel-info " >
+                <div class="panel panel-info " id="partialPanel">
                     <div class="panel-heading">
                        <b>Default Answer Type</b>
                     </div>

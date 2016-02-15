@@ -30,8 +30,8 @@
 </p>
 
 <table class="table table-condensed table-hover" border="1">
-    <tr>
-        <th></th>
+    <tr style="background-color:gainsboro">
+        <th>Id</th>
         <th>
             @Html.DisplayNameFor(model => model.First().obs_question_full_text)
         </th>
@@ -53,7 +53,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.obs_question_id)
+                    @item.obs_question_id
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.obs_question_full_text)

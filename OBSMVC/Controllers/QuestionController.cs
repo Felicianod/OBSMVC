@@ -51,7 +51,6 @@ namespace OBSMVC.Controllers
             else { return View(db.OBS_QUESTION.Where(ques => DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt).ToList().ToPagedList(page ?? 1, PageSize ?? 10)); }
 
         }
-        //------------------------------------- INDEX  [POST] ---------------------------------------------------------------------        
         
         //-----------------------------------------------------------------------------------------------------------------
         // GET: Question/Details/5

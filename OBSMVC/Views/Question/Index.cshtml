@@ -13,7 +13,13 @@
        <tr>
            <td style="text-align:left">
                @Html.TextBox("search") <input type="submit" value="Search" />
-               <label><input type="checkbox" name="includeActiveOnly" id="includeActiveOnly" checked>Only Search Active</label>
+               &nbsp;
+               <label><input type="checkbox" name="includeActiveOnly" id="includeActiveOnly" 
+                  @if (ViewBag.searchActiveOnly == "Y") { 
+                      @:checked="checked"
+                  }
+                   > Search Active Questions Only
+               </label>
            </td>
            <td style="text-align:end">
                <b>@Html.ActionLink("Add New Question", "Create")</b>
@@ -22,7 +28,8 @@
      </table>
 }
 </p>
-<table class="table" border="1">
+
+<table class="table table-condensed table-hover" border="1">
     <tr>
         <th></th>
         <th>
@@ -32,6 +39,7 @@
             Active
         </th>
         <th></th>
+        <th></th>
     </tr>
     @if (Model.Count() == 0)
     {
@@ -39,24 +47,28 @@
             <td colspan="4"><font color="red">Question not found</font></td>
         </tr>
     }
-    else { 
-    foreach (var item in Model)
+    else
     {
-        <tr>
-            <td>
-                @Html.ActionLink("Details", "Details", new { id = item.obs_question_id })
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.obs_question_full_text)
-            </td>
-            <td style="text-align:center">
-                <input type="checkbox" disabled="disabled" @if (DateTime.Today >= item.obs_question_eff_st_dt && DateTime.Today < item.obs_question_eff_end_dt) { <TEXT> checked="checked" </TEXT>      } />
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.obs_question_id, obs_question_id = item.obs_question_id, obs_question_added_dtm = item.obs_question_added_dtm, obs_question_added_uid = item.obs_question_added_uid })
-            </td>
-        </tr>
-    }
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.obs_question_id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.obs_question_full_text)
+                </td>
+                <td style="text-align:center">
+                    <input type="checkbox" disabled="disabled" @if (DateTime.Today >= item.obs_question_eff_st_dt && DateTime.Today < item.obs_question_eff_end_dt) { <TEXT> checked="checked" </TEXT>       } />
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = item.obs_question_id })
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.obs_question_id, obs_question_id = item.obs_question_id, obs_question_added_dtm = item.obs_question_added_dtm, obs_question_added_uid = item.obs_question_added_uid })
+                </td>
+            </tr>
+        }
     }
 </table>
 <table style="width:100%">
@@ -71,11 +83,13 @@
             @using (Html.BeginForm("Index", "Question", FormMethod.Get))
             {
                 <input type="hidden" value="@Request.QueryString["search"]" id="search" name="search" />
+                <input type="hidden" value="" id="includeActiveOnly2" name="includeActiveOnly" />
                 <b>Rows Per Page</b>
                 @Html.DropDownList("PageSize", new SelectList(new Dictionary<string, int> { { "10", 10 }, { "25", 25 }, { "50", 50 } }, "Key", "Value", ViewBag.CurrentItemsPerPage), new { id = "PageSize" })
                 <script type="text/javascript">
                     $('#PageSize').on('change', function (event) {
                         var form = $(event.target).parents('form');
+                        $('#includeActiveOnly2').val(document.getElementById("includeActiveOnly").value)
                         form.submit();
                     });
                 </script>

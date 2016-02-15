@@ -25,8 +25,8 @@
                         <li>@Html.ActionLink("Customers", "Index", "Cust")</li>
                         <li>@Html.ActionLink("Logistic Center", "Index", "LC")</li>
                         <li>@Html.ActionLink("Employees", "Index", "Employee")</li>
-                        <li>@Html.ActionLink("Observation Types", "Index", "OBSTYPE")</li>
-                        <li>@Html.ActionLink("Observation Subtypes", "Index", "OBSsubtype")</li>
+                        <li class="disabled">@Html.ActionLink("Observation Types", "Index", "OBSTYPE")</li>
+                        <li class="disabled">@Html.ActionLink("Observation Subtypes", "Index", "OBSsubtype")</li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -42,8 +42,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">              
                 <li>
-                    <span class="glyphicon glyphicon-log-in" style="font-size:large">@Html.ActionLink(" [Logout] ", "OBSLogout", "Login")</span>
-                    
+                    <span class="glyphicon glyphicon-log-in" style="font-size:large; color:white">@Html.ActionLink(" Logout |", "OBSLogout", "Login", new { style = "color:white"})</span>
                </li>
             </ul>  
         </div>

@@ -29,7 +29,8 @@
 
         <tr>
             <td style="text-align:center">
-                @Html.DisplayFor(modelItem => item.dsc_cust_id)
+                @Html.DisplayFor(m => item.dsc_cust_id)
+                @*@Html.DisplayFor(modelItem => item.dsc_cust_id)*@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.dsc_cust_name)
@@ -43,7 +44,6 @@
             </td>
             <td>
                 @Html.ActionLink(item.actionText, "Activate", new { id = item.dsc_cust_id, actionText = item.actionText })
-
             </td>
 
         </tr>

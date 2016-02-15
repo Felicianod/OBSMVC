@@ -36,7 +36,6 @@ namespace OBSMVC.Controllers
                     if (String.IsNullOrEmpty(customer.dsc_cust_eff_end_date))
                     {
                         customer.dsc_cust_eff_end_date = "YES";
-                        
 
                     }//end of if
                     else

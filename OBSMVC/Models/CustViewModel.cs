@@ -24,14 +24,11 @@ namespace OBSMVC.Models
 
         public CustViewModel(int dsc_cust_id, string dsc_cust_name, string dsc_cust_parent_name, string active, string actionText)
         {
-            //this.dsc_cust_id = dsc_cust_id;
+            this.dsc_cust_id = dsc_cust_id;
             this.dsc_cust_name = dsc_cust_name;
             this.dsc_cust_parent_name = dsc_cust_parent_name;
             this.active = active;
             this.actionText = actionText;
         }
-
-
-
     }
 }

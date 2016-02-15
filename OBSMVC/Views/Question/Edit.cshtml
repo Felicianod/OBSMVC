@@ -133,22 +133,44 @@
                 </div>
                 <br />
             </div>
-            <div class="col-md-6 personal-info">
-                <div class="panel panel-info " id="partialPanel">
-                    <div class="panel-heading">
-                       <b>Default Answer Type</b>
-                    </div>
-                    <div class="panel-body" id="answerSection">
-                        @*@Html.Partial("_listAnswerTypes")*@
-                        @*@{ Html.RenderAction("displayAnswerSection", new { question_id = Model.q.obs_question_id});}*@
-                        <div style="text-align: center">
-                            <br /><br /><br />
-                            <input type="button" id="refresh" value="Review-Change Answer Type" onclick="@("window.location.href='" + @Url.Action("displayAnswerSection", "Question", new { id = Model.q.obs_question_id }) + "'");" />
+            @if (Model.q.obs_question_eff_end_dt > DateTime.Today)
+            {
+                <div class="col-md-6 personal-info">
+                    <div class="panel panel-info " id="partialPanel">
+                        <div class="panel-heading">
+                            <b>Default Answer Type</b>
+                        </div>
+                        <div class="panel-body" id="answerSection">
+                            @*@Html.Partial("_listAnswerTypes")*@
+                            @*@{ Html.RenderAction("displayAnswerSection", new { question_id = Model.q.obs_question_id});}*@
+                            <div style="text-align: center">
+                                <br /><br /><br />
+                                <input type="button" id="refresh" value="Review-Change Answer Type" onclick="@("window.location.href='" + @Url.Action("displayAnswerSection", "Question", new { id = Model.q.obs_question_id }) + "'");" />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="col-md-6 personal-info">
+                    <div class="panel panel-info " id="partialPanel">
+                        <div class="panel-heading">
+                            <b>Default Answer Type</b>
+                        </div>
+                        <div class="panel-body" id="answerSection">
+                            <div style="text-align: center">
+                                <br /><br /><br />
+                                <span style="color:red">WARNING! <br/>This question is no longer active.<br/>The Answer type Information cannot be edited.</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
         </div>
+       @if (Model.q.obs_question_eff_end_dt > DateTime.Today)
+       {
         <div class="row">
             <div class="col-md-6 personal-info">
                 <div class="panel panel-info">
@@ -219,7 +241,7 @@
                                             <td>
                                                 <input type="checkbox" value="@item.obs_quest_md_id" id="qAssignedMD" name="qAssignedMD">
                                             </td>
-                                            <td>                                                
+                                            <td>
                                                 @item.obs_quest_md_value
                                             </td>
                                             <td>
@@ -262,6 +284,7 @@
 
             </div>
         </div>
+       }
    </form>
     @*<div class="row">
            @if (ViewBag.ConfMsg != null)

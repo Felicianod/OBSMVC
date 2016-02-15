@@ -31,15 +31,15 @@
 
 <table class="table table-condensed table-hover" border="1">
     <tr style="background-color:gainsboro">
-        <th>Id</th>
+        <th style="text-align:center; width:4%">Id</th>
         <th>
             @Html.DisplayNameFor(model => model.First().obs_question_full_text)
         </th>
-        <th style="text-align:center">
+        <th style="text-align:center; width:5%">
             Active
         </th>
-        <th></th>
-        <th></th>
+        <th style="width:5%"></th>
+        <th style="width:5%"></th>
     </tr>
     @if (Model.Count() == 0)
     {
@@ -52,7 +52,7 @@
         foreach (var item in Model)
         {
             <tr>
-                <td>
+                <td style="text-align:center">
                     @item.obs_question_id
                 </td>
                 <td>

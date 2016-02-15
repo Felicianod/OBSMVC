@@ -41,11 +41,11 @@ namespace OBSMVC.Models
         [Display(Name = "MultiMedia URL")]
         public string obs_question_mm_url { get; set; }
         
-        [Display(Name = "Effective Start Date")]
+        [Display(Name = "Usable As of:")]
         [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"), ApplyFormatInEditMode = true)]
         public DateTime obs_question_eff_st_dt { get; set; }
 
-        [Display(Name = "Effective End Date")]
+        [Display(Name = "Usable Until:")]
         [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"), ApplyFormatInEditMode=true)]
         public DateTime? obs_question_eff_end_dt { get; set; }
 

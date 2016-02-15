@@ -345,6 +345,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\DSCHome_Logo.gif" />
+    <Content Include="Images\DSCHOME_Logo.png" />
     <Content Include="Images\iconNoAvatar.png" />
     <Content Include="Images\KPogany.jpg" />
     <Content Include="Models\DSC_OBS_ENTITY.Context.tt">

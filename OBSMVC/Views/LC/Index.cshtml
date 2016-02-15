@@ -8,24 +8,24 @@
 <div class="well well-sm"><h3>Logistic Center Maintenance</h3></div>
 
 <table class="table table-condensed table-hover">
-    <tr>
-        <th style="text-align:center">
+    <tr style="background-color:gainsboro">
+        <th style="text-align:center; width:5%">
             @Html.DisplayNameFor(model => model.dsc_lc_id)
         </th>
-        <th style="text-align:center">
+        <th style="text-align:center; width:60%">
             @Html.DisplayNameFor(model => model.dsc_lc_name)
         </th>
-        <th style="text-align:center">
+        <th style="text-align:center; width:20%">
             @Html.DisplayNameFor(model => model.dsc_lc_code)
         </th>
-        <th style="text-align:center">
+        <th style="text-align:center; width:10%">
             @Html.DisplayNameFor(model => model.dsc_lc_timezone)
         </th>
-        <th style="text-align:center">
+        <th style="text-align:center; width:5%">
             @*@Html.DisplayNameFor(model => model.active)*@
             Active
         </th>
-        <th></th>
+        <th style="width:5%"></th>
     </tr>
 
     @foreach (var item in Model)

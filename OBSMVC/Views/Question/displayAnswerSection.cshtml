@@ -132,6 +132,47 @@
 
 <script>
     $(document).ready(function () {
+        // Validate that all textboxes are filled-in
+        $('input').change(function () {
+            var btnEnabled = true;
+            this.style.fontStyle = "normal";
+            this.style.color = "black";
 
+            $('form input[type="text"]').each(function () {
+                // Loop through all the Text boxes                
+                if (this.value.toString().trim() == "" || this.value == 'Enter a Value') // If the current text box is empty
+                {
+                    btnEnabled = false;
+                }                    
+            });
+
+            if (btnEnabled) {
+                //$('#btnSaveDefQuest').disabled = false;
+                $("#btnSaveDefQuest").removeAttr('disabled');
+            }
+            else { $("#btnSaveDefQuest").attr('disabled', 'disabled'); }
+        });
     });
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

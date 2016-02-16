@@ -719,7 +719,7 @@ namespace OBSMVC.Controllers
                     //if (isNew_Quest_Ans_Type(selected_ans_type_id, question_id))
                 else // this branch should take care of the scenario where this question/answer type exists in the obs_quest_ans_type table
                 {
-                    //Check if theew id a default "Y" record. If so, set it to "N"
+                    //Check if the id a default "Y" record. If so, set it to "N"
                     if (obsQuestion.indexOfDefaultQA >= 0)
                     {
                         setExistingDefaultToN(obsQuestion.questionId); 

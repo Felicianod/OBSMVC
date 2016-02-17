@@ -34,8 +34,8 @@ namespace OBSMVC.Models
                              };
                 foreach (var mdNew in tempMD)
                 {
-                    metaData x = new metaData();
-                    x.obs_quest_md_id = mdNew.md_id;
+                    metaDataTag x = new metaDataTag();
+                    x.md_id = mdNew.md_id;
                     x.obs_quest_md_value = mdNew.mdValue;
                     x.obs_quest_md_cat = mdNew.mdCat;
                     if (mdNew.mdSelected)
@@ -84,12 +84,12 @@ namespace OBSMVC.Models
         // ----------------------------------- PUBLIC CLASS PROPERTIES ----------------------------------------------
         
         public OBS_QUESTION q = new OBS_QUESTION();
-        public List<metaData> qAssignedMD = new List<metaData>();
-        public List<metaData> qUnassignedMD = new List<metaData>();
+        public List<metaDataTag> qAssignedMD = new List<metaDataTag>();
+        public List<metaDataTag> qUnassignedMD = new List<metaDataTag>();
         public List<int> preMetaDataIds = new List<int>();
     }
 
-    public class metaData
+    public class metaDataTag
     {
         [Required]
         public int obs_quest_md_id { get; set; }

@@ -323,6 +323,7 @@
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\QuestAnsTypes.cs" />
+    <Compile Include="Models\QuestionCreateViewModel.cs" />
     <Compile Include="Models\QuestionMDViewModel.cs" />
     <Compile Include="Models\QuestionMetadataView.cs" />
     <Compile Include="Models\QuestionView.cs" />

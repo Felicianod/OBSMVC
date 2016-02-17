@@ -708,10 +708,42 @@ namespace OBSMVC.Controllers
                     int default_qat_id = db.OBS_QUEST_ANS_TYPES.SingleOrDefault(item => item.obs_ans_type_id == obsQuestion.selectedAT.ATid && item.obs_question_id == question_id).obs_qat_id;
                     List<string> current_default_sel_ans_list = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == default_qat_id && item.obs_qsa_eff_st_dt >= DateTime.Today && item.obs_qsa_eff_end_dt < DateTime.Today).Select(x =>x.obs_qsa_text).ToList();
                     //at this point we have 2 lists of strings(current default selected answers and ones user passed from the form) and we need to compare them
-                    isEqualList(current_default_sel_ans_list, obsQuestion.selectedAT.selAnsList, obsQuestion.selectedAT.ATcathegory);
+                    if(isEqualList(current_default_sel_ans_list, obsQuestion.selectedAT.selAnsList, obsQuestion.selectedAT.ATcathegory))
+                    {//if we're here that means 2 lists are the same and we only need to change the order of selected answers list
+                        short order = 1;
+                        foreach (string str in obsQuestion.selectedAT.selAnsList)
+                        {
+                            OBS_QUEST_SLCT_ANS oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Single(item => item.obs_qat_id == default_qat_id && item.obs_qsa_text == str);                           
+                            oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
+                            db.SaveChanges();                     
+                            order++;
+                        }
 
-                    //CONTINUE HERE!!!!!!!
-                }
+                    }
+                    else//if we're here, that means user passed a different list of selected answers and we need to disable the current one and add new
+                    {
+                        List<OBS_QUEST_SLCT_ANS> oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == default_qat_id).ToList();
+                        oBS_QUEST_SLCT_ANS.ForEach(x => x.obs_qsa_eff_end_dt = DateTime.Today);//update end effective date to todays date
+                        short order = 1;
+                        foreach (string str in obsQuestion.selectedAT.selAnsList)//now lets create a new record with updated selected answers
+                        {
+                            OBS_QUEST_SLCT_ANS UPDATED_oBS_QUEST_SLCT_ANS = new OBS_QUEST_SLCT_ANS();
+                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qat_id = default_qat_id;
+                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_text = str;
+                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
+                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_wt = order;
+                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_dflt_yn = "N";
+                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_eff_st_dt = DateTime.Today;
+                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                            db.OBS_QUEST_SLCT_ANS.Add(UPDATED_oBS_QUEST_SLCT_ANS);
+                            order++;
+                        }
+                        db.SaveChanges();
+
+                    }
+
+
+                }// end of  "else if (obsQuestion.indexOfDefaultQA >= 0 &&(obsQuestion.selectedAT.ATid ==obsQuestion.OBSQA_List[obsQuestion.indexOfDefaultQA].answerTypeId)&& obsQuestion.selectedAT.requiresSelectableAnswers) "
                 else// this branch should take care of the scenario where this question/answer type exists in the obs_quest_ans_type table
                 {
                     //Check if the id a default "Y" record. If so, set it to "N"

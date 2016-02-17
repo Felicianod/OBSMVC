@@ -325,23 +325,7 @@ namespace OBSMVC.Controllers
                 //{
                 //    return View(questionList.ToList());
                 //}
-                return View(questionList.ToList());
-                //else
-                //{
-                //    try
-                //    {
-                //        string[] words = search.Split(' ');
-                //        string word0 = words[0];
-                //        string word1 = words[1];
-                //        return View(employeeList.Where(emp => (emp.dsc_emp_first_name.Contains(word0) && emp.dsc_emp_last_name.Contains(word1)) || (emp.dsc_emp_first_name.Contains(word1) && emp.dsc_emp_last_name.Contains(word0))).ToList().ToPagedList(page ?? 1, PageSize ?? 10));
-                //    }
-                //    catch
-                //    {
-                //        return View(employeeList.Where(emp => emp.dsc_emp_last_name.Contains(search) || emp.dsc_emp_first_name.Contains(search) || emp.DSC_LC.dsc_lc_name.Contains(search) || emp.dsc_emp_perm_id.ToString().Contains(search) || emp.dsc_emp_adp_id.Contains(search) || emp.dsc_emp_email_addr.Contains(search)).ToList().ToPagedList(page ?? 1, PageSize ?? 10));
-                //    }
-                //}
-                
-                
+                return View(questionList.ToList());                            
             }
         }
 
@@ -710,16 +694,27 @@ namespace OBSMVC.Controllers
                         oBS_QUEST_ANS_TYPES.obs_question_id = question_id;
                         oBS_QUEST_ANS_TYPES.obs_ans_type_id = (short)selected_ans_type_id;
                         oBS_QUEST_ANS_TYPES.obs_qat_default_ans_type_yn = "Y";
-                       // oBS_QUEST_ANS_TYPES.obs_qat_end_eff_dt = Convert.ToDateTime("12/31/2060");
+                        // oBS_QUEST_ANS_TYPES.obs_qat_end_eff_dt = Convert.ToDateTime("12/31/2060");
                         db.OBS_QUEST_ANS_TYPES.Add(oBS_QUEST_ANS_TYPES);
                         db.SaveChanges();
                     }
 
                 }// End of if (!obsQuestion.hasInstances)
-                    //if (isNew_Quest_Ans_Type(selected_ans_type_id, question_id))
-                else // this branch should take care of the scenario where this question/answer type exists in the obs_quest_ans_type table
+                 //if (isNew_Quest_Ans_Type(selected_ans_type_id, question_id))
+                else if (obsQuestion.indexOfDefaultQA >= 0 &&(obsQuestion.selectedAT.ATid ==obsQuestion.OBSQA_List[obsQuestion.indexOfDefaultQA].answerTypeId)&& obsQuestion.selectedAT.requiresSelectableAnswers) 
+                { //logic to update existing "OBS_QUEST_SLCT_ANS" when submitted answer type is default goes here
+
+                    //first lets find the obs_qat_id from  OBS_QUEST_ANS_TYPES table for this question id and selected answer type id
+                    int default_qat_id = db.OBS_QUEST_ANS_TYPES.SingleOrDefault(item => item.obs_ans_type_id == obsQuestion.selectedAT.ATid && item.obs_question_id == question_id).obs_qat_id;
+                    List<string> current_default_sel_ans_list = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == default_qat_id && item.obs_qsa_eff_st_dt >= DateTime.Today && item.obs_qsa_eff_end_dt < DateTime.Today).Select(x =>x.obs_qsa_text).ToList();
+                    //at this point we have 2 lists of strings(current default selected answers and ones user passed from the form) and we need to compare them
+                    isEqualList(current_default_sel_ans_list, obsQuestion.selectedAT.selAnsList, obsQuestion.selectedAT.ATcathegory);
+
+                    //CONTINUE HERE!!!!!!!
+                }
+                else// this branch should take care of the scenario where this question/answer type exists in the obs_quest_ans_type table
                 {
-                    //Check if theew id a default "Y" record. If so, set it to "N"
+                    //Check if the id a default "Y" record. If so, set it to "N"
                     if (obsQuestion.indexOfDefaultQA >= 0)
                     {
                         setExistingDefaultToN(obsQuestion.questionId); 
@@ -774,22 +769,7 @@ namespace OBSMVC.Controllers
                             db.SaveChanges();
 
                         }//end of if (isQuest_Slct_Ans_Required(selected_ans_type_id))
-                    }
-
-
-                    //OBS_QUEST_ANS_TYPES oBS_QUEST_ANS_TYPES = new OBS_QUEST_ANS_TYPES();
-                    //try
-                    //{    //set default flag the existing default answer type id to N
-                    //    // we need try/catch block in case there's no existing default answer type 
-                    //    oBS_QUEST_ANS_TYPES = db.OBS_QUEST_ANS_TYPES.Single(item => item.obs_question_id == question_id && item.obs_qat_default_ans_type_yn == "Y");
-                    //    oBS_QUEST_ANS_TYPES.obs_qat_default_ans_type_yn = "N";
-                    //    db.SaveChanges();
-                    //}
-                    //catch { }
-                    ////now let's set the selected answer type to be default one 
-                    //oBS_QUEST_ANS_TYPES = db.OBS_QUEST_ANS_TYPES.Single(item => item.obs_ans_type_id == selected_ans_type_id && item.obs_question_id == question_id);
-                    //oBS_QUEST_ANS_TYPES.obs_qat_default_ans_type_yn = "Y";
-                    //db.SaveChanges();
+                    }                   
                 } 
 
             }
@@ -825,6 +805,38 @@ namespace OBSMVC.Controllers
             }
             return selAnsList_from_form;
         }
+        /*
+        *This isEqualList method compares 2 lists of selected answer types: current default and the one passed from the form
+        *If 2 lists are the same, method returns true. if they're different it returns false
+        */
+        public bool isEqualList(List<string> currentDefault, List<string> passedFromForm, string ans_category)
+        {
+            
+            //this if checks if there are elements that are in the first list but not in the second. if "Except" method returns count>0
+            //that means there's something in the currentDefault list that is not in the passedFromForm. in this case we know user selected a new set of selected answers
+            if(ans_category == "3 Val Range" || ans_category == "5 Val Range")
+            {
+                if (currentDefault.Except(passedFromForm).ToList().Count > 0) { return false; }
+                else { return true; }
+            }
+            else//if we're here, that means the answer type category is MS List or SS List
+            {
+                //first, lets compare the size of both lists. if they are different, we need to return false 
+                if (currentDefault.Count == passedFromForm.Count)
+                {
+                    //sizes are the same, so lets check
+                    //if there are elements that are in the first list but not in the second. if "Except" method returns count>0
+                    //that means there's something in the currentDefault list that is not in the passedFromForm. 
+                    //in this case we know user selected a new set of selected answers
+                    if (currentDefault.Except(passedFromForm).ToList().Count > 0) { return false; }
+                    else { return true; }
+                }
+                else { return false; }
+
+            }
+            
+        }
+        
 
     }
 }

@@ -45,8 +45,7 @@
                 {
                 <div id='TextBoxesGroup'>
                     <div id="TextBoxDiv1">
-                        <label>Value #1 : </label><input type='text' id='textbox1'>
-
+                        <label>Value #1 : </label><input type='text' id='textbox1' name="userSelAnsList">
                     </div>
                 </div>
                 <input type='button' value='Add' id='addButton'>
@@ -75,7 +74,9 @@
                             </div>
                             <div class="panel-body" id="QATtemplates">
                                 <br />
-                                <table style="width:100%">
+                                @if (!(Model.selectedAT.ATcathegory == "MS List" || Model.selectedAT.ATcathegory == "SS List"))
+                                {
+                                    <table style="width:100%" id="TemplatesId">
                                     @foreach (string template in Model.templates)
                                     {
                                         <tr>
@@ -86,15 +87,20 @@
                                                 @if (!Model.templates[0].Equals("NO TEMPLATES NEEDED"))
                                                 {
                                                     @*if (!Model.selectedAT.hasSelectableAnswers)
-                                                    {
-                                                        <input type="button" id="TemplateLInk" value="Use This Template" onclick="testFunction('@template')" />
-                                                    }*@
-                                                        <input type="button" id="TemplateLInk" value="Use This Template" onclick="testFunction('@template')" />
+                                {
+                                    <input type="button" id="TemplateLInk" value="Use This Template" onclick="testFunction('@template')" />
+                                }*@
+                                                    <input type="button" id="TemplateLInk" value="Use This Template" onclick="testFunction('@template')" />
                                                 }
                                             </td>
                                         </tr>
                                     }
                                 </table>
+                                }
+                                else
+                                { 
+                                    <text>NO TEMPLATES AVAILABLE</text>
+                                }
                             </div>
                         </div>
                     </div>
@@ -147,14 +153,6 @@
             this.style.fontStyle = "normal";
             this.style.color = "black";
 
-            $('form input[type="text"]').each(function () {
-                // Loop through all the Text boxes                
-                if (this.value.toString().trim() == "" || this.value == 'Enter a Value') // If the current text box is empty
-                {
-                    btnEnabled = false;
-                }                    
-            });
-
             if (btnEnabled) {
                 //$('#btnSaveDefQuest').disabled = false;
                 $("#btnSaveDefQuest").removeAttr('disabled');
@@ -174,7 +172,7 @@
 
             newTextBoxDiv.after().html('<label>Value #' + counter + ' : </label>' +
                   '<input type="text" name="textbox' + counter +
-                  '" id="textbox' + counter + '" value="" >');
+                  '" id="textbox' + counter + '" value=""  name="userSelAnsList">');
 
             newTextBoxDiv.appendTo("#TextBoxesGroup");
             counter++;
@@ -190,14 +188,17 @@
             $("#TextBoxDiv" + counter).remove();
 
         });
+
+        $('form input[type="text"]').each(function () {
+            // Loop through all the Text boxes                
+            if (this.value.toString().trim() == "" || this.value == 'Enter a Value') // If the current text box is empty
+            {
+                btnEnabled = false;
+            }
+        });
+
     });
 </script>
-
-
-
-
-
-
 
 
 

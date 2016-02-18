@@ -41,7 +41,7 @@
                 @foreach (string selEntry in Model.selectedAT.selAnsList)
                 {
                     var something = "userSelAnsList" + counter;
-                    if (selEntry.Equals("Enter a Value"))
+                    @*if (selEntry.Equals("Enter a Value"))
                     {
                         <br /><input type="text" id="@something" name="userSelAnsList" value="@selEntry" style="font-style:italic; color:gray" />
                     }
@@ -52,8 +52,11 @@
                                 @selEntry
                             </li>
                         </ul>
-                    }
-                    counter++;
+                    }*@
+                        <br /><input type="text" id="@something" name="userSelAnsList" value="@selEntry"
+       @if (selEntry.Equals("Enter a Value")) { <TEXT> style="font-style:italic; color:gray" </TEXT>  } />
+
+counter++;
                 }
                 <br />
 
@@ -77,11 +80,11 @@
                                             <td style="width:20%">
                                                 @if (!Model.templates[0].Equals("NO TEMPLATES NEEDED"))
                                                 {
-                                                    if (!Model.selectedAT.hasSelectableAnswers)
+                                                    @*if (!Model.selectedAT.hasSelectableAnswers)
                                                     {
                                                         <input type="button" id="TemplateLInk" value="Use This Template" onclick="testFunction('@template')" />
-                                                    }
-
+                                                    }*@
+                                                        <input type="button" id="TemplateLInk" value="Use This Template" onclick="testFunction('@template')" />
                                                 }
                                             </td>
                                         </tr>

@@ -80,7 +80,13 @@ namespace OBSMVC.Controllers
         [HttpGet]  // GET: Question/Create
         public ActionResult Create()
         {
-            return View();
+            QuestionCreateViewModel obsQMD = new QuestionCreateViewModel();
+            //if (obsQMD == null)
+            //{
+            //    return HttpNotFound();
+            //}
+
+            return View(obsQMD);
         }
         //-----------------------------------------------------------------------------------------------------------------
         // POST: Question/Create

@@ -22,7 +22,11 @@
                </label>
            </td>
            <td style="text-align:end">
-               <b>@Html.ActionLink("Add New Question", "Create")</b>
+               @*<b>@Html.ActionLink("Add New Question", "Create")</b>*@
+               <button type="button" class="btnAdd" onclick="window.location.href = '/Question/Create/'">
+                   <img src="~/Images/Button-Add-icon.png" height="25" />
+                   Add New Question
+               </button>
            </td>
        </tr>   
      </table>

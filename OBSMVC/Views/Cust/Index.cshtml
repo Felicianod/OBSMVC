@@ -1,4 +1,6 @@
-﻿@model IEnumerable<OBSMVC.Models.CustViewModel>
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<OBSMVC.Models.CustViewModel>
 
 @{
     ViewBag.Title = "Customer List";
@@ -9,13 +11,13 @@
 <table class="table table-condensed table-hover">
     <tr style="background-color:gainsboro">
         <th style="text-align:center; width:5%">
-            @Html.DisplayNameFor(model => model.dsc_cust_id)
+            @Html.DisplayNameFor(model => model.First().dsc_cust_id)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.dsc_cust_name)
+            @Html.DisplayNameFor(model => model.First().dsc_cust_name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.dsc_cust_parent_name)
+            @Html.DisplayNameFor(model => model.First().dsc_cust_parent_name)
         </th>
         <th style="text-align:center; width:5%">
             @*@Html.DisplayNameFor(model => model.active)*@
@@ -51,3 +53,25 @@
     }
 
 </table>
+<table style="width:100%">
+    <tr>
+        <td style="text-align:left">
+        </td>
+        <td style="text-align:right">
+            @using (Html.BeginForm("Index", "Cust", FormMethod.Get))
+            {
+                <b>Rows Per Page</b>
+                @Html.DropDownList("PageSize", new SelectList(new Dictionary<string, int> { { "10", 10 }, { "25", 25 }, { "50", 50 } }, "Key", "Value", ViewBag.CurrentItemsPerPage), new { id = "PageSize" })
+                <script type="text/javascript">
+                    $('#PageSize').on('change', function (event) {
+                        var form = $(event.target).parents('form');
+                        form.submit();
+                    });
+                </script>
+            }
+        </td>
+    </tr>
+</table>
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, pageSize = ViewBag.CurrentItemsPerPage}), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded })
+
+

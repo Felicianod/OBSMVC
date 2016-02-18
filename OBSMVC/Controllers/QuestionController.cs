@@ -491,7 +491,7 @@ namespace OBSMVC.Controllers
                             // If the Id exist, then the Dropdown Selection has selectable answers
                             selectedAT.hasSelectableAnswers = true;
                             // Grab selectable Answer values from OBS_QUEST_SLCT_ANS table
-                            selectedAT.selAnsList = OBSdb.OBS_QUEST_SLCT_ANS.Where(X => X.obs_qat_id == QATinstanceId).OrderBy(y => y.obs_qsa_order).Select(z => z.obs_qsa_text).ToList();
+                            selectedAT.selAnsList = OBSdb.OBS_QUEST_SLCT_ANS.Where(X => X.obs_qat_id == QATinstanceId && X.obs_qsa_eff_st_dt<=DateTime.Today && X.obs_qsa_eff_end_dt>DateTime.Today).OrderBy(y => y.obs_qsa_order).Select(z => z.obs_qsa_text).ToList();
                         }
                         else
                         {
@@ -712,14 +712,14 @@ namespace OBSMVC.Controllers
 
                     //first lets find the obs_qat_id from  OBS_QUEST_ANS_TYPES table for this question id and selected answer type id
                     int default_qat_id = db.OBS_QUEST_ANS_TYPES.SingleOrDefault(item => item.obs_ans_type_id == obsQuestion.selectedAT.ATid && item.obs_question_id == question_id).obs_qat_id;
-                    List<string> current_default_sel_ans_list = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == default_qat_id && item.obs_qsa_eff_st_dt >= DateTime.Today && item.obs_qsa_eff_end_dt < DateTime.Today).Select(x =>x.obs_qsa_text).ToList();
+                    List<string> current_default_sel_ans_list = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == default_qat_id && item.obs_qsa_eff_st_dt <= DateTime.Today && item.obs_qsa_eff_end_dt > DateTime.Today).Select(x =>x.obs_qsa_text).ToList();
                     //at this point we have 2 lists of strings(current default selected answers and ones user passed from the form) and we need to compare them
                     if(isEqualList(current_default_sel_ans_list, obsQuestion.selectedAT.selAnsList, obsQuestion.selectedAT.ATcathegory))
                     {//if we're here that means 2 lists are the same and we only need to change the order of selected answers list
                         short order = 1;
                         foreach (string str in obsQuestion.selectedAT.selAnsList)
                         {
-                            OBS_QUEST_SLCT_ANS oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Single(item => item.obs_qat_id == default_qat_id && item.obs_qsa_text == str);                           
+                            OBS_QUEST_SLCT_ANS oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Single(item => item.obs_qat_id == default_qat_id && item.obs_qsa_text == str && item.obs_qsa_eff_st_dt <= DateTime.Today && item.obs_qsa_eff_end_dt > DateTime.Today);                           
                             oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
                             db.SaveChanges();                     
                             order++;
@@ -743,7 +743,7 @@ namespace OBSMVC.Controllers
                             UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_eff_end_dt = Convert.ToDateTime("12/31/2060");
                             db.OBS_QUEST_SLCT_ANS.Add(UPDATED_oBS_QUEST_SLCT_ANS);
                             order++;
-                        }
+                        }// end foreach
                         db.SaveChanges();
 
                     }
@@ -767,6 +767,44 @@ namespace OBSMVC.Controllers
                             oBS_QUEST_ANS_TYPES = db.OBS_QUEST_ANS_TYPES.Single(item => item.obs_question_id == question_id && item.obs_ans_type_id == selected_ans_type_id);
                             oBS_QUEST_ANS_TYPES.obs_qat_default_ans_type_yn = "Y";
                             db.SaveChanges();
+                            //after we set new answer type to be default, we need to check if selected answer types require updates as well
+                            if (obsQuestion.selectedAT.requiresSelectableAnswers)
+                            {
+                                int default_qat_id = oBS_QUEST_ANS_TYPES.obs_qat_id;
+                                List<string> current_default_sel_ans_list = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == default_qat_id && item.obs_qsa_eff_st_dt <= DateTime.Today && item.obs_qsa_eff_end_dt > DateTime.Today).Select(x => x.obs_qsa_text).ToList();
+                                if (isEqualList(current_default_sel_ans_list, obsQuestion.selectedAT.selAnsList, obsQuestion.selectedAT.ATcathegory))
+                                {//if we're here that means 2 lists are the same and we only need to change the order of selected answers list
+                                    short order = 1;
+                                    foreach (string str in obsQuestion.selectedAT.selAnsList)
+                                    {
+                                        OBS_QUEST_SLCT_ANS oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Single(item => item.obs_qat_id == default_qat_id && item.obs_qsa_text == str && item.obs_qsa_eff_st_dt <= DateTime.Today && item.obs_qsa_eff_end_dt > DateTime.Today);
+                                        oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
+                                        db.SaveChanges();
+                                        order++;
+                                    }
+
+                                }
+                                else//if we're here, that means user passed a different list of selected answers and we need to disable the current one and add new
+                                {
+                                    List<OBS_QUEST_SLCT_ANS> oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == default_qat_id).ToList();
+                                    oBS_QUEST_SLCT_ANS.ForEach(x => x.obs_qsa_eff_end_dt = DateTime.Today);//update end effective date to todays date
+                                    short order = 1;
+                                    foreach (string str in obsQuestion.selectedAT.selAnsList)//now lets create a new record with updated selected answers
+                                    {
+                                        OBS_QUEST_SLCT_ANS UPDATED_oBS_QUEST_SLCT_ANS = new OBS_QUEST_SLCT_ANS();
+                                        UPDATED_oBS_QUEST_SLCT_ANS.obs_qat_id = default_qat_id;
+                                        UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_text = str;
+                                        UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
+                                        UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_wt = order;
+                                        UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_dflt_yn = "N";
+                                        UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_eff_st_dt = DateTime.Today;
+                                        UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                                        db.OBS_QUEST_SLCT_ANS.Add(UPDATED_oBS_QUEST_SLCT_ANS);
+                                        order++;
+                                    }// end foreach
+                                    db.SaveChanges();
+                                }//end of else
+                            }//if (obsQuestion.selectedAT.requiresSelectableAnswers)
                         }
                         catch { }
                     }

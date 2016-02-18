@@ -29,37 +29,42 @@
                 else
                 {
                     <br />
-                    if (Model.selectedAT.requiresSelectableAnswers){
+                    if (Model.selectedAT.requiresSelectableAnswers)
+                    {
                         @:<b style="color:red">Enter New Values</b>
+                      
                     }
-                    else {
+                    else
+                    {
                         @:<b style="color:red">No Selectable Answers required.</b>
                     }
                 }
                 <br />
                 @{var counter = 1;}
-                @foreach (string selEntry in Model.selectedAT.selAnsList)
+                @if (Model.selectedAT.ATcathegory == "MS List" || Model.selectedAT.ATcathegory == "SS List")
                 {
-                    var something = "userSelAnsList" + counter;
-                    @*if (selEntry.Equals("Enter a Value"))
-                    {
-                        <br /><input type="text" id="@something" name="userSelAnsList" value="@selEntry" style="font-style:italic; color:gray" />
-                    }
-                    else
-                    {
-                        <ul>
-                            <li>
-                                @selEntry
-                            </li>
-                        </ul>
-                    }*@
-                        <br /><input type="text" id="@something" name="userSelAnsList" value="@selEntry"
-       @if (selEntry.Equals("Enter a Value")) { <TEXT> style="font-style:italic; color:gray" </TEXT>  } />
+                <div id='TextBoxesGroup'>
+                    <div id="TextBoxDiv1">
+                        <label>Value #1 : </label><input type='text' id='textbox1'>
 
-counter++;
+                    </div>
+                </div>
+                <input type='button' value='Add' id='addButton'>
+                <input type='button' value='Remove' id='removeButton'>
                 }
-                <br />
+                else {
+                    foreach (string selEntry in Model.selectedAT.selAnsList)
+                    {
+                        var something = "userSelAnsList" + counter;
 
+                       <br /><input type="text" id="@something" name="userSelAnsList" value="@selEntry"
+       @if (selEntry.Equals("Enter a Value"))
+       { <TEXT> style="font-style:italic; color:gray" </TEXT>  } />
+
+                        counter++;
+                    }
+                <br />
+               } 
             </td>
             <td style="width:50%; vertical-align:top">
                 <div class="row">
@@ -135,6 +140,7 @@ counter++;
 
 <script>
     $(document).ready(function () {
+        var counter = 2;
         // Validate that all textboxes are filled-in
         $('input').change(function () {
             var btnEnabled = true;
@@ -154,6 +160,35 @@ counter++;
                 $("#btnSaveDefQuest").removeAttr('disabled');
             }
             else { $("#btnSaveDefQuest").attr('disabled', 'disabled'); }
+        });
+
+        $("#addButton").click(function () {
+            
+            if (counter > 10) {
+                alert("Only 10 textboxes allow");
+                return false;
+            }
+
+            var newTextBoxDiv = $(document.createElement('div'))
+                 .attr("id", 'TextBoxDiv' + counter);
+
+            newTextBoxDiv.after().html('<label>Value #' + counter + ' : </label>' +
+                  '<input type="text" name="textbox' + counter +
+                  '" id="textbox' + counter + '" value="" >');
+
+            newTextBoxDiv.appendTo("#TextBoxesGroup");
+            counter++;
+        });
+        $("#removeButton").click(function () {
+            if (counter == 1) {
+                alert("No more textbox to remove");
+                return false;
+            }
+
+            counter--;
+
+            $("#TextBoxDiv" + counter).remove();
+
         });
     });
 </script>

@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using OBSMVC;
 using OBSMVC.Models;
+using PagedList;
+using PagedList.Mvc;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OBSMVC.Controllers
@@ -19,10 +21,11 @@ namespace OBSMVC.Controllers
 
         // GET: Cust
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(int? page, int? PageSize)
         {
             var customers = new List<DSC_CUSTOMER>();
             var viewCustomers = new List<CustViewModel>();
+            ViewBag.CurrentItemsPerPage = PageSize ?? 10;
 
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
@@ -59,7 +62,7 @@ namespace OBSMVC.Controllers
                 viewCustomers.Add(new CustViewModel(customer.dsc_cust_id, customer.dsc_cust_name,customer.dsc_cust_parent_name,customer.dsc_cust_eff_end_date,customer.dsc_cust_eff_end_date=="YES"?"Deactivate":"Activate"));
             }// end of foreach
 
-            return View(viewCustomers);
+            return View(viewCustomers.ToPagedList(page ?? 1, PageSize ?? 10));
             
         }
   

@@ -59,7 +59,7 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="row">
             <div class="form-group">
-                @Html.HiddenFor(model => model.obs_question_ver)
+                @Html.HiddenFor(model => model.q.obs_question_ver)
                 @*@Html.LabelFor(model => model.obs_question_ver, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.obs_question_ver, new { htmlAttributes = new { @class = "form-control" } })
@@ -67,37 +67,37 @@
                 </div>*@
             </div>
             <div class="form-group">
-                @Html.LabelFor(model => model.obs_question_full_text, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.q.obs_question_full_text, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.TextAreaFor(model => model.obs_question_full_text, 4, 100, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.TextAreaFor(model => model.q.obs_question_full_text, 4, 100, new { htmlAttributes = new { @class = "form-control" } })
                     @*@Html.EditorFor(model => model.obs_question_full_text, new { htmlAttributes = new { @class = "form-control" } })*@
-                    @Html.ValidationMessageFor(model => model.obs_question_full_text, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.q.obs_question_full_text, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(model => model.obs_question_desc, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.q.obs_question_desc, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.obs_question_desc, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.obs_question_desc, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.q.obs_question_desc, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.q.obs_question_desc, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group row">
-                @Html.LabelFor(model => model.obs_question_eff_st_dt, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.q.obs_question_eff_st_dt, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="input-group col-md-10">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                     <input class="form-control text-box single-line" data-val="flase" id="obs_question_eff_st_dt" name="obs_question_eff_st_dt" type="datetime" value="@DateTime.Today" />
                     @*@Html.EditorFor(model => model.obs_question_eff_st_dt, new { htmlAttributes = new { @class = "form-control", name = "obs_question_eff_st_dt", id = "obs_question_eff_st_dt" } })*@
-                    @Html.ValidationMessageFor(model => model.obs_question_eff_st_dt, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.q.obs_question_eff_st_dt, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group row">
-                @Html.LabelFor(model => model.obs_question_eff_end_dt, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.q.obs_question_eff_end_dt, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="input-group col-md-10">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                     <input class="form-control text-box single-line" data-val="flase" id="obs_question_eff_end_dt" name="obs_question_eff_end_dt" type="datetime" value="" />
                     @*<input class="form-control text-box single-line" data-val="true" data-val-date="The field Effective End Date must be a date." data-val-required="The Effective End Date field is required." id="obs_question_eff_end_dt" name="obs_question_eff_end_dt" type="datetime" value="2060/12/31" />*@
                     @*@Html.EditorFor(model => model.obs_question_eff_end_dt, new { htmlAttributes = new { @class = "form-control" } })*@
-                    @Html.ValidationMessageFor(model => model.obs_question_eff_end_dt, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.q.obs_question_eff_end_dt, "", new { @class = "text-danger" })
                 </div>
             </div>
         </div>
@@ -121,18 +121,18 @@
                                         </tr>
                                         @foreach (var item in Model.qAssignedMD)
                                         {
-                                            <tr>
-                                                <td>
-                                                    <input type="checkbox" id="qAssignedMD" name="qAssignedMD" checked="checked" value="@item.obs_quest_md_id" />
-                                                </td>
-                                                <td>
-                                                    @*<input type="hidden" id="qAssignedMD" name="qAssignedMD" value="@item.obs_quest_md_id" />*@
-                                                    @item.obs_quest_md_value
-                                                </td>
-                                                <td>
-                                                    @item.obs_quest_md_cat
-                                                </td>
-                                            </tr>
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" id="qAssignedMD" name="qAssignedMD" checked="checked" value="@item.md_id" />
+                                            </td>
+                                            <td>
+                                                @*<input type="hidden" id="qAssignedMD" name="qAssignedMD" value="@item.obs_quest_md_id" />*@
+                                                @item.md_value
+                                            </td>
+                                            <td>
+                                                @item.md_cat
+                                            </td>
+                                        </tr>
                                         }
                                     </table>
                                     <br />
@@ -170,13 +170,13 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    <input type="checkbox" value="@item.obs_quest_md_id" id="qAssignedMD" name="qAssignedMD">
+                                                    <input type="checkbox" value="@item.md_id" id="qAssignedMD" name="qAssignedMD">
                                                 </td>
                                                 <td>
-                                                    @item.obs_quest_md_value
+                                                    @item.md_value
                                                 </td>
                                                 <td>
-                                                    @item.obs_quest_md_cat
+                                                    @item.md_cat
                                                 </td>
                                             </tr>
                                         }

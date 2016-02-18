@@ -12,7 +12,19 @@ namespace OBSMVC.Models
     {
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
         //= = = = = = = = = = = = = = = CONSTRUCTOR (No parameters Create Empty Object) = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
-        public QuestionCreateViewModel() {  }
+        public QuestionCreateViewModel() {
+            qAssignedMD = new List<metaDataTag>();
+            qUnassignedMD = new List<metaDataTag>();
+            var mdList = db.OBS_QUESTION_METADATA.ToList();
+            foreach (var md in mdList)
+            {
+                metaDataTag mdTag = new metaDataTag();
+                mdTag.md_id = md.obs_quest_md_id;
+                mdTag.md_cat= md.obs_quest_md_cat;
+                mdTag.md_value = md.obs_quest_md_value;
+                qUnassignedMD.Add(mdTag);
+            }
+        }
 
         //= = = = = = = = = = = = = = = CONSTRUCTOR (Needs a Question Id parameter) = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
         public QuestionCreateViewModel(int qId)

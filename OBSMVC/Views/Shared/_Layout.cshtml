@@ -1,14 +1,17 @@
 ﻿<!DOCTYPE html>
-<html>
-<head>
+<html lang="en">
+<head>    
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - DSC Observations</title>
+
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="~/Scripts/jquery-ui.min.js" type="text/javascript"></script>
-    <link href="~/Content/jquery-ui.css" rel="stylesheet" type="text/css" />
+
+
+    @*<link href="~/Content/jquery-ui.css" rel="stylesheet" type="text/css" />*@
     <style>
         #foot {
             position: fixed !important;
@@ -68,3 +71,4 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+

@@ -56,7 +56,7 @@
                                 if (x <= Model.selectedAT.selAnsList.Count)
                                 {
 
-                                <input type='text' id=@id_name name="userSelAnsList" value=@Model.selectedAT.selAnsList[x - 1]><br />
+                                <input type='text' id=@id_name class="at_item" name="userSelAnsList" value=@Model.selectedAT.selAnsList[x - 1]><br />
                                 }
                                 else
                                 {
@@ -65,7 +65,7 @@
                             }
                         }
                         else {
-                            <input type='text' id='textbox1' name="userSelAnsList"><br />
+                            <input type='text' id='textbox1' class="at_item" name="userSelAnsList"><br />
                             <input type='hidden' id='textbox2' name="userSelAnsList"><br />
                             <input type='hidden' id='textbox3' name="userSelAnsList"><br />
                             <input type='hidden' id='textbox4' name="userSelAnsList"><br />
@@ -159,7 +159,7 @@
                         //var message = "You selected:\n ";
                         for (var i = 0; i < templateList.length; i++) {
                             var textboxName = "userSelAnsList" + (i + 1);
-                            document.getElementById(textboxName).value = templateList[i];
+                            document.getElementById(textboxName).value = templateList[i];x``
                             document.getElementById(textboxName).style.fontStyle = "normal";
                             document.getElementById(textboxName).style.color = "black";
                             //message = message + templateList[i].trim() + "\n";
@@ -178,7 +178,9 @@
 
 <script>
     $(document).ready(function () {
-        var counter = 2;
+
+        var counter = document.getElementsByClassName('at_item').length + 1;
+       // alert("There are " + counter + " textboxes");
         // Validate that all textboxes are filled-in
         $('input').change(function () {
             var btnEnabled = true;
@@ -201,6 +203,7 @@
 
             var newTextBoxDiv = $(document.createElement('div'))
                  .attr("id", 'TextBoxDiv' + counter);
+           
             document.getElementById("textbox" + counter).setAttribute('type', 'text');
            
             //newTextBoxDiv.after().html('<label>Value #' + counter + ' : </label>' +
@@ -218,7 +221,8 @@
 
             counter--;
 
-            $("#TextBoxDiv" + counter).remove();
+            document.getElementById("textbox" + counter).setAttribute('type', 'hidden');
+            document.getElementById("textbox" + counter).setAttribute('value', '');
 
         });
 

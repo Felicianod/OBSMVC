@@ -9,20 +9,22 @@
     //        dateFormat: 'M dd, yy'
     //    });
     //});
-    $(function () {
-        $("#obs_question_eff_st_dt").datepicker({
-            changeMonth: true,
-            changeYear: true,
-            dateFormat: 'M dd, yy'
-        });
-    });
-    $(function () {
-        $("#obs_question_eff_end_dt").datepicker({
-            changeMonth: true,
-            changeYear: true,
-            dateFormat: 'M dd, yy'
-        });
-    });
+
+
+    //$(function () {
+    //    $("#obs_question_eff_st_dt").datepicker({
+    //        changeMonth: true,
+    //        changeYear: true,
+    //        dateFormat: 'M dd, yy'
+    //    });
+    //});
+    //$(function () {
+    //    $("#obs_question_eff_end_dt").datepicker({
+    //        changeMonth: true,
+    //        changeYear: true,
+    //        dateFormat: 'M dd, yy'
+    //    });
+    //});
 
 </script>
 
@@ -32,6 +34,9 @@
         var isChanged = false;
         $('input, select, textarea').change(function () {
             //$("input[type='submit']").removeAttr("disabled");
+            if ($('#btnAdd').text() != "Add Question") {
+                $('#btnAdd').button('reset');
+            }
             $("#btnSave").removeAttr('disabled');
             isChanged = true;
         });

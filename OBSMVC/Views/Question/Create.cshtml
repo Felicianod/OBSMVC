@@ -2,7 +2,7 @@
 
 @{  ViewBag.Title = "Create"; }
 
-<script type="text/javascript">
+@*<script type="text/javascript">
         //$(function () {
         //    $("input:text.editDate").datepicker();
         //});
@@ -20,14 +20,19 @@
                 dateFormat: 'M dd, yy'
             });
         });
-</script>
+</script>*@
 <!-- Form Edit State Change Validation -->
 <script>
         $(document).ready(function () {
             var isChanged = false;
             $('input, select, textarea').change(function () {
                 //$("input[type='submit']").removeAttr("disabled");
+                if ($('#btnAdd').text() != "Add Question")
+                {
+                    $('#btnAdd').button('reset');
+                }
                 $("#btnAdd").removeAttr('disabled');
+                //alert('Button Text is:' + btnText);
                 isChanged = true;
             });
             $(window).bind('beforeunload', function () {
@@ -44,8 +49,7 @@
             //$(".btn").click(function () {
             //    isChanged = false;
             //    $(this).button('loading');
-            //});
-            
+            //});            
         });
 </script>
 <div class="well well-sm"><h3>Add New Question</h3></div>
@@ -85,7 +89,7 @@
                 @Html.LabelFor(model => model.q.obs_question_eff_st_dt, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="input-group col-md-10">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    <input class="form-control text-box single-line" data-val="flase" id="obs_question_eff_st_dt" name="obs_question_eff_st_dt" type="datetime" value="@DateTime.Today" />
+                    <input class="form-control text-box single-line" data-val="false" id="obs_question_eff_st_dt" name="q.obs_question_eff_st_dt" type="datetime" value="@DateTime.Today" />
                     @*@Html.EditorFor(model => model.obs_question_eff_st_dt, new { htmlAttributes = new { @class = "form-control", name = "obs_question_eff_st_dt", id = "obs_question_eff_st_dt" } })*@
                     @Html.ValidationMessageFor(model => model.q.obs_question_eff_st_dt, "", new { @class = "text-danger" })
                 </div>
@@ -94,7 +98,7 @@
                 @Html.LabelFor(model => model.q.obs_question_eff_end_dt, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="input-group col-md-10">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    <input class="form-control text-box single-line" data-val="flase" id="obs_question_eff_end_dt" name="obs_question_eff_end_dt" type="datetime" value="" />
+                    <input class="form-control text-box single-line" data-val="false" id="obs_question_eff_end_dt" name="q.obs_question_eff_end_dt" type="datetime" value="" />
                     @*<input class="form-control text-box single-line" data-val="true" data-val-date="The field Effective End Date must be a date." data-val-required="The Effective End Date field is required." id="obs_question_eff_end_dt" name="obs_question_eff_end_dt" type="datetime" value="2060/12/31" />*@
                     @*@Html.EditorFor(model => model.obs_question_eff_end_dt, new { htmlAttributes = new { @class = "form-control" } })*@
                     @Html.ValidationMessageFor(model => model.q.obs_question_eff_end_dt, "", new { @class = "text-danger" })
@@ -195,7 +199,7 @@
                 <div class="col-md-12 ">
                     <div class="form-group row">
                         <div class="col-md-offset-2 col-md-10">
-                            <button type="submit" class="btn btn-primary" disabled="disabled" id="btnAdd">Add Question</button>
+                            <button type="submit" class="btn btn-primary" disabled="disabled" id="btnAdd" >Add Question</button>
                             <span></span>
                             <input type="reset" class="btn btn-default" value="Reset Form">
                         </div>
@@ -219,38 +223,10 @@
 } @* ------------ END OF THE FORM ---------- *@
 
 
-<div id="dialog-form" title="Create new user">
-    <p class="validateTips">All form fields are required.</p>
-
-    <form>
-        <fieldset>
-            <label for="name">Name</label>
-            <input type="text" name="name" id="name" value="Jane Smith" class="text ui-widget-content ui-corner-all">
-            <label for="email">Email</label>
-            <input type="text" name="email" id="email" value="jane@smith.com" class="text ui-widget-content ui-corner-all">
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" value="xxxxxxx" class="text ui-widget-content ui-corner-all">
-
-            <!-- Allow form submission with keyboard without duplicating the dialog button -->
-            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-        </fieldset>
-    </form>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -258,117 +234,3 @@
 
 
 
-<div id="users-contain" class="ui-widget">
-    <h1>Existing Users:</h1>
-    <table id="users" class="ui-widget ui-widget-content">
-        <thead>
-            <tr class="ui-widget-header ">
-                <th>Name</th>
-                <th>Email</th>
-                <th>Password</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>John Doe</td>
-                <td>john.doe@example.com</td>
-                <td>johndoe1</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<button id="create-user">Create new user</button>
-
-
-<script>
-    $(function() {
-        var dialog, form,
-
-          // From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
-          emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
-          name = $( "#name" ),
-          email = $( "#email" ),
-          password = $( "#password" ),
-          allFields = $( [] ).add( name ).add( email ).add( password ),
-          tips = $( ".validateTips" );
-
-        function updateTips( t ) {
-            tips
-              .text( t )
-              .addClass( "ui-state-highlight" );
-            setTimeout(function() {
-                tips.removeClass( "ui-state-highlight", 1500 );
-            }, 500 );
-        }
-
-        function checkLength( o, n, min, max ) {
-            if ( o.val().length > max || o.val().length < min ) {
-                o.addClass( "ui-state-error" );
-                updateTips( "Length of " + n + " must be between " +
-                  min + " and " + max + "." );
-                return false;
-            } else {
-                return true;
-            }
-        }
-
-        function checkRegexp( o, regexp, n ) {
-            if ( !( regexp.test( o.val() ) ) ) {
-                o.addClass( "ui-state-error" );
-                updateTips( n );
-                return false;
-            } else {
-                return true;
-            }
-        }
-
-        function addUser() {
-            var valid = true;
-            allFields.removeClass( "ui-state-error" );
-
-            valid = valid && checkLength( name, "username", 3, 16 );
-            valid = valid && checkLength( email, "email", 6, 80 );
-            valid = valid && checkLength( password, "password", 5, 16 );
-
-            valid = valid && checkRegexp( name, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
-            valid = valid && checkRegexp( email, emailRegex, "eg. ui@jquery.com" );
-            valid = valid && checkRegexp( password, /^([0-9a-zA-Z])+$/, "Password field only allow : a-z 0-9" );
-
-            if ( valid ) {
-                $( "#users tbody" ).append( "<tr>" +
-                  "<td>" + name.val() + "</td>" +
-                  "<td>" + email.val() + "</td>" +
-                  "<td>" + password.val() + "</td>" +
-                "</tr>" );
-                dialog.dialog( "close" );
-            }
-            return valid;
-        }
-
-        dialog = $( "#dialog-form" ).dialog({
-            autoOpen: false,
-            height: 300,
-            width: 350,
-            modal: true,
-            buttons: {
-                "Create an account": addUser,
-                Cancel: function() {
-                    dialog.dialog( "close" );
-                }
-            },
-            close: function() {
-                form[ 0 ].reset();
-                allFields.removeClass( "ui-state-error" );
-            }
-        });
-
-        form = dialog.find( "form" ).on( "submit", function( event ) {
-            event.preventDefault();
-            addUser();
-        });
-
-        $( "#create-user" ).button().on( "click", function() {
-            dialog.dialog( "open" );
-        });
-    });
-</script>

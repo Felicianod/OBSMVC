@@ -47,15 +47,25 @@ namespace OBSMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "obs_quest_md_id,obs_quest_md_value,obs_quest_md_cat, qId")] OBS_QUESTION_METADATA oBS_QUESTION_METADATA)
+        //public ActionResult Create([Bind(Include = "obs_quest_md_id,obs_quest_md_value,obs_quest_md_cat, qId")] OBS_QUESTION_METADATA oBS_QUESTION_METADATA)
+        public ActionResult Create(OBS_QUESTION_METADATA oBS_QUESTION_METADATA, FormCollection postedData, string qId)
         {
+            var postedInfo = postedData;
             if (ModelState.IsValid)
             {
+                string returnId = postedData["qId"];
+
                 db.OBS_QUESTION_METADATA.Add(oBS_QUESTION_METADATA);
                 db.SaveChanges();
-
-                string returnId = Request.QueryString["qId"];
-                return RedirectToAction("Edit", "Question", new{id = returnId});
+                
+                if (String.IsNullOrEmpty(qId) || returnId == "0")
+                { // Redirect to the Create Page
+                    return RedirectToAction("Create", "Question");
+                }
+                else
+                { //Redirect to the Edit Page
+                    return RedirectToAction("Edit", "Question", new { id = returnId });
+                }                
             }
 
             return View(oBS_QUESTION_METADATA);

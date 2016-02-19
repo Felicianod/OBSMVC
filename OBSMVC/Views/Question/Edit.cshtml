@@ -11,20 +11,20 @@
     //});
 
 
-    //$(function () {
-    //    $("#obs_question_eff_st_dt").datepicker({
-    //        changeMonth: true,
-    //        changeYear: true,
-    //        dateFormat: 'M dd, yy'
-    //    });
-    //});
-    //$(function () {
-    //    $("#obs_question_eff_end_dt").datepicker({
-    //        changeMonth: true,
-    //        changeYear: true,
-    //        dateFormat: 'M dd, yy'
-    //    });
-    //});
+    $(function () {
+        $("#obs_question_eff_st_dt").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'M dd, yy'
+        });
+    });
+    $(function () {
+        $("#obs_question_eff_end_dt").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'M dd, yy'
+        });
+    });
 
 </script>
 
@@ -220,8 +220,9 @@
                                 <td>
                                     Available Metadata Tags
                                 </td>
-                                <td style="text-align:left">
-                                    @Html.ActionLink("[Add New Metadata Tag]", "Create", "QuestionMetadata", new { qId = Model.q.obs_question_id }, null)
+                                <td style="text-align:right">
+                                    @*@Html.ActionLink("[Add New Metadata Tag]", "Create", "QuestionMetadata", new { qId = Model.q.obs_question_id }, null)*@
+                                    <button type="button" class="btn btn-info btn-lg" style="font-size:small" data-toggle="modal" data-target="#NewMDTag">Add New Metedata Tag</button>
                                 </td>
                             </tr>
                         </table>
@@ -286,6 +287,58 @@
         </div>
        }
    </form>
+@* ------------ END OF THE FORM ---------- *@
+
+@* ---------------------- POP UP "Add New Metadata Tag" FORM ------------------------ *@
+<!-- Modal -->
+<div class="modal" id="NewMDTag" role="dialog">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add New Metadata Tag</h4>
+            </div>
+            <div class="modal-body">
+                @{var actionURL = "/QuestionMetadata/Create/" + Model.q.obs_question_id; }
+                <form action="@actionURL" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        <hr />
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="obs_quest_md_value">Metadata Value</label>
+                            <div class="col-md-10">
+                                <input class="form-control text-box single-line" id="obs_quest_md_value" name="obs_quest_md_value" type="text" value="" />
+                                <span class="field-validation-valid text-danger" data-valmsg-for="obs_quest_md_value" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="obs_quest_md_cat">Metadata Category</label>
+                            <div class="col-md-10">
+                                <input class="form-control text-box single-line" id="obs_quest_md_cat" name="obs_quest_md_cat" type="text" value="" />
+                                <span class="field-validation-valid text-danger" data-valmsg-for="obs_quest_md_cat" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        @*<input type="hidden" name="qId" id="qId" value="0" />*@
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" value="@Model.q.obs_question_id" id="qId" name="qId" />
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Create Tag</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@* ---------------------- END OF "Add New Metadata Tag" FORM ------------------------ *@
+
+
+
+
+
+
     @*<div class="row">
            @if (ViewBag.ConfMsg != null)
            {

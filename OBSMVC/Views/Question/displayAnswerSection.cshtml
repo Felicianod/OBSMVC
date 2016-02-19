@@ -43,13 +43,24 @@
                 @{var counter = 1;}
                 @if (Model.selectedAT.ATcathegory == "MS List" || Model.selectedAT.ATcathegory == "SS List")
                 {
+                                           
                 <div id='TextBoxesGroup'>
                     <div id="TextBoxDiv1">
-                        <label>Value #1 : </label><input type='text' id='textbox1' name="userSelAnsList">
+                        <input type='text' id='textbox1' name="userSelAnsList"><br/>
+                        <input type='hidden' id='textbox2' name="userSelAnsList"><br/>
+                        <input type='hidden' id='textbox3' name="userSelAnsList"><br/>
+                        <input type='hidden' id='textbox4' name="userSelAnsList"><br />
+                        <input type='hidden' id='textbox5' name="userSelAnsList"><br />
+                        <input type='hidden' id='textbox6' name="userSelAnsList"><br />
+                        <input type='hidden' id='textbox7' name="userSelAnsList"><br />
+                        <input type='hidden' id='textbox8' name="userSelAnsList"><br />
+                        <input type='hidden' id='textbox9' name="userSelAnsList"><br />
+                        <input type='hidden' id='textbox10' name="userSelAnsList">
                     </div>
                 </div>
                 <input type='button' value='Add' id='addButton'>
                 <input type='button' value='Remove' id='removeButton'>
+                    
                 }
                 else {
                     foreach (string selEntry in Model.selectedAT.selAnsList)
@@ -63,7 +74,7 @@
                         counter++;
                     }
                 <br />
-               } 
+               }
             </td>
             <td style="width:50%; vertical-align:top">
                 <div class="row">
@@ -169,12 +180,13 @@
 
             var newTextBoxDiv = $(document.createElement('div'))
                  .attr("id", 'TextBoxDiv' + counter);
+            document.getElementById("textbox" + counter).setAttribute('type', 'text');
+           
+            //newTextBoxDiv.after().html('<label>Value #' + counter + ' : </label>' +
+              //    '<input type="text" name="textbox' + counter +
+                //  '" id="textbox' + counter + '" value=""  name="userSelAnsList">');
 
-            newTextBoxDiv.after().html('<label>Value #' + counter + ' : </label>' +
-                  '<input type="text" name="textbox' + counter +
-                  '" id="textbox' + counter + '" value=""  name="userSelAnsList">');
-
-            newTextBoxDiv.appendTo("#TextBoxesGroup");
+           // newTextBoxDiv.appendTo("#TextBoxesGroup");
             counter++;
         });
         $("#removeButton").click(function () {

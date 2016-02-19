@@ -43,29 +43,50 @@
                 @{var counter = 1;}
                 @if (Model.selectedAT.ATcathegory == "MS List" || Model.selectedAT.ATcathegory == "SS List")
                 {
-                                           
+
                 <div id='TextBoxesGroup'>
                     <div id="TextBoxDiv1">
-                        <input type='text' id='textbox1' name="userSelAnsList"><br/>
-                        <input type='hidden' id='textbox2' name="userSelAnsList"><br/>
-                        <input type='hidden' id='textbox3' name="userSelAnsList"><br/>
-                        <input type='hidden' id='textbox4' name="userSelAnsList"><br />
-                        <input type='hidden' id='textbox5' name="userSelAnsList"><br />
-                        <input type='hidden' id='textbox6' name="userSelAnsList"><br />
-                        <input type='hidden' id='textbox7' name="userSelAnsList"><br />
-                        <input type='hidden' id='textbox8' name="userSelAnsList"><br />
-                        <input type='hidden' id='textbox9' name="userSelAnsList"><br />
-                        <input type='hidden' id='textbox10' name="userSelAnsList">
+                        @if (Model.selectedAT.hasSelectableAnswers)
+                        {
+
+
+                            for (var x = 1; x <=10;x++)
+                            {
+                                var id_name = "textbox" + x;
+                                if (x <= Model.selectedAT.selAnsList.Count)
+                                {
+
+                                <input type='text' id=@id_name name="userSelAnsList" value=@Model.selectedAT.selAnsList[x - 1]><br />
+                                }
+                                else
+                                {
+                                    <input type='hidden' id=@id_name name="userSelAnsList"><br />
+                                }
+                            }
+                        }
+                        else {
+                            <input type='text' id='textbox1' name="userSelAnsList"><br />
+                            <input type='hidden' id='textbox2' name="userSelAnsList"><br />
+                            <input type='hidden' id='textbox3' name="userSelAnsList"><br />
+                            <input type='hidden' id='textbox4' name="userSelAnsList"><br />
+                            <input type='hidden' id='textbox5' name="userSelAnsList"><br />
+                            <input type='hidden' id='textbox6' name="userSelAnsList"><br />
+                            <input type='hidden' id='textbox7' name="userSelAnsList"><br />
+                            <input type='hidden' id='textbox8' name="userSelAnsList"><br />
+                            <input type='hidden' id='textbox9' name="userSelAnsList"><br />
+                            <input type='hidden' id='textbox10' name="userSelAnsList">
+                            }
                     </div>
                 </div>
                 <input type='button' value='Add' id='addButton'>
                 <input type='button' value='Remove' id='removeButton'>
-                    
+
+
                 }
-                else {
-                    foreach (string selEntry in Model.selectedAT.selAnsList)
-                    {
-                        var something = "userSelAnsList" + counter;
+                        else {
+                            foreach (string selEntry in Model.selectedAT.selAnsList)
+                            {
+                                var something = "userSelAnsList" + counter;
 
                        <br /><input type="text" id="@something" name="userSelAnsList" value="@selEntry"
        @if (selEntry.Equals("Enter a Value"))

@@ -89,7 +89,7 @@ namespace OBSMVC.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id>0), "dsc_lc_id", "dsc_lc_name", employeeToUpdate.dsc_assigned_lc_id);
+            ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id>0 && x.dsc_lc_eff_end_date.Equals(null)), "dsc_lc_id", "dsc_lc_name", employeeToUpdate.dsc_assigned_lc_id);
             return View(employeeToUpdate);
         }
 
@@ -116,7 +116,7 @@ namespace OBSMVC.Controllers
 
                 db.SaveChanges();
                 formEmployee = employee;
-                ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id > 0).ToList(), "dsc_lc_id", "dsc_lc_name", formEmployee.dsc_assigned_lc_id);
+                ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id > 0 && x.dsc_lc_eff_end_date.Equals(null)).ToList(), "dsc_lc_id", "dsc_lc_name", formEmployee.dsc_assigned_lc_id);
                 ViewBag.ConfMsg = "Success";
                 return View(employee);
             }

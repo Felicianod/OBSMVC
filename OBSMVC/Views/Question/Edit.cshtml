@@ -51,6 +51,11 @@
             isChanged = false;
             $(this).button('loading');
         });
+        $("#saveMDTag").click(function () {
+            isChanged = false;
+            $(this).button('loading');
+        });
+
         //$(".btn").click(function () {
         //    isChanged = false;
         //    $(this).button('loading');
@@ -384,7 +389,7 @@
                     <div class="modal-footer">
                         <input type="hidden" value="@Model.q.obs_question_id" id="qId" name="qId" />
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Create Tag</button>
+                        <button type="submit" class="btn btn-primary" id="saveMDTag">Create Tag</button>
                     </div>
                 </form>
             </div>

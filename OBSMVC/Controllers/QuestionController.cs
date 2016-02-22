@@ -97,9 +97,14 @@ namespace OBSMVC.Controllers
         public ActionResult Create(FormCollection postedData, QuestionMDViewModel QuestionMDView,
                                  [Bind(Prefix = "q")] OBS_QUESTION questionHdr)
         {
+
             //-------- Save the Question Information ----
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
+                if (questionHdr.obs_question_eff_end_dt < Convert.ToDateTime("01/01/1900"))
+                {
+                    questionHdr.obs_question_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                }
                 questionHdr.obs_question_ver = 1;
                 questionHdr.obs_question_added_uid = User.Identity.Name;
                 questionHdr.obs_question_added_dtm = DateTime.Now;

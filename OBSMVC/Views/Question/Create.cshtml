@@ -137,6 +137,7 @@
                         </table>
                     </div>
                     <div class="panel-body">
+                        <input type="hidden" id="qAssignedMD" name="qAssignedMD" />
                         @foreach (int item in Model.preMetaDataIds)
                         {
                             <input type="hidden" id="origTags" name="origTags" value="@item" />
@@ -144,7 +145,7 @@
                         <table style="width:100%">
                             <tr>
                                 <td style="width:45%; border:double; text-align:center; vertical-align:top">
-                                    <b>ASSIGNED QUESTION METADATA TAGS</b>   <br />
+                                    <b>ASSIGNED QUESTION METADATA TAGS</b>   <br />                                    
                                     <select id="sbOne" multiple="multiple" size="10" style="width:95%">
                                         @foreach (var item in Model.qAssignedMD)
                                         {
@@ -177,17 +178,18 @@
         </div>
         @* ---------- END OF NEW ROW WITH TEST CODE--------------*@
 
-        <div class="row">
+        @* - - - - - - - - - OLD CHECK BOX METADATA VIEW FORMAT - - - - - - - - *@        
+        @*<div class="row">
                 <div class="col-md-6 personal-info">
                     <div class="panel panel-info">
                         <div class="panel-heading">Assigned Question Metadata</div>
                         <div class="panel-body">
                             <div class="list-group">
                                 <div class="list-group-item">
-                                    @*@foreach (int item in Model.preMetaDataIds)
+                                    @foreach (int item in Model.preMetaDataIds)
                                     {
                                         <input type="hidden" id="origTags" name="origTags" value="@item" />
-                                    }*@
+                                    }
                                     <table class="table table-condensed table-hover">
                                         <tr>
                                             <th></th>
@@ -198,10 +200,9 @@
                                         {
                                         <tr>
                                             <td>
-                                                <input type="checkbox" id="qAssignedMD" name="qAssignedMD" checked="checked" value="@item.md_id" />
+                                                <input type="checkbox" id="qAssignedMDx" name="qAssignedMD" checked="checked" value="@item.md_id" />
                                             </td>
                                             <td>
-                                                @*<input type="hidden" id="qAssignedMD" name="qAssignedMD" value="@item.obs_quest_md_id" />*@
                                                 @item.md_value
                                             </td>
                                             <td>
@@ -211,8 +212,8 @@
                                         }
                                     </table>
                                     <br />
-                                    @*@{Html.RenderAction("qMetaDataList", new { postId = p.Id });}*@
-                                    @*@{Html.RenderAction("qMetaDataList");}*@
+                                    //@{Html.RenderAction("qMetaDataList", new { postId = p.Id });}
+                                    //@{Html.RenderAction("qMetaDataList");}
                                 </div>
                             </div>
                         </div>
@@ -221,18 +222,6 @@
                 <div class="col-md-6 personal-info">
                     <div class="panel panel-info">
                         <div class="panel-heading">
-
-                            @*<table style="width:100%">
-                                <tr>
-                                    <td>
-                                        Available Metadata Tags
-                                    </td>
-                                    <td style="text-align:right">
-                                        <button type="button" class="btnAdd"  data-toggle="modal" data-target="#NewMDTag"><img src="~/Images/Button-Add-icon.png" height="25" />Add New Metedata Tag</button>
-                                    </td>
-                                </tr>
-                            </table>*@
-
                         </div>
                         <div class="panel-body">
                             <div class="list-group">
@@ -259,19 +248,21 @@
                                         }
                                     </table>
                                     <br />
-                                    @*@{Html.RenderAction("qMetaDataList", new { postId = p.Id });}*@
-                                    @*@{Html.RenderAction("qMetaDataList");}*@
+                                    //@{Html.RenderAction("qMetaDataList", new { postId = p.Id });}
+                                    //@{Html.RenderAction("qMetaDataList");}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-        </div>
+        </div>*@
+        
+        
         <div class="row">
                 <div class="col-md-12 ">
                     <div class="form-group row">
                         <div class="col-md-offset-2 col-md-10">
-                            <button type="submit" class="btn btn-primary" disabled="disabled" id="btnAdd" >Add Question</button>
+                            <button type="submit" class="btn btn-primary" disabled="disabled" id="btnAdd" onclick="compileTagList();" >Add Question</button>
                             <span></span>
                             <input type="reset" class="btn btn-default" value="Reset Form">
                         </div>
@@ -376,5 +367,27 @@
             moveAllItems('#sbOne', '#sbTwo');
         });
     });
+</script>
+<script>
+    function compileTagList() {
+        var tagList = getTagListValues();
+        document.getElementById("qAssignedMD").setAttribute("Value", tagList);
+        //var hiddenFld = document.getElementById("qAssignedMD").value;
+        //alert("Result is: " + hiddenFld);
+        //return true;
+    };
+
+    function getTagListValues() {
+        var tagList = document.getElementById("sbOne");
+        var listResult = "";
+        var i;
+        for (i = 0; i < tagList.length; i++) {
+          listResult = listResult + tagList.options[i].value;
+          if (i != tagList.length - 1)
+          { listResult = listResult + ","; }
+        }
+        //alert(tagList);
+        return listResult;
+    };
 </script>
 

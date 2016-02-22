@@ -171,7 +171,66 @@
         </div>
        @if (Model.q.obs_question_eff_end_dt > DateTime.Today)
        {
+        @* ---------- NEW ROW WITH TEST CODE--------------*@
         <div class="row">
+            <div class="col-md-12 personal-info">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <table style="width:100%">
+                            <tr>
+                                <td>
+                                    <b>Question Metadata Maintenance</b>
+                                </td>
+                                <td style="text-align:right">
+                                    <button type="button" class="btnAdd" data-toggle="modal" data-target="#NewMDTag"><img src="~/Images/Button-Add-icon.png" height="25" />Add New Metedata Tag</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <input type="hidden" id="qAssignedMD" name="qAssignedMD" />
+                        @foreach (int item in Model.preMetaDataIds)
+                        {
+                            <input type="hidden" id="origTags" name="origTags" value="@item" />
+                        }
+                        <table style="width:100%">
+                            <tr>
+                                <td style="width:45%; border:double; text-align:center; vertical-align:top">
+                                    <b>ASSIGNED QUESTION METADATA TAGS</b>   <br />
+                                    <select id="sbOne" multiple="multiple" size="10" style="width:95%">
+                                        @foreach (var item in Model.qAssignedMD)
+                                        {
+                                            <option value="@item.obs_quest_md_id">@item.obs_quest_md_value [@item.obs_quest_md_cat]</option>
+                                        }
+                                    </select>
+                                    <br /><br />
+                                </td>
+                                <td style="width:10%; text-align:center; font-weight:bold; color:blue ">
+                                    <input type="button" id="left" style="width:50px" value="<" /> <br /><br />
+                                    <input type="button" id="right" style="width:50px" value=">" /> <br /><br />
+                                    <input type="button" id="leftall" style="width:50px" value="<<" /> <br /><br />
+                                    <input type="button" id="rightall" style="width:50px" value=">>" /> <br />
+                                </td>
+                                <td style="width:45%; border:double; text-align:center; vertical-align:top">
+                                    <b>AVAILABLE METADATA TAGS</b>   <br />
+                                    <select id="sbTwo" multiple="multiple" size="10" style="width:95%">
+                                        @foreach (var item in Model.qUnassignedMD)
+                                        {
+                                            <option value="@item.obs_quest_md_id">@item.obs_quest_md_value [@item.obs_quest_md_cat]</option>
+                                        }
+                                    </select>
+                                    <br /><br />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @* ---------- END OF NEW ROW WITH TEST CODE--------------*@
+
+        @* - - - - - - - - - OLD CHECK BOX METADATA VIEW FORMAT - - - - - - - - *@
+        @*<div class="row">
             <div class="col-md-6 personal-info">
                 <div class="panel panel-info">
                     <div class="panel-heading">Assigned Question Metadata</div>
@@ -195,7 +254,7 @@
                                                 <input type="checkbox" id="qAssignedMD" name="qAssignedMD" checked="checked" value="@item.obs_quest_md_id" />
                                             </td>
                                             <td>
-                                                @*<input type="hidden" id="qAssignedMD" name="qAssignedMD" value="@item.obs_quest_md_id" />*@
+                                                <input type="hidden" id="qAssignedMD" name="qAssignedMD" value="@item.obs_quest_md_id" />
                                                 @item.obs_quest_md_value
                                             </td>
                                             <td>
@@ -205,8 +264,8 @@
                                     }
                                 </table>
                                 <br />
-                                @*@{Html.RenderAction("qMetaDataList", new { postId = p.Id });}*@
-                                @*@{Html.RenderAction("qMetaDataList");}*@
+                                //@{Html.RenderAction("qMetaDataList", new { postId = p.Id });}
+                                //@{Html.RenderAction("qMetaDataList");}
                             </div>
                         </div>
                     </div>
@@ -221,7 +280,6 @@
                                     Available Metadata Tags
                                 </td>
                                 <td style="text-align:right">
-                                    @*@Html.ActionLink("[Add New Metadata Tag]", "Create", "QuestionMetadata", new { qId = Model.q.obs_question_id }, null)*@
                                     <button type="button" class="btn btn-info btn-lg" style="font-size:small" data-toggle="modal" data-target="#NewMDTag">Add New Metedata Tag</button>
                                 </td>
                             </tr>
@@ -252,19 +310,20 @@
                                     }
                                 </table>
                                 <br />
-                                @*@{Html.RenderAction("qMetaDataList", new { postId = p.Id });}*@
-                                @*@{Html.RenderAction("qMetaDataList");}*@
+                                //@{Html.RenderAction("qMetaDataList", new { postId = p.Id });}
+                                //@{Html.RenderAction("qMetaDataList");}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
+        </div>*@
+        
+           <div class="row">
             <div class="col-md-12 ">
                 <div class="form-group row">
                     <div class="col-md-offset-2 col-md-6">
-                        <button type="submit" class="btn btn-primary" disabled="disabled" id="btnSave">Save Changes</button>
+                        <button type="submit" class="btn btn-primary" disabled="disabled" id="btnSave" onclick="compileTagList();" >Save Changes</button>
                         <span></span>
                         <input type="reset" class="btn btn-default" value="Cancel">
                     </div>
@@ -351,3 +410,54 @@
         @Html.ActionLink("Back to List", "Index")
     </div>
 
+
+@*SCRIP to move Question Metadata Tags across pannels*@
+<script>
+    $(function () {
+        function moveItems(origin, dest) {
+            $(origin).find(':selected').appendTo(dest);
+        }
+
+        function moveAllItems(origin, dest) {
+            $(origin).children().appendTo(dest);
+        }
+
+        $('#left').click(function () {
+            moveItems('#sbTwo', '#sbOne');
+        });
+
+        $('#right').on('click', function () {
+            moveItems('#sbOne', '#sbTwo');
+        });
+
+        $('#leftall').on('click', function () {
+            moveAllItems('#sbTwo', '#sbOne');
+        });
+
+        $('#rightall').on('click', function () {
+            moveAllItems('#sbOne', '#sbTwo');
+        });
+    });
+</script>
+<script>
+    function compileTagList() {
+        var tagList = getTagListValues();
+        document.getElementById("qAssignedMD").setAttribute("Value", tagList);
+        //var hiddenFld = document.getElementById("qAssignedMD").value;
+        //alert("Result is: " + hiddenFld);
+        //return true;
+    };
+
+    function getTagListValues() {
+        var tagList = document.getElementById("sbOne");
+        var listResult = "";
+        var i;
+        for (i = 0; i < tagList.length; i++) {
+            listResult = listResult + tagList.options[i].value;
+            if (i != tagList.length - 1)
+            { listResult = listResult + ","; }
+        }
+        //alert(tagList);
+        return listResult;
+    };
+</script>

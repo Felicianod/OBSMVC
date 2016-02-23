@@ -186,12 +186,20 @@ namespace OBSMVC.Controllers
                 return  OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date).Equals(null) ? null : OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date);
                 
             }
-            /*public List<int> searchByQuestion(string search)
+            public List<int> searchByQuestion(string search)
             {
-                List<int> = from q in OBSdb.OBS_QUESTION join qa in OBSdb.OBS_QUEST_ANS_TYPES 
-                            on q.obs_question_id equals qa.obs_question_id join fq in OBSdb.OBS_COL_FORM_QUESTIONS
-                            on qa.obs_qat_id equals fq.obs_quest_ans_types_id
-            }*/
+                List<int> cft_ids_with_matching_qiestions = (from q in OBSdb.OBS_QUESTION
+                                                             join qa in OBSdb.OBS_QUEST_ANS_TYPES
+                                                             on q.obs_question_id equals qa.obs_question_id
+                                                             join fq in OBSdb.OBS_COL_FORM_QUESTIONS
+                                                              on qa.obs_qat_id equals fq.obs_qat_id
+                                                             where q.obs_question_full_text.Contains(search)
+                                                             select fq.obs_cft_id).ToList();
+
+                return cft_ids_with_matching_qiestions;
+            }
+
+
         }
         //---------------------------------------------HELPERS----------------------------------------//
         public static bool IsActiveForm(DateTime start_date, DateTime end_date)

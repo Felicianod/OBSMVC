@@ -190,6 +190,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ColFormTemplateControllerFD1.cs" />
     <Compile Include="Controllers\ColFormTemplateControllerFD.cs" />
     <Compile Include="Controllers\CustController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
@@ -492,6 +493,7 @@
     <Content Include="Views\Question\displayAnswerSection.cshtml" />
     <Content Include="Views\TestQuestionAnswerTypeDefault\_TestlistAnswerTypes.cshtml" />
     <Content Include="Views\ColFormTemplateFD\showColFormTemplate.cshtml" />
+    <Content Include="Views\ColFormTemplateFD1\showColFormTemplate1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

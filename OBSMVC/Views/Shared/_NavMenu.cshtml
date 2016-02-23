@@ -28,16 +28,25 @@
                         <li class="disabled">@Html.ActionLink("Observation Types", "Index", "OBSTYPE")</li>
                         <li class="disabled">@Html.ActionLink("Observation Subtypes", "Index", "OBSsubtype")</li>
                     </ul>
-                </li>
+                </li>              
                 <li class="dropdown">
-                    <a data-toggle="dropdown" href="#" >Questions Library
+                    <a data-toggle="dropdown" href="#">
+                        Questions Library
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("Search", "Index", "Question")</li>                        
+                        <li>@Html.ActionLink("Search", "Index", "Question")</li>
                     </ul>
                 </li>
-                <li class="dropdown disabled"><a data-toggle="tab" href="#">Menu 3</a></li>
+                <li class="dropdown">
+                    <a data-toggle="dropdown" href="#">
+                        Collection Form Templates
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink("Search", "Index", "ColFormTemplate")</li>
+                    </ul>
+                </li>
                 <li class="dropdown disabled"><a data-toggle="tab" href="#">Menu 4</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">              

@@ -22,8 +22,8 @@ namespace OBSMVC.Models
         public string obs_cfima_filename { get; set; }
         public System.DateTime obs_cfima_add_dt { get; set; }
     
-        public virtual OBS_QUESTION OBS_QUESTION { get; set; }
         public virtual OBS_COLLECT_FORM_INST OBS_COLLECT_FORM_INST { get; set; }
         public virtual OBS_MULTIMEDIA_TYPE OBS_MULTIMEDIA_TYPE { get; set; }
+        public virtual OBS_QUESTION OBS_QUESTION { get; set; }
     }
 }

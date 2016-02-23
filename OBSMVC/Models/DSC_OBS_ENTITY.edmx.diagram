@@ -14,12 +14,9 @@
         <AssociationConnector Association="Models.obs_super_type_type" ManuallyRouted="false" />
         <EntityTypeShape EntityType="Models.OBS_QUEST_ANS_TYPES" Width="1.5" PointX="6.875" PointY="2.75" />
         <EntityTypeShape EntityType="Models.OBS_QUEST_ASSGND_MD" Width="2" PointX="7.375" PointY="5.875" />
-        <EntityTypeShape EntityType="Models.OBS_QUESTION" Width="1.5" PointX="5.5" PointY="5.875" />
         <EntityTypeShape EntityType="Models.OBS_QUESTION_METADATA" Width="2" PointX="9.75" PointY="6" />
         <AssociationConnector Association="Models.relationship43" />
-        <AssociationConnector Association="Models.relationship41" />
         <AssociationConnector Association="Models.rel_metadata_quest_assgnd" />
-        <AssociationConnector Association="Models.rel_quest_assgnd_meta" />
         <EntityTypeShape EntityType="Models.OBS_ANS_TYPE" Width="1.5" PointX="0.75" PointY="10" />
         <EntityTypeShape EntityType="Models.DSC_CUSTOMER" Width="1.5" PointX="2.875" PointY="18.25" />
         <EntityTypeShape EntityType="Models.OBS_APP_EVENT_LOG" Width="1.5" PointX="3.375" PointY="15.625" />
@@ -50,7 +47,6 @@
         <AssociationConnector Association="Models.relationship13" />
         <AssociationConnector Association="Models.relationship27" />
         <AssociationConnector Association="Models.relationship28" />
-        <AssociationConnector Association="Models.relationship29" />
         <AssociationConnector Association="Models.relationship30" />
         <AssociationConnector Association="Models.relationship31" />
         <AssociationConnector Association="Models.relationship33" />
@@ -74,6 +70,10 @@
         <AssociationConnector Association="Models.rel_section_from_question" />
         <AssociationConnector Association="Models.rel_sub_section_form_question" />
         <AssociationConnector Association="Models.relationship42" />
+        <EntityTypeShape EntityType="Models.OBS_QUESTION" Width="1.5" PointX="4.625" PointY="10.375" />
+        <AssociationConnector Association="Models.relationship29" />
+        <AssociationConnector Association="Models.relationship41" />
+        <AssociationConnector Association="Models.rel_quest_assgnd_meta" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

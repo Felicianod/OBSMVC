@@ -17,10 +17,9 @@ namespace OBSMVC.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public OBS_QUESTION()
         {
+            this.OBS_COL_FORM_INST_MM_ATTACH = new HashSet<OBS_COL_FORM_INST_MM_ATTACH>();
             this.OBS_QUEST_ANS_TYPES = new HashSet<OBS_QUEST_ANS_TYPES>();
             this.OBS_QUEST_ASSGND_MD = new HashSet<OBS_QUEST_ASSGND_MD>();
-            this.OBS_COL_FORM_INST_MM_ATTACH = new HashSet<OBS_COL_FORM_INST_MM_ATTACH>();
-            this.OBS_COL_FORM_INST_QUEST = new HashSet<OBS_COL_FORM_INST_QUEST>();
         }
     
         public int obs_question_id { get; set; }
@@ -37,12 +36,10 @@ namespace OBSMVC.Models
         public Nullable<System.DateTime> obs_question_upd_dtm { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OBS_COL_FORM_INST_MM_ATTACH> OBS_COL_FORM_INST_MM_ATTACH { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_QUEST_ANS_TYPES> OBS_QUEST_ANS_TYPES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_QUEST_ASSGND_MD> OBS_QUEST_ASSGND_MD { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OBS_COL_FORM_INST_MM_ATTACH> OBS_COL_FORM_INST_MM_ATTACH { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OBS_COL_FORM_INST_QUEST> OBS_COL_FORM_INST_QUEST { get; set; }
     }
 }

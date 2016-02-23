@@ -1115,18 +1115,9 @@
           </AssociationSet>
           <EntitySet Name="OBS_QUEST_ANS_TYPES" EntityType="Models.OBS_QUEST_ANS_TYPES" />
           <EntitySet Name="OBS_QUEST_ASSGND_MD" EntityType="Models.OBS_QUEST_ASSGND_MD" />
-          <EntitySet Name="OBS_QUESTION" EntityType="Models.OBS_QUESTION" />
           <EntitySet Name="OBS_QUESTION_METADATA" EntityType="Models.OBS_QUESTION_METADATA" />
-          <AssociationSet Name="relationship41" Association="Models.relationship41">
-            <End Role="OBS_QUESTION" EntitySet="OBS_QUESTION" />
-            <End Role="OBS_QUEST_ANS_TYPES" EntitySet="OBS_QUEST_ANS_TYPES" />
-          </AssociationSet>
           <AssociationSet Name="rel_metadata_quest_assgnd" Association="Models.rel_metadata_quest_assgnd">
             <End Role="OBS_QUESTION_METADATA" EntitySet="OBS_QUESTION_METADATA" />
-            <End Role="OBS_QUEST_ASSGND_MD" EntitySet="OBS_QUEST_ASSGND_MD" />
-          </AssociationSet>
-          <AssociationSet Name="rel_quest_assgnd_meta" Association="Models.rel_quest_assgnd_meta">
-            <End Role="OBS_QUESTION" EntitySet="OBS_QUESTION" />
             <End Role="OBS_QUEST_ASSGND_MD" EntitySet="OBS_QUEST_ASSGND_MD" />
           </AssociationSet>
           <EntitySet Name="OBS_ANS_TYPE" EntityType="Models.OBS_ANS_TYPE" />
@@ -1173,8 +1164,8 @@
             <End Role="OBS_RVW_FORM_INST" EntitySet="OBS_RVW_FORM_INST" />
           </AssociationSet>
           <AssociationSet Name="relationship40" Association="Models.relationship40">
-            <End Role="EMPLOYEE" EntitySet="EMPLOYEEs" />
-            <End Role="OBS_INST" EntitySet="OBS_INST" />
+            <End EntitySet="EMPLOYEEs" Role="EMPLOYEE" />
+            <End EntitySet="OBS_INST" Role="OBS_INST" />
           </AssociationSet>
           <AssociationSet Name="relationship35" Association="Models.relationship35">
             <End Role="DSC_LC" EntitySet="DSC_LC" />
@@ -1195,10 +1186,6 @@
           <AssociationSet Name="relationship28" Association="Models.relationship28">
             <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
             <End Role="OBS_COL_FORM_INST_ATTRIB_VALS" EntitySet="OBS_COL_FORM_INST_ATTRIB_VALS" />
-          </AssociationSet>
-          <AssociationSet Name="relationship29" Association="Models.relationship29">
-            <End Role="OBS_QUESTION" EntitySet="OBS_QUESTION" />
-            <End Role="OBS_COL_FORM_INST_MM_ATTACH" EntitySet="OBS_COL_FORM_INST_MM_ATTACH" />
           </AssociationSet>
           <AssociationSet Name="relationship30" Association="Models.relationship30">
             <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
@@ -1286,6 +1273,19 @@
             <End Role="OBS_QUEST_ANS_TYPES" EntitySet="OBS_QUEST_ANS_TYPES" />
             <End Role="OBS_COL_FORM_QUESTIONS" EntitySet="OBS_COL_FORM_QUESTIONS" />
           </AssociationSet>
+          <EntitySet Name="OBS_QUESTION" EntityType="Models.OBS_QUESTION" />
+          <AssociationSet Name="relationship29" Association="Models.relationship29">
+            <End Role="OBS_QUESTION" EntitySet="OBS_QUESTION" />
+            <End Role="OBS_COL_FORM_INST_MM_ATTACH" EntitySet="OBS_COL_FORM_INST_MM_ATTACH" />
+          </AssociationSet>
+          <AssociationSet Name="relationship41" Association="Models.relationship41">
+            <End Role="OBS_QUESTION" EntitySet="OBS_QUESTION" />
+            <End Role="OBS_QUEST_ANS_TYPES" EntitySet="OBS_QUEST_ANS_TYPES" />
+          </AssociationSet>
+          <AssociationSet Name="rel_quest_assgnd_meta" Association="Models.rel_quest_assgnd_meta">
+            <End Role="OBS_QUESTION" EntitySet="OBS_QUESTION" />
+            <End Role="OBS_QUEST_ASSGND_MD" EntitySet="OBS_QUEST_ASSGND_MD" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="OBS_QUEST_ANS_TYPES">
           <Key>
@@ -1295,11 +1295,11 @@
           <Property Name="obs_question_id" Type="Int32" Nullable="false" />
           <Property Name="obs_ans_type_id" Type="Int16" Nullable="false" />
           <Property Name="obs_qat_end_eff_dt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="OBS_QUESTION" Relationship="Models.relationship41" FromRole="OBS_QUEST_ANS_TYPES" ToRole="OBS_QUESTION" />
           <NavigationProperty Name="OBS_ANS_TYPE" Relationship="Models.relationship43" FromRole="OBS_QUEST_ANS_TYPES" ToRole="OBS_ANS_TYPE" />
           <Property Name="obs_qat_default_ans_type_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="OBS_QUEST_SLCT_ANS" Relationship="Models.relationship44" FromRole="OBS_QUEST_ANS_TYPES" ToRole="OBS_QUEST_SLCT_ANS" />
           <NavigationProperty Name="OBS_COL_FORM_QUESTIONS" Relationship="Models.relationship42" FromRole="OBS_QUEST_ANS_TYPES" ToRole="OBS_COL_FORM_QUESTIONS" />
+          <NavigationProperty Name="OBS_QUESTION" Relationship="Models.relationship41" FromRole="OBS_QUEST_ANS_TYPES" ToRole="OBS_QUESTION" />
         </EntityType>
         <EntityType Name="OBS_QUEST_ASSGND_MD">
           <Key>
@@ -1313,26 +1313,6 @@
           <NavigationProperty Name="OBS_QUESTION_METADATA" Relationship="Models.rel_metadata_quest_assgnd" FromRole="OBS_QUEST_ASSGND_MD" ToRole="OBS_QUESTION_METADATA" />
           <NavigationProperty Name="OBS_QUESTION" Relationship="Models.rel_quest_assgnd_meta" FromRole="OBS_QUEST_ASSGND_MD" ToRole="OBS_QUESTION" />
         </EntityType>
-        <EntityType Name="OBS_QUESTION">
-          <Key>
-            <PropertyRef Name="obs_question_id" />
-          </Key>
-          <Property Name="obs_question_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="obs_question_ver" Type="Int16" Nullable="false" />
-          <Property Name="obs_question_full_text" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="obs_question_short_text" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="obs_question_desc" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="obs_question_mm_url" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="obs_question_eff_st_dt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="obs_question_eff_end_dt" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="OBS_QUEST_ANS_TYPES" Relationship="Models.relationship41" FromRole="OBS_QUESTION" ToRole="OBS_QUEST_ANS_TYPES" />
-          <NavigationProperty Name="OBS_QUEST_ASSGND_MD" Relationship="Models.rel_quest_assgnd_meta" FromRole="OBS_QUESTION" ToRole="OBS_QUEST_ASSGND_MD" />
-          <Property Name="obs_question_added_uid" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
-          <Property Name="obs_question_added_dtm" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="obs_question_upd_uid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
-          <Property Name="obs_question_upd_dtm" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="OBS_COL_FORM_INST_MM_ATTACH" Relationship="Models.relationship29" FromRole="OBS_QUESTION" ToRole="OBS_COL_FORM_INST_MM_ATTACH" />
-        </EntityType>
         <EntityType Name="OBS_QUESTION_METADATA">
           <Key>
             <PropertyRef Name="obs_quest_md_id" />
@@ -1342,18 +1322,6 @@
           <Property Name="obs_quest_md_cat" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="OBS_QUEST_ASSGND_MD" Relationship="Models.rel_metadata_quest_assgnd" FromRole="OBS_QUESTION_METADATA" ToRole="OBS_QUEST_ASSGND_MD" />
         </EntityType>
-        <Association Name="relationship41">
-          <End Type="Models.OBS_QUESTION" Role="OBS_QUESTION" Multiplicity="1" />
-          <End Type="Models.OBS_QUEST_ANS_TYPES" Role="OBS_QUEST_ANS_TYPES" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_QUESTION">
-              <PropertyRef Name="obs_question_id" />
-            </Principal>
-            <Dependent Role="OBS_QUEST_ANS_TYPES">
-              <PropertyRef Name="obs_question_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="rel_metadata_quest_assgnd">
           <End Type="Models.OBS_QUESTION_METADATA" Role="OBS_QUESTION_METADATA" Multiplicity="1" />
           <End Type="Models.OBS_QUEST_ASSGND_MD" Role="OBS_QUEST_ASSGND_MD" Multiplicity="*" />
@@ -1363,18 +1331,6 @@
             </Principal>
             <Dependent Role="OBS_QUEST_ASSGND_MD">
               <PropertyRef Name="obs_quest_md_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="rel_quest_assgnd_meta">
-          <End Type="Models.OBS_QUESTION" Role="OBS_QUESTION" Multiplicity="1" />
-          <End Type="Models.OBS_QUEST_ASSGND_MD" Role="OBS_QUEST_ASSGND_MD" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_QUESTION">
-              <PropertyRef Name="obs_question_id" />
-            </Principal>
-            <Dependent Role="OBS_QUEST_ASSGND_MD">
-              <PropertyRef Name="obs_question_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1457,9 +1413,9 @@
           <Property Name="obs_cfima_ntwk_path" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="obs_cfima_filename" Type="String" Nullable="false" MaxLength="75" FixedLength="false" Unicode="false" />
           <Property Name="obs_cfima_add_dt" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="OBS_QUESTION" Relationship="Models.relationship29" FromRole="OBS_COL_FORM_INST_MM_ATTACH" ToRole="OBS_QUESTION" />
           <NavigationProperty Name="OBS_COLLECT_FORM_INST" Relationship="Models.relationship30" FromRole="OBS_COL_FORM_INST_MM_ATTACH" ToRole="OBS_COLLECT_FORM_INST" />
           <NavigationProperty Name="OBS_MULTIMEDIA_TYPE" Relationship="Models.relationship31" FromRole="OBS_COL_FORM_INST_MM_ATTACH" ToRole="OBS_MULTIMEDIA_TYPE" />
+          <NavigationProperty Name="OBS_QUESTION" Relationship="Models.relationship29" FromRole="OBS_COL_FORM_INST_MM_ATTACH" ToRole="OBS_QUESTION" />
         </EntityType>
         <EntityType Name="OBS_COL_FORM_INST_SIGS">
           <Key>
@@ -1695,8 +1651,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="relationship40">
-          <End Type="Models.EMPLOYEE" Role="EMPLOYEE" Multiplicity="0..1" />
-          <End Type="Models.OBS_INST" Role="OBS_INST" Multiplicity="*" />
+          <End Type="Models.EMPLOYEE" Multiplicity="0..1" Role="EMPLOYEE" />
+          <End Type="Models.OBS_INST" Multiplicity="*" Role="OBS_INST" />
           <ReferentialConstraint>
             <Principal Role="EMPLOYEE">
               <PropertyRef Name="dsc_emp_id" />
@@ -1763,18 +1719,6 @@
             </Principal>
             <Dependent Role="OBS_COL_FORM_INST_ATTRIB_VALS">
               <PropertyRef Name="obs_cfi_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="relationship29">
-          <End Type="Models.OBS_QUESTION" Role="OBS_QUESTION" Multiplicity="0..1" />
-          <End Type="Models.OBS_COL_FORM_INST_MM_ATTACH" Role="OBS_COL_FORM_INST_MM_ATTACH" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_QUESTION">
-              <PropertyRef Name="obs_question_id" />
-            </Principal>
-            <Dependent Role="OBS_COL_FORM_INST_MM_ATTACH">
-              <PropertyRef Name="obs_question_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2061,6 +2005,62 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="OBS_QUESTION">
+          <Key>
+            <PropertyRef Name="obs_question_id" />
+          </Key>
+          <Property Name="obs_question_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="obs_question_ver" Type="Int16" Nullable="false" />
+          <Property Name="obs_question_full_text" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="obs_question_short_text" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="obs_question_desc" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="obs_question_mm_url" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="obs_question_eff_st_dt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="obs_question_eff_end_dt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="obs_question_added_uid" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="obs_question_added_dtm" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="obs_question_upd_uid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="obs_question_upd_dtm" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="OBS_COL_FORM_INST_MM_ATTACH" Relationship="Models.relationship29" FromRole="OBS_QUESTION" ToRole="OBS_COL_FORM_INST_MM_ATTACH" />
+          <NavigationProperty Name="OBS_QUEST_ANS_TYPES" Relationship="Models.relationship41" FromRole="OBS_QUESTION" ToRole="OBS_QUEST_ANS_TYPES" />
+          <NavigationProperty Name="OBS_QUEST_ASSGND_MD" Relationship="Models.rel_quest_assgnd_meta" FromRole="OBS_QUESTION" ToRole="OBS_QUEST_ASSGND_MD" />
+        </EntityType>
+        <Association Name="relationship29">
+          <End Type="Models.OBS_QUESTION" Role="OBS_QUESTION" Multiplicity="0..1" />
+          <End Type="Models.OBS_COL_FORM_INST_MM_ATTACH" Role="OBS_COL_FORM_INST_MM_ATTACH" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_QUESTION">
+              <PropertyRef Name="obs_question_id" />
+            </Principal>
+            <Dependent Role="OBS_COL_FORM_INST_MM_ATTACH">
+              <PropertyRef Name="obs_question_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="relationship41">
+          <End Type="Models.OBS_QUESTION" Role="OBS_QUESTION" Multiplicity="1" />
+          <End Type="Models.OBS_QUEST_ANS_TYPES" Role="OBS_QUEST_ANS_TYPES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_QUESTION">
+              <PropertyRef Name="obs_question_id" />
+            </Principal>
+            <Dependent Role="OBS_QUEST_ANS_TYPES">
+              <PropertyRef Name="obs_question_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rel_quest_assgnd_meta">
+          <End Type="Models.OBS_QUESTION" Role="OBS_QUESTION" Multiplicity="1" />
+          <End Type="Models.OBS_QUEST_ASSGND_MD" Role="OBS_QUEST_ASSGND_MD" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_QUESTION">
+              <PropertyRef Name="obs_question_id" />
+            </Principal>
+            <Dependent Role="OBS_QUEST_ASSGND_MD">
+              <PropertyRef Name="obs_question_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2156,24 +2156,6 @@
                 <ScalarProperty Name="obs_question_id" ColumnName="obs_question_id" />
                 <ScalarProperty Name="obs_quest_md_id" ColumnName="obs_quest_md_id" />
                 <ScalarProperty Name="obs_qad_id" ColumnName="obs_qad_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OBS_QUESTION">
-            <EntityTypeMapping TypeName="Models.OBS_QUESTION">
-              <MappingFragment StoreEntitySet="OBS_QUESTION">
-                <ScalarProperty Name="obs_question_upd_dtm" ColumnName="obs_question_upd_dtm" />
-                <ScalarProperty Name="obs_question_upd_uid" ColumnName="obs_question_upd_uid" />
-                <ScalarProperty Name="obs_question_added_dtm" ColumnName="obs_question_added_dtm" />
-                <ScalarProperty Name="obs_question_added_uid" ColumnName="obs_question_added_uid" />
-                <ScalarProperty Name="obs_question_eff_end_dt" ColumnName="obs_question_eff_end_dt" />
-                <ScalarProperty Name="obs_question_eff_st_dt" ColumnName="obs_question_eff_st_dt" />
-                <ScalarProperty Name="obs_question_mm_url" ColumnName="obs_question_mm_url" />
-                <ScalarProperty Name="obs_question_desc" ColumnName="obs_question_desc" />
-                <ScalarProperty Name="obs_question_short_text" ColumnName="obs_question_short_text" />
-                <ScalarProperty Name="obs_question_full_text" ColumnName="obs_question_full_text" />
-                <ScalarProperty Name="obs_question_ver" ColumnName="obs_question_ver" />
-                <ScalarProperty Name="obs_question_id" ColumnName="obs_question_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2425,6 +2407,24 @@
                 <ScalarProperty Name="obs_form_section_id" ColumnName="obs_form_section_id" />
                 <ScalarProperty Name="obs_cft_id" ColumnName="obs_cft_id" />
                 <ScalarProperty Name="obs_col_form_quest_id" ColumnName="obs_col_form_quest_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OBS_QUESTION">
+            <EntityTypeMapping TypeName="Models.OBS_QUESTION">
+              <MappingFragment StoreEntitySet="OBS_QUESTION">
+                <ScalarProperty Name="obs_question_upd_dtm" ColumnName="obs_question_upd_dtm" />
+                <ScalarProperty Name="obs_question_upd_uid" ColumnName="obs_question_upd_uid" />
+                <ScalarProperty Name="obs_question_added_dtm" ColumnName="obs_question_added_dtm" />
+                <ScalarProperty Name="obs_question_added_uid" ColumnName="obs_question_added_uid" />
+                <ScalarProperty Name="obs_question_eff_end_dt" ColumnName="obs_question_eff_end_dt" />
+                <ScalarProperty Name="obs_question_eff_st_dt" ColumnName="obs_question_eff_st_dt" />
+                <ScalarProperty Name="obs_question_mm_url" ColumnName="obs_question_mm_url" />
+                <ScalarProperty Name="obs_question_desc" ColumnName="obs_question_desc" />
+                <ScalarProperty Name="obs_question_short_text" ColumnName="obs_question_short_text" />
+                <ScalarProperty Name="obs_question_full_text" ColumnName="obs_question_full_text" />
+                <ScalarProperty Name="obs_question_ver" ColumnName="obs_question_ver" />
+                <ScalarProperty Name="obs_question_id" ColumnName="obs_question_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

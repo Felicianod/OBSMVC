@@ -7,7 +7,7 @@ using OBSMVC.Models;
 
 namespace OBSMVC.Controllers
 {
-    public class ColFormTemplateController : Controller
+    public class ColFormTemplateControllerFD : Controller
     {
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
 

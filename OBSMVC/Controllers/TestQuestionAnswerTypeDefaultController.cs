@@ -267,8 +267,7 @@ namespace OBSMVC.Controllers
                     oBS_QUEST_ANS_TYPES = db.OBS_QUEST_ANS_TYPES.Single(item => item.obs_ans_type_id == selected_ans_type_id && item.obs_question_id == question_id);
                     oBS_QUEST_ANS_TYPES.obs_qat_default_ans_type_yn = "Y";
                     db.SaveChanges();
-                }
-                
+                }               
             }
            
         }

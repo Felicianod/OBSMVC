@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="351439614754467e91eec7e236a9b3c6" Name="Diagram1" ZoomLevel="97">
+      <Diagram DiagramId="351439614754467e91eec7e236a9b3c6" Name="Diagram1">
         <EntityTypeShape EntityType="Models.EMPLOYEE" Width="1.5" PointX="3" PointY="3.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.DSC_LC" Width="1.5" PointX="0.5" PointY="3.125" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.OBS_SUB_TYPE" Width="1.5" PointX="7.75" PointY="0.5" IsExpanded="true" />
@@ -69,14 +69,7 @@
         <AssociationConnector Association="Models.rel_obs_type_sub_type" />
         <EntityTypeShape EntityType="Models.OBS_QUEST_SLCT_ANS" Width="1.5" PointX="9.125" PointY="9.75" />
         <AssociationConnector Association="Models.relationship44" />
-        <EntityTypeShape EntityType="Models.OBS_COL_FORM_INST_ANS" Width="1.5" PointX="3.375" PointY="11.125" />
-        <EntityTypeShape EntityType="Models.OBS_COL_FORM_INST_QUEST" Width="1.5" PointX="21.125" PointY="9.125" />
-        <EntityTypeShape EntityType="Models.del_dsc_employee" Width="1.5" PointX="7.75" PointY="14.125" />
-        <EntityTypeShape EntityType="Models.DSC_delnow" Width="1.5" PointX="0.75" PointY="14.125" />
-        <AssociationConnector Association="Models.rel_inst_quest_ans" />
-        <AssociationConnector Association="Models.rel_col_inst_col_inst_quest" />
-        <AssociationConnector Association="Models.rel_quest_inst_quest" />
-        <EntityTypeShape EntityType="Models.OBS_COL_FORM_QUESTIONS" Width="1.5" PointX="19.125" PointY="0.75" />
+        <EntityTypeShape EntityType="Models.OBS_COL_FORM_QUESTIONS" Width="1.5" PointX="20.125" PointY="9.625" />
         <AssociationConnector Association="Models.rel_col_from_questions" />
         <AssociationConnector Association="Models.rel_section_from_question" />
         <AssociationConnector Association="Models.rel_sub_section_form_question" />

@@ -54,10 +54,6 @@ namespace OBSMVC.Models
         public virtual DbSet<OBS_RVW_FORM_INST> OBS_RVW_FORM_INST { get; set; }
         public virtual DbSet<OBS_TYPE_SUB_TYPES> OBS_TYPE_SUB_TYPES { get; set; }
         public virtual DbSet<OBS_QUEST_SLCT_ANS> OBS_QUEST_SLCT_ANS { get; set; }
-        public virtual DbSet<OBS_COL_FORM_INST_ANS> OBS_COL_FORM_INST_ANS { get; set; }
-        public virtual DbSet<OBS_COL_FORM_INST_QUEST> OBS_COL_FORM_INST_QUEST { get; set; }
-        public virtual DbSet<del_dsc_employee> del_dsc_employee { get; set; }
-        public virtual DbSet<DSC_delnow> DSC_delnow { get; set; }
         public virtual DbSet<OBS_COL_FORM_QUESTIONS> OBS_COL_FORM_QUESTIONS { get; set; }
     }
 }

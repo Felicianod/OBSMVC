@@ -190,6 +190,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ColFormTemplateController.cs" />
     <Compile Include="Controllers\CustController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
@@ -254,9 +255,6 @@
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OBS_COLLECT_FORM_TMPLT.cs">
-      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\OBS_COL_FORM_INST_ACT_ANS.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OBS_COL_FORM_INST_ATTRIB_VALS.cs">
@@ -493,6 +491,7 @@
     <Content Include="Views\QuestionAnswerTypeDefault\View.cshtml" />
     <Content Include="Views\Question\displayAnswerSection.cshtml" />
     <Content Include="Views\TestQuestionAnswerTypeDefault\_TestlistAnswerTypes.cshtml" />
+    <Content Include="Views\ColFormTemplate\showColFormTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

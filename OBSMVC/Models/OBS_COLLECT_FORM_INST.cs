@@ -17,7 +17,6 @@ namespace OBSMVC.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public OBS_COLLECT_FORM_INST()
         {
-            this.OBS_COL_FORM_INST_ACT_ANS = new HashSet<OBS_COL_FORM_INST_ACT_ANS>();
             this.OBS_COL_FORM_INST_ATTRIB_VALS = new HashSet<OBS_COL_FORM_INST_ATTRIB_VALS>();
             this.OBS_COL_FORM_INST_MM_ATTACH = new HashSet<OBS_COL_FORM_INST_MM_ATTACH>();
             this.OBS_COL_FORM_INST_SIGS = new HashSet<OBS_COL_FORM_INST_SIGS>();
@@ -33,8 +32,6 @@ namespace OBSMVC.Models
         public Nullable<System.DateTime> obs_cfi_comp_date { get; set; }
     
         public virtual EMPLOYEE DSC_EMPLOYEE { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OBS_COL_FORM_INST_ACT_ANS> OBS_COL_FORM_INST_ACT_ANS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_COL_FORM_INST_ATTRIB_VALS> OBS_COL_FORM_INST_ATTRIB_VALS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

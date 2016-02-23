@@ -52,7 +52,7 @@ namespace OBSMVC.Controllers
 
         }
         
-        //-----------------------------------------------------------------------------------------------------------------
+        //--------------------------------------- DETAILS [GET] ------------------------------------------------------------------
         // GET: Question/Details/5
         public ActionResult Details(int? id)
         {
@@ -76,7 +76,7 @@ namespace OBSMVC.Controllers
 
 
         }
-        //-----------------------------------------------------------------------------------------------------------------
+        //---------------------------------------- CREATE  [GET] -----------------------------------------------------------------
         [HttpGet]  // GET: Question/Create
         public ActionResult Create()
         {
@@ -88,11 +88,8 @@ namespace OBSMVC.Controllers
 
             return View(obsQMD);
         }
-        //-----------------------------------------------------------------------------------------------------------------
-        // POST: Question/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        //---------------------------------------- CREATE [POST] -----------------------------------------------------------------
+        [HttpPost]               // POST: Question/Create
         [ValidateAntiForgeryToken]
         public ActionResult Create(FormCollection postedData, QuestionMDViewModel QuestionMDView,
                                  [Bind(Prefix = "q")] OBS_QUESTION questionHdr)
@@ -290,8 +287,7 @@ namespace OBSMVC.Controllers
         }        
         //-----------------------------------------------------------------------------------------------------------------
         // GET: QuestionMetadata
-        [ChildActionOnly]
-        [OutputCache(Duration =2000)]
+        [ChildActionOnly]     [OutputCache(Duration =2000)]
         public ActionResult qMetaDataList()
         {
             return View(db.OBS_QUESTION_METADATA.ToList());
@@ -315,7 +311,7 @@ namespace OBSMVC.Controllers
         // POST: Question/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        //----------------------------------------------------[ DELETECONFIRMED ] -----------------------------------------------
+        //---------------------------------------------[ DELETECONFIRMED  Action: GET] -----------------------------------------------
         public ActionResult DeleteConfirmed(int id)
         {
             OBS_QUESTION oBS_QUESTION = db.OBS_QUESTION.Find(id);
@@ -389,7 +385,7 @@ namespace OBSMVC.Controllers
             }
         }
 
-        //------------------------------------------ [ DISPOSE  Used as Garbage Collector on Delete Action]-----------------------
+        //---------------------------------------- [ DISPOSE  Used as Garbage Collector on Delete Action]-----------------------
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -190,6 +190,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ColFormTemplateController.cs" />
     <Compile Include="Controllers\CustController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
@@ -210,7 +211,13 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CustViewModel.cs" />
+    <Compile Include="Models\del_dsc_employee.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DSC_CUSTOMER.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DSC_delnow.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DSC_LC.cs">
@@ -256,13 +263,16 @@
     <Compile Include="Models\OBS_COLLECT_FORM_TMPLT.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\OBS_COL_FORM_INST_ACT_ANS.cs">
+    <Compile Include="Models\OBS_COL_FORM_INST_ANS.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OBS_COL_FORM_INST_ATTRIB_VALS.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OBS_COL_FORM_INST_MM_ATTACH.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_COL_FORM_INST_QUEST.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OBS_COL_FORM_INST_SIGS.cs">
@@ -377,6 +387,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="ClassDiagram1.cd" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Content\jquery-ui.css" />
@@ -493,6 +504,11 @@
     <Content Include="Views\QuestionAnswerTypeDefault\View.cshtml" />
     <Content Include="Views\Question\displayAnswerSection.cshtml" />
     <Content Include="Views\TestQuestionAnswerTypeDefault\_TestlistAnswerTypes.cshtml" />
+    <Content Include="Views\ColFormTemplate\Create.cshtml" />
+    <Content Include="Views\ColFormTemplate\Delete.cshtml" />
+    <Content Include="Views\ColFormTemplate\Details.cshtml" />
+    <Content Include="Views\ColFormTemplate\Edit.cshtml" />
+    <Content Include="Views\ColFormTemplate\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

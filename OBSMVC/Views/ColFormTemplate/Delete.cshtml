@@ -1,0 +1,97 @@
+﻿@model OBSMVC.Models.OBS_COLLECT_FORM_TMPLT
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "TestlistAnswerTypes.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>OBS_COLLECT_FORM_TMPLT</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_cft_nbr)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_cft_nbr)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_cft_ver)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_cft_ver)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_cft_eff_st_dt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_cft_eff_st_dt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_cft_eff_end_dt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_cft_eff_end_dt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_cft_title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_cft_title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_cft_subtitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_cft_subtitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DSC_CUSTOMER.dsc_cust_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DSC_CUSTOMER.dsc_cust_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DSC_LC.dsc_lc_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DSC_LC.dsc_lc_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OBS_TYPE.obs_type_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OBS_TYPE.obs_type_name)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

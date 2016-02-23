@@ -18,10 +18,10 @@ namespace OBSMVC.Models
         public int obs_cft_id { get; set; }
         public int obs_form_section_id { get; set; }
         public Nullable<int> obs_form_sub_section_id { get; set; }
-        public int obs_quest_ans_types_id { get; set; }
+        public int obs_qat_id { get; set; }
         public short obs_col_form_quest_order { get; set; }
         public Nullable<short> obs_col_form_quest_wgt { get; set; }
-        public string obs_col_form_na_yn { get; set; }
+        public string obs_col_form_quest_na_yn { get; set; }
     
         public virtual OBS_COLLECT_FORM_TMPLT OBS_COLLECT_FORM_TMPLT { get; set; }
         public virtual OBS_FORM_SECTION OBS_FORM_SECTION { get; set; }

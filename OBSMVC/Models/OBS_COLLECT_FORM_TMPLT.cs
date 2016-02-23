@@ -17,9 +17,9 @@ namespace OBSMVC.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public OBS_COLLECT_FORM_TMPLT()
         {
-            this.OBS_COL_FORM_QUESTIONS = new HashSet<OBS_COL_FORM_QUESTIONS>();
             this.OBS_COL_FORM_TMPLT_ATTRIBS = new HashSet<OBS_COL_FORM_TMPLT_ATTRIBS>();
             this.OBS_COLLECT_FORM_INST = new HashSet<OBS_COLLECT_FORM_INST>();
+            this.OBS_COL_FORM_QUESTIONS = new HashSet<OBS_COL_FORM_QUESTIONS>();
         }
     
         public int obs_cft_id { get; set; }
@@ -36,11 +36,11 @@ namespace OBSMVC.Models
         public virtual DSC_CUSTOMER DSC_CUSTOMER { get; set; }
         public virtual DSC_LC DSC_LC { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OBS_COL_FORM_QUESTIONS> OBS_COL_FORM_QUESTIONS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_COL_FORM_TMPLT_ATTRIBS> OBS_COL_FORM_TMPLT_ATTRIBS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_COLLECT_FORM_INST> OBS_COLLECT_FORM_INST { get; set; }
         public virtual OBS_TYPE OBS_TYPE { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OBS_COL_FORM_QUESTIONS> OBS_COL_FORM_QUESTIONS { get; set; }
     }
 }

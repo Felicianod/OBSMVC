@@ -739,7 +739,7 @@ namespace OBSMVC.Controllers
                             oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
                             oBS_QUEST_SLCT_ANS.obs_qsa_wt = order;
                             oBS_QUEST_SLCT_ANS.obs_qsa_dflt_yn = "N";
-                            oBS_QUEST_SLCT_ANS.obs_qsa_eff_st_dt = DateTime.Today;
+                            oBS_QUEST_SLCT_ANS.obs_qsa_eff_st_dt = DateTime.Now;
                             oBS_QUEST_SLCT_ANS.obs_qsa_eff_end_dt = Convert.ToDateTime("12/31/2060");
                             db.OBS_QUEST_SLCT_ANS.Add(oBS_QUEST_SLCT_ANS);
                             order++;
@@ -775,6 +775,7 @@ namespace OBSMVC.Controllers
                         {
                             OBS_QUEST_SLCT_ANS oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Single(item => item.obs_qat_id == default_qat_id && item.obs_qsa_text == str && item.obs_qsa_eff_st_dt <= DateTime.Today && item.obs_qsa_eff_end_dt > DateTime.Today);                           
                             oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
+                            oBS_QUEST_SLCT_ANS.obs_qsa_wt = order;
                             db.SaveChanges();                     
                             order++;
                         }
@@ -793,7 +794,7 @@ namespace OBSMVC.Controllers
                             UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
                             UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_wt = order;
                             UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_dflt_yn = "N";
-                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_eff_st_dt = DateTime.Today;
+                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_eff_st_dt = DateTime.Now;
                             UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_eff_end_dt = Convert.ToDateTime("12/31/2060");
                             db.OBS_QUEST_SLCT_ANS.Add(UPDATED_oBS_QUEST_SLCT_ANS);
                             order++;
@@ -841,7 +842,7 @@ namespace OBSMVC.Controllers
                                 else//if we're here, that means user passed a different list of selected answers and we need to disable the current one and add new
                                 {
                                     List<OBS_QUEST_SLCT_ANS> oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == default_qat_id).ToList();
-                                    oBS_QUEST_SLCT_ANS.ForEach(x => x.obs_qsa_eff_end_dt = DateTime.Today);//update end effective date to todays date
+                                    oBS_QUEST_SLCT_ANS.ForEach(x => x.obs_qsa_eff_end_dt = DateTime.Now);//update end effective date to todays date
                                     short order = 1;
                                     foreach (string str in obsQuestion.selectedAT.selAnsList)//now lets create a new record with updated selected answers
                                     {
@@ -851,7 +852,7 @@ namespace OBSMVC.Controllers
                                         UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
                                         UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_wt = order;
                                         UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_dflt_yn = "N";
-                                        UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_eff_st_dt = DateTime.Today;
+                                        UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_eff_st_dt = DateTime.Now;
                                         UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_eff_end_dt = Convert.ToDateTime("12/31/2060");
                                         db.OBS_QUEST_SLCT_ANS.Add(UPDATED_oBS_QUEST_SLCT_ANS);
                                         order++;
@@ -891,7 +892,7 @@ namespace OBSMVC.Controllers
                                 oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
                                 oBS_QUEST_SLCT_ANS.obs_qsa_wt = order;
                                 oBS_QUEST_SLCT_ANS.obs_qsa_dflt_yn = "N";
-                                oBS_QUEST_SLCT_ANS.obs_qsa_eff_st_dt = DateTime.Today;
+                                oBS_QUEST_SLCT_ANS.obs_qsa_eff_st_dt = DateTime.Now;
                                 oBS_QUEST_SLCT_ANS.obs_qsa_eff_end_dt = Convert.ToDateTime("12/31/2060");
                                 db.OBS_QUEST_SLCT_ANS.Add(oBS_QUEST_SLCT_ANS);
                                 order++;

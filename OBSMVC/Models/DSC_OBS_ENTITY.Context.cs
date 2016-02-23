@@ -39,11 +39,9 @@ namespace OBSMVC.Models
         public virtual DbSet<OBS_APP_EVENT_LOG> OBS_APP_EVENT_LOG { get; set; }
         public virtual DbSet<OBS_APPLICATION> OBS_APPLICATION { get; set; }
         public virtual DbSet<OBS_ATTRIB_DATA_TYPES> OBS_ATTRIB_DATA_TYPES { get; set; }
-        public virtual DbSet<OBS_COL_FORM_INST_ACT_ANS> OBS_COL_FORM_INST_ACT_ANS { get; set; }
         public virtual DbSet<OBS_COL_FORM_INST_ATTRIB_VALS> OBS_COL_FORM_INST_ATTRIB_VALS { get; set; }
         public virtual DbSet<OBS_COL_FORM_INST_MM_ATTACH> OBS_COL_FORM_INST_MM_ATTACH { get; set; }
         public virtual DbSet<OBS_COL_FORM_INST_SIGS> OBS_COL_FORM_INST_SIGS { get; set; }
-        public virtual DbSet<OBS_COL_FORM_QUESTIONS> OBS_COL_FORM_QUESTIONS { get; set; }
         public virtual DbSet<OBS_COL_FORM_TMPLT_ATTRIBS> OBS_COL_FORM_TMPLT_ATTRIBS { get; set; }
         public virtual DbSet<OBS_COLLECT_FORM_INST> OBS_COLLECT_FORM_INST { get; set; }
         public virtual DbSet<OBS_COLLECT_FORM_TMPLT> OBS_COLLECT_FORM_TMPLT { get; set; }
@@ -56,5 +54,10 @@ namespace OBSMVC.Models
         public virtual DbSet<OBS_RVW_FORM_INST> OBS_RVW_FORM_INST { get; set; }
         public virtual DbSet<OBS_TYPE_SUB_TYPES> OBS_TYPE_SUB_TYPES { get; set; }
         public virtual DbSet<OBS_QUEST_SLCT_ANS> OBS_QUEST_SLCT_ANS { get; set; }
+        public virtual DbSet<OBS_COL_FORM_INST_ANS> OBS_COL_FORM_INST_ANS { get; set; }
+        public virtual DbSet<OBS_COL_FORM_INST_QUEST> OBS_COL_FORM_INST_QUEST { get; set; }
+        public virtual DbSet<del_dsc_employee> del_dsc_employee { get; set; }
+        public virtual DbSet<DSC_delnow> DSC_delnow { get; set; }
+        public virtual DbSet<OBS_COL_FORM_QUESTIONS> OBS_COL_FORM_QUESTIONS { get; set; }
     }
 }

@@ -16,22 +16,27 @@
            <td>
               <h3 class="panel-title"> <b>COLLECTION FORM: </b> @Model.cft_Title </h3>
               <h5> Subtitle: @Model.cft_SubTitle </h5>
-              <table style="width:100%">
-                <tr>
-                  <td style="width:10%"><b>CUSTOMER: </b></td>
-                  <td style="width:15%">@Model.cft_Cust</td>
-                  <td style="width:4%"><b>LC: </b></td>
-                  <td style="width:15%">@Model.cft_LC</td>
-                  <td style="width:8%"><b>TYPE: </b></td>
-                  <td style="width:40%">@Model.cft_obsType</td>
-                  <td style="width:13%; text-align:right"><span class="badge">@Model.cft_Status </span> </td>
-                </tr>
-              </table>
            </td>
            <td style="text-align:right; vertical-align:top">
-               <span class="badge"> @Model.cft_id<text>-N</text>@Model.cft_Nbr v.@Model.cft_Version</span>
+               <span class="badge"> ID: @Model.cft_id<text>-N</text>@Model.cft_Nbr v.@Model.cft_Version</span>
            </td>
         </tr>
+         <tr>
+<td colspan="2">
+    <table style="width:100%">
+        <tr>
+            <td style="width:10%"><b>CUSTOMER: </b></td>
+            <td style="width:15%">@Model.cft_Cust</td>
+            <td style="width:4%"><b>LC: </b></td>
+            <td style="width:15%">@Model.cft_LC</td>
+            <td style="width:8%"><b>TYPE: </b></td>
+            <td style="width:40%">@Model.cft_obsType</td>
+            <td style="width:8%; text-align:right"><span class="badge">@Model.cft_Status </span> </td>
+        </tr>
+    </table>
+
+</td>
+         </tr>
      </table>
   </div>
   <div class="panel-body">

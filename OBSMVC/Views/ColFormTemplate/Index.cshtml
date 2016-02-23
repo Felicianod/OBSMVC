@@ -1,0 +1,88 @@
+﻿@model IEnumerable<OBSMVC.Controllers.ColFormTemplateController.ObsColFormTemplate>
+
+@{
+    ViewBag.Title = "Form Templates";
+}
+
+<h2>Form Templates</h2>
+<br />
+<table class="table table-condensed table-hover" border="1">
+    <tr style="background-color:gainsboro">
+        <th>
+            @Html.DisplayNameFor(model => model.OBSformID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FormTitle)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FormNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FormVersion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Customer)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LC)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OBS_Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.isActive)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.QuestionCount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ObservationCount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastCompleteDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td style="text-align:center">
+            @Html.DisplayFor(modelItem => item.OBSformID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FormTitle)
+        </td>
+        <td style="text-align:center">
+            @Html.DisplayFor(modelItem => item.FormNumber)
+        </td>
+        <td style="text-align:center">
+            @Html.DisplayFor(modelItem => item.FormVersion)
+        </td>
+        <td style="text-align:center">
+            @Html.DisplayFor(modelItem => item.Customer)
+        </td>
+        <td style="text-align:center">
+            @Html.DisplayFor(modelItem => item.LC)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OBS_Type)
+        </td>
+        <td style="text-align:center">
+            @Html.DisplayFor(modelItem => item.isActive)
+        </td>
+        <td style="text-align:center">
+            @Html.DisplayFor(modelItem => item.QuestionCount)
+        </td>
+        <td style="text-align:center">
+            @Html.DisplayFor(modelItem => item.ObservationCount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastCompleteDate)
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", new { id=item.OBSformID }) 
+        </td>
+    </tr>
+}
+
+</table>

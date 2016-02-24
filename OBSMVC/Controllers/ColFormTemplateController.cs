@@ -286,6 +286,7 @@ namespace OBSMVC.Controllers
                 int sectionCounter = 0;
                 string oldSectionName = "undefined";
                 string newSectionName = String.Empty;
+                int questionCounter = 1;
                 CollectionFormSection oSection = new CollectionFormSection();
                 foreach (OBS_COL_FORM_QUESTIONS q in formQuestions)
                 {
@@ -306,14 +307,18 @@ namespace OBSMVC.Controllers
                     //Create New question, Populate the Info and Add it to the current Form section
                     CollectionFormQuestion oQuestion = new CollectionFormQuestion();
                     oQuestion.cfq_id = q.obs_col_form_quest_id;
-                    oQuestion.cfq_order = q.obs_col_form_quest_order;
                     oQuestion.cfq_questId = q.OBS_QUEST_ANS_TYPES.obs_question_id;
-                    oQuestion.cfq_ATid = q.OBS_QUEST_ANS_TYPES.obs_ans_type_id;
+                    oQuestion.cfq_order = q.obs_col_form_quest_order;
+                    oQuestion.cfq_seqInForm = questionCounter.ToString("00");
+                    oQuestion.cfq_fullText = q.OBS_QUEST_ANS_TYPES.OBS_QUESTION.obs_question_full_text.Replace(": (",":<br/>(");
+                    oQuestion.cfq_AT = q.OBS_QUEST_ANS_TYPES.OBS_ANS_TYPE.obs_ans_type_name;
+                    oQuestion.cfq_qatId = q.obs_qat_id;
                     // .... Populate the rest of the oQuestion properties
                     oSection.colFormQuestionList.Add(oQuestion);
                     
                     // reset the name of the old  section indicator
                     oldSectionName = newSectionName;
+                    questionCounter++;
                 } // End of For-each question loop
                 //Finally add the last populated section to the section List
                 colFormSections.Add(oSection);            
@@ -339,9 +344,13 @@ namespace OBSMVC.Controllers
         //- - - - - - - - - - Properties - - - - - - - - - - - - - - - - - - - - |
         // All Properties are set at Constructor Time
         public long cfq_id { get; set; }
+        public long cfq_qatId { get; set; }
+        public string cfq_seqInForm { get; set; }
         public int cfq_order { get; set; }
         public int cfq_questId { get; set; }
-        public int cfq_ATid { get; set; }
+        public string cfq_fullText { get; set; }
+        public string cfq_AT { get; set; }
+        
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\\
         //- - - - - - - - - - - - CLASS METHODS - - - - - - - - - - - - - - - - |
         //.... TODO ....

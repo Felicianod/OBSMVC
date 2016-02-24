@@ -70,8 +70,15 @@
                         @foreach (var fQuestion in fSection.colFormQuestionList)
                         {
                             <li class="list-group-item">
-                               [@fQuestion.cfq_id.ToString("00")] Question Id: @fQuestion.cfq_questId
-                                <span class="badge">Answer Type Id: @fQuestion.cfq_ATid.ToString("00")</span>
+                                <table style="width:100%">
+                                  <tr>
+                                     <td style="width:5%">
+                                         <a href="/Question/Details/@fQuestion.cfq_questId?rurl=Form_@Model.cft_id" class="Button">[ @fQuestion.cfq_seqInForm ]</a>
+                                     </td>
+                                     <td>@fQuestion.cfq_fullText</td>
+                                     <td style="width:8%"><span class="badge">Answer Type: @fQuestion.cfq_AT</span></td>
+                                  </tr>
+                                </table>
                             </li>
                         }
                     </ul>

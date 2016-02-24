@@ -1,17 +1,24 @@
 ﻿@model OBSMVC.Controllers.CollectionForm
 
-@{
-    ViewBag.Title = "showColFormTemplate";
-}
+@{ ViewBag.Title = "showColFormTemplate"; }
 
 <style>
-  body { padding-top: 70px; }
+  body { padding-top: 50px; }
   .affix {
       top: 0;
       width: 100%;
   }
   .affix + .container-fluid {
       padding-top: 70px;
+  }
+  .list-group-item {
+      overflow:hidden;  
+      position: relative;
+      display: block;
+      padding: 7px 7px; /* adjust here */
+      margin-bottom: -1px;
+      border: 1px solid #ddd;
+      line-height: 1em /* set to text height */
   }
   
 </style>
@@ -21,7 +28,7 @@
         <table style="width:100%">
             <tr>
                 <td>
-                    <h3 class="panel-title"> <b>COLLECTION FORM: </b> @Model.cft_Title </h3>
+                    <h3 class="panel-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>COLLECTION FORM: </b><span style="color:blue">@Model.cft_Title </span></h3>
                     <h5> Subtitle: @Model.cft_SubTitle </h5>
                 </td>
                 <td style="text-align:right; vertical-align:top">
@@ -49,25 +56,29 @@
     </div>
     <div class="panel-body">
     @* - - - - - Loop Once for each Question Section - - - - - *@
-    @for (int x = 0; x < 5; x++)
+    @foreach (var fSection in Model.colFormSections)
     {
-       <div class="panel-group">
-         <div class="panel panel-default">
-            <div class="panel-heading">
-               <h4 class="panel-title">
-                  <a data-toggle="collapse" href="#collapse1">Section No. @x+1</a>
-               </h4>
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#@fSection.sectionViewId"><span class="glyphicon glyphicon-resize-vertical">&nbsp;</span>@fSection.sectionName</a>
+                    </h4>
+                </div>
+                <div id="@fSection.sectionViewId" class="panel-collapse collapse in">
+                    <ul class="list-group">
+                        @foreach (var fQuestion in fSection.colFormQuestionList)
+                        {
+                            <li class="list-group-item">
+                               [@fQuestion.cfq_id.ToString("00")] Question Id: @fQuestion.cfq_questId
+                                <span class="badge">Answer Type Id: @fQuestion.cfq_ATid.ToString("00")</span>
+                            </li>
+                        }
+                    </ul>
+                    @*<div class="panel-footer">Footer</div>*@
+                </div>
             </div>
-            <div id="collapse1" class="panel-collapse collapse">
-               <ul class="list-group">
-                  <li class="list-group-item">Question @x+1a</li>
-                  <li class="list-group-item">Question @x+1b</li>
-                  <li class="list-group-item">Question @x+1a</li>
-               </ul>
-               @*<div class="panel-footer">Footer</div>*@
-            </div>
-         </div>
-       </div>
+        </div>
     }
    </div>
 </div>

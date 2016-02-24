@@ -16,30 +16,109 @@ namespace OBSMVC.Controllers
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
 
         // GET: ColFormTemplate
-        public ActionResult Index()
+        public ActionResult Index( string title_search, string question_search, string t_search, string q_search)
         {
             var oBS_COLLECT_FORM_TMPLT = db.OBS_COLLECT_FORM_TMPLT.Include(o => o.DSC_CUSTOMER).Include(o => o.DSC_LC).Include(o => o.OBS_TYPE);
-
+            
             List<ObsColFormTemplate> ObsColFormTemplateList = new List<ObsColFormTemplate>();
-            foreach(var x in oBS_COLLECT_FORM_TMPLT)
-            {
-                ObsColFormTemplate obsForm = new ObsColFormTemplate();
-                obsForm.OBSformID = x.obs_cft_id;
-                obsForm.FormTitle = x.obs_cft_title;
-                obsForm.FormNumber = x.obs_cft_nbr;
-                obsForm.FormVersion = x.obs_cft_ver;
-                obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
-                obsForm.LC = x.DSC_LC.dsc_lc_name;
-                obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
-                obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
-                obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
-                obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
-                obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
-                obsForm.FormSubtitle = x.obs_cft_subtitle;
+            if (String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
+            {//scenario where user didn't pass any search strings
+                foreach (var x in oBS_COLLECT_FORM_TMPLT)
+                {
+                    ObsColFormTemplate obsForm = new ObsColFormTemplate();
+                    obsForm.OBSformID = x.obs_cft_id;
+                    obsForm.FormTitle = x.obs_cft_title;
+                    obsForm.FormNumber = x.obs_cft_nbr;
+                    obsForm.FormVersion = x.obs_cft_ver;
+                    obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
+                    obsForm.LC = x.DSC_LC.dsc_lc_name;
+                    obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
+                    obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                    obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
+                    obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
+                    obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
+                    obsForm.FormSubtitle = x.obs_cft_subtitle;
+                    ObsColFormTemplateList.Add(obsForm);
+                }//end of foreach
 
-                ObsColFormTemplateList.Add(obsForm);
+            }// end of  if (String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
+            else if (String.IsNullOrWhiteSpace(question_search) && !String.IsNullOrWhiteSpace(title_search))
+            {// search by title
+                foreach (var x in oBS_COLLECT_FORM_TMPLT)
+                {
+                    if (matchesSearchCriteria(title_search, x.obs_cft_title + " " + x.OBS_TYPE.obs_type_name + " " + x.obs_cft_subtitle, t_search))
+                    {
+                        ObsColFormTemplate obsForm = new ObsColFormTemplate();
+                        obsForm.OBSformID = x.obs_cft_id;
+                        obsForm.FormTitle = x.obs_cft_title;
+                        obsForm.FormNumber = x.obs_cft_nbr;
+                        obsForm.FormVersion = x.obs_cft_ver;
+                        obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
+                        obsForm.LC = x.DSC_LC.dsc_lc_name;
+                        obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
+                        obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                        obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
+                        obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
+                        obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
+                        obsForm.FormSubtitle = x.obs_cft_subtitle;
+                        ObsColFormTemplateList.Add(obsForm);
+                    }
 
+                }//end of foreach
+            } // end of  else if (String.IsNullOrWhiteSpace(question_search) && !String.IsNullOrWhiteSpace(title_search))
+            else if (!String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
+            {//search by question
+                List<int> cft_with_matching_questions = searchQuestionsWithMatchingSearchCriteria(question_search, q_search);
+                foreach (var x in oBS_COLLECT_FORM_TMPLT)
+                {
+                    if (cft_with_matching_questions.Count() > 0 && cft_with_matching_questions.IndexOf(x.obs_cft_id)!=-1)
+                    {
+                        ObsColFormTemplate obsForm = new ObsColFormTemplate();
+                        obsForm.OBSformID = x.obs_cft_id;
+                        obsForm.FormTitle = x.obs_cft_title;
+                        obsForm.FormNumber = x.obs_cft_nbr;
+                        obsForm.FormVersion = x.obs_cft_ver;
+                        obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
+                        obsForm.LC = x.DSC_LC.dsc_lc_name;
+                        obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
+                        obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                        obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
+                        obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
+                        obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
+                        obsForm.FormSubtitle = x.obs_cft_subtitle;
+                        ObsColFormTemplateList.Add(obsForm);
+
+                    }
+                }
+            }// end of  else if (!String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
+            else if(!String.IsNullOrWhiteSpace(question_search) && !String.IsNullOrWhiteSpace(title_search))
+            {// search by both title and question
+                List<int> cft_with_matching_questions = searchQuestionsWithMatchingSearchCriteria(question_search, q_search);
+                foreach (var x in oBS_COLLECT_FORM_TMPLT)
+                {
+                    if ((matchesSearchCriteria(title_search, x.obs_cft_title + " " + x.OBS_TYPE.obs_type_name + " " + x.obs_cft_subtitle, t_search))||((cft_with_matching_questions.Count() > 0 && cft_with_matching_questions.IndexOf(x.obs_cft_id) != -1)))
+                    {
+                        ObsColFormTemplate obsForm = new ObsColFormTemplate();
+                        obsForm.OBSformID = x.obs_cft_id;
+                        obsForm.FormTitle = x.obs_cft_title;
+                        obsForm.FormNumber = x.obs_cft_nbr;
+                        obsForm.FormVersion = x.obs_cft_ver;
+                        obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
+                        obsForm.LC = x.DSC_LC.dsc_lc_name;
+                        obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
+                        obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                        obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
+                        obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
+                        obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
+                        obsForm.FormSubtitle = x.obs_cft_subtitle;
+                        ObsColFormTemplateList.Add(obsForm);//title search match
+                    }                   
+
+                }//end of foreach
+                
             }
+
+          
             return View(ObsColFormTemplateList.ToList());
         }
 
@@ -186,26 +265,119 @@ namespace OBSMVC.Controllers
                 return  OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date).Equals(null) ? null : OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date);
                 
             }
-            public List<int> searchByQuestion(string search)
-            {
-                List<int> cft_ids_with_matching_qiestions = (from q in OBSdb.OBS_QUESTION
-                                                             join qa in OBSdb.OBS_QUEST_ANS_TYPES
-                                                             on q.obs_question_id equals qa.obs_question_id
-                                                             join fq in OBSdb.OBS_COL_FORM_QUESTIONS
-                                                              on qa.obs_qat_id equals fq.obs_qat_id
-                                                             where q.obs_question_full_text.Contains(search)
-                                                             select fq.obs_cft_id).ToList();
-
-                return cft_ids_with_matching_qiestions;
-            }
+           
 
 
         }
         //---------------------------------------------HELPERS----------------------------------------//
+        public List<int> searchQuestionsWithMatchingSearchCriteria(string search_for_string, string search_criteria)
+        {
+             DSC_OBS_DB_ENTITY OBSdb = new DSC_OBS_DB_ENTITY();
+        List<int> cft_ids_with_matching_qiestions = new List<int>();
+           
+            List<OBS_QUESTION> list_of_questions = (from q in OBSdb.OBS_QUESTION
+                                                    join qa in OBSdb.OBS_QUEST_ANS_TYPES
+                                                    on q.obs_question_id equals qa.obs_question_id
+                                                    join fq in OBSdb.OBS_COL_FORM_QUESTIONS
+                                                     on qa.obs_qat_id equals fq.obs_qat_id
+
+                                                    select q).Distinct().ToList();
+            string[] splitterm = { " " };
+            string[] splitted_search_string = search_for_string.Split(splitterm, StringSplitOptions.RemoveEmptyEntries);
+            switch (search_criteria)
+            {
+                case "Any":
+                    foreach (OBS_QUESTION quest in list_of_questions)
+                    {
+                        /* foreach (string s in splitted_search_string)
+                         {
+                             if (quest.obs_question_full_text.ToLower().Contains(s.ToLower()))
+                             { list_of_quest_ids.Add(quest.obs_question_id); break; }
+                             else { continue; }
+                         }*/
+                        if (matchesSearchCriteria(search_for_string, quest.obs_question_full_text, search_criteria))
+                        {
+
+                              List<int> temp  = (from q in OBSdb.OBS_QUESTION
+                                                               join qa in OBSdb.OBS_QUEST_ANS_TYPES
+                                                               on q.obs_question_id equals qa.obs_question_id
+                                                               join fq in OBSdb.OBS_COL_FORM_QUESTIONS
+                                                                on qa.obs_qat_id equals fq.obs_qat_id
+                                                               where q.obs_question_id == quest.obs_question_id
+                                                               select fq.obs_cft_id).Distinct().ToList();
+                            cft_ids_with_matching_qiestions = temp.Union(cft_ids_with_matching_qiestions).ToList();
+                        }
+                        
+                    }
+                    break;
+
+                case "All":
+                    foreach (OBS_QUESTION quest in list_of_questions)
+                    {
+                        if (matchesSearchCriteria(search_for_string, quest.obs_question_full_text, search_criteria))
+                        {
+                            List<int> temp = (from q in OBSdb.OBS_QUESTION
+                                                               join qa in OBSdb.OBS_QUEST_ANS_TYPES
+                                                               on q.obs_question_id equals qa.obs_question_id
+                                                               join fq in OBSdb.OBS_COL_FORM_QUESTIONS
+                                                                on qa.obs_qat_id equals fq.obs_qat_id
+                                                               where q.obs_question_id == quest.obs_question_id
+                                                               select fq.obs_cft_id).Distinct().ToList();
+                            cft_ids_with_matching_qiestions = temp.Union(cft_ids_with_matching_qiestions).ToList();
+                        }
+                    }
+                    break;
+
+                case "Exact":
+                    cft_ids_with_matching_qiestions = (from q in OBSdb.OBS_QUESTION
+                                                       join qa in OBSdb.OBS_QUEST_ANS_TYPES
+                                                       on q.obs_question_id equals qa.obs_question_id
+                                                       join fq in OBSdb.OBS_COL_FORM_QUESTIONS
+                                                        on qa.obs_qat_id equals fq.obs_qat_id
+                                                       where q.obs_question_full_text.Contains(search_for_string)
+                                                       select fq.obs_cft_id).Distinct().ToList();
+                    return cft_ids_with_matching_qiestions;
+
+            }
+
+
+            return cft_ids_with_matching_qiestions;
+        }
         public static bool IsActiveForm(DateTime start_date, DateTime end_date)
         {
             if (DateTime.Today >= start_date && DateTime.Today < end_date) { return true; }
             else { return false; }
+        }
+        public static bool matchesSearchCriteria(string search_for_string, string search_in, string search_criteria)
+        {
+            string[] splitterm = { " " };
+            string[] splitted_search_string = search_for_string.Split(splitterm, StringSplitOptions.RemoveEmptyEntries);
+            switch (search_criteria)
+            {
+                case "Any":
+                    foreach (string s in splitted_search_string)
+                    {
+                        if (search_in.ToLower().Contains(s.ToLower())) { return true; }
+                        else { continue; }
+                    }
+                    return false;
+                
+                case "All":
+                    foreach (string s in splitted_search_string)
+                    {
+                        if (search_in.ToLower().Contains(s.ToLower())) { continue; }
+                        else { return false; }
+                    }
+                    return true;
+                  
+                case "Exact":
+                    if (search_in.ToLower().Contains(search_for_string.ToLower())) { return true; }
+                    else return false;
+
+                default:
+                   return false;
+            }
+            
         }
     }
     //\==================== END OF CONTROLLERS CLASS ==================================================/

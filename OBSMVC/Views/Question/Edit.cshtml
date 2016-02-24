@@ -87,20 +87,16 @@
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
    <form class="form-horizontal" role="form" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" value="@Model.q.obs_question_id" name="q.obs_question_id" id="q.obs_question_id">
         <div class="row">
             <!-- Display A single edit form column -->
-            <div class="col-md-6 personal-info">
-
-                @Html.AntiForgeryToken()
-
-                <div class="form-group row">
-                    <input type="hidden" value="@Model.q.obs_question_id" name="q.obs_question_id" id="q.obs_question_id">
-                </div>
+            <div class="col-md-7 personal-info">
                 <div class="form-group row">
                     @Html.LabelFor(model => model.q.obs_question_full_text, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="input-group col-md-6">
-                        @*<input type="text" value="@Model.q.obs_question_full_text" class="form-control" name="obs_question_full_text" id="obs_question_full_text" />*@
-                        @Html.EditorFor(model => model.q.obs_question_full_text, new { htmlAttributes = new { @class = "form-control ", @cols = 80, @rows = 3 } })
+                    <div class="input-group col-md-10">
+                        @*<textarea class="form-control" rows="5" cols="150" id="q.obs_question_full_text"></textarea>*@
+                        @Html.EditorFor(model => model.q.obs_question_full_text, new { htmlAttributes = new {@class = "form-control ", @cols = 120, @rows = 4 } })
                         @Html.ValidationMessageFor(model => model.q.obs_question_full_text, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -113,7 +109,7 @@
                 </div>*@
                 <div class="form-group row">
                     @Html.LabelFor(model => model.q.obs_question_desc, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="input-group col-md-6">
+                    <div class="input-group col-md-10">
                         @Html.EditorFor(model => model.q.obs_question_desc, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.q.obs_question_desc, "", new { @class = "text-danger" })
                     </div>
@@ -140,40 +136,40 @@
             </div>
             @if (Model.q.obs_question_eff_end_dt > DateTime.Today)
             {
-                <div class="col-md-6 personal-info">
-                    <div class="panel panel-info " id="partialPanel">
-                        <div class="panel-heading">
-                            <b>Default Answer Type</b>
-                        </div>
-                        <div class="panel-body" id="answerSection">
-                            @*@Html.Partial("_listAnswerTypes")*@
-                            @*@{ Html.RenderAction("displayAnswerSection", new { question_id = Model.q.obs_question_id});}*@
-                            <div style="text-align: center">
-                                <br /><br /><br />
-                                <input type="button" id="refresh" value="Review-Change Answer Type" onclick="@("window.location.href='" + @Url.Action("displayAnswerSection", "Question", new { id = Model.q.obs_question_id }) + "'");" />
-                            </div>
+             <div class="col-md-5 personal-info">
+                <div class="panel panel-info " id="partialPanel">
+                   <div class="panel-heading">
+                      <b>Default Answer Type</b>
+                   </div>
+                    <div class="panel-body" id="answerSection">
+                        @*@Html.Partial("_listAnswerTypes")*@
+                        @*@{ Html.RenderAction("displayAnswerSection", new { question_id = Model.q.obs_question_id});}*@
+                        <div style="text-align: center">
+                            <br /><br /><br />
+                            <input type="button" id="refresh" value="Review-Change Answer Type" onclick="@("window.location.href='" + @Url.Action("displayAnswerSection", "Question", new { id = Model.q.obs_question_id }) + "'");" />
                         </div>
                     </div>
                 </div>
+             </div>
             }
             else
             {
-                <div class="col-md-6 personal-info">
-                    <div class="panel panel-info " id="partialPanel">
-                        <div class="panel-heading">
-                            <b>Default Answer Type</b>
-                        </div>
-                        <div class="panel-body" id="answerSection">
-                            <div style="text-align: center">
-                                <br /><br /><br />
-                                <span style="color:red">WARNING! <br/>This question is no longer active.<br/>The Answer type Information cannot be edited.</span>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
+              <div class="col-md-6 personal-info">
+                 <div class="panel panel-info " id="partialPanel">
+                     <div class="panel-heading">
+                         <b>Default Answer Type</b>
+                     </div>
+                     <div class="panel-body" id="answerSection">
+                         <div style="text-align: center">
+                             <br /><br /><br />
+                             <span style="color:red">WARNING! <br/>This question is no longer active.<br/>The Answer type Information cannot be edited.</span>
+                         </div>
+                     </div>
+                 </div>
+              </div>
             }
         </div>
+
        @if (Model.q.obs_question_eff_end_dt > DateTime.Today)
        {
         @* ---------- NEW ROW WITH RIGHT-LEFT MOVE FUNCTIONALITY --------------*@

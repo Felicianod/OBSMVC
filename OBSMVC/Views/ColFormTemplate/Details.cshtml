@@ -1,26 +1,40 @@
 ﻿@model OBSMVC.Controllers.CollectionForm
 
-@{
-    ViewBag.Title = "showColFormTemplate";
-}
+@{ ViewBag.Title = "showColFormTemplate"; }
 
 <style>
-    body {
-        padding-top: 70px;
-    }
+  body { padding-top: 50px; }
+  .affix {
+      top: 0;
+      width: 100%;
+  }
+  .affix + .container-fluid {
+      padding-top: 70px;
+  }
+  .list-group-item {
+      overflow:hidden;  
+      position: relative;
+      display: block;
+      padding: 7px 7px; /* adjust here */
+      margin-bottom: -1px;
+      border: 1px solid #ddd;
+      line-height: 1em /* set to text height */
+  }
+  
 </style>
 
-
 <div class="panel panel-default">
-    <div class="panel-heading">
+    <div class="panel-heading" data-spy="affix" data-offset-top="197">
         <table style="width:100%">
             <tr>
                 <td>
-                    <h3 class="panel-title"> <b>COLLECTION FORM: </b> @Model.cft_Title </h3>
+                    <h3 class="panel-title" style="text-align:center"><b>COLLECTION FORM: </b><span style="color:cadetblue; font-size:x-large; font-weight:bold">"@Model.cft_Title"</span></h3>
                     <h5> Subtitle: @Model.cft_SubTitle </h5>
                 </td>
                 <td style="text-align:right; vertical-align:top">
-                    <span class="badge"> ID: @Model.cft_id<text>-N</text>@Model.cft_Nbr v.@Model.cft_Version</span>
+                    <span class="badge" data-toggle="tooltip" title="Form ID: @Model.cft_id Number/Version: @Model.cft_Nbr v.@Model.cft_Version">
+                       ID: @Model.cft_id<text>-N</text>@Model.cft_Nbr v.@Model.cft_Version
+                    </span>
                 </td>
             </tr>
             <tr>
@@ -36,20 +50,48 @@
                             <td style="width:8%; text-align:right"><span class="badge">@Model.cft_Status </span> </td>
                         </tr>
                     </table>
-
                 </td>
             </tr>
         </table>
     </div>
     <div class="panel-body">
-
-        QUESTION INFO
-
-    </div>
+    @* - - - - - Loop Once for each Question Section - - - - - *@
+    @foreach (var fSection in Model.colFormSections)
+    {
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#@fSection.sectionViewId"><span class="glyphicon glyphicon-resize-vertical">&nbsp;</span>@fSection.sectionName</a>
+                    </h4>
+                </div>
+                <div id="@fSection.sectionViewId" class="panel-collapse collapse in">
+                    <ul class="list-group">
+                        @foreach (var fQuestion in fSection.colFormQuestionList)
+                        {
+                            <li class="list-group-item">
+                                <table style="width:100%">
+                                  <tr>
+                                     <td style="width:5%">
+                                         <a href="/Question/Details/@fQuestion.cfq_questId?rurl=Form_@Model.cft_id" class="Button">[ @fQuestion.cfq_seqInForm ]</a>
+                                     </td>
+                                     <td>@fQuestion.cfq_fullText</td>
+                                     <td style="width:8%"><span class="badge">@fQuestion.cfq_AT</span></td>
+                                  </tr>
+                                </table>
+                            </li>
+                        }
+                    </ul>
+                    @*<div class="panel-footer">Footer</div>*@
+                </div>
+            </div>
+        </div>
+    }
+   </div>
 </div>
 
 <p>
-    @*@Html.ActionLink("Edit", "Edit", new { id = Model.obs_cft_id }) |
-    @Html.ActionLink("Back to List", "Index")*@
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.obs_cft_id }) |*@
+    @Html.ActionLink("Back to List", "Index")
 </p>
 

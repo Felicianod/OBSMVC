@@ -388,22 +388,14 @@ namespace OBSMVC.Controllers
     //******* CLASES ***********************************************************************************
     public class CollectionForm
     {
-        private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();  //To give Database access to this Class
+        private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();  //To get Database access inside this Class
 
         //--- CONSTRUCTOR------------------
         public CollectionForm(int id)
         {//Ctreate the Collection Form Data (Header Info) from the Id passed as a parameter
 
             cft_id = id;
-            //cft_Title = "TEST";
-            //cft_SubTitle = "TEST";
-            //cft_obsType = "TEST";
-            //cft_Cust = "TEST";
-            //cft_LC = "TEST";
-            //cft_Status = "TEST";
-            //cft_Nbr = 1;
-            //cft_Version = 2;
-
+            // Query the Data from the Database
             var q = (from A in db.OBS_COLLECT_FORM_TMPLT
                      join B in db.OBS_TYPE                          //First Table Left join
                          on A.obs_type_id equals B.obs_type_id
@@ -428,7 +420,7 @@ namespace OBSMVC.Controllers
                          cft_LC = D.dsc_lc_name,
                          cft_Status = ((A.obs_cft_eff_st_dt < DateTime.Now) && (A.obs_cft_eff_end_dt > DateTime.Now)) ? "ACTIVE" : "INACTIVE"
                      }).ToList().FirstOrDefault();
-
+            // Set the properties from query result
             cft_Title = q.cft_Title;
             cft_SubTitle = q.cft_SubTitle;
             cft_obsType = q.cft_obsType;
@@ -437,7 +429,10 @@ namespace OBSMVC.Controllers
             cft_Status = q.cft_Status;
             cft_Nbr = q.cft_Nbr;
             cft_Version = q.cft_Version;
+            colFormSections = new List<CollectionFormSection>();
+            retrieveQuestionData();
         }
+
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \\
         //- - - - - - - - - - Properties - - - - - - - - - - - - - - - - - - - - |
         // All Properties are set at Constructor Time
@@ -450,26 +445,84 @@ namespace OBSMVC.Controllers
         public string cft_Status { get; set; }
         public int cft_Nbr { get; set; }
         public int cft_Version { get; set; }
-        public List<CollectionFormQuestion> colFormQuestionList { get; set; }
+        public List<CollectionFormSection> colFormSections { get; set; }        
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\\
         //- - - - - - - - - - - - CLASS METHODS - - - - - - - - - - - - - - - - |
-        //.... TODO ....
+        private void retrieveQuestionData()
+        {
+            DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();  //To give Database access to this Class
+            // Pull all the questions information for the selected Form in the correct order
+            var formQuestions = db.OBS_COL_FORM_QUESTIONS.Include(o => o.OBS_FORM_SECTION).Where(x => x.obs_cft_id == cft_id).ToList().OrderBy(y => y.obs_col_form_quest_order);
+            if (formQuestions.Count() > 0)
+            { //Pupulate the Form Sections and Questions List only if there is question data for the selcted Form
+                int sectionCounter = 0;
+                string oldSectionName = "undefined";
+                string newSectionName = String.Empty;
+                int questionCounter = 1;
+                CollectionFormSection oSection = new CollectionFormSection();
+                foreach (OBS_COL_FORM_QUESTIONS q in formQuestions)
+                {
+                    newSectionName = q.OBS_FORM_SECTION.obs_form_section_name;
+                    //If the section name has changed, then we are in a new section
+                    if (!newSectionName.Equals(oldSectionName))   // --- If this is a new Section ---
+                    {
+                        sectionCounter++;
+                      // If this is not the first section. Add the old Section to the List
+                        if (!oldSectionName.Equals("undefined")) { colFormSections.Add(oSection); }
+                      //Create a new Section from scratch
+                        oSection = new CollectionFormSection();
+                        oSection.sectionNumber = sectionCounter;
+                        oSection.sectionName = q.OBS_FORM_SECTION.obs_form_section_name;
+                        oSection.sectionViewId = "viewSection" + oSection.sectionNumber.ToString();
+                    }
+
+                    //Create New question, Populate the Info and Add it to the current Form section
+                    CollectionFormQuestion oQuestion = new CollectionFormQuestion();
+                    oQuestion.cfq_id = q.obs_col_form_quest_id;
+                    oQuestion.cfq_questId = q.OBS_QUEST_ANS_TYPES.obs_question_id;
+                    oQuestion.cfq_order = q.obs_col_form_quest_order;
+                    oQuestion.cfq_seqInForm = questionCounter.ToString("00");
+                    oQuestion.cfq_fullText = q.OBS_QUEST_ANS_TYPES.OBS_QUESTION.obs_question_full_text.Replace(": (",":<br/>(");
+                    oQuestion.cfq_AT = q.OBS_QUEST_ANS_TYPES.OBS_ANS_TYPE.obs_ans_type_name;
+                    oQuestion.cfq_qatId = q.obs_qat_id;
+                    // .... Populate the rest of the oQuestion properties
+                    oSection.colFormQuestionList.Add(oQuestion);
+                    
+                    // reset the name of the old  section indicator
+                    oldSectionName = newSectionName;
+                    questionCounter++;
+                } // End of For-each question loop
+                //Finally add the last populated section to the section List
+                colFormSections.Add(oSection);            
+            }
+        }
         //------------------
     }
 
+    public class CollectionFormSection
+    {
+        public int sectionNumber = 0;
+       public string sectionName = String.Empty;
+       public string sectionViewId = String.Empty;
+       public List<CollectionFormQuestion> colFormQuestionList { get; set; }
+       // --- Constructor --------
+       public CollectionFormSection() { colFormQuestionList = new List<CollectionFormQuestion>(); }
+    }
     public class CollectionFormQuestion
     {
-        private DSC_OBS_DB_ENTITY OBSdb = new DSC_OBS_DB_ENTITY();  //To give Database access to this Class
-
         //--- CONSTRUCTOR------------------
-        public CollectionFormQuestion()
-        {
-        }
+        public CollectionFormQuestion() { }
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \\
         //- - - - - - - - - - Properties - - - - - - - - - - - - - - - - - - - - |
         // All Properties are set at Constructor Time
-        public int cft_id { get; set; }
-        public string Name { get; set; }
+        public long cfq_id { get; set; }
+        public long cfq_qatId { get; set; }
+        public string cfq_seqInForm { get; set; }
+        public int cfq_order { get; set; }
+        public int cfq_questId { get; set; }
+        public string cfq_fullText { get; set; }
+        public string cfq_AT { get; set; }
+        
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\\
         //- - - - - - - - - - - - CLASS METHODS - - - - - - - - - - - - - - - - |
         //.... TODO ....

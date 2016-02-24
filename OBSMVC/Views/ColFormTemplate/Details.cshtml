@@ -5,35 +5,59 @@
 }
 
 <style>
-    body {
-        padding-top: 70px;
+    body { padding-top: 50px; }
+    .list-group-item {
+      overflow:hidden;  
+      position: relative;
+      display: block;
+      padding: 7px 7px; /* adjust here */
+      margin-bottom: -1px;
+      border: 1px solid #ddd;
+      line-height: 1em /* set to text height */
     }
 </style>
 
-
 <div class="panel panel-default">
-    <div class="panel-heading">
+   <div class="panel-heading">
+      <div class="list-group">
+         <div class ="list-group-item active">
+             <div class="list-group-item-heading">
+                 <table style="width:100%">
+                     <tr>
+                         <td><h3 class="panel-title"> <b>COLLECTION FORM: </b>&nbsp;" @Model.cft_Title "</h3></td>
+                         <td style="text-align:right; vertical-align:top">
+                             <span class="badge"> ID: @Model.cft_id<text>-N</text>@Model.cft_Nbr v.@Model.cft_Version</span>
+                         </td>
+                     </tr>
+                 </table>
+             </div>
+             <div class="list-group-item-text">
+                 <table style="width:100%">
+                     <tr>
+                         <td>
+                             <p>Subtitle: @Model.cft_SubTitle </p> 
+                         </td>
+                         <td style="text-align:right">
+                             <span class="badge">@Model.cft_Status </span>
+                         </td>
+                     </tr>
+                 </table>
+             </div>
+         </div>
+      </div>
         <table style="width:100%">
-            <tr>
-                <td>
-                    <h3 class="panel-title"> <b>COLLECTION FORM: </b> @Model.cft_Title </h3>
-                    <h5> Subtitle: @Model.cft_SubTitle </h5>
-                </td>
-                <td style="text-align:right; vertical-align:top">
-                    <span class="badge"> ID: @Model.cft_id<text>-N</text>@Model.cft_Nbr v.@Model.cft_Version</span>
-                </td>
-            </tr>
             <tr>
                 <td colspan="2">
                     <table style="width:100%">
                         <tr>
-                            <td style="width:10%"><b>CUSTOMER: </b></td>
-                            <td style="width:15%">@Model.cft_Cust</td>
+                            <td style="width:15%">
+                                    <b>CUSTOMER: </b>&nbsp;&nbsp;&nbsp;
+                                    @Model.cft_Cust
+                            </td>
                             <td style="width:4%"><b>LC: </b></td>
                             <td style="width:15%">@Model.cft_LC</td>
                             <td style="width:8%"><b>TYPE: </b></td>
-                            <td style="width:40%">@Model.cft_obsType</td>
-                            <td style="width:8%; text-align:right"><span class="badge">@Model.cft_Status </span> </td>
+                            <td style="width:40%">@Model.cft_obsType</td>                            
                         </tr>
                     </table>
 
@@ -42,8 +66,6 @@
         </table>
     </div>
     <div class="panel-body">
-
-        QUESTION INFO
 
     </div>
 </div>

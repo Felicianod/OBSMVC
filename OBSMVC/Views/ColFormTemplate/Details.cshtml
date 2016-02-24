@@ -28,7 +28,7 @@
         <table style="width:100%">
             <tr>
                 <td>
-                    <h3 class="panel-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>COLLECTION FORM: </b><span style="color:blue">@Model.cft_Title </span></h3>
+                    <h3 class="panel-title" style="text-align:center"><b>COLLECTION FORM: </b><span style="color:cadetblue; font-size:x-large; font-weight:bold">"@Model.cft_Title"</span></h3>
                     <h5> Subtitle: @Model.cft_SubTitle </h5>
                 </td>
                 <td style="text-align:right; vertical-align:top">
@@ -76,7 +76,7 @@
                                          <a href="/Question/Details/@fQuestion.cfq_questId?rurl=Form_@Model.cft_id" class="Button">[ @fQuestion.cfq_seqInForm ]</a>
                                      </td>
                                      <td>@fQuestion.cfq_fullText</td>
-                                     <td style="width:8%"><span class="badge">Answer Type: @fQuestion.cfq_AT</span></td>
+                                     <td style="width:8%"><span class="badge">@fQuestion.cfq_AT</span></td>
                                   </tr>
                                 </table>
                             </li>

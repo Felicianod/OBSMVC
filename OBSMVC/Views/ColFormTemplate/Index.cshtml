@@ -6,6 +6,22 @@
 
 <h2>Form Templates</h2>
 <br />
+<p>
+    @using (Html.BeginForm("Index", "ColFormTemplate", FormMethod.Get))
+    {
+    <b>Search by Title:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>@Html.TextBox("title_search")
+    @Html.RadioButton("t_search", "Any")  <text>Any</text>
+    @Html.RadioButton("t_search", "All", true)  <text>All</text><br />
+    <b>Search by Question: </b>@Html.TextBox("question_search")
+    @Html.RadioButton("q_search", "Any")  <text>Any</text>
+    @Html.RadioButton("q_search", "All", true) <text> All </text>
+    @Html.RadioButton("q_search", "Exact")<text> Exact </text>
+
+    <br />
+    <input type="submit" value="Search">
+    <br />
+    }
+</p>
 <table class="table table-condensed table-hover" border="1">
     <tr style="background-color:gainsboro">
         <th>

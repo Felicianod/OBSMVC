@@ -485,6 +485,7 @@ namespace OBSMVC.Controllers
                     oQuestion.cfq_fullText = q.OBS_QUEST_ANS_TYPES.OBS_QUESTION.obs_question_full_text.Replace(": (",":<br/>(");
                     oQuestion.cfq_AT = q.OBS_QUEST_ANS_TYPES.OBS_ANS_TYPE.obs_ans_type_name;
                     oQuestion.cfq_qatId = q.obs_qat_id;
+                    oQuestion.cfq_SelectableAnswers = q.OBS_QUEST_ANS_TYPES.OBS_QUEST_SLCT_ANS.OrderBy(xx => xx.obs_qsa_order).Select(x => x.obs_qsa_text).ToList();
                     // .... Populate the rest of the oQuestion properties
                     oSection.colFormQuestionList.Add(oQuestion);
                     
@@ -522,6 +523,8 @@ namespace OBSMVC.Controllers
         public int cfq_questId { get; set; }
         public string cfq_fullText { get; set; }
         public string cfq_AT { get; set; }
+        public List<string> cfq_SelectableAnswers { get; set; }
+        public List<string> cfq_AnsHTML { get; set; }      //HTML Code passes to the view to render the answer info
         
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\\
         //- - - - - - - - - - - - CLASS METHODS - - - - - - - - - - - - - - - - |

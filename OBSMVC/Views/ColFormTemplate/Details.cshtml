@@ -3,28 +3,27 @@
 @{ ViewBag.Title = "showColFormTemplate"; }
 
 <style>
-  body { padding-top: 50px; }
-  .affix {
-      top: 0;
-      width: 100%;
-  }
-  .affix + .container-fluid {
-      padding-top: 70px;
-  }
-  .list-group-item {
-      overflow:hidden;  
-      position: relative;
-      display: block;
-      padding: 7px 7px; /* adjust here */
-      margin-bottom: -1px;
-      border: 1px solid #ddd;
-      line-height: 1em /* set to text height */
-  }
-  
+    body { padding-top: 50px; }
+    .affix {
+        top: 0;
+        width: 100%;
+    }
+    .affix + .container-fluid {
+        padding-top: 70px;
+    }
+    .list-group-item {
+        overflow:hidden;
+        position: relative;
+        display: block;
+        padding: 7px 7px; /* adjust here */
+        margin-bottom: -1px;
+        border: 1px solid #ddd;
+        line-height: 1em /* set to text height */
+    }
 </style>
 
 <div class="panel panel-default">
-    <div class="panel-heading" data-spy="affix" data-offset-top="197">
+  <div class="panel-heading" data-spy="affix" data-offset-top="197">
         <table style="width:100%">
             <tr>
                 <td>
@@ -33,7 +32,7 @@
                 </td>
                 <td style="text-align:right; vertical-align:top">
                     <span class="badge" data-toggle="tooltip" title="Form ID: @Model.cft_id Number/Version: @Model.cft_Nbr v.@Model.cft_Version">
-                       ID: @Model.cft_id<text>-N</text>@Model.cft_Nbr v.@Model.cft_Version
+                        ID: @Model.cft_id<text>-N</text>@Model.cft_Nbr v.@Model.cft_Version
                     </span>
                 </td>
             </tr>
@@ -53,41 +52,101 @@
                 </td>
             </tr>
         </table>
-    </div>
-    <div class="panel-body">
-    @* - - - - - Loop Once for each Question Section - - - - - *@
-    @foreach (var fSection in Model.colFormSections)
-    {
-        <div class="panel-group">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" href="#@fSection.sectionViewId"><span class="glyphicon glyphicon-resize-vertical">&nbsp;</span>@fSection.sectionName</a>
-                    </h4>
-                </div>
-                <div id="@fSection.sectionViewId" class="panel-collapse collapse in">
-                    <ul class="list-group">
-                        @foreach (var fQuestion in fSection.colFormQuestionList)
-                        {
-                            <li class="list-group-item">
-                                <table style="width:100%">
-                                  <tr>
-                                     <td style="width:5%">
-                                         <a href="/Question/Details/@fQuestion.cfq_questId?rurl=Form_@Model.cft_id" class="Button">[ @fQuestion.cfq_seqInForm ]</a>
-                                     </td>
-                                     <td>@fQuestion.cfq_fullText</td>
-                                     <td style="width:8%"><span class="badge">@fQuestion.cfq_AT</span></td>
-                                  </tr>
-                                </table>
-                            </li>
-                        }
-                    </ul>
-                    @*<div class="panel-footer">Footer</div>*@
-                </div>
+  </div>
+  <div class="panel-body">
+     <div class="row">
+        <table style="width:100%">
+           <tr>
+              <td style="text-align:center; width:10%"><button type="button" class="btn-link" id="collapseall">Collapse All</button></td>
+              <td style="text-align:center; width:10%"><button type="button" class="btn-link " id="showall">Show All</button></td>
+              <td style="text-align:right">@Html.ActionLink("Back to List", "Index") &nbsp;&nbsp;</td>
+           </tr>
+        </table>
+     </div>
+     @* - - - - - Loop Once for each Question Section - - - - - *@
+     <div class="panel-group" id="accordion">
+       @foreach (var fSection in Model.colFormSections)
+       {
+         <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
+                    <a class="accordion-toggle" data-toggle="collapse" href="#@fSection.sectionViewId">
+                       <span class="glyphicon glyphicon-minus">&nbsp;</span>
+                       @*<span class="glyphicon glyphicon-collapse-up">&nbsp;</span>*@
+                       @*<span class="caret">&nbsp;</span>*@
+                       @fSection.sectionName
+                    </a>
+                </h4>
             </div>
-        </div>
-    }
-   </div>
+            <div id="@fSection.sectionViewId" class="panel-collapse collapse in">
+                <ul class="list-group">
+                  @foreach (var fQuestion in fSection.colFormQuestionList)
+                  {
+                    <li class="list-group-item">
+                       <table style="width:100%">
+                           <tr>
+                               <td style="width:5%">
+                                   <a href="/Question/Details/@fQuestion.cfq_questId?rurl=Form_@Model.cft_id" class="Button">[ @fQuestion.cfq_seqInForm ]</a>
+                               </td>
+                               <td>@fQuestion.cfq_fullText</td>
+                               <td style="width:8%"><span class="badge">@fQuestion.cfq_AT</span></td>
+                           </tr>
+                        @if (fQuestion.cfq_AT.Equals("YN"))
+                        {
+                           <tr>
+                             <td style="width:5%"></td>
+                             <td  colspan="2">
+                                <span class="badge">Y</span>
+                                <span class="badge">N</span>
+                                <TEXT>&nbsp; [No comment is Required]</TEXT>
+                             </td>
+                           </tr>
+                        }
+                        else
+                        {//Loop through the Question Selectable answers List and create a new table row for each of them
+                            <tr>
+                               <td style="width:5%"></td>
+                               <td colspan="2">
+                                 <table class="table table-condensed table-hover">
+                                    <tbody>
+                                      @foreach (var qAnswer in fQuestion.cfq_SelectableAnswers)
+                                      {
+                                          int counter = 1;
+                                          string controlName = "checkbox" + counter.ToString("00");
+                                        <tr>
+                                           <td>
+                                               @if (fQuestion.cfq_AT.Contains("Multi Select"))
+                                               {
+                                                <input id="@controlName" class="icon-checkbox" type="checkbox" />
+                                               }
+                                               else if (fQuestion.cfq_AT.Contains("Single Select") || fQuestion.cfq_AT.Contains("Range"))
+                                               {
+
+                                                    <input type="radio" name="options1" id="option1" autocomplete="off" checked> @*<span class="glyphicon glyphicon-unchecked unchecked"></span> <span class="glyphicon glyphicon-check checked"></span>*@
+
+                                               }
+                                               <TEXT>&nbsp;</TEXT>
+                                               @qAnswer
+                                           </td>
+                                        </tr>
+                                        counter++;
+                                      }
+                                    </tbody>
+                                 </table>
+                               </td>
+                            </tr>
+                        }
+                       </table>
+                    </li>
+                  }
+                </ul>
+                @*<div class="panel-footer">Footer</div>*@
+            </div>
+         </div>
+       }
+     </div>
+  </div>
 </div>
 
 <p>
@@ -95,3 +154,34 @@
     @Html.ActionLink("Back to List", "Index")
 </p>
 
+<script>
+    $(document).ready(function () {
+
+        $('.collapse').on('show.bs.collapse', function () {
+            $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
+        }).on('hide.bs.collapse', function () {
+            $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
+        });
+
+        //$(".collapse").on("hide.bs.collapse", function () {
+        //    this.parent().find(".glyphicon-plus").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+        //    //this.removeClass("glyphicon-collapse-down").addClass("glyphicon-collapse-down");
+        //    //this.html(this.html.replace("down","up"));
+        //        //'<span class="glyphicon glyphicon-collapse-down"></span> Open');
+        //});
+        //$(".collapse").on("show.bs.collapse", function () {
+        //    (this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+        //    //this.removeClass("glyphicon-collapse-down").addClass("glyphicon-collapse-down");
+        //    //this.html(this.html.replace("up", "down"));
+        //    //$(".btn").html('<span class="glyphicon glyphicon-collapse-up"></span> Close');
+        //});
+        $('#collapseall').click(function () {
+            $('.panel-collapse.in')
+              .collapse('hide');
+        });
+        $('#showall').click(function () {
+            $('.panel-collapse')
+              .collapse('show');
+        });
+    });
+</script>

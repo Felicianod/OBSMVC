@@ -16,16 +16,21 @@ namespace OBSMVC.Controllers
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
 
         // GET: ColFormTemplate
-        public ActionResult Index( string title_search, string question_search, string t_search, string q_search)
+        [HttpGet]
+        public ActionResult Index(string title_search, string question_search, string t_search, string q_search,FormCollection form)
         {
             var oBS_COLLECT_FORM_TMPLT = db.OBS_COLLECT_FORM_TMPLT.Include(o => o.DSC_CUSTOMER).Include(o => o.DSC_LC).Include(o => o.OBS_TYPE);
-            
+            List<SelectListItem> fullFuncList = setfullFuncList();
+            string test = Request.QueryString["fullFuncList"];
+               
+
             List<ObsColFormTemplate> ObsColFormTemplateList = new List<ObsColFormTemplate>();
             if (String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
             {//scenario where user didn't pass any search strings
                 foreach (var x in oBS_COLLECT_FORM_TMPLT)
                 {
                     ObsColFormTemplate obsForm = new ObsColFormTemplate();
+                   
                     obsForm.OBSformID = x.obs_cft_id;
                     obsForm.FormTitle = x.obs_cft_title;
                     obsForm.FormNumber = x.obs_cft_nbr;
@@ -33,6 +38,7 @@ namespace OBSMVC.Controllers
                     obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
                     obsForm.LC = x.DSC_LC.dsc_lc_name;
                     obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
+                    obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
                     obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
                     obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
                     obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
@@ -49,6 +55,7 @@ namespace OBSMVC.Controllers
                     if (matchesSearchCriteria(title_search, x.obs_cft_title + " " + x.OBS_TYPE.obs_type_name + " " + x.obs_cft_subtitle, t_search))
                     {
                         ObsColFormTemplate obsForm = new ObsColFormTemplate();
+                       
                         obsForm.OBSformID = x.obs_cft_id;
                         obsForm.FormTitle = x.obs_cft_title;
                         obsForm.FormNumber = x.obs_cft_nbr;
@@ -56,6 +63,7 @@ namespace OBSMVC.Controllers
                         obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
                         obsForm.LC = x.DSC_LC.dsc_lc_name;
                         obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
+                        obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
                         obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
                         obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
                         obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
@@ -74,6 +82,7 @@ namespace OBSMVC.Controllers
                     if (cft_with_matching_questions.Count() > 0 && cft_with_matching_questions.IndexOf(x.obs_cft_id)!=-1)
                     {
                         ObsColFormTemplate obsForm = new ObsColFormTemplate();
+                       
                         obsForm.OBSformID = x.obs_cft_id;
                         obsForm.FormTitle = x.obs_cft_title;
                         obsForm.FormNumber = x.obs_cft_nbr;
@@ -81,6 +90,7 @@ namespace OBSMVC.Controllers
                         obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
                         obsForm.LC = x.DSC_LC.dsc_lc_name;
                         obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
+                        obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
                         obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
                         obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
                         obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
@@ -96,9 +106,10 @@ namespace OBSMVC.Controllers
                 List<int> cft_with_matching_questions = searchQuestionsWithMatchingSearchCriteria(question_search, q_search);
                 foreach (var x in oBS_COLLECT_FORM_TMPLT)
                 {
-                    if ((matchesSearchCriteria(title_search, x.obs_cft_title + " " + x.OBS_TYPE.obs_type_name + " " + x.obs_cft_subtitle, t_search))||((cft_with_matching_questions.Count() > 0 && cft_with_matching_questions.IndexOf(x.obs_cft_id) != -1)))
+                    if ((matchesSearchCriteria(title_search, x.obs_cft_title + " " + x.OBS_TYPE.obs_type_name + " " + x.obs_cft_subtitle, t_search))&&((cft_with_matching_questions.Count() > 0 && cft_with_matching_questions.IndexOf(x.obs_cft_id) != -1)))
                     {
                         ObsColFormTemplate obsForm = new ObsColFormTemplate();
+                        
                         obsForm.OBSformID = x.obs_cft_id;
                         obsForm.FormTitle = x.obs_cft_title;
                         obsForm.FormNumber = x.obs_cft_nbr;
@@ -106,6 +117,7 @@ namespace OBSMVC.Controllers
                         obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
                         obsForm.LC = x.DSC_LC.dsc_lc_name;
                         obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
+                        obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
                         obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
                         obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
                         obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
@@ -118,7 +130,7 @@ namespace OBSMVC.Controllers
                 
             }
 
-          
+            ViewBag.fullFuncList = fullFuncList;
             return View(ObsColFormTemplateList.ToList());
         }
 
@@ -249,7 +261,9 @@ namespace OBSMVC.Controllers
             public DateTime? LastCompleteDate { get; set; }
 
             public string FormSubtitle { get; set; }
+            public List<String> AssignedFunctions = new List<string>();
 
+           
             public int getAssignedQuestionCount(int cft_id)
             {
                 int quest_count = OBSdb.OBS_COL_FORM_QUESTIONS.Where(item => item.obs_cft_id == cft_id).Count();
@@ -265,7 +279,18 @@ namespace OBSMVC.Controllers
                 return  OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date).Equals(null) ? null : OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date);
                 
             }
-           
+           public List<string> getAssignedFunctions(int cft_if)
+            {
+                List<string> AssignedFunctions = (from fc in OBSdb.OBS_COLLECT_FORM_TMPLT
+                                                  join t in OBSdb.OBS_TYPE on fc.obs_type_id equals t.obs_type_id
+                                                  join ots in OBSdb.OBS_TYPE_SUB_TYPES on t.obs_type_id equals ots.obs_type_id
+                                                  join os in OBSdb.OBS_SUB_TYPE on ots.obs_sub_type_id equals os.obs_sub_type_id
+                                                  where fc.obs_cft_id == cft_if && os.obs_sub_type_group == "FUNCTION"
+                                                  select os.obs_sub_type_name).ToList();
+                return AssignedFunctions;
+            }
+          
+
 
 
         }
@@ -343,6 +368,7 @@ namespace OBSMVC.Controllers
 
             return cft_ids_with_matching_qiestions;
         }
+       
         public static bool IsActiveForm(DateTime start_date, DateTime end_date)
         {
             if (DateTime.Today >= start_date && DateTime.Today < end_date) { return true; }
@@ -378,6 +404,20 @@ namespace OBSMVC.Controllers
                    return false;
             }
             
+        }
+        public  List<SelectListItem> setfullFuncList()
+        {
+            List<OBS_SUB_TYPE> oBS_SUB_TYPE = db.OBS_SUB_TYPE.Where(x => x.obs_sub_type_group == "FUNCTION").ToList();
+         
+            List<SelectListItem> fullFuncList = new List<SelectListItem>();
+            foreach (OBS_SUB_TYPE temp in oBS_SUB_TYPE)
+            {
+                SelectListItem fullFuncListItem = new SelectListItem();
+                fullFuncListItem.Value = temp.obs_sub_type_id.ToString();
+                fullFuncListItem.Text = temp.obs_sub_type_name;
+                fullFuncList.Add(fullFuncListItem);
+            }
+            return fullFuncList;
         }
     }
     //\==================== END OF CONTROLLERS CLASS ==================================================/

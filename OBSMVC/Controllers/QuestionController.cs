@@ -541,7 +541,7 @@ namespace OBSMVC.Controllers
                             // If the Id exist, then the Dropdown Selection has selectable answers
                             selectedAT.hasSelectableAnswers = true;
                             // Grab selectable Answer values from OBS_QUEST_SLCT_ANS table
-                            selectedAT.selAnsList = OBSdb.OBS_QUEST_SLCT_ANS.Where(X => X.obs_qat_id == QATinstanceId && X.obs_qsa_eff_st_dt<=DateTime.Today && X.obs_qsa_eff_end_dt>DateTime.Today).OrderBy(y => y.obs_qsa_order).Select(z => z.obs_qsa_text).ToList();
+                            selectedAT.selAnsList = OBSdb.OBS_QUEST_SLCT_ANS.Where(X => X.obs_qat_id == QATinstanceId && X.obs_qsa_eff_st_dt<=DateTime.Now && X.obs_qsa_eff_end_dt>DateTime.Now).OrderBy(y => y.obs_qsa_order).Select(z => z.obs_qsa_text).ToList();
                         }
                         else
                         {

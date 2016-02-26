@@ -4,19 +4,22 @@
     ViewBag.Title = "Form Templates";
 }
 
-<h2>Form Templates</h2>
-<br />
+<div class="well well-sm"><h3>Form Templates</h3></div>
+
 <p>
     @using (Html.BeginForm("Index", "ColFormTemplate", FormMethod.Get))
     {
-    <b>Search by Title:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>@Html.TextBox("title_search")
-    @Html.RadioButton("t_search", "Any")  <text>Any</text>
-    @Html.RadioButton("t_search", "All", true)  <text>All</text><br />
-    <b>Search by Question: </b>@Html.TextBox("question_search")
-    @Html.RadioButton("q_search", "Any")  <text>Any</text>
-    @Html.RadioButton("q_search", "All", true) <text> All </text>
-    @Html.RadioButton("q_search", "Exact")<text> Exact </text>
-
+        
+            <b>Search by Title:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>@Html.TextBox("title_search")
+            @Html.RadioButton("t_search", "Any")  <text>Any</text>
+            @Html.RadioButton("t_search", "All", true)  <text>All</text><br />
+            <p> </p>
+            <b>Search by Question: </b>@Html.TextBox("question_search") 
+            @Html.RadioButton("q_search", "Any")  <text>Any</text>
+            @Html.RadioButton("q_search", "All", true) <text> All </text>
+            @Html.RadioButton("q_search", "Exact")<text> Exact </text><br/><p> </p>
+            <b>Function :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+            @Html.DropDownList("fullFuncList", ViewBag.fullFuncList as SelectList, "All")
     <br />
     <input type="submit" value="Search">
     <br />

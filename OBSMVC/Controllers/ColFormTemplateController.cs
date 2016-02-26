@@ -21,95 +21,144 @@ namespace OBSMVC.Controllers
         {
             var oBS_COLLECT_FORM_TMPLT = db.OBS_COLLECT_FORM_TMPLT.Include(o => o.DSC_CUSTOMER).Include(o => o.DSC_LC).Include(o => o.OBS_TYPE);
             List<SelectListItem> fullFuncList = setfullFuncList();
-            string test = Request.QueryString["fullFuncList"];
-               
+            int selectedFunctionId = -1;
+            try
+            {
+                selectedFunctionId = Convert.ToInt32(Request.QueryString["fullFuncList"]);              
+            }
+            catch { }
 
             List<ObsColFormTemplate> ObsColFormTemplateList = new List<ObsColFormTemplate>();
-            if (String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
-            {//scenario where user didn't pass any search strings
-                foreach (var x in oBS_COLLECT_FORM_TMPLT)
-                {
-                    ObsColFormTemplate obsForm = new ObsColFormTemplate();
-                   
-                    obsForm.OBSformID = x.obs_cft_id;
-                    obsForm.FormTitle = x.obs_cft_title;
-                    obsForm.FormNumber = x.obs_cft_nbr;
-                    obsForm.FormVersion = x.obs_cft_ver;
-                    obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
-                    obsForm.LC = x.DSC_LC.dsc_lc_name;
-                    obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
-                    obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
-                    obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
-                    obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
-                    obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
-                    obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
-                    obsForm.FormSubtitle = x.obs_cft_subtitle;
-                    ObsColFormTemplateList.Add(obsForm);
-                }//end of foreach
-
-            }// end of  if (String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
-            else if (String.IsNullOrWhiteSpace(question_search) && !String.IsNullOrWhiteSpace(title_search))
-            {// search by title
-                foreach (var x in oBS_COLLECT_FORM_TMPLT)
-                {
-                    if (matchesSearchCriteria(title_search, x.obs_cft_title + " " + x.OBS_TYPE.obs_type_name + " " + x.obs_cft_subtitle, t_search))
+            if(selectedFunctionId >0)
+            {//case where function is selected
+                if (String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
+                {//scenario where user didn't pass any search strings
+                    foreach (var x in oBS_COLLECT_FORM_TMPLT)
                     {
                         ObsColFormTemplate obsForm = new ObsColFormTemplate();
-                       
-                        obsForm.OBSformID = x.obs_cft_id;
-                        obsForm.FormTitle = x.obs_cft_title;
-                        obsForm.FormNumber = x.obs_cft_nbr;
-                        obsForm.FormVersion = x.obs_cft_ver;
-                        obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
-                        obsForm.LC = x.DSC_LC.dsc_lc_name;
-                        obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
-                        obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
-                        obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
-                        obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
-                        obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
-                        obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
-                        obsForm.FormSubtitle = x.obs_cft_subtitle;
-                        ObsColFormTemplateList.Add(obsForm);
-                    }
-
-                }//end of foreach
-            } // end of  else if (String.IsNullOrWhiteSpace(question_search) && !String.IsNullOrWhiteSpace(title_search))
-            else if (!String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
-            {//search by question
-                List<int> cft_with_matching_questions = searchQuestionsWithMatchingSearchCriteria(question_search, q_search);
-                foreach (var x in oBS_COLLECT_FORM_TMPLT)
-                {
-                    if (cft_with_matching_questions.Count() > 0 && cft_with_matching_questions.IndexOf(x.obs_cft_id)!=-1)
-                    {
-                        ObsColFormTemplate obsForm = new ObsColFormTemplate();
-                       
-                        obsForm.OBSformID = x.obs_cft_id;
-                        obsForm.FormTitle = x.obs_cft_title;
-                        obsForm.FormNumber = x.obs_cft_nbr;
-                        obsForm.FormVersion = x.obs_cft_ver;
-                        obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
-                        obsForm.LC = x.DSC_LC.dsc_lc_name;
-                        obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
-                        obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
-                        obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
-                        obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
-                        obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
-                        obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
-                        obsForm.FormSubtitle = x.obs_cft_subtitle;
-                        ObsColFormTemplateList.Add(obsForm);
-
-                    }
-                }
-            }// end of  else if (!String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
-            else if(!String.IsNullOrWhiteSpace(question_search) && !String.IsNullOrWhiteSpace(title_search))
-            {// search by both title and question
-                List<int> cft_with_matching_questions = searchQuestionsWithMatchingSearchCriteria(question_search, q_search);
-                foreach (var x in oBS_COLLECT_FORM_TMPLT)
-                {
-                    if ((matchesSearchCriteria(title_search, x.obs_cft_title + " " + x.OBS_TYPE.obs_type_name + " " + x.obs_cft_subtitle, t_search))&&((cft_with_matching_questions.Count() > 0 && cft_with_matching_questions.IndexOf(x.obs_cft_id) != -1)))
-                    {
-                        ObsColFormTemplate obsForm = new ObsColFormTemplate();
+                        if (obsForm.getAssignedFunctions(x.obs_cft_id).IndexOf(selectedFunctionId)!=-1)
+                        {
+                            obsForm.OBSformID = x.obs_cft_id;
+                            obsForm.FormTitle = x.obs_cft_title;
+                            obsForm.FormNumber = x.obs_cft_nbr;
+                            obsForm.FormVersion = x.obs_cft_ver;
+                            obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
+                            obsForm.LC = x.DSC_LC.dsc_lc_name;
+                            obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
+                            obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
+                            obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                            obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
+                            obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
+                            obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
+                            obsForm.FormSubtitle = x.obs_cft_subtitle;
+                            ObsColFormTemplateList.Add(obsForm);
+                        }
                         
+                    }//end of foreach
+
+                }// end of  if (String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
+                else if (String.IsNullOrWhiteSpace(question_search) && !String.IsNullOrWhiteSpace(title_search))
+                {// search by title
+                    foreach (var x in oBS_COLLECT_FORM_TMPLT)
+                    {
+                        if (matchesSearchCriteria(title_search, x.obs_cft_title + " " + x.OBS_TYPE.obs_type_name + " " + x.obs_cft_subtitle, t_search))
+                        {
+                            ObsColFormTemplate obsForm = new ObsColFormTemplate();
+                            if(obsForm.getAssignedFunctions(x.obs_cft_id).IndexOf(selectedFunctionId) != -1)
+                            {
+                                obsForm.OBSformID = x.obs_cft_id;
+                                obsForm.FormTitle = x.obs_cft_title;
+                                obsForm.FormNumber = x.obs_cft_nbr;
+                                obsForm.FormVersion = x.obs_cft_ver;
+                                obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
+                                obsForm.LC = x.DSC_LC.dsc_lc_name;
+                                obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
+                                obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
+                                obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                                obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
+                                obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
+                                obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
+                                obsForm.FormSubtitle = x.obs_cft_subtitle;
+                                ObsColFormTemplateList.Add(obsForm);
+                            }
+                            
+                        }
+
+                    }//end of foreach
+                } // end of  else if (String.IsNullOrWhiteSpace(question_search) && !String.IsNullOrWhiteSpace(title_search))
+                else if (!String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
+                {//search by question
+                    List<int> cft_with_matching_questions = searchQuestionsWithMatchingSearchCriteria(question_search, q_search);
+                    foreach (var x in oBS_COLLECT_FORM_TMPLT)
+                    {
+                        if (cft_with_matching_questions.Count() > 0 && cft_with_matching_questions.IndexOf(x.obs_cft_id) != -1)
+                        {
+                            ObsColFormTemplate obsForm = new ObsColFormTemplate();
+                            if (obsForm.getAssignedFunctions(x.obs_cft_id).IndexOf(selectedFunctionId) != -1)
+                            {
+                                obsForm.OBSformID = x.obs_cft_id;
+                                obsForm.FormTitle = x.obs_cft_title;
+                                obsForm.FormNumber = x.obs_cft_nbr;
+                                obsForm.FormVersion = x.obs_cft_ver;
+                                obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
+                                obsForm.LC = x.DSC_LC.dsc_lc_name;
+                                obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
+                                obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
+                                obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                                obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
+                                obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
+                                obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
+                                obsForm.FormSubtitle = x.obs_cft_subtitle;
+                                ObsColFormTemplateList.Add(obsForm);
+                            }
+                              
+
+                        }
+                    }
+                }// end of  else if (!String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
+                else if (!String.IsNullOrWhiteSpace(question_search) && !String.IsNullOrWhiteSpace(title_search))
+                {// search by both title and question
+                    List<int> cft_with_matching_questions = searchQuestionsWithMatchingSearchCriteria(question_search, q_search);
+                    foreach (var x in oBS_COLLECT_FORM_TMPLT)
+                    {
+                        if ((matchesSearchCriteria(title_search, x.obs_cft_title + " " + x.OBS_TYPE.obs_type_name + " " + x.obs_cft_subtitle, t_search)) && ((cft_with_matching_questions.Count() > 0 && cft_with_matching_questions.IndexOf(x.obs_cft_id) != -1)))
+                        {
+                            ObsColFormTemplate obsForm = new ObsColFormTemplate();
+                            if (obsForm.getAssignedFunctions(x.obs_cft_id).IndexOf(selectedFunctionId) != -1)
+                            {
+                                obsForm.OBSformID = x.obs_cft_id;
+                                obsForm.FormTitle = x.obs_cft_title;
+                                obsForm.FormNumber = x.obs_cft_nbr;
+                                obsForm.FormVersion = x.obs_cft_ver;
+                                obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
+                                obsForm.LC = x.DSC_LC.dsc_lc_name;
+                                obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
+                                obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
+                                obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                                obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
+                                obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
+                                obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
+                                obsForm.FormSubtitle = x.obs_cft_subtitle;
+                                ObsColFormTemplateList.Add(obsForm);//title search match
+
+                            }
+                              
+                        }
+
+                    }//end of foreach
+
+                }
+                fullFuncList.Single(x =>x.Value== Request.QueryString["fullFuncList"]).Selected = true;
+            }// end of if(selectedFunctionId >0)
+            else
+            {//case where function is NOT passed
+
+                if (String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
+                {//scenario where user didn't pass any search strings
+                    foreach (var x in oBS_COLLECT_FORM_TMPLT)
+                    {
+                        ObsColFormTemplate obsForm = new ObsColFormTemplate();
+
                         obsForm.OBSformID = x.obs_cft_id;
                         obsForm.FormTitle = x.obs_cft_title;
                         obsForm.FormNumber = x.obs_cft_nbr;
@@ -123,11 +172,92 @@ namespace OBSMVC.Controllers
                         obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
                         obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
                         obsForm.FormSubtitle = x.obs_cft_subtitle;
-                        ObsColFormTemplateList.Add(obsForm);//title search match
-                    }                   
+                        ObsColFormTemplateList.Add(obsForm);
+                    }//end of foreach
 
-                }//end of foreach
-                
+                }// end of  if (String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
+                else if (String.IsNullOrWhiteSpace(question_search) && !String.IsNullOrWhiteSpace(title_search))
+                {// search by title
+                    foreach (var x in oBS_COLLECT_FORM_TMPLT)
+                    {
+                        if (matchesSearchCriteria(title_search, x.obs_cft_title + " " + x.OBS_TYPE.obs_type_name + " " + x.obs_cft_subtitle, t_search))
+                        {
+                            ObsColFormTemplate obsForm = new ObsColFormTemplate();
+
+                            obsForm.OBSformID = x.obs_cft_id;
+                            obsForm.FormTitle = x.obs_cft_title;
+                            obsForm.FormNumber = x.obs_cft_nbr;
+                            obsForm.FormVersion = x.obs_cft_ver;
+                            obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
+                            obsForm.LC = x.DSC_LC.dsc_lc_name;
+                            obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
+                            obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
+                            obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                            obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
+                            obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
+                            obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
+                            obsForm.FormSubtitle = x.obs_cft_subtitle;
+                            ObsColFormTemplateList.Add(obsForm);
+                        }
+
+                    }//end of foreach
+                } // end of  else if (String.IsNullOrWhiteSpace(question_search) && !String.IsNullOrWhiteSpace(title_search))
+                else if (!String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
+                {//search by question
+                    List<int> cft_with_matching_questions = searchQuestionsWithMatchingSearchCriteria(question_search, q_search);
+                    foreach (var x in oBS_COLLECT_FORM_TMPLT)
+                    {
+                        if (cft_with_matching_questions.Count() > 0 && cft_with_matching_questions.IndexOf(x.obs_cft_id) != -1)
+                        {
+                            ObsColFormTemplate obsForm = new ObsColFormTemplate();
+
+                            obsForm.OBSformID = x.obs_cft_id;
+                            obsForm.FormTitle = x.obs_cft_title;
+                            obsForm.FormNumber = x.obs_cft_nbr;
+                            obsForm.FormVersion = x.obs_cft_ver;
+                            obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
+                            obsForm.LC = x.DSC_LC.dsc_lc_name;
+                            obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
+                            obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
+                            obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                            obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
+                            obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
+                            obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
+                            obsForm.FormSubtitle = x.obs_cft_subtitle;
+                            ObsColFormTemplateList.Add(obsForm);
+
+                        }
+                    }
+                }// end of  else if (!String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
+                else if (!String.IsNullOrWhiteSpace(question_search) && !String.IsNullOrWhiteSpace(title_search))
+                {// search by both title and question
+                    List<int> cft_with_matching_questions = searchQuestionsWithMatchingSearchCriteria(question_search, q_search);
+                    foreach (var x in oBS_COLLECT_FORM_TMPLT)
+                    {
+                        if ((matchesSearchCriteria(title_search, x.obs_cft_title + " " + x.OBS_TYPE.obs_type_name + " " + x.obs_cft_subtitle, t_search)) && ((cft_with_matching_questions.Count() > 0 && cft_with_matching_questions.IndexOf(x.obs_cft_id) != -1)))
+                        {
+                            ObsColFormTemplate obsForm = new ObsColFormTemplate();
+
+                            obsForm.OBSformID = x.obs_cft_id;
+                            obsForm.FormTitle = x.obs_cft_title;
+                            obsForm.FormNumber = x.obs_cft_nbr;
+                            obsForm.FormVersion = x.obs_cft_ver;
+                            obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
+                            obsForm.LC = x.DSC_LC.dsc_lc_name;
+                            obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
+                            obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
+                            obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                            obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
+                            obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
+                            obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
+                            obsForm.FormSubtitle = x.obs_cft_subtitle;
+                            ObsColFormTemplateList.Add(obsForm);//title search match
+                        }
+
+                    }//end of foreach
+
+                }
+
             }
 
             ViewBag.fullFuncList = fullFuncList;
@@ -261,7 +391,7 @@ namespace OBSMVC.Controllers
             public DateTime? LastCompleteDate { get; set; }
 
             public string FormSubtitle { get; set; }
-            public List<String> AssignedFunctions = new List<string>();
+            public List<int> AssignedFunctions = new List<int>();
 
            
             public int getAssignedQuestionCount(int cft_id)
@@ -279,14 +409,14 @@ namespace OBSMVC.Controllers
                 return  OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date).Equals(null) ? null : OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date);
                 
             }
-           public List<string> getAssignedFunctions(int cft_if)
+           public List<int> getAssignedFunctions(int cft_if)
             {
-                List<string> AssignedFunctions = (from fc in OBSdb.OBS_COLLECT_FORM_TMPLT
+                List<int> AssignedFunctions = (from fc in OBSdb.OBS_COLLECT_FORM_TMPLT
                                                   join t in OBSdb.OBS_TYPE on fc.obs_type_id equals t.obs_type_id
                                                   join ots in OBSdb.OBS_TYPE_SUB_TYPES on t.obs_type_id equals ots.obs_type_id
                                                   join os in OBSdb.OBS_SUB_TYPE on ots.obs_sub_type_id equals os.obs_sub_type_id
                                                   where fc.obs_cft_id == cft_if && os.obs_sub_type_group == "FUNCTION"
-                                                  select os.obs_sub_type_name).ToList();
+                                                  select os.obs_sub_type_id).ToList();
                 return AssignedFunctions;
             }
           
@@ -313,13 +443,7 @@ namespace OBSMVC.Controllers
             {
                 case "Any":
                     foreach (OBS_QUESTION quest in list_of_questions)
-                    {
-                        /* foreach (string s in splitted_search_string)
-                         {
-                             if (quest.obs_question_full_text.ToLower().Contains(s.ToLower()))
-                             { list_of_quest_ids.Add(quest.obs_question_id); break; }
-                             else { continue; }
-                         }*/
+                    {                       
                         if (matchesSearchCriteria(search_for_string, quest.obs_question_full_text, search_criteria))
                         {
 

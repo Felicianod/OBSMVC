@@ -43,13 +43,17 @@
             background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
             background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
         }
+        .container-fluid {
+        max-width: 1400px;
+		padding:30px;  /*Whitespace or outside gutter*/
+        }
     </style>
 </head>
 <body>
     <div style="text-align:center">
         @Html.Partial("_NavMenu")
     </div>
-    <div class="container body-content ">
+    <div class="container-fluid body-content ">
         @RenderBody()
         <hr />
     </div>

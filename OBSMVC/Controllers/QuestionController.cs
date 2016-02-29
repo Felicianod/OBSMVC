@@ -257,23 +257,27 @@ namespace OBSMVC.Controllers
                 //-- Process each metadata entry to add for the selected question
                 foreach (string mdIdtoAdd in mdIDsToAdd)
                 {
-                    int tempId = Convert.ToInt32(mdIdtoAdd);
-                    //-- Look for an entry in OBS_QUEST_ASSGND_MD usign the Question Id and the metadata it.
-                    OBS_QUEST_ASSGND_MD oBS_QUEST_ASSGND_MD = db.OBS_QUEST_ASSGND_MD.FirstOrDefault(x => x.obs_quest_md_id == tempId && x.obs_question_id == questionHdr.obs_question_id);
-                    //-- If an entry is found in the junction table for that question, just enable it
-                    if (oBS_QUEST_ASSGND_MD != null && tempId > 0)
+                    try
                     {
-                        oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                        int tempId = Convert.ToInt32(mdIdtoAdd);
+                        //-- Look for an entry in OBS_QUEST_ASSGND_MD usign the Question Id and the metadata it.
+                        OBS_QUEST_ASSGND_MD oBS_QUEST_ASSGND_MD = db.OBS_QUEST_ASSGND_MD.FirstOrDefault(x => x.obs_quest_md_id == tempId && x.obs_question_id == questionHdr.obs_question_id);
+                        //-- If an entry is found in the junction table for that question, just enable it
+                        if (oBS_QUEST_ASSGND_MD != null && tempId > 0)
+                        {
+                            oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                        }
+                        else
+                        { //-- If selected MD does not exist in the junction table for that question, add it.
+                            oBS_QUEST_ASSGND_MD = new OBS_QUEST_ASSGND_MD();
+                            oBS_QUEST_ASSGND_MD.obs_quest_md_id = tempId;
+                            oBS_QUEST_ASSGND_MD.obs_question_id = questionHdr.obs_question_id;
+                            oBS_QUEST_ASSGND_MD.obs_qad_eff_st_dt = DateTime.Today;
+                            oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                            db.OBS_QUEST_ASSGND_MD.Add(oBS_QUEST_ASSGND_MD);
+                        }
                     }
-                    else
-                    { //-- If selected MD does not exist in the junction table for that question, add it.
-                        oBS_QUEST_ASSGND_MD = new OBS_QUEST_ASSGND_MD();
-                        oBS_QUEST_ASSGND_MD.obs_quest_md_id = tempId;
-                        oBS_QUEST_ASSGND_MD.obs_question_id = questionHdr.obs_question_id;
-                        oBS_QUEST_ASSGND_MD.obs_qad_eff_st_dt = DateTime.Today;
-                        oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = Convert.ToDateTime("12/31/2060");
-                        db.OBS_QUEST_ASSGND_MD.Add(oBS_QUEST_ASSGND_MD);                    
-                    }
+                    catch { }
                 }
 
                 //---- Save All Changes ------

@@ -267,7 +267,7 @@ namespace OBSMVC.Controllers
         // GET: ColFormTemplate/Details/5
         public ActionResult Details(int id)
         {
-            if (id == null) { return HttpNotFound(); }
+            //if (id == null) { return HttpNotFound(); }
 
             CollectionForm selectedColForm = new CollectionForm(id);
             if (selectedColForm == null) { return HttpNotFound(); }

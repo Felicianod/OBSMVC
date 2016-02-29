@@ -38,14 +38,15 @@
 </style>
 
 <div class="panel panel-default">
-    <div class="panel-heading header">
-        <table style="width:100%">
-            <tr>
+   <div class="panel-heading header">
+      <table style="width:100%">
+         <tr>
                 <td>
                     <h3 class="panel-title" style="text-align:center"><b>COLLECTION FORM: </b><span style="color:cadetblue; font-size:x-large; font-weight:bold">"@Model.cft_Title"</span></h3>
                     @if (!String.IsNullOrEmpty(Model.cft_SubTitle))
                     {<h5> Subtitle: @Model.cft_SubTitle </h5>}
-                    else { <h5> </h5>}
+                    else
+                    { <h5> </h5>}
                 </td>
                 <td style="text-align:right; vertical-align:top">
                     <span class="badge" data-toggle="tooltip" title="Form ID: @Model.cft_id Number/Version: @Model.cft_Nbr v.@Model.cft_Version">
@@ -53,7 +54,7 @@
                     </span>
                 </td>
             </tr>
-            <tr>
+         <tr>
                 <td colspan="2">
                     <table style="width:100%">
                         <tr>
@@ -68,10 +69,10 @@
                     </table>
                 </td>
             </tr>
-        </table>
-    </div>
-    <div class="panel-body content">
-        <div class="row">
+      </table>
+   </div>
+   <div class="panel-body content">
+      <div class="row">
             <table style="width:100%">
                 <tr>
                     <td style="text-align:center; width:10%"><button type="button" class="btn-link" id="collapseall">Collapse All</button></td>
@@ -80,12 +81,12 @@
                 </tr>
             </table>
         </div>
-        @* - - - - - Loop Once for each Question Section - - - - - *@
-        <div class="panel-group" id="accordion">
-            @foreach (var fSection in Model.colFormSections)
-            {
-                <div class="panel panel-default">
-                    <div class="panel-heading">
+      @* - - - - - Loop Once for each Question Section - - - - - *@
+      <div class="panel-group" id="accordion">
+        @foreach (var fSection in Model.colFormSections)
+        {
+         <div class="panel panel-default">
+            <div class="panel-heading">
                         <h4 class="panel-title">
                             @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
                             <a class="accordion-toggle" data-toggle="collapse" href="#@fSection.sectionViewId">
@@ -96,13 +97,13 @@
                             </a>
                         </h4>
                     </div>
-                    <div id="@fSection.sectionViewId" class="panel-collapse collapse in">
-                        <ul class="list-group">
-                            @foreach (var fQuestion in fSection.colFormQuestionList)
-                            {
-                                <li class="list-group-item">
-                                    <table style="width:100%">
-                                        <tr>
+            <div id="@fSection.sectionViewId" class="panel-collapse collapse in">
+               <ul class="list-group">
+                @foreach (var fQuestion in fSection.colFormQuestionList)
+                  {
+                    <li class="list-group-item">
+                      <table style="width:100%">
+                         <tr>
                                             <td style="width:5%">
                                                 <a href="/Question/Details/@fQuestion.cfq_questId?rurl=Form_@Model.cft_id" class="Button">[ @fQuestion.cfq_seqInForm ]</a>
                                             </td>
@@ -111,9 +112,9 @@
                                                 <span class="label label-primary">@fQuestion.cfq_AT</span>
                                             </td>
                                         </tr>
-                                        @if (fQuestion.cfq_AT.Contains("YN"))
-                                        {
-                                            <tr>
+                         @if (fQuestion.cfq_AT.Contains("YN"))
+                         {
+                            <tr>
                                                 <td style="width:5%"></td>
                                                 <td colspan="2">
                                                     <span class="badge">Y</span>
@@ -122,20 +123,20 @@
                                                     {<TEXT>&nbsp; [No comment is Required]</TEXT> }
                                                 </td>
                                             </tr>
-                                        }
-                                        @if (fQuestion.cfq_AT.Contains("3 Val Range"))
-                                        {
+                         }
+                         @if (fQuestion.cfq_AT.Contains("3 Val Range"))
+                         {
                                             <tr>
                                                 <td style="width:5%"></td>
                                                 <td colspan="2">
                                                     <br />
                                                     @*<div class="btn-group" role="group" aria-label="...">
-                                                        @foreach (var qAnswer in fQuestion.cfq_SelectableAnswers)
-                                                        {
-                                                            <button type="button" class="btn btn-default">@qAnswer</button>
-                                                        }
-                                                    </div>
-                                                    <br />*@
+                                                            @foreach (var qAnswer in fQuestion.cfq_SelectableAnswers)
+                                                            {
+                                                                <button type="button" class="btn btn-default">@qAnswer</button>
+                                                            }
+                                                        </div>
+                                                        <br />*@
 
 
 
@@ -143,7 +144,7 @@
 
 
                                                     @{int aCounter = 1;}
-                                                    <ul class="nav nav-pills" >
+                                                    <ul class="nav nav-pills">
                                                         @foreach (var qAnswer in fQuestion.cfq_SelectableAnswers)
                                                         {
                                                             string rangeBtnId = "#qRange" + fQuestion.cfq_questId.ToString("00") + aCounter.ToString("00");
@@ -163,7 +164,7 @@
                                                                 @if (aCounter == 1)
                                                                 {
                                                                     <textarea class="form-control has-feedback" cols="400" rows="2" style="max-width: 100%; width:80%; background-color:#E5E4E2" placeholder="This Selection requires a mandatory comment!"></textarea>
-                                                                }                                                                
+                                                                }
                                                             </div>
                                                         }
                                                     </div>
@@ -171,82 +172,82 @@
 
                                                 </td>
                                             </tr>
-                                        }
-                                        @*
-                                            @if (fQuestion.cfq_AT.Contains("Range"))
+                         }
+                         @*
+                            @if (fQuestion.cfq_AT.Contains("Range"))
+                            {
+                                <tr>
+                                   <td style="width:5%"></td>
+                                   <td colspan="2">
+                                      <table style="width:80%">
+                                        <tr>
+                                          @foreach (var qAnswer in fQuestion.cfq_SelectableAnswers)
+                                          {
+                                             <td style="width:20%">
+                                                <h5><span class="label label-default">@qAnswer</span></h5>
+                                             </td>
+                                          }
+                                        </tr>
+                                      </table>
+                                   </td>
+                                </tr>
+                            }*@
+                        else
+                        {//Loop through the Question Selectable answers List and create a new table row for each of them
+                           <tr>
+                              <td style="width:5%"></td>
+                              <td colspan="2">
+                                 <table class="table table-condensed table-hover">
+                                    <tbody>
+                                    @foreach (var qAnswer in fQuestion.cfq_SelectableAnswers)
+                                    {
+                                       int counter = 1;
+                                       string controlName = "checkbox" + counter.ToString("00");
+                                       <tr>
+                                          <td>
+                                            @if (fQuestion.cfq_AT.Contains("Multi Select"))
                                             {
-                                                <tr>
-                                                    <td style="width:5%"></td>
-                                                    <td colspan="2">
-                                                        <table style="width:80%">
-                                                            <tr>
-                                                                @foreach (var qAnswer in fQuestion.cfq_SelectableAnswers)
-                                                                {
-                                                                    <td style="width:20%">
-                                                                        <h5><span class="label label-default">@qAnswer</span></h5>
-                                                                    </td>
-                                                                }
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            }*@
-                                        else
-                                        {//Loop through the Question Selectable answers List and create a new table row for each of them
-                                            <tr>
-                                                <td style="width:5%"></td>
-                                                <td colspan="2">
-                                                    <table class="table table-condensed table-hover">
-                                                        <tbody>
-                                                            @foreach (var qAnswer in fQuestion.cfq_SelectableAnswers)
-                                                            {
-                                                                int counter = 1;
-                                                                string controlName = "checkbox" + counter.ToString("00");
-                                                                <tr>
-                                                                    <td>
-                                                                        @if (fQuestion.cfq_AT.Contains("Multi Select"))
-                                                                        {
-                                                                            <input id="@controlName" class="icon-checkbox" type="checkbox" />
-                                                                        }
-                                                                        else if (fQuestion.cfq_AT.Contains("Single Select") || fQuestion.cfq_AT.Contains("Range"))
-                                                                        {
-                                                                            <input type="radio" name="options1" id="option1" autocomplete="off" checked> @*<span class="glyphicon glyphicon-unchecked unchecked"></span> <span class="glyphicon glyphicon-check checked"></span>*@
-                                                                        }
-                                                                        <text>&nbsp;</text>
-                                                                        @qAnswer
-                                                                    </td>
-                                                                </tr>
-                                                                counter++;
-                                                            }
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        }
-                                        @if ((fQuestion.cfq_AT.Contains("Comment") || fQuestion.cfq_AT.Contains("Text")) && !fQuestion.cfq_AT.Contains("3 Val Range"))
-                                        {
-                                            <tr>
-                                                <td style="width:5%"></td>
-                                                <td colspan="2">
-                                                    <textarea class="form-control has-feedback" cols="400" rows="2" style="max-width: 100%; width:80%; background-color:#E5E4E2" placeholder="Enter Comment Here"></textarea>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </table>
-                                </li>
-                            }
-                        </ul>
-                        @*<div class="panel-footer">Footer</div>*@
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
+                                               <input id="@controlName" class="icon-checkbox" type="checkbox" />
+                                            }
+                                            else if (fQuestion.cfq_AT.Contains("Single Select") || fQuestion.cfq_AT.Contains("Range"))
+                                            {
+                                                <input type="radio" name="options1" id="option1" autocomplete="off" checked> @*<span class="glyphicon glyphicon-unchecked unchecked"></span> <span class="glyphicon glyphicon-check checked"></span>*@
+                                            }
+                                            <text>&nbsp;</text>
+                                            @qAnswer
+                                          </td>
+                                       </tr>
+                                       counter++;
+                                    }
+                                    </tbody>
+                                 </table>
+                              </td>
+                           </tr>
+                        }
+                        @if ((fQuestion.cfq_AT.Contains("Comment") || fQuestion.cfq_AT.Contains("Text")) && !fQuestion.cfq_AT.Contains("3 Val Range"))
+                        {
+                           <tr>
+                             <td style="width:5%"></td>
+                             <td colspan="2">
+                                <textarea class="form-control has-feedback" cols="400" rows="2" style="max-width: 100%; width:80%; background-color:#E5E4E2" placeholder="Enter Comment Here"></textarea>
+                             </td>
+                           </tr>
+                        }
+                      </table>
+                    </li>
+                  }
+                </ul>
+               @*<div class="panel-footer">Footer</div>*@
+            </div>
+         </div>
+        }
+      </div>
+   </div>
 </div>
 
 <p>
-    @*@Html.ActionLink("Edit", "Edit", new { id = Model.obs_cft_id }) |*@
-    @Html.ActionLink("Back to List", "Index")
+   @*@Html.ActionLink("Edit", "Edit", new { id = Model.obs_cft_id }) |*@
+   @Html.ActionLink("Back to List", "Index")
 </p>
 
 <script>

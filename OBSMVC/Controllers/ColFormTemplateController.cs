@@ -294,7 +294,7 @@ namespace OBSMVC.Controllers
             if (String.IsNullOrWhiteSpace(full_text_search) && String.IsNullOrWhiteSpace(metadata_search))
             {//no search parameters passed
                
-                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now).OrderBy(x => x.obs_question_id).Take(pageSize ?? 10).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).ToList();
+                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now).OrderBy(x => x.obs_question_id).ToList();
                 foreach (OBS_QUESTION q in list_of_questions)
                 {
                     AvailableQuestions quest = new AvailableQuestions();
@@ -308,7 +308,7 @@ namespace OBSMVC.Controllers
             else if (!String.IsNullOrWhiteSpace(full_text_search) && String.IsNullOrWhiteSpace(metadata_search))
             {//search by question text
                
-                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.ToLower().Contains(full_text_search.ToLower())).Take(pageSize ?? 10).OrderBy(x => x.obs_question_id).Take(pageSize ?? 10).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).ToList();
+                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.ToLower().Contains(full_text_search.ToLower())).ToList();
                 if(list_of_questions.Count>0)
                 {
                     foreach (OBS_QUESTION q in list_of_questions)
@@ -345,6 +345,8 @@ namespace OBSMVC.Controllers
                             else { continue; }
                            
                 }               
+                        
+                       
             }
                 }               
             }
@@ -374,9 +376,14 @@ namespace OBSMVC.Controllers
                             
                         }
                     }
-                }                   
+                }
+                   
             }
-            return PartialView("_getQuestions", availableQuestions.OrderBy(x => x.obs_question_id).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).Take(pageSize ?? 10).ToList());
+            int psize = pageSize ?? 10;
+            int pg = page ?? 1;
+            int skip_records = ((page ?? 1) - 1) * (pageSize ?? 10);
+
+            return PartialView("_getQuestions", availableQuestions.Take(pageSize ?? 10).OrderBy(x => x.obs_question_id).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).ToList());            
         }
 
         // POST: ColFormTemplate/Create

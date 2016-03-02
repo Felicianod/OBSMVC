@@ -73,8 +73,6 @@ namespace OBSMVC.Controllers
                 return HttpNotFound();
             }
             return View(obsQMD);
-
-
         }
         //---------------------------------------- CREATE  [GET] -----------------------------------------------------------------
         [HttpGet]  // GET: Question/Create
@@ -179,6 +177,8 @@ namespace OBSMVC.Controllers
             //ViewBag.mdTags = db.OBS_QUESTION_METADATA.ToList();
             
             // Populate the new QuestionMD Model from the selected Id and forward it to the View
+
+            //QuestionCreateViewModel obsQMD = new QuestionCreateViewModel((int)id);
             QuestionMDViewModel obsQMD = new QuestionMDViewModel((int)id);
             if (obsQMD == null) {
                 return HttpNotFound();
@@ -445,6 +445,7 @@ namespace OBSMVC.Controllers
             ViewBag.question_selected_ans_type = question_selected_ans_type;
 
         }
+
         // =================================================================================================
         // ============================ HELPER METHODS FOR OBS_QUESTION ====================================
         //******** CLASES *******************************
@@ -656,11 +657,9 @@ namespace OBSMVC.Controllers
 
             public List<string> getTemplates(string category)
             {
-
                 List<string> templateList = new List<string>();
                 switch (category)
                 {
-
                     case "3 Val Range":
                         templateList.Add("1,2,3");
                         templateList.Add("YES,NO,MAYBE");
@@ -682,7 +681,6 @@ namespace OBSMVC.Controllers
                     default:
                         templateList.Add("NO TEMPLATES NEEDED");
                         break;
-
                 }//end of switch    
                 return templateList;
             }
@@ -906,7 +904,6 @@ namespace OBSMVC.Controllers
             }
 
         }
-
         public bool isQuest_Slct_Ans_Required(int ans_type_id)
         {
             short temp = (short)ans_type_id;
@@ -967,7 +964,5 @@ namespace OBSMVC.Controllers
             }
             
         }
-        
-
     }
 }

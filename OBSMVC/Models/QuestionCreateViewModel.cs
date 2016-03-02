@@ -15,24 +15,32 @@ namespace OBSMVC.Models
         public QuestionCreateViewModel() {
             qAssignedMD = new List<metaDataTag>();
             qUnassignedMD = new List<metaDataTag>();
+            qMDCategories = new List<string>();
             var mdList = db.OBS_QUESTION_METADATA.ToList();
             foreach (var md in mdList)
             {
                 metaDataTag mdTag = new metaDataTag();
                 mdTag.md_id = md.obs_quest_md_id;
                 mdTag.md_cat= md.obs_quest_md_cat;
-                mdTag.md_value = md.obs_quest_md_value;
+                mdTag.md_value = md.obs_quest_md_value;                
                 qUnassignedMD.Add(mdTag);
+                qMDCategories.Add(md.obs_quest_md_cat);
             }
+            qMDCategories = qMDCategories.Distinct().ToList().OrderBy(q => q).ToList();
         }
 
         //= = = = = = = = = = = = = = = CONSTRUCTOR (Needs a Question Id parameter) = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
         public QuestionCreateViewModel(int qId)
         {
+            //Set the distict list of metadata tags available
+            qMDCategories = new List<string>();
+            qMDCategories = db.OBS_QUESTION_METADATA.Select(x => x.obs_quest_md_cat).Distinct().OrderBy(y => y).ToList();
+           
+            
             // Retrieve the Question Information from OBS_Question Table
-            q = db.OBS_QUESTION.Find(qId);
+            questn = db.OBS_QUESTION.Find(qId);
 
-            if (q != null)
+            if (questn != null)
             {
                 // Add all Metadata List to the QuestionMD Object
                 var tempMD = from t1 in db.OBS_QUESTION_METADATA
@@ -67,9 +75,10 @@ namespace OBSMVC.Models
         }
         // ----------------------------------- PUBLIC CLASS PROPERTIES ----------------------------------------------
         
-        public OBS_QUESTION q = new OBS_QUESTION();
+        public OBS_QUESTION questn = new OBS_QUESTION();
         public List<metaDataTag> qAssignedMD = new List<metaDataTag>();
         public List<metaDataTag> qUnassignedMD = new List<metaDataTag>();
+        public List<string> qMDCategories = new List<string>();
         public List<int> preMetaDataIds = new List<int>();
     }
 

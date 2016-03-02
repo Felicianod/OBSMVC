@@ -345,8 +345,6 @@ namespace OBSMVC.Controllers
                             else { continue; }
                            
                 }               
-                        
-                       
             }
                 }               
             }
@@ -376,10 +374,9 @@ namespace OBSMVC.Controllers
                             
                         }
                     }
-                }
-                   
+                }                   
             }
-            return PartialView("_getQuestions", availableQuestions.Take(pageSize ?? 10).OrderBy(x => x.obs_question_id).Take(pageSize ?? 10).Skip(((page ?? 1) - 1) * (pageSize ?? 10)));            
+            return PartialView("_getQuestions", availableQuestions.OrderBy(x => x.obs_question_id).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).Take(pageSize ?? 10).ToList());
         }
 
         // POST: ColFormTemplate/Create

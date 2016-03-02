@@ -1,14 +1,14 @@
 ﻿@model OBSMVC.Models.OBS_COLLECT_FORM_TMPLT
 @{ ViewBag.Title = "Create"; }
 
-<div class="well well-sm"><h3>Collection Form Creation</h3></div>
+<div class="well well-sm wellDSC"><h3>Collection Form Creation</h3></div>
 
 @*====================== BEGINING OF THE "CREATE COLLECTION FORM" FORM =========================*@
 @using (Html.BeginForm())
 {
   @Html.AntiForgeryToken()
-    <div class="panel panel-default">
-        @*---------------------- FORM HEADER ------------------------- *@
+   <div class="panel panel-default">
+   @*---------------------- FORM HEADER ------------------------- *@
         <div class="panel-heading header">
             <table style="width:100%">
                 <tr>
@@ -76,128 +76,167 @@
 
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 </div>
-        @*---------------------- FORM BODY --------------------------- *@
-        <div class="panel-body content">
-            <div class="row">
-                <div class="col-md-6 personal-info">
-                    FORM DETAIL SECTIONS AND QUESTIONS GO HERE
-                </div>
-                <div class="col-md-6 personal-info">
-                    @*// **************** This is the Panel with the Question's Library ***************** *@
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <table style="width:100%">
-                                <tr>
-                                    <td colspan="2"><b>Question Library</b></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Enter Search Text:
-                                    </td>
-                                    <td>
-                                        @Html.TextBox("full_text_search", "", new { @class = "form-control" })
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Metadata Search:
-                                    </td>
-                                    <td>
-                                        @Html.TextBox("metadata_search", "", new { @class = "form-control" })
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <button type="button" id="doSearch">Search</button>
-                                        @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
+   @*---------------------- FORM BODY --------------------------- *@
+      <div class="panel-body content">
+         <div class="row">
+           <div class="col-md-7 personal-info">
+           @*/---------------- MAIN QUESTION DETAIL DISPLAY PANEL ----------------------\*@
+
+
+           @*
+              *******************************************************************************
+                RASUL,
+                 you will be working and testing on this section to trigger the AJAX call
+                 and to update this section with the partial view !!!!!!!!!!!!!!!!
+              ******************************************************************************@
+
+               <div class="input-group col-md-6">
+                   <input type="text" id="droppedQId" class="form-control" placeholder="Question Id to Add...">
+                   <span class="input-group-btn">
+                       
+   @* - - - - This is the button that will trigger the Ajax call for Testing !!! - - - - - - - - - *@
+                       <button id="displayQID" class="btn btn-primary" type="button">Add Question!</button>
+                   </span>
+               </div><!-- /input-group -->
+               <hr />
+
+
+
+               <div id="questionPanel">
+                   
+                   <<< THE PARTIAL VIEW QUESTION DETAILS <br/>RETURNED BY AJAX CALL WILL BE PLACED HERE >>>
+
+               </div>
+
+
+
+
+
+
+           @*\--------------- END OF THE MAIN QUESTION DISPLAY PANEL -------------------/*@
+           </div>
+           <div class="col-md-5 personal-info">
+              @*// **************** This is the Panel with the Question's Library ***************** *@
+              <div class="panel panel-info">
+                 <div class="panel-heading">
+                     <table style="width:100%">
+                        <tr>
+                           <td colspan="2" style="text-align:center; font-size:large"><b>"QUESTION LIBRARY"</b></td>
+                        </tr>
+                        <tr>
+                           <td style="width:30%">
+                                Enter Search Text:
+                           </td>
+                           <td style="width:70%">
+                                @Html.TextBox("full_text_search", "", new { @class = "form-control" })
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>
+                                Metadata Search:
+                           </td>
+                           <td>
+                                @Html.TextBox("metadata_search", "", new { @class = "form-control" })
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>
+                                <button type="button" id="doSearch" class="btn btn-primary" data-loading-text="Please Wait...">Search Questions</button>
+                                @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
                                               HttpMethod = "GET",
                                               UpdateTargetId = "resultPanel",
                                               InsertionMode = InsertionMode.Replace,
                                               LoadingElementId = "divLoading"
-                                            })*@
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="panel-body">
-                            @*<div>
-                                    @Html.Action("getQuestions", new { full_text_search = "", metadata_search = "" })
-                                </div>*@
-                            <div id="resultPanel">
-                                [Results]
-                            </div>
-                            <div id="divLoading" style="display:none">
-                                @*<img src="@Url.Content("~/Images/LoadingData.gif")" alt="" />*@
-                                <img src="~/Images/LoadingData.gif" />
-                            </div>
-                        </div>
-                    </div> @*------------- End of Question Library Panel ---------------*@
-                </div>
-            </div>@*---- END OF FORM BODY -------*@
+                                })*@
+                           </td>
+                        </tr>
+                     </table>
+                 </div>
+                 <div class="panel-body">
+                     @*<div>
+                        @Html.Action("getQuestions", new { full_text_search = "", metadata_search = "" })
+                     </div>*@
+                     <div id="resultPanel">
+                         [Results]
+                     </div>
+                     <div id="divLoading" style="display:none">
+                         @*<img src="@Url.Content("~/Images/LoadingData.gif")" alt="" />*@
+                         <img src="~/Images/LoadingData.gif" />
+                     </div>
+                 </div>
+              </div> @*------------- End of Question Library Panel ---------------*@
+           </div>
+         </div>@*---- END OF FORM BODY -------*@
+      </div>
+      <div class="row">
+        <div class="col-md-offset-2 col-md-10">
+           <input id="btnSaveForm" type="submit" value="Save Form" disabled="disabled" />
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default disabled" />
-            </div>
-        </div>
+      </div>
    </div>
- } 
-    @*====================== END OF THE "CREATE COLLECTION FORM" FORM =========================*@
+} 
+@*====================== END OF THE "CREATE COLLECTION FORM" FORM =========================*@
 
-        <div>
-            @Html.ActionLink("Back to List", "Index")
-        </div>
-
-
-        <br /><br /><br />
-
-        <script type="text/jscript">
-            $('#doSearch').click(function () {
-                //e.preventDefault(); // <------------------ stop default behaviour of button
-
-                var searchText = $("#full_text_search").val();
-                var searchMD = $("#metadata_search").val();
-                var url = "/ColFormTemplate/getQuestions";
-                var loadingInfo = "<div id=\"divLoading\" style=\"display:none\"><img src=\"~/Images/LoadingData.gif\" /></div>";
-                $("#resultPanel").html("Search String is: " + searchText + "<br/>" + loadingInfo);
-
-                //$.get(url, { full_text_search: "", metadata_search: "" }, function (data) {
-                //    $("#resultPanel").html(data);
-                //});
-
-                $.ajax({
-                    @*url: '@Url.Action("getQuestions", "ColFormTemplate", new { full_text_search = searchText, metadata_search = searchMD })',*@
-                    url: '@Url.Action("getQuestions", "ColFormTemplate")',
-                    method: "GET",
-                    //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                    //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                    //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                    //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-                    cache: false,
-                    data: { full_text_search: searchText, metadata_search: searchMD, page: 2 },     //<-- Parameters data if not already passed in the Url
-                    error: function () {                                      //<-- Trap and alert of any errors if they occurred
-                        alert("Failed to render the Question List from the Database !!");
-                    }
-                }).done(function (d) {
-                    $("#resultPanel").html(d);
-                });
-            })
-        </script>
+ <div>
+    @Html.ActionLink("Back to List", "Index")
+ </div>
 
 
-        @*<script type="text/javascript">
-                $(document).ready(function () {
-                    BindSpinner();
-                });
+ <br />
 
-                function BindSpinner() {
-                    $("#divLoading").bind("ajaxSend", function () {
-                        $(this).show();
-                    }).bind("ajaxStop", function () {
-                        $(this).hide();
-                    }).bind("ajaxError", function () {
-                        $(this).hide();
-                    });
-                };
-            </script>*@
+@*//======================================== JAVASCRIPT / AJAX SECTION  ===============================================\\*@
+<script type="text/jscript">
+    $('#doSearch').click(function () {
+        var $btn = $(this);
+        $btn.button('loading');
+        //$(this).button('loading');        
+      //e.preventDefault(); // <------------------ stop default behaviour of button (to prevent form submit or other behaviours if neeed)
+
+      //var url = "/ColFormTemplate/getQuestions";
+      //$.get(url, { full_text_search: "", metadata_search: "" }, function (data) {
+      //    $("#resultPanel").html(data);
+      //});
+
+      // ---- Fetch the Values that wil be used as parameters on the AJAX call -------
+      var searchText = $("#full_text_search").val();
+      var searchMD = $("#metadata_search").val();
+      // ------------ Make the Ajax Call ---------------------------------------------
+      $.ajax({
+        @*url: '@Url.Action("getQuestions", "ColFormTemplate", new { full_text_search = searchText, metadata_search = searchMD })',*@
+        url: '@Url.Action("getQuestions", "ColFormTemplate")',
+        method: "GET",
+        cache: false,
+        data: { full_text_search: searchText, metadata_search: searchMD, page: 1, pageSize: 25 },     //<---- Data Parameters (if not already passed in the Url)
+        //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+        //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+        //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+        //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+          //--- On error, execute this function ------
+        error: function () {                                      
+            alert("Failed to render the Question List from the Database !!");  //<-- Trap and alert of any errors if they occurred
+        }
+      }).done(function (d) {
+          //Execute this code After the Ajax call completes successfully
+          $("#resultPanel").html(d);
+          $btn.button('reset');
+        });
+  })
+</script>
+
+
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            BindSpinner();
+        });
+
+        function BindSpinner() {
+            $("#divLoading").bind("ajaxSend", function () {
+                $(this).show();
+            }).bind("ajaxStop", function () {
+                $(this).hide();
+            }).bind("ajaxError", function () {
+                $(this).hide();
+            });
+        };
+    </script>*@

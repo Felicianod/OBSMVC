@@ -341,6 +341,7 @@ namespace OBSMVC.Controllers
                         quest.obs_question_full_text = q.obs_question_full_text;
                                 //quest.assigned_metadata = quest.getAssignedMetadata(q.obs_question_id);
                         availableQuestions.Add(quest);
+                        break;
                     }
                             else { continue; }
                            
@@ -370,6 +371,7 @@ namespace OBSMVC.Controllers
                             quest.obs_question_id = q.obs_question_id;
                             quest.obs_question_full_text = q.obs_question_full_text;
                             availableQuestions.Add(quest);
+                            break;
                         }
                                 else { continue; }
                             }

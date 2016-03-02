@@ -1,7 +1,9 @@
 ﻿@model OBSMVC.Models.QuestionCreateViewModel
 @using System.Linq;
-@{  ViewBag.Title = "Create"; }
+@{  ViewBag.Title = "Create Question"; }
 @*<script src="~/Scripts/jquery-ui.js"></script>*@
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/bootstrap-confirmation.js"></script>
 
 <script type="text/javascript">
         //$(function () {
@@ -72,14 +74,13 @@
     }
 </style>
 
-<div class="well well-sm"><h3>Add New Question</h3></div>
-
+<div class="well well-sm" style="padding: 4px; font-size:xx-large">&nbsp;&nbsp; Add New Question</div>
+<hr />
 @using (Html.BeginForm("Create", "Question", FormMethod.Post)) 
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="row">
             <div class="form-group">
@@ -125,7 +126,7 @@
                 </div>
             </div>
         </div>
-        @* ---------- NEW ROW WITH TEST CODE--------------*@
+        @* ---------- NEW ROW WITH MOVE LEFT/RIGHT TAGS PANELS --------------*@
         <div class="row">
             <div class="col-md-12 personal-info">
                 <div class="panel panel-info">
@@ -151,7 +152,7 @@
                             <tr>
                                 <td style="width:45%; border:double; text-align:center; vertical-align:top">
                                     <b>ASSIGNED QUESTION METADATA TAGS</b>   <br />                                    
-                                    <select id="sbOne" multiple="multiple" size="10" style="width:95%">
+                                    <select id="sbOne" multiple="multiple" size="10" style="width:95%" data-toggle="tooltip" data-placement="auto right" title="Double Click Item to remove it">
                                         @foreach (var item in Model.qAssignedMD)
                                         {
                                             <option value="@item.md_id">@item.md_value [@item.md_cat]</option>
@@ -160,14 +161,14 @@
                                     <br /><br />
                                 </td>
                                 <td style="width:10%; text-align:center; font-weight:bold; color:blue ">
-                                    <input type="button" id="left" style="width:50px" value="<" /> <br /><br />
+                                    <input type="button" id="left" style="width:50px" value="<" data-toggle="confirmation" data-placement="left" /> <br /><br />
                                     <input type="button" id="right" style="width:50px" value=">" /> <br /><br />
-                                    <input type="button" id="leftall" style="width:50px" value="<<" /> <br /><br />
-                                    <input type="button" id="rightall" style="width:50px" value=">>" /> <br />
+                                    @*<input type="button" id="leftall" style="width:50px" value="<<" /> <br /><br />
+                                    <input type="button" id="rightall" style="width:50px" value=">>" /> <br />*@
                                 </td>
                                 <td style="width:45%; border:double; text-align:center; vertical-align:top">
                                     <b>AVAILABLE METADATA TAGS</b>   <br />
-                                    <select id="sbTwo" multiple="multiple" size="10" style="width:95%">
+                                    <select id="sbTwo" multiple="multiple" size="10" style="width:95%" data-toggle="tooltip" data-placement="auto left" title="Double Click Item to Add it" >
                                         @foreach (var item in Model.qUnassignedMD)
                                         {
                                             <option value="@item.md_id">@item.md_value [@item.md_cat]</option>
@@ -181,88 +182,7 @@
                 </div>
             </div>
         </div>
-        @* ---------- END OF NEW ROW WITH TEST CODE--------------*@
-
-        @* - - - - - - - - - OLD CHECK BOX METADATA VIEW FORMAT - - - - - - - - *@        
-        @*<div class="row">
-                <div class="col-md-6 personal-info">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Assigned Question Metadata</div>
-                        <div class="panel-body">
-                            <div class="list-group">
-                                <div class="list-group-item">
-                                    @foreach (int item in Model.preMetaDataIds)
-                                    {
-                                        <input type="hidden" id="origTags" name="origTags" value="@item" />
-                                    }
-                                    <table class="table table-condensed table-hover">
-                                        <tr>
-                                            <th></th>
-                                            <th>Value</th>
-                                            <th>Category</th>
-                                        </tr>
-                                        @foreach (var item in Model.qAssignedMD)
-                                        {
-                                        <tr>
-                                            <td>
-                                                <input type="checkbox" id="qAssignedMDx" name="qAssignedMD" checked="checked" value="@item.md_id" />
-                                            </td>
-                                            <td>
-                                                @item.md_value
-                                            </td>
-                                            <td>
-                                                @item.md_cat
-                                            </td>
-                                        </tr>
-                                        }
-                                    </table>
-                                    <br />
-                                    //@{Html.RenderAction("qMetaDataList", new { postId = p.Id });}
-                                    //@{Html.RenderAction("qMetaDataList");}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 personal-info">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                        </div>
-                        <div class="panel-body">
-                            <div class="list-group">
-                                <div class="list-group-item">
-                                    <table class="table table-condensed table-hover">
-                                        <tr>
-                                            <th></th>
-                                            <th>Value</th>
-                                            <th>Category</th>
-                                        </tr>
-                                        @foreach (var item in Model.qUnassignedMD)
-                                        {
-                                            <tr>
-                                                <td>
-                                                    <input type="checkbox" value="@item.md_id" id="qAssignedMD" name="qAssignedMD">
-                                                </td>
-                                                <td>
-                                                    @item.md_value
-                                                </td>
-                                                <td>
-                                                    @item.md_cat
-                                                </td>
-                                            </tr>
-                                        }
-                                    </table>
-                                    <br />
-                                    //@{Html.RenderAction("qMetaDataList", new { postId = p.Id });}
-                                    //@{Html.RenderAction("qMetaDataList");}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </div>*@
-        
-        
+        @* ---------- END OF NEW ROW WITH MOVE LEFT/RIGHT TAGS PANELS --------------*@
         <div class="row">
                 <div class="col-md-12 ">
                     <div class="form-group row">
@@ -333,14 +253,17 @@
         </div>
     </div>
 </div>
+
+
 @* ---------------------- END OF "Add New Metadata Tag" FORM ------------------------ *@
 
+
+<p>Content here. <a class="alert" href="http://msn.com">Alert!</a></p>
 
 
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
-
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -365,13 +288,24 @@
             moveItems('#sbOne', '#sbTwo');
         });
 
-        $('#leftall').on('click', function () {
-            moveAllItems('#sbTwo', '#sbOne');
-        });
+        //$('#leftall').on('click', function () {
+        //    moveAllItems('#sbTwo', '#sbOne');
+        //});
 
-        $('#rightall').on('click', function () {
-            moveAllItems('#sbOne', '#sbTwo');
+        //$('#rightall').on('click', function () {
+        //    moveAllItems('#sbOne', '#sbTwo');
+        //});
+        $('#sbOne').on('dblclick', function () {
+            moveItems('#sbOne', '#sbTwo');
         });
+        $('#sbTwo').on('dblclick', function () {
+            moveItems('#sbTwo', '#sbOne');
+        });       
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
 <script>
@@ -395,5 +329,27 @@
         //alert(tagList);
         return listResult;
     };
+
+    function showConfirmation() {
+        bootbox.confirm("Are you sure?", function (result) {
+            //Example.show("Confirm result: " + result);
+            //console.log("Alert Callback");
+            return result;
+        });
+
+    }
 </script>
+
+<!-- bootbox code -->
+<script src="~/Scripts/bootbox.min.js"></script>
+<script>
+    $(document).on("click", ".alert", function(e) {
+        bootbox.confirm("Are you sure?", function (result) {
+            //Example.show("Confirm result: " + result);
+            //console.log("Alert Callback");
+            return result;
+        });
+    });
+</script>
+
 

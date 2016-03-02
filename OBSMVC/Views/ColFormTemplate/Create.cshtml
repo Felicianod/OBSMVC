@@ -1,178 +1,203 @@
 ﻿@model OBSMVC.Models.OBS_COLLECT_FORM_TMPLT
+@{ ViewBag.Title = "Create"; }
 
-@{
-    ViewBag.Title = "Create";
-    
-}
+<div class="well well-sm"><h4>Collection Form Creation</h4></div>
 
-<h2>Create</h2>
-
-@using (Html.BeginForm()) 
+@*====================== BEGINING OF THE "CREATE COLLECTION FORM" FORM =========================*@
+@using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>OBS_COLLECT_FORM_TMPLT</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.obs_type_id, "obs_type_id", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("obs_type_id", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.obs_type_id, "", new { @class = "text-danger" })
-            </div>
-        </div>
+  @Html.AntiForgeryToken()
+    <div class="panel panel-default">
+        @*---------------------- FORM HEADER ------------------------- *@
+        <div class="panel-heading header">
+            <table style="width:100%">
+                <tr>
+                    <td style="width:10%">
+                        <b> FORM TITLE: </b>
+                    </td>
+                    <td >
+                        <span style="color:cadetblue; font-size:x-large; font-weight:bold">
+                            @Html.EditorFor(model => model.obs_cft_title, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.obs_cft_title, "", new { @class = "text-danger" })
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:10%">
+                        <b> Subtitle: </b>
+                    </td>
+                    <td >
+                        <span style="color:cadetblue; font-size:x-large; font-weight:bold">
+                            @Html.EditorFor(model => model.obs_cft_subtitle, new { htmlAttributes = new { @class = "form-control" } })
+                        </span>
+                    </td>
+                </tr>
+            </table>
+            <table style="width:100%">
+               <tr>
+                  <td style="text-align:center">
+                      Observation Type:
+                  </td>
+                  <td>
+                      @Html.DropDownList("obs_type_id", null, htmlAttributes: new { @class = "form-control" })
+                  </td>
+                  <td style="text-align:center">
+                      Customer:
+                  </td>
+                  <td>
+                      @Html.DropDownList("dsc_cust_id", null, htmlAttributes: new { @class = "form-control" })
+                  </td>
+                  <td style="text-align:center">
+                      Whse Location:
+                  </td>
+                  <td>
+                      @Html.DropDownList("dsc_lc_id", null, htmlAttributes: new { @class = "form-control" })
+                  </td>
+               </tr>
+            </table>
+            <table>
+               <tr>
+                    <td style="width:10%">
+                            Effective Date:
+                    </td>
+                   <td style="width:40%">
+                       @Html.EditorFor(model => model.obs_cft_eff_st_dt, new { htmlAttributes = new { @class = "form-control" } })
+                       @Html.ValidationMessageFor(model => model.obs_cft_eff_st_dt, "", new { @class = "text-danger" })
+                   </td>
+                   <td style="width:10%">
+                       Usable Until:
+                   </td>
+                   <td style="width:40%">
+                       @Html.EditorFor(model => model.obs_cft_eff_end_dt, new { htmlAttributes = new { @class = "form-control" } })
+                       @Html.ValidationMessageFor(model => model.obs_cft_eff_end_dt, "", new { @class = "text-danger" })
+                   </td>
+                </tr>
+            </table>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_cust_id, "dsc_cust_id", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("dsc_cust_id", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.dsc_cust_id, "", new { @class = "text-danger" })
-            </div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+</div>
+        @*---------------------- FORM BODY --------------------------- *@
+        <div class="panel-body content">
+            <div class="row">
+                <div class="col-md-6 personal-info">
+                    FORM DETAIL SECTIONS AND QUESTIONS GO HERE
+                </div>
+                <div class="col-md-6 personal-info">
+                    @*// **************** This is the Panel with the Question's Library ***************** *@
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <table style="width:100%">
+                                <tr>
+                                    <td colspan="2"><b>Question Library</b></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Enter Search Text:
+                                    </td>
+                                    <td>
+                                        @Html.TextBox("full_text_search", "", new { @class = "form-control" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Metadata Search:
+                                    </td>
+                                    <td>
+                                        @Html.TextBox("metadata_search", "", new { @class = "form-control" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <button type="button" id="doSearch">Search</button>
+                                        @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
+                                              HttpMethod = "GET",
+                                              UpdateTargetId = "resultPanel",
+                                              InsertionMode = InsertionMode.Replace,
+                                              LoadingElementId = "divLoading"
+                                            })*@
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="panel-body">
+                            @*<div>
+                                    @Html.Action("getQuestions", new { full_text_search = "", metadata_search = "" })
+                                </div>*@
+                            <div id="resultPanel">
+                                [Results]
+                            </div>
+                            <div id="divLoading" style="display:none">
+                                @*<img src="@Url.Content("~/Images/LoadingData.gif")" alt="" />*@
+                                <img src="~/Images/LoadingData.gif" />
+                            </div>
+                        </div>
+                    </div> @*------------- End of Question Library Panel ---------------*@
+                </div>
+            </div>@*---- END OF FORM BODY -------*@
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.dsc_lc_id, "dsc_lc_id", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("dsc_lc_id", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.dsc_lc_id, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.obs_cft_nbr, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.obs_cft_nbr, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.obs_cft_nbr, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.obs_cft_ver, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.obs_cft_ver, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.obs_cft_ver, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.obs_cft_eff_st_dt, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.obs_cft_eff_st_dt, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.obs_cft_eff_st_dt, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.obs_cft_eff_end_dt, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.obs_cft_eff_end_dt, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.obs_cft_eff_end_dt, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.obs_cft_title, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.obs_cft_title, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.obs_cft_title, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.obs_cft_subtitle, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.obs_cft_subtitle, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.obs_cft_subtitle, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-default disabled" />
             </div>
         </div>
-    </div>
-    
-<hr />    
-    <div class="row">
-        Enter Search Text:
-        @Html.TextBox("full_text_search", "", new { @class = "form-control" })
-        <br />
-        Metadata Search: @Html.TextBox("metadata_search", "", new { @class = "form-control" })
+   </div>
+ } 
+    @*====================== END OF THE "CREATE COLLECTION FORM" FORM =========================*@
 
-        @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
-           HttpMethod = "GET",
-           UpdateTargetId = "resultPanel",
-           InsertionMode = InsertionMode.Replace,
-           LoadingElementId = "divLoading"
-         })*@
-
-        <button type="button" id="doSearch" >Search</button>
-    </div>
-    <hr />
-    <div id="resultPanel">
-
-    </div>
-    <div id="divLoading" style="display:none">
-        @*<img src="@Url.Content("~/Images/LoadingData.gif")" alt="" />*@
-        <img src="~/Images/LoadingData.gif" />
-    </div>
-    //@Html.Action("getQuestions", new { full_text_search = "", metadata_search = "" })
-
-}
-<br /><br /><br />
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
-<script type="text/jscript">
-    $('#doSearch').click(function () {
-        //e.preventDefault(); // <------------------ stop default behaviour of button
-
-        var searchText = $("#full_text_search").val();
-        var searchMD = $("#metadata_search").val();
-        var url = "/ColFormTemplate/getQuestions";
-        var loadingInfo = "<div id=\"divLoading\" style=\"display:none\"><img src=\"~/Images/LoadingData.gif\" /></div>";
-        $("#resultPanel").html("Search String is: " + searchText + "<br/>" + loadingInfo);
-
-        //$.get(url, { full_text_search: "", metadata_search: "" }, function (data) {
-        //    $("#resultPanel").html(data);
-        //});
-
-        $.ajax({
-            @*url: '@Url.Action("getQuestions", "ColFormTemplate", new { full_text_search = searchText, metadata_search = searchMD })',*@
-            url: '@Url.Action("getQuestions", "ColFormTemplate")',
-            method: "GET",
-            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-            cache: false,
-            data: { full_text_search: searchText, metadata_search: searchMD },     //<-- Parameters data if not already passed in the Url
-            error: function () {                                      //<-- Trap and alert of any errors if they occurred
-                alert("Failed to render the Question List from the Database !!");
-            }
-            }).done(function (d) {
-            $("#resultPanel").html(d);
-        });
-    })
-</script>
+        <div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>
 
 
-@*<script type="text/javascript">
-        $(document).ready(function () {
-            BindSpinner();
-        });
+        <br /><br /><br />
 
-        function BindSpinner() {
-            $("#divLoading").bind("ajaxSend", function () {
-                $(this).show();
-            }).bind("ajaxStop", function () {
-                $(this).hide();
-            }).bind("ajaxError", function () {
-                $(this).hide();
-            });
-        };
-    </script>*@
+        <script type="text/jscript">
+            $('#doSearch').click(function () {
+                //e.preventDefault(); // <------------------ stop default behaviour of button
+
+                var searchText = $("#full_text_search").val();
+                var searchMD = $("#metadata_search").val();
+                var url = "/ColFormTemplate/getQuestions";
+                var loadingInfo = "<div id=\"divLoading\" style=\"display:none\"><img src=\"~/Images/LoadingData.gif\" /></div>";
+                $("#resultPanel").html("Search String is: " + searchText + "<br/>" + loadingInfo);
+
+                //$.get(url, { full_text_search: "", metadata_search: "" }, function (data) {
+                //    $("#resultPanel").html(data);
+                //});
+
+                $.ajax({
+                    @*url: '@Url.Action("getQuestions", "ColFormTemplate", new { full_text_search = searchText, metadata_search = searchMD })',*@
+                    url: '@Url.Action("getQuestions", "ColFormTemplate")',
+                    method: "GET",
+                    //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                    //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                    //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                    //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                    cache: false,
+                    data: { full_text_search: searchText, metadata_search: searchMD },     //<-- Parameters data if not already passed in the Url
+                    error: function () {                                      //<-- Trap and alert of any errors if they occurred
+                        alert("Failed to render the Question List from the Database !!");
+                    }
+                }).done(function (d) {
+                    $("#resultPanel").html(d);
+                });
+            })
+        </script>
+
+
+        @*<script type="text/javascript">
+                $(document).ready(function () {
+                    BindSpinner();
+                });
+
+                function BindSpinner() {
+                    $("#divLoading").bind("ajaxSend", function () {
+                        $(this).show();
+                    }).bind("ajaxStop", function () {
+                        $(this).hide();
+                    }).bind("ajaxError", function () {
+                        $(this).hide();
+                    });
+                };
+            </script>*@

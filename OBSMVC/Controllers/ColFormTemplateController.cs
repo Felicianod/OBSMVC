@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using OBSMVC.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace OBSMVC.Controllers
 {
@@ -67,7 +68,7 @@ namespace OBSMVC.Controllers
                             if(obsForm.getAssignedFunctions(x.obs_cft_id).IndexOf(selectedFunctionId) != -1)
                             {
                                 obsForm.OBSformID = x.obs_cft_id;
-                                obsForm.FormTitle = x.obs_cft_title;
+                                obsForm.FormTitle = string.Format(x.obs_cft_title);
                                 obsForm.FormNumber = x.obs_cft_nbr;
                                 obsForm.FormVersion = x.obs_cft_ver;
                                 obsForm.Customer = x.DSC_CUSTOMER.dsc_cust_name;
@@ -283,6 +284,83 @@ namespace OBSMVC.Controllers
             ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name");
             return View();
         }
+        //GET: List of Quesions
+        [HttpGet]
+        public ActionResult getQuestions(string full_text_search, string metadata_search, int? page, int? pageSize)
+        {
+            List<AvailableQuestions> availableQuestions = new List<AvailableQuestions>();
+            if (String.IsNullOrWhiteSpace(full_text_search) && String.IsNullOrWhiteSpace(metadata_search))
+            {//no search parameters passed
+               
+                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now).Take(pageSize ?? 10).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).ToList();
+                foreach (OBS_QUESTION q in list_of_questions)
+                {
+                    AvailableQuestions quest = new AvailableQuestions();
+                    quest.obs_question_id = q.obs_question_id;
+                    quest.obs_question_full_text = q.obs_question_full_text;
+                    quest.assigned_metadata = quest.getAssignedMetadata(q.obs_question_id);
+                    availableQuestions.Add(quest);
+
+                }
+            }
+            else if (!String.IsNullOrWhiteSpace(full_text_search) && String.IsNullOrWhiteSpace(metadata_search))
+            {//search by question text
+               
+                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.Contains(full_text_search)).Take(pageSize ?? 10).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).ToList();
+                if(list_of_questions.Count>0)
+                {
+                    foreach (OBS_QUESTION q in list_of_questions)
+                    {
+                        AvailableQuestions quest = new AvailableQuestions();
+                        quest.obs_question_id = q.obs_question_id;
+                        quest.obs_question_full_text = q.obs_question_full_text;
+                        quest.assigned_metadata = quest.getAssignedMetadata(q.obs_question_id);
+                        availableQuestions.Add(quest);
+
+                    }
+                }                
+            }
+            else if (String.IsNullOrWhiteSpace(full_text_search) && !String.IsNullOrWhiteSpace(metadata_search))
+            {//search by metadata
+
+                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now ).Take(pageSize ?? 10).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).ToList();
+
+                foreach (OBS_QUESTION q in list_of_questions)
+                {
+                    AvailableQuestions quest = new AvailableQuestions();
+                    if (quest.getAssignedMetadata(q.obs_question_id).Count > 0)
+                    {
+                        quest.obs_question_id = q.obs_question_id;
+                        quest.obs_question_full_text = q.obs_question_full_text;
+                        quest.assigned_metadata = quest.getAssignedMetadata(q.obs_question_id);
+                        availableQuestions.Add(quest);
+                    }
+                }               
+            }
+            else if (!String.IsNullOrWhiteSpace(full_text_search) && !String.IsNullOrWhiteSpace(metadata_search))
+            {//search by metadata
+
+                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.Contains(full_text_search)).Take(pageSize ?? 10).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).ToList();
+
+                if (list_of_questions.Count > 0)
+                {
+                    foreach (OBS_QUESTION q in list_of_questions)
+                    {
+                        AvailableQuestions quest = new AvailableQuestions();
+                        if (quest.getAssignedMetadata(q.obs_question_id).Count > 0)
+                        {
+                            quest.obs_question_id = q.obs_question_id;
+                            quest.obs_question_full_text = q.obs_question_full_text;
+                            quest.assigned_metadata = quest.getAssignedMetadata(q.obs_question_id);
+                            availableQuestions.Add(quest);
+                        }
+                    }
+                }
+                   
+            }
+            return View(availableQuestions);
+            
+        }
 
         // POST: ColFormTemplate/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -424,6 +502,30 @@ namespace OBSMVC.Controllers
 
 
         }
+        public class AvailableQuestions
+        {
+            private DSC_OBS_DB_ENTITY OBSdb = new DSC_OBS_DB_ENTITY();
+
+            public int obs_question_id { set; get; }
+            public string obs_question_full_text { set; get; }
+
+            public List<string> assigned_metadata;
+
+            public List<string> getAssignedMetadata(int qid)
+            {
+
+                List<string> metadata = (from q in OBSdb.OBS_QUESTION
+                                         join qam in OBSdb.OBS_QUEST_ASSGND_MD on
+                                              q.obs_question_id equals qam.obs_question_id
+                                         join md in OBSdb.OBS_QUESTION_METADATA on
+                                              qam.obs_quest_md_id equals md.obs_quest_md_id
+                                         where qam.obs_qad_eff_st_dt <= DateTime.Now && qam.obs_qad_eff_end_dt > DateTime.Now && q.obs_question_id == qid
+                                         select md.obs_quest_md_value + "[" + md.obs_quest_md_cat + "]").Distinct().ToList();
+                return metadata;
+            }
+
+
+        }
         //---------------------------------------------HELPERS----------------------------------------//
         public List<int> searchQuestionsWithMatchingSearchCriteria(string search_for_string, string search_criteria)
         {
@@ -492,12 +594,12 @@ namespace OBSMVC.Controllers
 
             return cft_ids_with_matching_qiestions;
         }
-       
         public static bool IsActiveForm(DateTime start_date, DateTime end_date)
         {
             if (DateTime.Today >= start_date && DateTime.Today < end_date) { return true; }
             else { return false; }
         }
+        
         public static bool matchesSearchCriteria(string search_for_string, string search_in, string search_criteria)
         {
             string[] splitterm = { " " };

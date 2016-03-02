@@ -1,7 +1,7 @@
 ﻿@model OBSMVC.Models.OBS_COLLECT_FORM_TMPLT
 @{ ViewBag.Title = "Create"; }
 
-<div class="well well-sm"><h4>Collection Form Creation</h4></div>
+<div class="well well-sm"><h3>Collection Form Creation</h3></div>
 
 @*====================== BEGINING OF THE "CREATE COLLECTION FORM" FORM =========================*@
 @using (Html.BeginForm())
@@ -175,7 +175,7 @@
                     //traditional: true,                                       //<--- In case we wanted to post a JSON data object
 
                     cache: false,
-                    data: { full_text_search: searchText, metadata_search: searchMD, page:2,pageSize:25 },     //<-- Parameters data if not already passed in the Url
+                    data: { full_text_search: searchText, metadata_search: searchMD, page: 2 },     //<-- Parameters data if not already passed in the Url
                     error: function () {                                      //<-- Trap and alert of any errors if they occurred
                         alert("Failed to render the Question List from the Database !!");
                     }

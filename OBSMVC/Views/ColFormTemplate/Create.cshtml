@@ -96,19 +96,33 @@
     
     
     <div class="row">
+        Enter Search Text:
+        @Html.TextBox("full_text_search", "", new { @class = "form-control" })
+        
         Text Search:
         <input type="text" name="full_text_search" id="full_text_search" /><br />
         Metadata Search:
         <input type="text" name="metadata_search" id="metadata_search" /><br />
+
+        @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
+           HttpMethod = "GET",
+           UpdateTargetId = "resultPanel",
+           InsertionMode = InsertionMode.Replace,
+           LoadingElementId = "divLoading"
+         })*@
+
         <button type="button" id="doSearch" >Search</button>
     </div>
     
     <div id="resultPanel">
 
     </div>
-    
+    <div id="divLoading" style="display:none">
+        @*<img src="@Url.Content("~/Images/LoadingData.gif")" alt="" />*@
+        <img src="~/Images/LoadingData.gif" />
+    </div>
     //@Html.Action("getQuestions", new { full_text_search = "", metadata_search = "" })
-    
+
 }
 <br /><br /><br />
 <div>
@@ -117,12 +131,49 @@
 
 <script type="text/jscript">
     $('#doSearch').click(function () {
+        //e.preventDefault(); // <------------------ stop default behaviour of button
+
         var searchText = $("#full_text_search").val();
         var searchMD = $("#metadata_search").val();
         var url = "/ColFormTemplate/getQuestions";
         $("#resultPanel").html("Search String is: " + searchText);
-        $.get(url, { full_text_search: "test", metadata_search: "" }, function (data) {
-            $("#resultPanel").html(data);
+
+        //$.get(url, { full_text_search: "", metadata_search: "" }, function (data) {
+        //    $("#resultPanel").html(data);
+        //});
+       
+        $.ajax({
+            url: '@Url.Action("getQuestions", "ColFormTemplate", new { full_text_search="", metadata_search="" })',
+            method: "GET",
+            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+            cache: false,
+            //data: { full_text_search: "", metadata_search: "" }     //<-- Add the paraeter data if not already passed in the Url      
+            error: function () {                                      //<-- Trap and alert of any errors if they occurred
+                alert("Failed to render the Question List from the Database !!");
+            }
+            }).done(function (d) {
+            $("#resultPanel").html(d);
         });
     })
 </script>
+
+
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            BindSpinner();
+        });
+
+        function BindSpinner() {
+            $("#divLoading").bind("ajaxSend", function () {
+                $(this).show();
+            }).bind("ajaxStop", function () {
+                $(this).hide();
+            }).bind("ajaxError", function () {
+                $(this).hide();
+            });
+        };
+    </script>*@

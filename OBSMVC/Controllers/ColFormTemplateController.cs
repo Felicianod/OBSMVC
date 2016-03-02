@@ -289,6 +289,7 @@ namespace OBSMVC.Controllers
         [HttpGet]
         public PartialViewResult getQuestions(string full_text_search, string metadata_search, int? page, int? pageSize)
         {
+            //System.Threading.Thread.Sleep(2000);
             List<AvailableQuestions> availableQuestions = new List<AvailableQuestions>();
             if (String.IsNullOrWhiteSpace(full_text_search) && String.IsNullOrWhiteSpace(metadata_search))
             {//no search parameters passed
@@ -359,7 +360,7 @@ namespace OBSMVC.Controllers
                 }
                    
             }
-            return PartialView("_getQuestions", availableQuestions);            
+            return PartialView("_getQuestions", availableQuestions);     
         }
 
         // POST: ColFormTemplate/Create

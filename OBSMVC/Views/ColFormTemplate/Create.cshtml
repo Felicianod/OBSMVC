@@ -94,15 +94,12 @@
         </div>
     </div>
     
-    
+<hr />    
     <div class="row">
         Enter Search Text:
         @Html.TextBox("full_text_search", "", new { @class = "form-control" })
-        
-        Text Search:
-        <input type="text" name="full_text_search" id="full_text_search" /><br />
-        Metadata Search:
-        <input type="text" name="metadata_search" id="metadata_search" /><br />
+        <br />
+        Metadata Search: @Html.TextBox("metadata_search", "", new { @class = "form-control" })
 
         @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
            HttpMethod = "GET",
@@ -113,7 +110,7 @@
 
         <button type="button" id="doSearch" >Search</button>
     </div>
-    
+    <hr />
     <div id="resultPanel">
 
     </div>
@@ -136,14 +133,16 @@
         var searchText = $("#full_text_search").val();
         var searchMD = $("#metadata_search").val();
         var url = "/ColFormTemplate/getQuestions";
-        $("#resultPanel").html("Search String is: " + searchText);
+        var loadingInfo = "<div id=\"divLoading\" style=\"display:none\"><img src=\"~/Images/LoadingData.gif\" /></div>";
+        $("#resultPanel").html("Search String is: " + searchText + "<br/>" + loadingInfo);
 
         //$.get(url, { full_text_search: "", metadata_search: "" }, function (data) {
         //    $("#resultPanel").html(data);
         //});
-       
+
         $.ajax({
-            url: '@Url.Action("getQuestions", "ColFormTemplate", new { full_text_search="", metadata_search="" })',
+            @*url: '@Url.Action("getQuestions", "ColFormTemplate", new { full_text_search = searchText, metadata_search = searchMD })',*@
+            url: '@Url.Action("getQuestions", "ColFormTemplate")',
             method: "GET",
             //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
             //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
@@ -151,7 +150,7 @@
             //traditional: true,                                       //<--- In case we wanted to post a JSON data object
 
             cache: false,
-            //data: { full_text_search: "", metadata_search: "" }     //<-- Add the paraeter data if not already passed in the Url      
+            data: { full_text_search: searchText, metadata_search: searchMD },     //<-- Parameters data if not already passed in the Url
             error: function () {                                      //<-- Trap and alert of any errors if they occurred
                 alert("Failed to render the Question List from the Database !!");
             }

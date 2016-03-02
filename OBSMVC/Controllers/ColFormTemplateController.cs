@@ -284,15 +284,16 @@ namespace OBSMVC.Controllers
             ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name");
             return View();
         }
+        
         //GET: List of Quesions
         [HttpGet]
-        public ActionResult getQuestions(string full_text_search, string metadata_search, int? page, int? pageSize)
+        public PartialViewResult getQuestions(string full_text_search, string metadata_search, int? page, int? pageSize)
         {
             List<AvailableQuestions> availableQuestions = new List<AvailableQuestions>();
             if (String.IsNullOrWhiteSpace(full_text_search) && String.IsNullOrWhiteSpace(metadata_search))
             {//no search parameters passed
                
-                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now).Take(pageSize ?? 10).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).ToList();
+                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now).OrderBy(x => x.obs_question_id).Take(pageSize ?? 10).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).ToList();
                 foreach (OBS_QUESTION q in list_of_questions)
                 {
                     AvailableQuestions quest = new AvailableQuestions();
@@ -358,8 +359,7 @@ namespace OBSMVC.Controllers
                 }
                    
             }
-            return View(availableQuestions);
-            
+            return PartialView("_getQuestions", availableQuestions);            
         }
 
         // POST: ColFormTemplate/Create
@@ -502,30 +502,7 @@ namespace OBSMVC.Controllers
 
 
         }
-        public class AvailableQuestions
-        {
-            private DSC_OBS_DB_ENTITY OBSdb = new DSC_OBS_DB_ENTITY();
-
-            public int obs_question_id { set; get; }
-            public string obs_question_full_text { set; get; }
-
-            public List<string> assigned_metadata;
-
-            public List<string> getAssignedMetadata(int qid)
-            {
-
-                List<string> metadata = (from q in OBSdb.OBS_QUESTION
-                                         join qam in OBSdb.OBS_QUEST_ASSGND_MD on
-                                              q.obs_question_id equals qam.obs_question_id
-                                         join md in OBSdb.OBS_QUESTION_METADATA on
-                                              qam.obs_quest_md_id equals md.obs_quest_md_id
-                                         where qam.obs_qad_eff_st_dt <= DateTime.Now && qam.obs_qad_eff_end_dt > DateTime.Now && q.obs_question_id == qid
-                                         select md.obs_quest_md_value + "[" + md.obs_quest_md_cat + "]").Distinct().ToList();
-                return metadata;
-            }
-
-
-        }
+        
         //---------------------------------------------HELPERS----------------------------------------//
         public List<int> searchQuestionsWithMatchingSearchCriteria(string search_for_string, string search_criteria)
         {
@@ -797,4 +774,34 @@ namespace OBSMVC.Controllers
         //.... TODO ....
         //------------------
     }
+
+    public class AvailableQuestions
+    {
+        private DSC_OBS_DB_ENTITY OBSdb = new DSC_OBS_DB_ENTITY();
+        [Required]
+        [Display(Name = "ID")]
+        public int obs_question_id { set; get; }
+        [Required]
+        [Display(Name = "Full Text")]
+        public string obs_question_full_text { set; get; }
+        [Display(Name="Assigned Meta Data")]
+        public List<string> assigned_metadata;
+
+        public List<string> getAssignedMetadata(int qid)
+        {
+
+            List<string> metadata = (from q in OBSdb.OBS_QUESTION
+                                     join qam in OBSdb.OBS_QUEST_ASSGND_MD on
+                                          q.obs_question_id equals qam.obs_question_id
+                                     join md in OBSdb.OBS_QUESTION_METADATA on
+                                          qam.obs_quest_md_id equals md.obs_quest_md_id
+                                     where qam.obs_qad_eff_st_dt <= DateTime.Now && qam.obs_qad_eff_end_dt > DateTime.Now && q.obs_question_id == qid
+                                     select md.obs_quest_md_value + "[" + md.obs_quest_md_cat + "]").Distinct().ToList();
+            return metadata;
+        }
+
+
+    }
+
+
 }

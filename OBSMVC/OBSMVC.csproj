@@ -501,6 +501,7 @@
     <Content Include="Views\ColFormTemplate\Details.cshtml" />
     <Content Include="Views\ColFormTemplate\Edit.cshtml" />
     <Content Include="Views\ColFormTemplate\Index.cshtml" />
+    <Content Include="Views\ColFormTemplate\_getQuestions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

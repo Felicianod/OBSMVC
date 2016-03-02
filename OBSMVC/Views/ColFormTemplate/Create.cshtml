@@ -93,8 +93,36 @@
             </div>
         </div>
     </div>
-}
+    
+    
+    <div class="row">
+        Text Search:
+        <input type="text" name="full_text_search" id="full_text_search" /><br />
+        Metadata Search:
+        <input type="text" name="metadata_search" id="metadata_search" /><br />
+        <button type="button" id="doSearch" >Search</button>
+    </div>
+    
+    <div id="resultPanel">
 
+    </div>
+    
+    //@Html.Action("getQuestions", new { full_text_search = "", metadata_search = "" })
+    
+}
+<br /><br /><br />
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+
+<script type="text/jscript">
+    $('#doSearch').click(function () {
+        var searchText = $("#full_text_search").val();
+        var searchMD = $("#metadata_search").val();
+        var url = "/ColFormTemplate/getQuestions";
+        $("#resultPanel").html("Search String is: " + searchText);
+        $.get(url, { full_text_search: "test", metadata_search: "" }, function (data) {
+            $("#resultPanel").html(data);
+        });
+    })
+</script>

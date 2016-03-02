@@ -1,0 +1,19 @@
+﻿@model  IEnumerable<OBSMVC.Controllers.AvailableQuestions>
+
+<table class="table table-responsive table-condensed table-hover" >
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Question Text</th>
+        </tr>
+    </thead>
+    @foreach (var question in Model)
+    {
+        <tr>
+            <td>@question.obs_question_id</td>
+            <td>@question.obs_question_full_text</td>
+        </tr>
+    }
+</table>
+
+

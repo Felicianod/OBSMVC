@@ -379,11 +379,9 @@ namespace OBSMVC.Controllers
                 }
                    
             }
-            int psize = pageSize ?? 10;
-            int pg = page ?? 1;
-            int skip_records = ((page ?? 1) - 1) * (pageSize ?? 10);
-
-            return PartialView("_getQuestions", availableQuestions.Take(pageSize ?? 10).OrderBy(x => x.obs_question_id).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).ToList());            
+           
+            List<AvailableQuestions> questions_for_display = availableQuestions.OrderBy(x => x.obs_question_id).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).Take(pageSize ?? 10).ToList();      
+            return PartialView("_getQuestions", questions_for_display);            
         }
 
         // POST: ColFormTemplate/Create

@@ -362,8 +362,6 @@
       <LastGenOutput>DSC_OBS_ENTITY.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootbox.min.js" />
-    <Content Include="Scripts\bootstrap-dialog.js" />
-    <Content Include="Scripts\bootstrap-dialog_min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="Models\DSC_OBS_ENTITY.edmx">

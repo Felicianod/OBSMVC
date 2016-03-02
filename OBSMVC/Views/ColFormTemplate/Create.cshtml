@@ -121,7 +121,7 @@
         var searchMD = $("#metadata_search").val();
         var url = "/ColFormTemplate/getQuestions";
         $("#resultPanel").html("Search String is: " + searchText);
-        $.get(url, { full_text_search: "test", metadata_search: "" }, function (data) {
+        $.get(url, { full_text_search: searchText, metadata_search: searchMD }, function (data) {
             $("#resultPanel").html(data);
         });
     })

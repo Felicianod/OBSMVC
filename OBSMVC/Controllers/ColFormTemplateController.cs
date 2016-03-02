@@ -307,7 +307,7 @@ namespace OBSMVC.Controllers
             else if (!String.IsNullOrWhiteSpace(full_text_search) && String.IsNullOrWhiteSpace(metadata_search))
             {//search by question text
                
-                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.Contains(full_text_search)).Take(pageSize ?? 10).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).ToList();
+                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.ToLower().Contains(full_text_search.ToLower())).Take(pageSize ?? 10).OrderBy(x => x.obs_question_id).Take(pageSize ?? 10).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).ToList();
                 if(list_of_questions.Count>0)
                 {
                     foreach (OBS_QUESTION q in list_of_questions)
@@ -324,24 +324,35 @@ namespace OBSMVC.Controllers
             else if (String.IsNullOrWhiteSpace(full_text_search) && !String.IsNullOrWhiteSpace(metadata_search))
             {//search by metadata
 
-                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now ).Take(pageSize ?? 10).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).ToList();
+                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now ).ToList();
 
                 foreach (OBS_QUESTION q in list_of_questions)
                 {
                     AvailableQuestions quest = new AvailableQuestions();
                     if (quest.getAssignedMetadata(q.obs_question_id).Count > 0)
                     {
-                        quest.obs_question_id = q.obs_question_id;
-                        quest.obs_question_full_text = q.obs_question_full_text;
                         quest.assigned_metadata = quest.getAssignedMetadata(q.obs_question_id);
-                        availableQuestions.Add(quest);
+                        foreach (string s in quest.assigned_metadata)
+                        {
+                            if(s.ToLower().Contains(metadata_search.ToLower()))
+                            {
+                                quest.obs_question_id = q.obs_question_id;
+                                quest.obs_question_full_text = q.obs_question_full_text;
+                                //quest.assigned_metadata = quest.getAssignedMetadata(q.obs_question_id);
+                                availableQuestions.Add(quest);
+                            }
+                            else { continue; }
+                           
+                        }
+                        
+                       
                     }
                 }               
             }
             else if (!String.IsNullOrWhiteSpace(full_text_search) && !String.IsNullOrWhiteSpace(metadata_search))
-            {//search by metadata
+            {//search by metadata and full text
 
-                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.Contains(full_text_search)).Take(pageSize ?? 10).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).ToList();
+                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.ToLower().Contains(full_text_search.ToLower())).ToList();
 
                 if (list_of_questions.Count > 0)
                 {
@@ -350,16 +361,24 @@ namespace OBSMVC.Controllers
                         AvailableQuestions quest = new AvailableQuestions();
                         if (quest.getAssignedMetadata(q.obs_question_id).Count > 0)
                         {
-                            quest.obs_question_id = q.obs_question_id;
-                            quest.obs_question_full_text = q.obs_question_full_text;
                             quest.assigned_metadata = quest.getAssignedMetadata(q.obs_question_id);
-                            availableQuestions.Add(quest);
+                            foreach(string s in quest.assigned_metadata)
+                            {
+                                if (s.ToLower().Contains(metadata_search.ToLower()))
+                                {
+                                    quest.obs_question_id = q.obs_question_id;
+                                    quest.obs_question_full_text = q.obs_question_full_text;
+                                    availableQuestions.Add(quest);
+                                }
+                                else { continue; }
+                            }
+                            
                         }
                     }
                 }
                    
             }
-            return PartialView("_getQuestions", availableQuestions);            
+            return PartialView("_getQuestions", availableQuestions.Take(pageSize ?? 10).OrderBy(x => x.obs_question_id).Take(pageSize ?? 10).Skip(((page ?? 1) - 1) * (pageSize ?? 10)));            
         }
 
         // POST: ColFormTemplate/Create
@@ -796,7 +815,7 @@ namespace OBSMVC.Controllers
                                      join md in OBSdb.OBS_QUESTION_METADATA on
                                           qam.obs_quest_md_id equals md.obs_quest_md_id
                                      where qam.obs_qad_eff_st_dt <= DateTime.Now && qam.obs_qad_eff_end_dt > DateTime.Now && q.obs_question_id == qid
-                                     select md.obs_quest_md_value + "[" + md.obs_quest_md_cat + "]").Distinct().ToList();
+                                     select md.obs_quest_md_value + " [" + md.obs_quest_md_cat + "]").Distinct().ToList();
             return metadata;
         }
 

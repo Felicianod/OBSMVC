@@ -289,6 +289,7 @@ namespace OBSMVC.Controllers
         [HttpGet]
         public PartialViewResult getQuestions(string full_text_search, string metadata_search, int? page, int? pageSize)
         {
+            //System.Threading.Thread.Sleep(2000);
             List<AvailableQuestions> availableQuestions = new List<AvailableQuestions>();
             if (String.IsNullOrWhiteSpace(full_text_search) && String.IsNullOrWhiteSpace(metadata_search))
             {//no search parameters passed
@@ -336,17 +337,17 @@ namespace OBSMVC.Controllers
                         {
                             if(s.ToLower().Contains(metadata_search.ToLower()))
                             {
-                                quest.obs_question_id = q.obs_question_id;
-                                quest.obs_question_full_text = q.obs_question_full_text;
+                        quest.obs_question_id = q.obs_question_id;
+                        quest.obs_question_full_text = q.obs_question_full_text;
                                 //quest.assigned_metadata = quest.getAssignedMetadata(q.obs_question_id);
-                                availableQuestions.Add(quest);
-                            }
+                        availableQuestions.Add(quest);
+                    }
                             else { continue; }
                            
-                        }
+                }               
                         
                        
-                    }
+            }
                 }               
             }
             else if (!String.IsNullOrWhiteSpace(full_text_search) && !String.IsNullOrWhiteSpace(metadata_search))
@@ -366,10 +367,10 @@ namespace OBSMVC.Controllers
                             {
                                 if (s.ToLower().Contains(metadata_search.ToLower()))
                                 {
-                                    quest.obs_question_id = q.obs_question_id;
-                                    quest.obs_question_full_text = q.obs_question_full_text;
-                                    availableQuestions.Add(quest);
-                                }
+                            quest.obs_question_id = q.obs_question_id;
+                            quest.obs_question_full_text = q.obs_question_full_text;
+                            availableQuestions.Add(quest);
+                        }
                                 else { continue; }
                             }
                             

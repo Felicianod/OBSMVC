@@ -337,17 +337,15 @@ namespace OBSMVC.Controllers
                         {
                             if(s.ToLower().Contains(metadata_search.ToLower()))
                             {
-                        quest.obs_question_id = q.obs_question_id;
-                        quest.obs_question_full_text = q.obs_question_full_text;
-                                //quest.assigned_metadata = quest.getAssignedMetadata(q.obs_question_id);
-                        availableQuestions.Add(quest);
-                    }
+                                quest.obs_question_id = q.obs_question_id;
+                                quest.obs_question_full_text = q.obs_question_full_text;
+                                availableQuestions.Add(quest);
+                                break;
+                            }
                             else { continue; }
                            
-                }               
-                        
-                       
-            }
+                        }                                                         
+                       }
                 }               
             }
             else if (!String.IsNullOrWhiteSpace(full_text_search) && !String.IsNullOrWhiteSpace(metadata_search))
@@ -367,10 +365,11 @@ namespace OBSMVC.Controllers
                             {
                                 if (s.ToLower().Contains(metadata_search.ToLower()))
                                 {
-                            quest.obs_question_id = q.obs_question_id;
-                            quest.obs_question_full_text = q.obs_question_full_text;
-                            availableQuestions.Add(quest);
-                        }
+                                    quest.obs_question_id = q.obs_question_id;
+                                    quest.obs_question_full_text = q.obs_question_full_text;
+                                    availableQuestions.Add(quest);
+                                    break;                                 
+                               }
                                 else { continue; }
                             }
                             
@@ -380,8 +379,50 @@ namespace OBSMVC.Controllers
                    
             }
            
-            List<AvailableQuestions> questions_for_display = availableQuestions.OrderBy(x => x.obs_question_id).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).Take(pageSize ?? 10).ToList();      
+            List<AvailableQuestions> questions_for_display = availableQuestions.OrderBy(x => x.obs_question_id).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).Take(pageSize ?? 10).ToList();
+           
             return PartialView("_getQuestions", questions_for_display);            
+        }
+        public PartialViewResult getQuestionInfo(int question_id)
+        {
+            QuestionInfo questionInfo = new QuestionInfo();
+            questionInfo.question_id = question_id;
+            questionInfo.full_text = db.OBS_QUESTION.Single(item => item.obs_question_id == question_id).obs_question_full_text;
+            questionInfo.isDefaultAnsType = false;
+            questionInfo.qat_id = -1;
+            List<OBS_QUEST_ANS_TYPES> QAInstances = db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == question_id).ToList();
+
+            if (QAInstances.Count() == 0)  //There were no records found in the 'OBS_QUEST_ANS_TYPES' Table for this question Id
+            {
+                questionInfo.hasInstances = false;             
+            }
+            else
+            {//there's a record(s) in 'OBS_QUEST_ANS_TYPES'. now we need to loop through all of them and find default answer type
+                
+                questionInfo.hasInstances = true;
+                questionInfo.qat_id = QAInstances[0].obs_qat_id;//first let's assign the very first record in case we won't find default answer type
+                int ans_type_id = QAInstances[0].obs_ans_type_id;//and we save the ans_type_id of this QA instance.
+                foreach (OBS_QUEST_ANS_TYPES qaInstanceTemp in QAInstances)
+                {
+                    if (qaInstanceTemp.obs_qat_default_ans_type_yn == "Y")
+                    {   //if we're here, that means we found default default answer type
+                        questionInfo.qat_id = qaInstanceTemp.obs_qat_id;//we set our object's qat id to the default qat id
+                        questionInfo.isDefaultAnsType = true;// and we set object's default flag to true
+                        ans_type_id = qaInstanceTemp.obs_ans_type_id;
+                        break; 
+                    }
+                    else { continue; }
+                }
+                //now we need to find the corresponding answer type and assign it to the object
+                questionInfo.assigned_answer_type = db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == ans_type_id);
+                // lets check if this answer type requires selectable answers
+                if (questionInfo.assigned_answer_type.obs_ans_type_has_fxd_ans_yn == "Y")
+                {//if true, we need to list all of them and assign them to object's list of selectable answers
+                   questionInfo.selectable_answers = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == questionInfo.qat_id && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).ToList();
+                }
+            }
+
+            return PartialView(questionInfo);
         }
 
         // POST: ColFormTemplate/Create
@@ -824,6 +865,18 @@ namespace OBSMVC.Controllers
 
 
     }
+    public class QuestionInfo
+    {
+        public int question_id { set; get; }
+        public string full_text { set; get; }
+        public bool hasInstances { get; set; }
+        public int qat_id { set; get; }
+        public bool isDefaultAnsType { set; get; }
+        public OBS_ANS_TYPE assigned_answer_type = new OBS_ANS_TYPE();
+        public List<OBS_QUEST_SLCT_ANS> selectable_answers = new List<OBS_QUEST_SLCT_ANS>();
+
+    }
+    
 
 
 }

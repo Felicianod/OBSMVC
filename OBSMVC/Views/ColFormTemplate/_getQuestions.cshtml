@@ -7,18 +7,12 @@
             <th>Question Text</th>
         </tr>
     </thead>
-    @if (Model.Children != null && Model.Children.Count > 0)
+    @foreach (var question in Model)
     {
-        foreach (var question in Model)
-        {
-            <tr>
-                <td>@question.obs_question_id</td>
-                <td>@question.obs_question_full_text</td>
-            </tr>
-        }
+    <tr>
+        <td>@question.obs_question_id</td>
+        <td>@question.obs_question_full_text</td>
+    </tr>
     }
-    else
-    {
-        <tr><td colspan="2"><span style="font-weight:bold; color:red">THERE ARE NO RECORDS TO DISPLAY</span></td></tr>
-    }
+   
 </table>

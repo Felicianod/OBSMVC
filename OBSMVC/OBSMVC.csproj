@@ -205,6 +205,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OBSTYPEController.cs" />
+    <Compile Include="Controllers\SectionController.cs" />
     <Compile Include="Controllers\TestQuestionAnswerTypeDefaultController.cs" />
     <Compile Include="Controllers\QuestionAnswerTypeDefaultController.cs" />
     <Compile Include="Controllers\QuestionAnswerTypesController.cs" />
@@ -511,6 +512,11 @@
     <Content Include="Views\ColFormTemplate\Index.cshtml" />
     <Content Include="Views\ColFormTemplate\_getQuestions.cshtml" />
     <Content Include="Views\ColFormTemplate\_getQuestionInfo.cshtml" />
+    <Content Include="Views\Section\Create.cshtml" />
+    <Content Include="Views\Section\Delete.cshtml" />
+    <Content Include="Views\Section\Details.cshtml" />
+    <Content Include="Views\Section\Edit.cshtml" />
+    <Content Include="Views\Section\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

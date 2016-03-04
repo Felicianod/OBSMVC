@@ -1,0 +1,26 @@
+﻿@model OBSMVC.Models.OBS_FORM_SECTION
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>OBS_FORM_SECTION</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.obs_form_section_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.obs_form_section_name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.obs_form_section_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

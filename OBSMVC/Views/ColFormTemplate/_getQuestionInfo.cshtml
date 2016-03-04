@@ -6,13 +6,31 @@
                 <th>ID</th>
                 <th>Question Text</th>
             </tr>
-        </thead>       
-            <tr>
-                <td>@Model.question_id</td>
-                <td>@Model.full_text</td>
-            </tr>   
+        </thead>   
         <tr>
+            <td>@Model.question_id</td>
+            <td>@Model.full_text</td>
+        </tr> 
+        @*CODE BELOW IS HERE JUST TO VERIFY I HAVE ALL REQUIRED DATA AVAILABLE*@
+        @*@foreach (var x in Model.assigned_answer_types)
+        {
+            <tr>
                 <td>Answer Type</td>
-                <td>@Model.assigned_answer_type.obs_ans_type_name</td>
-            </tr>       
+                <td>@x.obs_ans_type_name</td>
+                <td>isDefault @Model.obs_question_answer_types.Single(a => a.obs_ans_type_id == x.obs_ans_type_id).obs_qat_default_ans_type_yn</td>
+            </tr>
+            if (x.obs_ans_type_has_fxd_ans_yn == "Y")
+            {
+                foreach (var y in Model.selectable_answers.Where(item => item.obs_qat_id == Model.obs_question_answer_types.Single(a => a.obs_ans_type_id == x.obs_ans_type_id).obs_qat_id))
+                {
+                    <tr>
+                        <td>Selectable Answer Types</td>
+                        <td>@y.obs_qsa_text</td>
+                    </tr>
+                }
+
+            }
+        }*@
+             
+                
     </table>

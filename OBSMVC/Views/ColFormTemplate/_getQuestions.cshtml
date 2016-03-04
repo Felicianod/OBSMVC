@@ -1,18 +1,29 @@
 ﻿@model  IEnumerable<OBSMVC.Controllers.AvailableQuestions>
 
-<table class="table table-responsive table-condensed table-hover">
-    <thead>
-        <tr style="background-color:lightgray">
-            <th>ID</th>
-            <th>Question Text</th>
+@{var listEntries = (Model as List<OBSMVC.Controllers.AvailableQuestions>).Count; }
+
+@if (listEntries > 0)
+{
+    <table class="table table-responsive table-condensed table-hover">
+        <thead>
+            <tr style="background-color:lightgray">
+                <th>ID</th>
+                <th>Question Text</th>
+            </tr>
+        </thead>
+        @foreach (var question in Model)
+        {
+        <tr>
+            <td>@question.obs_question_id</td>
+            <td>@question.obs_question_full_text</td>
         </tr>
-    </thead>
-    @foreach (var question in Model)
-    {
-    <tr>
-        <td>@question.obs_question_id</td>
-        <td>@question.obs_question_full_text</td>
-    </tr>
-    }
-   
-</table>
+        }
+    </table>
+}
+else
+{
+    <div class="alert alert-danger" style="color:red">
+        <strong>Warning!</strong> &nbsp;&nbsp; THERE ARE NO RECORDS TO DISPLAY
+    </div>
+}
+

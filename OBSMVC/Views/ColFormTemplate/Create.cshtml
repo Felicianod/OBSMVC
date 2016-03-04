@@ -104,7 +104,8 @@
 
                <div id="questionPanel">
                    
-                   <<< THE PARTIAL VIEW QUESTION DETAILS <br/>RETURNED BY AJAX CALL WILL BE PLACED HERE >>>
+                   @*<<< THE PARTIAL VIEW QUESTION DETAILS <br/>RETURNED BY AJAX CALL WILL BE PLACED HERE >>>*@
+                   
 
                </div>
 
@@ -198,7 +199,7 @@
       //});
 
       // ---- Fetch the Values that wil be used as parameters on the AJAX call -------
-      var searchText = $("#full_text_search").val();
+        var searchText = $("#full_text_search").val();
       var searchMD = $("#metadata_search").val();
       // ------------ Make the Ajax Call ---------------------------------------------
       $.ajax({
@@ -206,7 +207,7 @@
         url: '@Url.Action("getQuestions", "ColFormTemplate")',
         method: "GET",
         cache: false,
-        data: { full_text_search: searchText, metadata_search: searchMD, page: 1, pageSize: 25 },     //<---- Data Parameters (if not already passed in the Url)
+        data: { full_text_search: searchText, metadata_search: searchMD, page: 1, pageSize: 10 },     //<---- Data Parameters (if not already passed in the Url)
         //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
         //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
         //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
@@ -215,6 +216,7 @@
           //--- On error, execute this function ------
         error: function () {                                      
             alert("Failed to render the Question List from the Database !!");  //<-- Trap and alert of any errors if they occurred
+            $btn.button('reset');
         }
       }).done(function (d) {
           //Execute this code After the Ajax call completes successfully
@@ -223,7 +225,47 @@
         });
   })
 </script>
+@*====================================AJAX TO CALL QUESTION DETAILS ACTION====================================*@
+<script type="text/jscript">
+    $('#displayQID').click(function () {
+        var $btn = $(this);
+        $btn.button('loading');
+  
+        //$(this).button('loading');
+      //e.preventDefault(); // <------------------ stop default behaviour of button (to prevent form submit or other behaviours if neeed)
 
+      //var url = "/ColFormTemplate/getQuestions";
+      //$.get(url, { full_text_search: "", metadata_search: "" }, function (data) {
+      //    $("#resultPanel").html(data);
+      //});
+
+      // ---- Fetch the Values that wil be used as parameters on the AJAX call -------
+        var qid = $("#droppedQId").val();
+      
+      // ------------ Make the Ajax Call ---------------------------------------------
+      $.ajax({
+        url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
+        method: "GET",
+        cache: false,
+        data: { question_id: qid},     //<---- Data Parameters (if not already passed in the Url)
+        //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+        //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+        //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+        //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+          //--- On error, execute this function ------
+        error: function () {
+            alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
+            $btn.button('reset');
+        }     
+      }).done(function (d) {
+          //Execute this code After the Ajax call completes successfully
+          
+          $("#questionPanel").append(d);
+          $btn.button('reset');
+        });
+  })
+</script>
 
 @*<script type="text/javascript">
         $(document).ready(function () {

@@ -390,7 +390,7 @@ namespace OBSMVC.Controllers
             questionInfo.full_text = db.OBS_QUESTION.Single(item => item.obs_question_id == question_id).obs_question_full_text;
             questionInfo.isDefaultAnsType = false;
             questionInfo.qat_id = -1;
-            List<OBS_QUEST_ANS_TYPES> QAInstances = db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == question_id).ToList();
+            List<OBS_QUEST_ANS_TYPES> QAInstances = db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == question_id && (x.obs_qat_end_eff_dt==null ||x.obs_qat_end_eff_dt>DateTime.Now)).ToList();
 
             if (QAInstances.Count() == 0)  //There were no records found in the 'OBS_QUEST_ANS_TYPES' Table for this question Id
             {
@@ -422,7 +422,7 @@ namespace OBSMVC.Controllers
                 }
             }
 
-            return PartialView(questionInfo);
+            return PartialView("_getQuestionInfo",questionInfo);
         }
 
         // POST: ColFormTemplate/Create
@@ -482,14 +482,14 @@ namespace OBSMVC.Controllers
             return View(oBS_COLLECT_FORM_TMPLT);
         }
 
-        protected override void Dispose(bool disposing)
+       /* protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
+        }*/
         public class ObsColFormTemplate
         {
             private DSC_OBS_DB_ENTITY OBSdb = new DSC_OBS_DB_ENTITY();

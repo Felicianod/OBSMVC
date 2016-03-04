@@ -1,0 +1,18 @@
+﻿@model  OBSMVC.Controllers.QuestionInfo
+
+    <table class="table table-responsive table-condensed table-hover">
+        <thead>
+            <tr style="background-color:lightgray">
+                <th>ID</th>
+                <th>Question Text</th>
+            </tr>
+        </thead>       
+            <tr>
+                <td>@Model.question_id</td>
+                <td>@Model.full_text</td>
+            </tr>   
+        <tr>
+                <td>Answer Type</td>
+                <td>@Model.assigned_answer_type.obs_ans_type_name</td>
+            </tr>       
+    </table>

@@ -1,16 +1,18 @@
 ﻿@model  OBSMVC.Controllers.QuestionInfo
-
+<input type="hidden" id="currentSelectedQAT" name="currentSelectedQAT" value=@Model.question_assigned_answer_types.Where(item =>item.Selected == true).FirstOrDefault().Value />
     <table class="table table-responsive table-condensed table-hover">
         <thead>
             <tr style="background-color:lightgray">
                 <th>ID</th>
                 <th>Question Text</th>
+                <th>Answer Type</th>
             </tr>
         </thead>   
         <tr>
             <td>@Model.question_id</td>
             <td>@Model.full_text</td>
-        </tr> 
+            <td>@Html.DropDownList("Assigned Answers", Model.question_assigned_answer_types, "Select Answer Type")</td>
+        </td> 
         @*CODE BELOW IS HERE JUST TO VERIFY I HAVE ALL REQUIRED DATA AVAILABLE*@
         @*@foreach (var x in Model.assigned_answer_types)
         {
@@ -31,6 +33,7 @@
 
             }
         }*@
+        
              
                 
     </table>

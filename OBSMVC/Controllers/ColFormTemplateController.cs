@@ -406,19 +406,25 @@ namespace OBSMVC.Controllers
                         questionInfo.default_qat_id = qaInstanceTemp.obs_qat_id;//we set our object's qat id to the default qat id                                              
                     }
                     //now we need to find the corresponding answer type and assign it to the object
-                    questionInfo.assigned_answer_types.Add(db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id));
+                    OBS_ANS_TYPE temp_answer = db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id);
+                    questionInfo.assigned_answer_types.Add(temp_answer);
+                    SelectListItem answer_for_dropdown = new SelectListItem() { Text = temp_answer.obs_ans_type_name, Value = qaInstanceTemp.obs_qat_id.ToString()};
+                    questionInfo.question_assigned_answer_types.Add(answer_for_dropdown);                    
                     // lets check if this answer type requires selectable answers
                     if(db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id).obs_ans_type_has_fxd_ans_yn=="Y")
                     {
                         {//if true, we need to list all of them and assign them to object's list of selectable answers
                             foreach(OBS_QUEST_SLCT_ANS temp in db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qaInstanceTemp.obs_qat_id && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now))
-                            questionInfo.selectable_answers.Add(temp);
+                            questionInfo.selectable_answers.Add(temp);                           
                         }
                     }
                 }
               
             }
-
+            if (questionInfo.default_qat_id > 0)
+            {               
+                questionInfo.question_assigned_answer_types.Single(x => x.Value == questionInfo.default_qat_id.ToString()).Selected = true;
+            }           
             return PartialView("_getQuestionInfo",questionInfo);
         }
 
@@ -871,7 +877,9 @@ namespace OBSMVC.Controllers
        
         public List<OBS_ANS_TYPE> assigned_answer_types = new List<OBS_ANS_TYPE>();
         public List<OBS_QUEST_SLCT_ANS> selectable_answers = new List<OBS_QUEST_SLCT_ANS>();
-        public List<OBS_QUEST_ANS_TYPES> obs_question_answer_types = new List<OBS_QUEST_ANS_TYPES>(); 
+        public List<OBS_QUEST_ANS_TYPES> obs_question_answer_types = new List<OBS_QUEST_ANS_TYPES>();
+        public List<SelectListItem> question_assigned_answer_types = new List<SelectListItem>();
+        
 
     }
     

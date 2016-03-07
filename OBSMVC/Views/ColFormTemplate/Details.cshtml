@@ -40,38 +40,36 @@
 <div class="panel panel-default">
 @*--------------------------- PANEL HEADER SECTION --------------------------------------*@
   <div class="panel-heading header">
-        <table style="width:100%">
-            <tr>
-                <td>
-                    <h3 class="panel-title" style="text-align:center"><b>COLLECTION FORM: </b><span style="color:cadetblue; font-size:x-large; font-weight:bold">"@Model.cft_Title"</span></h3>
-                    @if (!String.IsNullOrEmpty(Model.cft_SubTitle))
-                    {<h5> Subtitle: @Model.cft_SubTitle </h5>}
-                    else
-                    { <h5> </h5>}
-                </td>
-                <td style="text-align:right; vertical-align:top">
-                    <span class="badge" data-toggle="tooltip" title="Form ID: @Model.cft_id Number/Version: @Model.cft_Nbr v.@Model.cft_Version">
+    <table style="width:100%">
+        <tr>
+         <td>
+            <h3 class="panel-title" style="text-align:center"><b>COLLECTION FORM: </b><span style="color:cadetblue; font-size:x-large; font-weight:bold">"@Model.cft_Title"</span></h3>
+            @if (!String.IsNullOrEmpty(Model.cft_SubTitle)) {<h5> Subtitle: @Model.cft_SubTitle </h5>}
+            else { <h5> </h5>}
+         </td>
+         <td style="text-align:right; vertical-align:top">
+            <span class="badge" data-toggle="tooltip" title="Form ID: @Model.cft_id Number/Version: @Model.cft_Nbr v.@Model.cft_Version">
                         ID: @Model.cft_id<text>-N</text>@Model.cft_Nbr v.@Model.cft_Version
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <table style="width:100%">
-                        <tr>
-                            <td style="width:10%"><b>CUSTOMER: </b></td>
-                            <td style="width:15%">@Model.cft_Cust</td>
-                            <td style="width:4%"><b>LC: </b></td>
-                            <td style="width:15%">@Model.cft_LC</td>
-                            <td style="width:8%"><b>TYPE: </b></td>
-                            <td style="width:40%">@Model.cft_obsType</td>
-                            <td style="width:8%; text-align:right"><span class="badge">@Model.cft_Status </span> </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </div>
+            </span>
+         </td>
+       </tr>
+       <tr>
+         <td colspan="2">
+            <table style="width:100%">
+              <tr>
+                <td style="width:10%"><b>CUSTOMER: </b></td>
+                <td style="width:15%">@Model.cft_Cust</td>
+                <td style="width:4%"><b>LC: </b></td>
+                <td style="width:15%">@Model.cft_LC</td>
+                <td style="width:8%"><b>TYPE: </b></td>
+                <td style="width:40%">@Model.cft_obsType</td>
+                <td style="width:8%; text-align:right"><span class="badge">@Model.cft_Status </span> </td>
+              </tr>
+            </table>
+         </td>
+       </tr>
+    </table>
+  </div>
 @*--------------------------- PANEL BODY SECTION --------------------------------------*@
   <div class="panel-body content">
     <div class="row">

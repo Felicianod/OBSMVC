@@ -90,23 +90,26 @@
                  and to update this section with the partial view !!!!!!!!!!!!!!!!
               ******************************************************************************@
 
-               <div class="input-group col-md-6">
-                   <input type="text" id="droppedQId" class="form-control" placeholder="Question Id to Add...">
-                   <span class="input-group-btn">
-                       
-   @* - - - - This is the button that will trigger the Ajax call for Testing !!! - - - - - - - - - *@
+               @*<div class="input-group col-md-6">
+                    <input type="text" id="droppedQId" class="form-control" placeholder="Question Id to Add...">
+                    <span class="input-group-btn">
                        <button id="displayQID" class="btn btn-primary" type="button">Add Question!</button>
-                   </span>
-               </div><!-- /input-group -->
-               <hr />
-
+                    </span>
+                 </div><!-- /input-group -->
+                 <hr />
+            *@
 
 
                <div id="questionPanel" ondrop="addQid(event)" ondragover="allowDrop(event)">
 
                    @*<<< THE PARTIAL VIEW QUESTION DETAILS <br/>RETURNED BY AJAX CALL WILL BE PLACED HERE >>>*@
-
-
+                   <table style="width:100%; text-align:center">
+                       <tr style="border:dashed; border-width:medium">
+                           <td>
+                               --- DROP YOUR QUESTION HERE ---
+                           </td>
+                       </tr>
+                   </table>
                </div>
 
 

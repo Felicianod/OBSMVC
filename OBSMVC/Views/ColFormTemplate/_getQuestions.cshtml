@@ -4,6 +4,7 @@
 
 @if (listEntries > 0)
 {
+    
     <table class="table table-responsive table-condensed table-hover">
         <thead>
             <tr style="background-color:lightgray">
@@ -11,12 +12,19 @@
                 <th>Question Text</th>
             </tr>
         </thead>
+        @{
+            int rowCounter = 0;
+            string rowId = "";
+          }
         @foreach (var question in Model)
         {
-        <tr>
-            <td>@question.obs_question_id</td>
-            <td>@question.obs_question_full_text</td>
-        </tr>
+            rowCounter++;
+            //rowId = "row" + rowCounter.ToString("00");
+            rowId = @question.obs_question_id.ToString("00");
+            <tr id="@rowId" draggable="true" ondragstart="drag(event)">
+                <td>@question.obs_question_id</td>
+                <td>@question.obs_question_full_text</td>
+            </tr>
         }
     </table>
 }
@@ -26,4 +34,11 @@ else
         <strong>Warning!</strong> &nbsp;&nbsp; THERE ARE NO RECORDS TO DISPLAY
     </div>
 }
+@*<script>
+    $(function () {
+        $("#dragMe").draggable({ revert: true, opacity: 0.7, helper: "clone", cursor: "move", cursorAt: { top: 56, left: 56 } });
+        //$("#draggable5").draggable({ containment: "#containment-wrapper", scroll: false });
+        //$("#draggable5").draggable({ containment: "parent" });
+    });
+</script>*@
 

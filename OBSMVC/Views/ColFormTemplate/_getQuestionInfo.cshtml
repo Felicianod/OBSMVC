@@ -5,14 +5,23 @@
             <tr style="background-color:lightgray">
                 <th>ID</th>
                 <th>Question Text</th>
+                <th>Default Id</th>
             </tr>
         </thead>   
         <tr>
             <td>@Model.question_id</td>
             <td>@Model.full_text</td>
+            <td>
+            @if (Model.default_qat_id < 0) {
+             <text>NO DEFAULT</text>
+            }
+            else { 
+            @Model.default_qat_id
+            }
+            </td>
         </tr> 
         @*CODE BELOW IS HERE JUST TO VERIFY I HAVE ALL REQUIRED DATA AVAILABLE*@
-        @*@foreach (var x in Model.assigned_answer_types)
+        @foreach (var x in Model.assigned_answer_types)
         {
             <tr>
                 <td>Answer Type</td>
@@ -30,7 +39,7 @@
                 }
 
             }
-        }*@
+        }
              
                 
     </table>

@@ -1,5 +1,5 @@
 ﻿@model  OBSMVC.Controllers.QuestionInfo
-<input type="hidden" id="currentSelectedQAT" name="currentSelectedQAT" value=@Model.question_assigned_answer_types.Where(item =>item.Selected == true).FirstOrDefault().Value />
+
     <table class="table table-responsive table-condensed table-hover">
         <thead>
             <tr style="background-color:lightgray">
@@ -12,28 +12,13 @@
             <td>@Model.question_id</td>
             <td>@Model.full_text</td>
             <td>@Html.DropDownList("Assigned Answers", Model.question_assigned_answer_types, "Select Answer Type")</td>
-        </td> 
-        @*CODE BELOW IS HERE JUST TO VERIFY I HAVE ALL REQUIRED DATA AVAILABLE*@
-        @*@foreach (var x in Model.assigned_answer_types)
-        {
-            <tr>
-                <td>Answer Type</td>
-                <td>@x.obs_ans_type_name</td>
-                <td>isDefault @Model.obs_question_answer_types.Single(a => a.obs_ans_type_id == x.obs_ans_type_id).obs_qat_default_ans_type_yn</td>
-            </tr>
-            if (x.obs_ans_type_has_fxd_ans_yn == "Y")
-            {
-                foreach (var y in Model.selectable_answers.Where(item => item.obs_qat_id == Model.obs_question_answer_types.Single(a => a.obs_ans_type_id == x.obs_ans_type_id).obs_qat_id))
-                {
-                    <tr>
-                        <td>Selectable Answer Types</td>
-                        <td>@y.obs_qsa_text</td>
-                    </tr>
-                }
-
-            }
-        }*@
-        
-             
-                
+               
     </table>
+@try
+{
+    <input type="hidden" id="currentSelectedQAT" name="currentSelectedQAT" value= "@Model.question_assigned_answer_types.FirstOrDefault(item => item.Selected == true).Value" >
+}
+catch
+{
+    <input type="hidden" id="currentSelectedQAT" name="currentSelectedQAT" value="-1">
+}

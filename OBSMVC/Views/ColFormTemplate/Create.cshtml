@@ -120,7 +120,8 @@
                        <div id="section001" class="panel-collapse collapse in " @*style="border:dashed; border-width:thin"*@>
 
 
-
+                       <input type="hidden" id="qCounter" value="1" />
+                                           
                            <div id="questionPnl01" class="droptarget" ondrop="addQid(event)" ondragover="    allowDrop(event)">
                                @*<<< THE PARTIAL VIEW QUESTION DETAILS <br/>RETURNED BY AJAX CALL WILL BE PLACED HERE >>>*@
                                <table id="table1" style="width:100%; text-align:center; background-color:lightblue">
@@ -264,44 +265,6 @@
 
 @*====================================AJAX TO CALL QUESTION DETAILS ACTION====================================*@
 <script type="text/jscript">
-    $('#displayQID').click(function () {
-         var $btn = $(this);
-         $btn.button('loading');
-
-         //$(this).button('loading');
-         //e.preventDefault(); // <------------------ stop default behaviour of button (to prevent form submit or other behaviours if neeed)
-
-         //var url = "/ColFormTemplate/getQuestions";
-         //$.get(url, { full_text_search: "", metadata_search: "" }, function (data) {
-         //    $("#resultPanel").html(data);
-         //});
-
-         // ---- Fetch the Values that wil be used as parameters on the AJAX call -------
-         var qid = $("#droppedQId").val();
-
-         // ------------ Make the Ajax Call ---------------------------------------------
-        $.ajax({
-            url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
-            method: "GET",
-            cache: false,
-            data: { question_id: qid },     //<---- Data Parameters (if not already passed in the Url)
-            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-            //--- On error, execute this function ------
-            error: function () {
-                alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-                $btn.button('reset');
-            }
-        }).done(function (d) {
-            //Execute this code After the Ajax call completes successfully
-            $("#questionPanel").append(d);
-            $btn.button('reset');
-        });
-    })
-
 
     $('#btnAddSection').click(function () {
         var $btn = $(this);
@@ -354,6 +317,7 @@
 
     function addQid(ev) {
 
+        var lastCounterUsed = $("#qCounter").val();
         var qid = ev.dataTransfer.getData("Text"); // "Id" of the dragged data element
         //var target = ev.target || ev.srcElement;
         //var myId = $(event.target).attr("id");;
@@ -367,7 +331,7 @@
             url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
             method: "GET",
             cache: false,
-            data: { question_id: qid },     //<---- Data Parameters (if not already passed in the Url)
+            data: { question_id: qid, qCounter: lastCounterUsed },     //<---- Data Parameters (if not already passed in the Url)
             //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
             //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
             //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
@@ -386,6 +350,7 @@
             $mydata = $(ev.target);
             $mydata.append(d);
 
+            $('#qCounter').val(Number($('#qCounter').val()) + 1);
             //ev.target.html(d);
             //$("#questionPnl01").append(d);
             //$btn.button('reset');

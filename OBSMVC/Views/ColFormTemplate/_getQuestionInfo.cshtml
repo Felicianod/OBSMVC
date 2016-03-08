@@ -41,29 +41,30 @@
 
 
 <script type="text/javascript">
-   $("#AssignedAnswers").change( function (event) {
-       var $drop_down = $(this);
-       var selectedId = $(this).val();
-       if (selectedId == '') {
-           selectedId = "-1";
-       }
-       else {
-           $.ajax({
-           url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
-           method: "GET",
-           cache: false,
-           data: { qat_id: selectedId },
-           error: function () {
-               alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-           }
-       }).done(function (d) {
-           //Execute this code After the Ajax call completes successfully
-           // alert("result is "+d);
-           $("#"+@current_selected).html(d);
-       });
-       }
-       var cur_sel = document.getElementById("currentSelectedQAT");
-       cur_sel.value = selectedId;
-       //alert("hidden = " + document.getElementById("currentSelectedQAT").value);
-   })
+
+    $("#AssignedAnswers").change( function (event) {
+        var $drop_down = $(this);
+        var selectedId = $(this).val();
+        if (selectedId == '') {
+            selectedId = "-1";
+        }
+        else {
+            $.ajax({
+            url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
+            method: "GET",
+            cache: false,
+            data: { qat_id: selectedId },
+            error: function () {
+                alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (d) {
+            //Execute this code After the Ajax call completes successfully
+            // alert("result is "+d);
+            $("#"+@current_selected).html(d);            
+        });
+        }
+        var cur_sel = document.getElementById("currentSelectedQAT");
+        cur_sel.value = selectedId;
+        //alert("hidden = " + document.getElementById("currentSelectedQAT").value);
+    })
 </script>

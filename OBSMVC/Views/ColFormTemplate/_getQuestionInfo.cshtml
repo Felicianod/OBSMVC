@@ -14,8 +14,10 @@
         <tr>
             <td>@Model.question_id</td>
             <td>@Model.full_text</td>
-            <td>@Html.DropDownList("AssignedAnswers", Model.question_assigned_answer_types, "Select Answer Type",new { id = "AssignedAnswers"}) <br />
-                @{var current_selected = -1;}
+            <td>@Html.DropDownList("AssignedAnswers", Model.question_assigned_answer_types, "Select Answer Type",new { id = "AssignedAnswers", @class="viewDropDown"}) <br />
+                @{
+                    var current_selected = -1;
+                 }
                 @if (Model.hasInstances == true && Model.question_assigned_answer_types.Where(item => item.Selected == true).Count() > 0)
                 {
                     current_selected = Convert.ToInt32(Model.question_assigned_answer_types.Single(item => item.Selected == true).Value);
@@ -41,8 +43,7 @@
 
 
 <script type="text/javascript">
-
-    $("#AssignedAnswers").change( function (event) {
+    $(".viewDropDown").change( function (event) {
         var $drop_down = $(this);
         var selectedId = $(this).val();
         if (selectedId == '') {

@@ -120,7 +120,8 @@
                        <div id="section001" class="panel-collapse collapse in " @*style="border:dashed; border-width:thin"*@>
 
 
-
+                       <input type="hidden" id="qCounter" value="0" />
+                                           
                            <div id="questionPnl01" class="droptarget" ondrop="addQid(event)" ondragover="    allowDrop(event)">
                                @*<<< THE PARTIAL VIEW QUESTION DETAILS <br/>RETURNED BY AJAX CALL WILL BE PLACED HERE >>>*@
                                <table id="table1" style="width:100%; text-align:center; background-color:lightblue">
@@ -278,13 +279,14 @@
 
          // ---- Fetch the Values that wil be used as parameters on the AJAX call -------
          var qid = $("#droppedQId").val();
+         var lastCounterUsed = $("#qCounter").val()
 
          // ------------ Make the Ajax Call ---------------------------------------------
         $.ajax({
             url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
             method: "GET",
             cache: false,
-            data: { question_id: qid },     //<---- Data Parameters (if not already passed in the Url)
+            data: { question_id: qid, qCounter: lastCounterUsed },     //<---- Data Parameters (if not already passed in the Url)
             //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
             //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
             //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object

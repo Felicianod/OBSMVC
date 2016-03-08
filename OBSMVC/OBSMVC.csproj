@@ -195,7 +195,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ColFormTemplateController.cs" />
-    <Compile Include="Controllers\ColFormTemplateControllerFD1.cs" />
     <Compile Include="Controllers\CustController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
@@ -504,7 +503,6 @@
     <Content Include="Views\QuestionAnswerTypeDefault\View.cshtml" />
     <Content Include="Views\Question\displayAnswerSection.cshtml" />
     <Content Include="Views\TestQuestionAnswerTypeDefault\_TestlistAnswerTypes.cshtml" />
-    <Content Include="Views\ColFormTemplateFD1\showColFormTemplate1.cshtml" />
     <Content Include="Views\ColFormTemplate\Create.cshtml" />
     <Content Include="Views\ColFormTemplate\Delete.cshtml" />
     <Content Include="Views\ColFormTemplate\Details.cshtml" />
@@ -518,6 +516,7 @@
     <Content Include="Views\Section\Edit.cshtml" />
     <Content Include="Views\Section\Index.cshtml" />
     <Content Include="Views\ColFormTemplate\_addNewSection.cshtml" />
+    <Content Include="Views\ColFormTemplate\_getQuestionInfoFD.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

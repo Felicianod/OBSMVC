@@ -426,7 +426,7 @@ namespace OBSMVC.Controllers
             {               
                 questionInfo.question_assigned_answer_types.Single(x => x.Value == questionInfo.default_qat_id.ToString()).Selected = true;
             }           
-            return PartialView("_getQuestionInfo",questionInfo);
+            return PartialView("_getQuestionInfoFD",questionInfo);
         }
         public String GetSelectableAnswers(string qat_id)
         {
@@ -452,9 +452,10 @@ namespace OBSMVC.Controllers
             }        
         }
 
-        public PartialViewResult addNewSection()
+        public PartialViewResult addNewSection(string sCounter)
         {
-            return PartialView("_addNewSection");
+            ViewData["sNumber"] = sCounter;
+            return PartialView("_addNewSection" );
         }
         // POST: ColFormTemplate/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -513,7 +514,7 @@ namespace OBSMVC.Controllers
             return View(oBS_COLLECT_FORM_TMPLT);
         }
 
-      protected override void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -522,7 +523,7 @@ namespace OBSMVC.Controllers
             base.Dispose(disposing);
         }
         public class ObsColFormTemplate
-        {
+      {
             private DSC_OBS_DB_ENTITY OBSdb = new DSC_OBS_DB_ENTITY();
 
             //Constructor

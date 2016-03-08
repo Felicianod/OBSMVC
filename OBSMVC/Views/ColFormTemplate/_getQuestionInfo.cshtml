@@ -12,7 +12,7 @@
             </tr>
         </thead>      
         <tr>
-            <td>@Model.question_id</td>
+            <td>@Model.uniqueCounter</td>
             <td>@Model.full_text</td>
             <td>@Html.DropDownList("AssignedAnswers", Model.question_assigned_answer_types, "Select Answer Type",new { id = "AssignedAnswers"}) <br />
                 @{var current_selected = -1;}

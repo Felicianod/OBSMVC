@@ -3,18 +3,19 @@
         <h4 class="panel-title">
             @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
             <a class="accordion-toggle" data-toggle="collapse" href="#section002">
-                <span class="glyphicon glyphicon-minus">&nbsp;</span>
-                <input type="text" value="[Enter Section Name]" id="section002Name" />
+                <span class="glyphicon glyphicon-minus">&nbsp; </span>
+                <span >Section# @ViewData["sNumber"]</span>
             </a>
+            <input class="enterSection" type="text" onfocus="$(this).select();" value="[Enter Section Name]" id="section002Name" />
         </h4>
     </div>
     <div id="section002" class="panel-collapse collapse in" @*style="border:dashed; border-width:medium"*@>
         <div id="questionPnl02" class="droptarget" ondrop="addQid(event)" ondragover="allowDrop(event)">
             @*<<< THE PARTIAL VIEW QUESTION DETAILS <br/>RETURNED BY AJAX CALL WILL BE PLACED HERE >>>*@
-            <table style="width:100%; text-align:center; background-color:lightblue">
+            <table style="width:100%; text-align:center">
                 <tr>
                     <td>
-                        --- DROP YOUR QUESTION HERE ---
+                       <span style="background-color:lightblue">--- DROP YOUR QUESTION HERE ---</span>
                     </td>
                 </tr>
             </table>

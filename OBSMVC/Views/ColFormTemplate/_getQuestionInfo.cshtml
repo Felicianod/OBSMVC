@@ -7,16 +7,16 @@
                 <th>Question Text</th>
                 <th>Answer Type</th>              
             </tr>
-        </thead>
-        
+        </thead>      
         <tr>
             <td>@Model.question_id</td>
             <td>@Model.full_text</td>
-            <td>@Html.DropDownList("Assigned Answers", Model.question_assigned_answer_types, "Select Answer Type") <br />
-                @{int counter = 0;}
+            <td>@Html.DropDownList("AssignedAnswers", Model.question_assigned_answer_types, "Select Answer Type",new { id = "AssignedAnswers"}) <br />
+                @{var current_selected = -1;}
                 @if (Model.hasInstances == true && Model.question_assigned_answer_types.Where(item => item.Selected == true).Count() > 0)
                 {
-                    <ul id="">
+                    current_selected = Convert.ToInt32(Model.question_assigned_answer_types.Single(item => item.Selected == true).Value);
+                    <ul id="@current_selected">
                         @foreach (var x in Model.selectable_answers.Where(x => x.obs_qat_id == Convert.ToInt32(Model.question_assigned_answer_types.Single(item => item.Selected == true).Value)))
                         {
                             @*if (Model.assigned_answer_types.Single(ans_type => ans_type.obs_ans_type_id == (Model.obs_question_answer_types.Single(y => y.obs_qat_id == Convert.ToInt32(Model.question_assigned_answer_types.Single(item => item.Selected == true).Value)).obs_ans_type_id)).obs_ans_type_category == "3 Val Range")
@@ -33,11 +33,38 @@
                 }
             </td>          
     </table>
-@try
-{
-    <input type="hidden" id="currentSelectedQAT" name="currentSelectedQAT" value= "@Model.question_assigned_answer_types.FirstOrDefault(item => item.Selected == true).Value" >
-}
-catch
-{
-    <input type="hidden" id="currentSelectedQAT" name="currentSelectedQAT" value="-1">
-}
+    <input type="hidden" id="currentSelectedQAT" name="currentSelectedQAT" value= "@current_selected" >
+
+
+<script type="text/javascript">
+
+    $("#AssignedAnswers").change( function (event) {
+                 var $drop_down = $(this);
+                 
+                  $.ajax({
+                      url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
+                      method: "GET",
+                      cache: false,
+                      data: { qat_id: $(this).val() },
+                      error: function () {
+                          alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
+
+                      }
+                  }).done(function (d) {
+                      //Execute this code After the Ajax call completes successfully
+                     // alert("result is "+d);
+                      $("#"+@current_selected).html(d);
+                      var cur_sel = document.getElementById("currentSelectedQAT");
+                      if($(this).val()==null){
+                     
+                          cur_sel.value=-1;
+                      }
+                      else
+                      {
+                          cur_sel.value=$(this).val();
+                      }
+                      alert("hidden = " + document.getElementById("currentSelectedQAT").value);
+
+                  });
+              })
+</script>

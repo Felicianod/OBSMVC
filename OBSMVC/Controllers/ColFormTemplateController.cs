@@ -427,6 +427,29 @@ namespace OBSMVC.Controllers
             }           
             return PartialView("_getQuestionInfo",questionInfo);
         }
+        public String GetSelectableAnswers(string qat_id)
+        {
+            if (qat_id == "")
+            {
+                return "";
+            }
+            else
+            {
+                int obs_qat_id = Convert.ToInt32(qat_id);
+                var list = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == obs_qat_id && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now);
+                if (list.Count() > 0)
+                {
+                    string sel_ans = "";
+                    foreach (var x in list)
+                    {
+                        sel_ans = sel_ans + "<li>" + x.obs_qsa_text + "</li>";
+                    }
+
+                    return sel_ans;
+                }
+                else { return ""; }
+            }        
+        }
 
         // POST: ColFormTemplate/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 

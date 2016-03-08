@@ -383,16 +383,17 @@ namespace OBSMVC.Controllers
            
             return PartialView("_getQuestions", questions_for_display);            
         }
-        public PartialViewResult getQuestionInfo(int question_id)
+        public PartialViewResult getQuestionInfo(int question_id, string qCounter)
         {
             QuestionInfo questionInfo = new QuestionInfo();
             questionInfo.question_id = question_id;
+            questionInfo.uniqueCounter = questionInfo.question_id + "." + qCounter;
             questionInfo.full_text = db.OBS_QUESTION.Single(item => item.obs_question_id == question_id).obs_question_full_text;          
             List<OBS_QUEST_ANS_TYPES> QAInstances = db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == question_id && (x.obs_qat_end_eff_dt==null ||x.obs_qat_end_eff_dt>DateTime.Now)).ToList();
 
             if (QAInstances.Count() == 0)  //There were no records found in the 'OBS_QUEST_ANS_TYPES' Table for this question Id
             {
-                questionInfo.hasInstances = false;             
+                questionInfo.hasInstances = false;                         
             }
             else
             {//there's a record(s) in 'OBS_QUEST_ANS_TYPES'. now we need to loop through all of them, add them to the list and find default answer type
@@ -906,7 +907,7 @@ namespace OBSMVC.Controllers
         public List<OBS_QUEST_SLCT_ANS> selectable_answers = new List<OBS_QUEST_SLCT_ANS>();
         public List<OBS_QUEST_ANS_TYPES> obs_question_answer_types = new List<OBS_QUEST_ANS_TYPES>();
         public List<SelectListItem> question_assigned_answer_types = new List<SelectListItem>();
-        
+        public string uniqueCounter { set; get; }
 
     }
     

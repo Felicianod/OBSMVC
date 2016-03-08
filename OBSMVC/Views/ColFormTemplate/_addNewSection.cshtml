@@ -1,0 +1,23 @@
+﻿<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
+            <a class="accordion-toggle" data-toggle="collapse" href="#section002">
+                <span class="glyphicon glyphicon-minus">&nbsp;</span>
+                <input type="text" value="[Enter Section Name]" id="section002Name" />
+            </a>
+        </h4>
+    </div>
+    <div id="section002" class="panel-collapse collapse in" @*style="border:dashed; border-width:medium"*@>
+        <div id="questionPnl02" class="droptarget" ondrop="addQid(event)" ondragover="allowDrop(event)">
+            @*<<< THE PARTIAL VIEW QUESTION DETAILS <br/>RETURNED BY AJAX CALL WILL BE PLACED HERE >>>*@
+            <table style="width:100%; text-align:center; background-color:lightblue">
+                <tr>
+                    <td>
+                        --- DROP YOUR QUESTION HERE ---
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div> @*End of Section "section002"*@
+</div>

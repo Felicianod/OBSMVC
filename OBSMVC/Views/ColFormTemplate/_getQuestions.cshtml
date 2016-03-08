@@ -21,7 +21,7 @@
             rowCounter++;
             //rowId = "row" + rowCounter.ToString("00");
             rowId = @question.obs_question_id.ToString("00");
-            <tr id="@rowId" draggable="true" ondragstart="drag(event)">
+            <tr id="@rowId" draggable="true" >
                 <td>@question.obs_question_id</td>
                 <td>@question.obs_question_full_text</td>
             </tr>

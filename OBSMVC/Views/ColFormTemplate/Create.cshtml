@@ -1,330 +1,493 @@
 ﻿@model OBSMVC.Models.OBS_COLLECT_FORM_TMPLT
 @{ ViewBag.Title = "Create"; }
 
-<div class="well well-sm wellDSC" ><h3 class="col-md-offset-1">Collection Form Creation</h3></div>
+<div class="well well-sm wellDSC"><h3 class="col-md-offset-1">Collection Form Creation</h3></div>
+<style>
+    .droptarget {        
+        margin: 5px;
+        padding: 3px;
+        border: 1px solid #aaaaaa;
+    }
+</style>
 
 @*====================== BEGINING OF THE "CREATE COLLECTION FORM" FORM =========================*@
 @using (Html.BeginForm())
 {
   @Html.AntiForgeryToken()
   <div class="panel panel-default">
-   @*---------------------- FORM HEADER ------------------------- *@
+      @*---------------------- FORM HEADER ------------------------- *@
       <div class="panel-heading header">
-          <div class="form-group row">
-              <div class="col-sm-7">
-                  <label for="obs_cft_title" class="col-sm-2 form-control-label">FORM TITLE:</label>
-                  <div class="col-sm-10">
-                      @Html.EditorFor(model => model.obs_cft_title, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
-                      @Html.ValidationMessageFor(model => model.obs_cft_title, "", new { @class = "text-danger" })
-                  </div>
-              </div>
-              <div class="col-sm-5">
-                  <label for="obs_cft_title" class="col-sm-2 form-control-label" style="text-align:right">Subtitle:</label>
-                  <div class="col-sm-10">
-                      @Html.EditorFor(model => model.obs_cft_subtitle, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
-                  </div>
-              </div>
-          </div>
+            <div class="form-group row">
+                <div class="col-sm-7">
+                    <label for="obs_cft_title" class="col-sm-2 form-control-label">FORM TITLE:</label>
+                    <div class="col-sm-10">
+                        @Html.EditorFor(model => model.obs_cft_title, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
+                        @Html.ValidationMessageFor(model => model.obs_cft_title, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <label for="obs_cft_title" class="col-sm-2 form-control-label" style="text-align:right">Subtitle:</label>
+                    <div class="col-sm-10">
+                        @Html.EditorFor(model => model.obs_cft_subtitle, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
+                    </div>
+                </div>
+            </div>
 
-          <div class="form-group row">
-              <div class="col-sm-4">
-                  <div class="input-group">
-                      <div class="input-group-addon">Observation Type</div>
-                      @Html.DropDownList("obs_type_id", null, htmlAttributes: new { @class = "form-control" })
-                  </div>
-              </div>
-              <div class="col-sm-4">
-                  <div class="input-group">
-                      <div class="input-group-addon">Customer</div>
-                      @Html.DropDownList("dsc_cust_id", null, htmlAttributes: new { @class = "form-control" })
-                  </div>
-              </div>
-              <div class="col-sm-4">
-                  <div class="input-group">
-                      <div class="input-group-addon">Whse Location</div>
-                      @Html.DropDownList("dsc_lc_id", null, htmlAttributes: new { @class = "form-control" })
-                  </div>
-              </div>
-          </div>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-addon">Observation Type</div>
+                        @Html.DropDownList("obs_type_id", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-addon">Customer</div>
+                        @Html.DropDownList("dsc_cust_id", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-addon">Whse Location</div>
+                        @Html.DropDownList("dsc_lc_id", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
 
-          <div class="form-group row">
-              <div class="col-sm-4">
-                  <div class="input-group" data-provide="datepicker">
-                      <div class="input-group-addon">Effective Date:</div>
-                      <input class="datepicker form-control" id="obs_cft_eff_st_dt" name="obs_cft_eff_st_dt" style="max-width: 100%; width:100%;">
-                      @*<input class="datepicker form-control" data-date-format="mm/dd/yyyy" id="obs_cft_eff_st_dt" name="obs_cft_eff_st_dt" style="max-width: 100%; width:100%;">*@
-                      <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                      @Html.ValidationMessageFor(model => model.obs_cft_eff_st_dt, "", new { @class = "text-danger" })
-                  </div>
-              </div>
-              <div class="col-sm-4 col-sm-offset-2">
-                  <div class="input-group" data-provide="datepicker">
-                      <div class="input-group-addon">Usable Until:</div>
-                      <input class="datepicker form-control" id="obs_cft_eff_end_dt" name="obs_cft_eff_end_dt" style="max-width: 100%; width:100%;">
-                      <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                      @Html.ValidationMessageFor(model => model.obs_cft_eff_end_dt, "", new { @class = "text-danger" })
-                  </div>
-              </div>
-          </div>
-          
-          @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-              </div>
-              @*---------------------- FORM BODY --------------------------- *@
-              <div class="panel-body content">
-                  <div class="row">
-                      <div class="col-md-7 personal-info">
-                          @*/---------------- MAIN QUESTION DETAIL DISPLAY PANEL ----------------------\*@
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <div class="input-group" data-provide="datepicker">
+                        <div class="input-group-addon">Effective Date:</div>
+                        <input class="datepicker form-control" id="obs_cft_eff_st_dt" name="obs_cft_eff_st_dt" style="max-width: 100%; width:100%;">
+                        @*<input class="datepicker form-control" data-date-format="mm/dd/yyyy" id="obs_cft_eff_st_dt" name="obs_cft_eff_st_dt" style="max-width: 100%; width:100%;">*@
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                        @Html.ValidationMessageFor(model => model.obs_cft_eff_st_dt, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4 col-sm-offset-2">
+                    <div class="input-group" data-provide="datepicker">
+                        <div class="input-group-addon">Usable Until:</div>
+                        <input class="datepicker form-control" id="obs_cft_eff_end_dt" name="obs_cft_eff_end_dt" style="max-width: 100%; width:100%;">
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                        @Html.ValidationMessageFor(model => model.obs_cft_eff_end_dt, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
 
-
-                          @*
-                            *******************************************************************************
-                              RASUL,
-                               you will be working and testing on this section to trigger the AJAX call
-                               and to update this section with the partial view !!!!!!!!!!!!!!!!
-                            ******************************************************************************@
-
-                          @*<div class="input-group col-md-6">
-                               <input type="text" id="droppedQId" class="form-control" placeholder="Question Id to Add...">
-                               <span class="input-group-btn">
-                                  <button id="displayQID" class="btn btn-primary" type="button">Add Question!</button>
-                               </span>
-                            </div><!-- /input-group -->
-                            <hr />
-                          *@
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </div>
+      @*---------------------- FORM BODY --------------------------- *@
+      <div class="panel-body content">
+         <div class="row">
+            @*/---------------- Below is the MAIN FORM QUESTION DETAIL DISPLAY PANEL ----------------------\*@
+            <div class="col-md-7 personal-info">
+               @*
+                    *******************************************************************************
+                      RASUL,
+                       you will be working and testing on this section to trigger the AJAX call
+                       and to update this section with the partial view !!!!!!!!!!!!!!!!
+                    ******************************************************************************@
+               @*<div class="input-group col-md-6">
+                           <input type="text" id="droppedQId" class="form-control" placeholder="Question Id to Add...">
+                           <span class="input-group-btn">
+                              <button id="displayQID" class="btn btn-primary" type="button">Add Question!</button>
+                           </span>
+                        </div><!-- /input-group -->
+                        <hr />
+               *@
 
 
-                          <div id="questionPanel" ondrop="addQid(event)" ondragover="allowDrop(event)">
-
-                              @*<<< THE PARTIAL VIEW QUESTION DETAILS <br/>RETURNED BY AJAX CALL WILL BE PLACED HERE >>>*@
-                              <table style="width:100%; text-align:center">
-                                  <tr style="border:dashed; border-width:medium">
-                                      <td>
-                                          --- DROP YOUR QUESTION HERE ---
-                                      </td>
-                                  </tr>
-                              </table>
-                          </div>
+               <div class="panel-group" id="accordion">
+                @*  ################################   W A R N I N G   #####################################
+                *******************************************************************************
+                  Do not touch this section
+                  This is the New Form Question Main Panel
+                  DO NOT CHANGE OR MODIFY  Feliciano is testing it !!!!!!!!!
+                ******************************************************************************@
 
 
 
+                   <div class="panel panel-default">
+                       <div class="panel-heading">
+                           <h4 class="panel-title">
+                               @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
+                               <a class="accordion-toggle" data-toggle="collapse" href="#section001">
+                                   <span class="glyphicon glyphicon-minus">&nbsp;</span>
+                                   <input type="text" value="[Default Section Name]" id="section001Name" />
+                               </a>
+                           </h4>
+                       </div>
+                       <div id="section001" class="panel-collapse collapse in " @*style="border:dashed; border-width:thin"*@>
 
 
 
-                          @*\--------------- END OF THE MAIN QUESTION DISPLAY PANEL -------------------/*@
-                      </div>
-                      <div class="col-md-5 personal-info">
-                          @*// **************** This is the Panel with the Question's Library ***************** *@
-                          <div class="panel panel-info">
-                              <div class="panel-heading">
-                                  <table style="width:100%">
-                                      <tr>
-                                          <td colspan="2" style="text-align:center; font-size:large"><b>"QUESTION LIBRARY"</b></td>
-                                      </tr>
-                                      <tr>
-                                          <td style="width:30%">
-                                              Enter Search Text:
-                                          </td>
-                                          <td style="width:70%">
-                                              @Html.TextBox("full_text_search", "", new { @class = "form-control" })
-                                          </td>
-                                      </tr>
-                                      <tr>
-                                          <td>
-                                              Metadata Search:
-                                          </td>
-                                          <td>
-                                              @Html.TextBox("metadata_search", "", new { @class = "form-control" })
-                                          </td>
-                                      </tr>
-                                      <tr>
-                                          <td>
-                                              <button type="button" id="doSearch" class="btn btn-primary" data-loading-text="Please Wait...">Search Questions</button>
-                                              @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
-                                                              HttpMethod = "GET",
-                                                              UpdateTargetId = "resultPanel",
-                                                              InsertionMode = InsertionMode.Replace,
-                                                              LoadingElementId = "divLoading"
-                                                })*@
-                                          </td>
-                                      </tr>
-                                  </table>
-                              </div>
-                              <div class="panel-body">
-                                  @*<div>
-                                       @Html.Action("getQuestions", new { full_text_search = "", metadata_search = "" })
-                                    </div>*@
-                                  <div id="resultPanel">
-                                      [Results]
-                                  </div>
-                                  <div id="divLoading" style="display:none">
-                                      @*<img src="@Url.Content("~/Images/LoadingData.gif")" alt="" />*@
-                                      <img src="~/Images/LoadingData.gif" />
-                                  </div>
-                              </div>
-                          </div> @*------------- End of Question Library Panel ---------------*@
-                      </div>
-                  </div>@*---- END OF FORM BODY -------*@
-              </div>
-              <div class="row">
-                  <div class="col-md-offset-2 col-md-10">
-                      <input id="btnSaveForm" type="submit" value="Save Form" disabled="disabled" />
-                  </div>
-              </div>
-          </div>
-          }
-          @*====================== END OF THE "CREATE COLLECTION FORM" FORM =========================*@
+                           <div id="questionPnl01" class="droptarget" ondrop="addQid(event)" ondragover="    allowDrop(event)">
+                               @*<<< THE PARTIAL VIEW QUESTION DETAILS <br/>RETURNED BY AJAX CALL WILL BE PLACED HERE >>>*@
+                               <table id="table1" style="width:100%; text-align:center; background-color:lightblue">
+                                   <tr>
+                                       <td>
+                                           --- DROP YOUR QUESTION HERE ---
+                                       </td>
+                                   </tr>
+                               </table>
+                           </div>
+                       </div> @*End of Section "section001"*@
 
-          <div>
-              @Html.ActionLink("Back to List", "Index")
-          </div>
+                   </div>
 
 
-          <br />
-
-          @*//======================================== JAVASCRIPT / AJAX SECTION  ===============================================\\*@
-          <script type="text/jscript">
-              $('#doSearch').click(function () {
-                  var $btn = $(this);
-                  $btn.button('loading');
-                  //$(this).button('loading');
-                  //e.preventDefault(); // <------------------ stop default behaviour of button (to prevent form submit or other behaviours if neeed)
-
-                  //var url = "/ColFormTemplate/getQuestions";
-                  //$.get(url, { full_text_search: "", metadata_search: "" }, function (data) {
-                  //    $("#resultPanel").html(data);
-                  //});
-
-                  // ---- Fetch the Values that wil be used as parameters on the AJAX call -------
-                  var searchText = $("#full_text_search").val();
-                  var searchMD = $("#metadata_search").val();
-                  // ------------ Make the Ajax Call ---------------------------------------------
-                  $.ajax({
-                      @*url: '@Url.Action("getQuestions", "ColFormTemplate", new { full_text_search = searchText, metadata_search = searchMD })',*@
-                      url: '@Url.Action("getQuestions", "ColFormTemplate")',
-                      method: "GET",
-                      cache: false,
-                      data: { full_text_search: searchText, metadata_search: searchMD, page: 1, pageSize: 10 },     //<---- Data Parameters (if not already passed in the Url)
-                      //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                      //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                      //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                      //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-                      //--- On error, execute this function ------
-                      error: function () {
-                          alert("Failed to render the Question List from the Database !!");  //<-- Trap and alert of any errors if they occurred
-                          $btn.button('reset');
-                      }
-                  }).done(function (d) {
-                      //Execute this code After the Ajax call completes successfully
-                      $("#resultPanel").html(d);
-                      $btn.button('reset');
-                  });
-              })
-          </script>
-          @*====================================AJAX TO CALL QUESTION DETAILS ACTION====================================*@
-          <script type="text/jscript">
-              $('#displayQID').click(function () {
-                  var $btn = $(this);
-                  $btn.button('loading');
-
-                  //$(this).button('loading');
-                  //e.preventDefault(); // <------------------ stop default behaviour of button (to prevent form submit or other behaviours if neeed)
-
-                  //var url = "/ColFormTemplate/getQuestions";
-                  //$.get(url, { full_text_search: "", metadata_search: "" }, function (data) {
-                  //    $("#resultPanel").html(data);
-                  //});
-
-                  // ---- Fetch the Values that wil be used as parameters on the AJAX call -------
-                  var qid = $("#droppedQId").val();
-
-                  // ------------ Make the Ajax Call ---------------------------------------------
-                  $.ajax({
-                      url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
-                      method: "GET",
-                      cache: false,
-                      data: { question_id: qid },     //<---- Data Parameters (if not already passed in the Url)
-                      //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                      //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                      //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                      //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-                      //--- On error, execute this function ------
-                      error: function () {
-                          alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-                          $btn.button('reset');
-                      }
-                  }).done(function (d) {
-                      //Execute this code After the Ajax call completes successfully
-
-                      $("#questionPanel").append(d);
-                      $btn.button('reset');
-                  });
-              })
-          </script>
-
-          @*<script type="text/javascript">
-                $(document).ready(function () {
-                    BindSpinner();
-                });
-
-                function BindSpinner() {
-                    $("#divLoading").bind("ajaxSend", function () {
-                        $(this).show();
-                    }).bind("ajaxStop", function () {
-                        $(this).hide();
-                    }).bind("ajaxError", function () {
-                        $(this).hide();
-                    });
-                };
-            </script>*@
-
-          <script>
-              function allowDrop(ev) {
-                  ev.preventDefault();
-              }
-
-              function drag(ev) {
-                  ev.dataTransfer.setData("text", ev.target.id);
-              }
-
-              function drop(ev) {
-                  ev.preventDefault();
-                  var data = ev.dataTransfer.getData("text");
-                  ev.target.appendChild(document.getElementById(data));
-              }
-              function addQid(ev) {
-
-                  //var qid = 3;
-                  var data = ev.dataTransfer.getData("text");
-                  var qid = data;
-                  // ------------ Make the Ajax Call ---------------------------------------------
-                  $.ajax({
-                      url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
-                      method: "GET",
-                      cache: false,
-                      data: { question_id: qid },     //<---- Data Parameters (if not already passed in the Url)
-                      //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                      //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                      //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                      //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-                      //--- On error, execute this function ------
-                      error: function () {
-                          alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-                          //$btn.button('reset');
-                      }
-                  }).done(function (d) {
-                      //Execute this code After the Ajax call completes successfully
-
-                  $("#questionPanel").append(d);
-                      //$btn.button('reset');
-                  });
-              }
 
 
-              $('.datepicker').datepicker({
-                  format: 'MM dd yyyy'
-              });
 
-          </script>
+
+
+
+
+                @* ############### END OF PANEL USED by Feliciano For Testing ##################    *@
+                </div>
+                @*When This button is clicked, add a new view to the "accordion" <DIV> section*@
+                <input type="button" id="btnAddSection" value="Add New Section" />
+
+
+               @*\--------------- END OF THE MAIN QUESTION DISPLAY PANEL -------------------/*@
+            </div>
+
+            @*// **************** Below is the Panel with the Question's Library ***************** *@
+            <div class="col-md-5 personal-info">
+
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <table style="width:100%">
+                    <tr>
+                        <td colspan="2" style="text-align:center; font-size:large"><b>"QUESTION LIBRARY"</b></td>
+                    </tr>
+                    <tr>
+                        <td style="width:30%">
+                            Enter Search Text:
+                        </td>
+                        <td style="width:70%">
+                            @Html.TextBox("full_text_search", "", new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Metadata Search:
+                        </td>
+                        <td>
+                            @Html.TextBox("metadata_search", "", new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="button" id="doSearch" class="btn btn-primary" data-loading-text="Please Wait...">Search Questions</button>
+                            @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
+                                              HttpMethod = "GET",
+                                              UpdateTargetId = "resultPanel",
+                                              InsertionMode = InsertionMode.Replace,
+                                              LoadingElementId = "divLoading"
+                                })*@
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel-body">
+                @*<div>
+                        @Html.Action("getQuestions", new { full_text_search = "", metadata_search = "" })
+                    </div>*@
+                <div id="resultPanel">
+                    [Results]
+                </div>
+                <div id="divLoading" style="display:none">
+                    @*<img src="@Url.Content("~/Images/LoadingData.gif")" alt="" />*@
+                    <img src="~/Images/LoadingData.gif" />
+                </div>
+            </div>
+        </div> @*------------- End of Question Library Panel ---------------*@
+    </div>
+         </div>@*---- END OF FORM BODY -------*@
+      </div>
+      <div class="row">
+         <div class="col-md-offset-2 col-md-10">
+             <input id="btnSaveForm" type="submit" value="Save Form" disabled="disabled" />
+         </div>
+      </div>
+  </div>
+}
+
+@*====================== END OF THE "CREATE COLLECTION FORM" FORM =========================*@
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+<br />
+
+@*//======================================== JAVASCRIPT / AJAX SECTION  ===============================================\\*@
+<script type="text/jscript">
+    $('#doSearch').click(function () {
+        var $btn = $(this);
+        $btn.button('loading');
+        //$(this).button('loading');
+        //e.preventDefault(); // <------------------ stop default behaviour of button (to prevent form submit or other behaviours if neeed)
+
+        //var url = "/ColFormTemplate/getQuestions";
+        //$.get(url, { full_text_search: "", metadata_search: "" }, function (data) {
+        //    $("#resultPanel").html(data);
+       //});
+
+       // ---- Fetch the Values that wil be used as parameters on the AJAX call -------
+       var searchText = $("#full_text_search").val();
+       var searchMD = $("#metadata_search").val();
+       // ------------ Make the Ajax Call ---------------------------------------------
+       $.ajax({
+       @*url: '@Url.Action("getQuestions", "ColFormTemplate", new { full_text_search = searchText, metadata_search = searchMD })',*@
+       url: '@Url.Action("getQuestions", "ColFormTemplate")',
+       method: "GET",
+       cache: false,
+       data: { full_text_search: searchText, metadata_search: searchMD, page: 1, pageSize: 10 },     //<---- Data Parameters (if not already passed in the Url)
+       //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+       //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+       //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+       //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+       //--- On error, execute this function ------
+       error: function () {
+           alert("Failed to render the Question List from the Database !!");  //<-- Trap and alert of any errors if they occurred
+           $btn.button('reset');
+        }
+       }).done(function (d) {
+           //Execute this code After the Ajax call completes successfully
+          $("#resultPanel").html(d);
+          $btn.button('reset');
+       });
+    })
+</script>
+
+@*====================================AJAX TO CALL QUESTION DETAILS ACTION====================================*@
+<script type="text/jscript">
+    $('#displayQID').click(function () {
+         var $btn = $(this);
+         $btn.button('loading');
+
+         //$(this).button('loading');
+         //e.preventDefault(); // <------------------ stop default behaviour of button (to prevent form submit or other behaviours if neeed)
+
+         //var url = "/ColFormTemplate/getQuestions";
+         //$.get(url, { full_text_search: "", metadata_search: "" }, function (data) {
+         //    $("#resultPanel").html(data);
+         //});
+
+         // ---- Fetch the Values that wil be used as parameters on the AJAX call -------
+         var qid = $("#droppedQId").val();
+
+         // ------------ Make the Ajax Call ---------------------------------------------
+        $.ajax({
+            url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
+            method: "GET",
+            cache: false,
+            data: { question_id: qid },     //<---- Data Parameters (if not already passed in the Url)
+            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+            //--- On error, execute this function ------
+            error: function () {
+                alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
+                $btn.button('reset');
+            }
+        }).done(function (d) {
+            //Execute this code After the Ajax call completes successfully
+            $("#questionPanel").append(d);
+            $btn.button('reset');
+        });
+    })
+
+
+    $('#btnAddSection').click(function () {
+        var $btn = $(this);
+        $btn.button('loading');
+        // ------------ Make the Ajax Call ---------------------------------------------
+        $.ajax({
+            url: '@Url.Action("addNewSection", "ColFormTemplate")',
+            method: "GET",
+            cache: false,
+            //data: { question_id: qid },     //<---- Data Parameters (if not already passed in the Url)
+            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+            //--- On error, execute this function ------
+            error: function () {
+                alert("An Error has Occurred. Unable to Add New Sections to Form!!");  //<-- Trap and alert of any errors if they occurred
+                $btn.button('reset');
+            }
+        }).done(function (d) {
+            //Execute this code After the Ajax call completes successfully
+            $("#accordion").append(d);
+            $btn.button('reset');
+        });
+    })
+
+</script>
+
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            BindSpinner();
+        });
+
+        function BindSpinner() {
+            $("#divLoading").bind("ajaxSend", function () {
+                $(this).show();
+            }).bind("ajaxStop", function () {
+                $(this).hide();
+            }).bind("ajaxError", function () {
+                $(this).hide();
+            });
+        };
+    </script>*@
+
+<script>
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function addQid(ev) {
+
+        var qid = ev.dataTransfer.getData("Text"); // "Id" of the dragged data element
+        //var target = ev.target || ev.srcElement;
+        //var myId = $(event.target).attr("id");;
+
+        ev.target.style.border = "";
+        //event.target.appendChild(document.getElementById(dataId));
+
+
+        // ------------ Make the Ajax Call ---------------------------------------------
+        $.ajax({
+            url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
+            method: "GET",
+            cache: false,
+            data: { question_id: qid },     //<---- Data Parameters (if not already passed in the Url)
+            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+            //--- On error, execute this function ------
+            error: function () {
+                alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
+                //$btn.button('reset');
+            }
+        }).done(function (d) {
+            //Execute this code After the Ajax call completes successfully
+            //ev.target.append(d);
+            var targetId = $(this);
+            //alert('Source Id is: ' + qid + ' & Target Id is: ' + targetId.id);
+            $mydata = $(ev.target);
+            $mydata.append(d);
+
+            //ev.target.html(d);
+            //$("#questionPnl01").append(d);
+            //$btn.button('reset');
+        });
+    }
+
+
+    $('.datepicker').datepicker({
+        format: "DD, d MM, yy"
+    });
+
+</script>
+
+
+@********************************* DRAG AND DROP EVENT LISTENERS *********************************@
+<script>
+    /* Events fired on the drag target */
+    document.addEventListener("dragstart", function (event) {
+        // The dataTransfer.setData() method sets the data type and the value of the dragged data
+        event.dataTransfer.setData("Text", event.target.id);
+
+        // Change the opacity of the draggable element
+        event.target.style.opacity = "0.4";
+    });
+
+    //// While dragging the p element, change the color of the output text
+    //document.addEventListener("drag", function (event) {
+    //    document.getElementById("demo").style.color = "red";
+    //});
+
+    // Output some text when finished dragging the p element and reset the opacity
+    document.addEventListener("dragend", function (event) {
+        //document.getElementById("demo").innerHTML = "Finished dragging the p element.";
+        event.target.style.opacity = "1";
+    });
+
+
+    /* Events fired on the drop target */
+
+    // When the draggable p element enters the droptarget, change the DIVS's border style
+    document.addEventListener("dragenter", function (event) {
+        if (event.target.className == "droptarget") {
+            event.target.style.border = "3px dotted red";
+        }
+    });
+
+    // By default, data/elements cannot be dropped in other elements. To allow a drop, we must prevent the default handling of the element
+    document.addEventListener("dragover", function (event) {
+        event.preventDefault();
+    });
+
+    // When the draggable p element leaves the droptarget, reset the DIVS's border style
+    document.addEventListener("dragleave", function (event) {
+        if (event.target.className == "droptarget") {
+            event.target.style.border = "";
+        }
+    });
+
+    /* On drop - Prevent the browser default handling of the data (default is open as link on drop)
+       Reset the color of the output text and DIV's border color
+       Get the dragged data with the dataTransfer.getData() method
+       The dragged data is the id of the dragged element ("drag1")
+       Append the dragged element into the drop element
+    */
+
+    @*document.addEventListener("drop", function (event) {
+        event.preventDefault();
+        alert("Something was dropped");
+        if (event.target.className == "droptarget") {
+            // Perfomr the add routine only if the target is a class type 'droptarget' 
+            //document.getElementById("demo").style.color = "";
+            event.target.style.border = "";
+            var dataId = event.dataTransfer.getData("Text"); // "Id" of the dragged data element
+            //event.target.appendChild(document.getElementById(dataId));
+
+            // ------------ Make the Ajax Call ---------------------------------------------
+            $.ajax({
+                url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
+                method: "GET",
+                cache: false,
+                data: { question_id: dataId },     //<---- Data Parameters (if not already passed in the Url)
+                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                //--- On error, execute this function ------
+                error: function () {
+                    alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
+                    //$btn.button('reset');
+                }
+            }).done(function (d) {
+                //Execute this code After the Ajax call completes successfully
+                event.target.append(d);
+                //var targetId = $(this);
+                //alert('Target Id is: ' + target.id + ' - ' + myId);
+                //$("#questionPnl01").append(d);
+                //$btn.button('reset');
+            });
+        }
+    });*@
+
+
+
+</script>

@@ -5,7 +5,7 @@
 <script src="~/Scripts/bootstrap.js"></script>
 <script src="~/Scripts/bootstrap-confirmation.js"></script>
 
-<script type="text/javascript">
+@*<script type="text/javascript">
         //$(function () {
         //    $("input:text.editDate").datepicker();
         //});
@@ -23,7 +23,7 @@
                 dateFormat: 'M dd, yy'
             });
         });
-</script>
+</script>*@
 <!-- Form Edit State Change Validation -->
 <script>
         $(document).ready(function () {
@@ -160,12 +160,20 @@
                                     </select>
                                     <br /><br />
                                 </td>
+
                                 <td style="width:10%; text-align:center; font-weight:bold; color:blue ">
-                                    <input type="button" id="left" style="width:50px" value="<" data-toggle="confirmation" data-placement="left" /> <br /><br />
-                                    <input type="button" id="right" style="width:50px" value=">" /> <br /><br />
+
+                                    <div class="btn-group">
+                                        <button title="Add Selected Tags to the Question" class="btn btn-default" id="left" data-toggle="confirmation"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                                        <button title="Remove Selected Tags from the Question" class="btn btn-default" id="right"><i class="glyphicon glyphicon-chevron-right"></i></button>
+                                    </div>
+
+                                    @*<input type="button" id="left" style="width:50px" value="<" data-toggle="confirmation" data-placement="left" /> <br /><br />
+                                    <input type="button" id="right" style="width:50px" value=">" /> <br /><br />*@
                                     @*<input type="button" id="leftall" style="width:50px" value="<<" /> <br /><br />
                                     <input type="button" id="rightall" style="width:50px" value=">>" /> <br />*@
                                 </td>
+
                                 <td style="width:45%; border:double; text-align:center; vertical-align:top">
                                     <b>AVAILABLE METADATA TAGS</b>   <br />
                                     <select id="sbTwo" multiple="multiple" size="10" style="width:95%" data-toggle="tooltip" data-placement="auto left" title="Double Click Item to Add it" >

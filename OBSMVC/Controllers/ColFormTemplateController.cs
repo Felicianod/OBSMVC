@@ -18,26 +18,26 @@ namespace OBSMVC.Controllers
 
         // GET: ColFormTemplate
         [HttpGet]
-        public ActionResult Index(string title_search, string question_search, string t_search, string q_search,FormCollection form)
+        public ActionResult Index(string title_search, string question_search, string t_search, string q_search, FormCollection form)
         {
             var oBS_COLLECT_FORM_TMPLT = db.OBS_COLLECT_FORM_TMPLT.Include(o => o.DSC_CUSTOMER).Include(o => o.DSC_LC).Include(o => o.OBS_TYPE);
             List<SelectListItem> fullFuncList = setfullFuncList();
             int selectedFunctionId = -1;
             try
             {
-                selectedFunctionId = Convert.ToInt32(Request.QueryString["fullFuncList"]);              
+                selectedFunctionId = Convert.ToInt32(Request.QueryString["fullFuncList"]);
             }
             catch { }
 
             List<ObsColFormTemplate> ObsColFormTemplateList = new List<ObsColFormTemplate>();
-            if(selectedFunctionId >0)
+            if (selectedFunctionId > 0)
             {//case where function is selected
                 if (String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
                 {//scenario where user didn't pass any search strings
                     foreach (var x in oBS_COLLECT_FORM_TMPLT)
                     {
                         ObsColFormTemplate obsForm = new ObsColFormTemplate();
-                        if (obsForm.getAssignedFunctions(x.obs_cft_id).IndexOf(selectedFunctionId)!=-1)
+                        if (obsForm.getAssignedFunctions(x.obs_cft_id).IndexOf(selectedFunctionId) != -1)
                         {
                             obsForm.OBSformID = x.obs_cft_id;
                             obsForm.FormTitle = x.obs_cft_title;
@@ -54,7 +54,7 @@ namespace OBSMVC.Controllers
                             obsForm.FormSubtitle = x.obs_cft_subtitle;
                             ObsColFormTemplateList.Add(obsForm);
                         }
-                        
+
                     }//end of foreach
 
                 }// end of  if (String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
@@ -65,7 +65,7 @@ namespace OBSMVC.Controllers
                         if (matchesSearchCriteria(title_search, x.obs_cft_title + " " + x.OBS_TYPE.obs_type_name + " " + x.obs_cft_subtitle, t_search))
                         {
                             ObsColFormTemplate obsForm = new ObsColFormTemplate();
-                            if(obsForm.getAssignedFunctions(x.obs_cft_id).IndexOf(selectedFunctionId) != -1)
+                            if (obsForm.getAssignedFunctions(x.obs_cft_id).IndexOf(selectedFunctionId) != -1)
                             {
                                 obsForm.OBSformID = x.obs_cft_id;
                                 obsForm.FormTitle = string.Format(x.obs_cft_title);
@@ -82,7 +82,7 @@ namespace OBSMVC.Controllers
                                 obsForm.FormSubtitle = x.obs_cft_subtitle;
                                 ObsColFormTemplateList.Add(obsForm);
                             }
-                            
+
                         }
 
                     }//end of foreach
@@ -112,7 +112,7 @@ namespace OBSMVC.Controllers
                                 obsForm.FormSubtitle = x.obs_cft_subtitle;
                                 ObsColFormTemplateList.Add(obsForm);
                             }
-                              
+
 
                         }
                     }
@@ -143,13 +143,13 @@ namespace OBSMVC.Controllers
                                 ObsColFormTemplateList.Add(obsForm);//title search match
 
                             }
-                              
+
                         }
 
                     }//end of foreach
 
                 }
-                fullFuncList.Single(x =>x.Value== Request.QueryString["fullFuncList"]).Selected = true;
+                fullFuncList.Single(x => x.Value == Request.QueryString["fullFuncList"]).Selected = true;
             }// end of if(selectedFunctionId >0)
             else
             {//case where function is NOT passed
@@ -272,28 +272,61 @@ namespace OBSMVC.Controllers
 
             CollectionForm selectedColForm = new CollectionForm(id);
             if (selectedColForm == null) { return HttpNotFound(); }
-            
+
             return View(selectedColForm);
         }
 
         // GET: ColFormTemplate/Create
         public ActionResult Create()
         {
+            ViewData["errMsg"] = "Error. Cannot Retrieve Data from the Database.<br>Please contact the Service Desk!";
+            // First Check the Database Connection
+            try
+            {
+                int testDB = db.DSC_CUSTOMER.Count();
+                ViewData["errMsg"] = "DBOK";
+            }
+            catch
+            {
+                ViewData["errMsg"] = "DBerror";
+            }
+
             ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER, "dsc_cust_id", "dsc_cust_name");
             ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name");
             ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name");
             return View();
         }
-        
+
+        // POST: ColFormTemplate/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "obs_cft_id,obs_type_id,dsc_cust_id,dsc_lc_id,obs_cft_nbr,obs_cft_ver,obs_cft_eff_st_dt,obs_cft_eff_end_dt,obs_cft_title,obs_cft_subtitle")] OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT)
+        {
+            if (ModelState.IsValid)
+            {
+                db.OBS_COLLECT_FORM_TMPLT.Add(oBS_COLLECT_FORM_TMPLT);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER, "dsc_cust_id", "dsc_cust_name", oBS_COLLECT_FORM_TMPLT.dsc_cust_id);
+            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name", oBS_COLLECT_FORM_TMPLT.dsc_lc_id);
+            ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name", oBS_COLLECT_FORM_TMPLT.obs_type_id);
+            return View(oBS_COLLECT_FORM_TMPLT);
+        }
+
+
         //GET: List of Quesions
         [HttpGet]
-        public PartialViewResult getQuestions(string full_text_search, string metadata_search, int? page, int? pageSize)
+        public PartialViewResult getQuestionsList(string full_text_search, string metadata_search, int? page, int? pageSize)
         {
             //System.Threading.Thread.Sleep(2000);
             List<AvailableQuestions> availableQuestions = new List<AvailableQuestions>();
             if (String.IsNullOrWhiteSpace(full_text_search) && String.IsNullOrWhiteSpace(metadata_search))
             {//no search parameters passed
-               
+
                 List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now).OrderBy(x => x.obs_question_id).ToList();
                 foreach (OBS_QUESTION q in list_of_questions)
                 {
@@ -307,9 +340,9 @@ namespace OBSMVC.Controllers
             }
             else if (!String.IsNullOrWhiteSpace(full_text_search) && String.IsNullOrWhiteSpace(metadata_search))
             {//search by question text
-               
+
                 List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.ToLower().Contains(full_text_search.ToLower())).ToList();
-                if(list_of_questions.Count>0)
+                if (list_of_questions.Count > 0)
                 {
                     foreach (OBS_QUESTION q in list_of_questions)
                     {
@@ -320,12 +353,12 @@ namespace OBSMVC.Controllers
                         availableQuestions.Add(quest);
 
                     }
-                }                
+                }
             }
             else if (String.IsNullOrWhiteSpace(full_text_search) && !String.IsNullOrWhiteSpace(metadata_search))
             {//search by metadata
 
-                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now ).ToList();
+                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now).ToList();
 
                 foreach (OBS_QUESTION q in list_of_questions)
                 {
@@ -335,7 +368,7 @@ namespace OBSMVC.Controllers
                         quest.assigned_metadata = quest.getAssignedMetadata(q.obs_question_id);
                         foreach (string s in quest.assigned_metadata)
                         {
-                            if(s.ToLower().Contains(metadata_search.ToLower()))
+                            if (s.ToLower().Contains(metadata_search.ToLower()))
                             {
                                 quest.obs_question_id = q.obs_question_id;
                                 quest.obs_question_full_text = q.obs_question_full_text;
@@ -343,10 +376,10 @@ namespace OBSMVC.Controllers
                                 break;
                             }
                             else { continue; }
-                           
-                        }                                                         
-                       }
-                }               
+
+                        }
+                    }
+                }
             }
             else if (!String.IsNullOrWhiteSpace(full_text_search) && !String.IsNullOrWhiteSpace(metadata_search))
             {//search by metadata and full text
@@ -361,44 +394,44 @@ namespace OBSMVC.Controllers
                         if (quest.getAssignedMetadata(q.obs_question_id).Count > 0)
                         {
                             quest.assigned_metadata = quest.getAssignedMetadata(q.obs_question_id);
-                            foreach(string s in quest.assigned_metadata)
+                            foreach (string s in quest.assigned_metadata)
                             {
                                 if (s.ToLower().Contains(metadata_search.ToLower()))
                                 {
                                     quest.obs_question_id = q.obs_question_id;
                                     quest.obs_question_full_text = q.obs_question_full_text;
                                     availableQuestions.Add(quest);
-                                    break;                                 
-                               }
+                                    break;
+                                }
                                 else { continue; }
                             }
-                            
+
                         }
                     }
                 }
-                   
+
             }
-           
+
             List<AvailableQuestions> questions_for_display = availableQuestions.OrderBy(x => x.obs_question_id).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).Take(pageSize ?? 10).ToList();
-           
-            return PartialView("_getQuestions", questions_for_display);            
+
+            return PartialView("_getQuestionsList", questions_for_display);
         }
         public PartialViewResult getQuestionInfo(int question_id, int qCounter)
         {
             QuestionInfo questionInfo = new QuestionInfo();
             questionInfo.question_id = question_id;
             questionInfo.uniqueCounter = qCounter;
-            questionInfo.full_text = db.OBS_QUESTION.Single(item => item.obs_question_id == question_id).obs_question_full_text;          
-            List<OBS_QUEST_ANS_TYPES> QAInstances = db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == question_id && (x.obs_qat_end_eff_dt==null ||x.obs_qat_end_eff_dt>DateTime.Now)).ToList();
+            questionInfo.full_text = db.OBS_QUESTION.Single(item => item.obs_question_id == question_id).obs_question_full_text;
+            List<OBS_QUEST_ANS_TYPES> QAInstances = db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == question_id && (x.obs_qat_end_eff_dt == null || x.obs_qat_end_eff_dt > DateTime.Now)).ToList();
 
             if (QAInstances.Count() == 0)  //There were no records found in the 'OBS_QUEST_ANS_TYPES' Table for this question Id
             {
-                questionInfo.hasInstances = false;                         
+                questionInfo.hasInstances = false;
             }
             else
             {//there's a record(s) in 'OBS_QUEST_ANS_TYPES'. now we need to loop through all of them, add them to the list and find default answer type
-                
-                questionInfo.hasInstances = true;                
+
+                questionInfo.hasInstances = true;
                 foreach (OBS_QUEST_ANS_TYPES qaInstanceTemp in QAInstances)
                 {
                     questionInfo.obs_question_answer_types.Add(qaInstanceTemp);
@@ -409,24 +442,24 @@ namespace OBSMVC.Controllers
                     //now we need to find the corresponding answer type and assign it to the object
                     OBS_ANS_TYPE temp_answer = db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id);
                     questionInfo.assigned_answer_types.Add(temp_answer);
-                    SelectListItem answer_for_dropdown = new SelectListItem() { Text = temp_answer.obs_ans_type_name, Value = qaInstanceTemp.obs_qat_id.ToString()};
-                    questionInfo.question_assigned_answer_types.Add(answer_for_dropdown);                    
+                    SelectListItem answer_for_dropdown = new SelectListItem() { Text = temp_answer.obs_ans_type_name, Value = qaInstanceTemp.obs_qat_id.ToString() };
+                    questionInfo.question_assigned_answer_types.Add(answer_for_dropdown);
                     // lets check if this answer type requires selectable answers
-                    if(db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id).obs_ans_type_has_fxd_ans_yn=="Y")
+                    if (db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id).obs_ans_type_has_fxd_ans_yn == "Y")
                     {
                         {//if true, we need to list all of them and assign them to object's list of selectable answers
-                            foreach(OBS_QUEST_SLCT_ANS temp in db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qaInstanceTemp.obs_qat_id && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now))
-                            questionInfo.selectable_answers.Add(temp);                           
+                            foreach (OBS_QUEST_SLCT_ANS temp in db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qaInstanceTemp.obs_qat_id && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now))
+                                questionInfo.selectable_answers.Add(temp);
                         }
                     }
                 }
-              
+
             }
             if (questionInfo.default_qat_id > 0)
-            {               
+            {
                 questionInfo.question_assigned_answer_types.Single(x => x.Value == questionInfo.default_qat_id.ToString()).Selected = true;
-            }           
-            return PartialView("_getQuestionInfoFD",questionInfo);
+            }
+            return PartialView("_getQuestionInfoFD", questionInfo);
         }
         public String GetSelectableAnswers(string qat_id)
         {
@@ -449,32 +482,13 @@ namespace OBSMVC.Controllers
                     return sel_ans;
                 }
                 else { return ""; }
-            }        
+            }
         }
 
         public PartialViewResult addNewSection(string sCounter)
         {
             ViewData["sNumber"] = sCounter;
-            return PartialView("_addNewSection" );
-        }
-        // POST: ColFormTemplate/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "obs_cft_id,obs_type_id,dsc_cust_id,dsc_lc_id,obs_cft_nbr,obs_cft_ver,obs_cft_eff_st_dt,obs_cft_eff_end_dt,obs_cft_title,obs_cft_subtitle")] OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT)
-        {
-            if (ModelState.IsValid)
-            {
-                db.OBS_COLLECT_FORM_TMPLT.Add(oBS_COLLECT_FORM_TMPLT);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER, "dsc_cust_id", "dsc_cust_name", oBS_COLLECT_FORM_TMPLT.dsc_cust_id);
-            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name", oBS_COLLECT_FORM_TMPLT.dsc_lc_id);
-            ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name", oBS_COLLECT_FORM_TMPLT.obs_type_id);
-            return View(oBS_COLLECT_FORM_TMPLT);
+            return PartialView("_addNewSection");
         }
 
         // GET: ColFormTemplate/Edit/5
@@ -523,7 +537,7 @@ namespace OBSMVC.Controllers
             base.Dispose(disposing);
         }
         public class ObsColFormTemplate
-      {
+        {
             private DSC_OBS_DB_ENTITY OBSdb = new DSC_OBS_DB_ENTITY();
 
             //Constructor
@@ -560,13 +574,13 @@ namespace OBSMVC.Controllers
             public bool isActive { get; set; }
 
             [Display(Name = "Last Submitted on")]
-            [DisplayFormat(DataFormatString ="{0:g}")]
+            [DisplayFormat(DataFormatString = "{0:g}")]
             public DateTime? LastCompleteDate { get; set; }
 
             public string FormSubtitle { get; set; }
             public List<int> AssignedFunctions = new List<int>();
 
-           
+
             public int getAssignedQuestionCount(int cft_id)
             {
                 int quest_count = OBSdb.OBS_COL_FORM_QUESTIONS.Where(item => item.obs_cft_id == cft_id).Count();
@@ -577,33 +591,33 @@ namespace OBSMVC.Controllers
                 int times_compleded = OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id && !item.obs_cfi_comp_date.Equals(null)).Count();
                 return times_compleded;
             }
-           public DateTime? getLastCompleteDate(int cft_id)
+            public DateTime? getLastCompleteDate(int cft_id)
             {
-                return  OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date).Equals(null) ? null : OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date);
-                
+                return OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date).Equals(null) ? null : OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date);
+
             }
-           public List<int> getAssignedFunctions(int cft_if)
+            public List<int> getAssignedFunctions(int cft_if)
             {
                 List<int> AssignedFunctions = (from fc in OBSdb.OBS_COLLECT_FORM_TMPLT
-                                                  join t in OBSdb.OBS_TYPE on fc.obs_type_id equals t.obs_type_id
-                                                  join ots in OBSdb.OBS_TYPE_SUB_TYPES on t.obs_type_id equals ots.obs_type_id
-                                                  join os in OBSdb.OBS_SUB_TYPE on ots.obs_sub_type_id equals os.obs_sub_type_id
-                                                  where fc.obs_cft_id == cft_if && os.obs_sub_type_group == "FUNCTION"
-                                                  select os.obs_sub_type_id).ToList();
+                                               join t in OBSdb.OBS_TYPE on fc.obs_type_id equals t.obs_type_id
+                                               join ots in OBSdb.OBS_TYPE_SUB_TYPES on t.obs_type_id equals ots.obs_type_id
+                                               join os in OBSdb.OBS_SUB_TYPE on ots.obs_sub_type_id equals os.obs_sub_type_id
+                                               where fc.obs_cft_id == cft_if && os.obs_sub_type_group == "FUNCTION"
+                                               select os.obs_sub_type_id).ToList();
                 return AssignedFunctions;
             }
-          
+
 
 
 
         }
-        
+
         //---------------------------------------------HELPERS----------------------------------------//
         public List<int> searchQuestionsWithMatchingSearchCriteria(string search_for_string, string search_criteria)
         {
-             DSC_OBS_DB_ENTITY OBSdb = new DSC_OBS_DB_ENTITY();
-        List<int> cft_ids_with_matching_qiestions = new List<int>();
-           
+            DSC_OBS_DB_ENTITY OBSdb = new DSC_OBS_DB_ENTITY();
+            List<int> cft_ids_with_matching_qiestions = new List<int>();
+
             List<OBS_QUESTION> list_of_questions = (from q in OBSdb.OBS_QUESTION
                                                     join qa in OBSdb.OBS_QUEST_ANS_TYPES
                                                     on q.obs_question_id equals qa.obs_question_id
@@ -617,20 +631,20 @@ namespace OBSMVC.Controllers
             {
                 case "Any":
                     foreach (OBS_QUESTION quest in list_of_questions)
-                    {                       
+                    {
                         if (matchesSearchCriteria(search_for_string, quest.obs_question_full_text, search_criteria))
                         {
 
-                              List<int> temp  = (from q in OBSdb.OBS_QUESTION
-                                                               join qa in OBSdb.OBS_QUEST_ANS_TYPES
-                                                               on q.obs_question_id equals qa.obs_question_id
-                                                               join fq in OBSdb.OBS_COL_FORM_QUESTIONS
-                                                                on qa.obs_qat_id equals fq.obs_qat_id
-                                                               where q.obs_question_id == quest.obs_question_id
-                                                               select fq.obs_cft_id).Distinct().ToList();
+                            List<int> temp = (from q in OBSdb.OBS_QUESTION
+                                              join qa in OBSdb.OBS_QUEST_ANS_TYPES
+                                              on q.obs_question_id equals qa.obs_question_id
+                                              join fq in OBSdb.OBS_COL_FORM_QUESTIONS
+                                               on qa.obs_qat_id equals fq.obs_qat_id
+                                              where q.obs_question_id == quest.obs_question_id
+                                              select fq.obs_cft_id).Distinct().ToList();
                             cft_ids_with_matching_qiestions = temp.Union(cft_ids_with_matching_qiestions).ToList();
                         }
-                        
+
                     }
                     break;
 
@@ -640,12 +654,12 @@ namespace OBSMVC.Controllers
                         if (matchesSearchCriteria(search_for_string, quest.obs_question_full_text, search_criteria))
                         {
                             List<int> temp = (from q in OBSdb.OBS_QUESTION
-                                                               join qa in OBSdb.OBS_QUEST_ANS_TYPES
-                                                               on q.obs_question_id equals qa.obs_question_id
-                                                               join fq in OBSdb.OBS_COL_FORM_QUESTIONS
-                                                                on qa.obs_qat_id equals fq.obs_qat_id
-                                                               where q.obs_question_id == quest.obs_question_id
-                                                               select fq.obs_cft_id).Distinct().ToList();
+                                              join qa in OBSdb.OBS_QUEST_ANS_TYPES
+                                              on q.obs_question_id equals qa.obs_question_id
+                                              join fq in OBSdb.OBS_COL_FORM_QUESTIONS
+                                               on qa.obs_qat_id equals fq.obs_qat_id
+                                              where q.obs_question_id == quest.obs_question_id
+                                              select fq.obs_cft_id).Distinct().ToList();
                             cft_ids_with_matching_qiestions = temp.Union(cft_ids_with_matching_qiestions).ToList();
                         }
                     }
@@ -671,7 +685,7 @@ namespace OBSMVC.Controllers
             if (DateTime.Today >= start_date && DateTime.Today < end_date) { return true; }
             else { return false; }
         }
-        
+
         public static bool matchesSearchCriteria(string search_for_string, string search_in, string search_criteria)
         {
             string[] splitterm = { " " };
@@ -685,7 +699,7 @@ namespace OBSMVC.Controllers
                         else { continue; }
                     }
                     return false;
-                
+
                 case "All":
                     foreach (string s in splitted_search_string)
                     {
@@ -693,20 +707,20 @@ namespace OBSMVC.Controllers
                         else { return false; }
                     }
                     return true;
-                  
+
                 case "Exact":
                     if (search_in.ToLower().Contains(search_for_string.ToLower())) { return true; }
                     else return false;
 
                 default:
-                   return false;
+                    return false;
             }
-            
+
         }
-        public  List<SelectListItem> setfullFuncList()
+        public List<SelectListItem> setfullFuncList()
         {
             List<OBS_SUB_TYPE> oBS_SUB_TYPE = db.OBS_SUB_TYPE.Where(x => x.obs_sub_type_group == "FUNCTION").ToList();
-         
+
             List<SelectListItem> fullFuncList = new List<SelectListItem>();
             foreach (OBS_SUB_TYPE temp in oBS_SUB_TYPE)
             {
@@ -783,7 +797,7 @@ namespace OBSMVC.Controllers
         public string cft_Status { get; set; }
         public int cft_Nbr { get; set; }
         public int cft_Version { get; set; }
-        public List<CollectionFormSection> colFormSections { get; set; }        
+        public List<CollectionFormSection> colFormSections { get; set; }
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\\
         //- - - - - - - - - - - - CLASS METHODS - - - - - - - - - - - - - - - - |
         private void retrieveQuestionData()
@@ -805,9 +819,9 @@ namespace OBSMVC.Controllers
                     if (!newSectionName.Equals(oldSectionName))   // --- If this is a new Section ---
                     {
                         sectionCounter++;
-                      // If this is not the first section. Add the old Section to the List
+                        // If this is not the first section. Add the old Section to the List
                         if (!oldSectionName.Equals("undefined")) { colFormSections.Add(oSection); }
-                      //Create a new Section from scratch
+                        //Create a new Section from scratch
                         oSection = new CollectionFormSection();
                         oSection.sectionNumber = sectionCounter;
                         oSection.sectionName = q.OBS_FORM_SECTION.obs_form_section_name;
@@ -820,19 +834,19 @@ namespace OBSMVC.Controllers
                     oQuestion.cfq_questId = q.OBS_QUEST_ANS_TYPES.obs_question_id;
                     oQuestion.cfq_order = q.obs_col_form_quest_order;
                     oQuestion.cfq_seqInForm = questionCounter.ToString("00");
-                    oQuestion.cfq_fullText = q.OBS_QUEST_ANS_TYPES.OBS_QUESTION.obs_question_full_text.Replace(": (",":<br/>(");
+                    oQuestion.cfq_fullText = q.OBS_QUEST_ANS_TYPES.OBS_QUESTION.obs_question_full_text.Replace(": (", ":<br/>(");
                     oQuestion.cfq_AT = q.OBS_QUEST_ANS_TYPES.OBS_ANS_TYPE.obs_ans_type_name;
                     oQuestion.cfq_qatId = q.obs_qat_id;
                     oQuestion.cfq_SelectableAnswers = q.OBS_QUEST_ANS_TYPES.OBS_QUEST_SLCT_ANS.OrderBy(xx => xx.obs_qsa_order).Select(x => x.obs_qsa_text).ToList();
                     // .... Populate the rest of the oQuestion properties
                     oSection.colFormQuestionList.Add(oQuestion);
-                    
+
                     // reset the name of the old  section indicator
                     oldSectionName = newSectionName;
                     questionCounter++;
                 } // End of For-each question loop
                 //Finally add the last populated section to the section List
-                colFormSections.Add(oSection);            
+                colFormSections.Add(oSection);
             }
         }
         //------------------
@@ -841,11 +855,11 @@ namespace OBSMVC.Controllers
     public class CollectionFormSection
     {
         public int sectionNumber = 0;
-       public string sectionName = String.Empty;
-       public string sectionViewId = String.Empty;
-       public List<CollectionFormQuestion> colFormQuestionList { get; set; }
-       // --- Constructor --------
-       public CollectionFormSection() { colFormQuestionList = new List<CollectionFormQuestion>(); }
+        public string sectionName = String.Empty;
+        public string sectionViewId = String.Empty;
+        public List<CollectionFormQuestion> colFormQuestionList { get; set; }
+        // --- Constructor --------
+        public CollectionFormSection() { colFormQuestionList = new List<CollectionFormQuestion>(); }
     }
     public class CollectionFormQuestion
     {
@@ -863,7 +877,7 @@ namespace OBSMVC.Controllers
         public string cfq_AT { get; set; }
         public List<string> cfq_SelectableAnswers { get; set; }
         public List<string> cfq_AnsHTML { get; set; }      //HTML Code passes to the view to render the answer info
-        
+
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\\
         //- - - - - - - - - - - - CLASS METHODS - - - - - - - - - - - - - - - - |
         //.... TODO ....
@@ -879,7 +893,7 @@ namespace OBSMVC.Controllers
         [Required]
         [Display(Name = "Full Text")]
         public string obs_question_full_text { set; get; }
-        [Display(Name="Assigned Meta Data")]
+        [Display(Name = "Assigned Meta Data")]
         public List<string> assigned_metadata;
 
         public List<string> getAssignedMetadata(int qid)
@@ -903,7 +917,7 @@ namespace OBSMVC.Controllers
         public string full_text { set; get; }
         public bool hasInstances { get; set; }
         public int default_qat_id = -1;
-       
+
         public List<OBS_ANS_TYPE> assigned_answer_types = new List<OBS_ANS_TYPE>();
         public List<OBS_QUEST_SLCT_ANS> selectable_answers = new List<OBS_QUEST_SLCT_ANS>();
         public List<OBS_QUEST_ANS_TYPES> obs_question_answer_types = new List<OBS_QUEST_ANS_TYPES>();
@@ -911,5 +925,5 @@ namespace OBSMVC.Controllers
         public int uniqueCounter { set; get; }
 
     }
-    
+
 }

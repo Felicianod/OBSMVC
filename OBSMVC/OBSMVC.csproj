@@ -508,7 +508,7 @@
     <Content Include="Views\ColFormTemplate\Details.cshtml" />
     <Content Include="Views\ColFormTemplate\Edit.cshtml" />
     <Content Include="Views\ColFormTemplate\Index.cshtml" />
-    <Content Include="Views\ColFormTemplate\_getQuestions.cshtml" />
+    <Content Include="Views\ColFormTemplate\_getQuestionsList.cshtml" />
     <Content Include="Views\ColFormTemplate\_getQuestionInfo.cshtml" />
     <Content Include="Views\Section\Create.cshtml" />
     <Content Include="Views\Section\Delete.cshtml" />

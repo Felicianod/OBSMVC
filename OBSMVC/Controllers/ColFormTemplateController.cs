@@ -758,7 +758,8 @@ namespace OBSMVC.Controllers
                     int cft_id = db.OBS_COLLECT_FORM_TMPLT.Single(item => item.obs_cft_nbr == cft_number && item.obs_cft_ver == 1).obs_cft_id;
                     foreach(string question in form_questions_from_gui)
                     {
-                        
+                        //now lets first save split the string we received from the gui
+                        // string format should be: order,qat_id,section_text
                         string[] splitterm = { "," };
                         string[] parsed_question = question.Split(splitterm, StringSplitOptions.RemoveEmptyEntries);
                         short order = Convert.ToInt16(parsed_question[0]);

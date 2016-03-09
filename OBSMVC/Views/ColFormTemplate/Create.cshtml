@@ -1,22 +1,75 @@
 ﻿@model OBSMVC.Models.OBS_COLLECT_FORM_TMPLT
 @{ ViewBag.Title = "Create"; }
 
-<div class="well well-sm wellDSC"><h3 class="col-md-offset-1">Collection Form Creation</h3></div>
+@*===========================================  STYLES, SCRIPTS AND ANOTATIONS =====================================================*@
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+<script>
+    $(function () {
+        $("#sortable").sortable({
+            revert: true
+        });
+        $("#draggable").draggable({
+            connectToSortable: "#sortable",
+            helper: "clone",
+            revert: "invalid"
+        });
+        $(".ulElement, .liElement").disableSelection();
+    });
+</script>
+
 <style>
-    .droptarget {        
+    .droptarget {
         margin: 5px;
         padding: 3px;
         border: 1px solid #aaaaaa;
     }
+    .ulElement {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        margin-bottom: 10px;
+    }
+    .liElement {
+        margin: 10px;
+        padding: 5px;
+        width: 98%;
+    }
 </style>
+<script>
+    $(function () {
+        $("#sortable").sortable({
+            revert: true
+        });
+        $("#draggable").draggable({
+            connectToSortable: "#sortable",
+            helper: "clone",
+            revert: "invalid"
+        });
+        $("ul, li").disableSelection();
+    });
+</script>
+
+@*=====================================================  MAIN VIEW PAGE ===========================================================*@
+<div class="well well-sm nopadding"><h3 class="col-md-offset-1">Collection Form Creation</h3></div>
+
+@if (ViewData["errMsg"].ToString() != "DBOK")
+{
+    <div class="form-group row">
+        <div class="alert alert-danger col-sm-12">
+            <strong>Warning!</strong> Failed to Connect to the Database to retrive Information
+        </div>
+    </div>
+}
 
 @*====================== BEGINING OF THE "CREATE COLLECTION FORM" FORM =========================*@
 @using (Html.BeginForm())
 {
-  @Html.AntiForgeryToken()
-  <div class="panel panel-default">
-      @*---------------------- FORM HEADER ------------------------- *@
-      <div class="panel-heading header">
+    @Html.AntiForgeryToken()
+    <div class="panel panel-default">
+        @*---------------------- FORM HEADER ------------------------- *@
+        <div class="panel-heading header">
             <div class="form-group row">
                 <div class="col-sm-7">
                     <label for="obs_cft_title" class="col-sm-2 form-control-label">FORM TITLE:</label>
@@ -33,26 +86,29 @@
                 </div>
             </div>
 
-            <div class="form-group row">
-                <div class="col-sm-4">
-                    <div class="input-group">
-                        <div class="input-group-addon">Observation Type</div>
-                        @Html.DropDownList("obs_type_id", null, htmlAttributes: new { @class = "form-control" })
+            @if (ViewData["errMsg"].ToString() == "DBOK")
+            {
+                <div class="form-group row">
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon">Observation Type</div>
+                            @Html.DropDownList("obs_type_id", null, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon">Customer</div>
+                            @Html.DropDownList("dsc_cust_id", null, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon">Whse Location</div>
+                            @Html.DropDownList("dsc_lc_id", null, htmlAttributes: new { @class = "form-control" })
+                        </div>
                     </div>
                 </div>
-                <div class="col-sm-4">
-                    <div class="input-group">
-                        <div class="input-group-addon">Customer</div>
-                        @Html.DropDownList("dsc_cust_id", null, htmlAttributes: new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="input-group">
-                        <div class="input-group-addon">Whse Location</div>
-                        @Html.DropDownList("dsc_lc_id", null, htmlAttributes: new { @class = "form-control" })
-                    </div>
-                </div>
-            </div>
+            }
 
             <div class="form-group row">
                 <div class="col-sm-4">
@@ -76,147 +132,162 @@
 
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         </div>
-      @*---------------------- FORM BODY --------------------------- *@
-      <div class="panel-body content">
-         <div class="row">
-            @*/---------------- Below is the MAIN FORM QUESTION DETAIL DISPLAY PANEL ----------------------\*@
-            <div class="col-md-7 personal-info">
-               @*
-                    *******************************************************************************
-                      RASUL,
-                       you will be working and testing on this section to trigger the AJAX call
-                       and to update this section with the partial view !!!!!!!!!!!!!!!!
-                    ******************************************************************************@
-               @*<div class="input-group col-md-6">
+        @*---------------------- FORM BODY --------------------------- *@
+        <div class="panel-body content">
+            <div class="row">
+                @*/---------------- Below is the MAIN FORM QUESTION DETAIL DISPLAY PANEL ----------------------\*@
+                <div class="col-md-7 personal-info">
+                    @*
+                        *******************************************************************************
+                          RASUL,
+                           you will be working and testing on this section to trigger the AJAX call
+                           and to update this section with the partial view !!!!!!!!!!!!!!!!
+                        ******************************************************************************@
+                    @*<div class="input-group col-md-6">
                            <input type="text" id="droppedQId" class="form-control" placeholder="Question Id to Add...">
                            <span class="input-group-btn">
                               <button id="displayQID" class="btn btn-primary" type="button">Add Question!</button>
                            </span>
                         </div><!-- /input-group -->
                         <hr />
-               *@
+                    *@
 
-                <input type="hidden" id="qCounter" value="1" />
-                <input type="hidden" id="sCounter" value="1" />
+                    <input type="hidden" id="qCounter" value="1" />
+                    <input type="hidden" id="sCounter" value="1" />
 
-                <div class="panel-group" id="accordion">
-                @*  ################################   W A R N I N G   #####################################
-                *******************************************************************************
-                  Do not touch this section
-                  This is the New Form Question Main Panel
-                  DO NOT CHANGE OR MODIFY  Feliciano is testing it !!!!!!!!!
-                ******************************************************************************@
-                   
-
-
-                   <div class="panel panel-default">
-                       <div class="panel-heading">
-                           <h4 class="panel-title">
-                               @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
-                               <a class="accordion-toggle" data-toggle="collapse" href="#section001">
-                                   <span class="glyphicon glyphicon-minus">&nbsp;</span>
-                                   <span>Section# 1</span>                                   
-                               </a>
-                               <input type="text" value="[Default Section Name]" id="section001Name" />
-                           </h4>
-                       </div>
-                       <div id="section001" class="panel-collapse collapse in " @*style="border:dashed; border-width:thin"*@>
-
-
-                                           
-                           <div id="questionPnl01" class="droptarget" ondrop="addQid(event)" ondragover="allowDrop(event)">
-                               @*<<< THE PARTIAL VIEW QUESTION DETAILS <br/>RETURNED BY AJAX CALL WILL BE PLACED HERE >>>*@
-                               <table id="table1" style="width:100%; text-align:center">
-                                   <tr>
-                                       <td>
-                                           <span style="background-color:lightblue; width:100%">--- DROP YOUR QUESTION HERE ---</span> 
-                                       </td>
-                                   </tr>
-                               </table>
-                           </div>
-
-
-                       </div> @*End of Section "section001"*@
-
-                   </div>
+                    <div class="panel-group" id="accordion">
+                        @*  ################################   W A R N I N G   #####################################
+                            *******************************************************************************
+                              Do not touch this section
+                              This is the New Form Question Main Panel
+                              DO NOT CHANGE OR MODIFY  Feliciano is testing it !!!!!!!!!
+                            ******************************************************************************@
 
 
 
+                        <div class="panel panel-default">
+                            <div class="panel-heading form-inline">
+                                <h4 class="panel-title">
+                                    @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
+                                    <a class="accordion-toggle" data-toggle="collapse" href="#section001">
+                                        <span class="glyphicon glyphicon-minus">&nbsp;</span>
+                                        <span>Section# 1</span>
+                                    </a>
+                                    &nbsp;&nbsp;
+                                    <input type="text" id="section001Name" class="form-control" style="width:50%" placeholder="<Enter Section Name>"/>
+                                </h4>
+                            </div>
+                            <div id="section001" class="panel-collapse collapse in " @*style="border:dashed; border-width:thin"*@>
+                                <div style="text-align:center; background-color:lightblue; width:100%">
+                                    <span style="background-color:lightblue; width:100%">--- DROP YOUR QUESTION HERE ---</span>
+                                </div>
+                                <ul id="sortable" class="list-group">
+                                    <li class="list-group-item ui-state-default liElement">Item 1</li>
+                                    <li class="list-group-item ui-state-default liElement">Item 2</li>
+                                    <li class="list-group-item ui-state-default liElement">Item 3</li>
+                                    <li class="list-group-item ui-state-default liElement">Item 4</li>
+                                    <li class="list-group-item ui-state-default liElement">Item 5</li>
+                                </ul>
+                                <div id="questionPnl01" class="droptarget" ondrop="addQid(event)" ondragover="allowDrop(event)">
+                                    @*<<< THE PARTIAL VIEW QUESTION DETAILS <br/>RETURNED BY AJAX CALL WILL BE PLACED HERE >>>*@
+                                    <table id="table1" style="width:100%; text-align:center">
+                                        <tr>
+                                            <td>
+                                                
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+
+                            </div> @*End of Section "section001"*@
+
+                        </div>
 
 
 
 
 
 
-                @* ############### END OF PANEL USED by Feliciano For Testing ##################    *@
+
+
+
+                        @* ############### END OF PANEL USED by Feliciano For Testing ##################    *@
+
+
+
+
+
+
+
+                    </div>
+                    @*When This button is clicked, add a new view to the "accordion" <DIV> section*@
+                    <input type="button" id="btnAddSection" value="Add New Section" />
+
+
+                    @*\--------------- END OF THE MAIN QUESTION DISPLAY PANEL -------------------/*@
                 </div>
-                @*When This button is clicked, add a new view to the "accordion" <DIV> section*@
-                <input type="button" id="btnAddSection" value="Add New Section" />
 
+                @*// **************** Below is the Panel with the Question's Library ***************** *@
+                <div class="col-md-5 personal-info">
 
-               @*\--------------- END OF THE MAIN QUESTION DISPLAY PANEL -------------------/*@
-            </div>
-
-            @*// **************** Below is the Panel with the Question's Library ***************** *@
-            <div class="col-md-5 personal-info">
-
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <table style="width:100%">
-                    <tr>
-                        <td colspan="2" style="text-align:center; font-size:large"><b>"QUESTION LIBRARY"</b></td>
-                    </tr>
-                    <tr>
-                        <td style="width:30%">
-                            Enter Search Text:
-                        </td>
-                        <td style="width:70%">
-                            @Html.TextBox("full_text_search", "", new { @class = "form-control" })
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Metadata Search:
-                        </td>
-                        <td>
-                            @Html.TextBox("metadata_search", "", new { @class = "form-control" })
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button type="button" id="doSearch" class="btn btn-primary" data-loading-text="Please Wait...">Search Questions</button>
-                            @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
-                                              HttpMethod = "GET",
-                                              UpdateTargetId = "resultPanel",
-                                              InsertionMode = InsertionMode.Replace,
-                                              LoadingElementId = "divLoading"
-                                })*@
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="panel-body">
-                @*<div>
-                        @Html.Action("getQuestions", new { full_text_search = "", metadata_search = "" })
-                    </div>*@
-                <div id="resultPanel">
-                    [Results]
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <table style="width:100%">
+                                <tr>
+                                    <td colspan="2" style="text-align:center; font-size:large"><b>"QUESTION LIBRARY"</b></td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%">
+                                        Enter Search Text:
+                                    </td>
+                                    <td style="width:70%">
+                                        @Html.TextBox("full_text_search", "", new { @class = "form-control" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Metadata Search:
+                                    </td>
+                                    <td>
+                                        @Html.TextBox("metadata_search", "", new { @class = "form-control" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <button type="button" id="doSearch" class="btn btn-primary" data-loading-text="Please Wait...">Search Questions</button>
+                                        @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
+                                                          HttpMethod = "GET",
+                                                          UpdateTargetId = "resultPanel",
+                                                          InsertionMode = InsertionMode.Replace,
+                                                          LoadingElementId = "divLoading"
+                                            })*@
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="panel-body">
+                            @*<div>
+                                    @Html.Action("getQuestions", new { full_text_search = "", metadata_search = "" })
+                                </div>*@
+                            <div id="resultPanel">
+                                [Results]
+                            </div>
+                            <div id="divLoading" style="display:none">
+                                @*<img src="@Url.Content("~/Images/LoadingData.gif")" alt="" />*@
+                                <img src="~/Images/LoadingData.gif" />
+                            </div>
+                        </div>
+                    </div> @*------------- End of Question Library Panel ---------------*@
                 </div>
-                <div id="divLoading" style="display:none">
-                    @*<img src="@Url.Content("~/Images/LoadingData.gif")" alt="" />*@
-                    <img src="~/Images/LoadingData.gif" />
-                </div>
+            </div>@*---- END OF FORM BODY -------*@
+        </div>
+        <div class="row">
+            <div class="col-md-offset-2 col-md-10">
+                <input id="btnSaveForm" type="submit" value="Save Form" disabled="disabled" />
             </div>
-        </div> @*------------- End of Question Library Panel ---------------*@
+        </div>
     </div>
-         </div>@*---- END OF FORM BODY -------*@
-      </div>
-      <div class="row">
-         <div class="col-md-offset-2 col-md-10">
-             <input id="btnSaveForm" type="submit" value="Save Form" disabled="disabled" />
-         </div>
-      </div>
-  </div>
 }
 
 @*====================== END OF THE "CREATE COLLECTION FORM" FORM =========================*@
@@ -237,33 +308,33 @@
         //var url = "/ColFormTemplate/getQuestions";
         //$.get(url, { full_text_search: "", metadata_search: "" }, function (data) {
         //    $("#resultPanel").html(data);
-       //});
+        //});
 
-       // ---- Fetch the Values that wil be used as parameters on the AJAX call -------
-       var searchText = $("#full_text_search").val();
-       var searchMD = $("#metadata_search").val();
-       // ------------ Make the Ajax Call ---------------------------------------------
-       $.ajax({
-       @*url: '@Url.Action("getQuestions", "ColFormTemplate", new { full_text_search = searchText, metadata_search = searchMD })',*@
-       url: '@Url.Action("getQuestions", "ColFormTemplate")',
-       method: "GET",
-       cache: false,
-       data: { full_text_search: searchText, metadata_search: searchMD, page: 1, pageSize: 10 },     //<---- Data Parameters (if not already passed in the Url)
-       //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-       //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-       //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-       //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+        // ---- Fetch the Values that wil be used as parameters on the AJAX call -------
+        var searchText = $("#full_text_search").val();
+        var searchMD = $("#metadata_search").val();
+        // ------------ Make the Ajax Call ---------------------------------------------
+        $.ajax({
+            @*url: '@Url.Action("getQuestions", "ColFormTemplate", new { full_text_search = searchText, metadata_search = searchMD })',*@
+            url: '@Url.Action("getQuestionsList", "ColFormTemplate")',
+            method: "GET",
+            cache: false,
+            data: { full_text_search: searchText, metadata_search: searchMD, page: 1, pageSize: 10 },     //<---- Data Parameters (if not already passed in the Url)
+            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
 
-       //--- On error, execute this function ------
-       error: function () {
-           alert("Failed to render the Question List from the Database !!");  //<-- Trap and alert of any errors if they occurred
-           $btn.button('reset');
-        }
-       }).done(function (d) {
-           //Execute this code After the Ajax call completes successfully
-          $("#resultPanel").html(d);
-          $btn.button('reset');
-       });
+            //--- On error, execute this function ------
+            error: function () {
+                alert("Failed to render the Question List from the Database !!");  //<-- Trap and alert of any errors if they occurred
+                $btn.button('reset');
+            }
+        }).done(function (d) {
+            //Execute this code After the Ajax call completes successfully
+            $("#resultPanel").html(d);
+            $btn.button('reset');
+        });
     })
 </script>
 
@@ -291,7 +362,7 @@
                 $btn.button('reset');
             }
         }).done(function (d) {
-            //Execute this code After the Ajax call completes successfully            
+            //Execute this code After the Ajax call completes successfully
             $("#accordion").append(d);
             $btn.button('reset');
         });
@@ -320,8 +391,7 @@
         format: "DD, d MM, yy"
     });
 
-    function removeSection(qSectionId)
-    {
+    function removeSection(qSectionId) {
         $("#" + qSectionId).remove();
     }
 
@@ -444,7 +514,7 @@
         event.preventDefault();
         alert("Something was dropped");
         if (event.target.className == "droptarget") {
-            // Perfomr the add routine only if the target is a class type 'droptarget' 
+            // Perfomr the add routine only if the target is a class type 'droptarget'
             //document.getElementById("demo").style.color = "";
             event.target.style.border = "";
             var dataId = event.dataTransfer.getData("Text"); // "Id" of the dragged data element

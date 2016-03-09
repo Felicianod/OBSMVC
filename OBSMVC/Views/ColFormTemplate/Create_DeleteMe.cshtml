@@ -1,9 +1,5 @@
-﻿@model OBSMVC.Models.OBS_COLLECT_FORM_TMPLT
-@{ ViewBag.Title = "Create"; }
-
+﻿
 @*===========================================  STYLES, SCRIPTS AND ANOTATIONS =====================================================*@
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
 <script>
     $(function () {
@@ -44,39 +40,13 @@
 
 
 @*=====================================================  MAIN VIEW PAGE ===========================================================*@
-<div class="well well-sm nopadding"><h3 class="col-md-offset-1">Collection Form Creation</h3></div>
-
-@if (ViewData["errMsg"].ToString() != "DBOK")
-{
-    <div class="form-group row">
-        <div class="alert alert-danger col-sm-12">
-            <strong>Warning!</strong> Failed to Connect to the Database to retrive Information
-        </div>
-    </div>
-}
 
 @*====================== BEGINING OF THE "CREATE COLLECTION FORM" FORM =========================*@
 
     <form class="form-horizontal" role="form" method="post">
-        @Html.AntiForgeryToken()
+      
         <div class="panel panel-default">
-            @*---------------------- FORM HEADER ------------------------- *@
             <div class="panel-heading header">
-                <div class="form-group row">
-                    <div class="col-sm-7">
-                        <label for="obs_cft_title" class="col-sm-2 form-control-label">FORM TITLE:</label>
-                        <div class="col-sm-10">
-                            @Html.EditorFor(model => model.obs_cft_title, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
-                            @Html.ValidationMessageFor(model => model.obs_cft_title, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="col-sm-5">
-                        <label for="obs_cft_title" class="col-sm-2 form-control-label" style="text-align:right">Subtitle:</label>
-                        <div class="col-sm-10">
-                            @Html.EditorFor(model => model.obs_cft_subtitle, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
-                        </div>
-                    </div>
-                </div>
 
                 @if (ViewData["errMsg"].ToString() == "DBOK")
             {
@@ -305,11 +275,6 @@
                         </div> @*------------- End of Question Library Panel ---------------*@
                     </div>
                 </div>@*---- END OF FORM BODY -------*@
-            </div>
-            <div class="row">
-                <div class="col-md-offset-2 col-md-10">
-                    <input id="btnSaveForm" type="submit" value="Save Form" @*disabled="disabled"*@ />
-                </div>
             </div>
         </div>
     </form>

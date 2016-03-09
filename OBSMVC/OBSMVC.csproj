@@ -517,6 +517,8 @@
     <Content Include="Views\Section\Index.cshtml" />
     <Content Include="Views\ColFormTemplate\_addNewSection.cshtml" />
     <Content Include="Views\ColFormTemplate\_getQuestionInfoFD.cshtml" />
+    <Content Include="Views\ColFormTemplate\CreateForm.cshtml" />
+    <Content Include="Views\ColFormTemplate\Create_DeleteMe.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

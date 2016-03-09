@@ -2,6 +2,36 @@
 @{
     ViewBag.Title = "Edit Employee Profile";
 }
+
+<script>
+    $(document).ready(function () {
+        var isChanged = false;
+        $('input, select, textarea').change(function () {
+            //$("input[type='submit']").removeAttr("disabled");
+            $("#btnSubmit").removeAttr('disabled');
+            isChanged = true;
+        });
+        $(window).bind('beforeunload', function () {
+            if (isChanged) {
+                return 'There are unsaved changed. Do you want to discard Changes and Exit?';
+            } else {
+                return undefined;
+            }
+        });
+        $("#btnSubmit").click(function () {
+            isChanged = false;
+            $(this).button('loading');
+        });
+        //$(".btn").click(function () {
+        //    isChanged = false;
+        //    $(this).button('loading');
+        //});
+    });
+</script>
+
+
+
+
 <br />
 <div class="container">
     <h1>Edit Profile</h1>
@@ -26,31 +56,6 @@
         });
     </script> *@
     <!-- Form Edit State Change Validation -->
-    <script>
-        $(document).ready(function () {
-            var isChanged = false;
-            $('input, select, textarea').change(function () {
-                //$("input[type='submit']").removeAttr("disabled");
-                $("#btnSubmit").removeAttr('disabled');
-                isChanged = true;
-            });
-            $(window).bind('beforeunload', function () {
-                if (isChanged) {
-                    return 'There are unsaved changed. Do you want to discard Changes and Exit?';
-                } else {
-                    return undefined;
-                }
-            });
-            $("#btnSubmit").click(function () {
-                isChanged = false;
-                $(this).button('loading');
-            });
-            //$(".btn").click(function () {
-            //    isChanged = false;
-            //    $(this).button('loading');
-            //});
-        });
-    </script>
     <!-- left column -->
     <div class="col-md-3">
         <div class="text-left">

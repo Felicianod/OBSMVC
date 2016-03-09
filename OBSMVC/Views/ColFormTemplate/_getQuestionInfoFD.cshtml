@@ -7,6 +7,7 @@
   }
 
 <div class="row " id="@qViewId" style="text-align:left">
+    @{var rowInfo = Model.uniqueCounter; }
     <div class="row" >
         <div class="col-sm-1" style="text-align:right">
             [@Model.uniqueCounter]
@@ -49,6 +50,8 @@
             </div>
     </div>        
     </div>
+    @{ rowInfo += "as001" + "seccion001"; }
+    <input type="hidden" id="formQuestions" value="@rowInfo" />
     <hr />
 </div>
 

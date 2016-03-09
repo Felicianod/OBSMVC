@@ -754,10 +754,75 @@ namespace OBSMVC.Controllers
             return fullFuncList;
         }
 
-        public void saveForm(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLY)
+        private void saveForm(OBS_COLLECT_FORM_TMPLT template_from_form, string[] form_questions_from_gui)
         {
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    //first we need to save OBS_COLLECT_FORM_TMPLT table data
+                    OBS_COLLECT_FORM_TMPLT template_to_save = new OBS_COLLECT_FORM_TMPLT();
+                    template_to_save.dsc_cust_id = template_from_form.dsc_cust_id;
+                    template_to_save.obs_type_id = template_from_form.obs_type_id;
+                    template_to_save.dsc_lc_id = template_from_form.dsc_lc_id;
+                    short cft_number = (short)(db.OBS_COLLECT_FORM_TMPLT.Max(x => x.obs_cft_nbr) + 1);
+                    template_to_save.obs_cft_nbr = cft_number;
+                    template_to_save.obs_cft_ver = 1;
+                    template_to_save.obs_cft_title = template_from_form.obs_cft_title;
+                    template_to_save.obs_cft_subtitle = template_from_form.obs_cft_subtitle;
+                    template_to_save.obs_cft_eff_st_dt = template_from_form.obs_cft_eff_st_dt;
+                    template_to_save.obs_cft_eff_end_dt = template_from_form.obs_cft_eff_end_dt;
+                    db.OBS_COLLECT_FORM_TMPLT.Add(template_to_save);
+                    db.SaveChanges();
+
+                    //now we need to query OBS_COLLECT_FORM_TMPLT table to find CFT ID we just created
+                    int cft_id = db.OBS_COLLECT_FORM_TMPLT.Single(item => item.obs_cft_nbr == cft_number && item.obs_cft_ver == 1).obs_cft_id;
+                    foreach (string question in form_questions_from_gui)
+                    {
+                        //now lets first save split the string we received from the gui
+                        // string format should be: order,qat_id,section_text
+                        string[] splitterm = { "," };
+                        string[] parsed_question = question.Split(splitterm, StringSplitOptions.RemoveEmptyEntries);
+                        short order = Convert.ToInt16(parsed_question[0]);
+                        int qat_id = Convert.ToInt32(parsed_question[1]);
+                        int form_section_id = getSectionID(parsed_question[2]);
+                        OBS_COL_FORM_QUESTIONS new_form_question = new OBS_COL_FORM_QUESTIONS();
+                        new_form_question.obs_cft_id = cft_id;
+                        new_form_question.obs_form_section_id = form_section_id;
+                        new_form_question.obs_qat_id = qat_id;
+                        new_form_question.obs_col_form_quest_order = order;
+                        new_form_question.obs_col_form_quest_wgt = 1;
+                        new_form_question.obs_col_form_quest_na_yn = "Y";
+                        db.OBS_COL_FORM_QUESTIONS.Add(new_form_question);
+                        db.SaveChanges();
+                    }
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+
+                }
+            }//end of  using (var transaction = db.Database.BeginTransaction())
 
         }
+
+        private int getSectionID(string section_name)
+        {
+            if (db.OBS_FORM_SECTION.Where(item => item.obs_form_section_name == section_name).Count() > 0)
+            {
+                return db.OBS_FORM_SECTION.Single(item => item.obs_form_section_name == section_name).obs_form_section_id;
+            }
+            else
+            {
+                OBS_FORM_SECTION section = new OBS_FORM_SECTION();
+                section.obs_form_section_name = section_name;
+                db.OBS_FORM_SECTION.Add(section);
+                db.SaveChanges();
+                return db.OBS_FORM_SECTION.Single(item => item.obs_form_section_name == section_name).obs_form_section_id;
+            }
+        }
+
 
     }
     //\==================== END OF CONTROLLERS CLASS ==================================================/

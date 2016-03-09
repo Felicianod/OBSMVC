@@ -733,9 +733,39 @@ namespace OBSMVC.Controllers
             return fullFuncList;
         }
 
-        public void saveForm(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLY)
+        public void saveForm(OBS_COLLECT_FORM_TMPLT template_from_form)
         {
-            
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    //first we need to save OBS_COLLECT_FORM_TMPLT table data
+                    OBS_COLLECT_FORM_TMPLT template_to_save = new OBS_COLLECT_FORM_TMPLT();
+                    template_to_save.dsc_cust_id = template_from_form.dsc_cust_id;
+                    template_to_save.obs_type_id = template_from_form.obs_type_id;
+                    template_to_save.dsc_lc_id = template_from_form.dsc_lc_id;
+                    short cft_number = (short)(db.OBS_COLLECT_FORM_TMPLT.Max(x => x.obs_cft_nbr) + 1);
+                    template_to_save.obs_cft_nbr = cft_number;
+                    template_to_save.obs_cft_ver = 1;
+                    template_to_save.obs_cft_title = template_from_form.obs_cft_title;
+                    template_to_save.obs_cft_subtitle = template_from_form.obs_cft_subtitle;
+                    template_to_save.obs_cft_eff_st_dt = template_from_form.obs_cft_eff_st_dt;
+                    template_to_save.obs_cft_eff_end_dt = template_from_form.obs_cft_eff_end_dt;
+                    db.OBS_COLLECT_FORM_TMPLT.Add(template_to_save);
+                    db.SaveChanges();
+
+                    //now we need to query OBS_COLLECT_FORM_TMPLT table to find CFT ID we just created
+                    int cft_id = db.OBS_COLLECT_FORM_TMPLT.Single(item => item.obs_cft_nbr == cft_number && item.obs_cft_ver == 1).obs_cft_id;
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                }
+            }//end of  using (var transaction = db.Database.BeginTransaction())
+
+
+
 
         }
 

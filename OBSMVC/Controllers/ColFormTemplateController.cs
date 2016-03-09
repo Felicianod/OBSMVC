@@ -733,7 +733,7 @@ namespace OBSMVC.Controllers
             return fullFuncList;
         }
 
-        public void saveForm(OBS_COLLECT_FORM_TMPLT template_from_form)
+        private void saveForm(OBS_COLLECT_FORM_TMPLT template_from_form)
         {
             using (var transaction = db.Database.BeginTransaction())
             {
@@ -761,12 +761,26 @@ namespace OBSMVC.Controllers
                 catch (Exception e)
                 {
                     transaction.Rollback();
+                    
                 }
             }//end of  using (var transaction = db.Database.BeginTransaction())
 
+        }
 
-
-
+        private int getSectionID(string section_name)
+        {
+            if(db.OBS_FORM_SECTION.Where(item =>item.obs_form_section_name==section_name).Count()>0)
+            {
+                return db.OBS_FORM_SECTION.Single(item => item.obs_form_section_name == section_name).obs_form_section_id;
+            }
+            else
+            {
+                OBS_FORM_SECTION section = new OBS_FORM_SECTION();
+                section.obs_form_section_name = section_name;
+                db.OBS_FORM_SECTION.Add(section);
+                db.SaveChanges();
+                return db.OBS_FORM_SECTION.Single(item => item.obs_form_section_name == section_name).obs_form_section_id;
+            }
         }
 
     }

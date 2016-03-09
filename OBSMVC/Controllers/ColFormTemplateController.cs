@@ -270,7 +270,7 @@ namespace OBSMVC.Controllers
         {
             //if (id == null) { return HttpNotFound(); }
 
-            CollectionForm selectedColForm = new CollectionForm(id);
+            oCollectionForm selectedColForm = new oCollectionForm(id);
             if (selectedColForm == null) { return HttpNotFound(); }
 
             return View(selectedColForm);
@@ -298,23 +298,17 @@ namespace OBSMVC.Controllers
         }
 
         // GET: ColFormTemplate/Create
+        [HttpGet]
         public ActionResult CreateForm()
         {
-            ViewData["errMsg"] = "Error. Cannot Retrieve Data from the Database.<br>Please contact the Service Desk!";
+            ViewData["errMsg"] = "Database is Up!";
             // First Check the Database Connection
-            try
-            {
-                int testDB = db.DSC_CUSTOMER.Count();
-                ViewData["errMsg"] = "DBOK";
-            }
-            catch
-            {
-                ViewData["errMsg"] = "DBerror";
-            }
+            try { int testDB = db.DSC_CUSTOMER.Count(); }
+            catch { ViewData["errMsg"] = "Database Server is down..."; }
 
-            ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER, "dsc_cust_id", "dsc_cust_name");
-            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name");
-            ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name");
+            //ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER, "dsc_cust_id", "dsc_cust_name");
+            //ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name");
+            //ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name");
             return View();
         }
 
@@ -322,7 +316,7 @@ namespace OBSMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateForm(CollectionForm formData)
+        public ActionResult CreateForm(FormCollection formData)
         {
 
 
@@ -343,7 +337,7 @@ namespace OBSMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT, CollectionForm formData)
+        public ActionResult Create(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT, oCollectionForm formData)
         {
             //if (ModelState.IsValid)
             //{
@@ -851,12 +845,12 @@ namespace OBSMVC.Controllers
     // =================================================================================================
     // ============================ HELPER CLASES FOR CONTROLERS  ======================================
     //******* CLASES ***********************************************************************************
-    public class CollectionForm
+    public class oCollectionForm
     {
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();  //To get Database access inside this Class
 
         //--- CONSTRUCTOR------------------
-        public CollectionForm(int id)
+        public oCollectionForm(int id)
         {//Ctreate the Collection Form Data (Header Info) from the Id passed as a parameter
 
             cft_id = id;

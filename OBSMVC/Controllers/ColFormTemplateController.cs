@@ -464,17 +464,18 @@ namespace OBSMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "obs_cft_id,obs_type_id,dsc_cust_id,dsc_lc_id,obs_cft_nbr,obs_cft_ver,obs_cft_eff_st_dt,obs_cft_eff_end_dt,obs_cft_title,obs_cft_subtitle")] OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT)
         {
-            if (ModelState.IsValid)
-            {
-                db.OBS_COLLECT_FORM_TMPLT.Add(oBS_COLLECT_FORM_TMPLT);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            //if (ModelState.IsValid)
+            //{
+            //    db.OBS_COLLECT_FORM_TMPLT.Add(oBS_COLLECT_FORM_TMPLT);
+            //    db.SaveChanges();
+            //    return RedirectToAction("Index");
+            //}
 
-            ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER, "dsc_cust_id", "dsc_cust_name", oBS_COLLECT_FORM_TMPLT.dsc_cust_id);
-            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name", oBS_COLLECT_FORM_TMPLT.dsc_lc_id);
-            ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name", oBS_COLLECT_FORM_TMPLT.obs_type_id);
-            return View(oBS_COLLECT_FORM_TMPLT);
+            //ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER, "dsc_cust_id", "dsc_cust_name", oBS_COLLECT_FORM_TMPLT.dsc_cust_id);
+            //ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name", oBS_COLLECT_FORM_TMPLT.dsc_lc_id);
+            //ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name", oBS_COLLECT_FORM_TMPLT.obs_type_id);
+            //return View(oBS_COLLECT_FORM_TMPLT);
+            return RedirectToAction("Index");
         }
 
         // GET: ColFormTemplate/Edit/5
@@ -717,6 +718,10 @@ namespace OBSMVC.Controllers
             }
             return fullFuncList;
         }
+        public void saveForm(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLY)
+        {
+
+        }
     }
     //\==================== END OF CONTROLLERS CLASS ==================================================/
 
@@ -911,5 +916,6 @@ namespace OBSMVC.Controllers
         public int uniqueCounter { set; get; }
 
     }
+   
     
 }

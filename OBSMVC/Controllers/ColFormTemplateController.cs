@@ -297,6 +297,26 @@ namespace OBSMVC.Controllers
             return View("CreateForm");
         }
 
+        // GET: ColFormTemplate/Create
+        public ActionResult CreateForm()
+        {
+            ViewData["errMsg"] = "Error. Cannot Retrieve Data from the Database.<br>Please contact the Service Desk!";
+            // First Check the Database Connection
+            try
+            {
+                int testDB = db.DSC_CUSTOMER.Count();
+                ViewData["errMsg"] = "DBOK";
+            }
+            catch
+            {
+                ViewData["errMsg"] = "DBerror";
+            }
+
+            ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER, "dsc_cust_id", "dsc_cust_name");
+            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name");
+            ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name");
+            return View();
+        }
 
 
 

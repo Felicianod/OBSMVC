@@ -294,21 +294,21 @@ namespace OBSMVC.Controllers
             ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER, "dsc_cust_id", "dsc_cust_name");
             ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name");
             ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name");
-            return View("CreateForm");
+            return View();
         }
 
         // GET: ColFormTemplate/Create
         [HttpGet]
         public ActionResult CreateForm()
         {
-            ViewData["errMsg"] = "Database is Up!";
-            // First Check the Database Connection
-            try { int testDB = db.DSC_CUSTOMER.Count(); }
-            catch { ViewData["errMsg"] = "Database Server is down..."; }
+            //ViewData["errMsg"] = "Database is Up!";
+            //// First Check the Database Connection
+            //try { int testDB = db.DSC_CUSTOMER.Count(); }
+            //catch { ViewData["errMsg"] = "Database Server is down..."; }
 
-            //ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER, "dsc_cust_id", "dsc_cust_name");
-            //ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name");
-            //ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name");
+            ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER, "dsc_cust_id", "dsc_cust_name");
+            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name");
+            ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name");
             return View();
         }
 
@@ -337,7 +337,7 @@ namespace OBSMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT, oCollectionForm formData)
+        public ActionResult Create(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT, FormCollection formData)
         {
             //if (ModelState.IsValid)
             //{

@@ -1,4 +1,4 @@
-﻿@*@model OBSMVC.Models.OBS_COLLECT_FORM_TMPLT*@
+﻿@model OBSMVC.Models.OBS_COLLECT_FORM_TMPLT
 @{ ViewBag.Title = "Create/Edit Form"; }
 
 
@@ -21,7 +21,7 @@
     <div class="panel panel-default">
 
         <div class="panel-heading header">
-            @*<div class="form-group row">
+            <div class="form-group row">
                 <div class="col-sm-7">
                     <label for="obs_cft_title" class="col-sm-2 form-control-label">FORM TITLE:</label>
                     <div class="col-sm-10">
@@ -35,11 +35,9 @@
                         @Html.EditorFor(model => model.obs_cft_subtitle, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
                     </div>
                 </div>
-            </div>*@
+            </div>
 
         </div>
-        Enter Something:
-        <input type="text" id="nametest" />
         <div class="row">
            <div class="col-md-offset-2 col-md-10">
                <input id="btnSaveForm" type="submit" value="Save Form" @*disabled="disabled"*@ />

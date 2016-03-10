@@ -291,9 +291,9 @@ namespace OBSMVC.Controllers
                 ViewData["errMsg"] = "DBerror";
             }
 
-            ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER, "dsc_cust_id", "dsc_cust_name");
-            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name");
-            ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name");
+            ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER.Where(x => x.dsc_cust_id >= 0), "dsc_cust_id", "dsc_cust_name");
+            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id >= 0), "dsc_lc_id", "dsc_lc_name");
+            ViewBag.obs_type_id = new SelectList(db.OBS_TYPE.Where(x => x.obs_type_id >= 0), "obs_type_id", "obs_type_name");
             return View();
         }
 
@@ -313,9 +313,9 @@ namespace OBSMVC.Controllers
             //try { int testDB = db.DSC_CUSTOMER.Count(); }
             //catch { ViewData["errMsg"] = "Database Server is down..."; }
 
-            ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER, "dsc_cust_id", "dsc_cust_name");
-            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name");
-            ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name");
+            ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER.Where(x=>x.dsc_cust_id>=0), "dsc_cust_id", "dsc_cust_name");
+            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC.Where(x=>x.dsc_lc_id>=0), "dsc_lc_id", "dsc_lc_name");
+            ViewBag.obs_type_id = new SelectList(db.OBS_TYPE.Where(x=>x.obs_type_id>=0), "obs_type_id", "obs_type_name");
             return View();
         }
 
@@ -731,7 +731,7 @@ namespace OBSMVC.Controllers
         }
         public static bool IsActiveForm(DateTime start_date, DateTime end_date)
         {
-            if (DateTime.Today >= start_date && DateTime.Today < end_date) { return true; }
+            if (DateTime.Now >= start_date && DateTime.Now < end_date) { return true; }
             else { return false; }
         }
 
@@ -787,6 +787,7 @@ namespace OBSMVC.Controllers
             {
                 try
                 {
+                   
                     //first we need to save OBS_COLLECT_FORM_TMPLT table data
                     OBS_COLLECT_FORM_TMPLT template_to_save = new OBS_COLLECT_FORM_TMPLT();
                     template_to_save.dsc_cust_id = template_from_form.dsc_cust_id;
@@ -799,9 +800,15 @@ namespace OBSMVC.Controllers
                     template_to_save.obs_cft_subtitle = template_from_form.obs_cft_subtitle;
                     template_to_save.obs_cft_eff_st_dt = template_from_form.obs_cft_eff_st_dt==null?DateTime.Now: template_from_form.obs_cft_eff_st_dt;
                     template_to_save.obs_cft_eff_end_dt = template_from_form.obs_cft_eff_end_dt == null? Convert.ToDateTime("12/31/2060") : template_from_form.obs_cft_eff_end_dt;
+
+
+
+
+
+
                     db.OBS_COLLECT_FORM_TMPLT.Add(template_to_save);
                     db.SaveChanges();
-
+                  
                     //now we need to query OBS_COLLECT_FORM_TMPLT table to find CFT ID we just created
                     int cft_id = db.OBS_COLLECT_FORM_TMPLT.Single(item => item.obs_cft_nbr == cft_number && item.obs_cft_ver == 1).obs_cft_id;
                     string[] splitterm = { "," };

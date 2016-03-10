@@ -200,7 +200,126 @@ ol.target {
                <div class="col-md-7 personal-info">
                    <input type="hidden" id="qCounter" value="1" />
                    <input type="hidden" id="sCounter" value="1" />
-                   <div class="right col-md-12">
+
+
+
+                   @*--------------------------------------------------------------------------------- Harcoded Values for Debugging ----*@
+                   @{int uniqueCounter = 1;
+                     string qbtnCloseId = "btn00001";
+                     string ulId = "ul00001";
+                     string rowInfo = uniqueCounter.ToString(); 
+                    }
+
+                   <div class="row " id="qRow00001" style="text-align:left">
+                       <div class="row">
+                           <div class="col-sm-1" style="text-align:right">
+                               [@uniqueCounter]
+                           </div>
+                           <div class="col-sm-10">
+                               <p>Harcoded Question Text</p>
+                           </div>
+                           <div class="col-sm-1">
+                               <button type="button" id="@qbtnCloseId" class="btnClose" onclick="removeSection('qRow00001')" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                           </div>
+                       </div>
+                       <div class="row">
+                           <div class="col-sm-5 col-sm-offset-1">
+                               <div class="input-group">
+                                   <div class="input-group-addon">Answer Type</div>
+                                   <input type="text" id="AssignedAnswers" name="AssignedAnswers" value="3 Val Range" class="viewDropDown form-control" >
+                               </div>
+                           </div>
+                       </div>
+                       <div class="row">
+                          <div class="col-sm-11 col-sm-offset-1">
+                               <div class="col-sm-3">
+                                   Selectable Answers: &nbsp;&nbsp;
+                               </div>
+                               <div class="col-sm-9">
+                                   @{
+                                       var current_selected = -1;
+                                       
+                                   }
+                                       <ul id="@ulId">
+                                           <li style="display: inline"><span class="badge">Yes</span></li>
+                                           <li style="display: inline"><span class="badge">No</span></li>
+                                           <li style="display: inline"><span class="badge">Maybe</span></li>
+                                       </ul>                                   
+                               </div>
+                          </div>
+                       </div>
+                       @{ rowInfo += "~001~section001"; }
+                       <div class="input-group">
+                           <input type="hidden" id="formQuestions" name="formQuestions" value="@rowInfo" />
+                       </div>
+                       <hr />
+                   </div>
+
+                   @{ uniqueCounter = 2;
+                      qbtnCloseId = "btn00002";
+                      ulId = "ul00002";
+                      rowInfo = uniqueCounter.ToString();
+                   }
+                   <div class="row " id="qRow00001" style="text-align:left">
+                       <div class="row">
+                           <div class="col-sm-1" style="text-align:right">
+                               [@uniqueCounter]
+                           </div>
+                           <div class="col-sm-10">
+                               <p>Harcoded Question Text</p>
+                           </div>
+                           <div class="col-sm-1">
+                               <button type="button" id="@qbtnCloseId" class="btnClose" onclick="removeSection('qRow00001')" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                           </div>
+                       </div>
+                       <div class="row">
+                           <div class="col-sm-5 col-sm-offset-1">
+                               <div class="input-group">
+                                   <div class="input-group-addon">Answer Type</div>
+                                   <input type="text" id="AssignedAnswers" name="AssignedAnswers" value="3 Val Range" class="viewDropDown form-control">
+                               </div>
+                           </div>
+                       </div>
+                       <div class="row">
+                           <div class="col-sm-11 col-sm-offset-1">
+                               <div class="col-sm-3">
+                                   Selectable Answers: &nbsp;&nbsp;
+                               </div>
+                               <div class="col-sm-9">
+                                   @{
+                                      current_selected = -1;
+                                   }                                   
+                                   <ul id="@ulId">
+                                       <li style="display: inline"><span class="badge">Yes</span></li>
+                                       <li style="display: inline"><span class="badge">No</span></li>
+                                       <li style="display: inline"><span class="badge">Maybe</span></li>
+                                   </ul>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="input-group">
+                           @{ rowInfo += "~002~section001"; }
+                           <input type="hidden" id="formQuestions" name="formQuestions" value="@rowInfo" />
+                       </div>
+                       <hr />
+                   </div>
+                   @*------------------------------------------------------------------------------ END of Harcoded Values for Debugging ----*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   
+                   <div class="right row">
                        <ol class="list-group target">
                            <li class="list-group-item placeholder">Drag a question here...</li>
                        </ol>
@@ -208,7 +327,7 @@ ol.target {
 
 
 
-               </div>
+                   </div>
                @*// -------------- Below is the Panel with the Question's Library ---------------- *@
                <div class="col-md-5 personal-info">
                    <div class="panel panel-info">
@@ -251,7 +370,7 @@ ol.target {
                        <div class="panel-body">
                            @*<div>
                             @Html.Action("getQuestions", new { full_text_search = "", metadata_search = "" })
-                        </div>*@
+                             </div>*@
                            @*<div id="dummyResults" class="right">
                                <ul class="list-group source">
                                    <li id="qId007" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 007</span>This is dummy Question 1</li>
@@ -440,7 +559,7 @@ ol.target {
 
     // Function to call everytime we do a drag and drop
     function updateValues(msg) {
-        alert("An item was moved! = " + msg);
+        alert("An item was moved! Id = " + msg);
 
         //var items = [];
         //$("ul.target").children().each(function () {
@@ -522,5 +641,50 @@ ol.target {
     //    error: function(){}
     //});
 
+    function addQid(ev) {
+        var newCounterSeq = $("#qCounter").val();
+        var qid = ev.dataTransfer.getData("Text"); // "Id" of the dragged data element
+        //var target = ev.target || ev.srcElement;
+        //var myId = $(event.target).attr("id");;
+
+        ev.target.style.border = "";
+        //event.target.appendChild(document.getElementById(dataId));
+
+
+        // ------------ Make the Ajax Call ---------------------------------------------
+        $.ajax({
+            url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
+            method: "GET",
+            cache: false,
+            data: { question_id: qid, qCounter: newCounterSeq },     //<---- Data Parameters (if not already passed in the Url)
+            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+            //--- On error, execute this function ------
+            error: function () {
+                alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
+                //$btn.button('reset');
+            }
+        }).done(function (d) {
+            //Execute this code After the Ajax call completes successfully
+            //ev.target.append(d);
+            var targetId = $(this);
+            //alert('Source Id is: ' + qid + ' & Target Id is: ' + targetId.id);
+            $mydata = $(ev.target);
+            $mydata.append(d);
+
+            $('#qCounter').val(Number($('#qCounter').val()) + 1);
+            //alert("You jusr added question View Id: " + "qRow" + newCounterSeq)
+            //ev.target.html(d);
+            //$("#questionPnl01").append(d);
+            //$btn.button('reset');
+        });
+    }
+
+    function removeSection(qSectionId) {
+        $("#" + qSectionId).remove();
+    }
 
 </script>

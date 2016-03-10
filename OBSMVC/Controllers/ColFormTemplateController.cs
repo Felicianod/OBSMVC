@@ -326,11 +326,13 @@ namespace OBSMVC.Controllers
         public ActionResult CreateForm(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT, FormCollection formData)
         {
 
-            string[] data_from_form = { "1,5,Driving Ability / Safety", "2,10,Driving Ability / Safety", "3,20,Driving Ability / Safety", "3,26,Exceptions" };
-            int cft_id =saveForm(oBS_COLLECT_FORM_TMPLT, data_from_form);
+
+            // int cft_id =saveForm(oBS_COLLECT_FORM_TMPLT, data_from_form);
 
 
-            return RedirectToAction("Details", new { id =cft_id});
+            // return RedirectToAction("Details", new { id =cft_id});
+            return RedirectToAction("Details");
+
         }
 
 

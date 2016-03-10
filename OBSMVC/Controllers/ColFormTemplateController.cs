@@ -325,7 +325,8 @@ namespace OBSMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateForm(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT, FormCollection formData)
         {
-
+            string questionData = formData["formQuestions"];
+            string[] questions = questionData.Split(',');
 
             return RedirectToAction("Index");
         }

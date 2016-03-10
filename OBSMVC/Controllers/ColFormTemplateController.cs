@@ -301,6 +301,13 @@ namespace OBSMVC.Controllers
         [HttpGet]
         public ActionResult CreateForm()
         {
+            ViewData["errMsg"] = "DBOK";
+
+            //Delete this line and uncomment next two when at work, for Home Test Only
+            ViewData["errMsg"] = "Database Server is down...";
+            //try { int testDB = db.DSC_CUSTOMER.Count(); }
+            //catch { ViewData["errMsg"] = "Database Server is down..."; }
+
             //ViewData["errMsg"] = "Database is Up!";
             //// First Check the Database Connection
             //try { int testDB = db.DSC_CUSTOMER.Count(); }
@@ -316,7 +323,7 @@ namespace OBSMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateForm(FormCollection formData)
+        public ActionResult CreateForm(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT, FormCollection formData)
         {
 
 
@@ -345,7 +352,7 @@ namespace OBSMVC.Controllers
             //    db.SaveChanges();
             //    return RedirectToAction("Index");
             //}
-            int test = 0;
+
             //ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER, "dsc_cust_id", "dsc_cust_name", oBS_COLLECT_FORM_TMPLT.dsc_cust_id);
             //ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name", oBS_COLLECT_FORM_TMPLT.dsc_lc_id);
             //ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name", oBS_COLLECT_FORM_TMPLT.obs_type_id);
@@ -814,8 +821,8 @@ namespace OBSMVC.Controllers
                 }
                 catch (Exception e)
                 {
+                    ViewBag.exception = e.Message;
                     transaction.Rollback();
-
                 }
             }//end of  using (var transaction = db.Database.BeginTransaction())
 

@@ -44,60 +44,12 @@
 @*====================== BEGINING OF THE "CREATE COLLECTION FORM" FORM =========================*@
 
     <form class="form-horizontal" role="form" method="post">
-      
         <div class="panel panel-default">
-            <div class="panel-heading header">
 
-
-
-
-            @if (ViewData["errMsg"].ToString() == "DBOK")
-            {
-            <div class="form-group row">
-                <div class="col-sm-4">
-                    <div class="input-group">
-                        <div class="input-group-addon">Observation Type</div>
-                        @Html.DropDownList("obs_type_id", null, htmlAttributes: new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="input-group">
-                        <div class="input-group-addon">Customer</div>
-                        @Html.DropDownList("dsc_cust_id", null, htmlAttributes: new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="input-group">
-                        <div class="input-group-addon">Whse Location</div>
-                        @Html.DropDownList("dsc_lc_id", null, htmlAttributes: new { @class = "form-control" })
-                    </div>
-                </div>
-            </div>
-            }
-
-                <div class="form-group row">
-                    <div class="col-sm-4">
-                        <div class="input-group" data-provide="datepicker">
-                            <div class="input-group-addon">Effective Date:</div>
-                            <input class="datepicker form-control" id="obs_cft_eff_st_dt" name="obs_cft_eff_st_dt" style="max-width: 100%; width:100%;">
-                            @*<input class="datepicker form-control" data-date-format="mm/dd/yyyy" id="obs_cft_eff_st_dt" name="obs_cft_eff_st_dt" style="max-width: 100%; width:100%;">*@
-                            <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                            @Html.ValidationMessageFor(model => model.obs_cft_eff_st_dt, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="col-sm-4 col-sm-offset-2">
-                        <div class="input-group" data-provide="datepicker">
-                            <div class="input-group-addon">Usable Until:</div>
-                            <input class="datepicker form-control" id="obs_cft_eff_end_dt" name="obs_cft_eff_end_dt" style="max-width: 100%; width:100%;">
-                            <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                            @Html.ValidationMessageFor(model => model.obs_cft_eff_end_dt, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            </div>
             @*---------------------- FORM BODY --------------------------- *@
+
+
+
             <div class="panel-body content">
                 <div class="row">
                     @*/---------------- Below is the MAIN FORM QUESTION DETAIL DISPLAY PANEL ----------------------\*@
@@ -105,19 +57,34 @@
                         <input type="hidden" id="qCounter" value="1" />
                         <input type="hidden" id="sCounter" value="1" />
 
+
+
+
+
+
+
                         <div class="panel-group" id="accordion">
 
 
-
-
-
-
                             @*  ################################   W A R N I N G   #####################################
-                                *******************************************************************************
-                                  Do not touch this section
-                                  This is the New Form Question Main Panel
-                                  DO NOT CHANGE OR MODIFY  Feliciano is testing it !!!!!!!!!
-                                ******************************************************************************@
+        *******************************************************************************
+           Do not touch this section
+           This is the New Form Question Main Panel
+           DO NOT CHANGE OR MODIFY  Feliciano is testing it !!!!!!!!!
+        ******************************************************************************@
+
+
+
+
+
+
+
+
+
+
+
+
+                           
 
 
 
@@ -160,16 +127,6 @@
 
 
 
-                                    @*<div id="questionPnl01" class="droptarget" ondrop="addQid(event)" ondragover="allowDrop(event)">
-                                            //<<< THE PARTIAL VIEW QUESTION DETAILS <br/>RETURNED BY AJAX CALL WILL BE PLACED HERE >>>
-                                            <table id="table1" style="width:100%; text-align:center">
-                                                <tr>
-                                                    <td>
-
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>*@
                                 </div> @*End of Section "section001"*@
 
                                 <br />
@@ -184,6 +141,9 @@
 
 
 
+
+
+                            
 
 
 
@@ -206,133 +166,20 @@
                         @*\--------------- END OF THE MAIN QUESTION DISPLAY PANEL -------------------/*@
                     </div>
 
-                    @*// **************** Below is the Panel with the Question's Library ***************** *@
-                    <div class="col-md-5 personal-info">
 
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <table style="width:100%">
-                                    <tr>
-                                        <td colspan="2" style="text-align:center; font-size:large"><b>"QUESTION LIBRARY"</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="width:30%">
-                                            Enter Search Text:
-                                        </td>
-                                        <td style="width:70%">
-                                            @Html.TextBox("full_text_search", "", new { @class = "form-control" })
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Metadata Search:
-                                        </td>
-                                        <td>
-                                            @Html.TextBox("metadata_search", "", new { @class = "form-control" })
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <button type="button" id="doSearch" class="btn btn-primary" data-loading-text="Please Wait...">Search Questions</button>
-                                            @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
-                                                                 HttpMethod = "GET",
-                                                                 UpdateTargetId = "resultPanel",
-                                                                 InsertionMode = InsertionMode.Replace,
-                                                                 LoadingElementId = "divLoading"
-                                                })*@
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-
-
-
-
-
-                            @* -------- <Body Section> This section is Used to Render all the Question Library list Results ---------------- *@
-                            <div class="panel-body">
-                                @*<div>
-                                        @Html.Action("getQuestions", new { full_text_search = "", metadata_search = "" })
-                                    </div>*@
-                                <div id="resultPanel">
-                                    [Results]
-                                </div>
-                                <div>
-                                    <ul class="list-group">
-                                        <li id="draggable" class="list-group-item ui-state-highlight liElement draggableItem">Drag me Over to the Form</li>
-                                    </ul>
-                                </div>
-                                <div id="divLoading" style="display:none">
-                                    @*<img src="@Url.Content("~/Images/LoadingData.gif")" alt="" />*@
-                                    <img src="~/Images/LoadingData.gif" />
-                                </div>
-                            </div>
-
-                            @* ---------<Body Section> End of section Used to Render all the Question LIbrary list Results ---------------- *@
-
-
-
-
-
-
-                        </div> @*------------- End of Question Library Panel ---------------*@
-                    </div>
-                </div>@*---- END OF FORM BODY -------*@
+             </div>@*---- END OF FORM BODY -------*@
             </div>
         </div>
     </form>
 
 @*====================== END OF THE "CREATE COLLECTION FORM" FORM =========================*@
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-<br />
 
 @*//======================================== JAVASCRIPT / AJAX SECTION  ===============================================\\*@
-<script type="text/jscript">
-    $('#doSearch').click(function () {
-        var $btn = $(this);
-        $btn.button('loading');
-        //$(this).button('loading');
-        //e.preventDefault(); // <------------------ stop default behaviour of button (to prevent form submit or other behaviours if neeed)
 
-        //var url = "/ColFormTemplate/getQuestions";
-        //$.get(url, { full_text_search: "", metadata_search: "" }, function (data) {
-        //    $("#resultPanel").html(data);
-        //});
-
-        // ---- Fetch the Values that wil be used as parameters on the AJAX call -------
-        var searchText = $("#full_text_search").val();
-        var searchMD = $("#metadata_search").val();
-        // ------------ Make the Ajax Call ---------------------------------------------
-        $.ajax({
-            @*url: '@Url.Action("getQuestions", "ColFormTemplate", new { full_text_search = searchText, metadata_search = searchMD })',*@
-            url: '@Url.Action("getQuestionsList", "ColFormTemplate")',
-            method: "GET",
-            cache: false,
-            data: { full_text_search: searchText, metadata_search: searchMD, page: 1, pageSize: 10 },     //<---- Data Parameters (if not already passed in the Url)
-            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-            //--- On error, execute this function ------
-            error: function () {
-                alert("Failed to render the Question List from the Database !!");  //<-- Trap and alert of any errors if they occurred
-                $btn.button('reset');
-            }
-        }).done(function (d) {
-            //Execute this code After the Ajax call completes successfully
-            $("#resultPanel").html(d);
-            $btn.button('reset');
-        });
-    })
-</script>
 
 @*====================================AJAX TO CALL QUESTION DETAILS ACTION====================================*@
 <script type="text/jscript">
-
     $('#btnAddSection').click(function () {
         var $btn = $(this);
         $btn.button('loading');

@@ -2,26 +2,135 @@
 @{ ViewBag.Title = "Create/Edit Form"; }
 
 
-@*===========================================  STYLES, SCRIPTS AND ANOTATIONS =====================================================*@
+@*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
+
+@*<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.2.12/jquery.jgrowl.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.2.12/jquery.jgrowl.min.js"></script>
+<script type="text/javascript">
+	(function($){
+		$(function(){
+			$.jGrowl("Hello world!");
+		});
+	})(jQuery);
+</script>*@
 
 
+<script type="text/javascript" src="~/Scripts/pnotify.custom.min.js"></script>
+<link href="~/Scripts/pnotify.custom.min.css" media="all" rel="stylesheet" type="text/css" />
 
-@*=====================================================  MAIN VIEW PAGE ===========================================================*@
+<style>
+    body > li {
+  width: 320px;
+  margin: 5px;
+  padding: 5px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  list-style-type: none;
+  list-style-position: inside;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ccc !important;
+  background-color: #fafafa !important;
+  color: #bbb !important;
+}
+
+    .listActive {
+  border: 1px solid #ccc;
+  background-color: #fcfcfc;
+  padding: 0.5em 0 3em 0 !important;
+}
+    .placeholder {
+  list-style-type: none;
+  text-align: center;
+  font-style: italic;
+  border: 1px dashed #ddd !important;
+  background-color: #fff !important;
+  color: #aaa !important;
+}
+    .dismiss {
+  float: right;
+  position: relative;
+  top: -8px;
+  line-height: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none !important;
+  color: #468847;
+}
+
+    ul.source, ol.target {
+        min-height: 50px;
+  margin: 0px 25px 10px 0px;
+  padding: 2px;
+  border-width: 1px;
+  border-style: solid;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  list-style-type: none;
+  list-style-position: inside;
+}
+ul.source {
+  border-color: #f8e0b1;
+}
+ol.target {
+  border-color: #add38d;
+}
+.source li, .target li {
+  margin: 5px;
+  padding: 5px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.source li {
+  background-color: #fcf8e3;
+  border: 1px solid #fbeed5;
+  color: #c09853;
+}
+.target li {
+  background-color: #ebf5e6;
+  border: 1px solid #d6e9c6;
+  color: #468847;
+}
+.sortable-dragging {
+  border-color: #ccc !important;
+  background-color: #fafafa !important;
+  color: #bbb !important;
+}
+.sortable-placeholder {
+  height: 40px;
+}
+.source .sortable-placeholder {
+  border: 2px dashed #f8e0b1 !important;
+  background-color: #fefcf5 !important;
+}
+.target .sortable-placeholder {
+  border: 2px dashed #add38d !important;
+  background-color: #f6fbf4 !important;
+}
+</style>
+
+@*===========================================  MAIN VIEW PAGE CODE =======================================================*@
 
 <div class="well well-sm nopadding"><h3 class="col-md-offset-1">Collection Form Creation</h3></div>
-    <div class="row">
-        <div class="alert alert-danger col-sm-12">
-            <strong>Warning!</strong> @ViewData["errMsg"]
-        </div>
-    </div>
+   <div class="row">
+      <div class="alert alert-danger col-sm-12">
+          <strong>Warning!</strong> @ViewData["errMsg"]
+      </div>
+   </div>
 @* - - - - - - - - - - - - - - - - BEGINING OF THE "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
 
 <form class="form-horizontal" role="form" method="post" >
-    @Html.AntiForgeryToken()
-    <div class="panel panel-default">
-
-        <div class="panel-heading header">
-            <div class="form-group row">
+  @Html.AntiForgeryToken()
+  <div class="panel panel-default">
+     @* - - - - - - - - - - - - - - <<<<< FORM HEADER >>>>> - - - - - - - - - - - - - *@
+     <div class="panel-heading header">
+          <div class="form-group row">
                 <div class="col-sm-7">
                     <label for="obs_cft_title" class="col-sm-2 form-control-label">FORM TITLE:</label>
                     <div class="col-sm-10">
@@ -35,14 +144,317 @@
                         @Html.EditorFor(model => model.obs_cft_subtitle, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
                     </div>
                 </div>
-            </div>
+          </div>
 
-        </div>
-        <div class="row">
-           <div class="col-md-offset-2 col-md-10">
-               <input id="btnSaveForm" type="submit" value="Save Form" @*disabled="disabled"*@ />
+         @if (ViewData["errMsg"].ToString() == "DBOK")
+         {
+          <div class="form-group row">
+                <div class="col-sm-4">
+                   <div class="input-group">
+                       <div class="input-group-addon">Observation Type</div>
+                       @Html.DropDownList("obs_type_id", null, htmlAttributes: new { @class = "form-control" })
+                   </div>
+                </div>
+                <div class="col-sm-4">
+                   <div class="input-group">
+                       <div class="input-group-addon">Customer</div>
+                       @Html.DropDownList("dsc_cust_id", null, htmlAttributes: new { @class = "form-control" })
+                   </div>
+                </div>
+                <div class="col-sm-4">
+                   <div class="input-group">
+                       <div class="input-group-addon">Whse Location</div>
+                       @Html.DropDownList("dsc_lc_id", null, htmlAttributes: new { @class = "form-control" })
+                   </div>
+                </div>
+          </div>
+         }
+
+          <div class="form-group row">
+                <div class="col-sm-4">
+                    <div class="input-group" data-provide="datepicker">
+                        <div class="input-group-addon">Effective Date:</div>
+                        <input class="datepicker form-control" id="obs_cft_eff_st_dt" name="obs_cft_eff_st_dt" style="max-width: 100%; width:100%;">
+                        @*<input class="datepicker form-control" data-date-format="mm/dd/yyyy" id="obs_cft_eff_st_dt" name="obs_cft_eff_st_dt" style="max-width: 100%; width:100%;">*@
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                        @Html.ValidationMessageFor(model => model.obs_cft_eff_st_dt, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4 col-sm-offset-2">
+                    <div class="input-group" data-provide="datepicker">
+                        <div class="input-group-addon">Usable Until:</div>
+                        <input class="datepicker form-control" id="obs_cft_eff_end_dt" name="obs_cft_eff_end_dt" style="max-width: 100%; width:100%;">
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                        @Html.ValidationMessageFor(model => model.obs_cft_eff_end_dt, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+          </div>
+          @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+      </div>  @*- - - - END of panel-heading Section - - - - -*@
+      
+     @* - - - - - - - - - - - - - - <<<<< FORM BODY >>>>> - - - - - - - - - - - - - *@
+
+     <div class="panel-body content">
+         <div class="row">
+               @*/---------------- Below is the MAIN FORM QUESTION DETAIL DISPLAY PANEL ----------------------\*@
+               <div class="col-md-7 personal-info">
+                   <input type="hidden" id="qCounter" value="1" />
+                   <input type="hidden" id="sCounter" value="1" />
+                   <div class="right col-md-12">
+                       <ol class="list-group target">
+                           <li class="list-group-item placeholder">Drag a question here...</li>
+                       </ol>
+                   </div>
+
+
+
+               </div>
+               @*// -------------- Below is the Panel with the Question's Library ---------------- *@
+               <div class="col-md-5 personal-info">
+                   <div class="panel panel-info">
+                       <div class="panel-heading">
+                           <table style="width:100%">
+                               <tr>
+                                   <td colspan="2" style="text-align:center; font-size:large"><b>"QUESTION LIBRARY"</b></td>
+                               </tr>
+                               <tr>
+                                   <td style="width:30%">
+                                       Enter Search Text:
+                                   </td>
+                                   <td style="width:70%">
+                                       @Html.TextBox("full_text_search", "", new { @class = "form-control" })
+                                   </td>
+                               </tr>
+                               <tr>
+                                   <td>
+                                       Metadata Search:
+                                   </td>
+                                   <td>
+                                       @Html.TextBox("metadata_search", "", new { @class = "form-control" })
+                                   </td>
+                               </tr>
+                               <tr>
+                                   <td>
+                                       <button type="button" id="doSearch" class="btn btn-primary" data-loading-text="Please Wait...">Search Questions</button>
+                                       @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
+                                                     HttpMethod = "GET",
+                                                     UpdateTargetId = "resultPanel",
+                                                     InsertionMode = InsertionMode.Replace,
+                                                     LoadingElementId = "divLoading"
+                                    })*@
+                                   </td>
+                               </tr>
+                           </table>
+                       </div>
+
+                       @* -------- <Body Section> This section is Used to Render all the Question Library list Results ---------------- *@
+                       <div class="panel-body">
+                           @*<div>
+                            @Html.Action("getQuestions", new { full_text_search = "", metadata_search = "" })
+                        </div>*@
+                           <div id="resultPanel">
+                               [Results]
+                           </div>
+
+                           <div id="dummyResults" class="right" style="display:none">
+                               <ul class="list-group source">
+                                   <li id="qId007" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 007</span>This is dummy Question 1</li>
+                                   <li id="qId127" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 127</span>Some other Question too</li>
+                                   <li id="qId016" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 016</span>last question</li>
+
+                                   @*<li id="qId007" class="list-group-item" draggable="true"  data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 007</span>This is dummy Question 1</li>
+                                   <li id="qId127" class="list-group-item" draggable="true"  data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 127</span>Some other Question too</li>
+                                   <li id="qId016" class="list-group-item" draggable="true"  data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 016</span>last question</li>*@
+                               </ul>
+                           </div>
+                           <div id="divLoading" style="display:none">
+                               @*<img src="@Url.Content("~/Images/LoadingData.gif")" alt="" />*@
+                               <img src="~/Images/LoadingData.gif" />
+                           </div>
+                       </div>
+
+                       @* ---------<Body Section> End of section Used to Render all the Question LIbrary list Results ---------------- *@
+                   </div> @*------------- End of Question Library Panel ---------------*@
+               </div>
            </div>
+     </div>@*---- END OF FORM BODY -------*@
+
+
+
+
+     @*\\ - - - - - - - - - - - - - <<<<< END OF FORM BODY >>>>> - - - - - - - - - - - - //*@
+
+     @*// - - - - - - - - - - - - - <<<<< FORM FOTTER >>>>> - - - - - - - - - - - - \\*@
+     <div class="row">
+        <div class="col-md-offset-2 col-md-10">
+           <input id="btnSaveForm" type="submit" value="Save Form" @*disabled="disabled"*@ />
         </div>
-    </div>
+     </div>
+     @*\\ - - - - - - - - - - - - - <<<<< FORM FOTTER >>>>> - - - - - - - - - - - - //*@
+
+
+
+
+
+
+
+
+
+
+   </div> @* ----- END OF FORM PANEL*@
 </form>
 @* - - - - - - - - - - - - - - - - END OF "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+<br />
+
+
+
+@* ######################  J A V A    S C R I P T S    S E C T I O N   #################################### *@
+@*//- - - - - - - - -  Ajax Call to Retrieve and Display the Question List Search Results - - - - - - - - - - -\\*@
+<script type="text/jscript">
+    $('#doSearchProd').click(function () {
+        var $btn = $(this);
+        $btn.button('loading');
+        //$(this).button('loading');
+        //e.preventDefault(); // <------------------ stop default behaviour of button (to prevent form submit or other behaviours if neeed)
+
+        //var url = "/ColFormTemplate/getQuestions";
+        //$.get(url, { full_text_search: "", metadata_search: "" }, function (data) {
+        //    $("#resultPanel").html(data);
+        //});
+
+        // ---- Fetch the Values that wil be used as parameters on the AJAX call -------
+        var searchText = $("#full_text_search").val();
+        var searchMD = $("#metadata_search").val();
+        // ------------ Make the Ajax Call ---------------------------------------------
+        $.ajax({
+            @*url: '@Url.Action("getQuestions", "ColFormTemplate", new { full_text_search = searchText, metadata_search = searchMD })',*@
+            url: '@Url.Action("getQuestionsList", "ColFormTemplate")',
+            method: "GET",
+            cache: false,
+            data: { full_text_search: searchText, metadata_search: searchMD, page: 1, pageSize: 10 },     //<---- Data Parameters (if not already passed in the Url)
+            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+            //--- On error, execute this function ------
+            error: function () {
+                alert("Failed to render the Question List from the Database !!");  //<-- Trap and alert of any errors if they occurred
+                $btn.button('reset');
+            }
+        }).done(function (d) {
+            //Execute this code After the Ajax call completes successfully
+            $("#resultPanel").html(d);
+            $btn.button('reset');
+        });
+    })
+
+    $('#doSearch').click(function () {
+        // ---- This is a simmulated call that returns mocked up Results -------
+        var $btn = $(this);
+        $btn.button('loading');
+        $('#dummyResults').show();
+        //displayMsg("Data Retrieved Successfully.");
+        $btn.button('reset');
+    })
+
+</script>
+
+
+@*//- - - - - - - - -  Ajax Call to Retrieve and Display the Question List Search Results - - - - - - - - - - -\\*@
+
+
+
+<script>
+    $(document).ready(function () {
+       
+    });
+</script>
+<script type="text/javascript">
+    function displayMsg(msg) {
+        PNotify.removeAll();
+        var notice = new PNotify({
+            title: 'Success!',
+            text: msg,
+            type: 'success',
+            delay: 2000,
+            history: false,
+            sticker: true,
+            hide: true,
+            animate: {
+                animate: true,
+                in_class: 'slideInDown',
+                out_class: 'slideOutUp'
+            }
+        });
+    };
+   
+</script>
+@* --- Drag and Drop Java Script - - - - - *@ 
+<script type="text/javascript">
+    //$(function () {
+    //    $(".source, .target").sortable({
+    //        connectWith: ".connected"
+    //    }).bind("sortupdate", function () {
+    //        updateValues();
+    //    });
+    //});
+
+    // Function to call everytime we do a drag and drop
+    function updateValues() {
+        //alert("An item was moved!");
+
+        //var items = [];
+        //$("ul.target").children().each(function () {
+        //    var item = { manufacturer: $(this).text() };
+        //    items.push(item);
+        //});
+        //var jsonData = JSON.stringify(items);
+        //$.ajax({
+        //    url: "dnd.xsp/setfavourites",
+        //    type: "PUT",
+        //    data: jsonData,
+        //    dataType: "json",
+        //    contentType: "application/json; charset=utf-8",
+        //    success: function () { },
+        //    error: function () { }
+        //});
+    };
+    $(".source li").draggable({
+        //If you want to limit the area inside which a user can drag elements,
+        // Simply set the "appendTo" attribute to  "#myContainerName" or similar.
+        addClasses: false,
+        appendTo: "body",
+        helper: "clone"
+    });
+
+    $(".target").droppable({
+        addClasses: false,
+        activeClass: "listActive",
+        accept: ":not(.ui-sortable-helper)",
+        drop: function (event, ui) {
+            $(this).find(".placeholder").remove();
+            var link = $("<a href='#' class='dismiss'>x</a>");
+            var list = $("<li></li>").text(ui.draggable.text());
+            $(list).append(link);
+            $(list).appendTo(this);
+            updateValues();
+        }
+    }).sortable({
+        items: "li:not(.placeholder)",
+        sort: function () {
+            $(this).removeClass("listActive");
+        },
+        update: function () {
+            updateValues();
+        }
+    }).on("click", ".dismiss", function (event) {
+        event.preventDefault();
+        $(this).parent().remove();
+        updateValues();  //If we want to all a function when item is dragged/dropped
+    });
+</script>

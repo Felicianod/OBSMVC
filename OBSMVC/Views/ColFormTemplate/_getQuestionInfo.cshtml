@@ -22,7 +22,7 @@
                 @{
                     var current_selected = -1;
                  }
-                <ul id="@Model.uniqueCounter">
+                <ul id="@Model.uniqueCounter" >
                     @if (Model.hasInstances == true && Model.question_assigned_answer_types.Where(item => item.Selected == true).Count() > 0)
                     {
                         current_selected = Convert.ToInt32(Model.question_assigned_answer_types.Single(item => item.Selected == true).Value);

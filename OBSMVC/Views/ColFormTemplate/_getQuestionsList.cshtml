@@ -10,13 +10,13 @@
 @if (listEntries > 0)
 {
 
-    <ul class="list-group">
+    <ul class="list-group source">
         @foreach (var question in Model)
         {
             rowCounter++;
             //rowId = "row" + rowCounter.ToString("00");
             rowId = @question.obs_question_id.ToString("00");
-            <li class="list-group-item" draggable="true" id="@rowId" @*id="draggable"*@ data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: @question.obs_question_id</span>@question.obs_question_full_text</li>
+            <li id="@rowId" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: @question.obs_question_id</span>@question.obs_question_full_text</li>
         }
     </ul>
 

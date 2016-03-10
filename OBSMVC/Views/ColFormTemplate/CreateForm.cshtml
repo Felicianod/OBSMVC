@@ -118,11 +118,11 @@ ol.target {
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
 
 <div class="well well-sm nopadding"><h3 class="col-md-offset-1">Collection Form Creation</h3></div>
-   <div class="row">
+   @*<div class="row">
       <div class="alert alert-danger col-sm-12">
           <strong>Warning!</strong> @ViewData["errMsg"]
       </div>
-   </div>
+   </div>*@
 @* - - - - - - - - - - - - - - - - BEGINING OF THE "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
 
 <form class="form-horizontal" role="form" method="post" >
@@ -252,21 +252,19 @@ ol.target {
                            @*<div>
                             @Html.Action("getQuestions", new { full_text_search = "", metadata_search = "" })
                         </div>*@
-                           <div id="resultPanel">
-                               [Results]
-                           </div>
-
-                           <div id="dummyResults" class="right" style="display:none">
+                           @*<div id="dummyResults" class="right">
                                <ul class="list-group source">
                                    <li id="qId007" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 007</span>This is dummy Question 1</li>
                                    <li id="qId127" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 127</span>Some other Question too</li>
                                    <li id="qId016" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 016</span>last question</li>
-
-                                   @*<li id="qId007" class="list-group-item" draggable="true"  data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 007</span>This is dummy Question 1</li>
-                                   <li id="qId127" class="list-group-item" draggable="true"  data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 127</span>Some other Question too</li>
-                                   <li id="qId016" class="list-group-item" draggable="true"  data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 016</span>last question</li>*@
                                </ul>
+                           </div>*@
+
+                           <div id="resultPanel" class="right">
+                               @*Results from Ajax Call will be displayed here!!*@
                            </div>
+
+
                            <div id="divLoading" style="display:none">
                                @*<img src="@Url.Content("~/Images/LoadingData.gif")" alt="" />*@
                                <img src="~/Images/LoadingData.gif" />
@@ -315,7 +313,7 @@ ol.target {
 @* ######################  J A V A    S C R I P T S    S E C T I O N   #################################### *@
 @*//- - - - - - - - -  Ajax Call to Retrieve and Display the Question List Search Results - - - - - - - - - - -\\*@
 <script type="text/jscript">
-    $('#doSearchProd').click(function () {
+    $('#doSearch').click(function () {
         var $btn = $(this);
         $btn.button('loading');
         //$(this).button('loading');
@@ -349,11 +347,47 @@ ol.target {
         }).done(function (d) {
             //Execute this code After the Ajax call completes successfully
             $("#resultPanel").html(d);
+            //$("#dummyResults ul").append('<li id="qId017" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 017</span>last question New</li>');
+
+            //Make the New Source List Dragable
+            $(".source li").draggable({
+                //If you want to limit the area inside which a user can drag elements,
+                // Simply set the "appendTo" attribute to  "#myContainerName" or similar.
+                addClasses: false,
+                appendTo: "body",
+                helper: "clone"
+            });
+            //Make the Target List Dropable and force it to accept newly created source List
+            $(".target").droppable({
+                addClasses: false,
+                activeClass: "listActive",
+                accept: ":not(.ui-sortable-helper)",
+                drop: function (event, ui) {
+                    $(this).find(".placeholder").remove();
+                    var link = $("<a href='#' class='dismiss'>x</a>");
+                    var list = $("<li></li>").text(ui.draggable.text());
+                    $(list).append(link);
+                    $(list).appendTo(this);
+                    updateValues(ui.draggable.text().substring(3,5));
+                }
+            }).sortable({
+                items: "li:not(.placeholder)",
+                sort: function () {
+                    $(this).removeClass("listActive");
+                },
+                update: function () {
+                    updateValues(this.toString());
+                }
+            }).on("click", ".dismiss", function (event) {
+                event.preventDefault();
+                $(this).parent().remove();
+                updateValues(this.toString());  //If we want to all a function when item is dragged/dropped
+            });
             $btn.button('reset');
         });
     })
 
-    $('#doSearch').click(function () {
+    $('#doSearchDummyData').click(function () {
         // ---- This is a simmulated call that returns mocked up Results -------
         var $btn = $(this);
         $btn.button('loading');
@@ -405,8 +439,8 @@ ol.target {
     //});
 
     // Function to call everytime we do a drag and drop
-    function updateValues() {
-        //alert("An item was moved!");
+    function updateValues(msg) {
+        alert("An item was moved! = " + msg);
 
         //var items = [];
         //$("ul.target").children().each(function () {

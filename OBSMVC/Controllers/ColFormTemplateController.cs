@@ -277,27 +277,6 @@ namespace OBSMVC.Controllers
         }
 
         // GET: ColFormTemplate/Create
-        public ActionResult Create()
-        {
-            ViewData["errMsg"] = "Error. Cannot Retrieve Data from the Database.<br>Please contact the Service Desk!";
-            // First Check the Database Connection
-            try
-            {
-                int testDB = db.DSC_CUSTOMER.Count();
-                ViewData["errMsg"] = "DBOK";
-            }
-            catch
-            {
-                ViewData["errMsg"] = "DBerror";
-            }
-
-            ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER.Where(x => x.dsc_cust_id >= 0), "dsc_cust_id", "dsc_cust_name");
-            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id >= 0), "dsc_lc_id", "dsc_lc_name");
-            ViewBag.obs_type_id = new SelectList(db.OBS_TYPE.Where(x => x.obs_type_id >= 0), "obs_type_id", "obs_type_name");
-            return View();
-        }
-
-        // GET: ColFormTemplate/Create
         [HttpGet]
         public ActionResult CreateForm()
         {
@@ -341,7 +320,14 @@ namespace OBSMVC.Controllers
 
 
 
-
+        // GET: ColFormTemplate/Create
+        public ActionResult Create()
+        {
+            ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER.Where(x => x.dsc_cust_id >= 0), "dsc_cust_id", "dsc_cust_name");
+            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id >= 0), "dsc_lc_id", "dsc_lc_name");
+            ViewBag.obs_type_id = new SelectList(db.OBS_TYPE.Where(x => x.obs_type_id >= 0), "obs_type_id", "obs_type_name");
+            return View();
+        }
 
 
 

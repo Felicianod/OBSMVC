@@ -336,38 +336,23 @@ ol.target {
                <div class="col-md-5 personal-info">
                    <div class="panel panel-info">
                        <div class="panel-heading">
-                           <table style="width:100%">
-                               <tr>
-                                   <td colspan="2" style="text-align:center; font-size:large"><b>"QUESTION LIBRARY"</b></td>
-                               </tr>
-                               <tr>
-                                   <td style="width:30%">
-                                       Enter Search Text:
-                                   </td>
-                                   <td style="width:70%">
-                                       @Html.TextBox("full_text_search", "", new { @class = "form-control" })
-                                   </td>
-                               </tr>
-                               <tr>
-                                   <td>
-                                       Metadata Search:
-                                   </td>
-                                   <td>
-                                       @Html.TextBox("metadata_search", "", new { @class = "form-control" })
-                                   </td>
-                               </tr>
-                               <tr>
-                                   <td>
-                                       <button type="button" id="doSearch" class="btn btn-primary" data-loading-text="Please Wait...">Search Questions</button>
-                                       @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
-                                                     HttpMethod = "GET",
-                                                     UpdateTargetId = "resultPanel",
-                                                     InsertionMode = InsertionMode.Replace,
-                                                     LoadingElementId = "divLoading"
-                                    })*@
-                                   </td>
-                               </tr>
-                           </table>
+                           <div class="row" style="text-align:center; font-size:large">
+                               "QUESTION LIBRARY"
+                           </div>
+                           <div class="row">
+                               <div class="input-group col-sm-10 col-sm-offset-1">
+                                   <input type="text" class="form-control" id="full_text_search" name="full_text_search" placeholder="Search Question Library for..." style="max-width: 100%; width:100%;">
+                                   <span class="input-group-btn">
+                                       <button class="btn btn-secondary" type="button" id="doSearch" data-loading-text="Please Wait...">Search!</button>
+                                   </span>
+                               </div>
+                           </div>
+                                @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
+                                        HttpMethod = "GET",
+                                        UpdateTargetId = "resultPanel",
+                                        InsertionMode = InsertionMode.Replace,
+                                        LoadingElementId = "divLoading"
+                                })*@
                        </div>
 
                        @* -------- <Body Section> This section is Used to Render all the Question Library list Results ---------------- *@
@@ -383,7 +368,7 @@ ol.target {
                                </ul>
                            </div>*@
 
-                           <div id="resultPanel" class="right">
+                           <div id="resultPanel" class="right" style="max-width: 100%; width:100%;">
                                @*Results from Ajax Call will be displayed here!!*@
                            </div>
 

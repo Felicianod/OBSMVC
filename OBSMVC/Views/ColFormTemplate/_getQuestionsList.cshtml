@@ -16,7 +16,7 @@
             rowCounter++;
             //rowId = "row" + rowCounter.ToString("00");
             rowId = @question.obs_question_id.ToString("00");
-            <li id="@rowId" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: @question.obs_question_id</span>@question.obs_question_full_text</li>
+            <li id="@rowId" class="list-group-item" data-toggle="tooltip" title="Drag to the left to Add!" data-qid="@question.obs_question_id"><span class="badge" style="width:48px">Id: @question.obs_question_id</span>@question.obs_question_full_text</li>
         }
     </ul>
 

@@ -88,13 +88,17 @@ ol.target {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 .source li {
-  background-color: #fcf8e3;
   border: 1px solid #fbeed5;
-  color: #c09853;
+  /*background-color: #fcf8e3;
+  color: #c09853;*/
+  background-color: #fcf8e3;
+  color: #696969;
 }
 .target li {
-  background-color: #ebf5e6;
   border: 1px solid #d6e9c6;
+  /*background-color: #ebf5e6;*/
+  /*color: #468847;*/
+  background-color: ghostwhite;
   color: #468847;
 }
 .sortable-dragging {
@@ -248,7 +252,7 @@ ol.target {
                                </div>
                           </div>
                        </div>
-                       @{ rowInfo += "~001~section001"; }
+                       @{ rowInfo += "~001~sectionName001"; }
                        <div class="input-group">
                            <input type="hidden" id="formQuestions" name="formQuestions" value="@rowInfo" />
                        </div>
@@ -298,7 +302,7 @@ ol.target {
                            </div>
                        </div>
                        <div class="input-group">
-                           @{ rowInfo += "~002~section001"; }
+                           @{ rowInfo += "~002~sectionName001"; }
                            <input type="hidden" id="formQuestions" name="formQuestions" value="@rowInfo" />
                        </div>
                        <hr />
@@ -484,10 +488,15 @@ ol.target {
                 drop: function (event, ui) {
                     $(this).find(".placeholder").remove();
                     var link = $("<a href='#' class='dismiss'>x</a>");
-                    var list = $("<li></li>").text(ui.draggable.text());
+                    //var list = $("<li></li>").text(ui.draggable.text());
+                    var list = $("<li></li>").text("This is a Sample Question !!");
                     $(list).append(link);
                     $(list).appendTo(this);
-                    updateValues(ui.draggable.text().substring(3,5));
+
+                    //var questId = event.draggable.getAttribute("data-qid");
+                    //var questId = event.item.getAttribute("data-qid");
+                    //updateValues(ui.draggable.text().substring(3, 5));
+                    //updateValues(questId);
                 }
             }).sortable({
                 items: "li:not(.placeholder)",

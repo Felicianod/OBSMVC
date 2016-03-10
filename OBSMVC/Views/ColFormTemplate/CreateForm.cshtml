@@ -489,14 +489,16 @@ ol.target {
                     $(this).find(".placeholder").remove();
                     var link = $("<a href='#' class='dismiss'>x</a>");
                     //var list = $("<li></li>").text(ui.draggable.text());
-                    var list = $("<li></li>").text("This is a Sample Question !!");
+                    
+                    var qid = ui.draggable.attr("id");
+                    var listId = "liID" + qid;
+
+                    var list = $("<li id='" + listId + "'></li>").text("Question Id is: " + qid);
                     $(list).append(link);
                     $(list).appendTo(this);
 
-                    //var questId = event.draggable.getAttribute("data-qid");
-                    //var questId = event.item.getAttribute("data-qid");
                     //updateValues(ui.draggable.text().substring(3, 5));
-                    //updateValues(questId);
+                    updateValues("Question Id [ " + qid + "] was added.");
                 }
             }).sortable({
                 items: "li:not(.placeholder)",
@@ -504,12 +506,12 @@ ol.target {
                     $(this).removeClass("listActive");
                 },
                 update: function () {
-                    updateValues(this.toString());
+                    updateValues("An Item was reordered.");  // Call function After Sorting
                 }
             }).on("click", ".dismiss", function (event) {
                 event.preventDefault();
                 $(this).parent().remove();
-                updateValues(this.toString());  //If we want to all a function when item is dragged/dropped
+                updateValues("An Item Was Deleted!");
             });
             $btn.button('reset');
         });
@@ -568,7 +570,7 @@ ol.target {
 
     // Function to call everytime we do a drag and drop
     function updateValues(msg) {
-        alert("An item was moved! Id = " + msg);
+        alert(msg);
 
         //var items = [];
         //$("ul.target").children().each(function () {
@@ -604,7 +606,7 @@ ol.target {
             var list = $("<li></li>").text(ui.draggable.text());
             $(list).append(link);
             $(list).appendTo(this);
-            updateValues();
+            updateValues("Added!");
         }
     }).sortable({
         items: "li:not(.placeholder)",
@@ -612,12 +614,14 @@ ol.target {
             $(this).removeClass("listActive");
         },
         update: function () {
-            updateValues();
+            updateValues("Sorted!");
         }
     }).on("click", ".dismiss", function (event) {
         event.preventDefault();
+        //var qdelId = $(this).parent().attr("id");
         $(this).parent().remove();
-        updateValues();  //If we want to all a function when item is dragged/dropped
+        updateValues("Deleted");  //If we want to all a function when item is dragged/dropped
+        //updateValues();  //If we want to all a function when item is dragged/dropped
     });
 
     //Sample Code:

@@ -797,8 +797,8 @@ namespace OBSMVC.Controllers
                     template_to_save.obs_cft_ver = 1;
                     template_to_save.obs_cft_title = template_from_form.obs_cft_title;
                     template_to_save.obs_cft_subtitle = template_from_form.obs_cft_subtitle;
-                    template_to_save.obs_cft_eff_st_dt = template_from_form.obs_cft_eff_st_dt==null?DateTime.Now: template_from_form.obs_cft_eff_st_dt;
-                    template_to_save.obs_cft_eff_end_dt = template_from_form.obs_cft_eff_end_dt == null? Convert.ToDateTime("12/31/2060") : template_from_form.obs_cft_eff_end_dt;
+                    template_to_save.obs_cft_eff_st_dt = (template_from_form.obs_cft_eff_st_dt == null) || (template_from_form.obs_cft_eff_st_dt < Convert.ToDateTime("01/01/2000")) ? DateTime.Now : template_from_form.obs_cft_eff_st_dt;
+                    template_to_save.obs_cft_eff_end_dt = (template_from_form.obs_cft_eff_end_dt == null) || (template_from_form.obs_cft_eff_end_dt < Convert.ToDateTime("01/01/2000")) ? Convert.ToDateTime("12/31/2060") : template_from_form.obs_cft_eff_end_dt;
                     db.OBS_COLLECT_FORM_TMPLT.Add(template_to_save);
                     db.SaveChanges();
 
@@ -817,6 +817,7 @@ namespace OBSMVC.Controllers
                         int form_section_id = getSectionID(question_items[2]);
                         OBS_COL_FORM_QUESTIONS new_form_question = new OBS_COL_FORM_QUESTIONS();
                         new_form_question.obs_cft_id = cft_id;
+                        
                         new_form_question.obs_form_section_id = form_section_id;
                         new_form_question.obs_qat_id = qat_id;
                         new_form_question.obs_col_form_quest_order = order;

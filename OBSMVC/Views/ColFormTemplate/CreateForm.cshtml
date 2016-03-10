@@ -136,15 +136,15 @@ ol.target {
      <div class="panel-heading header">
           <div class="form-group row">
                 <div class="col-sm-7">
-                    <label for="obs_cft_title" class="col-sm-2 form-control-label">FORM TITLE:</label>
-                    <div class="col-sm-10">
+                    <div class="input-group">
+                        <div class="input-group-addon">Form Title:</div>
                         @Html.EditorFor(model => model.obs_cft_title, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
-                        @Html.ValidationMessageFor(model => model.obs_cft_title, "", new { @class = "text-danger" })
                     </div>
+                    @Html.ValidationMessageFor(model => model.obs_cft_title, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-sm-5">
-                    <label for="obs_cft_title" class="col-sm-2 form-control-label" style="text-align:right">Subtitle:</label>
-                    <div class="col-sm-10">
+                    <div class="input-group">
+                        <div class="input-group-addon">Subtitle:</div>
                         @Html.EditorFor(model => model.obs_cft_subtitle, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
                     </div>
                 </div>

@@ -457,4 +457,36 @@ ol.target {
         $(this).parent().remove();
         updateValues();  //If we want to all a function when item is dragged/dropped
     });
+
+    //Sample Code:
+    //looping in javascript through all the child elements of the target list
+    //var items = [];
+    //$("ul.target").children().each(function () {
+    //    var item = { manufacturer: $(this).data("stock-symbol") };
+    //    items.push(item);
+    //});
+    //var jsonData = JSON.stringify(items);
+    //
+    //or
+    //
+    //var items = [];
+    //$("ul.target").children().each(function () {
+    //    var item = { manufacturer: $(this).text() };
+    //    items.push(item);
+    //});
+    //var jsonData = JSON.stringify(items);
+    //
+    //
+    //and then we can also invoke Ajax call to manipulate/retrieve DataCue
+    //$.ajax ({
+    //    url: "dnd.xsp/setfavourites",
+    //    type: "PUT",
+    //    data: jsonData,
+    //    dataType: "json",
+    //    contentType: "application/json; charset=utf-8",
+    //    success: function(){},
+    //    error: function(){}
+    //});
+
+
 </script>

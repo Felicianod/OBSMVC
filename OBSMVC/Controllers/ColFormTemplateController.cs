@@ -305,8 +305,8 @@ namespace OBSMVC.Controllers
 
             //Delete this line and uncomment next two when at work, for Home Test Only
             //ViewData["errMsg"] = "Database Server is down...";
-            //try { int testDB = db.DSC_CUSTOMER.Count(); }
-            //catch { ViewData["errMsg"] = "Database Server is down..."; }
+            try { int testDB = db.DSC_CUSTOMER.Count(); }
+            catch { ViewData["errMsg"] = "Database Server is down..."; }
 
             //ViewData["errMsg"] = "Database is Up!";
             //// First Check the Database Connection

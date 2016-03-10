@@ -325,14 +325,14 @@ namespace OBSMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateForm(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT, FormCollection formData)
         {
-            string questionData = formData["formQuestions"];
-            string[] questions = questionData.Split(',');
+            string data_from_form = formData["formQuestions"];
+            
 
-            // int cft_id =saveForm(oBS_COLLECT_FORM_TMPLT, data_from_form);
+            int cft_id =saveForm(oBS_COLLECT_FORM_TMPLT, data_from_form);
 
 
-            // return RedirectToAction("Details", new { id =cft_id});
-            return RedirectToAction("Details");
+            return RedirectToAction("Details", new { id =cft_id});
+            //return RedirectToAction("Index");
 
         }
 
@@ -781,7 +781,7 @@ namespace OBSMVC.Controllers
             return fullFuncList;
         }
 
-        private int saveForm(OBS_COLLECT_FORM_TMPLT template_from_form, string[] form_questions_from_gui)
+        private int saveForm(OBS_COLLECT_FORM_TMPLT template_from_form, string form_questions_from_gui)
         {
             using (var transaction = db.Database.BeginTransaction())
             {
@@ -797,22 +797,24 @@ namespace OBSMVC.Controllers
                     template_to_save.obs_cft_ver = 1;
                     template_to_save.obs_cft_title = template_from_form.obs_cft_title;
                     template_to_save.obs_cft_subtitle = template_from_form.obs_cft_subtitle;
-                    template_to_save.obs_cft_eff_st_dt = template_from_form.obs_cft_eff_st_dt;
-                    template_to_save.obs_cft_eff_end_dt = template_from_form.obs_cft_eff_end_dt;
+                    template_to_save.obs_cft_eff_st_dt = template_from_form.obs_cft_eff_st_dt==null?DateTime.Now: template_from_form.obs_cft_eff_st_dt;
+                    template_to_save.obs_cft_eff_end_dt = template_from_form.obs_cft_eff_end_dt == null? Convert.ToDateTime("12/31/2060") : template_from_form.obs_cft_eff_end_dt;
                     db.OBS_COLLECT_FORM_TMPLT.Add(template_to_save);
                     db.SaveChanges();
 
                     //now we need to query OBS_COLLECT_FORM_TMPLT table to find CFT ID we just created
                     int cft_id = db.OBS_COLLECT_FORM_TMPLT.Single(item => item.obs_cft_nbr == cft_number && item.obs_cft_ver == 1).obs_cft_id;
-                    foreach (string question in form_questions_from_gui)
+                    string[] splitterm = { "," };
+                    string[] parsed_questions = form_questions_from_gui.Split(splitterm, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string question in parsed_questions)
                     {
                         //now lets first save split the string we received from the gui
                         // string format should be: order,qat_id,section_text
-                        string[] splitterm = { "," };
-                        string[] parsed_question = question.Split(splitterm, StringSplitOptions.RemoveEmptyEntries);
-                        short order = Convert.ToInt16(parsed_question[0]);
-                        int qat_id = Convert.ToInt32(parsed_question[1]);
-                        int form_section_id = getSectionID(parsed_question[2]);
+                        string[] splitby = { "~" };
+                        string[] question_items = question.Split(splitby, StringSplitOptions.RemoveEmptyEntries);
+                        short order = Convert.ToInt16(question_items[0]);
+                        int qat_id = Convert.ToInt32(question_items[1]);
+                        int form_section_id = getSectionID(question_items[2]);
                         OBS_COL_FORM_QUESTIONS new_form_question = new OBS_COL_FORM_QUESTIONS();
                         new_form_question.obs_cft_id = cft_id;
                         new_form_question.obs_form_section_id = form_section_id;

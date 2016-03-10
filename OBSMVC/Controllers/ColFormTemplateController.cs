@@ -328,7 +328,12 @@ namespace OBSMVC.Controllers
             string questionData = formData["formQuestions"];
             string[] questions = questionData.Split(',');
 
-            return RedirectToAction("Index");
+            // int cft_id =saveForm(oBS_COLLECT_FORM_TMPLT, data_from_form);
+
+
+            // return RedirectToAction("Details", new { id =cft_id});
+            return RedirectToAction("Details");
+
         }
 
 
@@ -776,7 +781,7 @@ namespace OBSMVC.Controllers
             return fullFuncList;
         }
 
-        private void saveForm(OBS_COLLECT_FORM_TMPLT template_from_form, string[] form_questions_from_gui)
+        private int saveForm(OBS_COLLECT_FORM_TMPLT template_from_form, string[] form_questions_from_gui)
         {
             using (var transaction = db.Database.BeginTransaction())
             {
@@ -819,11 +824,13 @@ namespace OBSMVC.Controllers
                         db.SaveChanges();
                     }
                     transaction.Commit();
+                    return cft_id;
                 }
                 catch (Exception e)
                 {
                     ViewBag.exception = e.Message;
                     transaction.Rollback();
+                    return -1;
                 }
             }//end of  using (var transaction = db.Database.BeginTransaction())
 
@@ -952,7 +959,7 @@ namespace OBSMVC.Controllers
                     oQuestion.cfq_fullText = q.OBS_QUEST_ANS_TYPES.OBS_QUESTION.obs_question_full_text.Replace(": (", ":<br/>(");
                     oQuestion.cfq_AT = q.OBS_QUEST_ANS_TYPES.OBS_ANS_TYPE.obs_ans_type_name;
                     oQuestion.cfq_qatId = q.obs_qat_id;
-                    oQuestion.cfq_SelectableAnswers = q.OBS_QUEST_ANS_TYPES.OBS_QUEST_SLCT_ANS.OrderBy(xx => xx.obs_qsa_order).Select(x => x.obs_qsa_text).ToList();
+                    oQuestion.cfq_SelectableAnswers = q.OBS_QUEST_ANS_TYPES.OBS_QUEST_SLCT_ANS.Where(item =>item.obs_qsa_eff_st_dt<=DateTime.Now && item.obs_qsa_eff_end_dt>DateTime.Now).OrderBy(xx => xx.obs_qsa_order).Select(x => x.obs_qsa_text).ToList();
                     // .... Populate the rest of the oQuestion properties
                     oSection.colFormQuestionList.Add(oQuestion);
 

@@ -407,7 +407,7 @@ namespace OBSMVC.Controllers
                         md_quest.assigned_metadata = md_quest.getAssignedMetadata(q.obs_question_id);
                         foreach (string s in md_quest.assigned_metadata)
                         {
-                            if (s.ToLower().Contains(full_text_search.ToLower()))
+                            if (s.ToLower().Contains(full_text_search.ToLower())&&(temp_questions_list.Where(x=>x.obs_question_id==q.obs_question_id).Count()==0))
                             {
                                 md_quest.obs_question_id = q.obs_question_id;
                                 md_quest.obs_question_full_text = q.obs_question_full_text;
@@ -419,7 +419,8 @@ namespace OBSMVC.Controllers
                         }
                     }
                 }
-                availableQuestions = temp_md_list.Union(temp_questions_list).ToList();
+                availableQuestions = temp_questions_list.Union(temp_md_list).ToList();
+                
             }//end of else
 
             

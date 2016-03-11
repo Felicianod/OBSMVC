@@ -86,7 +86,8 @@ ol.targetList {
   border: 1px solid #d6e9c6;
   /*background-color: #ebf5e6;*/
   /*color: #468847;*/
-  background-color: ghostwhite;
+  /*background-color: ghostwhite;*/
+  background-color: whitesmoke;
   color: #468847;
 }
 .sortable-dragging {
@@ -116,6 +117,17 @@ ol.targetList {
       </div>
    </div>*@
 @* - - - - - - - - - - - - - - - - BEGINING OF THE "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
+@*// ---- Helper Hidden Fields to Control the Inner Ids ----- *@
+<input type="hidden" id="masterItemCounter" value="1" />
+<input type="hidden" id="qCounter" value="1" />
+<input type="hidden" id="sCounter" value="0" />
+@{  int masterCounter = 1;
+    string qbtnCloseId = "btn00001";
+    string ulId = "ul00001";
+    string rowInfo = masterCounter.ToString(); 
+ }
+@*\\ ---- End of Hodden Control Fields section ----- *@
+
 
 <form class="form-horizontal" role="form" method="post" >
   @Html.AntiForgeryToken()
@@ -189,29 +201,32 @@ ol.targetList {
      <div class="panel-body content">
          <div class="row">
                @*/---------------- Below is the MAIN FORM QUESTION DETAIL DISPLAY PANEL ----------------------\*@
-               <div class="col-md-7 personal-info">
-                   <input type="hidden" id="qCounter" value="1" />
-                   <input type="hidden" id="sCounter" value="1" />
+               <div class="col-md-7 personal-info" style="max-width:100%; height:550px; overflow-y:scroll">
+
+                   <div class="panel-group" id="accordion">
+                    @*//Inside the Acordion Panel we place all the sections that will be added to the Form
+                        /-----------------------------------------\
+                        |                                         |
+                        |      FORM SECTIONS GO HERE              |
+                        |      POPULATED BY AJAX CALL             |
+                        \-----------------------------------------/*@
+                   </div> @* - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - -*@
 
 
 
-                   @*--------------------------------------------------------------------------------- Harcoded Values for Debugging ----*@
-                   @{int uniqueCounter = 1;
-                     string qbtnCloseId = "btn00001";
-                     string ulId = "ul00001";
-                     string rowInfo = uniqueCounter.ToString(); 
-                    }
 
-                   <div class="row " id="qRow00001" style="text-align:left">
+
+      @*------------------------------------------------- Harcoded Values for Debugging -------------------------*@
+                   @*<div class="row " id="qRow00001" style="text-align:left">
                        <div class="row">
                            <div class="col-sm-1" style="text-align:right">
-                               [@uniqueCounter]
+                               [01]
                            </div>
                            <div class="col-sm-10">
-                               <p>Harcoded Question Text</p>
+                               <p>Harcoded Question Text No 1</p>
                            </div>
                            <div class="col-sm-1">
-                               <button type="button" id="@qbtnCloseId" class="btnClose" onclick="removeSection('qRow00001')" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                               <button type="button" id="@qbtnCloseId" class="btnClose" onclick="removeQuestion('qRow00001')" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                            </div>
                        </div>
                        <div class="row">
@@ -228,104 +243,26 @@ ol.targetList {
                                    Selectable Answers: &nbsp;&nbsp;
                                </div>
                                <div class="col-sm-9">
-                                   @{
-                                       var current_selected = -1;
-                                       
-                                   }
-                                       <ul id="@ulId">
-                                           <li style="display: inline"><span class="badge">Yes</span></li>
-                                           <li style="display: inline"><span class="badge">No</span></li>
-                                           <li style="display: inline"><span class="badge">Maybe</span></li>
-                                       </ul>                                   
+                                  <ul id="@ulId">
+                                      <li style="display: inline"><span class="badge">Yes</span></li>
+                                      <li style="display: inline"><span class="badge">No</span></li>
+                                      <li style="display: inline"><span class="badge">Maybe</span></li>
+                                  </ul>
                                </div>
                           </div>
                        </div>
-                       @{ rowInfo += "~001~sectionName001"; }
+                       @{ rowInfo = "1~001~sectionName001"; }
                        <div class="input-group">
                            <input type="hidden" id="formQuestions" name="formQuestions" value="@rowInfo" />
                        </div>
-                       <hr />
-                   </div>
-
-                   @{ uniqueCounter = 2;
-                      qbtnCloseId = "btn00002";
-                      ulId = "ul00002";
-                      rowInfo = uniqueCounter.ToString();
-                   }
-                   <div class="row " id="qRow00001" style="text-align:left">
-                       <div class="row">
-                           <div class="col-sm-1" style="text-align:right">
-                               [@uniqueCounter]
-                           </div>
-                           <div class="col-sm-10">
-                               <p>Harcoded Question Text</p>
-                           </div>
-                           <div class="col-sm-1">
-                               <button type="button" id="@qbtnCloseId" class="btnClose" onclick="removeSection('qRow00001')" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                           </div>
-                       </div>
-                       <div class="row">
-                           <div class="col-sm-5 col-sm-offset-1">
-                               <div class="input-group">
-                                   <div class="input-group-addon">Answer Type</div>
-                                   <input type="text" id="AssignedAnswers" name="AssignedAnswers" value="3 Val Range" class="viewDropDown form-control">
-                               </div>
-                           </div>
-                       </div>
-                       <div class="row">
-                           <div class="col-sm-11 col-sm-offset-1">
-                               <div class="col-sm-3">
-                                   Selectable Answers: &nbsp;&nbsp;
-                               </div>
-                               <div class="col-sm-9">
-                                   @{
-                                      current_selected = -1;
-                                   }                                   
-                                   <ul id="@ulId">
-                                       <li style="display: inline"><span class="badge">Yes</span></li>
-                                       <li style="display: inline"><span class="badge">No</span></li>
-                                       <li style="display: inline"><span class="badge">Maybe</span></li>
-                                   </ul>
-                               </div>
-                           </div>
-                       </div>
-                       <div class="input-group">
-                           @{ rowInfo += "~002~sectionName001"; }
-                           <input type="hidden" id="formQuestions" name="formQuestions" value="@rowInfo" />
-                       </div>
-                       <hr />
-                   </div>
-                   @*------------------------------------------------------------------------------ END of Harcoded Values for Debugging ----*@
+                   </div>*@
+            @*------------------------------------------ END of Harcoded Values for Debugging -------------------*@
 
 
+                   @*When This button is clicked, add a new view to the "accordion" <DIV> section*@
+                   <input type="button" id="btnAddSection" value="Add New Section" />
+               </div>  @*End of Left Form Questions Pannel (7 column Pannel)*@
 
-
-
-
-
-
-
-
-
-
-
-
-                   
-                   <div class="right row">
-                       <ol class="list-group targetList" id="SectionTitleX" @*ondrop="addQid(event)"*@>
-                           <li class="list-group-item placeholder">
-                               <div style="font-weight:bold; font-size:large">
-                                   <br />Drag a question here...<br /><br />
-                               </div>
-                           </li>
-                       </ol>
-                   </div>
-
-
-                   <div id="ajaxSample">
-
-                   </div>
-               </div>
                @*// -------------- Below is the Panel with the Question's Library ---------------- *@
                <div class="col-md-5 personal-info">
                    <div class="panel panel-info">
@@ -337,7 +274,7 @@ ol.targetList {
                                <div class="input-group col-sm-10 col-sm-offset-1">
                                    <input type="text" class="form-control" id="full_text_search" name="full_text_search" placeholder="Search Question Library for..." style="max-width: 100%; width:100%;">
                                    <span class="input-group-btn">
-                                       <button class="btn btn-secondary" type="button" id="doSearch" data-loading-text="Please Wait...">Search!</button>
+                                       <button class="btn btn-secondary" type="button" id="doSearchDummyData" data-loading-text="Please Wait...">Search!</button>
                                    </span>
                                </div>
                            </div>
@@ -351,13 +288,13 @@ ol.targetList {
 
                        @* -------- <Body Section> This section is Used to Render all the Question Library list Results ---------------- *@
                        <div class="panel-body">
-                           @*<div id="dummyResults" class="right">
-                               <ul class="list-group source">
-                                   <li id="qId007" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 007</span>This is dummy Question 1</li>
-                                   <li id="qId127" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 127</span>Some other Question too</li>
-                                   <li id="qId016" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 016</span>last question</li>
+                           <div id="dummyResults" class="left" style="max-width: 100%; width:100%; display:none">
+                               <ul class="list-group sourceList" id="libraryQuestions">
+                                   <li id="7" class="list-group-item" data-toggle="tooltip" title="Drag to the left to Add!" data-qid="7"><span class="badge" style="width:48px">Id: 007</span>This is dummy Question 1</li>
+                                   <li id="127" class="list-group-item" data-toggle="tooltip" title="Drag to the left to Add!" data-qid="127"><span class="badge" style="width:48px">Id: 127</span>Some other Question too</li>
+                                   <li id="16" class="list-group-item" data-toggle="tooltip" title="Drag to the left to Add!" data-qid="16"><span class="badge" style="width:48px">Id: 016</span>last question</li>
                                </ul>
-                           </div>*@
+                           </div>
 
                            <div id="resultPanel" class="left" style="max-width: 100%; width:100%;">
 
@@ -414,6 +351,30 @@ ol.targetList {
 
 
 @* ######################  J A V A    S C R I P T S    S E C T I O N   #################################### *@
+@****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
+<script>
+    $(document).ready(function () {
+        $("input:text").focus(function () { $(this).select(); });
+
+        $('.collapse').on('show.bs.collapse', function () {
+            $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
+        }).on('hide.bs.collapse', function () {
+            $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
+        });
+
+        $('.datepicker').datepicker({
+            format: "DD, d MM, yy"
+        });
+
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    function removeQuestion(qRowId) {
+        $("#" + qRowId).remove();
+    }
+</script>
+
+@*********************************************************************************************************************@
 @*//- - - - - - - - -  Ajax Call to Retrieve and Display the Question List Search Results - - - - - - - - - - -\\*@
 <script type="text/jscript">
     $('#doSearch').click(function () {
@@ -469,27 +430,29 @@ ol.targetList {
                 drop: function (event, ui) {
                     $(this).find(".placeholder").remove();
 
-                    var link = $("<a href='#' class='dismiss'>x</a>");                   
-                    
+                    var link = $("<a href='#' class='dismiss'>x</a>");
+
                     var qid = ui.draggable.attr("id");
                     //var listId = "liID" + qid;
 
                     //var list = $("<li></li>").text(ui.draggable.text());
-                    var list = $("<li id=\"li" + qid + "\"></li>").text("Question Id is: " + qid );
+                    var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text("Question Id is: " + qid); //    .setAttribute('class', 'newliItem');
 
                     //alert($(list).attr("id"));   //It works, the Id is "li99" (99=qid)
                     $(list).append(link);
                     $(list).appendTo(this);
-                    
+
                     //getQinfo(qid);
                     //updateValues(ui.draggable.text().substring(3, 5));
-                    updateValues("Question Added Successfully: " + getTestData(qid));
-                    alert(getQinfo(qid));
+
+                    // updateValues("Question Added Successfully: " + getTestData(qid));   //Method invoked when action is dropped successfully
+
+                    getQinfo(qid);
                 }
             }).sortable({
                 //connectWith: ".connected",
-                items: "li:not(.placeholder)", 
-                
+                items: "li:not(.placeholder)",
+
                 //start: function (event, ui) {
                 //},
                 //stop: function (event, ui) {
@@ -518,11 +481,12 @@ ol.targetList {
                 //var qdelId = $(this).parent().attr("id");
                 $(this).parent().remove();
                 updateValues("An Item was Deleted");  //If we want to all a function when item is dragged/dropped
-                //updateValues();  //If we want to all a function when item is dragged/dropped
             });
             $btn.button('reset');
         });
-    })
+    });
+
+
 
     $('#doSearchDummyData').click(function () {
         // ---- This is a simmulated call that returns mocked up Results -------
@@ -530,8 +494,78 @@ ol.targetList {
         $btn.button('loading');
         $('#dummyResults').show();
         //displayMsg("Data Retrieved Successfully.");
+
+        //Make the New Source List Dragable
+        $(".sourceList li").draggable({
+            //If you want to limit the area inside which a user can drag elements,
+            // Simply set the "appendTo" attribute to  "#myContainerName" or similar.
+            addClasses: false,
+            appendTo: "body",
+            helper: "clone"
+        });
+
+        //Make the Target List Dropable and force it to accept newly created source List
+        $(".targetList").droppable({
+            addClasses: false,
+            activeClass: "listActive",
+            accept: ":not(.ui-sortable-helper)",
+            drop: function (event, ui) {
+                $(this).find(".placeholder").remove();
+
+                var link = $("<a href='#' class='dismiss'>x</a>");
+
+                var qid = ui.draggable.attr("id");
+                //var listId = "liID" + qid;
+
+                //var list = $("<li></li>").text(ui.draggable.text());
+                var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text("Question Id is: " + qid);
+                //list.setAttribute('class', 'newliItem');
+                //alert($(list).attr("id"));   //It works, the Id is "li99" (99=qid)
+                $(list).append(link);
+                $(list).appendTo(this);
+
+                //getQinfo(qid);
+                //updateValues(ui.draggable.text().substring(3, 5));
+                // updateValues("Question Added Successfully: " + getTestData(qid)); //Method invoked when action is dropped successfully
+                getQinfo(qid);
+            }
+        }).sortable({
+            //connectWith: ".connected",
+            items: "li:not(.placeholder)",
+
+            //start: function (event, ui) {
+            //},
+            //stop: function (event, ui) {
+            //    var item = $(ui.item);
+            //    alert($(this).attr("id"));
+            //    var to = item.parent().is("#droppable_widget");
+            //    var siblingsCount = item.siblings().size();
+            //    if (to && siblingsCount > 0) {
+            //        alert("only one item allowed here");
+            //        return false;
+            //    }
+            //},
+
+
+
+            sort: function () {
+                $(this).removeClass("listActive");
+            },
+
+            update: function () {
+                var qid2 = $(this).qid;
+                // updateValues("An Item was reordered." + +getTestData(qid2));  // Call function After Sorting
+            }
+        }).on("click", ".dismiss", function (event) {
+            event.preventDefault();
+            //var qdelId = $(this).parent().attr("id");
+            $(this).parent().remove();
+            updateValues("An Item was Deleted");  //If we want to all a function when item is dragged/dropped
+            //updateValues();  //If we want to all a function when item is dragged/dropped
+        });
+
         $btn.button('reset');
-    })
+    });
 
 </script>
 
@@ -542,7 +576,8 @@ ol.targetList {
 
 <script>
     $(document).ready(function () {
-       
+        // As sson as the page first loads, create a new Section
+        addNewSection();
     });
 </script>
 <script type="text/javascript">
@@ -619,60 +654,7 @@ ol.targetList {
     //    error: function(){}
     //});
 
-    function addQid(ev) {
-        //var qid = ui.draggable.attr("id");
-        var qid = 6;
-        //var listId = "liID" + qid;
-        //var list = $("<li></li>").text(ui.draggable.text());
-
-
-        //var newCounterSeq = $("#qCounter").val();
-
-        //For Now lets hardcode it
-        var newCounterSeq = 1;
-        //var target = ev.target || ev.srcElement;
-        //var myId = $(event.target).attr("id");;
-
-        //event.target.appendChild(document.getElementById(dataId));
-
-
-        // ------------ Make the Ajax Call ---------------------------------------------
-        $.ajax({
-            url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
-            method: "GET",
-            cache: false,
-            data: { question_id: qid, qCounter: newCounterSeq },     //<---- Data Parameters (if not already passed in the Url)
-            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-            //--- On error, execute this function ------
-            error: function () {
-                alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-                //$btn.button('reset');
-            }
-        }).done(function (d) {
-            //Execute this code After the Ajax call completes successfully
-            //ev.target.append(d);
-
-            var link = $("<a href='#' class='dismiss'>x</a>");
-            var list = $("<li id=\"li" + qid + "\"></li>").text(d);
-            $(list).append(link);
-            $(list).appendTo(this);
-            updateValues("Question Added Successfully: " + getTestData(qid));
-            //For NOw lets not update the hidden field
-            //$('#qCounter').val(Number($('#qCounter').val()) + 1);
-
-
-
-            //alert("You jusr added question View Id: " + "qRow" + newCounterSeq)
-            //ev.target.html(d);
-            //$("#questionPnl01").append(d);
-            //$btn.button('reset');
-        });
-    }
-
+   
 
     function addQidOLD(ev) {
         var newCounterSeq = $("#qCounter").val();
@@ -716,7 +698,7 @@ ol.targetList {
         });
     }
 
-
+    //------------------------------------------------------------------
     function getQinfo(questionId) {
         //var newCounterSeq = $("#qCounter").val();
         var newCounterSeq = 1;
@@ -725,11 +707,8 @@ ol.targetList {
         //var target = ev.target || ev.srcElement;
         //var myId = $(event.target).attr("id");;
 
-        alert("Retrieving Information via Ajax for Question Id: " + qid);
+        //alert("Retrieving Information via Ajax for Question Id: " + qid);
         // ------------ Make the Ajax Call ---------------------------------------------
-
-
-
         $.ajax({
             url: '@Url.Action("getQuestionInfoTest", "ColFormTemplate")',
             method: "GET",
@@ -740,10 +719,10 @@ ol.targetList {
             //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
             //traditional: true,                                       //<--- In case we wanted to post a JSON data object
 
-            beforeSend: function( xhr ) {
-                //xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-                alert("Ready to Submit Ajax call" );
-            },
+            //beforeSend: function( xhr ) {
+            //    //xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+            //    alert("Ready to Submit Ajax call" );
+            //},
 
 
             //--- On error, execute this function ------
@@ -754,7 +733,16 @@ ol.targetList {
         }).done(function (d) {
             //Execute this code After the Ajax call completes successfully
 
-            $('#ajaxSample').html(d)
+            //Put the retrieved source code inside a <DIV> tag
+            //Add the Division tag to the newly created "Li"
+            var newDIV = document.createElement('div');
+            newDIV.innerHTML = d;  // (If we want to just add some inner html text)
+            //newDIV.appendChild(d);   // (If we want to add a child element)
+            var liCreated = $('.newliItem').append(newDIV);
+
+            //Once the New List Item has been completed remove its "newli" atribbute
+            liCreated.removeClass("newliItem");
+            //$('#ajaxSample').html(d)
 
             //$('#qCounter').val(Number($('#qCounter').val()) + 1);
             //ajaxResult = d;
@@ -779,4 +767,69 @@ ol.targetList {
         $("#" + qSectionId).remove();
     }
 
+</script>
+
+@* - - - - - - - SCRIPT TO ADD A NEW SECTION TO THE FORM - - - - - - - - - - *@
+<script type="text/jscript">
+    $('#btnAddSection').click(function () {
+        var $btn = $(this);
+        $btn.button('loading');
+        addNewSection();
+        $btn.button('reset');
+    })
+
+    function addNewSection(){
+        $('#sCounter').val(Number($('#sCounter').val()) + 1);
+        // ------------ Make the Ajax Call ---------------------------------------------
+        $.ajax({
+            url: '@Url.Action("addNewSection", "ColFormTemplate")',
+            method: "GET",
+            cache: false,
+            data: { sCounter: $('#sCounter').val() },     //<---- Data Parameters (if not already passed in the Url)
+            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+            //--- On error, execute this function ------
+            error: function () {
+                alert("An Error has Occurred. Unable to Add New Sections to Form!!");  //<-- Trap and alert of any errors if they occurred
+                $btn.button('reset');
+            }
+        }).done(function (d) {
+            //Execute this code After the Ajax call completes successfully
+            $("#accordion").append(d);
+            $btn.button('reset');
+        });
+    } // ------ End of addNewSection() function -----
+
+</script>
+
+@*// Rasul's Script for the drop dowm Must be migrated from new code *@ 
+<script type="text/javascript">
+    $(".viewDropDown").change( function (event) {
+        var $drop_down = $(this);
+        var selectedId = $(this).val();
+        if (selectedId == '') {
+            selectedId = "-1";
+        }
+        else {
+            $.ajax({
+            url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
+            method: "GET",
+            cache: false,
+            data: { qat_id: selectedId },
+            error: function () {
+                alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (d) {
+            //Execute this code After the Ajax call completes successfully
+            // alert("result is "+d);
+            @*$("#"+@current_selected).html(d);              //Warning this code must be fixed*@
+        });
+        }
+        var cur_sel = document.getElementById("currentSelectedQAT");
+        cur_sel.value = selectedId;
+        //alert("hidden = " + document.getElementById("currentSelectedQAT").value);
+    })
 </script>

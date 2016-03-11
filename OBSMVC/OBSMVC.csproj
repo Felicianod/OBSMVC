@@ -397,6 +397,7 @@
     <Content Include="Scripts\images\ui-icons_cc0000_256x240.png" />
     <Content Include="Scripts\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery-ui.min.css" />
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.js" />
     <Content Include="Scripts\jquery.notifyBar.css" />
@@ -524,6 +525,7 @@
     <Content Include="Views\ColFormTemplate\_getQuestionInfoFD.cshtml" />
     <Content Include="Views\ColFormTemplate\CreateForm.cshtml" />
     <Content Include="Views\ColFormTemplate\Create_DeleteMe.cshtml" />
+    <Content Include="Views\ColFormTemplate\_getQuestionInfoTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

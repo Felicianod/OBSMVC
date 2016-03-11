@@ -53,7 +53,7 @@
             <div class="panel-body content">
                 <div class="row">
                     @*/---------------- Below is the MAIN FORM QUESTION DETAIL DISPLAY PANEL ----------------------\*@
-                    <div class="col-md-7 personal-info">
+                    <div class="col-md-7 personal-info" >
                         <input type="hidden" id="qCounter" value="1" />
                         <input type="hidden" id="sCounter" value="1" />
 
@@ -64,103 +64,12 @@
 
 
                         <div class="panel-group" id="accordion">
-
-
-                            @*  ################################   W A R N I N G   #####################################
-        *******************************************************************************
-           Do not touch this section
-           This is the New Form Question Main Panel
-           DO NOT CHANGE OR MODIFY  Feliciano is testing it !!!!!!!!!
-        ******************************************************************************@
-
-
-
-
-
-
-
-
-
-
-
-
-                           
-
-
-
-                            <div class="panel panel-default">
-                                <div class="panel-heading form-inline">
-                                    <h4 class="panel-title">
-                                        @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
-                                        <a class="accordion-toggle" data-toggle="collapse" href="#section001">
-                                            <span class="glyphicon glyphicon-minus">&nbsp;</span>
-                                            <span>Section# 1</span>
-                                        </a>
-                                        &nbsp;&nbsp;
-                                        <input type="text" id="section001Name" class="form-control input-sm" style="width:50%" placeholder="<Enter Section Name>" />
-                                    </h4>
-                                </div>
-                                <div id="section001" class="panel-collapse collapse in " @*style="border:dashed; border-width:thin"*@>
-                                    <div style="text-align:center; background-color:lightblue; width:100%"><span style="background-color:lightblue; width:100%">--- DROP YOUR QUESTION HERE ---</span></div>
-
-
-
-
-
-                                    @*<ul>
-                                            <li id="draggable" class="list-group-item ui-state-highlight liElement draggableItem">Drag me Down</li>
-                                        </ul>*@
-                                    <ul class="list-group ulElement sortableItem">
-                                        <li class="list-group-item ui-state-default liElement">list item #1</li>
-                                        <li class="list-group-item ui-state-default liElement">
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon">Question Id: </div>
-                                                        <input type="text" class="form-control" value="258" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item ui-state-default liElement">list item #3</li>
-                                    </ul>
-
-
-
-                                </div> @*End of Section "section001"*@
-
-                                <br />
-                                <div>
-                                    <ul class="list-group ulElement sortableItem">
-                                        <li class="list-group-item ui-state-default liElement">list item A</li>
-                                        <li class="list-group-item ui-state-default liElement">list item B</li>
-                                        <li class="list-group-item ui-state-default liElement">list item C</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-
-
-
-
-                            
-
-
-
-
-
-
-                            @* ############### END OF PANEL USED by Feliciano For Testing ##################    *@
-
-
-
-
-
-
-
                         </div>
-                        @*When This button is clicked, add a new view to the "accordion" <DIV> section*@
-                        <input type="button" id="btnAddSection" value="Add New Section" />
+
+
+
+
+
 
 
                         @*\--------------- END OF THE MAIN QUESTION DISPLAY PANEL -------------------/*@
@@ -179,35 +88,7 @@
 
 
 @*====================================AJAX TO CALL QUESTION DETAILS ACTION====================================*@
-<script type="text/jscript">
-    $('#btnAddSection').click(function () {
-        var $btn = $(this);
-        $btn.button('loading');
-        $('#sCounter').val(Number($('#sCounter').val()) + 1);
-        // ------------ Make the Ajax Call ---------------------------------------------
-        $.ajax({
-            url: '@Url.Action("addNewSection", "ColFormTemplate")',
-            method: "GET",
-            cache: false,
-            data: { sCounter: $('#sCounter').val() },     //<---- Data Parameters (if not already passed in the Url)
-            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
 
-            //--- On error, execute this function ------
-            error: function () {
-                alert("An Error has Occurred. Unable to Add New Sections to Form!!");  //<-- Trap and alert of any errors if they occurred
-                $btn.button('reset');
-            }
-        }).done(function (d) {
-            //Execute this code After the Ajax call completes successfully
-            $("#accordion").append(d);
-            $btn.button('reset');
-        });
-    })
-
-</script>
 
 @*<script type="text/javascript">
         $(document).ready(function () {
@@ -225,27 +106,6 @@
         };
     </script>*@
 
-<script>
-    $(document).ready(function () {
-        $("input:text").focus(function () { $(this).select(); });
-
-        $('.collapse').on('show.bs.collapse', function () {
-            $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
-        }).on('hide.bs.collapse', function () {
-            $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
-        });
-
-        $('.datepicker').datepicker({
-            format: "DD, d MM, yy"
-        });
-
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-
-    function removeSection(qSectionId) {
-        $("#" + qSectionId).remove();
-    }
-</script>
 
 
 @********************************* DRAG AND DROP EVENT LISTENERS *********************************@

@@ -8,7 +8,7 @@
 
 
 <div class="row " id="@qViewId" style="text-align:left">
-    @{var rowInfo = Model.uniqueCounter; }
+    @{var rowInfo = Model.uniqueCounter.ToString(); }
     <div class="row" >
         <div class="col-sm-1" style="text-align:right">
             [@Model.uniqueCounter]
@@ -61,30 +61,3 @@
     @*<input type="hidden" id="currentSelectedQAT" name="currentSelectedQAT" value= "@current_selected" >*@
 
 
-<script type="text/javascript">
-    $(".viewDropDown").change( function (event) {
-        var $drop_down = $(this);
-        var selectedId = $(this).val();
-        if (selectedId == '') {
-            selectedId = "-1";
-        }
-        else {
-            $.ajax({
-            url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
-            method: "GET",
-            cache: false,
-            data: { qat_id: selectedId },
-            error: function () {
-                alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-            }
-        }).done(function (d) {
-            //Execute this code After the Ajax call completes successfully
-            // alert("result is "+d);
-            $("#"+@current_selected).html(d);
-        });
-        }
-        var cur_sel = document.getElementById("currentSelectedQAT");
-        cur_sel.value = selectedId;
-        //alert("hidden = " + document.getElementById("currentSelectedQAT").value);
-    })
-</script>

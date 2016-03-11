@@ -284,8 +284,8 @@ namespace OBSMVC.Controllers
 
             //Delete this line and uncomment next two when at work, for Home Test Only
             //ViewData["errMsg"] = "Database Server is down...";
-            //try { int testDB = db.DSC_CUSTOMER.Count(); }
-            //catch { ViewData["errMsg"] = "Database Server is down..."; }
+            try { int testDB = db.DSC_CUSTOMER.Count(); }
+            catch { ViewData["errMsg"] = "Database Server is down..."; }
 
             //ViewData["errMsg"] = "Database is Up!";
             //// First Check the Database Connection
@@ -766,6 +766,7 @@ namespace OBSMVC.Controllers
                 return -1;
             }
 
+            ViewBag.exception = "";
             using (var transaction = db.Database.BeginTransaction())
             {
                 try
@@ -811,11 +812,16 @@ namespace OBSMVC.Controllers
                         db.SaveChanges();
                     }
                     transaction.Commit();
+                    if (cft_id < 0)
+                    {
+                        ViewBag.exception = "An error Occurred while saving information... ";
+                    }
+                    
                     return cft_id;
                 }
                 catch (Exception e)
                 {
-                    ViewBag.exception = e.Message;
+                    ViewBag.exception = "Failed to Save Data: " + e.Message;
                     transaction.Rollback();
                     return -1;
                 }

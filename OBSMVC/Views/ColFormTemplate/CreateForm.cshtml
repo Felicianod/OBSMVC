@@ -474,7 +474,7 @@ ol.targetList {
 
                 update: function () {
                     var qid2 = $(this).qid;
-                    updateValues("An Item was reordered." + +getTestData(qid2));  // Call function After Sorting
+                    //updateValues("An Item was reordered." + +getTestData(qid2));  // Call function After Sorting
                 }
             }).on("click", ".dismiss", function (event) {
                 event.preventDefault();
@@ -710,7 +710,7 @@ ol.targetList {
         //alert("Retrieving Information via Ajax for Question Id: " + qid);
         // ------------ Make the Ajax Call ---------------------------------------------
         $.ajax({
-            url: '@Url.Action("getQuestionInfoTest", "ColFormTemplate")',
+            url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
             method: "GET",
             cache: false,
             data: { question_id: qid, qCounter: newCounterSeq },     //<---- Data Parameters (if not already passed in the Url)
@@ -804,31 +804,3 @@ ol.targetList {
 
 </script>
 
-@*// Rasul's Script for the drop dowm Must be migrated from new code *@ 
-<script type="text/javascript">
-    $(".viewDropDown").change( function (event) {
-        var $drop_down = $(this);
-        var selectedId = $(this).val();
-        if (selectedId == '') {
-            selectedId = "-1";
-        }
-        else {
-            $.ajax({
-            url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
-            method: "GET",
-            cache: false,
-            data: { qat_id: selectedId },
-            error: function () {
-                alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-            }
-        }).done(function (d) {
-            //Execute this code After the Ajax call completes successfully
-            // alert("result is "+d);
-            @*$("#"+@current_selected).html(d);              //Warning this code must be fixed*@
-        });
-        }
-        var cur_sel = document.getElementById("currentSelectedQAT");
-        cur_sel.value = selectedId;
-        //alert("hidden = " + document.getElementById("currentSelectedQAT").value);
-    })
-</script>

@@ -305,10 +305,12 @@ namespace OBSMVC.Controllers
         public ActionResult CreateForm(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT, FormCollection formData)
         {
             string data_from_form = formData["formQuestions"];
-            
-
-            int cft_id =saveForm(oBS_COLLECT_FORM_TMPLT, data_from_form);
-
+            int cft_id = -1;
+            bool hasQuestions = !String.IsNullOrEmpty(data_from_form);
+            if(hasQuestions)
+            {
+                cft_id = saveForm(oBS_COLLECT_FORM_TMPLT, data_from_form);
+            }
 
             return RedirectToAction("Details", new { id =cft_id});
             //return RedirectToAction("Index");

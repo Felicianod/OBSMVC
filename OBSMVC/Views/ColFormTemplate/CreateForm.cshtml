@@ -1,7 +1,6 @@
 ﻿@model OBSMVC.Models.OBS_COLLECT_FORM_TMPLT
 @{ ViewBag.Title = "Create/Edit Form"; }
 
-
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
 
 @*<script type="text/javascript" src="~/Scripts/pnotify.custom.min.js"></script>
@@ -578,14 +577,6 @@ ol.targetList {
 
 @*//- - - - - - - - -  Ajax Call to Retrieve and Display the Question List Search Results - - - - - - - - - - -\\*@
 
-
-
-<script>
-    $(document).ready(function () {
-        // As sson as the page first loads, create a new Section
-        addNewSection();
-    });
-</script>
 <script type="text/javascript">
     function displayMsg(msg) {
         PNotify.removeAll();
@@ -777,6 +768,12 @@ ol.targetList {
 
 @* - - - - - - - SCRIPT TO ADD A NEW SECTION TO THE FORM - - - - - - - - - - *@
 <script type="text/jscript">
+    $(document).ready(function () {
+        // As sson as the page first loads, create a new Section
+        addNewSection();
+    });
+
+
     $('#btnAddSection').click(function () {
         var $btn = $(this);
         $btn.button('loading');

@@ -441,7 +441,8 @@ ol.targetList {
                     //var listId = "liID" + qid;
 
                     //var list = $("<li></li>").text(ui.draggable.text());
-                    var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text("Question Id is: " + qid); //    .setAttribute('class', 'newliItem');
+                    //var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text("Question Id is: " + qid); //    .setAttribute('class', 'newliItem');
+                    var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text(""); //    .setAttribute('class', 'newliItem');
 
                     //alert($(list).attr("id"));   //It works, the Id is "li99" (99=qid)
                     $(list).append(link);
@@ -485,7 +486,7 @@ ol.targetList {
                 event.preventDefault();
                 //var qdelId = $(this).parent().attr("id");
                 $(this).parent().remove();
-                updateValues("An Item was Deleted");  //If we want to all a function when item is dragged/dropped
+                // updateValues("An Item was Deleted");  //If we want to all a function when item is dragged/dropped
             });
             $btn.button('reset');
         });

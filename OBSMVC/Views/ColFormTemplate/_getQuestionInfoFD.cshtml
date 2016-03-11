@@ -56,7 +56,7 @@
     </div>
     <input type="hidden" id="@hidden_field" name="@hidden_field" value="@current_selected">
     @{rowInfo += "~" + current_selected.ToString() + "~Header Section";}
-    <input type="hidden" id="formQuestions" value="@rowInfo" />
+    <input type="hidden" id="formQuestions" name="formQuestions" value="@rowInfo" />
     <hr />
 </div>
 
@@ -67,7 +67,6 @@
 
 <script type="text/javascript">
     $("@dropdown2").change( function (event) {
-        alert("dropdown was changed!");
         var $drop_down = $(this);
         var selectedId = $(this).val();
         if (selectedId == '') {
@@ -75,7 +74,7 @@
             $("#@Model.uniqueCounter").html("");
         }
         else {
-            alert("Selected ID "+selectedId);
+            //alert("Selected ID "+selectedId);
             $.ajax({
                 url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
                 method: "GET",
@@ -85,7 +84,8 @@
                     alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
                 }
             }).done(function (d) {
-                $("#@Model.uniqueCounter").html(d);
+                //alert("Retrieved Data is: " + d);
+                $("#@ulId").html(d);
             });
         }
         var cur_sel = document.getElementById("currentSelectedQAT"+@Model.uniqueCounter);

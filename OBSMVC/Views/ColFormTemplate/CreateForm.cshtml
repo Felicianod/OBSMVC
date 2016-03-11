@@ -700,8 +700,8 @@ ol.targetList {
 
     //------------------------------------------------------------------
     function getQinfo(questionId) {
-        //var newCounterSeq = $("#qCounter").val();
-        var newCounterSeq = 1;
+        var newCounterSeq = $("#qCounter").val();
+        //var newCounterSeq = 1;
         var qid = questionId
         var ajaxResult = "Sample Data";
         //var target = ev.target || ev.srcElement;
@@ -744,7 +744,7 @@ ol.targetList {
             liCreated.removeClass("newliItem");
             //$('#ajaxSample').html(d)
 
-            //$('#qCounter').val(Number($('#qCounter').val()) + 1);
+            $('#qCounter').val(Number($('#qCounter').val()) + 1);
             //ajaxResult = d;
             //alert("Ajax call completed. result: " + d);
             //return ajaxResult;

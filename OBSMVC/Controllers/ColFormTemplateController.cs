@@ -357,6 +357,7 @@ namespace OBSMVC.Controllers
         [HttpGet]
         public PartialViewResult getQuestionsList(string full_text_search,  int? page, int? pageSize)
         {
+            //full text can be question text and medatada(value and category) 
             //System.Threading.Thread.Sleep(2000);
             List<AvailableQuestions> availableQuestions = new List<AvailableQuestions>();
             List<AvailableQuestions> questions_for_display = new List<AvailableQuestions>();
@@ -373,16 +374,16 @@ namespace OBSMVC.Controllers
                     availableQuestions.Add(quest);
 
                 }
-
-                //questions_for_display = availableQuestions.OrderBy(x => x.obs_question_id).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).Take(pageSize ?? 10).ToList();
                
             }
             else
-            {//search by question text
+            {//search by question text and metadata
 
-                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.ToLower().Contains(full_text_search.ToLower())).ToList();
                 List<AvailableQuestions> temp_questions_list = new List<AvailableQuestions>();
                 List<AvailableQuestions> temp_md_list = new List<AvailableQuestions>();
+
+                //first lets search for question text
+                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.ToLower().Contains(full_text_search.ToLower())).ToList();             
                 if (list_of_questions.Count > 0)
                 {
                     foreach (OBS_QUESTION q in list_of_questions)
@@ -395,6 +396,7 @@ namespace OBSMVC.Controllers
 
                     }
                 }
+                //now lets find all matching metadata
                 List<OBS_QUESTION> list_of_md_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now).ToList();
 
                 foreach (OBS_QUESTION q in list_of_md_questions)
@@ -420,62 +422,7 @@ namespace OBSMVC.Controllers
                 availableQuestions = temp_md_list.Union(temp_questions_list).ToList();
             }//end of else
 
-            //else if (String.IsNullOrWhiteSpace(full_text_search) && !String.IsNullOrWhiteSpace(metadata_search))
-            //{//search by metadata
-
-            //    List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now).ToList();
-
-            //    foreach (OBS_QUESTION q in list_of_questions)
-            //    {
-            //        AvailableQuestions quest = new AvailableQuestions();
-            //        if (quest.getAssignedMetadata(q.obs_question_id).Count > 0)
-            //        {
-            //            quest.assigned_metadata = quest.getAssignedMetadata(q.obs_question_id);
-            //            foreach (string s in quest.assigned_metadata)
-            //            {
-            //                if (s.ToLower().Contains(metadata_search.ToLower()))
-            //                {
-            //                    quest.obs_question_id = q.obs_question_id;
-            //                    quest.obs_question_full_text = q.obs_question_full_text;
-            //                    availableQuestions.Add(quest);
-            //                    break;
-            //                }
-            //                else { continue; }
-
-            //            }
-            //        }
-            //    }
-            //}
-            //else if (!String.IsNullOrWhiteSpace(full_text_search) && !String.IsNullOrWhiteSpace(metadata_search))
-            //{//search by metadata and full text
-
-            //    List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.ToLower().Contains(full_text_search.ToLower())).ToList();
-
-            //    if (list_of_questions.Count > 0)
-            //    {
-            //        foreach (OBS_QUESTION q in list_of_questions)
-            //        {
-            //            AvailableQuestions quest = new AvailableQuestions();
-            //            if (quest.getAssignedMetadata(q.obs_question_id).Count > 0)
-            //            {
-            //                quest.assigned_metadata = quest.getAssignedMetadata(q.obs_question_id);
-            //                foreach (string s in quest.assigned_metadata)
-            //                {
-            //                    if (s.ToLower().Contains(metadata_search.ToLower()))
-            //                    {
-            //                        quest.obs_question_id = q.obs_question_id;
-            //                        quest.obs_question_full_text = q.obs_question_full_text;
-            //                        availableQuestions.Add(quest);
-            //                        break;
-            //                    }
-            //                    else { continue; }
-            //                }
-
-            //            }
-            //        }
-            //    }
-
-            //}
+            
 
             questions_for_display = availableQuestions.OrderBy(x => x.obs_question_id).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).Take(pageSize ?? 10).ToList();
 
@@ -810,6 +757,11 @@ namespace OBSMVC.Controllers
 
         private int saveForm(OBS_COLLECT_FORM_TMPLT template_from_form, string form_questions_from_gui)
         {
+            if(db.OBS_COLLECT_FORM_TMPLT.Where(item =>item.obs_cft_title == template_from_form.obs_cft_title).Count() > 0)
+            {//we need to check if title passed from user is unique. if it already exists, we need to return the error message back to the screen
+                return -1;
+            }
+
             using (var transaction = db.Database.BeginTransaction())
             {
                 try

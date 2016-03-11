@@ -283,7 +283,7 @@ namespace OBSMVC.Controllers
             ViewData["errMsg"] = "DBOK";
 
             //Delete this line and uncomment next two when at work, for Home Test Only
-            ViewData["errMsg"] = "Database Server is down...";
+            //ViewData["errMsg"] = "Database Server is down...";
             //try { int testDB = db.DSC_CUSTOMER.Count(); }
             //catch { ViewData["errMsg"] = "Database Server is down..."; }
 

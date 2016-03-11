@@ -112,7 +112,7 @@ ol.targetList {
 
 <div class="well well-sm nopadding"><h3 class="col-md-offset-1">Collection Form Creation</h3></div>
 
-@if (ViewBag.exception != "")
+@if (!String.IsNullOrEmpty(ViewBag.exception))
 {
     <div class="row">
        <div class="alert alert-danger col-sm-12">

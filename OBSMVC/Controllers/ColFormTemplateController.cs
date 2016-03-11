@@ -481,6 +481,14 @@ namespace OBSMVC.Controllers
 
             return PartialView("_getQuestionsList", questions_for_display);
         }
+
+        [HttpGet]
+        public String getQuestionInfoTest(int question_id, int qCounter)
+        {
+            return "You selected Question Id: " + question_id + "[Counter: " + qCounter + "] via Ajax call.";        
+        }
+
+        [HttpGet]
         public PartialViewResult getQuestionInfo(int question_id, int qCounter)
         {
             QuestionInfo questionInfo = new QuestionInfo();
@@ -526,6 +534,9 @@ namespace OBSMVC.Controllers
             }
             return PartialView("_getQuestionInfoFD", questionInfo);
         }
+
+
+        // =====================================================================================================================
         public String GetSelectableAnswers(string qat_id)
         {
             if (qat_id == "")

@@ -4,20 +4,8 @@
 
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
 
-@*<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.2.12/jquery.jgrowl.min.css" />
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.2.12/jquery.jgrowl.min.js"></script>
-<script type="text/javascript">
-	(function($){
-		$(function(){
-			$.jGrowl("Hello world!");
-		});
-	})(jQuery);
-</script>*@
-
-
-<script type="text/javascript" src="~/Scripts/pnotify.custom.min.js"></script>
-<link href="~/Scripts/pnotify.custom.min.css" media="all" rel="stylesheet" type="text/css" />
+@*<script type="text/javascript" src="~/Scripts/pnotify.custom.min.js"></script>
+<link href="~/Scripts/pnotify.custom.min.css" media="all" rel="stylesheet" type="text/css" />*@
 
 <style>
     body > li {
@@ -55,15 +43,15 @@
   position: relative;
   top: -8px;
   line-height: 20px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
   text-decoration: none !important;
   color: #468847;
 }
 
-    ul.source, ol.target {
+    ul.sourceList, ol.targetList {
         min-height: 50px;
-  margin: 0px 25px 10px 0px;
+  margin: 0px 20px 10px 0px;
   padding: 2px;
   border-width: 1px;
   border-style: solid;
@@ -73,28 +61,28 @@
   list-style-type: none;
   list-style-position: inside;
 }
-ul.source {
+ul.sourceList {
   border-color: #f8e0b1;
 }
-ol.target {
+ol.targetList {
   border-color: #add38d;
 }
-.source li, .target li {
-  margin: 5px;
-  padding: 5px;
+.sourceList li, .targetList li {
+  margin: 3px;
+  padding: 3px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
-.source li {
+.sourceList li {
   border: 1px solid #fbeed5;
   /*background-color: #fcf8e3;
   color: #c09853;*/
   background-color: #fcf8e3;
   color: #696969;
 }
-.target li {
+.targetList li {
   border: 1px solid #d6e9c6;
   /*background-color: #ebf5e6;*/
   /*color: #468847;*/
@@ -107,13 +95,13 @@ ol.target {
   color: #bbb !important;
 }
 .sortable-placeholder {
-  height: 40px;
+  height: 50px;
 }
-.source .sortable-placeholder {
+.sourceList .sortable-placeholder {
   border: 2px dashed #f8e0b1 !important;
   background-color: #fefcf5 !important;
 }
-.target .sortable-placeholder {
+.targetList .sortable-placeholder {
   border: 2px dashed #add38d !important;
   background-color: #f6fbf4 !important;
 }
@@ -324,14 +312,20 @@ ol.target {
 
                    
                    <div class="right row">
-                       <ol class="list-group target">
-                           <li class="list-group-item placeholder">Drag a question here...</li>
+                       <ol class="list-group targetList" id="SectionTitleX" @*ondrop="addQid(event)"*@>
+                           <li class="list-group-item placeholder">
+                               <div style="font-weight:bold; font-size:large">
+                                   <br />Drag a question here...<br /><br />
+                               </div>
+                           </li>
                        </ol>
                    </div>
 
 
+                   <div id="ajaxSample">
 
                    </div>
+               </div>
                @*// -------------- Below is the Panel with the Question's Library ---------------- *@
                <div class="col-md-5 personal-info">
                    <div class="panel panel-info">
@@ -357,9 +351,6 @@ ol.target {
 
                        @* -------- <Body Section> This section is Used to Render all the Question Library list Results ---------------- *@
                        <div class="panel-body">
-                           @*<div>
-                            @Html.Action("getQuestions", new { full_text_search = "", metadata_search = "" })
-                             </div>*@
                            @*<div id="dummyResults" class="right">
                                <ul class="list-group source">
                                    <li id="qId007" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 007</span>This is dummy Question 1</li>
@@ -368,8 +359,12 @@ ol.target {
                                </ul>
                            </div>*@
 
-                           <div id="resultPanel" class="right" style="max-width: 100%; width:100%;">
-                               @*Results from Ajax Call will be displayed here!!*@
+                           <div id="resultPanel" class="left" style="max-width: 100%; width:100%;">
+
+                               @* *****************************************************
+                                     Results from Ajax Call will be displayed here!!
+                                  ******************************************************@
+
                            </div>
 
 
@@ -458,45 +453,72 @@ ol.target {
             //$("#dummyResults ul").append('<li id="qId017" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 017</span>last question New</li>');
 
             //Make the New Source List Dragable
-            $(".source li").draggable({
+            $(".sourceList li").draggable({
                 //If you want to limit the area inside which a user can drag elements,
                 // Simply set the "appendTo" attribute to  "#myContainerName" or similar.
                 addClasses: false,
                 appendTo: "body",
                 helper: "clone"
             });
+
             //Make the Target List Dropable and force it to accept newly created source List
-            $(".target").droppable({
+            $(".targetList").droppable({
                 addClasses: false,
                 activeClass: "listActive",
                 accept: ":not(.ui-sortable-helper)",
                 drop: function (event, ui) {
                     $(this).find(".placeholder").remove();
-                    var link = $("<a href='#' class='dismiss'>x</a>");
-                    //var list = $("<li></li>").text(ui.draggable.text());
+
+                    var link = $("<a href='#' class='dismiss'>x</a>");                   
                     
                     var qid = ui.draggable.attr("id");
-                    var listId = "liID" + qid;
+                    //var listId = "liID" + qid;
 
-                    var list = $("<li id='" + listId + "'></li>").text("Question Id is: " + qid);
+                    //var list = $("<li></li>").text(ui.draggable.text());
+                    var list = $("<li id=\"li" + qid + "\"></li>").text("Question Id is: " + qid );
+
+                    //alert($(list).attr("id"));   //It works, the Id is "li99" (99=qid)
                     $(list).append(link);
                     $(list).appendTo(this);
-
+                    
+                    //getQinfo(qid);
                     //updateValues(ui.draggable.text().substring(3, 5));
-                    updateValues("Question Id [ " + qid + "] was added.");
+                    updateValues("Question Added Successfully: " + getTestData(qid));
+                    alert(getQinfo(qid));
                 }
             }).sortable({
-                items: "li:not(.placeholder)",
+                //connectWith: ".connected",
+                items: "li:not(.placeholder)", 
+                
+                //start: function (event, ui) {
+                //},
+                //stop: function (event, ui) {
+                //    var item = $(ui.item);
+                //    alert($(this).attr("id"));
+                //    var to = item.parent().is("#droppable_widget");
+                //    var siblingsCount = item.siblings().size();
+                //    if (to && siblingsCount > 0) {
+                //        alert("only one item allowed here");
+                //        return false;
+                //    }
+                //},
+
+
+
                 sort: function () {
                     $(this).removeClass("listActive");
                 },
+
                 update: function () {
-                    updateValues("An Item was reordered.");  // Call function After Sorting
+                    var qid2 = $(this).qid;
+                    updateValues("An Item was reordered." + +getTestData(qid2));  // Call function After Sorting
                 }
             }).on("click", ".dismiss", function (event) {
                 event.preventDefault();
+                //var qdelId = $(this).parent().attr("id");
                 $(this).parent().remove();
-                updateValues("An Item Was Deleted!");
+                updateValues("An Item was Deleted");  //If we want to all a function when item is dragged/dropped
+                //updateValues();  //If we want to all a function when item is dragged/dropped
             });
             $btn.button('reset');
         });
@@ -545,14 +567,6 @@ ol.target {
 </script>
 @* --- Drag and Drop Java Script - - - - - *@ 
 <script type="text/javascript">
-    //$(function () {
-    //    $(".source, .target").sortable({
-    //        connectWith: ".connected"
-    //    }).bind("sortupdate", function () {
-    //        updateValues();
-    //    });
-    //});
-
     // Function to call everytime we do a drag and drop
     function updateValues(msg) {
         alert(msg);
@@ -573,41 +587,7 @@ ol.target {
         //    error: function () { }
         //});
     };
-    $(".source li").draggable({
-        //If you want to limit the area inside which a user can drag elements,
-        // Simply set the "appendTo" attribute to  "#myContainerName" or similar.
-        addClasses: false,
-        appendTo: "body",
-        helper: "clone"
-    });
 
-    $(".target").droppable({
-        addClasses: false,
-        activeClass: "listActive",
-        accept: ":not(.ui-sortable-helper)",
-        drop: function (event, ui) {
-            $(this).find(".placeholder").remove();
-            var link = $("<a href='#' class='dismiss'>x</a>");
-            var list = $("<li></li>").text(ui.draggable.text());
-            $(list).append(link);
-            $(list).appendTo(this);
-            updateValues("Added!");
-        }
-    }).sortable({
-        items: "li:not(.placeholder)",
-        sort: function () {
-            $(this).removeClass("listActive");
-        },
-        update: function () {
-            updateValues("Sorted!");
-        }
-    }).on("click", ".dismiss", function (event) {
-        event.preventDefault();
-        //var qdelId = $(this).parent().attr("id");
-        $(this).parent().remove();
-        updateValues("Deleted");  //If we want to all a function when item is dragged/dropped
-        //updateValues();  //If we want to all a function when item is dragged/dropped
-    });
 
     //Sample Code:
     //looping in javascript through all the child elements of the target list
@@ -640,6 +620,61 @@ ol.target {
     //});
 
     function addQid(ev) {
+        //var qid = ui.draggable.attr("id");
+        var qid = 6;
+        //var listId = "liID" + qid;
+        //var list = $("<li></li>").text(ui.draggable.text());
+
+
+        //var newCounterSeq = $("#qCounter").val();
+
+        //For Now lets hardcode it
+        var newCounterSeq = 1;
+        //var target = ev.target || ev.srcElement;
+        //var myId = $(event.target).attr("id");;
+
+        //event.target.appendChild(document.getElementById(dataId));
+
+
+        // ------------ Make the Ajax Call ---------------------------------------------
+        $.ajax({
+            url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
+            method: "GET",
+            cache: false,
+            data: { question_id: qid, qCounter: newCounterSeq },     //<---- Data Parameters (if not already passed in the Url)
+            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+            //--- On error, execute this function ------
+            error: function () {
+                alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
+                //$btn.button('reset');
+            }
+        }).done(function (d) {
+            //Execute this code After the Ajax call completes successfully
+            //ev.target.append(d);
+
+            var link = $("<a href='#' class='dismiss'>x</a>");
+            var list = $("<li id=\"li" + qid + "\"></li>").text(d);
+            $(list).append(link);
+            $(list).appendTo(this);
+            updateValues("Question Added Successfully: " + getTestData(qid));
+            //For NOw lets not update the hidden field
+            //$('#qCounter').val(Number($('#qCounter').val()) + 1);
+
+
+
+            //alert("You jusr added question View Id: " + "qRow" + newCounterSeq)
+            //ev.target.html(d);
+            //$("#questionPnl01").append(d);
+            //$btn.button('reset');
+        });
+    }
+
+
+    function addQidOLD(ev) {
         var newCounterSeq = $("#qCounter").val();
         var qid = ev.dataTransfer.getData("Text"); // "Id" of the dragged data element
         //var target = ev.target || ev.srcElement;
@@ -679,6 +714,65 @@ ol.target {
             //$("#questionPnl01").append(d);
             //$btn.button('reset');
         });
+    }
+
+
+    function getQinfo(questionId) {
+        //var newCounterSeq = $("#qCounter").val();
+        var newCounterSeq = 1;
+        var qid = questionId
+        var ajaxResult = "Sample Data";
+        //var target = ev.target || ev.srcElement;
+        //var myId = $(event.target).attr("id");;
+
+        alert("Retrieving Information via Ajax for Question Id: " + qid);
+        // ------------ Make the Ajax Call ---------------------------------------------
+
+
+
+        $.ajax({
+            url: '@Url.Action("getQuestionInfoTest", "ColFormTemplate")',
+            method: "GET",
+            cache: false,
+            data: { question_id: qid, qCounter: newCounterSeq },     //<---- Data Parameters (if not already passed in the Url)
+            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+            beforeSend: function( xhr ) {
+                //xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+                alert("Ready to Submit Ajax call" );
+            },
+
+
+            //--- On error, execute this function ------
+            error: function () {
+                alert("Can't find data for question id " + qid + " !!");  //<-- Trap and alert of any errors if they occurred
+                //$btn.button('reset');
+            }
+        }).done(function (d) {
+            //Execute this code After the Ajax call completes successfully
+
+            $('#ajaxSample').html(d)
+
+            //$('#qCounter').val(Number($('#qCounter').val()) + 1);
+            //ajaxResult = d;
+            //alert("Ajax call completed. result: " + d);
+            //return ajaxResult;
+            //alert("You jusr added question View Id: " + "qRow" + newCounterSeq)
+            //ev.target.html(d);
+            //$("#questionPnl01").append(d);
+            //$btn.button('reset');
+            //return d;
+        });
+        
+    }
+
+
+    function getTestData(questionId) {
+
+        return "[You Selected Question Id: " + questionId + "]";
     }
 
     function removeSection(qSectionId) {

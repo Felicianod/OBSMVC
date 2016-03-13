@@ -1,7 +1,6 @@
 ﻿@model OBSMVC.Models.OBS_COLLECT_FORM_TMPLT
 @{ ViewBag.Title = "Create/Edit Form"; }
 
-
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
 
 @*<script type="text/javascript" src="~/Scripts/pnotify.custom.min.js"></script>
@@ -111,11 +110,16 @@ ol.targetList {
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
 
 <div class="well well-sm nopadding"><h3 class="col-md-offset-1">Collection Form Creation</h3></div>
-   @*<div class="row">
-      <div class="alert alert-danger col-sm-12">
-          <strong>Warning!</strong> @ViewData["errMsg"]
-      </div>
-   </div>*@
+
+@if (!String.IsNullOrEmpty(ViewBag.exception))
+{
+    <div class="row">
+       <div class="alert alert-danger col-sm-12">
+           <strong>Warning!</strong> @ViewBag.exception
+       </div>
+    </div>
+}
+
 @* - - - - - - - - - - - - - - - - BEGINING OF THE "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
 @*// ---- Helper Hidden Fields to Control the Inner Ids ----- *@
 <input type="hidden" id="masterItemCounter" value="1" />
@@ -273,7 +277,7 @@ ol.targetList {
                                <div class="input-group col-sm-10 col-sm-offset-1">
                                    <input type="text" class="form-control" id="full_text_search" name="full_text_search" placeholder="Search Question Library for..." style="max-width: 100%; width:100%;">
                                    <span class="input-group-btn">
-                                       <button class="btn btn-secondary" type="button" id="doSearchDummyData" data-loading-text="Please Wait...">Search!</button>
+                                       <button class="btn btn-secondary" type="button" id="doSearch" data-loading-text="Please Wait...">Search!</button>
                                    </span>
                                </div>
                            </div>
@@ -435,7 +439,8 @@ ol.targetList {
                     //var listId = "liID" + qid;
 
                     //var list = $("<li></li>").text(ui.draggable.text());
-                    var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text("Question Id is: " + qid); //    .setAttribute('class', 'newliItem');
+                    //var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text("Question Id is: " + qid); //    .setAttribute('class', 'newliItem');
+                    var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text(""); //    .setAttribute('class', 'newliItem');
 
                     //alert($(list).attr("id"));   //It works, the Id is "li99" (99=qid)
                     $(list).append(link);
@@ -473,13 +478,13 @@ ol.targetList {
 
                 update: function () {
                     var qid2 = $(this).qid;
-                    updateValues("An Item was reordered." + +getTestData(qid2));  // Call function After Sorting
+                    //updateValues("An Item was reordered." + +getTestData(qid2));  // Call function After Sorting
                 }
             }).on("click", ".dismiss", function (event) {
                 event.preventDefault();
                 //var qdelId = $(this).parent().attr("id");
                 $(this).parent().remove();
-                updateValues("An Item was Deleted");  //If we want to all a function when item is dragged/dropped
+                // updateValues("An Item was Deleted");  //If we want to all a function when item is dragged/dropped
             });
             $btn.button('reset');
         });
@@ -571,14 +576,6 @@ ol.targetList {
 
 @*//- - - - - - - - -  Ajax Call to Retrieve and Display the Question List Search Results - - - - - - - - - - -\\*@
 
-
-
-<script>
-    $(document).ready(function () {
-        // As sson as the page first loads, create a new Section
-        addNewSection();
-    });
-</script>
 <script type="text/javascript">
     function displayMsg(msg) {
         PNotify.removeAll();
@@ -699,8 +696,8 @@ ol.targetList {
 
     //------------------------------------------------------------------
     function getQinfo(questionId) {
-        //var newCounterSeq = $("#qCounter").val();
-        var newCounterSeq = 1;
+        var newCounterSeq = $("#qCounter").val();
+        //var newCounterSeq = 1;
         var qid = questionId
         var ajaxResult = "Sample Data";
         //var target = ev.target || ev.srcElement;
@@ -709,7 +706,7 @@ ol.targetList {
         //alert("Retrieving Information via Ajax for Question Id: " + qid);
         // ------------ Make the Ajax Call ---------------------------------------------
         $.ajax({
-            url: '@Url.Action("getQuestionInfoTest", "ColFormTemplate")',
+            url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
             method: "GET",
             cache: false,
             data: { question_id: qid, qCounter: newCounterSeq },     //<---- Data Parameters (if not already passed in the Url)
@@ -743,7 +740,7 @@ ol.targetList {
             liCreated.removeClass("newliItem");
             //$('#ajaxSample').html(d)
 
-            //$('#qCounter').val(Number($('#qCounter').val()) + 1);
+            $('#qCounter').val(Number($('#qCounter').val()) + 1);
             //ajaxResult = d;
             //alert("Ajax call completed. result: " + d);
             //return ajaxResult;
@@ -770,6 +767,12 @@ ol.targetList {
 
 @* - - - - - - - SCRIPT TO ADD A NEW SECTION TO THE FORM - - - - - - - - - - *@
 <script type="text/jscript">
+    $(document).ready(function () {
+        // As sson as the page first loads, create a new Section
+        addNewSection();
+    });
+
+
     $('#btnAddSection').click(function () {
         var $btn = $(this);
         $btn.button('loading');
@@ -798,37 +801,8 @@ ol.targetList {
         }).done(function (d) {
             //Execute this code After the Ajax call completes successfully
             $("#accordion").append(d);
-            $btn.button('reset');
         });
     } // ------ End of addNewSection() function -----
 
 </script>
 
-@*// Rasul's Script for the drop dowm Must be migrated from new code *@ 
-<script type="text/javascript">
-    $(".viewDropDown").change( function (event) {
-        var $drop_down = $(this);
-        var selectedId = $(this).val();
-        if (selectedId == '') {
-            selectedId = "-1";
-        }
-        else {
-            $.ajax({
-            url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
-            method: "GET",
-            cache: false,
-            data: { qat_id: selectedId },
-            error: function () {
-                alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-            }
-        }).done(function (d) {
-            //Execute this code After the Ajax call completes successfully
-            // alert("result is "+d);
-            @*$("#"+@current_selected).html(d);              //Warning this code must be fixed*@
-        });
-        }
-        var cur_sel = document.getElementById("currentSelectedQAT");
-        cur_sel.value = selectedId;
-        //alert("hidden = " + document.getElementById("currentSelectedQAT").value);
-    })
-</script>

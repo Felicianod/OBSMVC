@@ -283,9 +283,9 @@ namespace OBSMVC.Controllers
             ViewData["errMsg"] = "DBOK";
 
             //Delete this line and uncomment next two when at work, for Home Test Only
-            ViewData["errMsg"] = "Database Server is down...";
-            //try { int testDB = db.DSC_CUSTOMER.Count(); }
-            //catch { ViewData["errMsg"] = "Database Server is down..."; }
+            //ViewData["errMsg"] = "Database Server is down...";
+            try { int testDB = db.DSC_CUSTOMER.Count(); }
+            catch { ViewData["errMsg"] = "Database Server is down..."; }
 
             //ViewData["errMsg"] = "Database is Up!";
             //// First Check the Database Connection
@@ -305,10 +305,12 @@ namespace OBSMVC.Controllers
         public ActionResult CreateForm(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT, FormCollection formData)
         {
             string data_from_form = formData["formQuestions"];
-            
-
-            int cft_id =saveForm(oBS_COLLECT_FORM_TMPLT, data_from_form);
-
+            int cft_id = -1;
+            bool hasQuestions = !String.IsNullOrEmpty(data_from_form);
+            if(hasQuestions)
+            {
+                cft_id = saveForm(oBS_COLLECT_FORM_TMPLT, data_from_form);
+            }
 
             return RedirectToAction("Details", new { id =cft_id});
             //return RedirectToAction("Index");
@@ -407,7 +409,7 @@ namespace OBSMVC.Controllers
                         md_quest.assigned_metadata = md_quest.getAssignedMetadata(q.obs_question_id);
                         foreach (string s in md_quest.assigned_metadata)
                         {
-                            if (s.ToLower().Contains(full_text_search.ToLower()))
+                            if (s.ToLower().Contains(full_text_search.ToLower())&&(temp_questions_list.Where(x=>x.obs_question_id==q.obs_question_id).Count()==0))
                             {
                                 md_quest.obs_question_id = q.obs_question_id;
                                 md_quest.obs_question_full_text = q.obs_question_full_text;
@@ -419,7 +421,8 @@ namespace OBSMVC.Controllers
                         }
                     }
                 }
-                availableQuestions = temp_md_list.Union(temp_questions_list).ToList();
+                availableQuestions = temp_questions_list.Union(temp_md_list).ToList();
+                
             }//end of else
 
             
@@ -763,6 +766,7 @@ namespace OBSMVC.Controllers
                 return -1;
             }
 
+            ViewBag.exception = "";
             using (var transaction = db.Database.BeginTransaction())
             {
                 try
@@ -808,11 +812,16 @@ namespace OBSMVC.Controllers
                         db.SaveChanges();
                     }
                     transaction.Commit();
+                    if (cft_id < 0)
+                    {
+                        ViewBag.exception = "An error Occurred while saving information... ";
+                    }
+                    
                     return cft_id;
                 }
                 catch (Exception e)
                 {
-                    ViewBag.exception = e.Message;
+                    ViewBag.exception = "Failed to Save Data: " + e.Message;
                     transaction.Rollback();
                     return -1;
                 }

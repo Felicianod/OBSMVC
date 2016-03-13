@@ -3,28 +3,31 @@
 
 @{var qViewId = "qRow" + @Model.uniqueCounter;
   var qbtnCloseId = "btnClose" + @Model.uniqueCounter;
-  var somethingelst = "something" + @Model.uniqueCounter;
-  }
+  var hidden_field = "currentSelectedQAT" + Model.uniqueCounter;
+  var dropdown_id = "AssignedAnswers" + Model.uniqueCounter;
+  var dropdown2 = "#AssignedAnswers" + Model.uniqueCounter;
+  var rowInfo = Model.uniqueCounter.ToString();
+}
 
 
 <div class="row " id="@qViewId" style="text-align:left">
-    @{var rowInfo = Model.uniqueCounter.ToString(); }
+
     <div class="row" >
         <div class="col-sm-1" style="text-align:right">
-            [@Model.uniqueCounter]
+            @*[@Model.uniqueCounter]*@
         </div>
         <div class="col-sm-10">
             <p>@Model.full_text</p>
         </div>
-        <div class="col-sm-1">
+        @*<div class="col-sm-1">
             <button type="button" id="@qbtnCloseId" class="btnClose" onclick="removeSection('@qViewId')" aria-label="Close"><span aria-hidden="true" >&times;</span></button>
-        </div>
+        </div>*@
     </div>
     <div class="row">
         <div class="col-sm-5 col-sm-offset-1">
             <div class="input-group">
                 <div class="input-group-addon">Answer Type</div>
-                @Html.DropDownList("AssignedAnswers", Model.question_assigned_answer_types, "Select Answer Type", new { id = "AssignedAnswers", @class = "viewDropDown form-control" })
+                @Html.DropDownList("AssignedAnswers", Model.question_assigned_answer_types, "Select Answer Type", new { id = dropdown_id, @class = "viewDropDown form-control" }) <br />
             </div>
         </div>        
     </div>
@@ -51,9 +54,9 @@
             </div>
     </div>        
     </div>
-    @{ rowInfo += "as001" + "seccion001"; }
-    <input type="hidden" id="formQuestions" value="@rowInfo" />
-    <hr />
+    <input type="hidden" id="@hidden_field" name="@hidden_field" value="@current_selected">
+    @{rowInfo += "~" + current_selected.ToString() + "~Header Section";}
+    <input type="hidden" id="formQuestions" name="formQuestions" value="@rowInfo" />
 </div>
 
 @*//==================== NOTHING SHOULD BE LEFT BELOW THIS LINE =========================*@
@@ -61,3 +64,30 @@
     @*<input type="hidden" id="currentSelectedQAT" name="currentSelectedQAT" value= "@current_selected" >*@
 
 
+<script type="text/javascript">
+    $("@dropdown2").change( function (event) {
+        var $drop_down = $(this);
+        var selectedId = $(this).val();
+        if (selectedId == '') {
+            selectedId = "-1";
+            $("#@Model.uniqueCounter").html("");
+        }
+        else {
+            //alert("Selected ID "+selectedId);
+            $.ajax({
+                url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
+                method: "GET",
+                cache: false,
+                data: { qat_id: selectedId },
+                error: function () {
+                    alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                //alert("Retrieved Data is: " + d);
+                $("#@ulId").html(d);
+            });
+        }
+        var cur_sel = document.getElementById("currentSelectedQAT"+@Model.uniqueCounter);
+        cur_sel.value = selectedId;
+    })
+</script>

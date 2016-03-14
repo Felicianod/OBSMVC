@@ -16,6 +16,7 @@ namespace OBSMVC.Controllers
     {
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
 
+        
         // GET: ColFormTemplate
         [HttpGet]
         public ActionResult Index(string title_search, string question_search, string t_search, string q_search, FormCollection form)
@@ -265,6 +266,15 @@ namespace OBSMVC.Controllers
             return View(ObsColFormTemplateList.ToList());
         }
 
+        [HttpGet]
+        public ActionResult SectionNameLookup(string term)
+        {
+            //var data = from s in db.OBS_FORM_SECTION select new { label = s.obs_form_section_name, value = s.obs_form_section_name};
+            var data = db.OBS_FORM_SECTION.Where(x => x.obs_form_section_name.Contains(term)).Select(item => item.obs_form_section_name).ToArray();
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+
         // GET: ColFormTemplate/Details/5
         public ActionResult Details(int id)
         {
@@ -300,6 +310,7 @@ namespace OBSMVC.Controllers
 
 
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateForm(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT, FormCollection formData)
@@ -316,11 +327,6 @@ namespace OBSMVC.Controllers
             //return RedirectToAction("Index");
 
         }
-
-
-
-
-
 
         // GET: ColFormTemplate/Create
         public ActionResult Create()

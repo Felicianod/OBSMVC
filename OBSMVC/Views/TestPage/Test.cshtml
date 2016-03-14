@@ -3,6 +3,12 @@
     Layout = null;
 }
 
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/smart-forms.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+
+<script src="~/Scripts/jquery.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -58,7 +64,7 @@
             </div><!-- end .form-header section -->
 
 
-            <form method="post" action="" id="form-ui">
+            <form method="post" action="" id="form-ui" data-toggle="validator">
                 <div class="form-body">
 
                     <div class="spacer-b30">
@@ -71,7 +77,7 @@
 
                             <div class="section">
                                 <label class="field">
-                                    <input type="text" name="from" id="from" class="gui-input" placeholder="Input no icon">
+                                    <input type="text" name="from" id="from" class="gui-input" placeholder="Input no icon" required>
                                 </label>
                             </div><!-- end section -->
 

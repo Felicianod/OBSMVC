@@ -3,7 +3,7 @@
     string txtSectionName = "txtSectionName" + sectionNbr;
     string sectionId = "sectionId" + sectionNbr;
     string sectionIdHandle = "#" + sectionId;
-    string olListId = "olList" + sectionNbr;
+    string olListId = "olList" + sectionNbr;    
 }
 
 <div class="panel panel-default">
@@ -33,3 +33,39 @@
     </div> @*End of Section*@
 </div>
 
+<script>
+
+
+
+    $(function () {
+
+        //var availableTags = [
+        //  "ActionScript",
+        //  "AppleScript",
+        //  "Asp",
+        //  "BASIC",
+        //  "C",
+        //  "C++",
+        //  "Clojure",
+        //  "COBOL",
+        //  "ColdFusion",
+        //  "Erlang",
+        //  "Fortran",
+        //  "Groovy",
+        //  "Haskell",
+        //  "Java",
+        //  "JavaScript",
+        //  "Lisp",
+        //  "Perl",
+        //  "PHP",
+        //  "Python",
+        //  "Ruby",
+        //  "Scala",
+        //  "Scheme"
+        //];
+        $("#@txtSectionName").autocomplete({
+            source: "/ColFormTemplate/SectionNameLookup"
+        });
+    });
+
+</script>

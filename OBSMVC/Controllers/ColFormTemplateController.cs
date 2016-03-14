@@ -269,6 +269,17 @@ namespace OBSMVC.Controllers
         [HttpGet]
         public ActionResult SectionNameLookup(string term)
         {
+            // replace multiple spaces with one
+            //Regex regex = new Regex("[ ]{2,}", RegexOptions.None);
+            //term = Regex.Replace(term, " {2,}", " ");
+            term = Regex.Replace(term, @"\s+", " ", RegexOptions.Multiline);
+            
+            // ******* PREVENT SECURITY HOLE ***********************************************
+            // Remove all special characters to avoid javascript or SQL injection attacks
+            // allow only space, any unicode letter and digit, underscore and dash
+            term = Regex.Replace(term, "[^a-zA-Z0-9_.]+", "", RegexOptions.None);            
+            // *****************************************************************************
+
             //var data = from s in db.OBS_FORM_SECTION select new { label = s.obs_form_section_name, value = s.obs_form_section_name};
             var data = db.OBS_FORM_SECTION.Where(x => x.obs_form_section_name.Contains(term)).Select(item => item.obs_form_section_name).ToArray();
             return Json(data, JsonRequestBehavior.AllowGet);

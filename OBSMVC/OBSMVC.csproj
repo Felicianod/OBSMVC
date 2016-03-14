@@ -360,6 +360,7 @@
     <Content Include="Images\iconNoAvatar.png" />
     <Content Include="Images\KPogany.jpg" />
     <Content Include="Images\LoadingData.gif" />
+    <Content Include="Images\ui-anim_basic_16x16.gif" />
     <Content Include="Models\DSC_OBS_ENTITY.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DSC_OBS_ENTITY.edmx</DependentUpon>

@@ -64,7 +64,9 @@
         //  "Scheme"
         //];
         $("#@txtSectionName").autocomplete({
-            source: "/ColFormTemplate/SectionNameLookup"
+            //source: availableTags
+            source: "/ColFormTemplate/SectionNameLookup",
+            minLength: 2
         });
     });
 

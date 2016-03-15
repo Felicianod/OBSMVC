@@ -125,6 +125,7 @@ namespace OBSMVC.Models
         [Display(Name = "Answer Type Category")]
         public string answer_type_category { set; get; }
         public string selectable_ans_required { set; get; }
+        public string comment_required { set; get; }
        
         
 

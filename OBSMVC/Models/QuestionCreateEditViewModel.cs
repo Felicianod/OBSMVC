@@ -8,7 +8,6 @@ using OBSMVC.Models;
 
 namespace OBSMVC.Models
 {
-
     public class QuestionCreateEditViewModel
     {
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();

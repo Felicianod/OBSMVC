@@ -11,7 +11,7 @@ namespace OBSMVC.Models
     public class QuestionCreateViewModel
     {
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
-        //= = = = = = = = = = = = = = = CONSTRUCTOR (No parameters Create Empty Object) = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+        //= = = = = = = = = = = = = = = CONSTRUCTOR (No parameters Create Empty Object) = = = = = = = = = = = = = = = = = = = = = = = = = = = 
         public QuestionCreateViewModel() {
             qAssignedMD = new List<metaDataTag>();
             qUnassignedMD = new List<metaDataTag>();

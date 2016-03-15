@@ -28,10 +28,17 @@ namespace OBSMVC.Models
         public int dsc_lc_id { get; set; }
         public short obs_cft_nbr { get; set; }
         public short obs_cft_ver { get; set; }
-        public System.DateTime obs_cft_eff_st_dt { get; set; }
+        public Nullable<System.DateTime> obs_cft_eff_st_dt { get; set; }
         public System.DateTime obs_cft_eff_end_dt { get; set; }
         public string obs_cft_title { get; set; }
         public string obs_cft_subtitle { get; set; }
+        public Nullable<System.DateTime> obs_cft_last_saved_dtm { get; set; }
+        public Nullable<System.DateTime> obs_cft_pub_dtm { get; set; }
+        public string obs_cft_added_uid { get; set; }
+        public System.DateTime obs_cft_added_dtm { get; set; }
+        public string obs_cft_upd_uid { get; set; }
+        public Nullable<System.DateTime> obs_cft_upd_dtm { get; set; }
+        public string obs_cft_pub_by_uid { get; set; }
     
         public virtual DSC_CUSTOMER DSC_CUSTOMER { get; set; }
         public virtual DSC_LC DSC_LC { get; set; }

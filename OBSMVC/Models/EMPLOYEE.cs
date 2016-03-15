@@ -43,6 +43,7 @@ namespace OBSMVC.Models
         public string dsc_emp_upd_uid { get; set; }
         public Nullable<System.DateTime> dsc_emp_upd_dtm { get; set; }
         public string dsc_emp_mid_name { get; set; }
+        public string dsc_emp_supvsr_perm_id { get; set; }
     
         public virtual DSC_LC DSC_LC { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

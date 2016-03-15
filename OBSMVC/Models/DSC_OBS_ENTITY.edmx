@@ -12,7 +12,7 @@
           <Property Name="dsc_cust_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="dsc_cust_name" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="dsc_cust_parent_name" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="dsc_cust_eff_end_date" Type="varchar" MaxLength="20" />
+          <Property Name="dsc_cust_eff_end_date" Type="datetime" />
         </EntityType>
         <EntityType Name="DSC_EMPLOYEE">
           <Key>
@@ -21,6 +21,7 @@
           <Property Name="dsc_emp_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="dsc_assigned_lc_id" Type="int" />
           <Property Name="dsc_emp_perm_id" Type="varchar" MaxLength="20" />
+          <Property Name="dsc_emp_supvsr_perm_id" Type="varchar" MaxLength="20" />
           <Property Name="dsc_emp_wms_clock_nbr" Type="int" />
           <Property Name="dsc_emp_first_name" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="dsc_emp_mid_name" Type="varchar" MaxLength="30" />
@@ -162,12 +163,19 @@
           <Property Name="obs_type_id" Type="int" Nullable="false" />
           <Property Name="dsc_cust_id" Type="int" Nullable="false" />
           <Property Name="dsc_lc_id" Type="int" Nullable="false" />
-          <Property Name="obs_cft_nbr" Type="smallint" Nullable="false" />
-          <Property Name="obs_cft_ver" Type="smallint" Nullable="false" />
-          <Property Name="obs_cft_eff_st_dt" Type="datetime" Nullable="false" />
-          <Property Name="obs_cft_eff_end_dt" Type="datetime" Nullable="false" />
           <Property Name="obs_cft_title" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="obs_cft_subtitle" Type="varchar" MaxLength="50" />
+          <Property Name="obs_cft_nbr" Type="smallint" Nullable="false" />
+          <Property Name="obs_cft_ver" Type="smallint" Nullable="false" />
+          <Property Name="obs_cft_last_saved_dtm" Type="datetime" />
+          <Property Name="obs_cft_pub_by_uid" Type="varchar" MaxLength="70" />
+          <Property Name="obs_cft_pub_dtm" Type="datetime" />
+          <Property Name="obs_cft_eff_st_dt" Type="datetime" />
+          <Property Name="obs_cft_eff_end_dt" Type="datetime" Nullable="false" />
+          <Property Name="obs_cft_added_uid" Type="varchar" MaxLength="70" Nullable="false" />
+          <Property Name="obs_cft_added_dtm" Type="datetime" Nullable="false" />
+          <Property Name="obs_cft_upd_uid" Type="varchar" MaxLength="70" />
+          <Property Name="obs_cft_upd_dtm" Type="datetime" />
         </EntityType>
         <EntityType Name="OBS_EVENT_TYPE">
           <Key>
@@ -1025,6 +1033,7 @@
           <NavigationProperty Name="OBS_COL_FORM_INST_SIGS" Relationship="Models.relationship32" FromRole="EMPLOYEE" ToRole="OBS_COL_FORM_INST_SIGS" />
           <NavigationProperty Name="OBS_RVW_FORM_INST" Relationship="Models.relationship39" FromRole="EMPLOYEE" ToRole="OBS_RVW_FORM_INST" />
           <NavigationProperty Name="OBS_INST" Relationship="Models.relationship40" FromRole="EMPLOYEE" ToRole="OBS_INST" />
+          <Property Name="dsc_emp_supvsr_perm_id" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="DSC_LC">
           <Key>
@@ -1366,7 +1375,7 @@
           <Property Name="dsc_cust_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="dsc_cust_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="dsc_cust_parent_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_cust_eff_end_date" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_cust_eff_end_date" Type="String" />
           <NavigationProperty Name="OBS_INST" Relationship="Models.relationship34" FromRole="DSC_CUSTOMER" ToRole="OBS_INST" />
           <NavigationProperty Name="OBS_COLLECT_FORM_TMPLT" Relationship="Models.relationship8" FromRole="DSC_CUSTOMER" ToRole="OBS_COLLECT_FORM_TMPLT" />
         </EntityType>
@@ -1477,7 +1486,7 @@
           <Property Name="dsc_lc_id" Type="Int32" Nullable="false" />
           <Property Name="obs_cft_nbr" Type="Int16" Nullable="false" />
           <Property Name="obs_cft_ver" Type="Int16" Nullable="false" />
-          <Property Name="obs_cft_eff_st_dt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="obs_cft_eff_st_dt" Type="DateTime" Precision="3" />
           <Property Name="obs_cft_eff_end_dt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="obs_cft_title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="obs_cft_subtitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -1487,6 +1496,13 @@
           <NavigationProperty Name="OBS_COLLECT_FORM_INST" Relationship="Models.relationship14" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="OBS_COLLECT_FORM_INST" />
           <NavigationProperty Name="OBS_TYPE" Relationship="Models.rel_type_collect_form" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="OBS_TYPE" />
           <NavigationProperty Name="OBS_COL_FORM_QUESTIONS" Relationship="Models.rel_col_from_questions" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="OBS_COL_FORM_QUESTIONS" />
+          <Property Name="obs_cft_last_saved_dtm" Type="DateTime" Precision="3" />
+          <Property Name="obs_cft_pub_dtm" Type="DateTime" Precision="3" />
+          <Property Name="obs_cft_added_uid" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="obs_cft_added_dtm" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="obs_cft_upd_uid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="obs_cft_upd_dtm" Type="DateTime" Precision="3" />
+          <Property Name="obs_cft_pub_by_uid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="OBS_EVENT_TYPE">
           <Key>
@@ -2070,6 +2086,7 @@
           <EntitySetMapping Name="EMPLOYEEs">
             <EntityTypeMapping TypeName="Models.EMPLOYEE">
               <MappingFragment StoreEntitySet="DSC_EMPLOYEE">
+                <ScalarProperty Name="dsc_emp_supvsr_perm_id" ColumnName="dsc_emp_supvsr_perm_id" />
                 <ScalarProperty Name="dsc_emp_mid_name" ColumnName="dsc_emp_mid_name" />
                 <ScalarProperty Name="dsc_emp_upd_dtm" ColumnName="dsc_emp_upd_dtm" />
                 <ScalarProperty Name="dsc_emp_upd_uid" ColumnName="dsc_emp_upd_uid" />
@@ -2282,6 +2299,13 @@
           <EntitySetMapping Name="OBS_COLLECT_FORM_TMPLT">
             <EntityTypeMapping TypeName="Models.OBS_COLLECT_FORM_TMPLT">
               <MappingFragment StoreEntitySet="OBS_COLLECT_FORM_TMPLT">
+                <ScalarProperty Name="obs_cft_pub_by_uid" ColumnName="obs_cft_pub_by_uid" />
+                <ScalarProperty Name="obs_cft_upd_dtm" ColumnName="obs_cft_upd_dtm" />
+                <ScalarProperty Name="obs_cft_upd_uid" ColumnName="obs_cft_upd_uid" />
+                <ScalarProperty Name="obs_cft_added_dtm" ColumnName="obs_cft_added_dtm" />
+                <ScalarProperty Name="obs_cft_added_uid" ColumnName="obs_cft_added_uid" />
+                <ScalarProperty Name="obs_cft_pub_dtm" ColumnName="obs_cft_pub_dtm" />
+                <ScalarProperty Name="obs_cft_last_saved_dtm" ColumnName="obs_cft_last_saved_dtm" />
                 <ScalarProperty Name="obs_cft_subtitle" ColumnName="obs_cft_subtitle" />
                 <ScalarProperty Name="obs_cft_title" ColumnName="obs_cft_title" />
                 <ScalarProperty Name="obs_cft_eff_end_dt" ColumnName="obs_cft_eff_end_dt" />

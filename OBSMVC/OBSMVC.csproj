@@ -329,6 +329,7 @@
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\QuestAnsTypes.cs" />
+    <Compile Include="Models\QuestionCreateEditViewModel.cs" />
     <Compile Include="Models\QuestionCreateViewModel.cs" />
     <Compile Include="Models\QuestionMDViewModel.cs" />
     <Compile Include="Models\QuestionMetadataView.cs" />
@@ -533,6 +534,7 @@
     <Content Include="Views\ColFormTemplate\Create_DeleteMe.cshtml" />
     <Content Include="Views\ColFormTemplate\_getQuestionInfoTest.cshtml" />
     <Content Include="Views\TestPage\Test.cshtml" />
+    <Content Include="Views\Question\_getQuestionAnswerInfo.cshtml" />
     <Content Include="Views\Question\QuestionAddUpdate.cshtml" />
   </ItemGroup>
   <ItemGroup>

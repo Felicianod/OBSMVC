@@ -226,6 +226,28 @@ namespace OBSMVC.Controllers
             _listAnswerTypes((int)id);
             return View(obsQMD);
         }
+        [HttpGet]
+        public ActionResult CreateEdit(int? id)
+        {
+            int question_id = id ?? -1;
+            if (id == null)
+            {
+                QuestionCreateEditViewModel obsQCVM = new QuestionCreateEditViewModel();
+                return View(obsQCVM);
+            }
+            else
+            {
+                QuestionCreateEditViewModel obsQCVM = new QuestionCreateEditViewModel(question_id);
+                return View(obsQCVM);
+            }
+
+        }
+        [HttpGet]
+        public PartialViewResult getQuestionAnswerInfo(qatTags qatInfo)
+        {
+
+            return PartialView("_getQATInfo", qatInfo);
+        }
 
         //-----------------------------------------[ "EDIT"  Action: POST ] ---------------------------------------------------
         [HttpPost]

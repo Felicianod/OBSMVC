@@ -33,7 +33,6 @@ namespace OBSMVC.Models
         public Nullable<System.DateTime> obs_inst_del_date { get; set; }
         public string obs_inst_del_reason { get; set; }
     
-        public virtual DSC_CUSTOMER DSC_CUSTOMER { get; set; }
         public virtual EMPLOYEE DSC_EMPLOYEE { get; set; }
         public virtual DSC_LC DSC_LC { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -43,5 +42,6 @@ namespace OBSMVC.Models
         public virtual ICollection<OBS_INST_EVENT_LOG> OBS_INST_EVENT_LOG { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_RVW_FORM_INST> OBS_RVW_FORM_INST { get; set; }
+        public virtual DSC_CUSTOMER DSC_CUSTOMER { get; set; }
     }
 }

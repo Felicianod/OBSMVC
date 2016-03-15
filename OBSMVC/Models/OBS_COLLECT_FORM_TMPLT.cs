@@ -40,7 +40,6 @@ namespace OBSMVC.Models
         public Nullable<System.DateTime> obs_cft_upd_dtm { get; set; }
         public string obs_cft_pub_by_uid { get; set; }
     
-        public virtual DSC_CUSTOMER DSC_CUSTOMER { get; set; }
         public virtual DSC_LC DSC_LC { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_COL_FORM_TMPLT_ATTRIBS> OBS_COL_FORM_TMPLT_ATTRIBS { get; set; }
@@ -49,5 +48,6 @@ namespace OBSMVC.Models
         public virtual OBS_TYPE OBS_TYPE { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_COL_FORM_QUESTIONS> OBS_COL_FORM_QUESTIONS { get; set; }
+        public virtual DSC_CUSTOMER DSC_CUSTOMER { get; set; }
     }
 }

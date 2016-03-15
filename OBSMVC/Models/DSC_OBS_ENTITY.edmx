@@ -1134,7 +1134,6 @@
             <End Role="OBS_ANS_TYPE" EntitySet="OBS_ANS_TYPE" />
             <End Role="OBS_QUEST_ANS_TYPES" EntitySet="OBS_QUEST_ANS_TYPES" />
           </AssociationSet>
-          <EntitySet Name="DSC_CUSTOMER" EntityType="Models.DSC_CUSTOMER" />
           <EntitySet Name="OBS_APP_EVENT_LOG" EntityType="Models.OBS_APP_EVENT_LOG" />
           <EntitySet Name="OBS_APPLICATION" EntityType="Models.OBS_APPLICATION" />
           <EntitySet Name="OBS_ATTRIB_DATA_TYPES" EntityType="Models.OBS_ATTRIB_DATA_TYPES" />
@@ -1152,14 +1151,6 @@
           <EntitySet Name="OBS_MULTIMEDIA_TYPE" EntityType="Models.OBS_MULTIMEDIA_TYPE" />
           <EntitySet Name="OBS_RVW_FORM_INST" EntityType="Models.OBS_RVW_FORM_INST" />
           <EntitySet Name="OBS_TYPE_SUB_TYPES" EntityType="Models.OBS_TYPE_SUB_TYPES" />
-          <AssociationSet Name="relationship34" Association="Models.relationship34">
-            <End Role="DSC_CUSTOMER" EntitySet="DSC_CUSTOMER" />
-            <End Role="OBS_INST" EntitySet="OBS_INST" />
-          </AssociationSet>
-          <AssociationSet Name="relationship8" Association="Models.relationship8">
-            <End Role="DSC_CUSTOMER" EntitySet="DSC_CUSTOMER" />
-            <End Role="OBS_COLLECT_FORM_TMPLT" EntitySet="OBS_COLLECT_FORM_TMPLT" />
-          </AssociationSet>
           <AssociationSet Name="relationship15" Association="Models.relationship15">
             <End Role="EMPLOYEE" EntitySet="EMPLOYEEs" />
             <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
@@ -1295,6 +1286,15 @@
             <End Role="OBS_QUESTION" EntitySet="OBS_QUESTION" />
             <End Role="OBS_QUEST_ASSGND_MD" EntitySet="OBS_QUEST_ASSGND_MD" />
           </AssociationSet>
+          <EntitySet Name="DSC_CUSTOMER" EntityType="Models.DSC_CUSTOMER" />
+          <AssociationSet Name="relationship34" Association="Models.relationship34">
+            <End Role="DSC_CUSTOMER" EntitySet="DSC_CUSTOMER" />
+            <End Role="OBS_INST" EntitySet="OBS_INST" />
+          </AssociationSet>
+          <AssociationSet Name="relationship8" Association="Models.relationship8">
+            <End Role="DSC_CUSTOMER" EntitySet="DSC_CUSTOMER" />
+            <End Role="OBS_COLLECT_FORM_TMPLT" EntitySet="OBS_COLLECT_FORM_TMPLT" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="OBS_QUEST_ANS_TYPES">
           <Key>
@@ -1368,17 +1368,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="DSC_CUSTOMER">
-          <Key>
-            <PropertyRef Name="dsc_cust_id" />
-          </Key>
-          <Property Name="dsc_cust_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="dsc_cust_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_cust_parent_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_cust_eff_end_date" Type="String" />
-          <NavigationProperty Name="OBS_INST" Relationship="Models.relationship34" FromRole="DSC_CUSTOMER" ToRole="OBS_INST" />
-          <NavigationProperty Name="OBS_COLLECT_FORM_TMPLT" Relationship="Models.relationship8" FromRole="DSC_CUSTOMER" ToRole="OBS_COLLECT_FORM_TMPLT" />
-        </EntityType>
         <EntityType Name="OBS_APP_EVENT_LOG">
           <Key>
             <PropertyRef Name="obs_app_event_log_id" />
@@ -1490,7 +1479,6 @@
           <Property Name="obs_cft_eff_end_dt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="obs_cft_title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="obs_cft_subtitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="DSC_CUSTOMER" Relationship="Models.relationship8" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="DSC_CUSTOMER" />
           <NavigationProperty Name="DSC_LC" Relationship="Models.relationship9" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="DSC_LC" />
           <NavigationProperty Name="OBS_COL_FORM_TMPLT_ATTRIBS" Relationship="Models.relationship10" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="OBS_COL_FORM_TMPLT_ATTRIBS" />
           <NavigationProperty Name="OBS_COLLECT_FORM_INST" Relationship="Models.relationship14" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="OBS_COLLECT_FORM_INST" />
@@ -1502,6 +1490,7 @@
           <Property Name="obs_cft_added_dtm" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="obs_cft_upd_uid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
           <Property Name="obs_cft_upd_dtm" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="DSC_CUSTOMER" Relationship="Models.relationship8" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="DSC_CUSTOMER" />
           <Property Name="obs_cft_pub_by_uid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="OBS_EVENT_TYPE">
@@ -1552,13 +1541,13 @@
           <Property Name="obs_inst_del_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="obs_inst_del_date" Type="DateTime" Precision="3" />
           <Property Name="obs_inst_del_reason" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="DSC_CUSTOMER" Relationship="Models.relationship34" FromRole="OBS_INST" ToRole="DSC_CUSTOMER" />
           <NavigationProperty Name="DSC_EMPLOYEE" Relationship="Models.relationship40" FromRole="OBS_INST" ToRole="EMPLOYEE" />
           <NavigationProperty Name="DSC_LC" Relationship="Models.relationship35" FromRole="OBS_INST" ToRole="DSC_LC" />
           <NavigationProperty Name="OBS_COLLECT_FORM_INST" Relationship="Models.relationship23" FromRole="OBS_INST" ToRole="OBS_COLLECT_FORM_INST" />
           <NavigationProperty Name="OBS_TYPE" Relationship="Models.relationship19" FromRole="OBS_INST" ToRole="OBS_TYPE" />
           <NavigationProperty Name="OBS_INST_EVENT_LOG" Relationship="Models.relationship20" FromRole="OBS_INST" ToRole="OBS_INST_EVENT_LOG" />
           <NavigationProperty Name="OBS_RVW_FORM_INST" Relationship="Models.relationship36" FromRole="OBS_INST" ToRole="OBS_RVW_FORM_INST" />
+          <NavigationProperty Name="DSC_CUSTOMER" Relationship="Models.relationship34" FromRole="OBS_INST" ToRole="DSC_CUSTOMER" />
         </EntityType>
         <EntityType Name="OBS_INST_EVENT_LOG">
           <Key>
@@ -1606,30 +1595,6 @@
           <NavigationProperty Name="OBS_SUB_TYPE" Relationship="Models.rel_sub_type_types" FromRole="OBS_TYPE_SUB_TYPES" ToRole="OBS_SUB_TYPE" />
           <NavigationProperty Name="OBS_TYPE" Relationship="Models.rel_obs_type_sub_type" FromRole="OBS_TYPE_SUB_TYPES" ToRole="OBS_TYPE" />
         </EntityType>
-        <Association Name="relationship34">
-          <End Type="Models.DSC_CUSTOMER" Role="DSC_CUSTOMER" Multiplicity="0..1" />
-          <End Type="Models.OBS_INST" Role="OBS_INST" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DSC_CUSTOMER">
-              <PropertyRef Name="dsc_cust_id" />
-            </Principal>
-            <Dependent Role="OBS_INST">
-              <PropertyRef Name="dsc_cust_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="relationship8">
-          <End Type="Models.DSC_CUSTOMER" Role="DSC_CUSTOMER" Multiplicity="1" />
-          <End Type="Models.OBS_COLLECT_FORM_TMPLT" Role="OBS_COLLECT_FORM_TMPLT" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DSC_CUSTOMER">
-              <PropertyRef Name="dsc_cust_id" />
-            </Principal>
-            <Dependent Role="OBS_COLLECT_FORM_TMPLT">
-              <PropertyRef Name="dsc_cust_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="relationship15">
           <End Type="Models.EMPLOYEE" Role="EMPLOYEE" Multiplicity="1" />
           <End Type="Models.OBS_COLLECT_FORM_INST" Role="OBS_COLLECT_FORM_INST" Multiplicity="*" />
@@ -2077,6 +2042,41 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="DSC_CUSTOMER">
+          <Key>
+            <PropertyRef Name="dsc_cust_id" />
+          </Key>
+          <Property Name="dsc_cust_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dsc_cust_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_cust_parent_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_cust_eff_end_date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="OBS_INST" Relationship="Models.relationship34" FromRole="DSC_CUSTOMER" ToRole="OBS_INST" />
+          <NavigationProperty Name="OBS_COLLECT_FORM_TMPLT" Relationship="Models.relationship8" FromRole="DSC_CUSTOMER" ToRole="OBS_COLLECT_FORM_TMPLT" />
+        </EntityType>
+        <Association Name="relationship34">
+          <End Type="Models.DSC_CUSTOMER" Role="DSC_CUSTOMER" Multiplicity="0..1" />
+          <End Type="Models.OBS_INST" Role="OBS_INST" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DSC_CUSTOMER">
+              <PropertyRef Name="dsc_cust_id" />
+            </Principal>
+            <Dependent Role="OBS_INST">
+              <PropertyRef Name="dsc_cust_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="relationship8">
+          <End Type="Models.DSC_CUSTOMER" Role="DSC_CUSTOMER" Multiplicity="1" />
+          <End Type="Models.OBS_COLLECT_FORM_TMPLT" Role="OBS_COLLECT_FORM_TMPLT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DSC_CUSTOMER">
+              <PropertyRef Name="dsc_cust_id" />
+            </Principal>
+            <Dependent Role="OBS_COLLECT_FORM_TMPLT">
+              <PropertyRef Name="dsc_cust_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2195,16 +2195,6 @@
                 <ScalarProperty Name="obs_ans_type_desc" ColumnName="obs_ans_type_desc" />
                 <ScalarProperty Name="obs_ans_type_name" ColumnName="obs_ans_type_name" />
                 <ScalarProperty Name="obs_ans_type_id" ColumnName="obs_ans_type_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DSC_CUSTOMER">
-            <EntityTypeMapping TypeName="Models.DSC_CUSTOMER">
-              <MappingFragment StoreEntitySet="DSC_CUSTOMER">
-                <ScalarProperty Name="dsc_cust_eff_end_date" ColumnName="dsc_cust_eff_end_date" />
-                <ScalarProperty Name="dsc_cust_parent_name" ColumnName="dsc_cust_parent_name" />
-                <ScalarProperty Name="dsc_cust_name" ColumnName="dsc_cust_name" />
-                <ScalarProperty Name="dsc_cust_id" ColumnName="dsc_cust_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2449,6 +2439,16 @@
                 <ScalarProperty Name="obs_question_full_text" ColumnName="obs_question_full_text" />
                 <ScalarProperty Name="obs_question_ver" ColumnName="obs_question_ver" />
                 <ScalarProperty Name="obs_question_id" ColumnName="obs_question_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DSC_CUSTOMER">
+            <EntityTypeMapping TypeName="Models.DSC_CUSTOMER">
+              <MappingFragment StoreEntitySet="DSC_CUSTOMER">
+                <ScalarProperty Name="dsc_cust_eff_end_date" ColumnName="dsc_cust_eff_end_date" />
+                <ScalarProperty Name="dsc_cust_parent_name" ColumnName="dsc_cust_parent_name" />
+                <ScalarProperty Name="dsc_cust_name" ColumnName="dsc_cust_name" />
+                <ScalarProperty Name="dsc_cust_id" ColumnName="dsc_cust_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

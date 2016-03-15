@@ -18,7 +18,6 @@
         <AssociationConnector Association="Models.relationship43" />
         <AssociationConnector Association="Models.rel_metadata_quest_assgnd" />
         <EntityTypeShape EntityType="Models.OBS_ANS_TYPE" Width="1.5" PointX="0.75" PointY="10" />
-        <EntityTypeShape EntityType="Models.DSC_CUSTOMER" Width="1.5" PointX="2.875" PointY="18.25" />
         <EntityTypeShape EntityType="Models.OBS_APP_EVENT_LOG" Width="1.5" PointX="3.375" PointY="15.625" />
         <EntityTypeShape EntityType="Models.OBS_APPLICATION" Width="1.5" PointX="5.375" PointY="15.625" />
         <EntityTypeShape EntityType="Models.OBS_ATTRIB_DATA_TYPES" Width="1.5" PointX="2.875" PointY="22.75" />
@@ -36,8 +35,6 @@
         <EntityTypeShape EntityType="Models.OBS_MULTIMEDIA_TYPE" Width="1.5" PointX="15.5" PointY="20.5" />
         <EntityTypeShape EntityType="Models.OBS_RVW_FORM_INST" Width="1.5" PointX="15.5" PointY="7.25" />
         <EntityTypeShape EntityType="Models.OBS_TYPE_SUB_TYPES" Width="1.5" PointX="16" PointY="0.75" />
-        <AssociationConnector Association="Models.relationship34" />
-        <AssociationConnector Association="Models.relationship8" />
         <AssociationConnector Association="Models.relationship15" />
         <AssociationConnector Association="Models.relationship32" />
         <AssociationConnector Association="Models.relationship39" />
@@ -74,6 +71,9 @@
         <AssociationConnector Association="Models.relationship29" />
         <AssociationConnector Association="Models.relationship41" />
         <AssociationConnector Association="Models.rel_quest_assgnd_meta" />
+        <EntityTypeShape EntityType="Models.DSC_CUSTOMER" Width="1.5" PointX="0.75" PointY="14.125" />
+        <AssociationConnector Association="Models.relationship34" />
+        <AssociationConnector Association="Models.relationship8" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

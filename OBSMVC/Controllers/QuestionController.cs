@@ -74,6 +74,41 @@ namespace OBSMVC.Controllers
             }
             return View(obsQMD);
         }
+
+        //---------------------------------------- ADDUPDATE  [GET] -----------------------------------------------------------------
+
+        //[HttpGet]
+        //public ActionResult QuestionCreate()
+        //{
+        //    QuestionCreateViewModel obsQMD = new QuestionCreateViewModel();
+        //    obsQMD.questn.obs_question_eff_st_dt = DateTime.Today;
+        //    obsQMD.questn.obs_question_eff_end_dt = Convert.ToDateTime("2060/12/31");
+        //    return View("QuestionAddUpdate", obsQMD);
+        //}
+
+        [HttpGet]
+        [ActionName("QuestionAddUpdate")]
+        public ActionResult QuestionAddUpdateEdit(QuestionCreateViewModel formQuestion)
+        {
+            if (formQuestion.questn.obs_question_id < 1)
+            { // This is a new Question. Set up default values
+                formQuestion.questn.obs_question_eff_st_dt = DateTime.Today;
+                formQuestion.questn.obs_question_eff_end_dt = Convert.ToDateTime("2060/12/31");
+            }
+
+            return View("QuestionAddUpdate", formQuestion);
+        }
+
+        [HttpPost] [ValidateAntiForgeryToken]
+        [ActionName("QuestionAddUpdate")]
+        public ActionResult QuestionAddUpdatePost(QuestionCreateViewModel formQuestion)
+        {
+
+            return View("Edit");
+        }
+
+
+
         //---------------------------------------- CREATE  [GET] -----------------------------------------------------------------
         [HttpGet]  // GET: Question/Create
         public ActionResult Create()
@@ -90,7 +125,7 @@ namespace OBSMVC.Controllers
         [HttpPost]               // POST: Question/Create
         [ValidateAntiForgeryToken]
         public ActionResult Create(FormCollection postedData, QuestionMDViewModel QuestionMDView,
-                                 [Bind(Prefix = "q")] OBS_QUESTION questionHdr)
+                                 [Bind(Prefix = "questn")] OBS_QUESTION questionHdr)
         {
 
             //-------- Save the Question Information ----
@@ -116,8 +151,8 @@ namespace OBSMVC.Controllers
             string MDlistAfter = postedData["qAssignedMD"];
             List<string> originalMDList = new List<string>();
             List<string> newMDList = new List<string>();
-            if (MDlistBefore != null) { originalMDList = MDlistBefore.Split(',').ToList(); }
-            if (MDlistAfter != null) { newMDList = MDlistAfter.Split(',').ToList(); }
+            if (!String.IsNullOrEmpty(MDlistBefore)) { originalMDList = MDlistBefore.Split(',').ToList(); }
+            if (!String.IsNullOrEmpty(MDlistAfter)) { newMDList = MDlistAfter.Split(',').ToList(); }
             string[] mdIDsToDelete = originalMDList.Except(newMDList).ToArray();
             string[] mdIDsToAdd = newMDList.Except(originalMDList).ToArray();
 
@@ -137,24 +172,24 @@ namespace OBSMVC.Controllers
                 //-- Process each metadata entry to add for the selected question
                 foreach (string mdIdtoAdd in mdIDsToAdd)
                 {
-                    int tempId = Convert.ToInt32(mdIdtoAdd);
-                    //-- Look for an entry in OBS_QUEST_ASSGND_MD usign the Question Id and the metadata it.
-                    OBS_QUEST_ASSGND_MD oBS_QUEST_ASSGND_MD = db.OBS_QUEST_ASSGND_MD.FirstOrDefault(x => x.obs_quest_md_id == tempId && x.obs_question_id == questionHdr.obs_question_id);
-                    //-- If an entry is found in the junction table for that question, just enable it
-                    if (oBS_QUEST_ASSGND_MD != null && tempId > 0)
-                    {
-                        oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = Convert.ToDateTime("12/31/2060");
-                    }
-                    else
-                    { //-- If selected MD does not exist in the junction table for that question, add it.
-                        oBS_QUEST_ASSGND_MD = new OBS_QUEST_ASSGND_MD();
-                        oBS_QUEST_ASSGND_MD.obs_quest_md_id = tempId;
-                        oBS_QUEST_ASSGND_MD.obs_question_id = questionHdr.obs_question_id;
-                        oBS_QUEST_ASSGND_MD.obs_qad_eff_st_dt = DateTime.Today;
-                        oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = Convert.ToDateTime("12/31/2060");
-                        db.OBS_QUEST_ASSGND_MD.Add(oBS_QUEST_ASSGND_MD);
-                    }
-                }
+                        int tempId = Convert.ToInt32(mdIdtoAdd);
+                        //-- Look for an entry in OBS_QUEST_ASSGND_MD usign the Question Id and the metadata it.
+                        OBS_QUEST_ASSGND_MD oBS_QUEST_ASSGND_MD = db.OBS_QUEST_ASSGND_MD.FirstOrDefault(x => x.obs_quest_md_id == tempId && x.obs_question_id == questionHdr.obs_question_id);
+                        //-- If an entry is found in the junction table for that question, just enable it
+                        if (oBS_QUEST_ASSGND_MD != null && tempId > 0)
+                        {
+                            oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                        }
+                        else
+                        { //-- If selected MD does not exist in the junction table for that question, add it.
+                            oBS_QUEST_ASSGND_MD = new OBS_QUEST_ASSGND_MD();
+                            oBS_QUEST_ASSGND_MD.obs_quest_md_id = tempId;
+                            oBS_QUEST_ASSGND_MD.obs_question_id = questionHdr.obs_question_id;
+                            oBS_QUEST_ASSGND_MD.obs_qad_eff_st_dt = DateTime.Today;
+                            oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                            db.OBS_QUEST_ASSGND_MD.Add(oBS_QUEST_ASSGND_MD);
+                        }
+                }                
 
                 //---- Save All Changes ------
                 db.SaveChanges();
@@ -224,7 +259,7 @@ namespace OBSMVC.Controllers
                     editedQuestion.obs_question_ver++;
                 }
                 editedQuestion.obs_question_full_text = QuestionMDView.q.obs_question_full_text;
-                editedQuestion.obs_question_short_text = QuestionMDView.q.obs_question_short_text;
+                editedQuestion.obs_question_desc = QuestionMDView.q.obs_question_desc;
                 editedQuestion.obs_question_eff_st_dt = QuestionMDView.q.obs_question_eff_st_dt;
                 editedQuestion.obs_question_eff_end_dt = QuestionMDView.q.obs_question_eff_end_dt;
                 editedQuestion.obs_question_upd_dtm = DateTime.Now;
@@ -240,8 +275,8 @@ namespace OBSMVC.Controllers
             string MDlistAfter = postedData["qAssignedMD"];
             List<string> originalMDList = new List<string>();
             List<string> newMDList = new List<string>();
-            if (MDlistBefore != null) { originalMDList = MDlistBefore.Split(',').ToList(); }
-            if (MDlistAfter != null) { newMDList = MDlistAfter.Split(',').ToList(); }
+            if (!String.IsNullOrEmpty(MDlistBefore)) { originalMDList = MDlistBefore.Split(',').ToList(); }
+            if (!String.IsNullOrEmpty(MDlistAfter)) { newMDList = MDlistAfter.Split(',').ToList(); }
             string[] mdIDsToDelete = originalMDList.Except(newMDList).ToArray();
             string[] mdIDsToAdd = newMDList.Except(originalMDList).ToArray();
 

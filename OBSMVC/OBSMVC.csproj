@@ -533,6 +533,7 @@
     <Content Include="Views\ColFormTemplate\Create_DeleteMe.cshtml" />
     <Content Include="Views\ColFormTemplate\_getQuestionInfoTest.cshtml" />
     <Content Include="Views\TestPage\Test.cshtml" />
+    <Content Include="Views\Question\QuestionAddUpdate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

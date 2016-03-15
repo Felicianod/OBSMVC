@@ -94,7 +94,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.questn.obs_question_full_text, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.TextAreaFor(model => model.questn.obs_question_full_text, 4, 100, new { htmlAttributes = new { @class = "form-control", name="q.obs_question_full_text" } })
+                    @Html.TextAreaFor(model => model.questn.obs_question_full_text, 4, 100, new { htmlAttributes = new { @class = "form-control" } })
                     @*@Html.EditorFor(model => model.obs_question_full_text, new { htmlAttributes = new { @class = "form-control" } })*@
                     @Html.ValidationMessageFor(model => model.questn.obs_question_full_text, "", new { @class = "text-danger" })
                 </div>
@@ -102,7 +102,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.questn.obs_question_desc, htmlAttributes: new { @class = "control-label col-md-2"})
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.questn.obs_question_desc, new { htmlAttributes = new { @class = "form-control", name = "q.obs_question_desc" } })
+                    @Html.EditorFor(model => model.questn.obs_question_desc, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.questn.obs_question_desc, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -110,7 +110,7 @@
                 @Html.LabelFor(model => model.questn.obs_question_eff_st_dt, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="input-group col-md-10">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    <input class="form-control text-box single-line" data-val="false" id="obs_question_eff_st_dt" name="q.obs_question_eff_st_dt" type="datetime" value="@DateTime.Today" />
+                    <input class="form-control text-box single-line" data-val="false" id="obs_question_eff_st_dt" name="questn.obs_question_eff_st_dt" type="datetime" value="@DateTime.Today" />
                     @*@Html.EditorFor(model => model.obs_question_eff_st_dt, new { htmlAttributes = new { @class = "form-control", name = "obs_question_eff_st_dt", id = "obs_question_eff_st_dt" } })*@
                     @Html.ValidationMessageFor(model => model.questn.obs_question_eff_st_dt, "", new { @class = "text-danger" })
                 </div>
@@ -119,7 +119,7 @@
                 @Html.LabelFor(model => model.questn.obs_question_eff_end_dt, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="input-group col-md-10">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    <input class="form-control text-box single-line" data-val="false" id="obs_question_eff_end_dt" name="q.obs_question_eff_end_dt" type="datetime" value="" />
+                    <input class="form-control text-box single-line" data-val="false" id="obs_question_eff_end_dt" name="questn.obs_question_eff_end_dt" type="datetime" value="" />
                     @*<input class="form-control text-box single-line" data-val="true" data-val-date="The field Effective End Date must be a date." data-val-required="The Effective End Date field is required." id="obs_question_eff_end_dt" name="obs_question_eff_end_dt" type="datetime" value="2060/12/31" />*@
                     @*@Html.EditorFor(model => model.obs_question_eff_end_dt, new { htmlAttributes = new { @class = "form-control" } })*@
                     @Html.ValidationMessageFor(model => model.questn.obs_question_eff_end_dt, "", new { @class = "text-danger" })

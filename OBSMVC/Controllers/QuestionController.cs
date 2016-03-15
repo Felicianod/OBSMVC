@@ -88,21 +88,33 @@ namespace OBSMVC.Controllers
 
         [HttpGet]
         [ActionName("QuestionAddUpdate")]
-        public ActionResult QuestionAddUpdateEdit(QuestionCreateViewModel formQuestion)
+        public ActionResult QuestionAddUpdateEdit(int? id)
         {
-            if (formQuestion.questn.obs_question_id < 1)
-            { // This is a new Question. Set up default values
-                formQuestion.questn.obs_question_eff_st_dt = DateTime.Today;
-                formQuestion.questn.obs_question_eff_end_dt = Convert.ToDateTime("2060/12/31");
+            int questionId = id ?? -1;
+            if (questionId < 1)
+            {
+                QuestionCreateEditViewModel obsQCVM = new QuestionCreateEditViewModel();
+                obsQCVM.questn.obs_question_eff_st_dt = DateTime.Now;
+                obsQCVM.questn.obs_question_eff_end_dt = Convert.ToDateTime("2060/12/31");
+                return View("QuestionAddUpdate", obsQCVM);
             }
-
-            return View("QuestionAddUpdate", formQuestion);
+            else
+            {
+                QuestionCreateEditViewModel obsQCVM = new QuestionCreateEditViewModel(questionId);
+                return View("QuestionAddUpdate", obsQCVM);
+            }
         }
+
 
         [HttpPost] [ValidateAntiForgeryToken]
         [ActionName("QuestionAddUpdate")]
-        public ActionResult QuestionAddUpdatePost(QuestionCreateViewModel formQuestion)
+        public ActionResult QuestionAddUpdatePost(QuestionCreateEditViewModel formQuestion)
         {
+
+
+
+
+
 
             return View("Edit");
         }
@@ -226,27 +238,13 @@ namespace OBSMVC.Controllers
             _listAnswerTypes((int)id);
             return View(obsQMD);
         }
-        [HttpGet]
-        public ActionResult CreateEdit(int? id)
-        {
-            int question_id = id ?? -1;
-            if (id == null)
-            {
-                QuestionCreateEditViewModel obsQCVM = new QuestionCreateEditViewModel();
-                return View(obsQCVM);
-            }
-            else
-            {
-                QuestionCreateEditViewModel obsQCVM = new QuestionCreateEditViewModel(question_id);
-                return View(obsQCVM);
-            }
 
-        }
+
         [HttpGet]
         public PartialViewResult getQuestionAnswerInfo(qatTags qatInfo)
         {
 
-            return PartialView("_getQATInfo", qatInfo);
+            return PartialView("_getQuestionAnswerInfo", qatInfo);
         }
 
         //-----------------------------------------[ "EDIT"  Action: POST ] ---------------------------------------------------

@@ -54,8 +54,8 @@
     <!-- Form Edit State Change Validation -->
     <!-- left column -->
 <div class="row">
-    <div class="col-sm-3">
-        <div class="row">
+   <div class="col-sm-4">
+      <div class="row">
             <img src="~/Images/iconNoAvatar.png" class="avatar img-circle" alt="avatar">
             @*@if (Model.dsc_emp_last_name.Trim() == "Pogany")
               { <img src="~/Images/KPogany.jpg" class="avatar img-circle" alt="avatar">}
@@ -64,88 +64,108 @@
               }
             *@
         </div>
-        <div class="row">
+      <div class="row">
             <h3>@Model.dsc_emp_first_name @Model.dsc_emp_last_name</h3>
             <h5>@Model.dsc_emp_email_addr</h5>
             <h5>ADP ID: @Model.dsc_emp_adp_id</h5>
-        </div>
-    </div>
+      </div>
+   </div>
 
-    <!-- edit form column -->
-    <div class="col-md-9 personal-info">
-        <form class="form-horizontal" role="form" method="post">
+   <!-- edit form column -->
+   <div class="col-md-8 personal-info">
+      <form class="form-horizontal" role="form" method="post">
+
             <div class="form-group row">
-                <label class="col-lg-4 control-label">JDE ID:</label>
-                <div class="col-lg-8">
+                <div class="col-md-12">
+                    <div class="input-group">
+                        <span class="input-group-addon">Title</span>
+                        <input class="form-control" type="text" value="@Model.dsc_emp_title" name="dsc_emp_title" id="dsc_emp_title">
+                    </div>
+                </div>
+
+                <div class="input-group col-md-10" >
+                    <div class="input-group-addon">
+                       <span style="width:25%">JDE ID:</span>
+                    </div>
                     <input class="form-control" type="text" value="@Model.dsc_emp_perm_id" name="dsc_emp_perm_id">
                 </div>
             </div>
-            <div class="form-group  row">
-                <label class="col-lg-4 control-label">Title:</label>
-                <div class="col-lg-8">
-                    <input class="form-control" type="text" value="@Model.dsc_emp_title" name="dsc_emp_title" id="dsc_emp_title">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-lg-4 control-label">Facility:</label>
-                <div class="col-lg-8">
-                    <div class="ui-select">
-                        @Html.DropDownList("dsc_assigned_lc_id", null, htmlAttributes: new { @class = "form-control" })
+
+
+          <div class="form-group row">
+              <div class="col-md-12">
+                  <div class="input-group">
+                      <span class="input-group-addon">Title</span>
+                      <input class="form-control" type="text" value="@Model.dsc_emp_title" name="dsc_emp_title" id="dsc_emp_title">
+                  </div>
+              </div>
+          </div>
+
+
+                <div class="form-group row">
+                    <label class="col-lg-4 control-label">Facility:</label>
+                    <div class="col-lg-8">
+                        <div class="ui-select">
+                            @Html.DropDownList("dsc_assigned_lc_id", null, htmlAttributes: new { @class = "form-control" })
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-md-4 control-label">Hire Date:</label>
-                <div class="input-group col-md-8" data-provide="datepicker">
-                    <div class="input-group-addon">Usable Until:</div>
-                    @*<input type="Text" class="editDate form-control" value="@Model.dsc_emp_hire_dt"  name="dsc_emp_hire_dt" id="dsc_emp_hire_dt"/>*@
-                    <input class="datepicker form-control" id="dsc_emp_hire_dt" name="dsc_emp_hire_dt" style="max-width: 100%; width:100%;">
-                    @*@Html.EditorFor(model => Model.dsc_emp_hire_dt, new { htmlAttributes = new { @class = "form-control editDate", name = "dsc_emp_hire_dt", id = "dsc_emp_hire_dt" } })*@
-                    <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                    @Html.ValidationMessageFor(model => model.dsc_emp_hire_dt, "", new { @class = "text-danger" })
+            
+            
+            
+                <div class="form-group row">
+                    <div class="input-group col-md-8" data-provide="datepicker">
+                        <div class="input-group-addon">Hire Date</div>
+                        @*<input type="Text" class="editDate form-control" value="@Model.dsc_emp_hire_dt"  name="dsc_emp_hire_dt" id="dsc_emp_hire_dt"/>*@
+                        <input class="datepicker form-control" id="dsc_emp_hire_dt" name="dsc_emp_hire_dt" style="max-width: 100%; width:100%;">
+                        @*@Html.EditorFor(model => Model.dsc_emp_hire_dt, new { htmlAttributes = new { @class = "form-control editDate", name = "dsc_emp_hire_dt", id = "dsc_emp_hire_dt" } })*@
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                        @Html.ValidationMessageFor(model => model.dsc_emp_hire_dt, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group row">
-                <label class="col-lg-4 control-label">Termination Date:</label>
-                <div class="input-group col-lg-8">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    @*<input type="Text" class="editDate form-control" value="@Model.dsc_emp_term_dt"  name="dsc_emp_term_dt" id="dsc_emp_term_dt"/>*@
-                    @Html.EditorFor(model => Model.dsc_emp_term_dt, new { htmlAttributes = new { @class = "form-control editDate", name = "dsc_emp_term_dt", id = "dsc_emp_term_dt" } })
-                    @Html.ValidationMessageFor(model => model.dsc_emp_term_dt, "", new { @class = "text-danger" })
+
+
+                <div class="form-group row">
+                    <label class="col-lg-4 control-label">Termination Date:</label>
+                    <div class="input-group col-lg-8">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        @*<input type="Text" class="editDate form-control" value="@Model.dsc_emp_term_dt"  name="dsc_emp_term_dt" id="dsc_emp_term_dt"/>*@
+                        @Html.EditorFor(model => Model.dsc_emp_term_dt, new { htmlAttributes = new { @class = "form-control editDate", name = "dsc_emp_term_dt", id = "dsc_emp_term_dt" } })
+                        @Html.ValidationMessageFor(model => model.dsc_emp_term_dt, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-lg-4 control-label">Observable:</label>
-                <div class="col-lg-8">
-                    <input type="checkbox" class="form-control input-sm" id="dsc_emp_can_be_obs_yn" @if (Model.dsc_emp_can_be_obs_yn == "Y") { <text> checked="checked" </text>   } name="dsc_emp_can_be_obs_yn">
+                <div class="form-group row">
+                    <label class="col-lg-4 control-label">Observable:</label>
+                    <div class="col-lg-8">
+                        <input type="checkbox" class="form-control input-sm" id="dsc_emp_can_be_obs_yn" @if (Model.dsc_emp_can_be_obs_yn == "Y") { <text> checked="checked" </text>    } name="dsc_emp_can_be_obs_yn">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-lg-4 control-label">Hourly:</label>
-                <div class="col-lg-8">
-                    <input type="checkbox" class="form-control input-sm" id="dsc_emp_hourly_yn" @if (Model.dsc_emp_hourly_yn == "Y") { <text> checked="checked" </text>    } name="dsc_emp_hourly_yn">
+                <div class="form-group row">
+                    <label class="col-lg-4 control-label">Hourly:</label>
+                    <div class="col-lg-8">
+                        <input type="checkbox" class="form-control input-sm" id="dsc_emp_hourly_yn" @if (Model.dsc_emp_hourly_yn == "Y") { <text> checked="checked" </text>     } name="dsc_emp_hourly_yn">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-lg-4 control-label">Temp:</label>
-                <div class="col-lg-8">
-                    <input type="checkbox" class="form-control input-sm" id="dsc_emp_temp_yn" @if (Model.dsc_emp_temp_yn == "Y") { <text> checked="checked" </text>     } name="dsc_emp_temp_yn">
+                <div class="form-group row">
+                    <label class="col-lg-4 control-label">Temp:</label>
+                    <div class="col-lg-8">
+                        <input type="checkbox" class="form-control input-sm" id="dsc_emp_temp_yn" @if (Model.dsc_emp_temp_yn == "Y") { <text> checked="checked" </text>      } name="dsc_emp_temp_yn">
+                    </div>
                 </div>
-            </div>
-            <br />
-            <div class="form-group">
-                <label class="col-md-4 control-label"></label>
-                <div class="col-md-8">
-                    <button type="submit" class="btn btn-primary" disabled="disabled" id="btnSubmit">Save Changes</button>
-                    @*<input type="submit" class="btn btn-primary" value="Save Changes">*@
-                    <span></span>
-                    <input type="reset" class="btn btn-default" value="Cancel">
+                <br />
+                <div class="form-group">
+                    <label class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        <button type="submit" class="btn btn-primary" disabled="disabled" id="btnSubmit">Save Changes</button>
+                        @*<input type="submit" class="btn btn-primary" value="Save Changes">*@
+                        <span></span>
+                        <input type="reset" class="btn btn-default" value="Cancel">
+                    </div>
                 </div>
-            </div>
-            <input type="hidden" value="@Model.dsc_emp_id" name="dsc_emp_id" id="dsc_emp_id">
-        </form>
-    </div>
+                <input type="hidden" value="@Model.dsc_emp_id" name="dsc_emp_id" id="dsc_emp_id">
+</form>
+   </div>
 </div>
 
 

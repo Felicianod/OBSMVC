@@ -96,11 +96,11 @@
                 <div class="col-md-10">
                     @Html.TextAreaFor(model => model.questn.obs_question_full_text, 4, 100, new { htmlAttributes = new { @class = "form-control" } })
                     @*@Html.EditorFor(model => model.obs_question_full_text, new { htmlAttributes = new { @class = "form-control" } })*@
-                    @Html.ValidationMessageFor(model => model.questn.obs_question_full_text, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.questn.obs_question_full_text, "", new { @class = "text-danger", name="q.obs_question_full_text" })
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(model => model.questn.obs_question_desc, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.questn.obs_question_desc, htmlAttributes: new { @class = "control-label col-md-2", name="q.obs_question_desc" })
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.questn.obs_question_desc, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.questn.obs_question_desc, "", new { @class = "text-danger" })

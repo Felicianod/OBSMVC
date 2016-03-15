@@ -1,5 +1,7 @@
-﻿@model OBSMVC.Models.QuestionCreateViewModel
-@{ ViewBag.Title = "Create/Edit Question"; }
+﻿@model OBSMVC.Models.QuestionCreateEditViewModel
+@{ ViewBag.Title = "Create/Edit Question";
+   var test = @Model;
+    }
 
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
 <style>
@@ -91,6 +93,12 @@
         </div>
     </div>
 
+    <div style="border:solid">
+
+        @*_getQuestionAnswerInfo.cshtml*@
+        <br /><br /><br /><br /><br /><br /><br />
+
+    </div>
     @* ---------- NEW ROW WITH MOVE LEFT/RIGHT TAGS PANELS --------------*@
     <div class="row">
         <div class="col-md-12 personal-info">

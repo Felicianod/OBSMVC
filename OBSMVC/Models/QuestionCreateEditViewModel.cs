@@ -89,8 +89,9 @@ namespace OBSMVC.Models
                             List<OBS_QUEST_SLCT_ANS> temp_select_ans = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qaInstanceTemp.obs_qat_id && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).ToList();
                             temp_qat.selAns = temp_select_ans;
                         }
+                        Quest_Assigned_qatTags.Add(temp_qat);
                     }
-                    Quest_Assigned_qatTags.Add(temp_qat);
+                    
 
                 }
             }//end of  if (questn != null)

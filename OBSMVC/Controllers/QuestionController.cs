@@ -88,9 +88,10 @@ namespace OBSMVC.Controllers
 
         [HttpGet]
         [ActionName("QuestionAddUpdate")]
-        public ActionResult QuestionAddUpdateEdit(string qId)
+        public ActionResult QuestionAddUpdateEdit(int? id)
         {
-            if (String.IsNullOrEmpty(qId))
+            int questionId = id ?? -1;
+            if (questionId < 1)
             {
                 QuestionCreateEditViewModel obsQCVM = new QuestionCreateEditViewModel();
                 obsQCVM.questn.obs_question_eff_st_dt = DateTime.Now;
@@ -99,7 +100,7 @@ namespace OBSMVC.Controllers
             }
             else
             {
-                QuestionCreateEditViewModel obsQCVM = new QuestionCreateEditViewModel(Convert.ToInt32(qId));
+                QuestionCreateEditViewModel obsQCVM = new QuestionCreateEditViewModel(questionId);
                 return View("QuestionAddUpdate", obsQCVM);
             }
         }

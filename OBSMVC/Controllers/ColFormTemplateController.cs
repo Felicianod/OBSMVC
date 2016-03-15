@@ -40,6 +40,7 @@ namespace OBSMVC.Controllers
                         ObsColFormTemplate obsForm = new ObsColFormTemplate();
                         if (obsForm.getAssignedFunctions(x.obs_cft_id).IndexOf(selectedFunctionId) != -1)
                         {
+
                             obsForm.OBSformID = x.obs_cft_id;
                             obsForm.FormTitle = x.obs_cft_title;
                             obsForm.FormNumber = x.obs_cft_nbr;
@@ -48,7 +49,7 @@ namespace OBSMVC.Controllers
                             obsForm.LC = x.DSC_LC.dsc_lc_name;
                             obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
                             obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
-                            obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                            obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt, x.obs_cft_pub_dtm);
                             obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
                             obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
                             obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
@@ -76,7 +77,7 @@ namespace OBSMVC.Controllers
                                 obsForm.LC = x.DSC_LC.dsc_lc_name;
                                 obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
                                 obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
-                                obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                                obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt, x.obs_cft_pub_dtm);
                                 obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
                                 obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
                                 obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
@@ -106,7 +107,7 @@ namespace OBSMVC.Controllers
                                 obsForm.LC = x.DSC_LC.dsc_lc_name;
                                 obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
                                 obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
-                                obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                                obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt, x.obs_cft_pub_dtm);
                                 obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
                                 obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
                                 obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
@@ -136,7 +137,7 @@ namespace OBSMVC.Controllers
                                 obsForm.LC = x.DSC_LC.dsc_lc_name;
                                 obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
                                 obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
-                                obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                                obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt, x.obs_cft_pub_dtm);
                                 obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
                                 obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
                                 obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
@@ -169,7 +170,7 @@ namespace OBSMVC.Controllers
                         obsForm.LC = x.DSC_LC.dsc_lc_name;
                         obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
                         obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
-                        obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                        obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt, x.obs_cft_pub_dtm);
                         obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
                         obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
                         obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
@@ -194,7 +195,7 @@ namespace OBSMVC.Controllers
                             obsForm.LC = x.DSC_LC.dsc_lc_name;
                             obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
                             obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
-                            obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                            obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt, x.obs_cft_pub_dtm);
                             obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
                             obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
                             obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
@@ -221,7 +222,7 @@ namespace OBSMVC.Controllers
                             obsForm.LC = x.DSC_LC.dsc_lc_name;
                             obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
                             obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
-                            obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                            obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt, x.obs_cft_pub_dtm);
                             obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
                             obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
                             obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
@@ -248,7 +249,7 @@ namespace OBSMVC.Controllers
                             obsForm.LC = x.DSC_LC.dsc_lc_name;
                             obsForm.OBS_Type = x.OBS_TYPE.obs_type_name;
                             obsForm.AssignedFunctions = obsForm.getAssignedFunctions(x.obs_cft_id);
-                            obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt);
+                            obsForm.isActive = IsActiveForm(x.obs_cft_eff_st_dt, x.obs_cft_eff_end_dt, x.obs_cft_pub_dtm);
                             obsForm.QuestionCount = obsForm.getAssignedQuestionCount(x.obs_cft_id);
                             obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
                             obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
@@ -724,8 +725,11 @@ namespace OBSMVC.Controllers
 
             return cft_ids_with_matching_qiestions;
         }
-        public static bool IsActiveForm(DateTime start_date, DateTime end_date)
-        {
+        public static bool IsActiveForm(DateTime? start_date, DateTime end_date, DateTime? publishedDate)
+        {   // Start Date and publishedDate can be nullable
+            if (publishedDate == null || end_date <= DateTime.Today) { return false; }
+
+
             if (DateTime.Now >= start_date && DateTime.Now < end_date) { return true; }
             else { return false; }
         }

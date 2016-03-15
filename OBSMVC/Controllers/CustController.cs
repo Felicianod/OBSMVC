@@ -19,6 +19,7 @@ namespace OBSMVC.Controllers
     {
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
 
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         // GET: Cust
         [HttpGet]
         public ActionResult Index(int? page, int? PageSize)
@@ -34,38 +35,38 @@ namespace OBSMVC.Controllers
             DateTime active_date;
             foreach (DSC_CUSTOMER customer in customers)
             {
+                string activeAction = "";
                 try
                 {
-                    if (String.IsNullOrEmpty(customer.dsc_cust_eff_end_date))
+                    if (customer.dsc_cust_eff_end_date == null)
                     {
-                        customer.dsc_cust_eff_end_date = "YES";
+                        activeAction = "YES";
 
                     }//end of if
                     else
                     {
-                        active_date = DateTime.Parse(customer.dsc_cust_eff_end_date);
-                        if (active_date <= DateTime.Today)
+                        if (customer.dsc_cust_eff_end_date <= DateTime.Today)
                         {
-                            customer.dsc_cust_eff_end_date = "NO";
+                            activeAction = "NO";
                         }
                         else
                         {
-                            customer.dsc_cust_eff_end_date = "YES";
+                            activeAction = "YES";
                         }
                     }//end of else
                 }//end of try
                 catch
                 {
-                    customer.dsc_cust_eff_end_date = "NO";
+                    activeAction = "NO";
                 }//end of catch
 
-                viewCustomers.Add(new CustViewModel(customer.dsc_cust_id, customer.dsc_cust_name,customer.dsc_cust_parent_name,customer.dsc_cust_eff_end_date,customer.dsc_cust_eff_end_date=="YES"?"Deactivate":"Activate"));
+                viewCustomers.Add(new CustViewModel(customer.dsc_cust_id, customer.dsc_cust_name, customer.dsc_cust_parent_name, activeAction, activeAction == "YES" ? "Deactivate" : "Activate"));
             }// end of foreach
 
             return View(viewCustomers.ToPagedList(page ?? 1, PageSize ?? 10));
             
         }
-  
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         [HttpGet]
         public ActionResult Activate(int id, string actionText)
         {
@@ -83,16 +84,16 @@ namespace OBSMVC.Controllers
             {
                 using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
                 {
-                    DateTime today = DateTime.Today;
                     var customer = db.DSC_CUSTOMER.Single(cust_id => cust_id.dsc_cust_id == id);
-                    customer.dsc_cust_eff_end_date = today.ToString("d");
+                    customer.dsc_cust_eff_end_date = DateTime.Today;
                     db.SaveChanges();
                 }
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Index");
         }
-
+        
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         // POST: Cust/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -109,6 +110,7 @@ namespace OBSMVC.Controllers
             return View(dSC_CUSTOMER);
         }
 
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         // GET: Cust/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -124,6 +126,7 @@ namespace OBSMVC.Controllers
             return View(dSC_CUSTOMER);
         }
 
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         // POST: Cust/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -135,6 +138,7 @@ namespace OBSMVC.Controllers
             return RedirectToAction("Index");
         }
 
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         protected override void Dispose(bool disposing)
         {
             if (disposing)

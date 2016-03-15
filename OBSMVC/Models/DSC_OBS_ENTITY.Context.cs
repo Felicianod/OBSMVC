@@ -34,7 +34,6 @@ namespace OBSMVC.Models
         public virtual DbSet<OBS_QUEST_ASSGND_MD> OBS_QUEST_ASSGND_MD { get; set; }
         public virtual DbSet<OBS_QUESTION_METADATA> OBS_QUESTION_METADATA { get; set; }
         public virtual DbSet<OBS_ANS_TYPE> OBS_ANS_TYPE { get; set; }
-        public virtual DbSet<DSC_CUSTOMER> DSC_CUSTOMER { get; set; }
         public virtual DbSet<OBS_APP_EVENT_LOG> OBS_APP_EVENT_LOG { get; set; }
         public virtual DbSet<OBS_APPLICATION> OBS_APPLICATION { get; set; }
         public virtual DbSet<OBS_ATTRIB_DATA_TYPES> OBS_ATTRIB_DATA_TYPES { get; set; }
@@ -55,5 +54,6 @@ namespace OBSMVC.Models
         public virtual DbSet<OBS_QUEST_SLCT_ANS> OBS_QUEST_SLCT_ANS { get; set; }
         public virtual DbSet<OBS_COL_FORM_QUESTIONS> OBS_COL_FORM_QUESTIONS { get; set; }
         public virtual DbSet<OBS_QUESTION> OBS_QUESTION { get; set; }
+        public virtual DbSet<DSC_CUSTOMER> DSC_CUSTOMER { get; set; }
     }
 }

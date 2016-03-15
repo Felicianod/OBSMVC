@@ -24,7 +24,7 @@ namespace OBSMVC.Models
         public int dsc_cust_id { get; set; }
         public string dsc_cust_name { get; set; }
         public string dsc_cust_parent_name { get; set; }
-        public string dsc_cust_eff_end_date { get; set; }
+        public Nullable<System.DateTime> dsc_cust_eff_end_date { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_INST> OBS_INST { get; set; }

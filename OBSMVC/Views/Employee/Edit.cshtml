@@ -29,13 +29,9 @@
     });
 </script>
 
-
-
-
 <br />
-<div class="container">
-    <h1>Edit Profile</h1>
-    <hr>
+<h1>Edit Profile</h1>
+<hr>
  @*    <script type="text/javascript">
         //$(function () {
         //    $("input:text.editDate").datepicker();
@@ -57,9 +53,14 @@
     </script> *@
     <!-- Form Edit State Change Validation -->
     <!-- left column -->
+<div class="row">
+    <div class="col-sm-4">
+        <div class="row"></div>
+    </div>
+    <div class="col-sm-8"></div>
+</div>
     <div class="col-md-3">
         <div class="text-left">
-            @*  <img src="~/Images/iconNoAvatar.png" class="avatar img-circle" alt="avatar">*@
             <img src="~/Images/iconNoAvatar.png" class="avatar img-circle" alt="avatar">
             @*@if (Model.dsc_emp_last_name.Trim() == "Pogany")
                 { <img src="~/Images/KPogany.jpg" class="avatar img-circle" alt="avatar">}
@@ -174,7 +175,6 @@
             });
         </script>
     }
-</div>
 
 <hr>
 <div>

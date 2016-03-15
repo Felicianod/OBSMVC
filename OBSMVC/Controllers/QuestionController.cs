@@ -100,6 +100,10 @@ namespace OBSMVC.Controllers
                 {
                     questionHdr.obs_question_eff_end_dt = Convert.ToDateTime("12/31/2060");
                 }
+                if (questionHdr.obs_question_eff_st_dt < Convert.ToDateTime("01/01/1900"))
+                {
+                    questionHdr.obs_question_eff_st_dt = DateTime.Now;
+                }
                 questionHdr.obs_question_ver = 1;
                 questionHdr.obs_question_added_uid = User.Identity.Name;
                 questionHdr.obs_question_added_dtm = DateTime.Now;

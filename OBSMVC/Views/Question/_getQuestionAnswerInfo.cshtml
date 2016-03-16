@@ -1,24 +1,75 @@
 ﻿@model  OBSMVC.Models.qatTags
 
-<div class="row">
-    <div class="col-sm-5 col-sm-offset-1">
-        <div class="input-group">
-            <div class="input-group-addon">Answer Type: </div>
-            @Html.DisplayFor(model => model.answer_type_name) <br />
-            <div class="input-group-addon">Is Default: </div>
-            @Html.DisplayFor(model => model.QAT.obs_qat_default_ans_type_yn) <br />
+@* ===== THIS PARTIAL VIES REPRESENTS A SINGLE QUESTION ANSWER TYPE TO BE USED FOR QUESTION VIEW/MAINTENANCE MODE ======= *@
+
+@{var uniqueCounter = @Model.uniqueCounter.ToString("00");
+var qbtnCloseId = "btnClose" + @Model.uniqueCounter;
+var hidden_field = "currentSelectedQAT" + Model.uniqueCounter;
+var dropdown_id = "AssignedAnswers" + Model.uniqueCounter;
+var dropdown2 = "#AssignedAnswers" + Model.uniqueCounter;
+var rowInfo = Model.uniqueCounter.ToString();
+}
+
+
+
+
+
+<div class="col-sm-12" style="border:solid; border-width:1px; font-family:Arial">
+    <div class="row">
+        <div class="col-sm-4 form-inline">
+            <span class="label label-primary">[ @uniqueCounter ]&nbsp;</span>
+            <div class="input-group">
+                <span class="input-group-addon label-primary" style="color:white">Answer Type:</span>
+                <input type="text" class="form-control" id="qat" value="@Model.answer_type_name" readonly="readonly">
+            </div>
         </div>
+
+        <div class="col-sm-3 col-sm-offset-5 form-inline" style="text-align:right">
+            <span class="">Default:</span>
+            @if (Model.QAT.obs_qat_default_ans_type_yn == "Y")
+            { <button type="button" class="btn btnAdd btnIsDefault">YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span></button> }
+            else
+            { <button type="button" class="btn btnIsDefault btn-warning">NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span></button> }
+
+            <input type="checkbox" @if (Model.QAT.obs_qat_default_ans_type_yn == "Y") { <text> checked="checked" </text>     }
+                   class="form-control primar chkDefault" id="qatDefault" name="qatDefault" style="max-width:20%" />
+        </div>
+    </div>
+
+    <div class="row" id="selAnsLabels">
+        @if (Model.selectable_ans_required == "Y")
+        {
+            <ul>
+                @foreach (var x in Model.selAns)
+                {
+                    <li style="display: inline"><span class="badge">@x.obs_qsa_text</span></li>
+                }
+            </ul>
+        }
+        else
+        { <TEXT>This Question does not require Selectable answers</TEXT>}
+    </div>
+    <div class="row" id="selAnsTextBx" style="display:none">
+                @foreach (var x in Model.selAns)
+                {
+                    <input type="text" value="@x.obs_qsa_text" class="form-control" />
+                }
     </div>
     @if (Model.selectable_ans_required == "Y")
     {
-        <ul>
-            @foreach (var x in Model.selAns)
-            {
-            <li style="display: inline"><span class="badge">@x.obs_qsa_text</span></li>
-            }
-        </ul>
+        <div class="row form-inline">
+            <div class="col-sm-3 col-sm-offset-1">
+                <button type="button" onclick="editSelAns()">Change Answer Values</button>
+            </div>
+        </div>
     }
-    else
-    { <TEXT>This Question does not require Selectable answers</TEXT>}
+
 </div>
 
+<script>
+    function editSelAns() {
+        alert('You are about to Edit the Selectable Answers');
+        //$('#selAnsLabels').hide;
+        //$('#selAnsTextBx').show;
+    }
+</script>

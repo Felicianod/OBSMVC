@@ -74,16 +74,18 @@ namespace OBSMVC.Models
                 List<OBS_QUEST_ANS_TYPES> QAInstances = db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == questn.obs_question_id && (x.obs_qat_end_eff_dt == null || x.obs_qat_end_eff_dt > DateTime.Now)).ToList();
                 if (QAInstances.Count() > 0)  //There were no records found in the 'OBS_QUEST_ANS_TYPES' Table for this question Id
                 {
-                 
-                    
+
+                    int qatCounter = 0;
                     foreach (OBS_QUEST_ANS_TYPES qaInstanceTemp in QAInstances)
                     {
+                        qatCounter++;
                         qatTags temp_qat = new qatTags();
-                        temp_qat.QAT = qaInstanceTemp;                      
+                        temp_qat.QAT = qaInstanceTemp;
                         OBS_ANS_TYPE temp_answer = db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id);
                         temp_qat.answer_type_name = temp_answer.obs_ans_type_name;
                         temp_qat.answer_type_category = temp_answer.obs_ans_type_category;
                         temp_qat.selectable_ans_required = temp_answer.obs_ans_type_has_fxd_ans_yn;
+                        temp_qat.uniqueCounter = qatCounter;
                         if(temp_answer.obs_ans_type_has_fxd_ans_yn=="Y")
                         {
                             //if true, we need to list all of them and assign them to object's list of selectable answers
@@ -92,8 +94,6 @@ namespace OBSMVC.Models
                         }
                         Quest_Assigned_qatTags.Add(temp_qat);
                     }
-                    
-
                 }
             }//end of  if (questn != null)
         }
@@ -127,7 +127,7 @@ namespace OBSMVC.Models
         [Display(Name = "Answer Type Category")]
         public string answer_type_category { set; get; }
         public string selectable_ans_required { set; get; }
-       
+        public int uniqueCounter { set; get; }
         
     }
 }

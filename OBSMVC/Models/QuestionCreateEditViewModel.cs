@@ -75,10 +75,11 @@ namespace OBSMVC.Models
                 if (QAInstances.Count() > 0)  //There were no records found in the 'OBS_QUEST_ANS_TYPES' Table for this question Id
                 {
                  
-                    qatTags temp_qat = new qatTags();
+                    
                     foreach (OBS_QUEST_ANS_TYPES qaInstanceTemp in QAInstances)
                     {
-                        temp_qat.QAT = qaInstanceTemp;
+                        qatTags temp_qat = new qatTags();
+                        temp_qat.QAT = qaInstanceTemp;                      
                         OBS_ANS_TYPE temp_answer = db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id);
                         temp_qat.answer_type_name = temp_answer.obs_ans_type_name;
                         temp_qat.answer_type_category = temp_answer.obs_ans_type_category;

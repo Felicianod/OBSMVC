@@ -807,7 +807,7 @@ namespace OBSMVC.Controllers
             
             OBS_ANS_TYPE ans_type = db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == obs_ans_type_id);
 
-            List<string> current_sel_ans_list = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qat_id && item.obs_qsa_eff_st_dt <= DateTime.Today && item.obs_qsa_eff_end_dt > DateTime.Today).Select(x => x.obs_qsa_text).ToList();
+            List<string> current_sel_ans_list = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qat_id && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).Select(x => x.obs_qsa_text).ToList();
             if(current_sel_ans_list.Count()!= selAnsList_from_form.Count() && (ans_type.obs_ans_type_category =="3 Val Range"|| ans_type.obs_ans_type_category=="5 Val Range"))
             {
                 return "ERROR: Not Enough Selectable Answers for this category!!!!";

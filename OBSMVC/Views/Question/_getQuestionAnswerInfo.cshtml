@@ -8,6 +8,8 @@
             <div class="input-group-addon">Is Default: </div>
             @Html.DisplayFor(model => model.QAT.obs_qat_default_ans_type_yn) <br />
         </div>
+        Category: @Model.answer_type_category<br />
+        Answer type: @Model.answer_type_name<br />
     </div>
     @if (Model.selectable_ans_required == "Y")
     {

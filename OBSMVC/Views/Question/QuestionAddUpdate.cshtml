@@ -1,4 +1,5 @@
 ﻿@model OBSMVC.Models.QuestionCreateEditViewModel
+
 @{ ViewBag.Title = "Create/Edit Question";
    var test = @Model;
     }
@@ -13,30 +14,31 @@
         transition: opacity 0.3s linear, left 0.3s ease-out;
     }
     #container .modal.fade.in {
-            left: 50%;
-        }
+        left: 50%;
+    }
     /*.input-group-addon {
     min-width:200px;
     text-align:left;*/
     .stdWidth {
-    min-width:130px;
-    text-align:left;
-}
+        min-width:130px;
+        text-align:left;
+    }
+    .smallRowMargin{
+        margin-bottom:5px !important; 
+        /*margin:0px !important;  //if we want to remove the margin completelly*/
+   }
 </style>
 
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
-<div class="well well-sm" style="padding: 4px; font-size:xx-large"><span class="col-md-offset-1">Add New Question </span></div>
+<div class="well well-sm smallRowMargin" style="padding: 4px; font-size:xx-large"><span class="col-md-offset-1">Add New Question </span></div>
 
-@using (Html.BeginForm("QuestionAddUpdate", "Question", FormMethod.Post, new {@class ="form-horizontal" }))
+@using (Html.BeginForm("QuestionAddUpd", "Question", FormMethod.Post, new {@class ="form-horizontal" }))
 {
 @Html.AntiForgeryToken()
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-
-
-    <div class="form-group row">
-        <div class="col-sm-12">
+    <div class="form-group row smallRowMargin">
+        <div class="col-sm-11 col-sm-offset-1">
             <div class="input-group">
                 <div class="input-group-addon stdWidth">
                     @Html.LabelFor(model => model.questn.obs_question_full_text)
@@ -46,43 +48,40 @@
             </div>
         </div>
     </div>
-
-
-    <div class="form-group row">
-        <div class="col-sm-12">
+    <div class="form-group row smallRowMargin">
+        <div class="col-sm-11 col-sm-offset-1">
             <div class="input-group">
                 <div class="input-group-addon stdWidth">
-                   @Html.LabelFor(model => model.questn.obs_question_desc)
+                    @Html.LabelFor(model => model.questn.obs_question_desc)
                 </div>
                 @Html.EditorFor(model => model.questn.obs_question_desc, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:95%;" } })
                 @Html.ValidationMessageFor(model => model.questn.obs_question_desc, "", new { @class = "text-danger" })
             </div>
         </div>
     </div>
-
-    <div class="form-group row">
-        <div class="col-sm-4 ">
+    <div class="form-group row smallRowMargin">
+        <div class="col-sm-4 col-sm-offset-2">
             <div class="input-group" data-provide="datepicker">
                 <div class="input-group-addon">
                     @Html.LabelFor(model => model.questn.obs_question_eff_st_dt)
                 </div>
-                <input class="datepicker form-control" id="obs_question_eff_st_dt" name="questn.obs_question_eff_st_dt" value="@Model.questn.obs_question_eff_st_dt" style="max-width: 100%; width:100%;">
+                <input class="datepicker form-control" id="obs_question_eff_st_dt" name="questn.obs_question_eff_st_dt" value="@Model.questn.obs_question_eff_st_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;">
                 <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
                 @Html.ValidationMessageFor(model => model.questn.obs_question_eff_end_dt, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="col-sm-4 col-sm-offset-2">
+        <div class="col-sm-4 col-sm-offset-1">
             <div class="input-group" data-provide="datepicker">
                 <div class="input-group-addon">
-                   @Html.LabelFor(model => model.questn.obs_question_eff_end_dt)
+                    @Html.LabelFor(model => model.questn.obs_question_eff_end_dt)
                 </div>
-                <input class="datepicker form-control" id="obs_question_eff_end_dt" name="questn.obs_question_eff_end_dt" value="@Model.questn.obs_question_eff_end_dt" style="max-width: 100%; width:100%;">
+                <input class="datepicker form-control" id="obs_question_eff_end_dt" name="questn.obs_question_eff_end_dt" value="@Model.questn.obs_question_eff_end_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;">
                 <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
                 @Html.ValidationMessageFor(model => model.questn.obs_question_eff_end_dt, "", new { @class = "text-danger" })
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" smallrowmargin>
         <div class="form-group">
             @Html.HiddenFor(model => model.questn.obs_question_ver)
             @*@Html.LabelFor(model => model.obs_question_ver, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -93,14 +92,18 @@
         </div>
     </div>
 
-    <div style="border:solid">
+ <div style="border:solid">
+     @foreach (OBSMVC.Models.qatTags qat in Model.Quest_Assigned_qatTags)
+     { 
+         @Html.Partial("_getQuestionAnswerInfo", qat);
+     }
 
         @*_getQuestionAnswerInfo.cshtml*@
         <br /><br /><br /><br /><br /><br /><br />
 
-    </div>
-    @* ---------- NEW ROW WITH MOVE LEFT/RIGHT TAGS PANELS --------------*@
-    <div class="row">
+ </div>
+@* ---------- NEW ROW WITH MOVE LEFT/RIGHT TAGS PANELS --------------*@
+ <div class="row">
         <div class="col-md-12 personal-info">
             <div class="panel panel-info">
                 <div class="panel-heading">
@@ -162,9 +165,9 @@
                 </div>
             </div>
         </div>
-    </div>
-    @* ---------- END OF NEW ROW WITH MOVE LEFT/RIGHT TAGS PANELS --------------*@
-    <div class="row">
+ </div>
+@* ---------- END OF NEW ROW WITH MOVE LEFT/RIGHT TAGS PANELS --------------*@
+ <div class="row">
         <div class="col-md-12 ">
             <div class="form-group row">
                 <div class="col-md-offset-2 col-md-10">
@@ -187,8 +190,7 @@
                 </script>
                 }
         </div>
-    </div>
-
+ </div>
 }
 @* ------------ END OF THE FORM ---------- *@
 
@@ -259,7 +261,7 @@
         //});
 
         $('.datepicker').datepicker({
-            format: "DD, d MM, yy"
+            dateFormat: 'M dd, yy'
         });
 
         $('[data-toggle="tooltip"]').tooltip();
@@ -278,9 +280,9 @@
             $(origin).find(':selected').appendTo(dest);
         }
 
-        function moveAllItems(origin, dest) {
-            $(origin).children().appendTo(dest);
-        }
+        //function moveAllItems(origin, dest) {
+        //    $(origin).children().appendTo(dest);
+        //}
 
         $('#left').click(function () {
             moveItems('#sbTwo', '#sbOne');
@@ -386,7 +388,6 @@
             isChanged = false;
             $(this).button('loading');
         });
-
     });
 </script>
 

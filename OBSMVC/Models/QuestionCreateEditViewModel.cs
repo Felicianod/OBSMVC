@@ -129,10 +129,5 @@ namespace OBSMVC.Models
         public string selectable_ans_required { set; get; }
        
         
-
-
-
-
-
     }
 }

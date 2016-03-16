@@ -3,7 +3,8 @@
 @* ===== THIS PARTIAL VIES REPRESENTS A SINGLE QUESTION ANSWER TYPE TO BE USED FOR QUESTION VIEW/MAINTENANCE MODE ======= *@
 
 @{var uniqueCounter = @Model.uniqueCounter.ToString("00");
-  var qbtnSaveId = "#btnSave" + uniqueCounter;
+  var qbtnSaveId = "btnSave" + uniqueCounter;
+  //var qbtnSaveIdHandle = "#btnSave" + uniqueCounter;
   
   
 var hidden_field = "currentSelectedQAT" + Model.uniqueCounter;
@@ -66,7 +67,7 @@ var rowInfo = Model.uniqueCounter.ToString();
 
     <div class="row form-inline">
         <div class="col-sm-3 col-sm-offset-1">
-            <button id="qbtnSaveId" type="button" >SAVE</button>
+            <button id="@qbtnSaveId" type="button" >SAVE</button>
         </div>
     </div>
 
@@ -84,8 +85,8 @@ var rowInfo = Model.uniqueCounter.ToString();
 </script>
 
 <script type="text/jscript">
-
-    $('#qbtnSaveId').click(function () {
+    var qbtnSaveIdHandle = "#" + '@qbtnSaveId';
+    $(qbtnSaveIdHandle).click(function () {
         alert('SAVING DATA ... ');
         var $btn = $(this);
         $btn.button('loading');

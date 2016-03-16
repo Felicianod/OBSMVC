@@ -89,7 +89,7 @@ namespace OBSMVC.Models
                         if(temp_answer.obs_ans_type_has_fxd_ans_yn=="Y")
                         {
                             //if true, we need to list all of them and assign them to object's list of selectable answers
-                            List<OBS_QUEST_SLCT_ANS> temp_select_ans = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qaInstanceTemp.obs_qat_id && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).ToList();
+                            List<OBS_QUEST_SLCT_ANS> temp_select_ans = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qaInstanceTemp.obs_qat_id && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).OrderBy(x=>x.obs_qsa_order).ToList();
                             temp_qat.selAns = temp_select_ans;
                         }
                         Quest_Assigned_qatTags.Add(temp_qat);

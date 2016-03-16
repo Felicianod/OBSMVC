@@ -402,17 +402,16 @@
 
 
         $(".btnIsDefault").click(function () {
-            // If the button is not Default, make it default and reset all other buttond
-
+            // If the button is the Default, Just make it "No Default"
             if ($(this).hasClass('btnAdd')) {
-                $(this).removeClass("btnAdd");
-                $(this).addClass("btn-warning");
-                this.value = 'NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">';
+                $(this).removeClass("btnAdd").addClass("btn-warning");
+                $(this).html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
             }
             else {
+                //Else, reset all buttons to "No Default" and make this button the default
                 $(".btnIsDefault").removeClass("btnAdd").addClass("btn-warning");
-                $(".btnIsDefault").value = 'YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up">';
-                $(this).addClass("btnAdd");
+                $(".btnIsDefault").html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
+                $(this).removeClass("btn-warning").addClass("btnAdd");
             }
             
 

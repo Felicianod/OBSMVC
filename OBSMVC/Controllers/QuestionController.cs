@@ -247,6 +247,39 @@ namespace OBSMVC.Controllers
             return PartialView("_getQuestionAnswerInfo", qatInfo);
         }
 
+        [HttpPost]
+        public string saveSelAnsDefault(int qat_id, string sel_ans_list, bool isDefault)
+        {
+            if (String.IsNullOrEmpty(sel_ans_list))
+            {//if sel_ans_list is null that means we're only need to update default flag
+
+                try
+                {
+                    updateDefaultAnswerType(qat_id, isDefault ? "Y" : "N");
+                    return "OK";
+                }
+                catch (Exception e)
+                {
+                    return e.Message;
+                }
+
+            }
+            else
+            {
+                try
+                {
+                    updateDefaultAnswerType(qat_id, isDefault ? "Y" : "N");
+                    return updateSel_Ans_Types(qat_id, sel_ans_list);                    
+                }
+                catch(Exception e)
+                {
+                    return e.Message;
+                }
+               
+
+            }
+
+        }
         //-----------------------------------------[ "EDIT"  Action: POST ] ---------------------------------------------------
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -746,6 +779,89 @@ namespace OBSMVC.Controllers
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         }
         // ******* Helper Methods ***********************
+        public void updateDefaultAnswerType(int qat_id, string isDefault)
+        {
+            OBS_QUEST_ANS_TYPES passed_quest_ans_record = db.OBS_QUEST_ANS_TYPES.Single(x => x.obs_qat_id == qat_id);
+            if(passed_quest_ans_record.obs_qat_default_ans_type_yn!=isDefault && isDefault == "N")
+            { //if existing record is default and we need to set it to N we need to do it here and we won't have to 
+              //change any other records
+                passed_quest_ans_record.obs_qat_default_ans_type_yn = "N";
+                db.SaveChanges();
+            }
+            else if(passed_quest_ans_record.obs_qat_default_ans_type_yn != isDefault && isDefault == "Y")
+            {//  if passed qat_id needs to be default one, we should first set existing default to N and then update passed  to Y       
+                setExistingDefaultToN(db.OBS_QUEST_ANS_TYPES.SingleOrDefault(x => x.obs_question_id == passed_quest_ans_record.obs_question_id && x.obs_qat_id != passed_quest_ans_record.obs_qat_id && x.obs_qat_default_ans_type_yn=="Y").obs_question_id);
+                passed_quest_ans_record.obs_qat_default_ans_type_yn = "Y";
+                db.SaveChanges();
+            }
+        }
+        public string updateSel_Ans_Types(int qat_id, string sel_ans_list)
+        {
+            List<string> selAnsList_from_form = new List<string>();
+            string[] splitterm = { "," };
+            string[] selected_new_sel_ans_types = sel_ans_list.Split(splitterm, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in selected_new_sel_ans_types)
+            {
+                { selAnsList_from_form.Add(s); }
+
+            }
+            OBS_ANS_TYPE ans_type = db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == db.OBS_QUEST_ANS_TYPES.Single(x => x.obs_qat_id == qat_id).obs_ans_type_id);
+
+            List<string> current_sel_ans_list = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qat_id && item.obs_qsa_eff_st_dt <= DateTime.Today && item.obs_qsa_eff_end_dt > DateTime.Today).Select(x => x.obs_qsa_text).ToList();
+            if(current_sel_ans_list.Count()!= selAnsList_from_form.Count() && (ans_type.obs_ans_type_category =="3 Val Range"|| ans_type.obs_ans_type_category=="5 Val Range"))
+            {
+                return "ERROR: Not Enough Selectable Answers for this category!!!!";
+            }
+            if (isEqualList(current_sel_ans_list, selAnsList_from_form, ans_type.obs_ans_type_category))
+            {//if we're here that means 2 lists are the same and we only need to change the order of selected answers list
+
+                try {
+                    short order = 1;
+                    foreach (string str in selAnsList_from_form)
+                    {
+                        OBS_QUEST_SLCT_ANS oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Single(item => item.obs_qat_id == qat_id && item.obs_qsa_text == str && item.obs_qsa_eff_st_dt <= DateTime.Today && item.obs_qsa_eff_end_dt > DateTime.Today);
+                        oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
+                        db.SaveChanges();
+                        order++;
+                    }
+                    return "OK";
+                }
+                catch(Exception e)
+                {
+                    return e.Message;
+                }
+
+            }
+            else//if we're here, that means user passed a different list of selected answers and we need to disable the current one and add new
+            {
+                try
+                {
+                    List<OBS_QUEST_SLCT_ANS> oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qat_id).ToList();
+                    oBS_QUEST_SLCT_ANS.ForEach(x => x.obs_qsa_eff_end_dt = DateTime.Now);//update end effective date to todays date
+                    short order = 1;
+                    foreach (string str in selAnsList_from_form)//now lets create a new record with updated selected answers
+                    {
+                        OBS_QUEST_SLCT_ANS UPDATED_oBS_QUEST_SLCT_ANS = new OBS_QUEST_SLCT_ANS();
+                        UPDATED_oBS_QUEST_SLCT_ANS.obs_qat_id = qat_id;
+                        UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_text = str;
+                        UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
+                        UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_wt = order;
+                        UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_dflt_yn = "N";
+                        UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_eff_st_dt = DateTime.Now;
+                        UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                        db.OBS_QUEST_SLCT_ANS.Add(UPDATED_oBS_QUEST_SLCT_ANS);
+                        order++;
+                    }// end foreach
+                    db.SaveChanges();
+                    return "OK";
+                }
+                catch (Exception e)
+                {
+                    return e.Message;
+                }
+                
+            }
+        }
         public void SaveDefaultAnswerType(OBSQuestion obsQuestion)
         {
             int selected_ans_type_id = obsQuestion.selectedAT.ATid;

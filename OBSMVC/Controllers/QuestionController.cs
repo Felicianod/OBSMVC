@@ -787,8 +787,13 @@ namespace OBSMVC.Controllers
                 db.SaveChanges();
             }
             else if(passed_quest_ans_record.obs_qat_default_ans_type_yn != isDefault && isDefault == "Y")
-            {//  if passed qat_id needs to be default one, we should first set existing default to N and then update passed  to Y       
-                setExistingDefaultToN(db.OBS_QUEST_ANS_TYPES.SingleOrDefault(x => x.obs_question_id == passed_quest_ans_record.obs_question_id && x.obs_qat_id != passed_quest_ans_record.obs_qat_id && x.obs_qat_default_ans_type_yn=="Y").obs_question_id);
+            {//  if passed qat_id needs to be default one, we should first set existing default to N and then update passed  to Y   
+                try
+                {
+                    int current_default_quest_id = db.OBS_QUEST_ANS_TYPES.Single(x => x.obs_question_id == passed_quest_ans_record.obs_question_id && x.obs_qat_id != passed_quest_ans_record.obs_qat_id && x.obs_qat_default_ans_type_yn == "Y").obs_question_id;
+                    setExistingDefaultToN(current_default_quest_id);
+                }
+                catch { }
                 passed_quest_ans_record.obs_qat_default_ans_type_yn = "Y";
                 db.SaveChanges();
             }
@@ -801,13 +806,13 @@ namespace OBSMVC.Controllers
             string[] selected_new_sel_ans_types = sel_ans_list.Split(splitterm, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in selected_new_sel_ans_types)
             {
-                { selAnsList_from_form.Add(s); }
+                { selAnsList_from_form.Add(s.Trim().ToUpper()); }
 
             }
             
             OBS_ANS_TYPE ans_type = db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == obs_ans_type_id);
 
-            List<string> current_sel_ans_list = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qat_id && item.obs_qsa_eff_st_dt <= DateTime.Today && item.obs_qsa_eff_end_dt > DateTime.Today).Select(x => x.obs_qsa_text).ToList();
+            List<string> current_sel_ans_list = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qat_id && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).Select(x => x.obs_qsa_text).ToList();
             if(current_sel_ans_list.Count()!= selAnsList_from_form.Count() && (ans_type.obs_ans_type_category =="3 Val Range"|| ans_type.obs_ans_type_category=="5 Val Range"))
             {
                 return "ERROR: Not Enough Selectable Answers for this category!!!!";
@@ -819,7 +824,7 @@ namespace OBSMVC.Controllers
                     short order = 1;
                     foreach (string str in selAnsList_from_form)
                     {
-                        OBS_QUEST_SLCT_ANS oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Single(item => item.obs_qat_id == qat_id && item.obs_qsa_text == str && item.obs_qsa_eff_st_dt <= DateTime.Today && item.obs_qsa_eff_end_dt > DateTime.Today);
+                        OBS_QUEST_SLCT_ANS oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Single(item => item.obs_qat_id == qat_id && item.obs_qsa_text == str && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now);
                         oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
                         db.SaveChanges();
                         order++;

@@ -96,7 +96,7 @@ var rowInfo = Model.uniqueCounter.ToString();
             url: '@Url.Action("saveSelAnsDefault", "Question")',
             method: "POST",
             cache: false,
-            data: {qat_id : 1061, sel_ans_list :"YES, NO", isDefault: true },     //<---- Data Parameters (if not already passed in the Url)
+            data: {qat_id : 1061, sel_ans_list :"NO, Maybe, Yes", isDefault: true },     //<---- Data Parameters (if not already passed in the Url)
             //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
             //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
             //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object

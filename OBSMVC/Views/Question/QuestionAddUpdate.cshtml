@@ -41,7 +41,7 @@
                 <div class="input-group-addon stdWidth">
                     @Html.LabelFor(model => model.questn.obs_question_full_text)
                 </div>
-                <textarea class="form-control has-feedback" id="questn.obs_question_full_text" name="questn.obs_question_full_text" cols="400" rows="3" style="max-width: 100%; width:90% " placeholder="Enter The Question Full Text" required></textarea>
+                <textarea class="form-control has-feedback" id="questn.obs_question_full_text" name="questn.obs_question_full_text" cols="400" rows="3" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" required>@Model.questn.obs_question_full_text</textarea>
                 @Html.ValidationMessageFor(model => model.questn.obs_question_full_text, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -54,7 +54,7 @@
                 <div class="input-group-addon stdWidth">
                    @Html.LabelFor(model => model.questn.obs_question_desc)
                 </div>
-                @Html.EditorFor(model => model.questn.obs_question_desc, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%;" } })
+                @Html.EditorFor(model => model.questn.obs_question_desc, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:95%;" } })
                 @Html.ValidationMessageFor(model => model.questn.obs_question_desc, "", new { @class = "text-danger" })
             </div>
         </div>

@@ -4,6 +4,12 @@
 
 @{var uniqueCounter = @Model.uniqueCounter.ToString("00");
   var qbtnSaveId = "btnSave" + uniqueCounter;
+
+  var divSALabel = "divSALabel" + uniqueCounter;
+  var divSALabelHandle = "#" + divSALabel;
+  var divSAText = "divSAText" + uniqueCounter;
+  var divSATextHandle = "#" + divSAText;
+  
   //var qbtnSaveIdHandle = "#btnSave" + uniqueCounter;
   
   
@@ -37,7 +43,7 @@ var rowInfo = Model.uniqueCounter.ToString();
         </div>
     </div>
 
-    <div class="row" id="selAnsLabels">
+    <div class="row divLabel" id="@divSALabel">
         @if (Model.selectable_ans_required == "Y")
         {
             <ul>
@@ -45,37 +51,33 @@ var rowInfo = Model.uniqueCounter.ToString();
                 {
                     <li style="display: inline"><span class="badge">@x.obs_qsa_text</span></li>
                 }
+                <li style="display: inline">
+                    <button id="abc" type="button" onclick="editSelAns()" style="background-color:white"><span class="glyphicon glyphicon-pencil"></span>Edit</button>
+                </li>
             </ul>
         }
         else
         { <TEXT>This Question does not require Selectable answers</TEXT>}
     </div>
-    <div class="row" id="selAnsTextBx" style="display:none">
+    <div class="row divText" id="@divSAText" style="display:none">
                 @foreach (var x in Model.selAns)
                 {
                     <input type="text" value="@x.obs_qsa_text" class="form-control" />
                 }
     </div>
-    @if (Model.selectable_ans_required == "Y")
-    {
-        <div class="row form-inline">
-            <div class="col-sm-3 col-sm-offset-1">
-                <button id="abc" type="button" onclick="editSelAns()">Change Answer Values</button>
-            </div>
-        </div>
-    }
+
 
     <div class="row form-inline">
         <div class="col-sm-3 col-sm-offset-1">
             <button id="@qbtnSaveId" type="button" >SAVE</button>
-        </div>
+        </div>  
     </div>
 
 </div>
 
 <script>
     function editSelAns() {
-        alert('You are about to Edit the Selectable Answers');
+        alert('You are trying to hide DIV = ' + $(this).parent().parent().parent().attr("id") );
         //$('#selAnsLabels').hide;
         //$('#selAnsTextBx').show;
     }
@@ -96,7 +98,7 @@ var rowInfo = Model.uniqueCounter.ToString();
             url: '@Url.Action("saveSelAnsDefault", "Question")',
             method: "POST",
             cache: false,
-            data: {qat_id : 1061, sel_ans_list :"NO, Maybe, Yes", isDefault: true },     //<---- Data Parameters (if not already passed in the Url)
+            data: {qat_id : 1061, sel_ans_list :" MAYBE,YES, NO", isDefault: false },     //<---- Data Parameters (if not already passed in the Url)
             //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
             //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
             //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object

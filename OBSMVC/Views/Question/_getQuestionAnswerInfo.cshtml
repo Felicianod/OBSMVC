@@ -3,14 +3,14 @@
 @* ===== THIS PARTIAL VIES REPRESENTS A SINGLE QUESTION ANSWER TYPE TO BE USED FOR QUESTION VIEW/MAINTENANCE MODE ======= *@
 
 @{var uniqueCounter = @Model.uniqueCounter.ToString("00");
-var qbtnCloseId = "btnClose" + @Model.uniqueCounter;
+  var qbtnSaveId = "#btnSave" + uniqueCounter;
+  
+  
 var hidden_field = "currentSelectedQAT" + Model.uniqueCounter;
 var dropdown_id = "AssignedAnswers" + Model.uniqueCounter;
 var dropdown2 = "#AssignedAnswers" + Model.uniqueCounter;
 var rowInfo = Model.uniqueCounter.ToString();
 }
-
-
 
 
 
@@ -59,10 +59,16 @@ var rowInfo = Model.uniqueCounter.ToString();
     {
         <div class="row form-inline">
             <div class="col-sm-3 col-sm-offset-1">
-                <button type="button" onclick="editSelAns()">Change Answer Values</button>
+                <button id="abc" type="button" onclick="editSelAns()">Change Answer Values</button>
             </div>
         </div>
     }
+
+    <div class="row form-inline">
+        <div class="col-sm-3 col-sm-offset-1">
+            <button id="qbtnSaveId" type="button" >SAVE</button>
+        </div>
+    </div>
 
 </div>
 
@@ -72,4 +78,40 @@ var rowInfo = Model.uniqueCounter.ToString();
         //$('#selAnsLabels').hide;
         //$('#selAnsTextBx').show;
     }
+
+
+
+</script>
+
+<script type="text/jscript">
+
+    $('#qbtnSaveId').click(function () {
+        alert('SAVING DATA ... ');
+        var $btn = $(this);
+        $btn.button('loading');
+
+        // ------------ Make the Ajax Call ---------------------------------------------
+        $.ajax({
+            url: '@Url.Action("saveSelAnsDefault", "Question")',
+            method: "POST",
+            cache: false,
+            data: {qat_id : 1061, sel_ans_list :"YES, NO", isDefault: true },     //<---- Data Parameters (if not already passed in the Url)
+            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+            //--- On error, execute this function ------
+            error: function () {
+                alert("An Error has Occurred. Unable to Save Data!!");  //<-- Trap and alert of any errors if they occurred
+                $btn.button('reset');
+            }
+        }).done(function (d) {
+            //Execute this code After the Ajax call completes successfully
+            //$("#accordion").append(d);
+            alert('Save Resullt: ' + d)
+            $btn.button('reset');
+        });
+    })
+
 </script>

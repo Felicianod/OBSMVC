@@ -790,7 +790,7 @@ namespace OBSMVC.Controllers
             }
             else if(passed_quest_ans_record.obs_qat_default_ans_type_yn != isDefault && isDefault == "Y")
             {//  if passed qat_id needs to be default one, we should first set existing default to N and then update passed  to Y       
-                setExistingDefaultToN(db.OBS_QUEST_ANS_TYPES.SingleOrDefault(x => x.obs_question_id == passed_quest_ans_record.obs_question_id && x.obs_qat_id != passed_quest_ans_record.obs_qat_id && x.obs_qat_default_ans_type_yn=="Y").obs_question_id);
+                setExistingDefaultToN(db.OBS_QUEST_ANS_TYPES.FirstOrDefault(x => x.obs_question_id == passed_quest_ans_record.obs_question_id && x.obs_qat_id != passed_quest_ans_record.obs_qat_id && x.obs_qat_default_ans_type_yn=="Y").obs_question_id);
                 passed_quest_ans_record.obs_qat_default_ans_type_yn = "Y";
                 db.SaveChanges();
             }
@@ -858,10 +858,10 @@ namespace OBSMVC.Controllers
                 catch (Exception e)
                 {
                     return e.Message;
-                }
-                
+                }                
             }
         }
+
         public void SaveDefaultAnswerType(OBSQuestion obsQuestion)
         {
             int selected_ans_type_id = obsQuestion.selectedAT.ATid;

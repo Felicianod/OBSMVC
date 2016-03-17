@@ -27,6 +27,14 @@ namespace OBSMVC.Models
                 qMDCategories.Add(md.obs_quest_md_cat);
             }
             qMDCategories = qMDCategories.Distinct().ToList().OrderBy(q => q).ToList();
+            var all_ans_types = db.OBS_ANS_TYPE.ToList();
+            foreach (var ans in all_ans_types)
+            {
+
+                SelectListItem answer_for_dropdown = new SelectListItem() { Text = ans.obs_ans_type_name, Value = ans.obs_ans_type_id.ToString() };
+                available_answer_types.Add(answer_for_dropdown);
+
+            }
         }
 
         //= = = = = = = = = = = = = = = CONSTRUCTOR (Needs a Question Id parameter) = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
@@ -35,8 +43,17 @@ namespace OBSMVC.Models
             //Set the distict list of metadata tags available
             qMDCategories = new List<string>();
             qMDCategories = db.OBS_QUESTION_METADATA.Select(x => x.obs_quest_md_cat).Distinct().OrderBy(y => y).ToList();
+            var all_ans_types = db.OBS_ANS_TYPE.ToList();
+            foreach(var ans in all_ans_types)
+            {
+
+                SelectListItem answer_for_dropdown = new SelectListItem() { Text = ans.obs_ans_type_name, Value = ans.obs_ans_type_id.ToString() };
+                available_answer_types.Add(answer_for_dropdown);
+
+            }
            
-            
+
+
             // Retrieve the Question Information from OBS_Question Table
             questn = db.OBS_QUESTION.Find(qId);
 
@@ -105,7 +122,8 @@ namespace OBSMVC.Models
         public List<string> qMDCategories = new List<string>();
         public List<int> preMetaDataIds = new List<int>();
         public List<qatTags> Quest_Assigned_qatTags = new List<qatTags>();
-     
+        public List<SelectListItem> available_answer_types = new List<SelectListItem>();
+
     }
 
     public class metaDataTags

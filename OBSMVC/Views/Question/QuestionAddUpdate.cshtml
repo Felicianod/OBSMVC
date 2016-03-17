@@ -1,8 +1,8 @@
 ﻿@model OBSMVC.Models.QuestionCreateEditViewModel
 
 @{ ViewBag.Title = "Create/Edit Question";
-   var test = @Model;
- }
+ //var test = @Model;
+}
 
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
 <style>
@@ -13,29 +13,62 @@
         -o-transition: opacity 0.3s linear, left 0.3s ease-out;
         transition: opacity 0.3s linear, left 0.3s ease-out;
     }
-    #container .modal.fade.in {
-        left: 50%;
-    }
+
+        #container .modal.fade.in {
+            left: 50%;
+        }
     /*.input-group-addon {
     min-width:200px;
     text-align:left;*/
     .stdWidth {
-        min-width:130px;
-        text-align:left;
+        min-width: 130px;
+        text-align: left;
     }
-    .smallRowMargin{
-        margin-bottom:5px !important; 
+
+    .smallRowMargin {
+        margin-bottom: 5px !important;
         /*margin:0px !important;  //if we want to remove the margin completelly*/
-   }
+    }
+
+    .btnYES {
+        background: #3d85c6;
+        background: -webkit-linear-gradient(#073763, #3d85c6 50%, #073763);
+        background: linear-gradient(#073763, #3d85c6 50%, #073763);
+        border: 1px solid #569;
+        border-radius: 7px;
+        box-shadow: -2px 2px 0 0 #444;
+        color: #fff;
+        display: inline-block;
+        padding: 7px 13px;
+        font: normal 700 14px/1 "Calibri", sans-serif;
+        text-align: center;
+        text-shadow: 2px 2px 0 #070550;
+    }
+    .btnYES:hover {
+        background: #3498db;
+        background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+        background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+        font: normal 700 14px/1 "Calibri", sans-serif;
+        color: white;
+    }
+    .btnYES:focus {
+        background: #3498db;
+        background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+        background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+        font: normal 700 14px/1 "Calibri", sans-serif;
+        color: white;
+    }
 </style>
 
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
-<div class="well well-sm smallRowMargin" style="padding: 4px; font-size:xx-large"><span class="col-md-offset-1">Add New Question </span></div>
+<div class="well well-sm smallRowMargin" style="padding: 4px; font-size:xx-large; text-align:center">
+    <span class="col-md-offset-1" > @Model.viewPageTitle</span>
+</div>
 
-@using (Html.BeginForm("QuestionAddUpd", "Question", FormMethod.Post, new {@class ="form-horizontal" }))
+@using (Html.BeginForm("QuestionAddUpd", "Question", FormMethod.Post, new { @class = "form-horizontal" }))
 {
-@Html.AntiForgeryToken()
-@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
     <div class="form-group row smallRowMargin">
         <div class="col-sm-11 col-sm-offset-1">
@@ -92,83 +125,89 @@
         </div>
     </div>
 
- <div class="row" style="border:solid">
-     @foreach (OBSMVC.Models.qatTags qat in Model.Quest_Assigned_qatTags)
-     { 
-         @Html.Partial("_getQuestionAnswerInfo", qat);
-         <hr />
-     }
+    //-------------------------   QUESTION ANSWER TYPE AND SELECTABLE ANSWERS SECCTION ----------------------------------------
+    <div class="row" style="margin-left:10px; border:thin">
 
-        @*_getQuestionAnswerInfo.cshtml*@
-        <br /><br /><br /><br /><br /><br /><br />
-
- </div>
-@* ---------- NEW ROW WITH MOVE LEFT/RIGHT TAGS PANELS --------------*@
- <div class="row">
-        <div class="col-md-12 personal-info">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <table style="width:100%">
-                        <tr>
-                            <td>
-                                <b>Question Metadata Maintenance</b>
-                            </td>
-                            <td style="text-align:right">
-                                <button type="button" class="btnAdd" data-toggle="modal" data-target="#NewMDTag"><img src="~/Images/Button-Add-icon.png" height="25" />Add New Metedata Tag</button>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="panel-body">
-                    <input type="hidden" id="qAssignedMD" name="qAssignedMD" />
-                    @foreach (int item in Model.preMetaDataIds)
-                        {
-                        <input type="hidden" id="origTags" name="origTags" value="@item" />
-                        }
-                    <table style="width:100%">
-                        <tr>
-                            <td style="width:45%; border:double; text-align:center; vertical-align:top">
-                                <b>ASSIGNED QUESTION METADATA TAGS</b>   <br />
-                                <select id="sbOne" multiple="multiple" size="10" style="width:95%" @*data-toggle="tooltip"*@ data-placement="auto right" title="Double Click Item to remove it">
-                                    @foreach (var item in Model.qAssignedMD)
-                                        {
-                                        <option value="@item.md_id">@item.md_value [@item.md_cat]</option>
-                                        }
-                                </select>
-                                <br /><br />
-                            </td>
-
-                            <td style="width:10%; text-align:center; font-weight:bold; color:blue ">
-
-                                <div class="btn-group">
-                                    <button type="button" title="Add Selected Tags to the Question" class="btn btn-default" id="left" data-toggle="confirmation"><i class="glyphicon glyphicon-chevron-left"></i></button>
-                                    <button type="button" title="Remove Selected Tags from the Question" class="btn btn-default" id="right"><i class="glyphicon glyphicon-chevron-right"></i></button>
-                                </div>
-
-                                @*<input type="button" id="left" style="width:50px" value="<" data-toggle="confirmation" data-placement="left" /> <br /><br />
-                                    <input type="button" id="right" style="width:50px" value=">" /> <br /><br />*@
-                                @*<input type="button" id="leftall" style="width:50px" value="<<" /> <br /><br />
-                                    <input type="button" id="rightall" style="width:50px" value=">>" /> <br />*@
-                            </td>
-
-                            <td style="width:45%; border:double; text-align:center; vertical-align:top">
-                                <b>AVAILABLE METADATA TAGS</b>   <br />
-                                <select id="sbTwo" multiple="multiple" size="10" style="width:95%" @*data-toggle="tooltip"*@ data-placement="auto left" title="Double Click Item to Add it">
-                                    @foreach (var item in Model.qUnassignedMD)
-                                        {
-                                        <option value="@item.md_id">@item.md_value [@item.md_cat]</option>
-                                        }
-                                </select>
-                                <br /><br />
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+        <div class="row">
+            <span>Currently Defined Answers for this question:</span>
         </div>
- </div>
-@* ---------- END OF NEW ROW WITH MOVE LEFT/RIGHT TAGS PANELS --------------*@
- <div class="row">
+
+
+        <div class="row">
+            @foreach (OBSMVC.Models.qatTags qat in Model.Quest_Assigned_qatTags)
+            {
+                @Html.Partial("_getQuestionAnswerInfo", qat) ; <hr />
+            }
+        </div>
+
+    </div>
+    <br />
+    //-------------------------   QUESTION ANSWER TYPE AND SELECTABLE ANSWERS SECCTION ----------------------------------------
+
+    @* ---------- META DATA QUESTION INFORMATION -- --- WITH MOVE LEFT/RIGHT TAGS PANELS --------------*@
+    <div class="row">
+       <div class="col-md-12 personal-info">
+          <div class="panel panel-info">
+             <div class="panel-heading">
+                 <table style="width:100%">
+                     <tr>
+                         <td>
+                             <button type="button" id="showMDPanel" class="btn btn-info" data-toggle="collapse" data-target="#MDTinfo" style="min-width:85px">Collapse</button>
+                             <b>Question Metadata Maintenance</b>
+                         </td>
+                         <td style="text-align:right">
+                             <button type="button" class="btnAdd" data-toggle="modal" data-target="#NewMDTag"><img src="~/Images/Button-Add-icon.png" height="25" />Add New Metedata Tag</button>
+                         </td>
+                     </tr>
+                 </table>
+             </div>
+             <div class="panel-body collapse in" id="MDTinfo">
+                  <input type="hidden" id="qAssignedMD" name="qAssignedMD" />
+                  @foreach (int item in Model.preMetaDataIds)
+                  {
+                      <input type="hidden" id="origTags" name="origTags" value="@item" />
+                  }
+                  <table style="width:100%">
+                      <tr>
+                          <td style="width:45%; border:double; text-align:center; vertical-align:top">
+                              <b>ASSIGNED QUESTION METADATA TAGS</b>   <br />
+                              <select id="sbOne" multiple="multiple" size="10" style="width:95%" @*data-toggle="tooltip"*@ data-placement="auto right" title="Double Click Item to remove it">
+                                  @foreach (var item in Model.qAssignedMD)
+                                  {
+                                    <option value="@item.md_id">@item.md_value [@item.md_cat]</option>
+                                  }
+                              </select>
+                              <br /><br />
+                          </td>
+                          <td style="width:10%; text-align:center; font-weight:bold; color:blue ">
+                              <div class="btn-group">
+                                  <button type="button" title="Add Selected Tags to the Question" class="btn btn-default" id="left" data-toggle="confirmation"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                                  <button type="button" title="Remove Selected Tags from the Question" class="btn btn-default" id="right"><i class="glyphicon glyphicon-chevron-right"></i></button>
+                              </div>
+                              @*<input type="button" id="left" style="width:50px" value="<" data-toggle="confirmation" data-placement="left" /> <br /><br />
+                                <input type="button" id="right" style="width:50px" value=">" /> <br /><br />*@
+                              @*<input type="button" id="leftall" style="width:50px" value="<<" /> <br /><br />
+                                <input type="button" id="rightall" style="width:50px" value=">>" /> <br />*@
+                          </td>
+                          <td style="width:45%; border:double; text-align:center; vertical-align:top">
+                              <b>AVAILABLE METADATA TAGS</b>   <br />
+                              <select id="sbTwo" multiple="multiple" size="10" style="width:95%" @*data-toggle="tooltip"*@ data-placement="auto left" title="Double Click Item to Add it">
+                                @foreach (var item in Model.qUnassignedMD)
+                                {
+                                   <option value="@item.md_id">@item.md_value [@item.md_cat]</option>
+                                }
+                              </select>
+                              <br /><br />
+                          </td>
+                      </tr>
+                  </table>
+             </div>
+          </div>
+       </div>
+    </div>
+    @* ---------- END OF NEW ROW WITH MOVE LEFT/RIGHT TAGS PANELS --------------*@
+
+    <div class="row">
         <div class="col-md-12 ">
             <div class="form-group row">
                 <div class="col-md-offset-2 col-md-10">
@@ -178,20 +217,20 @@
                 </div>
             </div>
             @if (ViewBag.ConfMsg != null)
-                {
+            {
                 <div id="ConfMsg" style="text-align:center; font-weight: bold; color:green">
                     @ViewBag.ConfMsg
                 </div>
                 <script>
-                            $(function () {
-                                setTimeout(function () {
-                                    $("#ConfMsg").hide();
-                                }, 3000);
-                            });
+                    $(function () {
+                        setTimeout(function () {
+                            $("#ConfMsg").hide();
+                        }, 3000);
+                    });
                 </script>
-                }
+            }
         </div>
- </div>
+    </div>
 }
 @* ------------ END OF THE FORM ---------- *@
 
@@ -209,7 +248,6 @@
                     @Html.AntiForgeryToken()
                     <div class="form-horizontal">
                         <hr />
-
                         <div class="form-group">
                             <label class="control-label col-md-2" for="obs_quest_md_value">Metadata Value</label>
                             <div class="col-md-10">
@@ -327,9 +365,9 @@
         var listResult = "";
         var i;
         for (i = 0; i < tagList.length; i++) {
-          listResult = listResult + tagList.options[i].value;
-          if (i != tagList.length - 1)
-          { listResult = listResult + ","; }
+            listResult = listResult + tagList.options[i].value;
+            if (i != tagList.length - 1)
+            { listResult = listResult + ","; }
         }
         //alert(tagList);
         return listResult;
@@ -349,7 +387,7 @@
 <!-- bootbox code -->
 <script src="~/Scripts/bootbox.min.js"></script>
 <script>
-    $(document).on("click", ".alert", function(e) {
+    $(document).on("click", ".alert", function (e) {
         bootbox.confirm("Are you sure?", function (result) {
             //Example.show("Confirm result: " + result);
             //console.log("Alert Callback");
@@ -403,18 +441,18 @@
 
         $(".btnIsDefault").click(function () {
             // If the button is the Default, Just make it "No Default"
-            if ($(this).hasClass('btnAdd')) {
-                $(this).removeClass("btnAdd").addClass("btn-warning");
+            if ($(this).hasClass('btnYES')) {
+                $(this).removeClass("btnYES").addClass("btn-warning");
                 $(this).html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
             }
             else {
                 //Else, reset all buttons to "No Default" and make this button the default
-                $(".btnIsDefault").removeClass("btnAdd").addClass("btn-warning");
+                $(".btnIsDefault").removeClass("btnYES").addClass("btn-warning");
                 $(".btnIsDefault").html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
-                $(this).removeClass("btn-warning").addClass("btnAdd");
+                $(this).removeClass("btn-warning").addClass("btnYES");
                 $(this).html('YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up">');
             }
-            
+
 
             //$('.collapse').on('show.bs.collapse', function () {
             //    $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
@@ -425,16 +463,20 @@
 
 
 
-        //    on("click", ".dismiss", function (event) {
-        //        event.preventDefault();
-        //        //var qdelId = $(this).parent().attr("id");
-        //        $(this).parent().remove();
-        //        // updateValues("An Item was Deleted");  //If we want to all a function when item is dragged/dropped
-        //    });
-
-
+            //    on("click", ".dismiss", function (event) {
+            //        event.preventDefault();
+            //        //var qdelId = $(this).parent().attr("id");
+            //        $(this).parent().remove();
+            //        // updateValues("An Item was Deleted");  //If we want to all a function when item is dragged/dropped
+            //    });
         });
 
+        $('#showMDPanel').click(function () {
+            var btnText = $(this).html();
+            if (btnText == "Collapse")
+            { $(this).html("Show") }
+            else { $(this).html("Collapse") }
+        });
     });
 
 
@@ -460,9 +502,6 @@
             });
     </script>*@
 <!-- Form Edit State Change Validation -->
-
-
-
 @*---Using Input Groups with Add Ons - Correct Format---
     <div class="col-sm-4">
         <div class="input-group">
@@ -472,4 +511,102 @@
         </div>
     </div>
 *@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/jscript">
+    $(document).ready(function () {
+        //------------------------------ BUTTON EDIT ---------------------------------------------
+        $('.editSA').click(function () {
+            // Get the Ids that will be used in the dynamic execution
+            var ATid = $(this).prop("id").substring(7);  // "Answer Type" Sequence Number to drive the Ids of all components.
+            var divSALabel = "#divSALabel" + ATid;
+            var divSAText = "#divSAText" + ATid;
+            //var textDivId = $(this).parent().parent().parent().parent().children().filter(".divText").first().prop("id");   //NOT NEEDED ANYMORE
+            //var idToHide = $(this).parent().parent().parent().hide();       //NOT NEEDED ANYMORE
+
+            // Hide the "Labels" <Division>
+            $(divSALabel).hide();
+            // Show The "Text Boxes" <Division>
+            $(divSAText).show();
+            //$(this).parent().parent().parent().parent().children().filter(".divText").first().show();      // NOT NEEDED ANYMORE
+        });
+        //------------------------------ BUTTON SAVE ---------------------------------------------
+        $('.saveSA').click(function (e) {
+            // Get the Ids that will be used in the dynamic execution
+            var ATid = $(this).prop("id").substring(7);  // "Answer Type" Sequence Number to drive the Ids of all components.
+            var divSALabel = "#divSALabel" + ATid;
+            var divSAText = "#divSAText" + ATid;
+
+            // Hide the "Text Boxes" <Division>
+            $(divSAText).hide(); 
+            // Show The "Labels" < Division >
+            $(divSALabel).show();
+
+
+            //var buttonId = $(this).prop("id");        //Not Needed Anymore
+            //var sectionNbr = buttonId.substring(7);   //Not Needed Anymore
+            //alert("You clicked the Save Button Id: " + $(this).prop("id") + "[" + ATid + "]");
+
+        });
+        //----------------------------------------------------------------------------------------
+
+
+    });
+
+
+        @*var qbtnSaveIdHandle = "#" + '@qbtnSaveId';
+        $(qbtnSaveIdHandle).click(function () {
+            alert('SAVING DATA ... ');
+            var $btn = $(this);
+            $btn.button('loading');
+
+            // ------------ Make the Ajax Call ---------------------------------------------
+            $.ajax({
+                url: '@Url.Action("saveSelAnsDefault", "Question")',
+                method: "POST",
+                cache: false,
+                data: {qat_id : 1061, sel_ans_list :"  nO  , MAYbe , yes ", isDefault: true },     //<---- Data Parameters (if not already passed in the Url)
+                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                //--- On error, execute this function ------
+                error: function () {
+                    alert("An Error has Occurred. Unable to Save Data!!");  //<-- Trap and alert of any errors if they occurred
+                    $btn.button('reset');
+                }
+            }).done(function (d) {
+                //Execute this code After the Ajax call completes successfully
+                //$("#accordion").append(d);
+                alert('Save Resullt: ' + d)
+                $btn.button('reset');
+            });
+        })*@
+
+
+
+
+    </script>
+
+
+
+
+
+
+
+
 

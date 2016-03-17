@@ -60,11 +60,11 @@ namespace OBSMVC.Controllers
                 
                 if (String.IsNullOrEmpty(qId) || returnId == "0")
                 { // Redirect to the Create Page
-                    return RedirectToAction("Create", "Question");
+                    return RedirectToAction("QuestionAddUpdate", "Question");
                 }
                 else
                 { //Redirect to the Edit Page
-                    return RedirectToAction("Edit", "Question", new { id = returnId });
+                    return RedirectToAction("QuestionAddUpdate", "Question", new { id = returnId });
                 }                
             }
 

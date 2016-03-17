@@ -282,7 +282,7 @@ namespace OBSMVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(FormCollection postedData, QuestionMDViewModel QuestionMDView,
-                                 [Bind(Prefix = "q")] OBS_QUESTION questionHdr )
+                                 [Bind(Prefix = "q")] OBS_QUESTION questionHdr, string newQATInfo )
         {
 
             QuestionMDView.q = questionHdr;

@@ -46,7 +46,7 @@ namespace OBSMVC.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         //public ActionResult Create([Bind(Include = "obs_quest_md_id,obs_quest_md_value,obs_quest_md_cat, qId")] OBS_QUESTION_METADATA oBS_QUESTION_METADATA)
         public ActionResult Create(OBS_QUESTION_METADATA oBS_QUESTION_METADATA, FormCollection postedData, string qId)
         {

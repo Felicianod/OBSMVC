@@ -3,10 +3,10 @@
 @* ===== THIS PARTIAL VIES REPRESENTS A SINGLE QUESTION ANSWER TYPE TO BE USED FOR QUESTION VIEW/MAINTENANCE MODE ======= *@
 
 @{var uniqueCounter = @Model.uniqueCounter.ToString("00");
-  var qbtnSaveId = "btnSave" + uniqueCounter;
-  var qbtnEditId = "btnEdit" + uniqueCounter;
-  var divSALabel = "divSALabel" + uniqueCounter;
-  var divSAText = "divSAText" + uniqueCounter; 
+var qbtnSaveId = "btnSave" + uniqueCounter;
+var qbtnEditId = "btnEdit" + uniqueCounter;
+var divSALabel = "divSALabel" + uniqueCounter;
+var divSAText = "divSAText" + uniqueCounter;
 }
 
 <div class="col-sm-12 answerType" style="border:solid; border-width:1px; font-family:Arial">
@@ -20,87 +20,64 @@
         </div>
 
         <div class="col-sm-3 col-sm-offset-3 form-inline" style="text-align:right">
-                <div class="input-group">
-                    <span class="input-group-addon">Default </span>
-                    @if (Model.QAT.obs_qat_default_ans_type_yn == "Y")
+            <div class="input-group">
+                <span class="input-group-addon">Default </span>
+                @if (Model.QAT.obs_qat_default_ans_type_yn == "Y")
                     { <button type="button" class="btn btnIsDefault btnYES">YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span></button> }
                     else
                     { <button type="button" class="btn btnIsDefault btn-warning">NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span></button> }
-                    @*<input type="checkbox" @if (Model.QAT.obs_qat_default_ans_type_yn == "Y") { <text> checked="checked" </text>     }
-                        class="form-control primar chkDefault" id="qatDefault" name="qatDefault" style="max-width:20%" />*@
-                </div>
+                @*<input type="checkbox" @if (Model.QAT.obs_qat_default_ans_type_yn == "Y") { <text> checked="checked" </text>     }
+                    class="form-control primar chkDefault" id="qatDefault" name="qatDefault" style="max-width:20%" />*@
+            </div>
         </div>
     </div>
 
     <div class="row divLabel" id="@divSALabel">
         @if (Model.selectable_ans_required == "Y")
         {
-            <ul>
-                <li style="display: inline">
-                    <button id="@qbtnEditId" class="editSA" type="button" style="background-color:white">Edit&nbsp;<span class="glyphicon glyphicon-pencil"></span></button>
-                    <span>&nbsp;&nbsp;</span>
-                </li>
-                @foreach (var x in Model.selAns)
+        <ul>
+            <li style="display: inline">
+                <button id="@qbtnEditId" class="editSA" type="button" style="background-color:white">Edit&nbsp;<span class="glyphicon glyphicon-pencil"></span></button>
+                <span>&nbsp;&nbsp;</span>
+            </li>
+            @foreach (var x in Model.selAns)
                 {
-                    <li style="display: inline;" ><span class="badge" style="font-size:larger">@x.obs_qsa_text</span>&nbsp;&nbsp;</li>
+                <li style="display: inline;"><span class="badge" style="font-size:larger">@x.obs_qsa_text</span>&nbsp;&nbsp;</li>
                 }
-            </ul>
-            <br /><br />
+        </ul>
+        <br /><br />
         }
         else
         {
-            <div>
-                This Question does not require Selectable answers
-            </div>
+        <div>
+            This Question does not require Selectable answers
+        </div>
         }
     </div>
-    <div class="row form-inline divText" id="@divSAText" style="display:none">&nbsp;
-        <div class="col-sm-4">
+    <div class="row form-inline divText" id="@divSAText" style="display:none">
+        &nbsp;
+        <div class="col-sm-7">
+            <br /><br />
             @foreach (var x in Model.selAns)
             {
-                <input type="text" value="@x.obs_qsa_text" class="form-control selectableAnswer" />
-                <br />
+                <input type="text" value="@x.obs_qsa_text" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                <br /><br />
             }
             <span>&nbsp;</span>
             <button id="@qbtnSaveId" class="saveSA" type="button">SAVE</button>
             <br /><br />
         </div>
-        <div class="col-md-8 personal-info">
-            <div class="panel panel-info ">
-                <div class="panel-heading">
-                    <h4><b>SUGGESTED TEMPLATES</b></h4>
-                </div>
-                <div class="panel-body" id="QATtemplates">
-                    <br />
-                    @if (!(Model.answer_type_category == "MS List" || Model.answer_type_category == "SS List"))
-                    {
-                        <table style="width:100%" id="TemplatesId">
-                            @foreach (string template in Model.templates)
-                            {
-                                <tr>
-                                    <td style="width:80%">
-                                        @template
-                                    </td>
-                                    <td style="width:20%">
-                                        @if (!Model.templates[0].Equals("NO TEMPLATES NEEDED"))
-                                        {
-                                            @*if (!Model.selectedAT.hasSelectableAnswers)
-                                            {
-                                                <input type="button" id="TemplateLInk" value="Use This Template" onclick="testFunction('@template')" />
-                                            }*@
-                                            <input type="button" id="TemplateLInk" value="Use This Template" onclick="testFunction('@template')" />
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        </table>
-                    }
-                    else
-                    {
-                        <text>NO TEMPLATES AVAILABLE</text>
-                    }
-                </div>
-            </div>
+        <div class="col-md-5 personal-info">
+
+    @*  // - - - - - -- - - - - INSERT HERE The Selectable Answers Templates Panel (From External Partial View) --------
+        //------------------------------------------------------------------------------------------------------------------*@
+
+              @Html.Action("selAnsTemplates", new { templateCathegory = Model.answer_type_category }) 
+
+    @*  // - - - - - - - END OF Selectable Answers Templates Panel (From External Partial View) --------
+        //-------------------------------------------------------------------------------------------------------
+    *@
+
         </div>
 
 
@@ -115,42 +92,42 @@
 </div>
 
 @*<script>
-    function editSelAns(btn) {
-        var $btn = btn
-        alert('You are trying to hide DIV = ' + $btn.parent().parent().parent().attr("id") );
-        //$('#selAnsLabels').hide;
-        //$('#selAnsTextBx').show;
-    }
-</script>*@
+        function editSelAns(btn) {
+            var $btn = btn
+            alert('You are trying to hide DIV = ' + $btn.parent().parent().parent().attr("id") );
+            //$('#selAnsLabels').hide;
+            //$('#selAnsTextBx').show;
+        }
+    </script>*@
 
 @*<script type="text/jscript">
-    var qbtnSaveIdHandle = "#" + '@qbtnSaveId';
-    $(qbtnSaveIdHandle).click(function () {
-        alert('SAVING DATA ... ');
-        var $btn = $(this);
-        $btn.button('loading');
+        var qbtnSaveIdHandle = "#" + '@qbtnSaveId';
+        $(qbtnSaveIdHandle).click(function () {
+            alert('SAVING DATA ... ');
+            var $btn = $(this);
+            $btn.button('loading');
 
-        // ------------ Make the Ajax Call ---------------------------------------------
-        $.ajax({
-            url: '@Url.Action("saveSelAnsDefault", "Question")',
-            method: "POST",
-            cache: false,
-            data: {qat_id : 1061, sel_ans_list :"  nO  , MAYbe , yes ", isDefault: true },     //<---- Data Parameters (if not already passed in the Url)
-            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+            // ------------ Make the Ajax Call ---------------------------------------------
+            $.ajax({
+                url: '@Url.Action("saveSelAnsDefault", "Question")',
+                method: "POST",
+                cache: false,
+                data: {qat_id : 1061, sel_ans_list :"  nO  , MAYbe , yes ", isDefault: true },     //<---- Data Parameters (if not already passed in the Url)
+                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
 
-            //--- On error, execute this function ------
-            error: function () {
-                alert("An Error has Occurred. Unable to Save Data!!");  //<-- Trap and alert of any errors if they occurred
+                //--- On error, execute this function ------
+                error: function () {
+                    alert("An Error has Occurred. Unable to Save Data!!");  //<-- Trap and alert of any errors if they occurred
+                    $btn.button('reset');
+                }
+            }).done(function (d) {
+                //Execute this code After the Ajax call completes successfully
+                //$("#accordion").append(d);
+                alert('Save Resullt: ' + d)
                 $btn.button('reset');
-            }
-        }).done(function (d) {
-            //Execute this code After the Ajax call completes successfully
-            //$("#accordion").append(d);
-            alert('Save Resullt: ' + d)
-            $btn.button('reset');
-        });
-    })
-</script>*@
+            });
+        })
+    </script>*@

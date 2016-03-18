@@ -7,7 +7,7 @@
     </div>
     <div class="panel-body" id="QATtemplates">
         <br />
-        <table style="width:100%" id="TemplatesId">
+        <table class="table table-condensed table-hover" style="width:100%" id="TemplatesId">
             @foreach (string template in Model)
             {
                 <tr>
@@ -15,9 +15,9 @@
                         @template
                     </td>
                     <td style="width:20%">
-                        @if (!Model.templates[0].Equals("NO TEMPLATES NEEDED"))
+                        @if (!@Model.ElementAt(0).Equals("NO TEMPLATES NEEDED"))
                         {
-                            <input type="button" id="TemplateLInk" value="Use This Template" onclick="testFunction('@template')" />
+                            <input type="button" id="TemplateLink" value="Use This Template" onclick="testFunction($(this),'@template')" />
                         }
                     </td>
                 </tr>
@@ -25,20 +25,4 @@
         </table>
     </div>
 </div>
-
-<script type="text/javascript">
-    function testFunction(selAnslist) {
-        alert('Template ' + '"' + selAnslist + '" will be applied');
-        //var templateList = selAnslist.split(",");
-        ////var message = "You selected:\n ";
-        //for (var i = 0; i < templateList.length; i++) {
-        //    var textboxName = "userSelAnsList" + (i + 1);
-        //    document.getElementById(textboxName).value = templateList[i];
-        //    document.getElementById(textboxName).style.fontStyle = "normal";
-        //    document.getElementById(textboxName).style.color = "black";
-        //    //message = message + templateList[i].trim() + "\n";
-        //}
-        //document.getElementById("btnSaveDefQuest").disabled = false;
-    }
-</script>
 

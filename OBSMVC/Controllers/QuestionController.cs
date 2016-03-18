@@ -106,8 +106,9 @@ namespace OBSMVC.Controllers
         }
 
 
-        [HttpPost] [ValidateAntiForgeryToken]
         [ActionName("QuestionAddUpdate")]
+        [HttpPost]               // POST: Question/Create
+        [ValidateAntiForgeryToken]
         public ActionResult QuestionAddUpdatePost(QuestionCreateEditViewModel formQuestion)
         {
 
@@ -115,12 +116,13 @@ namespace OBSMVC.Controllers
 
 
 
-
-            return View("Edit");
+            return RedirectToAction("Index", "Question");
+            //return View("Edit");
         }
 
         //---------------------------------------- Render Templates Partial View -----------------------------------------------------------------
         [HttpGet]
+        [ChildActionOnly]
         public PartialViewResult selAnsTemplates(string templateCathegory)
         {
             List<string> templateList = new List<string>();

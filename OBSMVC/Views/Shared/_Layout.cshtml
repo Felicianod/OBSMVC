@@ -1,10 +1,10 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<head>    
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - DSC Observations</title>
-    
+
     <link href="~/Content/jquery-ui.css" rel="stylesheet" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -32,29 +32,36 @@
             box-shadow: -2px 2px 0 0 #444;
             color: #fff;
             display: inline-block;
-            padding: 3px 13px;
+            padding: 5px 13px;
             font: normal 700 14px/1 "Calibri", sans-serif;
             text-align: center;
             text-shadow: 2px 2px 0 #070550;
         }
 
         .btnAdd:hover {
-            background: #3498db;
-            background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
-            background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
-            font: normal 700 14px/1 "Calibri", sans-serif;
-            color: white
+                background: #3498db;
+                background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+                background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+                font: normal 700 14px/1 "Calibri", sans-serif;
+                color: white;
         }
+        .btnAdd:focus {
+            font: normal 700 14px/1 "Calibri", sans-serif;
+            color: white;
+    }
+
         .container-fluid {
             max-width: 1400px;
-            padding:25px;  /*Whitespace or outside gutter*/
+            padding: 25px; /*Whitespace or outside gutter*/
         }
+
         .wellDSC {
-            padding: 1px; 
-            font-size:xx-large;
+            padding: 1px;
+            font-size: xx-large;
             margin-bottom: 5px;
             margin-top: 1px;
         }
+
         .nopadding {
             padding: 0 !important;
             margin: 0 !important;
@@ -82,11 +89,10 @@
             </tr>
         </table>
     </div>
-    
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    
+
     @RenderSection("scripts", required: false)
 </body>
 </html>
-

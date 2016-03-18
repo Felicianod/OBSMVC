@@ -32,7 +32,8 @@
                     if (Model.selectedAT.requiresSelectableAnswers)
                     {
                         @:<b style="color:red">Enter New Values</b>
-                      
+
+
                     }
                     else
                     {
@@ -44,58 +45,59 @@
                 @if (Model.selectedAT.ATcathegory == "MS List" || Model.selectedAT.ATcathegory == "SS List")
                 {
 
-                <div id='TextBoxesGroup'>
-                    <div id="TextBoxDiv1">
-                        @if (Model.selectedAT.hasSelectableAnswers)
-                        {
-
-
-                            for (var x = 1; x <=10;x++)
+                    <div id='TextBoxesGroup'>
+                        <div id="TextBoxDiv1">
+                            @if (Model.selectedAT.hasSelectableAnswers)
                             {
-                                var id_name = "textbox" + x;
-                                if (x <= Model.selectedAT.selAnsList.Count)
-                                {
 
-                                <input type='text' id=@id_name class="at_item" name="userSelAnsList" value="@Model.selectedAT.selAnsList[x - 1]"><br />
-                                }
-                                else
+
+                                for (var x = 1; x <= 10; x++)
                                 {
-                                    <input type='hidden' id=@id_name name="userSelAnsList"><br />
+                                    var id_name = "textbox" + x;
+                                    if (x <= Model.selectedAT.selAnsList.Count)
+                                    {
+
+                                        <input type='text' id=@id_name class="at_item" name="userSelAnsList" value="@Model.selectedAT.selAnsList[x - 1]"><br />
+                                    }
+                                    else
+                                    {
+                                        <input type='hidden' id=@id_name name="userSelAnsList"><br />
+                                    }
                                 }
                             }
-                        }
-                        else {
-                            <input type='text' id='textbox1' class="at_item" name="userSelAnsList"><br />
-                            <input type='hidden' id='textbox2' name="userSelAnsList"><br />
-                            <input type='hidden' id='textbox3' name="userSelAnsList"><br />
-                            <input type='hidden' id='textbox4' name="userSelAnsList"><br />
-                            <input type='hidden' id='textbox5' name="userSelAnsList"><br />
-                            <input type='hidden' id='textbox6' name="userSelAnsList"><br />
-                            <input type='hidden' id='textbox7' name="userSelAnsList"><br />
-                            <input type='hidden' id='textbox8' name="userSelAnsList"><br />
-                            <input type='hidden' id='textbox9' name="userSelAnsList"><br />
-                            <input type='hidden' id='textbox10' name="userSelAnsList">
+                            else
+                            {
+                                <input type='text' id='textbox1' class="at_item" name="userSelAnsList"><br />
+                                <input type='hidden' id='textbox2' name="userSelAnsList"><br />
+                                <input type='hidden' id='textbox3' name="userSelAnsList"><br />
+                                <input type='hidden' id='textbox4' name="userSelAnsList"><br />
+                                <input type='hidden' id='textbox5' name="userSelAnsList"><br />
+                                <input type='hidden' id='textbox6' name="userSelAnsList"><br />
+                                <input type='hidden' id='textbox7' name="userSelAnsList"><br />
+                                <input type='hidden' id='textbox8' name="userSelAnsList"><br />
+                                <input type='hidden' id='textbox9' name="userSelAnsList"><br />
+                                <input type='hidden' id='textbox10' name="userSelAnsList">
                             }
+                        </div>
                     </div>
-                </div>
-                <input type='button' value='Add' id='addButton'>
-                <input type='button' value='Remove' id='removeButton'>
+                    <input type='button' value='Add' id='addButton'>
+                    <input type='button' value='Remove' id='removeButton'>
 
 
                 }
-                        else {
-                            foreach (string selEntry in Model.selectedAT.selAnsList)
-                            {
-                                var something = "userSelAnsList" + counter;
+                else
+                {
+                    foreach (string selEntry in Model.selectedAT.selAnsList)
+                    {
+                        var something = "userSelAnsList" + counter;
 
-                       <br /><input type="text" id="@something" name="userSelAnsList" value="@selEntry"
-       @if (selEntry.Equals("Enter a Value"))
-       { <TEXT> style="font-style:italic; color:gray" </TEXT>  } />
+                        <br /><input type="text" id="@something" name="userSelAnsList" value="@selEntry"
+                                     @if (selEntry.Equals("Enter a Value")) { <TEXT> style="font-style:italic; color:gray" </TEXT>   } />
 
-                        counter++;
+counter++;
                     }
-                <br />
-               }
+                    <br />
+                }
             </td>
             <td style="width:50%; vertical-align:top">
                 <div class="row">
@@ -109,28 +111,28 @@
                                 @if (!(Model.selectedAT.ATcathegory == "MS List" || Model.selectedAT.ATcathegory == "SS List"))
                                 {
                                     <table style="width:100%" id="TemplatesId">
-                                    @foreach (string template in Model.templates)
-                                    {
-                                        <tr>
-                                            <td style="width:80%">
-                                                @template
-                                            </td>
-                                            <td style="width:20%">
-                                                @if (!Model.templates[0].Equals("NO TEMPLATES NEEDED"))
-                                                {
-                                                    @*if (!Model.selectedAT.hasSelectableAnswers)
-                                {
-                                    <input type="button" id="TemplateLInk" value="Use This Template" onclick="testFunction('@template')" />
-                                }*@
-                                                    <input type="button" id="TemplateLInk" value="Use This Template" onclick="testFunction('@template')" />
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-                                </table>
+                                        @foreach (string template in Model.templates)
+                                        {
+                                            <tr>
+                                                <td style="width:80%">
+                                                    @template
+                                                </td>
+                                                <td style="width:20%">
+                                                    @if (!Model.templates[0].Equals("NO TEMPLATES NEEDED"))
+                                                    {
+                                                        @*if (!Model.selectedAT.hasSelectableAnswers)
+                                                            {
+                                                                <input type="button" id="TemplateLInk" value="Use This Template" onclick="testFunction('@template')" />
+                                                            }*@
+                                                        <input type="button" id="TemplateLInk" value="Use This Template" onclick="testFunction('@template')" />
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table>
                                 }
                                 else
-                                { 
+                                {
                                     <text>NO TEMPLATES AVAILABLE</text>
                                 }
                             </div>
@@ -142,11 +144,11 @@
         <tr>
             <td>
                 <br /><br />
-                <button type="submit" id="btnSaveDefQuest" onclick="" 
-                        @if (Model.selectedAT.requiresSelectableAnswers) { 
-                            @:disabled= "disabled"
-                        }
-                >Save Changes</button>
+                <button type="submit" id="btnSaveDefQuest" onclick=""
+                        @if (Model.selectedAT.requiresSelectableAnswers) {  @: disabled="disabled"
+                                                }>
+                    Save Changes
+                </button>
                 <script type="text/javascript">
                     $('#btnSaveDefQuest').on('click', function (event) {
                         var form = $(event.target).parents('form');
@@ -170,7 +172,7 @@
             </td>
         </tr>
     </table>
-                    }
+}
 <br /><br /><br />
 <div>
     @Html.ActionLink("Back to Question Maintenance", "Edit", "Question", new { id = Model.questionId }, null)
@@ -180,7 +182,7 @@
     $(document).ready(function () {
 
         var counter = document.getElementsByClassName('at_item').length + 1;
-       // alert("There are " + counter + " textboxes");
+        // alert("There are " + counter + " textboxes");
         // Validate that all textboxes are filled-in
         $('input').change(function () {
             var btnEnabled = true;
@@ -195,7 +197,7 @@
         });
 
         $("#addButton").click(function () {
-            
+
             if (counter > 10) {
                 alert("Only 10 textboxes allow");
                 return false;
@@ -203,14 +205,14 @@
 
             var newTextBoxDiv = $(document.createElement('div'))
                  .attr("id", 'TextBoxDiv' + counter);
-           
+
             document.getElementById("textbox" + counter).setAttribute('type', 'text');
             document.getElementById("textbox" + counter).setAttribute('value', '');
             //newTextBoxDiv.after().html('<label>Value #' + counter + ' : </label>' +
-              //    '<input type="text" name="textbox' + counter +
-                //  '" id="textbox' + counter + '" value=""  name="userSelAnsList">');
+            //    '<input type="text" name="textbox' + counter +
+            //  '" id="textbox' + counter + '" value=""  name="userSelAnsList">');
 
-           // newTextBoxDiv.appendTo("#TextBoxesGroup");
+            // newTextBoxDiv.appendTo("#TextBoxesGroup");
             counter++;
         });
         $("#removeButton").click(function () {
@@ -227,7 +229,7 @@
         });
 
         $('form input[type="text"]').each(function () {
-            // Loop through all the Text boxes                
+            // Loop through all the Text boxes
             if (this.value.toString().trim() == "" || this.value == 'Enter a Value') // If the current text box is empty
             {
                 btnEnabled = false;
@@ -236,19 +238,3 @@
 
     });
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -14,7 +14,7 @@
         transition: opacity 0.3s linear, left 0.3s ease-out;
     }
 
-        #container .modal.fade.in {
+   #container .modal.fade.in {
             left: 50%;
         }
     /*.input-group-addon {
@@ -70,69 +70,72 @@
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <div class="form-group row smallRowMargin">
-        <div class="col-sm-11 col-sm-offset-1">
-            <div class="input-group">
-                <div class="input-group-addon stdWidth">
-                    @Html.LabelFor(model => model.questn.obs_question_full_text)
+    <div class="row" style="border:double">
+        <br />
+        <div class="form-group row smallRowMargin">
+            <div class="col-sm-11 col-sm-offset-1">
+                <div class="input-group">
+                    <div class="input-group-addon stdWidth">
+                        @Html.LabelFor(model => model.questn.obs_question_full_text)
+                    </div>
+                    <textarea class="form-control has-feedback" id="questn.obs_question_full_text" name="questn.obs_question_full_text" cols="400" rows="3" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" required>@Model.questn.obs_question_full_text</textarea>
+                    @Html.ValidationMessageFor(model => model.questn.obs_question_full_text, "", new { @class = "text-danger" })
                 </div>
-                <textarea class="form-control has-feedback" id="questn.obs_question_full_text" name="questn.obs_question_full_text" cols="400" rows="3" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" required>@Model.questn.obs_question_full_text</textarea>
-                @Html.ValidationMessageFor(model => model.questn.obs_question_full_text, "", new { @class = "text-danger" })
             </div>
         </div>
-    </div>
-    <div class="form-group row smallRowMargin">
-        <div class="col-sm-11 col-sm-offset-1">
-            <div class="input-group">
-                <div class="input-group-addon stdWidth">
-                    @Html.LabelFor(model => model.questn.obs_question_desc)
+        <div class="form-group row smallRowMargin">
+            <div class="col-sm-11 col-sm-offset-1">
+                <div class="input-group">
+                    <div class="input-group-addon stdWidth">
+                        @Html.LabelFor(model => model.questn.obs_question_desc)
+                    </div>
+                    @Html.EditorFor(model => model.questn.obs_question_desc, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:95%;" } })
+                    @Html.ValidationMessageFor(model => model.questn.obs_question_desc, "", new { @class = "text-danger" })
                 </div>
-                @Html.EditorFor(model => model.questn.obs_question_desc, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:95%;" } })
-                @Html.ValidationMessageFor(model => model.questn.obs_question_desc, "", new { @class = "text-danger" })
             </div>
         </div>
-    </div>
-    <div class="form-group row smallRowMargin">
-        <div class="col-sm-4 col-sm-offset-2">
-            <div class="input-group" data-provide="datepicker">
-                <div class="input-group-addon">
-                    @Html.LabelFor(model => model.questn.obs_question_eff_st_dt)
+        <div class="form-group row smallRowMargin">
+            <div class="col-sm-4 col-sm-offset-2">
+                <div class="input-group" data-provide="datepicker">
+                    <div class="input-group-addon">
+                        @Html.LabelFor(model => model.questn.obs_question_eff_st_dt)
+                    </div>
+                    <input class="datepicker form-control" id="obs_question_eff_st_dt" name="questn.obs_question_eff_st_dt" value="@Model.questn.obs_question_eff_st_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                    @Html.ValidationMessageFor(model => model.questn.obs_question_eff_end_dt, "", new { @class = "text-danger" })
                 </div>
-                <input class="datepicker form-control" id="obs_question_eff_st_dt" name="questn.obs_question_eff_st_dt" value="@Model.questn.obs_question_eff_st_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;">
-                <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                @Html.ValidationMessageFor(model => model.questn.obs_question_eff_end_dt, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-4 col-sm-offset-1">
+                <div class="input-group" data-provide="datepicker">
+                    <div class="input-group-addon">
+                        @Html.LabelFor(model => model.questn.obs_question_eff_end_dt)
+                    </div>
+                    <input class="datepicker form-control" id="obs_question_eff_end_dt" name="questn.obs_question_eff_end_dt" value="@Model.questn.obs_question_eff_end_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                    @Html.ValidationMessageFor(model => model.questn.obs_question_eff_end_dt, "", new { @class = "text-danger" })
+                </div>
             </div>
         </div>
-        <div class="col-sm-4 col-sm-offset-1">
-            <div class="input-group" data-provide="datepicker">
-                <div class="input-group-addon">
-                    @Html.LabelFor(model => model.questn.obs_question_eff_end_dt)
-                </div>
-                <input class="datepicker form-control" id="obs_question_eff_end_dt" name="questn.obs_question_eff_end_dt" value="@Model.questn.obs_question_eff_end_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;">
-                <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                @Html.ValidationMessageFor(model => model.questn.obs_question_eff_end_dt, "", new { @class = "text-danger" })
+        <div class="row" smallrowmargin>
+            <div class="form-group">
+                @Html.HiddenFor(model => model.questn.obs_question_ver)
+                @*@Html.LabelFor(model => model.obs_question_ver, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.obs_question_ver, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.obs_question_ver, "", new { @class = "text-danger" })
+                    </div>*@
             </div>
-        </div>
-    </div>
-    <div class="row" smallrowmargin>
-        <div class="form-group">
-            @Html.HiddenFor(model => model.questn.obs_question_ver)
-            @*@Html.LabelFor(model => model.obs_question_ver, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.obs_question_ver, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.obs_question_ver, "", new { @class = "text-danger" })
-                </div>*@
         </div>
     </div>
 
     //-------------------------   QUESTION ANSWER TYPE AND SELECTABLE ANSWERS SECCTION ----------------------------------------
     <div class="row" style="margin-left:10px; border:thin">
 
-        <div class="row" style="border:solid thin; font-family:Arial;">
-            <div class="col-sm-10" style="vertical-align: middle">
-                <span style="vertical-align:middle">Currently Defined Answer Types for this question:</span>
+        <div class="row" font-family:Arial;">
+            <div class="col-sm-8" style="vertical-align: middle;">
+                <span style="vertical-align:middle; font-size:larger; font-weight:bold; background-color:bisque">Currently Defined Answer Types for this question:</span>
             </div>
-            <div class="col-sm-2" style="text-align:right; vertical-align:middle">
+            <div class="col-sm-4" style="text-align:right; vertical-align:middle">
                 <button type="button" class="btn btnAdd" id="addQuestion">Add New Question</button>
             </div>
             <br /><br />
@@ -150,7 +153,7 @@
     <br />
     //-------------------------   QUESTION ANSWER TYPE AND SELECTABLE ANSWERS SECCTION ----------------------------------------
 
-    @* ---------- META DATA QUESTION INFORMATION -- --- WITH MOVE LEFT/RIGHT TAGS PANELS --------------*@
+    @* ---------- META DATA QUESTION INFORMATION -- --- Select/Unselect PANELS --------------*@
     <div class="row">
        <div class="col-md-12 personal-info">
           <div class="panel panel-info">
@@ -211,7 +214,7 @@
           </div>
        </div>
     </div>
-    @* ---------- END OF NEW ROW WITH MOVE LEFT/RIGHT TAGS PANELS --------------*@
+    @* ---------- END OF NEW ROW WITH MOVE Select/Unselect TAGS PANELS --------------*@
 
     <div class="row">
         <div class="col-md-12 ">

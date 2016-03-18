@@ -11,15 +11,15 @@
 
 <div class="col-sm-12 answerType" style="border:solid; border-width:1px; font-family:Arial">
     <div class="row">
-        <div class="col-sm-4 form-inline">
-            <span class="label label-primary">[ @uniqueCounter ]&nbsp;</span>
-            <div class="input-group">
-                <span class="input-group-addon label-primary" style="color:white">Answer Type:</span>
-                <input type="text" class="form-control" id="qat" value="@Model.answer_type_name" readonly="readonly">
+        <div class="col-sm-6 form-inline">
+            <span class=" label label-primary">[ @uniqueCounter ]&nbsp;</span>
+            <div class="input-group col-sm-7">
+                <span class="input-group-addon label-primary" style="color:white; max-width:25%">Answer Type:</span>
+                <input type="text" class="form-control" id="qat" value="@Model.answer_type_name" readonly="readonly" style="max-width:100%; width:100%">
             </div>
         </div>
 
-        <div class="col-sm-3 col-sm-offset-5 form-inline" style="text-align:right">
+        <div class="col-sm-3 col-sm-offset-3 form-inline" style="text-align:right">
                 <div class="input-group">
                     <span class="input-group-addon">Default </span>
                     @if (Model.QAT.obs_qat_default_ans_type_yn == "Y")
@@ -55,16 +55,62 @@
         }
     </div>
     <div class="row form-inline divText" id="@divSAText" style="display:none">&nbsp;
-        <div class="col-sm-11   col-sm-offset-1">
+        <div class="col-sm-4">
             @foreach (var x in Model.selAns)
             {
-                <input type="text" value="@x.obs_qsa_text" class="form-control" />
-                <span>&nbsp;</span>
+                <input type="text" value="@x.obs_qsa_text" class="form-control selectableAnswer" />
+                <br />
             }
             <span>&nbsp;</span>
             <button id="@qbtnSaveId" class="saveSA" type="button">SAVE</button>
             <br /><br />
         </div>
+        <div class="col-md-8 personal-info">
+            <div class="panel panel-info ">
+                <div class="panel-heading">
+                    <h4><b>SUGGESTED TEMPLATES</b></h4>
+                </div>
+                <div class="panel-body" id="QATtemplates">
+                    <br />
+                    @if (!(Model.answer_type_category == "MS List" || Model.answer_type_category == "SS List"))
+                    {
+                        <table style="width:100%" id="TemplatesId">
+                            @foreach (string template in Model.templates)
+                            {
+                                <tr>
+                                    <td style="width:80%">
+                                        @template
+                                    </td>
+                                    <td style="width:20%">
+                                        @if (!Model.templates[0].Equals("NO TEMPLATES NEEDED"))
+                                        {
+                                            @*if (!Model.selectedAT.hasSelectableAnswers)
+                                            {
+                                                <input type="button" id="TemplateLInk" value="Use This Template" onclick="testFunction('@template')" />
+                                            }*@
+                                            <input type="button" id="TemplateLInk" value="Use This Template" onclick="testFunction('@template')" />
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    }
+                    else
+                    {
+                        <text>NO TEMPLATES AVAILABLE</text>
+                    }
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
     </div>
 </div>
 

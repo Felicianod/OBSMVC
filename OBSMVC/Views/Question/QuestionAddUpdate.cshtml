@@ -128,8 +128,14 @@
     //-------------------------   QUESTION ANSWER TYPE AND SELECTABLE ANSWERS SECCTION ----------------------------------------
     <div class="row" style="margin-left:10px; border:thin">
 
-        <div class="row">
-            <span>Currently Defined Answers for this question:</span>
+        <div class="row" style="border:solid thin; font-family:Arial;">
+            <div class="col-sm-10" style="vertical-align: middle">
+                <span style="vertical-align:middle">Currently Defined Answer Types for this question:</span>
+            </div>
+            <div class="col-sm-2" style="text-align:right; vertical-align:middle">
+                <button type="button" class="btn btnAdd" id="addQuestion">Add New Question</button>
+            </div>
+            <br /><br />
         </div>
 
 
@@ -562,7 +568,10 @@
 
         });
         //----------------------------------------------------------------------------------------
+        $('#addQuestion').click(function () {
+            alert('You are trying to add a New Question!');
 
+        });
 
     });
 

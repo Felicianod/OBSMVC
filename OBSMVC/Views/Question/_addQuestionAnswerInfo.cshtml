@@ -1,0 +1,26 @@
+﻿@model  OBSMVC.Models.qatTags
+
+<div class="col-sm-12 answerType" id="testing" style="border:solid; border-width:1px; font-family:Arial">
+    <div class="row">
+        <div class="col-sm-6 form-inline">
+            
+            <div class="input-group col-sm-7">
+                <span class="input-group-addon label-primary" style="color:white; max-width:25%">Answer Type:</span>
+                
+                @*<input type="text" class="form-control dropdown" id="qat" value="@Model.selAns" readonly="readonly" style="max-width:100%; width:100%">*@
+            </div>
+        </div>
+
+        <div class="col-sm-3 col-sm-offset-3 form-inline" style="text-align:right">
+            <div class="input-group">
+                <span class="input-group-addon">Default </span>
+                @if (Model.QAT.obs_qat_default_ans_type_yn == "Y")
+                { <button type="button" class="btn btnIsDefault btnYES">YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span></button> }
+                else
+                { <button type="button" class="btn btnIsDefault btn-warning">NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span></button> }
+                @*<input type="checkbox" @if (Model.QAT.obs_qat_default_ans_type_yn == "Y") { <text> checked="checked" </text>     }
+                    class="form-control primar chkDefault" id="qatDefault" name="qatDefault" style="max-width:20%" />*@
+            </div>
+        </div>
+    </div>
+</div>

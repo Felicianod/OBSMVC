@@ -339,6 +339,13 @@ namespace OBSMVC.Controllers
             return PartialView("_getQuestionAnswerInfo", qatInfo);
         }
 
+        [HttpGet]
+        public PartialViewResult addQuestionAnswerInfo(qatTags qatInfo)
+        {
+
+            return PartialView("_addQuestionAnswerInfo", qatInfo);
+        }
+
         [HttpPost]
         public string saveSelAns(int qat_id, string sel_ans_list)
         {

@@ -218,7 +218,7 @@ namespace OBSMVC.Controllers
                                 {
                                     OBS_QUEST_SLCT_ANS new_sel_ans = new OBS_QUEST_SLCT_ANS();
                                     new_sel_ans.obs_qat_id = new_assigned_ans_type.obs_qat_id;
-                                    new_sel_ans.obs_qsa_text = single_sel_ans_info[i];
+                                    new_sel_ans.obs_qsa_text = single_sel_ans_info[i].Trim().ToUpper();
                                     new_sel_ans.obs_qsa_order = order;
                                     new_sel_ans.obs_qsa_wt = order;
                                     new_sel_ans.obs_qsa_dflt_yn = "N";

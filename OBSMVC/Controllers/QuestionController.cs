@@ -133,16 +133,19 @@ namespace OBSMVC.Controllers
 
             return View(obsQMD);
         }
-        //---------------------------------------- CREATE [POST] -----------------------------------------------------------------
+        //---------------------------------------- QuestionAddUpd [POST] -----------------------------------------------------------------
         [HttpPost]               // POST: Question/Create
         [ValidateAntiForgeryToken]
-        public ActionResult Create(FormCollection postedData, QuestionMDViewModel QuestionMDView,
-                                 [Bind(Prefix = "questn")] OBS_QUESTION questionHdr)
+        public ActionResult QuestionAddUpd(FormCollection postedData, QuestionMDViewModel QuestionMDView,
+                                 [Bind(Prefix = "questn")] OBS_QUESTION questionHdr, string ans_type_list)
         {
-
+            //ans_type_list format: at_id~default~sel_ans,
+            //                        6~true~yes~no~maybe,
             //-------- Save the Question Information ----
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
+
+               
                 if (questionHdr.obs_question_eff_end_dt < Convert.ToDateTime("01/01/1900"))
                 {
                     questionHdr.obs_question_eff_end_dt = Convert.ToDateTime("12/31/2060");
@@ -156,6 +159,7 @@ namespace OBSMVC.Controllers
                 questionHdr.obs_question_added_dtm = DateTime.Now;
                 db.OBS_QUESTION.Add(questionHdr);
                 db.SaveChanges();
+                int test = questionHdr.obs_question_id;
             }
 
             // ------- Save the Question Metadata Changes ----

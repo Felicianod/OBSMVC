@@ -13,6 +13,7 @@ namespace OBSMVC.Models
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
         //= = = = = = = = = = = = = = = CONSTRUCTOR (No parameters Create Empty Object) = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
         public QuestionCreateEditViewModel() {
+            viewPageTitle = "New Question Data Entry";
             qAssignedMD = new List<metaDataTags>();
             qUnassignedMD = new List<metaDataTags>();
             qMDCategories = new List<string>();
@@ -34,12 +35,13 @@ namespace OBSMVC.Models
                 SelectListItem answer_for_dropdown = new SelectListItem() { Text = ans.obs_ans_type_name, Value = ans.obs_ans_type_id.ToString() };
                 available_answer_types.Add(answer_for_dropdown);
 
-            }
+        }
         }
 
         //= = = = = = = = = = = = = = = CONSTRUCTOR (Needs a Question Id parameter) = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
         public QuestionCreateEditViewModel(int qId)
         {
+            viewPageTitle = "Question Maintenance";
             //Set the distict list of metadata tags available
             qMDCategories = new List<string>();
             qMDCategories = db.OBS_QUESTION_METADATA.Select(x => x.obs_quest_md_cat).Distinct().OrderBy(y => y).ToList();
@@ -52,8 +54,8 @@ namespace OBSMVC.Models
 
             }
            
-
-
+           
+            
             // Retrieve the Question Information from OBS_Question Table
             questn = db.OBS_QUESTION.Find(qId);
 
@@ -115,7 +117,7 @@ namespace OBSMVC.Models
             }//end of  if (questn != null)
         }
         // ----------------------------------- PUBLIC CLASS PROPERTIES ----------------------------------------------
-        
+        public string viewPageTitle = String.Empty;
         public OBS_QUESTION questn = new OBS_QUESTION();
         public List<metaDataTags> qAssignedMD = new List<metaDataTags>();
         public List<metaDataTags> qUnassignedMD = new List<metaDataTags>();

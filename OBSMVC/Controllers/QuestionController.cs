@@ -106,8 +106,9 @@ namespace OBSMVC.Controllers
         }
 
 
-        [HttpPost] [ValidateAntiForgeryToken]
         [ActionName("QuestionAddUpdate")]
+        [HttpPost]               // POST: Question/Create
+        [ValidateAntiForgeryToken]
         public ActionResult QuestionAddUpdatePost(QuestionCreateEditViewModel formQuestion)
         {
 
@@ -115,10 +116,46 @@ namespace OBSMVC.Controllers
 
 
 
-
-            return View("Edit");
+            return RedirectToAction("Index", "Question");
+            //return View("Edit");
         }
 
+        //---------------------------------------- Render Templates Partial View -----------------------------------------------------------------
+        [HttpGet]
+        [ChildActionOnly]
+        public PartialViewResult selAnsTemplates(string templateCathegory)
+        {
+            List<string> templateList = new List<string>();
+            switch (templateCathegory)
+            {
+                case "3 Val Range":
+                    templateList.Add("1,2,3");
+                    templateList.Add("YES,NO,MAYBE");
+                    templateList.Add("LOW,MEDIUM,HIGH");
+                    templateList.Add("NEVER,SOMETIMES,ALWAYS");
+                    templateList.Add("ALWAYS,SOMETIMES,NEVER");
+                    break;
+                case "5 Val Range":
+                    templateList.Add("1,2,3,4,5");
+                    templateList.Add("NEVER,RARELY,SOMETIMES,OFTEN,ALWAYS");
+                    templateList.Add("STRONGLY DISAGREE,DISAGREE,N/A,AGREE,STRONGLY AGREE");
+                    break;
+                case "MS List":
+                    templateList.Add("Forklift,Hat,Steel toe shoes,Gloves");
+                    break;
+                case "SS List":
+                    templateList.Add("FIRST SHIFT,SECOND SHIFT,THIRD SHIFT");
+                    break;
+                default:
+                    templateList.Add("NO TEMPLATES NEEDED");
+                    break;
+            }//end of switch    
+
+            return PartialView("_selAnsTemplates", templateList);
+        }
+
+
+        //----------------------------------------------------------------
 
 
         //---------------------------------------- CREATE  [GET] -----------------------------------------------------------------
@@ -286,7 +323,7 @@ namespace OBSMVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(FormCollection postedData, QuestionMDViewModel QuestionMDView,
-                                 [Bind(Prefix = "q")] OBS_QUESTION questionHdr )
+                                 [Bind(Prefix = "q")] OBS_QUESTION questionHdr, string newQATInfo )
         {
 
             QuestionMDView.q = questionHdr;

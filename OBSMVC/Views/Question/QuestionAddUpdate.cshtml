@@ -137,7 +137,7 @@
                 <span style="vertical-align:middle; font-size:larger; font-weight:bold; background-color:bisque">Currently Defined Answer Types for this question:</span>
             </div>
             <div class="col-sm-4" style="text-align:right; vertical-align:middle">
-                <button type="button" class="btn btnAdd" id="addQuestion">Add New Question</button>
+                <button type="button" class="btn btnAdd" id="addQuestion">Add Answer Type</button>
             </div>
             <br /><br />
         </div>
@@ -566,6 +566,11 @@
                 var ATid = $(this).prop("id").substring(7);  // "Answer Type" Sequence Number to drive the Ids of all components.
                 var divSALabel = "#divSALabel" + ATid;
                 var divSAText = "#divSAText" + ATid;
+                var txtQATid = "#txtQATid" + ATid;
+                var postData = "qat_id : " + txtQATid + ", sel_ans_list :  nO  , MAYbe , yes";
+
+                // , isDefault: true";
+                alert("Saving Data: " + postData);
 
                 // Hide the "Text Boxes" <Division>
                 $(divSAText).hide("slow");
@@ -621,12 +626,4 @@
 
 
     </script>
-
-
-
-
-
-
-
-
 

@@ -181,22 +181,66 @@ namespace OBSMVC.Controllers
             //-------- Save the Question Information ----
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        if (questionHdr.obs_question_eff_end_dt < Convert.ToDateTime("01/01/1900"))
+                        {
+                            questionHdr.obs_question_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                        }
+                        if (questionHdr.obs_question_eff_st_dt < Convert.ToDateTime("01/01/1900"))
+                        {
+                            questionHdr.obs_question_eff_st_dt = DateTime.Now;
+                        }
+                        questionHdr.obs_question_ver = 1;
+                        questionHdr.obs_question_added_uid = User.Identity.Name;
+                        questionHdr.obs_question_added_dtm = DateTime.Now;
+                        db.OBS_QUESTION.Add(questionHdr);
+                        db.SaveChanges();
+                        int new_question_id = questionHdr.obs_question_id;
+                        string[] splitter = { "," };
+                        string[] passed_sel_ans_info = ans_type_list.Split(splitter, StringSplitOptions.RemoveEmptyEntries);//all passed selectable answers data
+                        foreach(string s in passed_sel_ans_info)
+                        {
+                            string[] splitby = { "~" };
+                            string[] single_sel_ans_info = s.Split(splitby, StringSplitOptions.RemoveEmptyEntries);//individual answer type data
+                            OBS_QUEST_ANS_TYPES new_assigned_ans_type = new OBS_QUEST_ANS_TYPES();
+                            new_assigned_ans_type.obs_qat_id = Convert.ToInt32(single_sel_ans_info[0]);
+                            new_assigned_ans_type.obs_question_id = new_question_id;
+                            new_assigned_ans_type.obs_qat_default_ans_type_yn = single_sel_ans_info[1]=="true"?"Y":"N";
+                            db.OBS_QUEST_ANS_TYPES.Add(new_assigned_ans_type);
+                            db.SaveChanges();//at this point we've saved the OBS_QUEST_ANS_TYPES record.
+                            if (single_sel_ans_info.Count() > 2)//now we need to check if there's selectable answers for this question
+                            {
+                                short order = 1;
+                                for (int i =2; i< single_sel_ans_info.Count(); i++)
+                                {
+                                    OBS_QUEST_SLCT_ANS new_sel_ans = new OBS_QUEST_SLCT_ANS();
+                                    new_sel_ans.obs_qat_id = new_assigned_ans_type.obs_qat_id;
+                                    new_sel_ans.obs_qsa_text = single_sel_ans_info[i];
+                                    new_sel_ans.obs_qsa_order = order;
+                                    new_sel_ans.obs_qsa_wt = order;
+                                    new_sel_ans.obs_qsa_dflt_yn = "N";
+                                    new_sel_ans.obs_qsa_eff_st_dt = DateTime.Now;
+                                    new_sel_ans.obs_qsa_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                                    db.OBS_QUEST_SLCT_ANS.Add(new_sel_ans);
+                                    db.SaveChanges();
+                                }
+                            }
 
+                        }
+                        transaction.Commit();
+                    }
+                   
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                    }
                
-                if (questionHdr.obs_question_eff_end_dt < Convert.ToDateTime("01/01/1900"))
-                {
-                    questionHdr.obs_question_eff_end_dt = Convert.ToDateTime("12/31/2060");
                 }
-                if (questionHdr.obs_question_eff_st_dt < Convert.ToDateTime("01/01/1900"))
-                {
-                    questionHdr.obs_question_eff_st_dt = DateTime.Now;
-                }
-                questionHdr.obs_question_ver = 1;
-                questionHdr.obs_question_added_uid = User.Identity.Name;
-                questionHdr.obs_question_added_dtm = DateTime.Now;
-                db.OBS_QUESTION.Add(questionHdr);
-                db.SaveChanges();
-                int test = questionHdr.obs_question_id;
+
+              
             }
 
             // ------- Save the Question Metadata Changes ----

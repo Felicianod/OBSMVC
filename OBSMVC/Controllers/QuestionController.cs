@@ -333,35 +333,24 @@ namespace OBSMVC.Controllers
         }
 
         [HttpPost]
-        public string saveSelAnsDefault(int qat_id, string sel_ans_list, bool isDefault)
+        public string saveSelAns(int qat_id, string sel_ans_list)
         {
-            if (String.IsNullOrEmpty(sel_ans_list))
-            {//if sel_ans_list is null that means we're only need to update default flag
-
-                try
-                {
-                    updateDefaultAnswerType(qat_id, isDefault ? "Y" : "N");
-                    return "OK";
-                }
-                catch (Exception e)
-                {
-                    return e.Message;
-                }
-
-            }
-            else
+                           
+           return updateSel_Ans_Types(qat_id, sel_ans_list);                    
+                          
+        }
+        [HttpPost]
+        public string setDefaultQAT(int qat_id,bool isDefault)
+        {
+            try
             {
-                try
-                {
-                    updateDefaultAnswerType(qat_id, isDefault ? "Y" : "N");
-                    return updateSel_Ans_Types(qat_id, sel_ans_list);                    
-                }
-                catch(Exception e)
-                {
-                    return e.Message;
-                }
+                updateDefaultAnswerType(qat_id, isDefault ? "Y" : "N");
+                return "OK";
             }
-
+            catch (Exception e)
+            {
+                return e.Message;
+            }
         }
         //-----------------------------------------[ "EDIT"  Action: POST ] ---------------------------------------------------
         [HttpPost]

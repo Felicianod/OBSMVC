@@ -115,6 +115,7 @@ namespace OBSMVC.Controllers
                                  [Bind(Prefix = "questn")] OBS_QUESTION questionHdr, string ans_type_list)
         {
 
+            //string ans_type_list = "6~true~yes~no~maybe,10~false~1~2~3~4~5";
             //ans_type_list format: at_id~default~sel_ans,
             //                        6~true~yes~no~maybe,
             //-------- Save the Question Information ----
@@ -168,7 +169,7 @@ namespace OBSMVC.Controllers
                                 string[] splitby = { "~" };
                                 string[] single_sel_ans_info = s.Split(splitby, StringSplitOptions.RemoveEmptyEntries);//individual answer type data
                                 OBS_QUEST_ANS_TYPES new_assigned_ans_type = new OBS_QUEST_ANS_TYPES();
-                                new_assigned_ans_type.obs_qat_id = Convert.ToInt32(single_sel_ans_info[0]);
+                                new_assigned_ans_type.obs_ans_type_id = Convert.ToInt16(single_sel_ans_info[0]);
                                 new_assigned_ans_type.obs_question_id = questionHdr.obs_question_id;
                                 new_assigned_ans_type.obs_qat_default_ans_type_yn = single_sel_ans_info[1] == "true" ? "Y" : "N";
                                 db.OBS_QUEST_ANS_TYPES.Add(new_assigned_ans_type);

@@ -331,7 +331,6 @@ namespace OBSMVC.Controllers
             return View(obsQMD);
         }
 
-
         [HttpGet]
         public PartialViewResult getQuestionAnswerInfo(qatTags qatInfo)
         {

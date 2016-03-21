@@ -40,14 +40,14 @@ var divSATextqatId = "txtQATid" + uniqueCounter;
         @if (Model.selectable_ans_required == "Y")
         {
         <ul clas="ulSALabel">
-            <li style="display: inline">
+            <li style="display: inline" id="testLi">
                 <button id="@qbtnEditId" class="editSA" type="button" style="background-color:white">Edit&nbsp;<span class="glyphicon glyphicon-pencil"></span></button>
                 <span>&nbsp;&nbsp;</span>
             </li>
             @foreach (var x in Model.selAns)
-                {
-                <li style="display: inline;"><span class="badge" style="font-size:larger">@x.obs_qsa_text</span>&nbsp;&nbsp;</li>
-                }
+            {
+                <li style="display: inline;" id="testLi"><span class="badge" style="font-size:larger">@x.obs_qsa_text</span>&nbsp;&nbsp;</li>
+            }
         </ul>
         <br /><br />
         }
@@ -62,7 +62,7 @@ var divSATextqatId = "txtQATid" + uniqueCounter;
         &nbsp;
         <div class="col-sm-7">
             <br /><br />
-            <input type="hidden" id="@divSATextqatId" value="@Model.QAT.obs_qat_id" />
+            @*<input type="hidden" id="@divSATextqatId" value="@Model.QAT.obs_qat_id" />*@
             
             @foreach (var x in Model.selAns)
             {

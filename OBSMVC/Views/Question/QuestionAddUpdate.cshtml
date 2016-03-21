@@ -73,6 +73,8 @@
 
 
     <input type="hidden" value="@Model.questn.obs_question_id" name="questn.obs_question_id" id="questn.obs_question_id">
+    //-----------------------------------   QUESTION HEADER SECCTION ----------------------------------------------------------
+    
     <div class="row" style="border:double">
         <br />
         <div class="form-group row smallRowMargin">
@@ -154,8 +156,12 @@
 
     </div>
     <br />
-    //-------------------------   QUESTION ANSWER TYPE AND SELECTABLE ANSWERS SECCTION ----------------------------------------
+    
+    <div class="row" id="divNewSA">
 
+
+    </div>
+    
     @* ---------- META DATA QUESTION INFORMATION -- --- Select/Unselect PANELS --------------*@
     <div class="row">
         <div class="col-md-12 personal-info">
@@ -395,7 +401,7 @@
 
         }
 
-        function testFunction(callerBtn, selAnslist) {
+        function loadTemplate(callerBtn, selAnslist) {
             //Transverse up to the parent "DIV" and then loop through all its "Textbox" children
             //to set their values based on the selected Template
 
@@ -413,6 +419,7 @@
                 $(this).val(templateList[textBoxCounter]);
                 textBoxCounter = textBoxCounter + 1;
             });
+            $('.saveSA').prop('disabled', false);
         }
 
 
@@ -572,7 +579,38 @@
 
     <script type="text/jscript">
         $(document).ready(function () {
-            //------------------------------ BUTTON EDIT ---------------------------------------------
+            //------------------------------ ADD NEW ANSWER TYPE BUTTON -----------------------------------------
+            $('#addQuestion').click(function () {
+
+                // ------------ Make the Ajax Call ---------------------------------------------
+                $.ajax({
+                    url: '@Url.Action("saveSelAns", "Question")',
+                    method: "POST",
+                    cache: false,
+                    data: { qat_id: QATid, sel_ans_list: textValues },     //<---- Data Parameters (if not already passed in the Url)
+                    //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                    //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                    //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                    //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                    //--- On error, execute this function ------
+                    error: function () {
+                        alert("An Error has Occurred. Unable to Save Data!!");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    //Execute this code After the Ajax call completes successfully
+                    //$("#accordion").append(d);
+                    //alert('Save Resullt: ' + d)
+                    $(this).parent().children('.selAnswerTextb').each(function () {
+                        textValues = textValues + $(this).val() + ","
+                    })
+
+                });
+
+
+            });
+
+            //-------------------------------------- BUTTON EDIT ------------------------------------------------
             $('.editSA').click(function () {
                 // Get the Ids that will be used in the dynamic execution
                 var ATid = $(this).prop("id").substring(7);  // "Answer Type" Sequence Number to drive the Ids of all components.
@@ -593,18 +631,15 @@
                 var ATid = $(this).prop("id").substring(7);  // "Answer Type" Sequence Number to drive the Ids of all components.
                 var divSALabel = "#divSALabel" + ATid;
                 var divSAText = "#divSAText" + ATid;
-                var txtQATid = "#txtQATid" + ATid;
-                var QATid = $(txtQATid).val();
+                var QATid = $(this).parents("div.answerType").first().find("#obs_qat_id").val();
                 var textValues = "";
-                $(this).parent().children('.selAnswerTextb').each(function(){
-                    textValues = textValues + $(this).val() + ","                
+                //Retrieve the first <Li> "badge" element of the current QAT
+                var badgeLi = $(divSALabel).find("Li").first();
+                $(this).parent().children('.selAnswerTextb').each(function () {
+                    textValues = textValues + $(this).val() + ","                    
+                    badgeLi = badgeLi.next();
+                    badgeLi.children("span").text($(this).val());
                 })
-                //var postData = "qat_id : " + QATid + ", sel_ans_list :  " + textValues;
-                // , isDefault: true";
-
-                //alert("Saving Data: " + postData);
-                
-
                 // ------------ Make the Ajax Call ---------------------------------------------
                 $.ajax({
                     url: '@Url.Action("saveSelAns", "Question")',
@@ -633,7 +668,7 @@
                // Hide the "Text Boxes" <Division>
                 $(divSAText).hide();
                 // Show The "Labels" < Division >
-                $(divSALabel).show("slow");
+                $(divSALabel).show();
 
 
                 //var buttonId = $(this).prop("id");        //Not Needed Anymore
@@ -641,12 +676,17 @@
                 //alert("You clicked the Save Button Id: " + $(this).prop("id") + "[" + ATid + "]");
 
             });
-            //----------------------------------------------------------------------------------------
-            $('#addQuestion').click(function () {
-                alert('Adding a New Selectable Answer is not enabled yet!');
-
+            //------------ ON SELECTABLE ANSWER CHANGE -----------------------------------------------------
+            $(".selAnswerTextb").change(function () {
+                if ($(this).val() == "")
+                {
+                    $('.saveSA').prop('disabled', true);
+                }
+                else
+                $('.saveSA').prop('disabled', false);
             });
 
+            //----------------------------------------------------------------------------------------------
         });
 
 

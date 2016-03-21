@@ -581,13 +581,15 @@
         $(document).ready(function () {
             //------------------------------ ADD NEW ANSWER TYPE BUTTON -----------------------------------------
             $('#addQuestion').click(function () {
-
+                $(this).prop('disabled', true);
+                var atListVar = @Model.available_answer_types;
                 // ------------ Make the Ajax Call ---------------------------------------------
                 $.ajax({
-                    url: '@Url.Action("saveSelAns", "Question")',
-                    method: "POST",
+                    url: '@Url.Action("addQuestionAnswerInfo", "Question")',
+                    method: "GET",
                     cache: false,
-                    data: { qat_id: QATid, sel_ans_list: textValues },     //<---- Data Parameters (if not already passed in the Url)
+                    data: { atList: atListVar},     //<---- Data Parameters (if not already passed in the Url)
+                    //data: { qat_id: QATid, sel_ans_list: textValues },     //<---- Data Parameters (if not already passed in the Url)
                     //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
                     //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
                     //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
@@ -595,16 +597,11 @@
 
                     //--- On error, execute this function ------
                     error: function () {
-                        alert("An Error has Occurred. Unable to Save Data!!");  //<-- Trap and alert of any errors if they occurred
+                        alert("An Error has Occurred. Unable to Add!!");  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
                     //Execute this code After the Ajax call completes successfully
-                    //$("#accordion").append(d);
-                    //alert('Save Resullt: ' + d)
-                    $(this).parent().children('.selAnswerTextb').each(function () {
-                        textValues = textValues + $(this).val() + ","
-                    })
-
+                    $("#divNewSA").append(d);
                 });
 
 
@@ -636,7 +633,7 @@
                 //Retrieve the first <Li> "badge" element of the current QAT
                 var badgeLi = $(divSALabel).find("Li").first();
                 $(this).parent().children('.selAnswerTextb').each(function () {
-                    textValues = textValues + $(this).val() + ","                    
+                    textValues = textValues + $(this).val() + ","
                     badgeLi = badgeLi.next();
                     badgeLi.children("span").text($(this).val());
                 })
@@ -665,7 +662,7 @@
 
                 });
 
-               // Hide the "Text Boxes" <Division>
+                // Hide the "Text Boxes" <Division>
                 $(divSAText).hide();
                 // Show The "Labels" < Division >
                 $(divSALabel).show();
@@ -683,7 +680,7 @@
                     $('.saveSA').prop('disabled', true);
                 }
                 else
-                $('.saveSA').prop('disabled', false);
+                    $('.saveSA').prop('disabled', false);
             });
 
             //----------------------------------------------------------------------------------------------

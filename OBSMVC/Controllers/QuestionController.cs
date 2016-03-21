@@ -92,18 +92,22 @@ namespace OBSMVC.Controllers
         public ActionResult QuestionAddUpdateEdit(int? id)
         {
             int questionId = id ?? -1;
+            QuestionCreateEditViewModel obsQCVM;
+
+
             if (questionId < 1)
             {
-                QuestionCreateEditViewModel obsQCVM = new QuestionCreateEditViewModel();
+                obsQCVM = new QuestionCreateEditViewModel();
                 obsQCVM.questn.obs_question_eff_st_dt = DateTime.Now;
-                obsQCVM.questn.obs_question_eff_end_dt = Convert.ToDateTime("2060/12/31");
-                return View("QuestionAddUpdate", obsQCVM);
+                obsQCVM.questn.obs_question_eff_end_dt = Convert.ToDateTime("2060/12/31");                
             }
             else
             {
-                QuestionCreateEditViewModel obsQCVM = new QuestionCreateEditViewModel(questionId);
-                return View("QuestionAddUpdate", obsQCVM);
+                obsQCVM = new QuestionCreateEditViewModel(questionId);                
             }
+            
+            return View("QuestionAddUpdate", obsQCVM);
+
         }
 
 
@@ -339,10 +343,10 @@ namespace OBSMVC.Controllers
         }
 
         [HttpGet]
-        public PartialViewResult addQuestionAnswerInfo(qatTags qatInfo)
+        public PartialViewResult addQuestionAnswerInfo(List<SelectListItem> atList)
         {
-
-            return PartialView("_addQuestionAnswerInfo", qatInfo);
+            ViewBag.fullSelATlist = atList;
+            return PartialView("_addQuestionAnswerInfo");
         }
 
         [HttpPost]

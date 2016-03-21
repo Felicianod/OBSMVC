@@ -86,6 +86,7 @@ namespace OBSMVC.Controllers
         //    return View("QuestionAddUpdate", obsQMD);
         //}
 
+        //---------------------------------------- QuestionAddUpd [ GET ] -----------------------------------------------------------------
         [HttpGet]
         [ActionName("QuestionAddUpdate")]
         public ActionResult QuestionAddUpdateEdit(int? id)
@@ -106,19 +107,163 @@ namespace OBSMVC.Controllers
         }
 
 
+        //---------------------------------------- QuestionAddUpd [POST] -----------------------------------------------------------------
+        [HttpPost]        
         [ActionName("QuestionAddUpdate")]
-        [HttpPost]               // POST: Question/Create
         [ValidateAntiForgeryToken]
-        public ActionResult QuestionAddUpdatePost(QuestionCreateEditViewModel formQuestion)
+        public ActionResult QuestionAddUpdatePost(FormCollection postedData, QuestionMDViewModel QuestionMDView,
+                                 [Bind(Prefix = "questn")] OBS_QUESTION questionHdr, string ans_type_list)
         {
 
+            //ans_type_list format: at_id~default~sel_ans,
+            //                        6~true~yes~no~maybe,
+            //-------- Save the Question Information ----
+            using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
+            {
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
 
 
+                        if (questionHdr.obs_question_id > 0)
+                        {
+                            OBS_QUESTION editedQuestion = db.OBS_QUESTION.Single(x => x.obs_question_id == questionHdr.obs_question_id);
+
+                            if (!editedQuestion.obs_question_full_text.Equals(questionHdr.obs_question_full_text))
+                            {
+                                editedQuestion.obs_question_ver++;
+                            }
+                            editedQuestion.obs_question_full_text = QuestionMDView.q.obs_question_full_text;
+                            editedQuestion.obs_question_desc = QuestionMDView.q.obs_question_desc;
+                            editedQuestion.obs_question_eff_st_dt = QuestionMDView.q.obs_question_eff_st_dt;
+                            editedQuestion.obs_question_eff_end_dt = QuestionMDView.q.obs_question_eff_end_dt;
+                            editedQuestion.obs_question_upd_dtm = DateTime.Now;
+                            editedQuestion.obs_question_upd_uid = User.Identity.Name;
+                            db.SaveChanges();
+                        }
+                        else {
+
+                            if (questionHdr.obs_question_eff_end_dt < Convert.ToDateTime("01/01/1900"))
+                            {
+                                questionHdr.obs_question_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                            }
+                            if (questionHdr.obs_question_eff_st_dt < Convert.ToDateTime("01/01/1900"))
+                            {
+                                questionHdr.obs_question_eff_st_dt = DateTime.Now;
+                            }
+                            questionHdr.obs_question_ver = 1;
+                            questionHdr.obs_question_added_uid = User.Identity.Name;
+                            questionHdr.obs_question_added_dtm = DateTime.Now;
+                            db.OBS_QUESTION.Add(questionHdr);
+                            db.SaveChanges();
+                        }
+
+                        if (!String.IsNullOrEmpty(ans_type_list))
+                        {
+                            string[] splitter = { "," };
+                            string[] passed_sel_ans_info = ans_type_list.Split(splitter, StringSplitOptions.RemoveEmptyEntries);//all passed selectable answers data
+                            foreach (string s in passed_sel_ans_info)
+                            {
+                                string[] splitby = { "~" };
+                                string[] single_sel_ans_info = s.Split(splitby, StringSplitOptions.RemoveEmptyEntries);//individual answer type data
+                                OBS_QUEST_ANS_TYPES new_assigned_ans_type = new OBS_QUEST_ANS_TYPES();
+                                new_assigned_ans_type.obs_qat_id = Convert.ToInt32(single_sel_ans_info[0]);
+                                new_assigned_ans_type.obs_question_id = questionHdr.obs_question_id;
+                                new_assigned_ans_type.obs_qat_default_ans_type_yn = single_sel_ans_info[1] == "true" ? "Y" : "N";
+                                db.OBS_QUEST_ANS_TYPES.Add(new_assigned_ans_type);
+                                db.SaveChanges();//at this point we've saved the OBS_QUEST_ANS_TYPES record.
+                                if (single_sel_ans_info.Count() > 2)//now we need to check if there's selectable answers for this question
+                                {
+                                    short order = 1;
+                                    for (int i = 2; i < single_sel_ans_info.Count(); i++)
+                                    {
+                                        OBS_QUEST_SLCT_ANS new_sel_ans = new OBS_QUEST_SLCT_ANS();
+                                        new_sel_ans.obs_qat_id = new_assigned_ans_type.obs_qat_id;
+                                        new_sel_ans.obs_qsa_text = single_sel_ans_info[i];
+                                        new_sel_ans.obs_qsa_order = order;
+                                        new_sel_ans.obs_qsa_wt = order;
+                                        new_sel_ans.obs_qsa_dflt_yn = "N";
+                                        new_sel_ans.obs_qsa_eff_st_dt = DateTime.Now;
+                                        new_sel_ans.obs_qsa_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                                        db.OBS_QUEST_SLCT_ANS.Add(new_sel_ans);
+                                        db.SaveChanges();
+                                    }
+                                }
+                            }
+                        }
+
+                        // ------- Save the Question Metadata Changes ----
+                        string MDlistBefore = postedData["origTags"];
+                        string MDlistAfter = postedData["qAssignedMD"];
+                        List<string> originalMDList = new List<string>();
+                        List<string> newMDList = new List<string>();
+                        if (!String.IsNullOrEmpty(MDlistBefore)) { originalMDList = MDlistBefore.Split(',').ToList(); }
+                        if (!String.IsNullOrEmpty(MDlistAfter)) { newMDList = MDlistAfter.Split(',').ToList(); }
+                        string[] mdIDsToDelete = originalMDList.Except(newMDList).ToArray();
+                        string[] mdIDsToAdd = newMDList.Except(originalMDList).ToArray();
+
+                        //---- Soft Delete all Metadata tags that are no longer used by the question
+                        foreach (string deleteId in mdIDsToDelete)
+                        {
+                            int tempId = Convert.ToInt32(deleteId);
+                            //int joitemp = db.OBS_QUEST_ASSGND_MD.Where(x => x.obs_quest_md_id == Convert.ToInt32(deleteId) && x.obs_question_id == questionHdr.obs_question_id).Select(x => x.obs_qad_id);
+                            OBS_QUEST_ASSGND_MD oBS_QUEST_ASSGND_MD = db.OBS_QUEST_ASSGND_MD.FirstOrDefault(x => x.obs_quest_md_id == tempId && x.obs_question_id == questionHdr.obs_question_id);
+                            oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = DateTime.Today;
+                            //db.OBS_QUESTION_METADATA.Remove(oBS_QUESTION_METADATA);  //No hard deletes
+                        }
+
+                        //---- Enable or Add the New metadata (MD) that will be assigned to the question ---
+                        //-- Process each metadata entry to add for the selected question
+                        foreach (string mdIdtoAdd in mdIDsToAdd)
+                        {
+                            try
+                            {
+                                int tempId = Convert.ToInt32(mdIdtoAdd);
+                                //-- Look for an entry in OBS_QUEST_ASSGND_MD usign the Question Id and the metadata it.
+                                OBS_QUEST_ASSGND_MD oBS_QUEST_ASSGND_MD = db.OBS_QUEST_ASSGND_MD.FirstOrDefault(x => x.obs_quest_md_id == tempId && x.obs_question_id == questionHdr.obs_question_id);
+                                //-- If an entry is found in the junction table for that question, just enable it
+                                if (oBS_QUEST_ASSGND_MD != null && tempId > 0)
+                                {
+                                    oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                                }
+                                else
+                                { //-- If selected MD does not exist in the junction table for that question, add it.
+                                    oBS_QUEST_ASSGND_MD = new OBS_QUEST_ASSGND_MD();
+                                    oBS_QUEST_ASSGND_MD.obs_quest_md_id = tempId;
+                                    oBS_QUEST_ASSGND_MD.obs_question_id = questionHdr.obs_question_id;
+                                    oBS_QUEST_ASSGND_MD.obs_qad_eff_st_dt = DateTime.Today;
+                                    oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                                    db.OBS_QUEST_ASSGND_MD.Add(oBS_QUEST_ASSGND_MD);
+                                }
+                            }
+                            catch { }
+                        }
+
+                        //---- Save All Changes ------
+                        db.SaveChanges();
+
+                        transaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                    }
+                }
 
 
-            return RedirectToAction("Index", "Question");
+            }
+
+
+            //ViewBag.ConfMsg = "Data Saved Successfully.";
+
+            return RedirectToAction("Index");
+
+            //return RedirectToAction("Index", "Question");
             //return View("Edit");
         }
+
+
 
         //---------------------------------------- Render Templates Partial View -----------------------------------------------------------------
         [HttpGet]
@@ -157,145 +302,6 @@ namespace OBSMVC.Controllers
 
         //----------------------------------------------------------------
 
-
-        //---------------------------------------- CREATE  [GET] -----------------------------------------------------------------
-        [HttpGet]  // GET: Question/Create
-        public ActionResult Create()
-        {
-            QuestionCreateViewModel obsQMD = new QuestionCreateViewModel();
-            //if (obsQMD == null)
-            //{
-            //    return HttpNotFound();
-            //}
-
-            return View(obsQMD);
-        }
-        //---------------------------------------- QuestionAddUpd [POST] -----------------------------------------------------------------
-        [HttpPost]               // POST: Question/Create
-        [ValidateAntiForgeryToken]
-        public ActionResult QuestionAddUpd(FormCollection postedData, QuestionMDViewModel QuestionMDView,
-                                 [Bind(Prefix = "questn")] OBS_QUESTION questionHdr, string ans_type_list)
-        {
-            //ans_type_list format: at_id~default~sel_ans,
-            //                        6~true~yes~no~maybe,
-            //-------- Save the Question Information ----
-            using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
-            {
-                using (var transaction = db.Database.BeginTransaction())
-                {
-                    try
-                    {
-                        if (questionHdr.obs_question_eff_end_dt < Convert.ToDateTime("01/01/1900"))
-                        {
-                            questionHdr.obs_question_eff_end_dt = Convert.ToDateTime("12/31/2060");
-                        }
-                        if (questionHdr.obs_question_eff_st_dt < Convert.ToDateTime("01/01/1900"))
-                        {
-                            questionHdr.obs_question_eff_st_dt = DateTime.Now;
-                        }
-                        questionHdr.obs_question_ver = 1;
-                        questionHdr.obs_question_added_uid = User.Identity.Name;
-                        questionHdr.obs_question_added_dtm = DateTime.Now;
-                        db.OBS_QUESTION.Add(questionHdr);
-                        db.SaveChanges();
-                        int new_question_id = questionHdr.obs_question_id;
-                        string[] splitter = { "," };
-                        string[] passed_sel_ans_info = ans_type_list.Split(splitter, StringSplitOptions.RemoveEmptyEntries);//all passed selectable answers data
-                        foreach(string s in passed_sel_ans_info)
-                        {
-                            string[] splitby = { "~" };
-                            string[] single_sel_ans_info = s.Split(splitby, StringSplitOptions.RemoveEmptyEntries);//individual answer type data
-                            OBS_QUEST_ANS_TYPES new_assigned_ans_type = new OBS_QUEST_ANS_TYPES();
-                            new_assigned_ans_type.obs_qat_id = Convert.ToInt32(single_sel_ans_info[0]);
-                            new_assigned_ans_type.obs_question_id = new_question_id;
-                            new_assigned_ans_type.obs_qat_default_ans_type_yn = single_sel_ans_info[1]=="true"?"Y":"N";
-                            db.OBS_QUEST_ANS_TYPES.Add(new_assigned_ans_type);
-                            db.SaveChanges();//at this point we've saved the OBS_QUEST_ANS_TYPES record.
-                            if (single_sel_ans_info.Count() > 2)//now we need to check if there's selectable answers for this question
-                            {
-                                short order = 1;
-                                for (int i =2; i< single_sel_ans_info.Count(); i++)
-                                {
-                                    OBS_QUEST_SLCT_ANS new_sel_ans = new OBS_QUEST_SLCT_ANS();
-                                    new_sel_ans.obs_qat_id = new_assigned_ans_type.obs_qat_id;
-                                    new_sel_ans.obs_qsa_text = single_sel_ans_info[i];
-                                    new_sel_ans.obs_qsa_order = order;
-                                    new_sel_ans.obs_qsa_wt = order;
-                                    new_sel_ans.obs_qsa_dflt_yn = "N";
-                                    new_sel_ans.obs_qsa_eff_st_dt = DateTime.Now;
-                                    new_sel_ans.obs_qsa_eff_end_dt = Convert.ToDateTime("12/31/2060");
-                                    db.OBS_QUEST_SLCT_ANS.Add(new_sel_ans);
-                                    db.SaveChanges();
-                                }
-                            }
-
-                        }
-                        transaction.Commit();
-                    }
-                   
-                    catch (Exception e)
-                    {
-                        transaction.Rollback();
-                    }
-               
-                }
-
-              
-            }
-
-            // ------- Save the Question Metadata Changes ----
-            string MDlistBefore = postedData["origTags"];
-            string MDlistAfter = postedData["qAssignedMD"];
-            List<string> originalMDList = new List<string>();
-            List<string> newMDList = new List<string>();
-            if (!String.IsNullOrEmpty(MDlistBefore)) { originalMDList = MDlistBefore.Split(',').ToList(); }
-            if (!String.IsNullOrEmpty(MDlistAfter)) { newMDList = MDlistAfter.Split(',').ToList(); }
-            string[] mdIDsToDelete = originalMDList.Except(newMDList).ToArray();
-            string[] mdIDsToAdd = newMDList.Except(originalMDList).ToArray();
-
-            using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
-            {
-                //---- Soft Delete all Metadata tags that are no longer used by the question
-                foreach (string deleteId in mdIDsToDelete)
-                {
-                    int tempId = Convert.ToInt32(deleteId);
-                    //int joitemp = db.OBS_QUEST_ASSGND_MD.Where(x => x.obs_quest_md_id == Convert.ToInt32(deleteId) && x.obs_question_id == questionHdr.obs_question_id).Select(x => x.obs_qad_id);
-                    OBS_QUEST_ASSGND_MD oBS_QUEST_ASSGND_MD = db.OBS_QUEST_ASSGND_MD.FirstOrDefault(x => x.obs_quest_md_id == tempId && x.obs_question_id == questionHdr.obs_question_id);
-                    oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = DateTime.Today;
-                    //db.OBS_QUESTION_METADATA.Remove(oBS_QUESTION_METADATA);  //No hard deletes
-                }
-
-                //---- Enable or Add the New metadata (MD) that will be assigned to the question ---
-                //-- Process each metadata entry to add for the selected question
-                foreach (string mdIdtoAdd in mdIDsToAdd)
-                {
-                        int tempId = Convert.ToInt32(mdIdtoAdd);
-                        //-- Look for an entry in OBS_QUEST_ASSGND_MD usign the Question Id and the metadata it.
-                        OBS_QUEST_ASSGND_MD oBS_QUEST_ASSGND_MD = db.OBS_QUEST_ASSGND_MD.FirstOrDefault(x => x.obs_quest_md_id == tempId && x.obs_question_id == questionHdr.obs_question_id);
-                        //-- If an entry is found in the junction table for that question, just enable it
-                        if (oBS_QUEST_ASSGND_MD != null && tempId > 0)
-                        {
-                            oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = Convert.ToDateTime("12/31/2060");
-                        }
-                        else
-                        { //-- If selected MD does not exist in the junction table for that question, add it.
-                            oBS_QUEST_ASSGND_MD = new OBS_QUEST_ASSGND_MD();
-                            oBS_QUEST_ASSGND_MD.obs_quest_md_id = tempId;
-                            oBS_QUEST_ASSGND_MD.obs_question_id = questionHdr.obs_question_id;
-                            oBS_QUEST_ASSGND_MD.obs_qad_eff_st_dt = DateTime.Today;
-                            oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = Convert.ToDateTime("12/31/2060");
-                            db.OBS_QUEST_ASSGND_MD.Add(oBS_QUEST_ASSGND_MD);
-                        }
-                }                
-
-                //---- Save All Changes ------
-                db.SaveChanges();
-            }
-
-            //ViewBag.ConfMsg = "Data Saved Successfully.";
-
-            return RedirectToAction("Index");
-        }
 
         //-----------------------------------------[ "EDIT"   Action: GET ] ---------------------------------------------------
         // GET: Question/Edit/5
@@ -352,107 +358,7 @@ namespace OBSMVC.Controllers
                 return e.Message;
             }
         }
-        //-----------------------------------------[ "EDIT"  Action: POST ] ---------------------------------------------------
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(FormCollection postedData, QuestionMDViewModel QuestionMDView,
-                                 [Bind(Prefix = "q")] OBS_QUESTION questionHdr, string newQATInfo )
-        {
-
-            QuestionMDView.q = questionHdr;
-            //QuestionMDView.q.obs_question_full_text = (string)postedData["q.obs_question_full_text"];
-            //QuestionMDView.q.obs_question_id = Convert.ToInt32(postedData["q.obs_question_id"]);
-            //QuestionMDView.q.obs_question_short_text = (string)postedData["q.obs_question_short_text"];
-            //QuestionMDView.q.obs_question_desc = (string)postedData["q.obs_question_desc"];
-            //QuestionMDView.q.obs_question_mm_url = (string)postedData["q.obs_question_mm_url"];
-            //QuestionMDView.q.obs_question_eff_end_dt = Convert.ToDateTime(postedData["q.obs_question_eff_end_dt"]);
-            //QuestionMDView.q.obs_question_eff_st_dt = Convert.ToDateTime(postedData["q.obs_question_eff_st_dt"]);
-
-            if (!ModelState.IsValid) // Model State is not Valid return Errors
-            {
-                ViewBag.ConfMsg = "Failed to Update Information!";
-                return View(QuestionMDView);
-            }
-
-            //-------- Save the Question Information ----
-            using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
-            {
-                OBS_QUESTION editedQuestion = db.OBS_QUESTION.Single(x => x.obs_question_id == questionHdr.obs_question_id);
-
-                if (!editedQuestion.obs_question_full_text.Equals(questionHdr.obs_question_full_text))
-                {
-                    editedQuestion.obs_question_ver++;
-                }
-                editedQuestion.obs_question_full_text = QuestionMDView.q.obs_question_full_text;
-                editedQuestion.obs_question_desc = QuestionMDView.q.obs_question_desc;
-                editedQuestion.obs_question_eff_st_dt = QuestionMDView.q.obs_question_eff_st_dt;
-                editedQuestion.obs_question_eff_end_dt = QuestionMDView.q.obs_question_eff_end_dt;
-                editedQuestion.obs_question_upd_dtm = DateTime.Now;
-                editedQuestion.obs_question_upd_uid = User.Identity.Name;
-
-                //db.Entry(editQuestion).State = EntityState.Modified;
-
-                db.SaveChanges();
-            }
-
-            // ------- Save the Question Metadata Changes ----
-            string MDlistBefore = postedData["origTags"];
-            string MDlistAfter = postedData["qAssignedMD"];
-            List<string> originalMDList = new List<string>();
-            List<string> newMDList = new List<string>();
-            if (!String.IsNullOrEmpty(MDlistBefore)) { originalMDList = MDlistBefore.Split(',').ToList(); }
-            if (!String.IsNullOrEmpty(MDlistAfter)) { newMDList = MDlistAfter.Split(',').ToList(); }
-            string[] mdIDsToDelete = originalMDList.Except(newMDList).ToArray();
-            string[] mdIDsToAdd = newMDList.Except(originalMDList).ToArray();
-
-            using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
-            {
-                //---- Soft Delete all Metadata tags that are no longer used by the question
-                foreach (string deleteId in mdIDsToDelete)
-                {
-                    int tempId = Convert.ToInt32(deleteId);
-                    //int joitemp = db.OBS_QUEST_ASSGND_MD.Where(x => x.obs_quest_md_id == Convert.ToInt32(deleteId) && x.obs_question_id == questionHdr.obs_question_id).Select(x => x.obs_qad_id);
-                    OBS_QUEST_ASSGND_MD oBS_QUEST_ASSGND_MD = db.OBS_QUEST_ASSGND_MD.FirstOrDefault(x => x.obs_quest_md_id == tempId && x.obs_question_id == questionHdr.obs_question_id);
-                    oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = DateTime.Today;
-                    //db.OBS_QUESTION_METADATA.Remove(oBS_QUESTION_METADATA);  //No hard deletes
-                }
-
-                //---- Enable or Add the New metadata (MD) that will be assigned to the question ---
-                //-- Process each metadata entry to add for the selected question
-                foreach (string mdIdtoAdd in mdIDsToAdd)
-                {
-                    try
-                    {
-                        int tempId = Convert.ToInt32(mdIdtoAdd);
-                        //-- Look for an entry in OBS_QUEST_ASSGND_MD usign the Question Id and the metadata it.
-                        OBS_QUEST_ASSGND_MD oBS_QUEST_ASSGND_MD = db.OBS_QUEST_ASSGND_MD.FirstOrDefault(x => x.obs_quest_md_id == tempId && x.obs_question_id == questionHdr.obs_question_id);
-                        //-- If an entry is found in the junction table for that question, just enable it
-                        if (oBS_QUEST_ASSGND_MD != null && tempId > 0)
-                        {
-                            oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = Convert.ToDateTime("12/31/2060");
-                        }
-                        else
-                        { //-- If selected MD does not exist in the junction table for that question, add it.
-                            oBS_QUEST_ASSGND_MD = new OBS_QUEST_ASSGND_MD();
-                            oBS_QUEST_ASSGND_MD.obs_quest_md_id = tempId;
-                            oBS_QUEST_ASSGND_MD.obs_question_id = questionHdr.obs_question_id;
-                            oBS_QUEST_ASSGND_MD.obs_qad_eff_st_dt = DateTime.Today;
-                            oBS_QUEST_ASSGND_MD.obs_qad_eff_end_dt = Convert.ToDateTime("12/31/2060");
-                            db.OBS_QUEST_ASSGND_MD.Add(oBS_QUEST_ASSGND_MD);
-                        }
-                    }
-                    catch { }
-                }
-
-                //---- Save All Changes ------
-                db.SaveChanges();           
-            }
-
-            ViewBag.ConfMsg = "Data Saved Successfully.";
-
-            //return View(QuestionMDView);
-            return RedirectToAction("Edit", "Question", new { id = questionHdr.obs_question_id, msg = "DataSaved" });
-        }        
+     
         //-----------------------------------------------------------------------------------------------------------------
         // GET: QuestionMetadata
         [ChildActionOnly]     [OutputCache(Duration =2000)]

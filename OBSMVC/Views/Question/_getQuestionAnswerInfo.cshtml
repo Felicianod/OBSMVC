@@ -12,7 +12,8 @@ var divSATextqatId = "txtQATid" + uniqueCounter;
 
 }
 
-<div class="col-sm-12 answerType" style="border:solid; border-width:1px; font-family:Arial">
+<div class="col-sm-12 answerType" id="testing" style="border:solid; border-width:1px; font-family:Arial">
+    <input type="hidden" id="obs_qat_id" value="@Model.QAT.obs_qat_id" />
     <div class="row">
         <div class="col-sm-6 form-inline">
             <span class=" label label-primary">[ @uniqueCounter ]&nbsp;</span>
@@ -23,7 +24,7 @@ var divSATextqatId = "txtQATid" + uniqueCounter;
         </div>
 
         <div class="col-sm-3 col-sm-offset-3 form-inline" style="text-align:right">
-            <div class="input-group">
+            <div class="input-group">                
                 <span class="input-group-addon">Default </span>
                 @if (Model.QAT.obs_qat_default_ans_type_yn == "Y")
                     { <button type="button" class="btn btnIsDefault btnYES">YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span></button> }
@@ -61,7 +62,7 @@ var divSATextqatId = "txtQATid" + uniqueCounter;
         &nbsp;
         <div class="col-sm-7">
             <br /><br />
-            <input type="hidden" id="@divSATextqatId" value="@Model.QAT.obs_ans_type_id" />
+            <input type="hidden" id="@divSATextqatId" value="@Model.QAT.obs_qat_id" />
             
             @foreach (var x in Model.selAns)
             {

@@ -71,6 +71,8 @@
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
+
+    <input type="hidden" value="@Model.questn.obs_question_id" name="questn.obs_question_id" id="questn.obs_question_id">
     <div class="row" style="border:double">
         <br />
         <div class="form-group row smallRowMargin">
@@ -472,7 +474,34 @@
 
 
             $(".btnIsDefault").click(function () {
-                // If the button is the Default, Just make it "No Default"
+                var isDefaultValue = true;
+                if ($(this).hasClass('btnYES')) {
+                    isDefaultValue = false;
+                }
+
+                var QATid = $(this).parents("div.answerType").first().find("#obs_qat_id").val();
+                //alert("Database will be updated to " + isDefaultValue + " for QAT id: " + QATid);
+
+                // ------------ Make the Ajax Call to Update the Default Answer Type Value---------------------------------------
+                $.ajax({
+                    url: '@Url.Action("setDefaultQAT", "Question")',
+                    method: "POST",
+                    cache: false,
+                    data: { qat_id: QATid, isDefault: isDefaultValue },     //<---- Data Parameters (if not already passed in the Url)
+                    //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                    //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                    //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                    //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                    //--- On error, execute this function ------
+                    error: function () {
+                        alert("An Error has Occurred. Unable to Save Data!!");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    //Execute this code After the Ajax call completes successfully
+                    // If the button is the Default, Just make it "No Default"
+                });
+                //--------- Finished executing Ajax call
                 if ($(this).hasClass('btnYES')) {
                     $(this).removeClass("btnYES").addClass("btn-warning");
                     $(this).html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
@@ -485,23 +514,21 @@
                     $(this).html('YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up">');
                 }
 
-
-                //$('.collapse').on('show.bs.collapse', function () {
-                //    $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
-                //}).on('hide.bs.collapse', function () {
-                //    $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
-                //});
-
-
-
-
-                //    on("click", ".dismiss", function (event) {
-                //        event.preventDefault();
-                //        //var qdelId = $(this).parent().attr("id");
-                //        $(this).parent().remove();
-                //        // updateValues("An Item was Deleted");  //If we want to all a function when item is dragged/dropped
-                //    });
             });
+
+            //$('.collapse').on('show.bs.collapse', function () {
+            //    $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
+            //}).on('hide.bs.collapse', function () {
+            //    $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
+            //});
+
+            //    on("click", ".dismiss", function (event) {
+            //        event.preventDefault();
+            //        //var qdelId = $(this).parent().attr("id");
+            //        $(this).parent().remove();
+            //        // updateValues("An Item was Deleted");  //If we want to all a function when item is dragged/dropped
+            //    });
+
 
             $('#showMDPanel').click(function () {
                 var btnText = $(this).html();
@@ -567,13 +594,45 @@
                 var divSALabel = "#divSALabel" + ATid;
                 var divSAText = "#divSAText" + ATid;
                 var txtQATid = "#txtQATid" + ATid;
-                var postData = "qat_id : " + txtQATid + ", sel_ans_list :  nO  , MAYbe , yes";
-
+                var QATid = $(txtQATid).val();
+                var textValues = "";
+                $(this).parent().children('.selAnswerTextb').each(function(){
+                    textValues = textValues + $(this).val() + ","                
+                })
+                //var postData = "qat_id : " + QATid + ", sel_ans_list :  " + textValues;
                 // , isDefault: true";
-                alert("Saving Data: " + postData);
 
-                // Hide the "Text Boxes" <Division>
-                $(divSAText).hide("slow");
+                //alert("Saving Data: " + postData);
+                
+
+                // ------------ Make the Ajax Call ---------------------------------------------
+                $.ajax({
+                    url: '@Url.Action("saveSelAns", "Question")',
+                    method: "POST",
+                    cache: false,
+                    data: { qat_id: QATid, sel_ans_list: textValues },     //<---- Data Parameters (if not already passed in the Url)
+                    //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                    //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                    //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                    //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                    //--- On error, execute this function ------
+                    error: function () {
+                        alert("An Error has Occurred. Unable to Save Data!!");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    //Execute this code After the Ajax call completes successfully
+                    //$("#accordion").append(d);
+                    //alert('Save Resullt: ' + d)
+                    $(this).parent().children('.selAnswerTextb').each(function () {
+                        textValues = textValues + $(this).val() + ","
+                    })
+
+                });
+
+
+               // Hide the "Text Boxes" <Division>
+                $(divSAText).hide("fast");
                 // Show The "Labels" < Division >
                 $(divSALabel).show();
 
@@ -585,7 +644,7 @@
             });
             //----------------------------------------------------------------------------------------
             $('#addQuestion').click(function () {
-                alert('You are trying to add a New Question!');
+                alert('Adding a New Selectable Answer is not enabled yet!');
 
             });
 

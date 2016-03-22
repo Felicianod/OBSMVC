@@ -343,9 +343,10 @@ namespace OBSMVC.Controllers
         }
 
         [HttpGet]
-        public PartialViewResult addQuestionAnswerInfo(List<SelectListItem> atList)
+        public PartialViewResult addQuestionAnswerInfo()
         {
-            ViewBag.fullSelATlist = atList;
+           
+           
             return PartialView("_addQuestionAnswerInfo");
         }
 

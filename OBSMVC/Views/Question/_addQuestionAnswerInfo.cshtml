@@ -20,22 +20,16 @@
         </div>
     </div>
 
-    <div class="row divLabel" style="display:none">
-        <ul clas="ulSALabel">
-            <li style="display: inline" id="testLi">
-                <button id="removeData" class="editSA" type="button" style="background-color:white">Remove&nbsp;<span class="glyphicon glyphicon-erase"></span></button>
-                <span>&nbsp;&nbsp;</span>
-            </li>
-        </ul>
-        <br />
+    <div class="row" id="noSelection" style="display:none">
+       <span class="label label-primary"> This Selection Does not Require Selectable Answers</span>   
     </div>
-
 
     <div class="row" id="ValRange3" style="display:none">
         <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
         <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
         <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
     </div>
+
     <div class="row" id="ValRange5" style="display:none">
         <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
         <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
@@ -44,8 +38,17 @@
         <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
     </div>
 
+    <div class="row" id="multiList" style="display:none">
+        @*<div class="row form-inline">
+            <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+            <button type="button" class="deleteTextBox" onclick="removeMe()"> <span class="glyphicon glyphicon-trash"></span></button>
+        </div>*@
+        <button type="button" class="addTextBox"> <span class="glyphicon glyphicon-plus"> Add New Selectable Answer</span></button>
+    </div>
 
+    <br /><br />
     <input type="button" id="something" onclick="$('#addQuestion').prop('disabled', false)" value="Click me" />
+    <br /><br />
 </div>
 <br />
 
@@ -59,17 +62,59 @@
             //var selectedValue = $('#fullSelATlist').val();
 
             if (selectedText == "3 Val") {
-                alert("You Selected a 3 Val Range Option")
+                $('#noSelection').hide();
+                $('#ValRange5').hide();
+                $('#ValRange5').children('.selAnswerTextb').val("");
+                $('#multiList').hide();
+                $('#multiList').children('.selAnswerTextb').val("");
+                $('#ValRange3').show();
             }
             else if (selectedText == "5 Val") {
-                alert("You Selected a 5 Val Range Option")
+                $('#noSelection').hide();
+                $('#ValRange3').hide();
+                $('#ValRange3').children('.selAnswerTextb').val("") ;
+                $('#multiList').hide();
+                $('#multiList').children('.selAnswerTextb').val("");
+                $('#ValRange5').show();
             }
             else if (selectedText == "Multi" || selectedText == "Singl") {
-                alert("You Selected a Multi or Single Selection List")
+                $('#ValRange3').hide();
+                $('#ValRange3').children('.selAnswerTextb').val("");
+                $('#ValRange5').hide();
+                $('#ValRange5').children('.selAnswerTextb').val("");
+                $('#noSelection').hide();
+                $('#multiList').show();
+                var divToAdd = '<div class="row form-inline newTB"> <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /> </div>'
+                var delButton = $('<button  type="button" ><span class="glyphicon glyphicon-trash"></span></button>').click(function () {
+                    $(this).parent().remove();
+                });
+                $('#multiList').append(divToAdd).children(".newTB").last().append(delButton);
             }
-            else
-            alert("The Option you selected does not require any Selectable Answers");
+            else {
+                $('#ValRange3').hide();
+                $('#ValRange3').children('.selAnswerTextb').val("");
+                $('#ValRange5').hide();
+                $('#ValRange5').children('.selAnswerTextb').val("");
+                $('#multiList').hide();
+                $('#multiList').children('.selAnswerTextb').val("");
+                $('#noSelection').show();
+            }
         });
+
+
+        $('.addTextBox').click(function () {
+            var divToAdd = '<div class="row form-inline newTB"> <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /> </div>'
+            var delButton = $('<button  type="button" ><span class="glyphicon glyphicon-trash"></span></button>').click(function () {
+                $(this).parent().remove();
+            });
+            $('#multiList').append(divToAdd).children(".newTB").last().append(delButton);
+        });
+
+        //$('.deleteTextBox').click(function () {
+        //    $(this).parent().remove();
+        //});
+
+
     });
 </script>
 

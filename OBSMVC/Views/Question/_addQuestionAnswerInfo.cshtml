@@ -55,7 +55,7 @@
             </div>
 
             <br />
-            <input type="button" id="btnSaveNewAT" onclick="$('#addQuestion').prop('disabled', false)" value="Save Answer Type and Values" style="display:none" />
+            <input type="button" id="btnSaveNewAT" value="Save Answer Type and Values" style="display:none" />
             <br /><br />
 
         </div>        
@@ -171,6 +171,36 @@
             $('#multiList').append(divToAdd).children(".newTB").last().append(delButton);
         });
 
+        $('#btnSaveNewAT').click(function () {
+            alert("Saving data via Ajax...");
+            $('#addQuestion').prop('disabled', false)
+            // --------------------------- SOFT SAVE NEW ANSWER TYPE VIA AJAX (NOT POSTED TO DB) --------------
+            $.ajax({
+                url: '@Url.Action("newAction", "Question")',
+                method: "GET",
+                cache: false,
+                dataType: "html",
+                data: { templateCathegory: selCathegory },     //<---- Data Parameters (if not already passed in the Url)
+                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                //--- On error, execute this function ------
+                error: function () {
+                    alert("Failed to retrieve appropriate Templates for Selection! [" + "selCathegory" + "]");  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                //Execute this code After the Ajax call completes successfully
+                //$("#accordion").append(d);
+                //alert('Save Resullt: ' + d)
+                $("#divTemplates").html(d);
+            });
+
+
+
+        });
+
         //$('.deleteTextBox').click(function () {
         //    $(this).parent().remove();
         //});
@@ -198,7 +228,4 @@
 
     });
 </script>
-
-
-
 

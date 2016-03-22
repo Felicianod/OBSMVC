@@ -2,7 +2,7 @@
 
 @* ===== THIS PARTIAL VIEW REPRESENTS A ADD NEW SELECTABLE ANSWER VIEW ======= *@
 
-<div class="row answerType" id="testing" style="margin-left:10px; border:double; border-color:green; font-family:Arial" >
+<div class="row answerType" id="testing" style="margin-left:10px; border:double; border-color:green; background-color:lightslategray; font-family:Arial">
     <div class="row">
         <div class="col-sm-6 form-inline">
             <div class="input-group col-sm-7">
@@ -11,7 +11,6 @@
                 @Html.DropDownList("fullSelATlist", null, "-Select Answer Type-", htmlAttributes: new { @class = "form-control selectAT" })
             </div>
         </div>
-
         <div class="col-sm-3 col-sm-offset-3 form-inline" style="text-align:right">
             <div class="input-group">
                 <span class="input-group-addon">Default </span>
@@ -20,35 +19,53 @@
         </div>
     </div>
 
-    <div class="row" id="noSelection" style="display:none">
-       <span class="label label-primary"> This Selection Does not Require Selectable Answers</span>   
-    </div>
 
-    <div class="row" id="ValRange3" style="display:none">
-        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-    </div>
+    <div class="row divText" >
+        &nbsp;
+        <div class="col-sm-7">
+            <div class="row" id="noSelection" style="display:none">
+                <span class="label label-primary"> This Selection Does not Require Selectable Answers</span>
+            </div>
 
-    <div class="row" id="ValRange5" style="display:none">
-        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-    </div>
+            <div class="row form-inline" id="ValRange3" style="display:none">
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+            </div>
 
-    <div class="row" id="multiList" style="display:none">
-        @*<div class="row form-inline">
-            <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-            <button type="button" class="deleteTextBox" onclick="removeMe()"> <span class="glyphicon glyphicon-trash"></span></button>
-        </div>*@
-        <button type="button" class="addTextBox"> <span class="glyphicon glyphicon-plus"> Add New Selectable Answer</span></button>
-    </div>
+            <div class="row form-inline" id="ValRange5" style="display:none">
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+            </div>
 
-    <br /><br />
-    <input type="button" id="something" onclick="$('#addQuestion').prop('disabled', false)" value="Click me" />
-    <br /><br />
+            <div class="row form-inline" id="multiList" style="display:none">
+                @*<div class="row form-inline">
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                <button type="button" class="deleteTextBox" onclick="removeMe()"> <span class="glyphicon glyphicon-trash"></span></button>
+            </div>*@
+                <button type="button" class="addTextBox"> <span class="glyphicon glyphicon-plus"> Add New Selectable Answer</span></button>
+            </div>
+
+            <br /><br />
+            <input type="button" id="something" onclick="$('#addQuestion').prop('disabled', false)" value="Click me" />
+            <br /><br />
+
+        </div>        
+        <div class="col-md-5 personal-info divTemplates">
+
+            @*  // - - - - - -- - - - - INSERT HERE The Selectable Answers Templates Panel (From External Partial View) --------
+                //------------------------------------------------------------------------------------------------------------------*@
+            
+
+            @*  // - - - - - - - END OF Selectable Answers Templates Panel (From External Partial View) --------
+                //-------------------------------------------------------------------------------------------------------
+            *@
+        </div>
+        <input type="hidden" id="selCathegoty" />
+    </div>
 </div>
 <br />
 
@@ -57,11 +74,13 @@
 <script>
     $(document).ready(function () {
         $(".selectAT").change(function () {
+            var selCathegory = "Other";
             var selectedText = $(this).find('option:selected').text().substring(0,5);
             var selectedValue = $(this).val();
             //var selectedValue = $('#fullSelATlist').val();
 
             if (selectedText == "3 Val") {
+                selCathegory = "3 Val Range";                
                 $('#noSelection').hide();
                 $('#ValRange5').hide();
                 $('#ValRange5').children('.selAnswerTextb').val("");
@@ -70,6 +89,7 @@
                 $('#ValRange3').show();
             }
             else if (selectedText == "5 Val") {
+                selCathegory = "5 Val Range";
                 $('#noSelection').hide();
                 $('#ValRange3').hide();
                 $('#ValRange3').children('.selAnswerTextb').val("") ;
@@ -99,6 +119,29 @@
                 $('#multiList').children('.selAnswerTextb').val("");
                 $('#noSelection').show();
             }
+            $("#selCathegoty").val(selCathegory);
+
+            //Load the Templated based on the Cathegory that was selected
+            $.ajax({
+                url: '@Url.Action("selAnsTemplates", "Question")',
+                method: "GET",
+                cache: false,
+                data: { templateCathegory: $("#selCathegoty").val() },     //<---- Data Parameters (if not already passed in the Url)
+                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                //--- On error, execute this function ------
+                error: function () {
+                    alert("Failed to retrieve appropriate Templates for Selection!");  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                //Execute this code After the Ajax call completes successfully
+                //$("#accordion").append(d);
+                //alert('Save Resullt: ' + d)
+                $("#divTemplates").append(d);
+            });
         });
 
 

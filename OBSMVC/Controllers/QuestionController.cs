@@ -139,10 +139,16 @@ namespace OBSMVC.Controllers
                             {
                                 editedQuestion.obs_question_ver++;
                             }
-                            editedQuestion.obs_question_full_text = QuestionMDView.q.obs_question_full_text;
-                            editedQuestion.obs_question_desc = QuestionMDView.q.obs_question_desc;
-                            editedQuestion.obs_question_eff_st_dt = QuestionMDView.q.obs_question_eff_st_dt;
-                            editedQuestion.obs_question_eff_end_dt = QuestionMDView.q.obs_question_eff_end_dt;
+                            //editedQuestion.obs_question_full_text = QuestionMDView.q.obs_question_full_text;
+                            //editedQuestion.obs_question_desc = QuestionMDView.q.obs_question_desc;
+                            //editedQuestion.obs_question_eff_st_dt = QuestionMDView.q.obs_question_eff_st_dt;
+                            //editedQuestion.obs_question_eff_end_dt = QuestionMDView.q.obs_question_eff_end_dt;
+                            //editedQuestion.obs_question_upd_dtm = DateTime.Now;
+                            //editedQuestion.obs_question_upd_uid = User.Identity.Name;
+                            editedQuestion.obs_question_full_text = questionHdr.obs_question_full_text;
+                            editedQuestion.obs_question_desc = questionHdr.obs_question_desc;
+                            editedQuestion.obs_question_eff_st_dt = questionHdr.obs_question_eff_st_dt;
+                            editedQuestion.obs_question_eff_end_dt = questionHdr.obs_question_eff_end_dt;
                             editedQuestion.obs_question_upd_dtm = DateTime.Now;
                             editedQuestion.obs_question_upd_uid = User.Identity.Name;
                             db.SaveChanges();

@@ -138,13 +138,7 @@ namespace OBSMVC.Controllers
                             if (!editedQuestion.obs_question_full_text.Equals(questionHdr.obs_question_full_text))
                             {
                                 editedQuestion.obs_question_ver++;
-                            }
-                            //editedQuestion.obs_question_full_text = QuestionMDView.q.obs_question_full_text;
-                            //editedQuestion.obs_question_desc = QuestionMDView.q.obs_question_desc;
-                            //editedQuestion.obs_question_eff_st_dt = QuestionMDView.q.obs_question_eff_st_dt;
-                            //editedQuestion.obs_question_eff_end_dt = QuestionMDView.q.obs_question_eff_end_dt;
-                            //editedQuestion.obs_question_upd_dtm = DateTime.Now;
-                            //editedQuestion.obs_question_upd_uid = User.Identity.Name;
+                            }                            
                             editedQuestion.obs_question_full_text = questionHdr.obs_question_full_text;
                             editedQuestion.obs_question_desc = questionHdr.obs_question_desc;
                             editedQuestion.obs_question_eff_st_dt = questionHdr.obs_question_eff_st_dt;
@@ -184,6 +178,7 @@ namespace OBSMVC.Controllers
                                 new_assigned_ans_type.obs_qat_default_ans_type_yn = single_sel_ans_info[1] == "true" ? "Y" : "N";
                                 db.OBS_QUEST_ANS_TYPES.Add(new_assigned_ans_type);
                                 db.SaveChanges();//at this point we've saved the OBS_QUEST_ANS_TYPES record.
+                                updateDefaultAnswerType(new_assigned_ans_type.obs_qat_id, new_assigned_ans_type.obs_qat_default_ans_type_yn);
                                 if (single_sel_ans_info.Count() > 2)//now we need to check if there's selectable answers for this question
                                 {
                                     short order = 1;

@@ -4,7 +4,7 @@
 
 @{
     var is_default = Model.isDefault ? "true" : "false";
-    var value_to_submit = Model.ans_type_id + "~" + is_default + "~";
+    var value_to_submit = Model.ans_type_id + "~" + is_default;
     if (Model.selAnsList.Count() > 0)
     {
         foreach(string s in Model.selAnsList)

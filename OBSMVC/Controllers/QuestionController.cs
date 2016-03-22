@@ -119,6 +119,7 @@ namespace OBSMVC.Controllers
                                  [Bind(Prefix = "questn")] OBS_QUESTION questionHdr, string ans_type_list)
         {
 
+            string temp = postedData["ans_type_list"];
             //string ans_type_list = "6~true~yes~no~maybe,10~false~1~2~3~4~5";
             //ans_type_list format: at_id~default~sel_ans,
             //                        6~true~yes~no~maybe,
@@ -164,10 +165,10 @@ namespace OBSMVC.Controllers
                             db.SaveChanges();
                         }
 
-                        if (!String.IsNullOrEmpty(ans_type_list))
+                        if (!String.IsNullOrEmpty(temp))
                         {
                             string[] splitter = { "," };
-                            string[] passed_sel_ans_info = ans_type_list.Split(splitter, StringSplitOptions.RemoveEmptyEntries);//all passed selectable answers data
+                            string[] passed_sel_ans_info = temp.Split(splitter, StringSplitOptions.RemoveEmptyEntries);//all passed selectable answers data
                             foreach (string s in passed_sel_ans_info)
                             {
                                 string[] splitby = { "~" };
@@ -178,7 +179,24 @@ namespace OBSMVC.Controllers
                                 new_assigned_ans_type.obs_qat_default_ans_type_yn = single_sel_ans_info[1] == "true" ? "Y" : "N";
                                 db.OBS_QUEST_ANS_TYPES.Add(new_assigned_ans_type);
                                 db.SaveChanges();//at this point we've saved the OBS_QUEST_ANS_TYPES record.
-                                updateDefaultAnswerType(new_assigned_ans_type.obs_qat_id, new_assigned_ans_type.obs_qat_default_ans_type_yn);
+                                OBS_QUEST_ANS_TYPES passed_quest_ans_record = db.OBS_QUEST_ANS_TYPES.Single(x => x.obs_qat_id == new_assigned_ans_type.obs_qat_id);
+                                if (passed_quest_ans_record.obs_qat_default_ans_type_yn != new_assigned_ans_type.obs_qat_default_ans_type_yn && new_assigned_ans_type.obs_qat_default_ans_type_yn == "N")
+                                { //if existing record is default and we need to set it to N we need to do it here and we won't have to 
+                                  //change any other records
+                                    passed_quest_ans_record.obs_qat_default_ans_type_yn = "N";
+                                    db.SaveChanges();
+                                }
+                                else if (passed_quest_ans_record.obs_qat_default_ans_type_yn != new_assigned_ans_type.obs_qat_default_ans_type_yn && new_assigned_ans_type.obs_qat_default_ans_type_yn == "Y")
+                                {//  if passed qat_id needs to be default one, we should first set existing default to N and then update passed  to Y   
+                                    try
+                                    {
+                                        int current_default_quest_id = db.OBS_QUEST_ANS_TYPES.Single(x => x.obs_question_id == passed_quest_ans_record.obs_question_id && x.obs_qat_id != passed_quest_ans_record.obs_qat_id && x.obs_qat_default_ans_type_yn == "Y").obs_question_id;
+                                        setExistingDefaultToN(current_default_quest_id);
+                                    }
+                                    catch { }
+                                    passed_quest_ans_record.obs_qat_default_ans_type_yn = "Y";
+                                    db.SaveChanges();
+                                }
                                 if (single_sel_ans_info.Count() > 2)//now we need to check if there's selectable answers for this question
                                 {
                                     short order = 1;

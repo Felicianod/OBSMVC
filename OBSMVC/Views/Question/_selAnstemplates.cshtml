@@ -17,7 +17,7 @@
                     <td style="width:20%">
                         @if (!@Model.ElementAt(0).Equals("NO TEMPLATES NEEDED"))
                         {
-                            <input type="button" class="btnTemplate" id="TemplateLink" value="Use This Template" onclick="loadTemplate($(this),'@template')" />
+                            <input type="button" id="TemplateLink" value="Use This Template" onclick="loadTemplate($(this),'@template')" />
                         }
                     </td>
                 </tr>

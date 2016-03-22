@@ -20,7 +20,7 @@
     </div>
 
 
-    <div class="row divText" >
+    <div id="divNewAT" class="row divText" >
         &nbsp;
         <div class="col-sm-6 col-sm-offset-1">
             <div class="row" id="noSelection" style="display:none">
@@ -35,12 +35,11 @@
             </div>
 
             <div class="row" id="ValRange5" style="display:none">
-                <br />
                 <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
                 <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
+                @*<input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
                 <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />*@
             </div>
 
             <div class="row form-inline" id="multiList" style="display:none">
@@ -55,8 +54,8 @@
                 *@
             </div>
 
-            <br /><br />
-            <input type="button" id="something" onclick="$('#addQuestion').prop('disabled', false)" value="Click me" />
+            <br />
+            <input type="button" id="btnSaveNewAT" onclick="$('#addQuestion').prop('disabled', false)" value="Save Answer Type and Values" style="display:none" />
             <br /><br />
 
         </div>        
@@ -78,11 +77,18 @@
 
 <script>
     $(document).ready(function () {
+
         $("#fullSelATlist").change(function () {
             var selCathegory = "Other";
             var selectedText = $(this).find('option:selected').text().substring(0,5);
             var selectedValue = $(this).val();
             //var selectedValue = $('#fullSelATlist').val();
+
+            //If the selected Index from the dropdown list is empty, disable the Save Button
+            if (selectedText == "-Sele") {
+                $('#btnSaveNewAT').hide();
+            }
+            else { $('#btnSaveNewAT').show(); }
 
             if (selectedText == "3 Val") {
                 selCathegory = "3 Val Range";                
@@ -96,7 +102,7 @@
             else if (selectedText == "5 Val") {
                 selCathegory = "5 Val Range";
                 $('#noSelection').hide();
-                $('#ValRange3').hide();
+                $('#ValRange3').show();
                 $('#ValRange3').children('.selAnswerTextb').val("") ;
                 $('#multiList').hide();
                 $('#multiList').children('.selAnswerTextb').val("");
@@ -146,7 +152,7 @@
 
                 //--- On error, execute this function ------
                 error: function () {
-                    alert("Failed to retrieve appropriate Templates for Selection!");  //<-- Trap and alert of any errors if they occurred
+                    alert("Failed to retrieve appropriate Templates for Selection! [" + "selCathegory" + "]");  //<-- Trap and alert of any errors if they occurred
                 }
             }).done(function (d) {
                 //Execute this code After the Ajax call completes successfully

@@ -582,13 +582,11 @@
             //------------------------------ ADD NEW ANSWER TYPE BUTTON -----------------------------------------
             $('#addQuestion').click(function () {
                 $(this).prop('disabled', true);
-                var atListVar = @Model.available_answer_types;
                 // ------------ Make the Ajax Call ---------------------------------------------
                 $.ajax({
                     url: '@Url.Action("addQuestionAnswerInfo", "Question")',
                     method: "GET",
                     cache: false,
-                    data: { atList: atListVar},     //<---- Data Parameters (if not already passed in the Url)
                     //data: { qat_id: QATid, sel_ans_list: textValues },     //<---- Data Parameters (if not already passed in the Url)
                     //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
                     //dataType: "json",                                        //<--- In case we wanted to post a JSON data object

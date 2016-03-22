@@ -31,13 +31,20 @@
     </div>
 
 
-    <div id="partialNewSA">
-
-
+    <div class="row" id="ValRange3" style="display:none">
+        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+    </div>
+    <div class="row" id="ValRange5" style="display:none">
+        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
     </div>
 
 
-    <br />
     <input type="button" id="something" onclick="$('#addQuestion').prop('disabled', false)" value="Click me" />
 </div>
 <br />
@@ -47,11 +54,21 @@
 <script>
     $(document).ready(function () {
         $(".selectAT").change(function () {
-            var selectedId = $(this).find('option:selected').attr('id');
+            var selectedText = $(this).find('option:selected').text().substring(0,5);
             var selectedValue = $(this).val();
             //var selectedValue = $('#fullSelATlist').val();
 
-            alert("Dropdown List was changed! You Selected Id: " + selectedId + " with a value of '" + selectedValue + "'");
+            if (selectedText == "3 Val") {
+                alert("You Selected a 3 Val Range Option")
+            }
+            else if (selectedText == "5 Val") {
+                alert("You Selected a 5 Val Range Option")
+            }
+            else if (selectedText == "Multi" || selectedText == "Singl") {
+                alert("You Selected a Multi or Single Selection List")
+            }
+            else
+            alert("The Option you selected does not require any Selectable Answers");
         });
     });
 </script>

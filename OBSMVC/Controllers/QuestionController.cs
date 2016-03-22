@@ -345,8 +345,12 @@ namespace OBSMVC.Controllers
         [HttpGet]
         public PartialViewResult addQuestionAnswerInfo()
         {
-           
-           
+            var selAnsList = db.OBS_ANS_TYPE.Select(x => new SelectListItem
+            {
+                Value = x.obs_ans_type_id.ToString(),
+                Text = x.obs_ans_type_name
+            }).OrderBy(y => y.Text);
+            ViewBag.fullSelATlist = selAnsList;
             return PartialView("_addQuestionAnswerInfo");
         }
 

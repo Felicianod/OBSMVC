@@ -140,12 +140,8 @@
             <div class="col-sm-8" style="vertical-align: middle;">
                 <span style="vertical-align:middle; font-size:larger; font-weight:bold; background-color:bisque">Currently Defined Answer Types for this question:</span>
             </div>
-            <div class="col-sm-4" style="text-align:right; vertical-align:middle">
-                <button type="button" class="btn btnAdd" id="addQuestion">Add Answer Type</button>
-            </div>
-            <br /><br />
+            <br />
         </div>
-
 
         <div class="row">
             @foreach (OBSMVC.Models.qatTags qat in Model.Quest_Assigned_qatTags)
@@ -156,12 +152,18 @@
 
     </div>
     <br />
-    
-    <div class="row" id="divNewSA">
+
+    <div class="row" id="divaddedSA">
 
 
     </div>
+    <div class="row" style="text-align:right; vertical-align:middle">
+        <button type="button" class="btn btnAdd" id="addQuestion">Add New Answer Type</button><br /><br />
+    </div>
     
+    <div class="row" id="divNewSA">
+    </div>
+
     @* ---------- META DATA QUESTION INFORMATION -- --- Select/Unselect PANELS --------------*@
     <div class="row">
         <div class="col-md-12 personal-info">
@@ -582,13 +584,11 @@
             //------------------------------ ADD NEW ANSWER TYPE BUTTON -----------------------------------------
             $('#addQuestion').click(function () {
                 $(this).prop('disabled', true);
-                var atListVar = @Model.available_answer_types;
                 // ------------ Make the Ajax Call ---------------------------------------------
                 $.ajax({
                     url: '@Url.Action("addQuestionAnswerInfo", "Question")',
                     method: "GET",
                     cache: false,
-                    data: { atList: atListVar},     //<---- Data Parameters (if not already passed in the Url)
                     //data: { qat_id: QATid, sel_ans_list: textValues },     //<---- Data Parameters (if not already passed in the Url)
                     //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
                     //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
@@ -601,9 +601,8 @@
                     }
                 }).done(function (d) {
                     //Execute this code After the Ajax call completes successfully
-                    $("#divNewSA").append(d);
+                    $("#divNewSA").html(d);
                 });
-
 
             });
 

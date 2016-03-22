@@ -237,12 +237,12 @@
 
             $('#addQuestion').prop('disabled', false)
             // --------------------------- SOFT SAVE NEW ANSWER TYPE VIA AJAX (NOT POSTED TO DB) --------------
-            @*$.ajax({
+            $.ajax({
                 url: '@Url.Action("saveNewSelectableAnswer", "Question")',
                 method: "GET",
                 cache: false,
                 dataType: "html",
-                data: { input_data: "7,true,Y,N,X" },     //<---- Data Parameters (if not already passed in the Url)
+                data: { input_data: postParams },     //<---- Data Parameters (if not already passed in the Url)
                 //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
                 //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
                 //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
@@ -258,7 +258,7 @@
                 //alert('Save Resullt: ' + d)
                 $("#divaddedSA").append(d);
                 $("#divNewSA").html("");
-            });*@
+            });
 
 
         });

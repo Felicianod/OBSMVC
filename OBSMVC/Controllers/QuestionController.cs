@@ -343,7 +343,7 @@ namespace OBSMVC.Controllers
         }
 
         [HttpGet]
-        public PartialViewResult addQuestionAnswerInfo(List<SelectListItem> atList)
+        public PartialViewResult addQuestionAnswerInfo()
         {
             var selAnsList = db.OBS_ANS_TYPE.Select(x => new SelectListItem
             {

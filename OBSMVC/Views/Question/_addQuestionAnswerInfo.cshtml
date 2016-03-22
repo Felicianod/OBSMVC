@@ -2,14 +2,13 @@
 
 @* ===== THIS PARTIAL VIEW REPRESENTS A ADD NEW SELECTABLE ANSWER VIEW ======= *@
 
-
-<div class="row answerType" id="testing" style="border:solid; border-width:1px; font-family:Arial">
+<div class="row answerType" id="testing" style="margin-left:10px; border:double; border-color:green; font-family:Arial" >
     <div class="row">
         <div class="col-sm-6 form-inline">
             <div class="input-group col-sm-7">
                 <span class="input-group-addon label-primary" style="color:white; max-width:25%">Answer Type:</span>
 
-                @Html.DropDownList("fullSelATlist", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("fullSelATlist", null, "-Select Answer Type-", htmlAttributes: new { @class = "form-control selectAT" })
             </div>
         </div>
 
@@ -38,63 +37,24 @@
     </div>
 
 
-
-    @*<div class="row form-inline divText" id="@divSAText" style="display:none">
-            &nbsp;
-            <div class="col-sm-7">
-                <br /><br />
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-                <input type="text" value="" class="form-control selAnswerTextb sel5val" placeholder="Enter a Value" style="display:none"/>
-                <input type="text" value="" class="form-control selAnswerTextb sel5val" placeholder="Enter a Value" style="display:none" />
-                    <br /><br />
-                <span>&nbsp;</span>
-                <br /><br />
-            </div>
-            <div class="col-md-5 personal-info" id="divTemplate">
-
-                  // - - - - - -- - - - - INSERT HERE The Selectable Answers Templates Panel (From External Partial View) --------
-                    //------------------------------------------------------------------------------------------------------------------
-
-                @Html.Action("selAnsTemplates", new { templateCathegory = Model.answer_type_category })
-
-                  // - - - - - - - END OF Selectable Answers Templates Panel (From External Partial View) --------
-                    //-------------------------------------------------------------------------------------------------------
-
-            </div>
-        </div>
-
-
-
-
-        <div class="row form-inline divText" id="divSATextSelList" style="display:none">
-            &nbsp;
-            <div class="col-sm-12">
-                <br /><br />
-                    <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-                    <br />
-                <span>&nbsp;</span>
-                <button id="addToList" type="button">Add Item</button>
-                <br /><br />
-            </div>
-        </div>
-
-
-        <div class="row form-inline divText" style="display:none">
-            <br />
-            This Selection does not require Selectable Answers
-            <br />
-        </div>*@
-
     <br />
     <input type="button" id="something" onclick="$('#addQuestion').prop('disabled', false)" value="Click me" />
 </div>
+<br />
 
 
 
+<script>
+    $(document).ready(function () {
+        $(".selectAT").change(function () {
+            var selectedId = $(this).find('option:selected').attr('id');
+            var selectedValue = $(this).val();
+            //var selectedValue = $('#fullSelATlist').val();
 
-
+            alert("Dropdown List was changed! You Selected Id: " + selectedId + " with a value of '" + selectedValue + "'");
+        });
+    });
+</script>
 
 
 

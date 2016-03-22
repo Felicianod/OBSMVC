@@ -150,4 +150,12 @@ namespace OBSMVC.Models
         public int uniqueCounter { set; get; }
         
     }
+    public class AddedSelAnswer
+    {
+        public AddedSelAnswer() { }
+        public short ans_type_id;
+        public string ans_type_name = String.Empty;
+        public bool isDefault = false;
+        public List<string> selAnsList = new List<string>();
+    }
 }

@@ -1,7 +1,27 @@
 ﻿@*@model  OBSMVC.Models.qatTags*@
 
 @* ===== THIS PARTIAL VIEW REPRESENTS A ADD NEW SELECTABLE ANSWER VIEW ======= *@
+<script>
+    function makeDflt(defaultBtn) {
+                //var btnClass = "test";
+                //if (defaultBtn.hasClass('btnYES'))
+                //{ btnClass = "This is a default Button" }
+                //else { btnClass = "This is not default Button" }
 
+
+        if (defaultBtn.hasClass('btnYES')) {
+            defaultBtn.removeClass("btnYES").addClass("btn-warning");
+            defaultBtn.html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
+        }
+        else {
+            //Else, reset all buttons to "No Default" and make this button the default
+            $(".btnIsDefault").removeClass("btnYES").addClass("btn-warning");
+            $(".btnIsDefault").html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
+            defaultBtn.removeClass("btn-warning").addClass("btnYES");
+            defaultBtn.html('YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up">');
+        }
+    }
+</script>
 <div class="row answerType" id="testing" style="margin-left:10px; border:double; border-color:green; background-color:lightslategray; font-family:Arial">
     <div class="row">
         <div class="col-sm-6 form-inline">
@@ -14,7 +34,9 @@
         <div class="col-sm-3 col-sm-offset-3 form-inline" style="text-align:right">
             <div class="input-group">
                 <span class="input-group-addon">Default </span>
-                <button type="button" class="btn btnIsDefault btn-warning">NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span></button>
+                <button id="btnNewATdefault" type="button" class="btn btnIsDefault btn-warning" onclick="makeDflt($(this))">
+                     NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
+                </button>
             </div>
         </div>
     </div>
@@ -172,15 +194,55 @@
         });
 
         $('#btnSaveNewAT').click(function () {
-            alert("Saving data via Ajax...");
+            var hasEmptyValues = false;
+            
+
+            var textValues = "";
+            var counter = 0;
+            var emptyBoxes = 0;
+            $('#divNewAT').find('.selAnswerTextb').each(function () {
+                counter = counter + 1;
+                if ($(this).val() != "") {
+
+                    textValues = textValues + $(this).val() + ",";
+                }
+                else {
+                    hasEmptyValues = true;
+                    emptyBoxes++;
+                }
+            });
+
+            alert(counter + " Text Boxes were found. The values Found are: " + textValues + " [Empty Boxes: " + emptyBoxes + "]");
+
+
+
+
+
+
+
+
+
+
+
+
+
+            var isDefaultValue = "false";
+            if ($('#btnNewATdefault').hasClass('btnYES')) {
+                isDefaultValue = "true";
+            }
+
+            var postParams = $("#fullSelATlist").val() + "," + isDefaultValue + "," + textValues;
+
+            alert("Parameter passed to Ajax are: " + postParams);
+
             $('#addQuestion').prop('disabled', false)
             // --------------------------- SOFT SAVE NEW ANSWER TYPE VIA AJAX (NOT POSTED TO DB) --------------
-            $.ajax({
-                url: '@Url.Action("newAction", "Question")',
+            @*$.ajax({
+                url: '@Url.Action("saveNewSelectableAnswer", "Question")',
                 method: "GET",
                 cache: false,
                 dataType: "html",
-                data: { templateCathegory: selCathegory },     //<---- Data Parameters (if not already passed in the Url)
+                data: { input_data: "7,true,Y,N,X" },     //<---- Data Parameters (if not already passed in the Url)
                 //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
                 //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
                 //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
@@ -194,37 +256,12 @@
                 //Execute this code After the Ajax call completes successfully
                 //$("#accordion").append(d);
                 //alert('Save Resullt: ' + d)
-                $("#divTemplates").html(d);
-            });
-
+                $("#divaddedSA").append(d);
+                $("#divNewSA").html("");
+            });*@
 
 
         });
-
-        //$('.deleteTextBox').click(function () {
-        //    $(this).parent().remove();
-        //});
-
-            //function loadTemplate(callerBtn, selAnslist) {
-            //    //Transverse up to the parent "DIV" and then loop through all its "Textbox" children
-            //    //to set their values based on the selected Template
-
-            //    // First Get the DIV parent id
-            //    var parentId = "#" + callerBtn.parent().parent().parent().parent().parent().parent().parent().parent().prop("id");
-            //    //var textbList = $(parentId).find(".selAnswerTextb").first().val();
-            //    //alert('Template ' + '[' + selAnslist + '] will be applied for Id: ' + parentId + "-- Note, first text box value is: " + textbList);
-
-            //    //Create an array of values to apply to the text boxes
-            //    var templateList = selAnslist.split(",");
-            //    var textBoxCounter = 0;
-
-            //    // Loops through all textboxes in the parent DIV and set their values accordingly
-            //    $(parentId).find(".selAnswerTextb").each(function () {
-            //        $(this).val(templateList[textBoxCounter]);
-            //        textBoxCounter = textBoxCounter + 1;
-            //    });
-            //    $('.saveSA').prop('disabled', false);
-            //}
 
     });
 </script>

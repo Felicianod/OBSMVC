@@ -278,7 +278,7 @@ namespace OBSMVC.Controllers
 
         //---------------------------------------- Render Templates Partial View -----------------------------------------------------------------
         [HttpGet]
-        [ChildActionOnly]
+        //[ChildActionOnly]
         public PartialViewResult selAnsTemplates(string templateCathegory)
         {
             List<string> templateList = new List<string>();
@@ -571,10 +571,7 @@ namespace OBSMVC.Controllers
             // --- Methods -------        
         }
         public class SelAnswerType {
-            public SelAnswerType()
-            {
-
-            }
+            public SelAnswerType()  { }
             public int indexinDDL =-1;
             public int ATid = 0;
             public string ATvalue = String.Empty;
@@ -583,6 +580,7 @@ namespace OBSMVC.Controllers
             public bool requiresSelectableAnswers = false;
             public List<string> selAnsList = new List<string>();
         }
+
         public class OBSQuestion
         {       
             private DSC_OBS_DB_ENTITY OBSdb = new DSC_OBS_DB_ENTITY();

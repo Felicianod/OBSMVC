@@ -22,31 +22,37 @@
 
     <div class="row divText" >
         &nbsp;
-        <div class="col-sm-7">
+        <div class="col-sm-6 col-sm-offset-1">
             <div class="row" id="noSelection" style="display:none">
                 <span class="label label-primary"> This Selection Does not Require Selectable Answers</span>
             </div>
 
-            <div class="row form-inline" id="ValRange3" style="display:none">
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+            <div class="row" id="ValRange3" style="display:none">
+                <br />
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
             </div>
 
-            <div class="row form-inline" id="ValRange5" style="display:none">
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+            <div class="row" id="ValRange5" style="display:none">
+                <br />
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
             </div>
 
             <div class="row form-inline" id="multiList" style="display:none">
+                <button type="button" class="addTextBox"> <span class="glyphicon glyphicon-plus"> Add New Answer</span></button>
+                <div id="newTB" class="row form-inline">
+
+                </div>
                 @*<div class="row form-inline">
                 <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
                 <button type="button" class="deleteTextBox" onclick="removeMe()"> <span class="glyphicon glyphicon-trash"></span></button>
-            </div>*@
-                <button type="button" class="addTextBox"> <span class="glyphicon glyphicon-plus"> Add New Selectable Answer</span></button>
+                </div>
+                *@
             </div>
 
             <br /><br />
@@ -54,17 +60,16 @@
             <br /><br />
 
         </div>        
-        <div class="col-md-5 personal-info divTemplates">
+        <div id="divTemplates" class="col-md-5 personal-info">
 
             @*  // - - - - - -- - - - - INSERT HERE The Selectable Answers Templates Panel (From External Partial View) --------
-                //------------------------------------------------------------------------------------------------------------------*@
-            
+            //------------------------------------------------------------------------------------------------------------------*@
+
 
             @*  // - - - - - - - END OF Selectable Answers Templates Panel (From External Partial View) --------
-                //-------------------------------------------------------------------------------------------------------
+            //-------------------------------------------------------------------------------------------------------
             *@
         </div>
-        <input type="hidden" id="selCathegoty" />
     </div>
 </div>
 <br />
@@ -73,7 +78,7 @@
 
 <script>
     $(document).ready(function () {
-        $(".selectAT").change(function () {
+        $("#fullSelATlist").change(function () {
             var selCathegory = "Other";
             var selectedText = $(this).find('option:selected').text().substring(0,5);
             var selectedValue = $(this).val();
@@ -104,11 +109,17 @@
                 $('#ValRange5').children('.selAnswerTextb').val("");
                 $('#noSelection').hide();
                 $('#multiList').show();
-                var divToAdd = '<div class="row form-inline newTB"> <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /> </div>'
-                var delButton = $('<button  type="button" ><span class="glyphicon glyphicon-trash"></span></button>').click(function () {
+
+                //var divToAdd = '<div class="row form-inline newTB"> <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /> </div>'
+                var addTextBox = '<input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />'
+                var addDelButton = $('<button  type="button" ><span class="glyphicon glyphicon-trash"></span></button>').click(function () {
                     $(this).parent().remove();
                 });
-                $('#multiList').append(divToAdd).children(".newTB").last().append(delButton);
+                //$('#multiList').append(divToAdd).children(".newTB").last().append(delButton);
+                // Clear all previously created Text boxes if any and Add the TextBox-Del Buttons
+                $('#newTB').html("");
+                $('#newTB').append(addTextBox);
+                $('#newTB').append(addDelButton);
             }
             else {
                 $('#ValRange3').hide();
@@ -119,14 +130,15 @@
                 $('#multiList').children('.selAnswerTextb').val("");
                 $('#noSelection').show();
             }
-            $("#selCathegoty").val(selCathegory);
 
             //Load the Templated based on the Cathegory that was selected
-            $.ajax({
+            //alert("Retrieving Templates: " + selCathegory);
+            $.ajax({                
                 url: '@Url.Action("selAnsTemplates", "Question")',
                 method: "GET",
                 cache: false,
-                data: { templateCathegory: $("#selCathegoty").val() },     //<---- Data Parameters (if not already passed in the Url)
+                dataType: "html",
+                data: { templateCathegory: selCathegory },     //<---- Data Parameters (if not already passed in the Url)
                 //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
                 //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
                 //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
@@ -140,13 +152,13 @@
                 //Execute this code After the Ajax call completes successfully
                 //$("#accordion").append(d);
                 //alert('Save Resullt: ' + d)
-                $("#divTemplates").append(d);
+                $("#divTemplates").html(d);
             });
         });
 
 
         $('.addTextBox').click(function () {
-            var divToAdd = '<div class="row form-inline newTB"> <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /> </div>'
+            var divToAdd = '<div class="row form-inline newTB"> <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /></div>'
             var delButton = $('<button  type="button" ><span class="glyphicon glyphicon-trash"></span></button>').click(function () {
                 $(this).parent().remove();
             });
@@ -157,6 +169,26 @@
         //    $(this).parent().remove();
         //});
 
+            //function loadTemplate(callerBtn, selAnslist) {
+            //    //Transverse up to the parent "DIV" and then loop through all its "Textbox" children
+            //    //to set their values based on the selected Template
+
+            //    // First Get the DIV parent id
+            //    var parentId = "#" + callerBtn.parent().parent().parent().parent().parent().parent().parent().parent().prop("id");
+            //    //var textbList = $(parentId).find(".selAnswerTextb").first().val();
+            //    //alert('Template ' + '[' + selAnslist + '] will be applied for Id: ' + parentId + "-- Note, first text box value is: " + textbList);
+
+            //    //Create an array of values to apply to the text boxes
+            //    var templateList = selAnslist.split(",");
+            //    var textBoxCounter = 0;
+
+            //    // Loops through all textboxes in the parent DIV and set their values accordingly
+            //    $(parentId).find(".selAnswerTextb").each(function () {
+            //        $(this).val(templateList[textBoxCounter]);
+            //        textBoxCounter = textBoxCounter + 1;
+            //    });
+            //    $('.saveSA').prop('disabled', false);
+            //}
 
     });
 </script>

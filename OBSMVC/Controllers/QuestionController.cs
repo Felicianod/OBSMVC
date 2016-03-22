@@ -368,14 +368,14 @@ namespace OBSMVC.Controllers
             added_answer_type.ans_type_id = Convert.ToInt16(data_from_gui[0]);
             added_answer_type.isDefault = data_from_gui[1] == "true" ? true : false;
             added_answer_type.ans_type_name = db.OBS_ANS_TYPE.Single(x => x.obs_ans_type_id == added_answer_type.ans_type_id).obs_ans_type_name;
-            if (data_from_gui.Count() > 2)//now we need to check if there's selectable answers for this question
+            if (data_from_gui.Count() > 2)//now we need to check if there's selectable answers for this answer type
             {                
                 for (int i = 2; i < data_from_gui.Count(); i++)
                 {
                     added_answer_type.selAnsList.Add(data_from_gui[i]);
                 }
             }
-            return PartialView("_getQuestionAnswerInfo", added_answer_type);
+            return PartialView("_saveNewSelectableAnswer", added_answer_type);
         }
 
         [HttpPost]

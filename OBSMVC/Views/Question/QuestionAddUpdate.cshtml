@@ -614,8 +614,6 @@
                 var ATid = $(this).prop("id").substring(7);  // "Answer Type" Sequence Number to drive the Ids of all components.
                 var divSALabel = "#divSALabel" + ATid;
                 var divSAText = "#divSAText" + ATid;
-                //var textDivId = $(this).parent().parent().parent().parent().children().filter(".divText").first().prop("id");   //NOT NEEDED ANYMORE
-                //var idToHide = $(this).parent().parent().parent().hide();       //NOT NEEDED ANYMORE
 
                 // Hide the "Labels" <Division>
                 $(divSALabel).hide(700);
@@ -648,11 +646,12 @@
                 var textValues = "";
                 //Retrieve the first <Li> "badge" element of the current QAT
                 var badgeLi = $(divSALabel).find("Li").first();
-                $(this).parent().children('.selAnswerTextb').each(function () {
+
+                $(this).parent().find('.selAnswerTextb').each(function () {
+                    //Compile a list of Values to post
                     textValues = textValues + $(this).val() + ","
-                    badgeLi = badgeLi.next();
-                    badgeLi.children("span").text($(this).val());
                 })
+                //alert("Current Textdiv Id is: " + divSAText + " QATid: " + QATid + " Values Found Are: " + textValues);
                 // ------------ Make the Ajax Call ---------------------------------------------
                 $.ajax({
                     url: '@Url.Action("saveSelAns", "Question")',
@@ -670,11 +669,17 @@
                     }
                 }).done(function (d) {
                     //Execute this code After the Ajax call completes successfully
-                    //$("#accordion").append(d);
-                    //alert('Save Resullt: ' + d)
-                    $(this).parent().children('.selAnswerTextb').each(function () {
-                        textValues = textValues + $(this).val() + ","
+
+                    // Refresh the Labels on the front end with the newly saved values
+                    //alert("The parent DIV Id is: " + $(this).parent().prop("id"));
+                    // If we are dealing with a x-Val-Range Question, replace one option for a new one
+
+                    $(divSAText).find('.selAnswerTextb').each(function () {
+                        alert("Refreshing Badges from [" + badgeLi.next().children("span").first().text() + "] to [" + $(this).val() + "]");
+                        badgeLi = badgeLi.next();
+                        badgeLi.children("span").first().text($(this).val());
                     })
+
 
                 });
 
@@ -682,12 +687,6 @@
                 $(divSAText).hide();
                 // Show The "Labels" < Division >
                 $(divSALabel).show();
-
-
-                //var buttonId = $(this).prop("id");        //Not Needed Anymore
-                //var sectionNbr = buttonId.substring(7);   //Not Needed Anymore
-                //alert("You clicked the Save Button Id: " + $(this).prop("id") + "[" + ATid + "]");
-
             });
             //------------ BUTTON CANCEL -----------------------------------------------------
             $('.cancelSA').click(function (e) {

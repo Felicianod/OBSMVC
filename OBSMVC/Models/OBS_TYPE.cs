@@ -17,9 +17,9 @@ namespace OBSMVC.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public OBS_TYPE()
         {
-            this.OBS_COLLECT_FORM_TMPLT = new HashSet<OBS_COLLECT_FORM_TMPLT>();
             this.OBS_INST = new HashSet<OBS_INST>();
             this.OBS_TYPE_SUB_TYPES = new HashSet<OBS_TYPE_SUB_TYPES>();
+            this.OBS_COLLECT_FORM_TMPLT = new HashSet<OBS_COLLECT_FORM_TMPLT>();
         }
     
         public int obs_type_id { get; set; }
@@ -31,10 +31,10 @@ namespace OBSMVC.Models
     
         public virtual OBS_SUPER_TYPE OBS_SUPER_TYPE { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OBS_COLLECT_FORM_TMPLT> OBS_COLLECT_FORM_TMPLT { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_INST> OBS_INST { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_TYPE_SUB_TYPES> OBS_TYPE_SUB_TYPES { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OBS_COLLECT_FORM_TMPLT> OBS_COLLECT_FORM_TMPLT { get; set; }
     }
 }

@@ -38,9 +38,9 @@ namespace OBSMVC.Models
         public virtual ICollection<OBS_COL_FORM_INST_MM_ATTACH> OBS_COL_FORM_INST_MM_ATTACH { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_COL_FORM_INST_SIGS> OBS_COL_FORM_INST_SIGS { get; set; }
-        public virtual OBS_COLLECT_FORM_TMPLT OBS_COLLECT_FORM_TMPLT { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_INST_EVENT_LOG> OBS_INST_EVENT_LOG { get; set; }
         public virtual OBS_INST OBS_INST { get; set; }
+        public virtual OBS_COLLECT_FORM_TMPLT OBS_COLLECT_FORM_TMPLT { get; set; }
     }
 }

@@ -18,19 +18,18 @@
         <AssociationConnector Association="Models.relationship43" />
         <AssociationConnector Association="Models.rel_metadata_quest_assgnd" />
         <EntityTypeShape EntityType="Models.OBS_ANS_TYPE" Width="1.5" PointX="0.75" PointY="10" />
-        <EntityTypeShape EntityType="Models.OBS_APP_EVENT_LOG" Width="1.5" PointX="3.375" PointY="15.625" />
-        <EntityTypeShape EntityType="Models.OBS_APPLICATION" Width="1.5" PointX="5.375" PointY="15.625" />
-        <EntityTypeShape EntityType="Models.OBS_ATTRIB_DATA_TYPES" Width="1.5" PointX="2.875" PointY="22.75" />
+        <EntityTypeShape EntityType="Models.OBS_APP_EVENT_LOG" Width="1.5" PointX="2.75" PointY="15.125" />
+        <EntityTypeShape EntityType="Models.OBS_APPLICATION" Width="1.5" PointX="4.375" PointY="15.625" />
+        <EntityTypeShape EntityType="Models.OBS_ATTRIB_DATA_TYPES" Width="1.5" PointX="6.125" PointY="14.5" />
         <EntityTypeShape EntityType="Models.OBS_COL_FORM_INST_ATTRIB_VALS" Width="1.5" PointX="15.75" PointY="3.875" />
         <EntityTypeShape EntityType="Models.OBS_COL_FORM_INST_MM_ATTACH" Width="1.5" PointX="17.75" PointY="13" />
         <EntityTypeShape EntityType="Models.OBS_COL_FORM_INST_SIGS" Width="1.5" PointX="14.75" PointY="10.375" />
         <EntityTypeShape EntityType="Models.OBS_COL_FORM_TMPLT_ATTRIBS" Width="1.5" PointX="9.875" PointY="0.5" />
         <EntityTypeShape EntityType="Models.OBS_COLLECT_FORM_INST" Width="1.5" PointX="12.5" PointY="6" />
-        <EntityTypeShape EntityType="Models.OBS_COLLECT_FORM_TMPLT" Width="1.75" PointX="5.125" PointY="1.875" />
         <EntityTypeShape EntityType="Models.OBS_EVENT_TYPE" Width="1.5" PointX="16.5" PointY="17.125" />
-        <EntityTypeShape EntityType="Models.OBS_FORM_ATTRIBS" Width="1.5" PointX="5.125" PointY="22.125" />
+        <EntityTypeShape EntityType="Models.OBS_FORM_ATTRIBS" Width="1.5" PointX="8.25" PointY="13.375" />
         <EntityTypeShape EntityType="Models.OBS_FORM_SECTION" Width="1.5" PointX="10.875" PointY="13.75" />
-        <EntityTypeShape EntityType="Models.OBS_INST" Width="1.5" PointX="11.125" PointY="2.625" />
+        <EntityTypeShape EntityType="Models.OBS_INST" Width="1.5" PointX="10.75" PointY="2.625" />
         <EntityTypeShape EntityType="Models.OBS_INST_EVENT_LOG" Width="1.5" PointX="18.75" PointY="4.875" />
         <EntityTypeShape EntityType="Models.OBS_MULTIMEDIA_TYPE" Width="1.5" PointX="15.5" PointY="20.5" />
         <EntityTypeShape EntityType="Models.OBS_RVW_FORM_INST" Width="1.5" PointX="15.5" PointY="7.25" />
@@ -40,19 +39,15 @@
         <AssociationConnector Association="Models.relationship39" />
         <AssociationConnector Association="Models.relationship40" />
         <AssociationConnector Association="Models.relationship35" />
-        <AssociationConnector Association="Models.relationship9" />
         <AssociationConnector Association="Models.relationship13" />
         <AssociationConnector Association="Models.relationship27" />
         <AssociationConnector Association="Models.relationship28" />
         <AssociationConnector Association="Models.relationship30" />
         <AssociationConnector Association="Models.relationship31" />
         <AssociationConnector Association="Models.relationship33" />
-        <AssociationConnector Association="Models.relationship10" />
         <AssociationConnector Association="Models.relationship11" />
-        <AssociationConnector Association="Models.relationship14" />
         <AssociationConnector Association="Models.relationship21" />
         <AssociationConnector Association="Models.relationship23" />
-        <AssociationConnector Association="Models.rel_type_collect_form" />
         <AssociationConnector Association="Models.relationship22" />
         <AssociationConnector Association="Models.relationship19" />
         <AssociationConnector Association="Models.relationship20" />
@@ -63,7 +58,6 @@
         <EntityTypeShape EntityType="Models.OBS_QUEST_SLCT_ANS" Width="1.5" PointX="9.125" PointY="9.75" />
         <AssociationConnector Association="Models.relationship44" />
         <EntityTypeShape EntityType="Models.OBS_COL_FORM_QUESTIONS" Width="1.5" PointX="20.125" PointY="9.625" />
-        <AssociationConnector Association="Models.rel_col_from_questions" />
         <AssociationConnector Association="Models.rel_section_from_question" />
         <AssociationConnector Association="Models.rel_sub_section_form_question" />
         <AssociationConnector Association="Models.relationship42" />
@@ -73,7 +67,13 @@
         <AssociationConnector Association="Models.rel_quest_assgnd_meta" />
         <EntityTypeShape EntityType="Models.DSC_CUSTOMER" Width="1.5" PointX="0.75" PointY="14.125" />
         <AssociationConnector Association="Models.relationship34" />
+        <EntityTypeShape EntityType="Models.OBS_COLLECT_FORM_TMPLT" Width="1.5" PointX="5.25" PointY="0.5" />
         <AssociationConnector Association="Models.relationship8" />
+        <AssociationConnector Association="Models.relationship9" />
+        <AssociationConnector Association="Models.rel_col_from_questions" />
+        <AssociationConnector Association="Models.relationship10" />
+        <AssociationConnector Association="Models.relationship14" />
+        <AssociationConnector Association="Models.rel_type_collect_form" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

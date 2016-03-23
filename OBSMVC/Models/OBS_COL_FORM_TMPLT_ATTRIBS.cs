@@ -22,7 +22,7 @@ namespace OBSMVC.Models
         public System.DateTime obs_cfta_eff_st_dt { get; set; }
         public System.DateTime obs_cfta_eff_end_dt { get; set; }
     
-        public virtual OBS_COLLECT_FORM_TMPLT OBS_COLLECT_FORM_TMPLT { get; set; }
         public virtual OBS_FORM_ATTRIBS OBS_FORM_ATTRIBS { get; set; }
+        public virtual OBS_COLLECT_FORM_TMPLT OBS_COLLECT_FORM_TMPLT { get; set; }
     }
 }

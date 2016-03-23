@@ -119,7 +119,7 @@ namespace OBSMVC.Controllers
                                  [Bind(Prefix = "questn")] OBS_QUESTION questionHdr, string ans_type_list)
         {
 
-            string temp = postedData["ans_type_list"];
+            string posted_ans_type_list = postedData["ans_type_list"];
             //string ans_type_list = "6~true~yes~no~maybe,10~false~1~2~3~4~5";
             //ans_type_list format: at_id~default~sel_ans,
             //                        6~true~yes~no~maybe,
@@ -165,10 +165,10 @@ namespace OBSMVC.Controllers
                             db.SaveChanges();
                         }
 
-                        if (!String.IsNullOrEmpty(temp))
+                        if (!String.IsNullOrEmpty(posted_ans_type_list))
                         {
                             string[] splitter = { "," };
-                            string[] passed_sel_ans_info = temp.Split(splitter, StringSplitOptions.RemoveEmptyEntries);//all passed selectable answers data
+                            string[] passed_sel_ans_info = posted_ans_type_list.Split(splitter, StringSplitOptions.RemoveEmptyEntries);//all passed selectable answers data
                             foreach (string s in passed_sel_ans_info)
                             {
                                 string[] splitby = { "~" };
@@ -308,6 +308,12 @@ namespace OBSMVC.Controllers
                     templateList.Add("1,2,3,4,5");
                     templateList.Add("NEVER,RARELY,SOMETIMES,OFTEN,ALWAYS");
                     templateList.Add("STRONGLY DISAGREE,DISAGREE,N/A,AGREE,STRONGLY AGREE");
+                    break;
+                case "MS List":
+                    templateList.Add("NO TEMPLATES AVAILABLE");
+                    break;
+                case "SS List":
+                    templateList.Add("NO TEMPLATES AVAILABLE");
                     break;
                 default:
                     templateList.Add("NO TEMPLATES NEEDED");

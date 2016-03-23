@@ -328,11 +328,12 @@ namespace OBSMVC.Controllers
         public ActionResult CreateForm(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT, FormCollection formData)
         {
             string data_from_form = formData["formQuestions"];
+            string is_published = formData["isPublished"];
             int cft_id = -1;
             bool hasQuestions = !String.IsNullOrEmpty(data_from_form);
             if(hasQuestions)
             {
-                cft_id = saveForm(oBS_COLLECT_FORM_TMPLT, data_from_form);
+                cft_id = saveForm(oBS_COLLECT_FORM_TMPLT, data_from_form, is_published);
             }
 
             return RedirectToAction("Details", new { id =cft_id});
@@ -780,7 +781,7 @@ namespace OBSMVC.Controllers
             return fullFuncList;
         }
 
-        private int saveForm(OBS_COLLECT_FORM_TMPLT template_from_form, string form_questions_from_gui)
+        private int saveForm(OBS_COLLECT_FORM_TMPLT template_from_form, string form_questions_from_gui, string isPublished)
         {
             if(db.OBS_COLLECT_FORM_TMPLT.Where(item =>item.obs_cft_title == template_from_form.obs_cft_title).Count() > 0)
             {//we need to check if title passed from user is unique. if it already exists, we need to return the error message back to the screen
@@ -807,7 +808,12 @@ namespace OBSMVC.Controllers
                     template_to_save.obs_cft_eff_end_dt = (template_from_form.obs_cft_eff_end_dt == null) || (template_from_form.obs_cft_eff_end_dt < Convert.ToDateTime("01/01/2000")) ? Convert.ToDateTime("12/31/2060") : template_from_form.obs_cft_eff_end_dt;
                     template_to_save.obs_cft_added_dtm = DateTime.Now;
                     template_to_save.obs_cft_added_uid = User.Identity.Name;
-                    template_to_save.obs_cft_last_saved_dtm = DateTime.Now;                   
+                    template_to_save.obs_cft_last_saved_dtm = DateTime.Now;
+                    if (isPublished == "true")
+                    {
+                        template_to_save.obs_cft_pub_by_uid = User.Identity.Name;
+                        template_to_save.obs_cft_pub_dtm = DateTime.Now;
+                    }                  
                     db.OBS_COLLECT_FORM_TMPLT.Add(template_to_save);
                     db.SaveChanges();
 

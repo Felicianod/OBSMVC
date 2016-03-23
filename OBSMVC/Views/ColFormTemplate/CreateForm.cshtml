@@ -133,7 +133,7 @@ ol.targetList {
 @*\\ ---- End of Hodden Control Fields section ----- *@
 
 
-<form class="form-horizontal" role="form" method="post" >
+<form class="form-horizontal" id="CreateForm" role="form" method="post" >
   @Html.AntiForgeryToken()
   <div class="panel panel-default">
      @* - - - - - - - - - - - - - - <<<<< FORM HEADER >>>>> - - - - - - - - - - - - - *@
@@ -326,13 +326,15 @@ ol.targetList {
 
      @*\\ - - - - - - - - - - - - - <<<<< END OF FORM BODY >>>>> - - - - - - - - - - - - //*@
 
-     @*// - - - - - - - - - - - - - <<<<< FORM FOTTER >>>>> - - - - - - - - - - - - \\*@
+     @*// - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - \\*@
      <div class="row">
+         <input type="hidden" id="isPublished" name="isPublished" value="false">
         <div class="col-md-offset-2 col-md-10">
            <input id="btnSaveForm" type="submit" value="Save Form" @*disabled="disabled"*@ />
+            <input id="btnPublishForm" type="button" value="Publish Form" onclick="PostMe()" />
         </div>
      </div>
-     @*\\ - - - - - - - - - - - - - <<<<< FORM FOTTER >>>>> - - - - - - - - - - - - //*@
+     @*\\ - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - //*@
 
 
 
@@ -357,6 +359,12 @@ ol.targetList {
 @* ######################  J A V A    S C R I P T S    S E C T I O N   #################################### *@
 @****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
 <script>
+    function PostMe() {
+     
+        document.getElementById("isPublished").value = "true"
+        document.getElementById("CreateForm").submit();
+    }
+
     $(document).ready(function () {
         $("input:text").focus(function () { $(this).select(); });
 

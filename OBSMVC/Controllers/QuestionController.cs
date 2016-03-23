@@ -308,7 +308,13 @@ namespace OBSMVC.Controllers
                     templateList.Add("1,2,3,4,5");
                     templateList.Add("NEVER,RARELY,SOMETIMES,OFTEN,ALWAYS");
                     templateList.Add("STRONGLY DISAGREE,DISAGREE,N/A,AGREE,STRONGLY AGREE");
-                    break;              
+                    break;
+                case "MS List":
+                    templateList.Add("NO TEMPLATES AVAILABLE");
+                    break;
+                case "SS List":
+                    templateList.Add("NO TEMPLATES AVAILABLE");
+                    break;
                 default:
                     templateList.Add("NO TEMPLATES NEEDED");
                     break;

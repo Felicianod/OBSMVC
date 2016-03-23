@@ -23,9 +23,9 @@ namespace OBSMVC.Models
         public Nullable<short> obs_col_form_quest_wgt { get; set; }
         public string obs_col_form_quest_na_yn { get; set; }
     
-        public virtual OBS_COLLECT_FORM_TMPLT OBS_COLLECT_FORM_TMPLT { get; set; }
         public virtual OBS_FORM_SECTION OBS_FORM_SECTION { get; set; }
         public virtual OBS_FORM_SECTION OBS_FORM_SECTION1 { get; set; }
         public virtual OBS_QUEST_ANS_TYPES OBS_QUEST_ANS_TYPES { get; set; }
+        public virtual OBS_COLLECT_FORM_TMPLT OBS_COLLECT_FORM_TMPLT { get; set; }
     }
 }

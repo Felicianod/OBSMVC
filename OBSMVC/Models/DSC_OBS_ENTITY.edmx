@@ -1080,9 +1080,9 @@
           <Property Name="obs_type_eff_st_dt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="obs_type_eff_end_dt" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="OBS_SUPER_TYPE" Relationship="Self.obs_super_type_type" FromRole="OBS_TYPE" ToRole="OBS_SUPER_TYPE" />
-          <NavigationProperty Name="OBS_COLLECT_FORM_TMPLT" Relationship="Models.rel_type_collect_form" FromRole="OBS_TYPE" ToRole="OBS_COLLECT_FORM_TMPLT" />
           <NavigationProperty Name="OBS_INST" Relationship="Models.relationship19" FromRole="OBS_TYPE" ToRole="OBS_INST" />
           <NavigationProperty Name="OBS_TYPE_SUB_TYPES" Relationship="Models.rel_obs_type_sub_type" FromRole="OBS_TYPE" ToRole="OBS_TYPE_SUB_TYPES" />
+          <NavigationProperty Name="OBS_COLLECT_FORM_TMPLT" Relationship="Models.rel_type_collect_form" FromRole="OBS_TYPE" ToRole="OBS_COLLECT_FORM_TMPLT" />
         </EntityType>
         <Association Name="relationship45">
           <End Role="DSC_LC" Type="Self.DSC_LC" Multiplicity="0..1" />
@@ -1142,7 +1142,6 @@
           <EntitySet Name="OBS_COL_FORM_INST_SIGS" EntityType="Models.OBS_COL_FORM_INST_SIGS" />
           <EntitySet Name="OBS_COL_FORM_TMPLT_ATTRIBS" EntityType="Models.OBS_COL_FORM_TMPLT_ATTRIBS" />
           <EntitySet Name="OBS_COLLECT_FORM_INST" EntityType="Models.OBS_COLLECT_FORM_INST" />
-          <EntitySet Name="OBS_COLLECT_FORM_TMPLT" EntityType="Models.OBS_COLLECT_FORM_TMPLT" />
           <EntitySet Name="OBS_EVENT_TYPE" EntityType="Models.OBS_EVENT_TYPE" />
           <EntitySet Name="OBS_FORM_ATTRIBS" EntityType="Models.OBS_FORM_ATTRIBS" />
           <EntitySet Name="OBS_FORM_SECTION" EntityType="Models.OBS_FORM_SECTION" />
@@ -1171,10 +1170,6 @@
             <End Role="DSC_LC" EntitySet="DSC_LC" />
             <End Role="OBS_INST" EntitySet="OBS_INST" />
           </AssociationSet>
-          <AssociationSet Name="relationship9" Association="Models.relationship9">
-            <End Role="DSC_LC" EntitySet="DSC_LC" />
-            <End Role="OBS_COLLECT_FORM_TMPLT" EntitySet="OBS_COLLECT_FORM_TMPLT" />
-          </AssociationSet>
           <AssociationSet Name="relationship13" Association="Models.relationship13">
             <End Role="OBS_ATTRIB_DATA_TYPES" EntitySet="OBS_ATTRIB_DATA_TYPES" />
             <End Role="OBS_FORM_ATTRIBS" EntitySet="OBS_FORM_ATTRIBS" />
@@ -1199,17 +1194,9 @@
             <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
             <End Role="OBS_COL_FORM_INST_SIGS" EntitySet="OBS_COL_FORM_INST_SIGS" />
           </AssociationSet>
-          <AssociationSet Name="relationship10" Association="Models.relationship10">
-            <End Role="OBS_COLLECT_FORM_TMPLT" EntitySet="OBS_COLLECT_FORM_TMPLT" />
-            <End Role="OBS_COL_FORM_TMPLT_ATTRIBS" EntitySet="OBS_COL_FORM_TMPLT_ATTRIBS" />
-          </AssociationSet>
           <AssociationSet Name="relationship11" Association="Models.relationship11">
             <End Role="OBS_FORM_ATTRIBS" EntitySet="OBS_FORM_ATTRIBS" />
             <End Role="OBS_COL_FORM_TMPLT_ATTRIBS" EntitySet="OBS_COL_FORM_TMPLT_ATTRIBS" />
-          </AssociationSet>
-          <AssociationSet Name="relationship14" Association="Models.relationship14">
-            <End Role="OBS_COLLECT_FORM_TMPLT" EntitySet="OBS_COLLECT_FORM_TMPLT" />
-            <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
           </AssociationSet>
           <AssociationSet Name="relationship21" Association="Models.relationship21">
             <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
@@ -1218,10 +1205,6 @@
           <AssociationSet Name="relationship23" Association="Models.relationship23">
             <End Role="OBS_INST" EntitySet="OBS_INST" />
             <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
-          </AssociationSet>
-          <AssociationSet Name="rel_type_collect_form" Association="Models.rel_type_collect_form">
-            <End Role="OBS_TYPE" EntitySet="OBS_TYPE" />
-            <End Role="OBS_COLLECT_FORM_TMPLT" EntitySet="OBS_COLLECT_FORM_TMPLT" />
           </AssociationSet>
           <AssociationSet Name="relationship22" Association="Models.relationship22">
             <End Role="OBS_EVENT_TYPE" EntitySet="OBS_EVENT_TYPE" />
@@ -1257,10 +1240,6 @@
             <End Role="OBS_QUEST_SLCT_ANS" EntitySet="OBS_QUEST_SLCT_ANS" />
           </AssociationSet>
           <EntitySet Name="OBS_COL_FORM_QUESTIONS" EntityType="Models.OBS_COL_FORM_QUESTIONS" />
-          <AssociationSet Name="rel_col_from_questions" Association="Models.rel_col_from_questions">
-            <End Role="OBS_COLLECT_FORM_TMPLT" EntitySet="OBS_COLLECT_FORM_TMPLT" />
-            <End Role="OBS_COL_FORM_QUESTIONS" EntitySet="OBS_COL_FORM_QUESTIONS" />
-          </AssociationSet>
           <AssociationSet Name="rel_section_from_question" Association="Models.rel_section_from_question">
             <End Role="OBS_FORM_SECTION" EntitySet="OBS_FORM_SECTION" />
             <End Role="OBS_COL_FORM_QUESTIONS" EntitySet="OBS_COL_FORM_QUESTIONS" />
@@ -1291,8 +1270,29 @@
             <End Role="DSC_CUSTOMER" EntitySet="DSC_CUSTOMER" />
             <End Role="OBS_INST" EntitySet="OBS_INST" />
           </AssociationSet>
+          <EntitySet Name="OBS_COLLECT_FORM_TMPLT" EntityType="Models.OBS_COLLECT_FORM_TMPLT" />
           <AssociationSet Name="relationship8" Association="Models.relationship8">
             <End Role="DSC_CUSTOMER" EntitySet="DSC_CUSTOMER" />
+            <End Role="OBS_COLLECT_FORM_TMPLT" EntitySet="OBS_COLLECT_FORM_TMPLT" />
+          </AssociationSet>
+          <AssociationSet Name="relationship9" Association="Models.relationship9">
+            <End Role="DSC_LC" EntitySet="DSC_LC" />
+            <End Role="OBS_COLLECT_FORM_TMPLT" EntitySet="OBS_COLLECT_FORM_TMPLT" />
+          </AssociationSet>
+          <AssociationSet Name="rel_col_from_questions" Association="Models.rel_col_from_questions">
+            <End Role="OBS_COLLECT_FORM_TMPLT" EntitySet="OBS_COLLECT_FORM_TMPLT" />
+            <End Role="OBS_COL_FORM_QUESTIONS" EntitySet="OBS_COL_FORM_QUESTIONS" />
+          </AssociationSet>
+          <AssociationSet Name="relationship10" Association="Models.relationship10">
+            <End Role="OBS_COLLECT_FORM_TMPLT" EntitySet="OBS_COLLECT_FORM_TMPLT" />
+            <End Role="OBS_COL_FORM_TMPLT_ATTRIBS" EntitySet="OBS_COL_FORM_TMPLT_ATTRIBS" />
+          </AssociationSet>
+          <AssociationSet Name="relationship14" Association="Models.relationship14">
+            <End Role="OBS_COLLECT_FORM_TMPLT" EntitySet="OBS_COLLECT_FORM_TMPLT" />
+            <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
+          </AssociationSet>
+          <AssociationSet Name="rel_type_collect_form" Association="Models.rel_type_collect_form">
+            <End Role="OBS_TYPE" EntitySet="OBS_TYPE" />
             <End Role="OBS_COLLECT_FORM_TMPLT" EntitySet="OBS_COLLECT_FORM_TMPLT" />
           </AssociationSet>
         </EntityContainer>
@@ -1443,8 +1443,8 @@
           <Property Name="obs_cfta_disp_order" Type="Int16" Nullable="false" />
           <Property Name="obs_cfta_eff_st_dt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="obs_cfta_eff_end_dt" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="OBS_COLLECT_FORM_TMPLT" Relationship="Models.relationship10" FromRole="OBS_COL_FORM_TMPLT_ATTRIBS" ToRole="OBS_COLLECT_FORM_TMPLT" />
           <NavigationProperty Name="OBS_FORM_ATTRIBS" Relationship="Models.relationship11" FromRole="OBS_COL_FORM_TMPLT_ATTRIBS" ToRole="OBS_FORM_ATTRIBS" />
+          <NavigationProperty Name="OBS_COLLECT_FORM_TMPLT" Relationship="Models.relationship10" FromRole="OBS_COL_FORM_TMPLT_ATTRIBS" ToRole="OBS_COLLECT_FORM_TMPLT" />
         </EntityType>
         <EntityType Name="OBS_COLLECT_FORM_INST">
           <Key>
@@ -1461,37 +1461,9 @@
           <NavigationProperty Name="OBS_COL_FORM_INST_ATTRIB_VALS" Relationship="Models.relationship28" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_COL_FORM_INST_ATTRIB_VALS" />
           <NavigationProperty Name="OBS_COL_FORM_INST_MM_ATTACH" Relationship="Models.relationship30" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_COL_FORM_INST_MM_ATTACH" />
           <NavigationProperty Name="OBS_COL_FORM_INST_SIGS" Relationship="Models.relationship33" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_COL_FORM_INST_SIGS" />
-          <NavigationProperty Name="OBS_COLLECT_FORM_TMPLT" Relationship="Models.relationship14" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_COLLECT_FORM_TMPLT" />
           <NavigationProperty Name="OBS_INST_EVENT_LOG" Relationship="Models.relationship21" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_INST_EVENT_LOG" />
           <NavigationProperty Name="OBS_INST" Relationship="Models.relationship23" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_INST" />
-        </EntityType>
-        <EntityType Name="OBS_COLLECT_FORM_TMPLT">
-          <Key>
-            <PropertyRef Name="obs_cft_id" />
-          </Key>
-          <Property Name="obs_cft_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="obs_type_id" Type="Int32" Nullable="false" />
-          <Property Name="dsc_cust_id" Type="Int32" Nullable="false" />
-          <Property Name="dsc_lc_id" Type="Int32" Nullable="false" />
-          <Property Name="obs_cft_nbr" Type="Int16" Nullable="false" />
-          <Property Name="obs_cft_ver" Type="Int16" Nullable="false" />
-          <Property Name="obs_cft_eff_st_dt" Type="DateTime" Precision="3" />
-          <Property Name="obs_cft_eff_end_dt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="obs_cft_title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="obs_cft_subtitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="DSC_LC" Relationship="Models.relationship9" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="DSC_LC" />
-          <NavigationProperty Name="OBS_COL_FORM_TMPLT_ATTRIBS" Relationship="Models.relationship10" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="OBS_COL_FORM_TMPLT_ATTRIBS" />
-          <NavigationProperty Name="OBS_COLLECT_FORM_INST" Relationship="Models.relationship14" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="OBS_COLLECT_FORM_INST" />
-          <NavigationProperty Name="OBS_TYPE" Relationship="Models.rel_type_collect_form" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="OBS_TYPE" />
-          <NavigationProperty Name="OBS_COL_FORM_QUESTIONS" Relationship="Models.rel_col_from_questions" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="OBS_COL_FORM_QUESTIONS" />
-          <Property Name="obs_cft_last_saved_dtm" Type="DateTime" Precision="3" />
-          <Property Name="obs_cft_pub_dtm" Type="DateTime" Precision="3" />
-          <Property Name="obs_cft_added_uid" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
-          <Property Name="obs_cft_added_dtm" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="obs_cft_upd_uid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
-          <Property Name="obs_cft_upd_dtm" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="DSC_CUSTOMER" Relationship="Models.relationship8" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="DSC_CUSTOMER" />
-          <Property Name="obs_cft_pub_by_uid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OBS_COLLECT_FORM_TMPLT" Relationship="Models.relationship14" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_COLLECT_FORM_TMPLT" />
         </EntityType>
         <EntityType Name="OBS_EVENT_TYPE">
           <Key>
@@ -1655,18 +1627,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="relationship9">
-          <End Type="Models.DSC_LC" Role="DSC_LC" Multiplicity="1" />
-          <End Type="Models.OBS_COLLECT_FORM_TMPLT" Role="OBS_COLLECT_FORM_TMPLT" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DSC_LC">
-              <PropertyRef Name="dsc_lc_id" />
-            </Principal>
-            <Dependent Role="OBS_COLLECT_FORM_TMPLT">
-              <PropertyRef Name="dsc_lc_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="relationship13">
           <End Type="Models.OBS_ATTRIB_DATA_TYPES" Role="OBS_ATTRIB_DATA_TYPES" Multiplicity="1" />
           <End Type="Models.OBS_FORM_ATTRIBS" Role="OBS_FORM_ATTRIBS" Multiplicity="*" />
@@ -1739,18 +1699,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="relationship10">
-          <End Type="Models.OBS_COLLECT_FORM_TMPLT" Role="OBS_COLLECT_FORM_TMPLT" Multiplicity="1" />
-          <End Type="Models.OBS_COL_FORM_TMPLT_ATTRIBS" Role="OBS_COL_FORM_TMPLT_ATTRIBS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_COLLECT_FORM_TMPLT">
-              <PropertyRef Name="obs_cft_id" />
-            </Principal>
-            <Dependent Role="OBS_COL_FORM_TMPLT_ATTRIBS">
-              <PropertyRef Name="obs_cft_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="relationship11">
           <End Type="Models.OBS_FORM_ATTRIBS" Role="OBS_FORM_ATTRIBS" Multiplicity="1" />
           <End Type="Models.OBS_COL_FORM_TMPLT_ATTRIBS" Role="OBS_COL_FORM_TMPLT_ATTRIBS" Multiplicity="*" />
@@ -1760,18 +1708,6 @@
             </Principal>
             <Dependent Role="OBS_COL_FORM_TMPLT_ATTRIBS">
               <PropertyRef Name="obs_form_attrib_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="relationship14">
-          <End Type="Models.OBS_COLLECT_FORM_TMPLT" Role="OBS_COLLECT_FORM_TMPLT" Multiplicity="1" />
-          <End Type="Models.OBS_COLLECT_FORM_INST" Role="OBS_COLLECT_FORM_INST" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_COLLECT_FORM_TMPLT">
-              <PropertyRef Name="obs_cft_id" />
-            </Principal>
-            <Dependent Role="OBS_COLLECT_FORM_INST">
-              <PropertyRef Name="obs_cft_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1796,18 +1732,6 @@
             </Principal>
             <Dependent Role="OBS_COLLECT_FORM_INST">
               <PropertyRef Name="obs_inst_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="rel_type_collect_form">
-          <End Type="Models.OBS_TYPE" Role="OBS_TYPE" Multiplicity="1" />
-          <End Type="Models.OBS_COLLECT_FORM_TMPLT" Role="OBS_COLLECT_FORM_TMPLT" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_TYPE">
-              <PropertyRef Name="obs_type_id" />
-            </Principal>
-            <Dependent Role="OBS_COLLECT_FORM_TMPLT">
-              <PropertyRef Name="obs_type_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1933,23 +1857,11 @@
           <Property Name="obs_col_form_quest_order" Type="Int16" Nullable="false" />
           <Property Name="obs_col_form_quest_wgt" Type="Int16" />
           <Property Name="obs_col_form_quest_na_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="OBS_COLLECT_FORM_TMPLT" Relationship="Models.rel_col_from_questions" FromRole="OBS_COL_FORM_QUESTIONS" ToRole="OBS_COLLECT_FORM_TMPLT" />
           <NavigationProperty Name="OBS_FORM_SECTION" Relationship="Models.rel_section_from_question" FromRole="OBS_COL_FORM_QUESTIONS" ToRole="OBS_FORM_SECTION" />
           <NavigationProperty Name="OBS_FORM_SECTION1" Relationship="Models.rel_sub_section_form_question" FromRole="OBS_COL_FORM_QUESTIONS" ToRole="OBS_FORM_SECTION" />
           <NavigationProperty Name="OBS_QUEST_ANS_TYPES" Relationship="Models.relationship42" FromRole="OBS_COL_FORM_QUESTIONS" ToRole="OBS_QUEST_ANS_TYPES" />
+          <NavigationProperty Name="OBS_COLLECT_FORM_TMPLT" Relationship="Models.rel_col_from_questions" FromRole="OBS_COL_FORM_QUESTIONS" ToRole="OBS_COLLECT_FORM_TMPLT" />
         </EntityType>
-        <Association Name="rel_col_from_questions">
-          <End Type="Models.OBS_COLLECT_FORM_TMPLT" Role="OBS_COLLECT_FORM_TMPLT" Multiplicity="1" />
-          <End Type="Models.OBS_COL_FORM_QUESTIONS" Role="OBS_COL_FORM_QUESTIONS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_COLLECT_FORM_TMPLT">
-              <PropertyRef Name="obs_cft_id" />
-            </Principal>
-            <Dependent Role="OBS_COL_FORM_QUESTIONS">
-              <PropertyRef Name="obs_cft_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="rel_section_from_question">
           <End Type="Models.OBS_FORM_SECTION" Role="OBS_FORM_SECTION" Multiplicity="1" />
           <End Type="Models.OBS_COL_FORM_QUESTIONS" Role="OBS_COL_FORM_QUESTIONS" Multiplicity="*" />
@@ -2065,6 +1977,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="OBS_COLLECT_FORM_TMPLT">
+          <Key>
+            <PropertyRef Name="obs_cft_id" />
+          </Key>
+          <Property Name="obs_cft_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="obs_type_id" Type="Int32" Nullable="false" />
+          <Property Name="dsc_cust_id" Type="Int32" Nullable="false" />
+          <Property Name="dsc_lc_id" Type="Int32" Nullable="false" />
+          <Property Name="obs_cft_title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="obs_cft_subtitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="obs_cft_nbr" Type="Int16" Nullable="false" />
+          <Property Name="obs_cft_ver" Type="Int16" Nullable="false" />
+          <Property Name="obs_cft_last_saved_dtm" Type="DateTime" Precision="3" />
+          <Property Name="obs_cft_pub_by_uid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="obs_cft_pub_dtm" Type="DateTime" Precision="3" />
+          <Property Name="obs_cft_eff_st_dt" Type="DateTime" Precision="3" />
+          <Property Name="obs_cft_eff_end_dt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="obs_cft_added_uid" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="obs_cft_added_dtm" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="obs_cft_upd_uid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="obs_cft_upd_dtm" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="DSC_CUSTOMER" Relationship="Models.relationship8" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="DSC_CUSTOMER" />
+          <NavigationProperty Name="DSC_LC" Relationship="Models.relationship9" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="DSC_LC" />
+          <NavigationProperty Name="OBS_COL_FORM_QUESTIONS" Relationship="Models.rel_col_from_questions" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="OBS_COL_FORM_QUESTIONS" />
+          <NavigationProperty Name="OBS_COL_FORM_TMPLT_ATTRIBS" Relationship="Models.relationship10" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="OBS_COL_FORM_TMPLT_ATTRIBS" />
+          <NavigationProperty Name="OBS_COLLECT_FORM_INST" Relationship="Models.relationship14" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="OBS_COLLECT_FORM_INST" />
+          <NavigationProperty Name="OBS_TYPE" Relationship="Models.rel_type_collect_form" FromRole="OBS_COLLECT_FORM_TMPLT" ToRole="OBS_TYPE" />
+        </EntityType>
         <Association Name="relationship8">
           <End Type="Models.DSC_CUSTOMER" Role="DSC_CUSTOMER" Multiplicity="1" />
           <End Type="Models.OBS_COLLECT_FORM_TMPLT" Role="OBS_COLLECT_FORM_TMPLT" Multiplicity="*" />
@@ -2074,6 +2014,66 @@
             </Principal>
             <Dependent Role="OBS_COLLECT_FORM_TMPLT">
               <PropertyRef Name="dsc_cust_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="relationship9">
+          <End Type="Models.DSC_LC" Role="DSC_LC" Multiplicity="1" />
+          <End Type="Models.OBS_COLLECT_FORM_TMPLT" Role="OBS_COLLECT_FORM_TMPLT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DSC_LC">
+              <PropertyRef Name="dsc_lc_id" />
+            </Principal>
+            <Dependent Role="OBS_COLLECT_FORM_TMPLT">
+              <PropertyRef Name="dsc_lc_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rel_col_from_questions">
+          <End Type="Models.OBS_COLLECT_FORM_TMPLT" Role="OBS_COLLECT_FORM_TMPLT" Multiplicity="1" />
+          <End Type="Models.OBS_COL_FORM_QUESTIONS" Role="OBS_COL_FORM_QUESTIONS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_COLLECT_FORM_TMPLT">
+              <PropertyRef Name="obs_cft_id" />
+            </Principal>
+            <Dependent Role="OBS_COL_FORM_QUESTIONS">
+              <PropertyRef Name="obs_cft_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="relationship10">
+          <End Type="Models.OBS_COLLECT_FORM_TMPLT" Role="OBS_COLLECT_FORM_TMPLT" Multiplicity="1" />
+          <End Type="Models.OBS_COL_FORM_TMPLT_ATTRIBS" Role="OBS_COL_FORM_TMPLT_ATTRIBS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_COLLECT_FORM_TMPLT">
+              <PropertyRef Name="obs_cft_id" />
+            </Principal>
+            <Dependent Role="OBS_COL_FORM_TMPLT_ATTRIBS">
+              <PropertyRef Name="obs_cft_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="relationship14">
+          <End Type="Models.OBS_COLLECT_FORM_TMPLT" Role="OBS_COLLECT_FORM_TMPLT" Multiplicity="1" />
+          <End Type="Models.OBS_COLLECT_FORM_INST" Role="OBS_COLLECT_FORM_INST" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_COLLECT_FORM_TMPLT">
+              <PropertyRef Name="obs_cft_id" />
+            </Principal>
+            <Dependent Role="OBS_COLLECT_FORM_INST">
+              <PropertyRef Name="obs_cft_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rel_type_collect_form">
+          <End Type="Models.OBS_TYPE" Role="OBS_TYPE" Multiplicity="1" />
+          <End Type="Models.OBS_COLLECT_FORM_TMPLT" Role="OBS_COLLECT_FORM_TMPLT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_TYPE">
+              <PropertyRef Name="obs_type_id" />
+            </Principal>
+            <Dependent Role="OBS_COLLECT_FORM_TMPLT">
+              <PropertyRef Name="obs_type_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2286,29 +2286,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OBS_COLLECT_FORM_TMPLT">
-            <EntityTypeMapping TypeName="Models.OBS_COLLECT_FORM_TMPLT">
-              <MappingFragment StoreEntitySet="OBS_COLLECT_FORM_TMPLT">
-                <ScalarProperty Name="obs_cft_pub_by_uid" ColumnName="obs_cft_pub_by_uid" />
-                <ScalarProperty Name="obs_cft_upd_dtm" ColumnName="obs_cft_upd_dtm" />
-                <ScalarProperty Name="obs_cft_upd_uid" ColumnName="obs_cft_upd_uid" />
-                <ScalarProperty Name="obs_cft_added_dtm" ColumnName="obs_cft_added_dtm" />
-                <ScalarProperty Name="obs_cft_added_uid" ColumnName="obs_cft_added_uid" />
-                <ScalarProperty Name="obs_cft_pub_dtm" ColumnName="obs_cft_pub_dtm" />
-                <ScalarProperty Name="obs_cft_last_saved_dtm" ColumnName="obs_cft_last_saved_dtm" />
-                <ScalarProperty Name="obs_cft_subtitle" ColumnName="obs_cft_subtitle" />
-                <ScalarProperty Name="obs_cft_title" ColumnName="obs_cft_title" />
-                <ScalarProperty Name="obs_cft_eff_end_dt" ColumnName="obs_cft_eff_end_dt" />
-                <ScalarProperty Name="obs_cft_eff_st_dt" ColumnName="obs_cft_eff_st_dt" />
-                <ScalarProperty Name="obs_cft_ver" ColumnName="obs_cft_ver" />
-                <ScalarProperty Name="obs_cft_nbr" ColumnName="obs_cft_nbr" />
-                <ScalarProperty Name="dsc_lc_id" ColumnName="dsc_lc_id" />
-                <ScalarProperty Name="dsc_cust_id" ColumnName="dsc_cust_id" />
-                <ScalarProperty Name="obs_type_id" ColumnName="obs_type_id" />
-                <ScalarProperty Name="obs_cft_id" ColumnName="obs_cft_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="OBS_EVENT_TYPE">
             <EntityTypeMapping TypeName="Models.OBS_EVENT_TYPE">
               <MappingFragment StoreEntitySet="OBS_EVENT_TYPE">
@@ -2449,6 +2426,29 @@
                 <ScalarProperty Name="dsc_cust_parent_name" ColumnName="dsc_cust_parent_name" />
                 <ScalarProperty Name="dsc_cust_name" ColumnName="dsc_cust_name" />
                 <ScalarProperty Name="dsc_cust_id" ColumnName="dsc_cust_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OBS_COLLECT_FORM_TMPLT">
+            <EntityTypeMapping TypeName="Models.OBS_COLLECT_FORM_TMPLT">
+              <MappingFragment StoreEntitySet="OBS_COLLECT_FORM_TMPLT">
+                <ScalarProperty Name="obs_cft_upd_dtm" ColumnName="obs_cft_upd_dtm" />
+                <ScalarProperty Name="obs_cft_upd_uid" ColumnName="obs_cft_upd_uid" />
+                <ScalarProperty Name="obs_cft_added_dtm" ColumnName="obs_cft_added_dtm" />
+                <ScalarProperty Name="obs_cft_added_uid" ColumnName="obs_cft_added_uid" />
+                <ScalarProperty Name="obs_cft_eff_end_dt" ColumnName="obs_cft_eff_end_dt" />
+                <ScalarProperty Name="obs_cft_eff_st_dt" ColumnName="obs_cft_eff_st_dt" />
+                <ScalarProperty Name="obs_cft_pub_dtm" ColumnName="obs_cft_pub_dtm" />
+                <ScalarProperty Name="obs_cft_pub_by_uid" ColumnName="obs_cft_pub_by_uid" />
+                <ScalarProperty Name="obs_cft_last_saved_dtm" ColumnName="obs_cft_last_saved_dtm" />
+                <ScalarProperty Name="obs_cft_ver" ColumnName="obs_cft_ver" />
+                <ScalarProperty Name="obs_cft_nbr" ColumnName="obs_cft_nbr" />
+                <ScalarProperty Name="obs_cft_subtitle" ColumnName="obs_cft_subtitle" />
+                <ScalarProperty Name="obs_cft_title" ColumnName="obs_cft_title" />
+                <ScalarProperty Name="dsc_lc_id" ColumnName="dsc_lc_id" />
+                <ScalarProperty Name="dsc_cust_id" ColumnName="dsc_cust_id" />
+                <ScalarProperty Name="obs_type_id" ColumnName="obs_type_id" />
+                <ScalarProperty Name="obs_cft_id" ColumnName="obs_cft_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

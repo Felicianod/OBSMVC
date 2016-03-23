@@ -136,7 +136,7 @@
     //-------------------------   QUESTION ANSWER TYPE AND SELECTABLE ANSWERS SECCTION ----------------------------------------
     <div class="row" style="margin-left:10px; border:thin">
 
-        <div class="row" font-family:arial">
+        <div class="row" style="font-family:arial">
             <div class="col-sm-8" style="vertical-align: middle;">
                 <span style="vertical-align:middle; font-size:larger; font-weight:bold; background-color:bisque">Currently Defined Answer Types for this question:</span>
             </div>
@@ -154,8 +154,9 @@
     <br />
 
     <div class="row" id="divaddedSA">
-
-
+        <div class="col-sm-10 col-sm-offset-1" id="mesageaddedSA" style="display:none">
+            <span style="color:red;">The following Answer Types have been added but have not been saved yet.</span>
+        </div>
     </div>
     <div class="row" style="text-align:right; vertical-align:middle">
         <button type="button" class="btn btnAdd" id="addQuestion">Add New Answer Type</button><br /><br />
@@ -582,79 +583,83 @@
 
 
     <script type="text/jscript">
-        $(document).ready(function () {
-            //------------------------------ ADD NEW ANSWER TYPE BUTTON -----------------------------------------
-            $('#addQuestion').click(function () {
-                $(this).prop('disabled', true);
-                // ------------ Make the Ajax Call ---------------------------------------------
-                $.ajax({
-                    url: '@Url.Action("addQuestionAnswerInfo", "Question")',
-                    method: "GET",
-                    cache: false,
-                    //data: { qat_id: QATid, sel_ans_list: textValues },     //<---- Data Parameters (if not already passed in the Url)
-                    //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                    //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                    //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                    //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+    $(document).ready(function () {
+        //------------------------------ ADD NEW ANSWER TYPE BUTTON -----------------------------------------
+        $('#addQuestion').click(function () {
+            $(this).prop('disabled', true);
+            // ------------ Make the Ajax Call ---------------------------------------------
+            $.ajax({
+                url: '@Url.Action("addQuestionAnswerInfo", "Question")',
+                method: "GET",
+                cache: false,
+                //data: { qat_id: QATid, sel_ans_list: textValues },     //<---- Data Parameters (if not already passed in the Url)
+                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
 
-                    //--- On error, execute this function ------
-                    error: function () {
-                        alert("An Error has Occurred. Unable to Add!!");  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    //Execute this code After the Ajax call completes successfully
-                    $("#divNewSA").html(d);
-                });
-
+                //--- On error, execute this function ------
+                error: function () {
+                    alert("An Error has Occurred. Unable to Add!!");  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                //Execute this code After the Ajax call completes successfully
+                $("#divNewSA").html(d);
             });
 
-            //-------------------------------------- BUTTON EDIT ------------------------------------------------
-            $('.editSA').click(function () {
-                // Get the Ids that will be used in the dynamic execution
-                var ATid = $(this).prop("id").substring(7);  // "Answer Type" Sequence Number to drive the Ids of all components.
-                var divSALabel = "#divSALabel" + ATid;
-                var divSAText = "#divSAText" + ATid;
+        });
 
-                // Hide the "Labels" <Division>
-                $(divSALabel).hide(700);
-                // Show The "Text Boxes" <Division>
-                $(divSAText).show();
+        //-------------------------------------- BUTTON EDIT ------------------------------------------------
+        $('.editSA').click(function () {
+            // Get the Ids that will be used in the dynamic execution
+            var ATid = $(this).prop("id").substring(7);  // "Answer Type" Sequence Number to drive the Ids of all components.
+            var divSALabel = "#divSALabel" + ATid;
+            var divSAText = "#divSAText" + ATid;
 
-                //var atCategory = $(this).parents("div.answerType").find('#atCat').first().val();
-                //if (atCategory == "SS List" || atCategory == "MS List") {
-                //    $(divSAText).find('#rangeCol').hide();
-                //    $(divSAText).find('#listCol').show();
-                //}
-                //else if (atCategory == "3 Val Range" || atCategory == "5 Val Range") {
-                //    $(divSAText).find('#rangeCol').show();
-                //    $(divSAText).find('#listCol').hide();
-                //}
+            // Hide the "Labels" <Division>
+            $(divSALabel).hide(700);
+            // Show The "Text Boxes" <Division>
+            $(divSAText).show();
+
+            //var atCategory = $(this).parents("div.answerType").find('#atCat').first().val();
+            //if (atCategory == "SS List" || atCategory == "MS List") {
+            //    $(divSAText).find('#rangeCol').hide();
+            //    $(divSAText).find('#listCol').show();
+            //}
+            //else if (atCategory == "3 Val Range" || atCategory == "5 Val Range") {
+            //    $(divSAText).find('#rangeCol').show();
+            //    $(divSAText).find('#listCol').hide();
+            //}
 
 
 
 
 
-                //$(this).parent().parent().parent().parent().children().filter(".divText").first().show();      // NOT NEEDED ANYMORE
-            });
-            //------------------------------ BUTTON SAVE ---------------------------------------------
-            $('.saveSA').click(function (e) {
-                // Get the Ids that will be used in the dynamic execution
-                var ATid = $(this).prop("id").substring(7);  // "Answer Type" Sequence Number to drive the Ids of all components.
-                var divSALabel = "#divSALabel" + ATid;
-                var divSAText = "#divSAText" + ATid;
-                var QATid = $(this).parents("div.answerType").first().find("#obs_qat_id").val();
-                var textValues = "";
-                //Retrieve the first <Li> "badge" element of the current QAT
-                var badgeLi = $(divSALabel).find("Li").first();
+            //$(this).parent().parent().parent().parent().children().filter(".divText").first().show();      // NOT NEEDED ANYMORE
+        });
+        //------------------------------ BUTTON SAVE ---------------------------------------------
+        $('.saveSA').click(function (e) {
+            // Get the Ids that will be used in the dynamic execution
+            var ATid = $(this).prop("id").substring(7);  // "Answer Type" Sequence Number to drive the Ids of all components.
+            var divSALabel = "#divSALabel" + ATid;
+            var divSAText = "#divSAText" + ATid;
+            var QATid = $(this).parents("div.answerType").first().find("#obs_qat_id").val();
+            var textValues = "";
+            //Retrieve the first <Li> "badge" element of the current QAT
+            var badgeLi = $(divSALabel).find("Li").first();
 
-                $(this).parent().find('.selAnswerTextb').each(function () {
-                    //Compile a list of Values to post
-                    textValues = textValues + $(this).val() + ","
-                })
-                //alert("Current Textdiv Id is: " + divSAText + " QATid: " + QATid + " Values Found Are: " + textValues);
-                // ------------ Make the Ajax Call ---------------------------------------------
-                $.ajax({
-                    url: '@Url.Action("saveSelAns", "Question")',
+            var counter = 0;
+            $(this).parent().find('.selAnswerTextb').each(function () {
+                counter++;
+                //Compile a list of Values to post
+                textValues = textValues + $(this).val() + ","                
+            })
+            alert("Found " + counter + " Text Boxes")
+
+            //alert("Current Textdiv Id is: " + divSAText + " QATid: " + QATid + " Values Found Are: " + textValues);
+            // ------------ Make the Ajax Call ---------------------------------------------
+            $.ajax({
+                url: '@Url.Action("saveSelAns", "Question")',
                     method: "POST",
                     cache: false,
                     data: { qat_id: QATid, sel_ans_list: textValues },     //<---- Data Parameters (if not already passed in the Url)
@@ -669,18 +674,15 @@
                     }
                 }).done(function (d) {
                     //Execute this code After the Ajax call completes successfully
-
-                    // Refresh the Labels on the front end with the newly saved values
-                    //alert("The parent DIV Id is: " + $(this).parent().prop("id"));
-                    // If we are dealing with a x-Val-Range Question, replace one option for a new one
-
+                    // First Remove all the pre-existing Badges
+                    badgeLi.siblings().remove();
                     $(divSAText).find('.selAnswerTextb').each(function () {
-                        alert("Refreshing Badges from [" + badgeLi.next().children("span").first().text() + "] to [" + $(this).val() + "]");
-                        badgeLi = badgeLi.next();
-                        badgeLi.children("span").first().text($(this).val());
+                        //  alert("Refreshing Badges from [" + badgeLi.next().children("span").first().text() + "] to [" + $(this).val() + "]");
+                        badgeLi.parent().append('<li style="display: inline;" id="testLi"><span class="badge" style="font-size:larger">' + $(this).val() + '</span>&nbsp;&nbsp;</li>');
                     })
 
-
+                    //Enable the Question Save Button if ajax call is successful
+                    $("#btnAddQuestion").removeAttr('disabled');
                 });
 
                 // Hide the "Text Boxes" <Division>
@@ -688,7 +690,7 @@
                 // Show The "Labels" < Division >
                 $(divSALabel).show();
             });
-            //------------ BUTTON CANCEL -----------------------------------------------------
+            //------------ BUTTON CANCEL EDIT OF ANSWER TYPE -----------------------------------------------------
             $('.cancelSA').click(function (e) {
                 var divSAText = "#" + $(this).parents("div.divText").first().prop('id');
                 var divSALabel = "#divSALabel" + divSAText.substring(10, 12);
@@ -698,6 +700,7 @@
                 // Show The "Labels" < Division >
                 $(divSALabel).show(500);
             });
+
             //------------ ON SELECTABLE ANSWER CHANGE -----------------------------------------------------
             $(".selAnswerTextb").change(function () {
                 if ($(this).val() == "")

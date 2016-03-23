@@ -309,12 +309,6 @@ namespace OBSMVC.Controllers
                     templateList.Add("NEVER,RARELY,SOMETIMES,OFTEN,ALWAYS");
                     templateList.Add("STRONGLY DISAGREE,DISAGREE,N/A,AGREE,STRONGLY AGREE");
                     break;
-                case "MS List":
-                    templateList.Add("Forklift,Hat,Steel toe shoes,Gloves");
-                    break;
-                case "SS List":
-                    templateList.Add("FIRST SHIFT,SECOND SHIFT,THIRD SHIFT");
-                    break;
                 default:
                     templateList.Add("NO TEMPLATES NEEDED");
                     break;

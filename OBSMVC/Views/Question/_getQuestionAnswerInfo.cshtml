@@ -12,8 +12,9 @@ var divSATextqatId = "txtQATid" + uniqueCounter;
 
 }
 
-<div class="col-sm-12 answerType" id="testing" style="border:solid; border-width:1px; font-family:Arial">
+<div class="col-sm-12 answerType" id="ansTypeInfo" style="border:solid; border-width:1px; font-family:Arial">
     <input type="hidden" id="obs_qat_id" value="@Model.QAT.obs_qat_id" />
+    <input type="hidden" id="atCat" value="@Model.QAT.OBS_ANS_TYPE.obs_ans_type_category" />
     <div class="row">
         <div class="col-sm-6 form-inline">
             <span class=" label label-primary">[ @uniqueCounter ]&nbsp;</span>
@@ -58,21 +59,52 @@ var divSATextqatId = "txtQATid" + uniqueCounter;
         </div>
         }
     </div>
+    @*//------ Edit Mode for 3/5 Val Range and Singlee an Multi Select Categories - - - - - - - - - - - - *@
     <div class="row form-inline divText" id="@divSAText" style="display:none">
         &nbsp;
-        <div class="col-sm-7">
-            <br /><br />
-            @*<input type="hidden" id="@divSATextqatId" value="@Model.QAT.obs_qat_id" />*@
-            
-            @foreach (var x in Model.selAns)
-            {
-                <input type="text" value="@x.obs_qsa_text" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+        @if (Model.QAT.OBS_ANS_TYPE.obs_ans_type_category == "5 Val Range" || Model.QAT.OBS_ANS_TYPE.obs_ans_type_category == "3 Val Range")
+        {
+            <div class="col-sm-7" id="rangeCol" >
                 <br /><br />
-            }
-            <span>&nbsp;</span>
-            <button id="@qbtnSaveId" class="saveSA" type="button">SAVE</button>
-            <br /><br />
-        </div>
+                @*<input type="hidden" id="@divSATextqatId" value="@Model.QAT.obs_qat_id" />*@
+
+                @foreach (var x in Model.selAns)
+                {
+                    <input type="text" value="@x.obs_qsa_text" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                    <br /><br />
+                }
+                <span>&nbsp;</span>
+                <button id="@qbtnSaveId" class="saveSA" type="button">SAVE</button>
+                <span>&nbsp;&nbsp;&nbsp;</span>
+                <button id="btnCancel" class="cancelSA" type="button">CANCEL</button>
+                <br /><br />
+            </div>
+        }
+        else if (Model.QAT.OBS_ANS_TYPE.obs_ans_type_category == "SS List" || Model.QAT.OBS_ANS_TYPE.obs_ans_type_category == "MS List")
+        {
+            <div class="col-sm-7" id="listCol">
+                <button type="button" class="addOption"> <span class="glyphicon glyphicon-plus"> Add New Answer</span></button>
+                <div class="row form-inline selectionList">
+                    @foreach (var x in Model.selAns)
+                    {
+                        <div class="form-inline newOption">
+                            <input type="text" value="@x.obs_qsa_text" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                            <button type="button" onclick="$(this).parent().remove();"><span class="glyphicon glyphicon-trash"></span></button>
+                        </div>
+                    }
+                </div>
+                <br />
+                <button id="@qbtnSaveId" class="saveSA" type="button">SAVE</button>
+                <br /><br />
+            </div>
+
+        }
+
+
+
+
+
+
         <div class="col-md-5 personal-info">
 
     @*  // - - - - - -- - - - - INSERT HERE The Selectable Answers Templates Panel (From External Partial View) --------
@@ -85,4 +117,5 @@ var divSATextqatId = "txtQATid" + uniqueCounter;
     *@
         </div>
     </div>
+
 </div>

@@ -46,12 +46,12 @@
         &nbsp;
         <div class="col-sm-6 col-sm-offset-1">
             <div class="row" id="noSelection" style="display:none">
-                <div class="col-sm-10">
+                <div class="col-sm-10 col-sm-offset-1">
                     <br />
                     <span class="label label-primary" style="font-size:larger; font-weight:bold">This Selection does not require Selectable answers</span>
+                    <br /><br />
                 </div>
             </div>
-
             <div class="row" id="ValRange3" style="display:none">
                 <br />
                 <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
@@ -81,6 +81,8 @@
 
             <br />
             <input type="button" id="btnSaveNewAT" value="Save Answer Type and Values" style="display:none" />
+            <span>&nbsp;&nbsp;&nbsp;</span>
+            <button id="btnCancel" class="cancelNewSA" type="button">CANCEL</button>
             <br /><br />
 
         </div>        
@@ -195,7 +197,12 @@
             });
             $('#multiList').append(divToAdd).children(".newTB").last().append(delButton);
         });
-
+        //------------ BUTTON CANCEL ENTERING NEW ANSWER TYPE -----------------------------------------------------
+        $('.cancelNewSA').click(function () {
+            $(this).parents("div.answerType").first().remove();
+            $("#addQuestion").removeAttr('disabled');
+        });
+        //--------------------- SOFT SAVE NEW SELECTABLE ANSER --------------------------------
         $('#btnSaveNewAT').click(function () {
             var hasEmptyValues = false;
             
@@ -261,6 +268,9 @@
                 //alert('Save Resullt: ' + d)
                 $("#divaddedSA").append(d);
                 $("#divNewSA").html("");
+                //If saving is successful, enable the Question Save Button
+                $("#btnAddQuestion").removeAttr('disabled');
+                $('#mesageaddedSA').show();
             });
 
 

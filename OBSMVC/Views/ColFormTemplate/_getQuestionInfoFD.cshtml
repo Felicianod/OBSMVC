@@ -6,7 +6,8 @@
   var hidden_field = "currentSelectedQAT" + Model.uniqueCounter;
   var dropdown_id = "AssignedAnswers" + Model.uniqueCounter;
   var dropdown2 = "#AssignedAnswers" + Model.uniqueCounter;
-  var rowInfo = Model.uniqueCounter.ToString();
+  var rowInfo = "";
+  var current_selected = "-1";
   var btnModal = "btnModal" + Model.question_id;
 }
 
@@ -42,12 +43,12 @@
             </div>
             <div class="col-sm-9">
                 @{
-                    var current_selected = -1;
+
                     var ulId = "ul" + @Model.uniqueCounter;
                 }
                 @if (Model.hasInstances == true && Model.question_assigned_answer_types.Where(item => item.Selected == true).Count() > 0)
                 {
-                    current_selected = Convert.ToInt32(Model.question_assigned_answer_types.Single(item => item.Selected == true).Value);
+                    current_selected = Model.question_assigned_answer_types.Single(item => item.Selected == true).Value;
                     <div class="form-inline" id="@ulId">
                         @foreach (var x in Model.selectable_answers.Where(x => x.obs_qat_id == Convert.ToInt32(Model.question_assigned_answer_types.Single(item => item.Selected == true).Value)))
                         {
@@ -56,19 +57,12 @@
                             </div>
                         }
                     </div>
-
-                    @*<ul id="@ulId">
-                        @foreach (var x in Model.selectable_answers.Where(x => x.obs_qat_id == Convert.ToInt32(Model.question_assigned_answer_types.Single(item => item.Selected == true).Value)))
-                        {
-                            <li style="display: inline"><span class="badge">@x.obs_qsa_text</span></li>
-                        }
-                    </ul>*@
                 }
             </div>
         </div>
     </div>
     <input type="hidden" id="@hidden_field" name="@hidden_field" value="@current_selected">
-    @{rowInfo += "~" + current_selected.ToString() + "~Header Section";}
+    @{rowInfo += current_selected + "~Header Section";}
     <input type="hidden" id="formQuestions" name="formQuestions" value="@rowInfo" />
 </div>
 @* ================================= SCRIPTS SECTION ============================================*@
@@ -79,6 +73,7 @@
         if (selectedId == '') {
             selectedId = "-1";
             $("#@Model.uniqueCounter").html("");
+            $("#@ulId").html("");
         }
         else {
             //alert("Selected ID "+selectedId);

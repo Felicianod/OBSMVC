@@ -67,12 +67,7 @@
     @{rowInfo += "~" + current_selected.ToString() + "~Header Section";}
     <input type="hidden" id="formQuestions" name="formQuestions" value="@rowInfo" />
 </div>
-
-@*//==================== NOTHING SHOULD BE LEFT BELOW THIS LINE =========================*@
-
-    @*<input type="hidden" id="currentSelectedQAT" name="currentSelectedQAT" value= "@current_selected" >*@
-
-
+@* ================================= SCRIPTS SECTION ============================================*@
 <script type="text/javascript">
     $("@dropdown2").change( function (event) {
         var $drop_down = $(this);
@@ -93,7 +88,7 @@
                 }
             }).done(function (d) {
                 //alert("Retrieved Data is: " + d);
-                $("#@ulId").html(d);       //////////////////////// CHANGE THIS!!!!!!!!!!
+                $("#@ulId").html(d);
             });
         }
         var cur_sel = document.getElementById("currentSelectedQAT"+@Model.uniqueCounter);

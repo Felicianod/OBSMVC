@@ -299,6 +299,57 @@
     </div>
 
 
+
+<div id="somediv">
+</div>
+
+
+<script>
+    function loadModal(btnClkd) {
+        alert("Load Modal for " + btnClkd.attr('id'));
+        opendialog("/Question/QuestionAddUpdate/9");
+    }
+
+    function opendialog(page) {
+        var $dialog = $('#somediv')
+        .html('<iframe style="border: 0px; " src="' + page + '" width="100%" height="100%"></iframe>')
+        .dialog({
+            title: "Page",
+            autoOpen: false,
+            dialogClass: 'dialog_fixed, ui-widget-header',
+            modal: true,
+            height: 800,
+            minWidth: 600,
+            minHeight: 400,
+            draggable: true,
+            /*close: function () { $(this).remove(); },*/
+            buttons: { "Ok": function () { $(this).dialog("close"); } }
+        });
+        $dialog.dialog('open');
+    }
+</script>
+<script>
+    function loadModalSourcePage() {
+        var loc = "http://localhost/morningmarketweb/index.html";
+        //$('#myFrame').attr('src', loc);
+        document.getElementById('myFrame').setAttribute('src', loc);
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @* ######################  J A V A    S C R I P T S    S E C T I O N   #################################### *@
     @****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
     <script>

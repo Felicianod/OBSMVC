@@ -6,7 +6,7 @@
     string olListId = "olList" + sectionNbr;
 }
 
-<div class="panel panel-default">
+<div class="panel panel-default formSection" id="TEST_SECTION">
     <div class="panel-heading form-inline" style="background-color:lightblue">
         <h4 class="panel-title">
             @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
@@ -15,7 +15,7 @@
                 <span>Section Title:</span>
             </a>
             &nbsp;&nbsp;
-            <input type="text" id="@txtSectionName" onfocus="$(this).select();" class="form-control input-sm sectionTitle" style="width:50%" placeholder="<Enter Section Name>" required />
+            <input type="text" id="@txtSectionName" onfocus="$(this).select();" class="form-control input-sm sectionTitle sectionTitle" style="width:50%" placeholder="<Enter Section Name>" required />
         </h4>
     </div>
     <div id="@sectionId" class="panel-collapse collapse in" style="margin-left:20px" @*style="border:dashed; border-width:medium"*@>

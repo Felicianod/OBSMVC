@@ -12,7 +12,7 @@
 }
 
 
-<div class="row " id="@qViewId" style="text-align:left">
+<div class="row divFormQuestion" id="@qViewId" style="text-align:left">
 
     <div class="row" >
         <div class="col-sm-1" style="text-align:right">
@@ -61,9 +61,9 @@
             </div>
         </div>
     </div>
-    <input type="hidden" id="@hidden_field" name="@hidden_field" value="@current_selected">
-    @{rowInfo += current_selected + "~Header Section";}
-    <input type="hidden" id="formQuestions" name="formQuestions" value="@rowInfo" />
+    <input class="currentQATid" type="hidden" id="@hidden_field" name="@hidden_field" value="@current_selected"> @*This line might not be needed anymore*@
+    @*@{rowInfo += current_selected + "~Header Section";}*@
+    <input class="hdnFormQuestion" type="hidden" id="formQuestions" name="formQuestions" value="@rowInfo" />
 </div>
 @* ================================= SCRIPTS SECTION ============================================*@
 <script type="text/javascript">

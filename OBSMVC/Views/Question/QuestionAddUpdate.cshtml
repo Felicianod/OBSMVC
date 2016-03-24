@@ -132,7 +132,7 @@
             </div>
         </div>
     </div>
-
+    
     //-------------------------   QUESTION ANSWER TYPE AND SELECTABLE ANSWERS SECCTION ----------------------------------------
     <div class="row" style="margin-left:10px; border:thin">
 
@@ -717,7 +717,7 @@
 
 
             $('.addOption').click(function () {
-                var divToAdd = '<div class="row form-inline newOption"><input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /></div>'
+                var divToAdd = '<div class="row form-inline newOption" style="margin-left:2px"><input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /> </div>'
                 var delButton = $('<button  type="button" ><span class="glyphicon glyphicon-trash"></span></button>').click(function () {
                     $(this).parent().remove();
                 });

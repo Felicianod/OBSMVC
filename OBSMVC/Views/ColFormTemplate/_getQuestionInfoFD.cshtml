@@ -7,6 +7,7 @@
   var dropdown_id = "AssignedAnswers" + Model.uniqueCounter;
   var dropdown2 = "#AssignedAnswers" + Model.uniqueCounter;
   var rowInfo = Model.uniqueCounter.ToString();
+  var btnModal = "btnModal" + Model.question_id;
 }
 
 
@@ -24,12 +25,15 @@
         </div>*@
     </div>
     <div class="row">
-        <div class="col-sm-5 col-sm-offset-1">
-            <div class="input-group">
+        <div class="col-sm-7 col-sm-offset-1">
+            <div class="input-group ">
                 <div class="input-group-addon">Answer Type</div>
                 @Html.DropDownList("AssignedAnswers", Model.question_assigned_answer_types, "Select Answer Type", new { id = dropdown_id, @class = "viewDropDown form-control" }) <br />
             </div>
-        </div>        
+        </div>
+        <div class="col-sm-4">
+            <button type="button" class="btnEditQAT" id="@btnModal" onclick="loadModal($(this))">Edit Question Info</button>
+        </div>    
     </div>
     <div class="row">
         <div class="col-sm-11 col-sm-offset-1">

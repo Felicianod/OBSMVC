@@ -529,7 +529,7 @@ namespace OBSMVC.Controllers
                     string sel_ans = "";
                     foreach (var x in list)
                     {
-                        sel_ans = sel_ans + "<li style=\"display: inline\"><span class=\"badge\">" + x.obs_qsa_text + "</span></li>";
+                        sel_ans = sel_ans + "<div style=\"display: inline\"><span class=\"badge\">" + x.obs_qsa_text + "</span></div>";
                     }
 
                     return sel_ans;

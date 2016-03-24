@@ -831,15 +831,16 @@ namespace OBSMVC.Controllers
                     int cft_id = db.OBS_COLLECT_FORM_TMPLT.Single(item => item.obs_cft_nbr == cft_number && item.obs_cft_ver == 1).obs_cft_id;
                     string[] splitterm = { "," };
                     string[] parsed_questions = form_questions_from_gui.Split(splitterm, StringSplitOptions.RemoveEmptyEntries);
+                    short order_counter = 1;
                     foreach (string question in parsed_questions)
                     {
                         //now lets first save split the string we received from the gui
                         // string format should be: order,qat_id,section_text
                         string[] splitby = { "~" };
                         string[] question_items = question.Split(splitby, StringSplitOptions.RemoveEmptyEntries);
-                        short order = Convert.ToInt16(question_items[0]);
-                        int qat_id = Convert.ToInt32(question_items[1]);
-                        int form_section_id = getSectionID(question_items[2]);
+                        short order = order_counter;
+                        int qat_id = Convert.ToInt32(question_items[0]);
+                        int form_section_id = getSectionID(question_items[1]);
                         OBS_COL_FORM_QUESTIONS new_form_question = new OBS_COL_FORM_QUESTIONS();
                         new_form_question.obs_cft_id = cft_id;
                         
@@ -850,6 +851,7 @@ namespace OBSMVC.Controllers
                         new_form_question.obs_col_form_quest_na_yn = "Y";
                         db.OBS_COL_FORM_QUESTIONS.Add(new_form_question);
                         db.SaveChanges();
+                        order_counter++;
                     }
                     transaction.Commit();
                     if (cft_id < 0)

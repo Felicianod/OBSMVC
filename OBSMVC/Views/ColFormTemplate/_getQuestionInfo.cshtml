@@ -27,12 +27,11 @@
                     @if (Model.hasInstances == true && Model.question_assigned_answer_types.Where(item => item.Selected == true).Count() > 0)
                     {
                         current_selected = Convert.ToInt32(Model.question_assigned_answer_types.Single(item => item.Selected == true).Value);
-                       
-                            foreach (var x in Model.selectable_answers.Where(x => x.obs_qat_id == Convert.ToInt32(Model.question_assigned_answer_types.Single(item => item.Selected == true).Value)))
-                            {
-                                <li style="display: inline"><span class="badge">@x.obs_qsa_text</span></li>
-                            }
-                      
+
+                        foreach (var x in Model.selectable_answers.Where(x => x.obs_qat_id == Convert.ToInt32(Model.question_assigned_answer_types.Single(item => item.Selected == true).Value)))
+                        {
+                            <li class="innerListItem" style="display: inline"><span class="badge">@x.obs_qsa_text</span></li>
+                        }
                     }
                 </ul>
 

@@ -108,9 +108,7 @@ ol.targetList {
 </style>
 
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
-<div class="well well-sm nopadding"><h3 class="col-md-offset-1">Collection Form Creation</h3></div>
-<div class="well well-sm" style="padding: 4px; font-size:xx-large">&nbsp;&nbsp; Collection Form Creation</div>
-
+<div class="well well-sm" style="padding: 4px; font-size:xx-large; text-align:center">'Collection Form' Creation</div>
 
 @if (!String.IsNullOrEmpty(ViewBag.exception))
 {
@@ -138,7 +136,7 @@ ol.targetList {
   <div class="panel panel-default">
      @* - - - - - - - - - - - - - - <<<<< FORM HEADER >>>>> - - - - - - - - - - - - - *@
      <div class="panel-heading header">
-          <div class="form-group row">
+        <div class="form-group row">
                 <div class="col-sm-7">
                     <div class="input-group">
                         <div class="input-group-addon">Form Title:</div>
@@ -153,10 +151,10 @@ ol.targetList {
                     </div>
                 </div>
           </div>
-
-         @if (ViewData["errMsg"].ToString() == "DBOK")
-         {
-          <div class="form-group row">
+        
+        @if (ViewData["errMsg"].ToString() == "DBOK")
+        {
+        <div class="form-group row">
                 <div class="col-sm-4">
                    <div class="input-group">
                        <div class="input-group-addon">Observation Type</div>
@@ -176,9 +174,9 @@ ol.targetList {
                    </div>
                 </div>
           </div>
-         }
-
-          <div class="form-group row">
+        }
+        
+        <div class="form-group row">
                 <div class="col-sm-4">
                     <div class="input-group" data-provide="datepicker">
                         <div class="input-group-addon">Usable As of:</div>
@@ -198,7 +196,7 @@ ol.targetList {
                 </div>
           </div>
           @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-      </div>  @*- - - - END of panel-heading Section - - - - -*@
+     </div>  @*- - - - END of panel-heading Section - - - - -*@
       
      @* - - - - - - - - - - - - - - <<<<< FORM BODY >>>>> - - - - - - - - - - - - - *@
 
@@ -207,7 +205,7 @@ ol.targetList {
                @*/---------------- Below is the MAIN FORM QUESTION DETAIL DISPLAY PANEL ----------------------\*@
                <div class="col-md-7 personal-info" style="max-width:100%; height:550px; overflow-y:scroll">
 
-                   <div class="panel-group" id="accordion">
+                   <div class="panel-group" id="accordion" >
                     @*//Inside the Acordion Panel we place all the sections that will be added to the Form
                         /-----------------------------------------\
                         |                                         |
@@ -219,53 +217,11 @@ ol.targetList {
 
 
 
-
-      @*------------------------------------------------- Harcoded Values for Debugging -------------------------*@
-                   @*<div class="row " id="qRow00001" style="text-align:left">
-                       <div class="row">
-                           <div class="col-sm-1" style="text-align:right">
-                               [01]
-                           </div>
-                           <div class="col-sm-10">
-                               <p>Harcoded Question Text No 1</p>
-                           </div>
-                           <div class="col-sm-1">
-                               <button type="button" id="@qbtnCloseId" class="btnClose" onclick="removeQuestion('qRow00001')" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                           </div>
-                       </div>
-                       <div class="row">
-                           <div class="col-sm-5 col-sm-offset-1">
-                               <div class="input-group">
-                                   <div class="input-group-addon">Answer Type</div>
-                                   <input type="text" id="AssignedAnswers" name="AssignedAnswers" value="3 Val Range" class="viewDropDown form-control" >
-                               </div>
-                           </div>
-                       </div>
-                       <div class="row">
-                          <div class="col-sm-11 col-sm-offset-1">
-                               <div class="col-sm-3">
-                                   Selectable Answers: &nbsp;&nbsp;
-                               </div>
-                               <div class="col-sm-9">
-                                  <ul id="@ulId">
-                                      <li style="display: inline"><span class="badge">Yes</span></li>
-                                      <li style="display: inline"><span class="badge">No</span></li>
-                                      <li style="display: inline"><span class="badge">Maybe</span></li>
-                                  </ul>
-                               </div>
-                          </div>
-                       </div>
-                       @{ rowInfo = "1~001~sectionName001"; }
-                       <div class="input-group">
-                           <input type="hidden" id="formQuestions" name="formQuestions" value="@rowInfo" />
-                       </div>
-                   </div>*@
-            @*------------------------------------------ END of Harcoded Values for Debugging -------------------*@
-
-
                    @*When This button is clicked, add a new view to the "accordion" <DIV> section*@
                    <input type="button" id="btnAddSection" value="Add New Section" />
                </div>  @*End of Left Form Questions Pannel (7 column Pannel)*@
+
+
 
                @*// -------------- Below is the Panel with the Question's Library ---------------- *@
                <div class="col-md-5 personal-info">
@@ -321,31 +277,20 @@ ol.targetList {
            </div>
      </div>@*---- END OF FORM BODY -------*@
 
-
-
-
-     @*\\ - - - - - - - - - - - - - <<<<< END OF FORM BODY >>>>> - - - - - - - - - - - - //*@
+ @*\\ - - - - - - - - - - - - - <<<<< END OF FORM BODY >>>>> - - - - - - - - - - - - //*@
 
      @*// - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - \\*@
      <div class="row">
          <input type="hidden" id="isPublished" name="isPublished" value="false">
         <div class="col-md-offset-2 col-md-10">
            <input id="btnSaveForm" type="submit" value="Save Form" @*disabled="disabled"*@ />
-            <input id="btnPublishForm" type="button" value="Publish Form" onclick="PostMe()" />
+            &nbsp;&nbsp;
+           <input id="btnPublishForm" type="button" value="Publish Form" onclick="PostMe()" />
         </div>
      </div>
      @*\\ - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - //*@
 
-
-
-
-
-
-
-
-
-
-   </div> @* ----- END OF FORM PANEL*@
+  </div> @* ----- END OF FORM PANEL*@
 </form>
 @* - - - - - - - - - - - - - - - - END OF "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
 
@@ -360,7 +305,6 @@ ol.targetList {
 @****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
 <script>
     function PostMe() {
-     
         document.getElementById("isPublished").value = "true"
         document.getElementById("CreateForm").submit();
     }
@@ -435,66 +379,7 @@ ol.targetList {
             });
 
             //Make the Target List Dropable and force it to accept newly created source List
-            $(".targetList").droppable({
-                addClasses: false,
-                activeClass: "listActive",
-                accept: ":not(.ui-sortable-helper)",
-                drop: function (event, ui) {
-                    $(this).find(".placeholder").remove();
-
-                    var link = $("<a href='#' class='dismiss'>x</a>");
-
-                    var qid = ui.draggable.attr("id");
-                    //var listId = "liID" + qid;
-
-                    //var list = $("<li></li>").text(ui.draggable.text());
-                    //var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text("Question Id is: " + qid); //    .setAttribute('class', 'newliItem');
-                    var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text(""); //    .setAttribute('class', 'newliItem');
-
-                    //alert($(list).attr("id"));   //It works, the Id is "li99" (99=qid)
-                    $(list).append(link);
-                    $(list).appendTo(this);
-
-                    //getQinfo(qid);
-                    //updateValues(ui.draggable.text().substring(3, 5));
-
-                    // updateValues("Question Added Successfully: " + getTestData(qid));   //Method invoked when action is dropped successfully
-
-                    getQinfo(qid);
-                }
-            }).sortable({
-                //connectWith: ".connected",
-                items: "li:not(.placeholder)",
-
-                //start: function (event, ui) {
-                //},
-                //stop: function (event, ui) {
-                //    var item = $(ui.item);
-                //    alert($(this).attr("id"));
-                //    var to = item.parent().is("#droppable_widget");
-                //    var siblingsCount = item.siblings().size();
-                //    if (to && siblingsCount > 0) {
-                //        alert("only one item allowed here");
-                //        return false;
-                //    }
-                //},
-
-
-
-                sort: function () {
-                    $(this).removeClass("listActive");
-                },
-
-                update: function () {
-                    var qid2 = $(this).qid;
-                    //updateValues("An Item was reordered." + +getTestData(qid2));  // Call function After Sorting
-                }
-            }).on("click", ".dismiss", function (event) {
-                event.preventDefault();
-                //var qdelId = $(this).parent().attr("id");
-                $(this).parent().remove();
-                // updateValues("An Item was Deleted");  //If we want to all a function when item is dragged/dropped
-            });
+            makeSectionsDropable();
             $btn.button('reset');
         });
     });
@@ -518,65 +403,7 @@ ol.targetList {
         });
 
         //Make the Target List Dropable and force it to accept newly created source List
-        $(".targetList").droppable({
-            addClasses: false,
-            activeClass: "listActive",
-            accept: ":not(.ui-sortable-helper)",
-            drop: function (event, ui) {
-                $(this).find(".placeholder").remove();
-
-                var link = $("<a href='#' class='dismiss'>x</a>");
-
-                var qid = ui.draggable.attr("id");
-                //var listId = "liID" + qid;
-
-                //var list = $("<li></li>").text(ui.draggable.text());
-                var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text("Question Id is: " + qid);
-                //list.setAttribute('class', 'newliItem');
-                //alert($(list).attr("id"));   //It works, the Id is "li99" (99=qid)
-                $(list).append(link);
-                $(list).appendTo(this);
-
-                //getQinfo(qid);
-                //updateValues(ui.draggable.text().substring(3, 5));
-                // updateValues("Question Added Successfully: " + getTestData(qid)); //Method invoked when action is dropped successfully
-                getQinfo(qid);
-            }
-        }).sortable({
-            //connectWith: ".connected",
-            items: "li:not(.placeholder)",
-
-            //start: function (event, ui) {
-            //},
-            //stop: function (event, ui) {
-            //    var item = $(ui.item);
-            //    alert($(this).attr("id"));
-            //    var to = item.parent().is("#droppable_widget");
-            //    var siblingsCount = item.siblings().size();
-            //    if (to && siblingsCount > 0) {
-            //        alert("only one item allowed here");
-            //        return false;
-            //    }
-            //},
-
-
-
-            sort: function () {
-                $(this).removeClass("listActive");
-            },
-
-            update: function () {
-                var qid2 = $(this).qid;
-                // updateValues("An Item was reordered." + +getTestData(qid2));  // Call function After Sorting
-            }
-        }).on("click", ".dismiss", function (event) {
-            event.preventDefault();
-            //var qdelId = $(this).parent().attr("id");
-            $(this).parent().remove();
-            updateValues("An Item was Deleted");  //If we want to all a function when item is dragged/dropped
-            //updateValues();  //If we want to all a function when item is dragged/dropped
-        });
-
+        makeSectionsDropable();
         $btn.button('reset');
     });
 
@@ -628,7 +455,71 @@ ol.targetList {
         //});
     };
 
+    function makeSectionsDropable() {
+        $(".targetList").droppable({
+            addClasses: false,
+            activeClass: "listActive",
+            accept: ":not(.ui-sortable-helper)",
+            drop: function (event, ui) {
+                $(this).find(".placeholder").remove();
 
+                var link = $("<a href='#' class='dismiss'>x</a>");
+
+                var qid = ui.draggable.attr("id");
+                //var listId = "liID" + qid;
+
+                //var list = $("<li></li>").text(ui.draggable.text());
+                //var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text("Question Id is: " + qid); //    .setAttribute('class', 'newliItem');
+                var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text(""); //    .setAttribute('class', 'newliItem');
+
+                //list.setAttribute('class', 'newliItem');
+                //alert($(list).attr("id"));   //It works, the Id is "li99" (99=qid)
+                $(list).append(link);
+                $(list).appendTo(this);
+
+                //getQinfo(qid);
+                //updateValues(ui.draggable.text().substring(3, 5));
+
+                // updateValues("Question Added Successfully: " + getTestData(qid));   //Method invoked when action is dropped successfully
+
+                getQinfo(qid);
+            }
+        }).sortable({
+            connectWith: ".connected",
+            items: "li:not(.placeholder)",
+
+            //start: function (event, ui) {
+            //},
+            //stop: function (event, ui) {
+            //    var item = $(ui.item);
+            //    alert($(this).attr("id"));
+            //    var to = item.parent().is("#droppable_widget");
+            //    var siblingsCount = item.siblings().size();
+            //    if (to && siblingsCount > 0) {
+            //        alert("only one item allowed here");
+            //        return false;
+            //    }
+            //},
+
+            sort: function () {
+                $(this).removeClass("listActive");
+            },
+            //beforeStop: function(ev, ui) {
+            //    if ($(ui.item).hasClass('innerListItem') ) {
+            //        $(this).sortable('cancel');
+            //    }
+            //},
+            update: function () {
+                var qid2 = $(this).qid;
+                //updateValues("An Item was reordered." + +getTestData(qid2));  // Call function After Sorting
+            }
+        }).on("click", ".dismiss", function (event) {
+            event.preventDefault();
+            //var qdelId = $(this).parent().attr("id");
+            $(this).parent().remove();
+            // updateValues("An Item was Deleted");  //If we want to call a function when item is dragged/dropped
+        });
+    }
     //Sample Code:
     //looping in javascript through all the child elements of the target list
     //var items = [];
@@ -810,6 +701,7 @@ ol.targetList {
         }).done(function (d) {
             //Execute this code After the Ajax call completes successfully
             $("#accordion").append(d);
+            makeSectionsDropable();
         });
     } // ------ End of addNewSection() function -----
 

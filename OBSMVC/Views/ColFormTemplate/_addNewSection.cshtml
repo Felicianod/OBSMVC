@@ -3,11 +3,11 @@
     string txtSectionName = "txtSectionName" + sectionNbr;
     string sectionId = "sectionId" + sectionNbr;
     string sectionIdHandle = "#" + sectionId;
-    string olListId = "olList" + sectionNbr;    
+    string olListId = "olList" + sectionNbr;
 }
 
 <div class="panel panel-default">
-    <div class="panel-heading form-inline">
+    <div class="panel-heading form-inline" style="background-color:lightblue">
         <h4 class="panel-title">
             @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
             <a class="accordion-toggle" data-toggle="collapse" href="@sectionIdHandle">
@@ -15,59 +15,27 @@
                 <span>Section# @sectionNbr</span>
             </a>
             &nbsp;&nbsp;
-            <input type="text" id="@txtSectionName" onfocus="$(this).select();" class="form-control input-sm" style="width:50%" placeholder="<Enter Section Name>" />
+            <input type="text" id="@txtSectionName" onfocus="$(this).select();" class="form-control input-sm sectionTitle" style="width:50%" placeholder="<Enter Section Name>" />
         </h4>
     </div>
-    <div id="@sectionId" class="panel-collapse collapse in" @*style="border:dashed; border-width:medium"*@>
-       
-       <div class="right row">
-          <ol class="list-group targetList" id="@olListId" @*ondrop="addQid(event)"*@>
-              <li class="list-group-item placeholder">
-                  <div style="font-weight:bold; font-size:large">
-                      <br />Drag a question here...<br /><br />
-                  </div>
-              </li>
-          </ol>
-       </div>
-
+    <div id="@sectionId" class="panel-collapse collapse in" style="margin-left:20px" @*style="border:dashed; border-width:medium"*@>
+        <div class="right row">
+            <ol class="list-group targetList connected" id="@olListId" @*ondrop="addQid(event)"*@>
+                <li class="list-group-item placeholder">
+                    <div style="font-weight:bold; font-size:large">
+                        <br />Drag a question here...<br /><br />
+                    </div>
+                </li>
+            </ol>
+        </div>
     </div> @*End of Section*@
 </div>
 
 <script>
-
-
-
     $(function () {
-
-        //var availableTags = [
-        //  "ActionScript",
-        //  "AppleScript",
-        //  "Asp",
-        //  "BASIC",
-        //  "C",
-        //  "C++",
-        //  "Clojure",
-        //  "COBOL",
-        //  "ColdFusion",
-        //  "Erlang",
-        //  "Fortran",
-        //  "Groovy",
-        //  "Haskell",
-        //  "Java",
-        //  "JavaScript",
-        //  "Lisp",
-        //  "Perl",
-        //  "PHP",
-        //  "Python",
-        //  "Ruby",
-        //  "Scala",
-        //  "Scheme"
-        //];
         $("#@txtSectionName").autocomplete({
-            //source: availableTags
             source: "/ColFormTemplate/SectionNameLookup",
             minLength: 2
         });
     });
-
 </script>

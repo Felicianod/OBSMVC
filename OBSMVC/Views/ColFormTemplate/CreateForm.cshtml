@@ -105,6 +105,10 @@
       border: 2px dashed #add38d !important;
       background-color: #f6fbf4 !important;
     }
+    .invalidField {
+        background-color: #A52300;
+        color: white;
+    }
 </style>
 
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
@@ -358,23 +362,19 @@
         function PostForm(btnClicked) {
             var errorMsg = "";
             var sectionCounter = 0;
-            if (btnClicked.attr("id") == "btnPublishForm") {
-                document.getElementById("isPublished").value = "true"
-            }
             // Validate the Form Fields
-            if (document.getElementById("obs_cft_title").value.trim() == "")
-            {
-               errorMsg = "The form Title is Required\n";
-            }
-
             //Process all the form Sections to get Data to post
             $("div.formSection").each(function () {
                 var formSection = $(this);
                 //var sectionTitle = $($(this).find("input.sectionTitle").first()).val();
-                var sectionTitle = formSection.find("input.sectionTitle").first().val();
+                var sectionTitleBox = formSection.find("input.sectionTitle").first();
                 sectionCounter++;
-                if (sectionTitle.trim() == "")
-                { errorMsg = errorMsg + " Form Section " + sectionCounter + " is missing the Title.\n"; }
+                if (sectionTitleBox.val().trim() == "")
+                {
+                    errorMsg = errorMsg + " Form Section " + sectionCounter + " is missing the Title.\n";
+                    sectionTitleBox.addClass("invalidField");
+                    sectionTitleBox.focus();
+                }
                 else {
                     formSection.find('.divFormQuestion').each(function () {
                         var qatDDL = $(this).find(".viewDropDown").first();
@@ -388,9 +388,28 @@
                 }
             });  // Finished Processing all Form Sections
 
+            // Validat the Start Date if the Form is being published
+            if (btnClicked.attr("id") == "btnPublishForm") {
+                document.getElementById("isPublished").value = "true"
+                if ($('#obs_cft_eff_st_dt').val() == "") {
+                    errorMsg = errorMsg + "The Effective Start Date id required when Publishing a Form\n";
+                    $('#obs_cft_eff_st_dt').addClass("invalidField");
+                    $('#obs_cft_eff_st_dt').focus();
+                }
+            }
+            //Validate the Form Title
+            if (document.getElementById("obs_cft_title").value.trim() == "") {
+                errorMsg = errorMsg + "The form Title is Required\n";
+                $("#obs_cft_title").addClass("invalidField");
+                $("#obs_cft_title").focus();
+            }
+
+
+
             if (errorMsg != "") {
                 //If an validation error is found 
                 alert(errorMsg);
+                $('#btnSaveForm').button('reset');
             }
             else {
                 //Post the Form
@@ -756,20 +775,49 @@
 
     </script>
 
-    @* - - - - - - - SCRIPT TO ADD A NEW SECTION TO THE FORM - - - - - - - - - - *@
+    @* - - - - - - - SCRIPT TO ADD A NEW SECTION TO THE FORM AND SET THE "FORM CHANGED" STATUS when form is modified- - - - - - - - - - *@
     <script type="text/jscript">
         $(document).ready(function () {
-            // As sson as the page first loads, create a new Section
+            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+            // As soon as the page first loads, create a new Section
             addNewSection();
-        });
+            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+            //Enable Input fields to be reset when to default css when edited and to set the form status to "changed"
+            var isChanged = false;
+            $('input, select, textarea').change(function () {
+                //$("input[type='submit']").removeAttr("disabled");
 
+                if ($('#btnSaveForm').val() != "Save Form") {
+                    $('#btnSaveForm').button('reset');
+                }
+                $("#btnSaveForm").removeAttr('disabled');
+                //alert('Button Text is:' + btnText);
+                isChanged = true;
+                $(this).removeClass("invalidField");
+            });
+            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+            $(window).bind('beforeunload', function () {
+                if (isChanged) {
+                    return 'There are unsaved changed. Do you want to discard Changes and Exit?';
+                } else {
+                    return undefined;
+                }
+            });
+            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+            $("#btnSaveForm").click(function () {
+                isChanged = false;
+                $(this).button('loading');
+            });
+            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+            $('#btnAddSection').click(function () {
+                var $btn = $(this);
+                $btn.button('loading');
+                addNewSection();
+                $btn.button('reset');
+            })
+            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+        });  // END Of documetn Ready Startup Scripts
 
-        $('#btnAddSection').click(function () {
-            var $btn = $(this);
-            $btn.button('loading');
-            addNewSection();
-            $btn.button('reset');
-        })
 
         function addNewSection() {
             $('#sCounter').val(Number($('#sCounter').val()) + 1);
@@ -793,7 +841,15 @@
                 //Execute this code After the Ajax call completes successfully
                 $("#accordion").append(d);
                 makeSectionsDropable();
+                // Reenable the "form change" validation on the newly created section
+                $('input').change(function () {
+                    isChanged = true;
+                    $("#btnSaveForm").removeAttr('disabled');
+                    $('#btnSaveForm').button('reset');
+                    $(this).removeClass("invalidField");
+                });
             });
+
         } // ------ End of addNewSection() function -----
 
     </script>

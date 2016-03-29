@@ -3,6 +3,8 @@
 @{
     ViewBag.Title = "Form Templates";
 }
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+<link href="~/Content/chkboxRadio.css" rel="stylesheet" />
 
 <div class="well well-sm"><h3>Form Templates</h3></div>
 
@@ -12,9 +14,9 @@
         <div class="col-sm-7">
             <div class="row">
                 <div class="col-sm-8">
-                    <div class="input-group" style="min-width:100%">
-                        <div class="input-group-addon"><span style="font-weight:bold">Search by Title</span></div>
-                        @Html.TextBox("title_search", null, new { @class = "form-control" })
+                    <div class="input-group">
+                        <div class="input-group-addon" style="min-width:156px"><span style="font-weight:bold">Search by Title</span></div>
+                        @Html.TextBox("title_search", null, new { @class = "form-control", style = "min-width:100%" })
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -25,8 +27,8 @@
             <div class="row">
                 <div class="col-sm-8">
                     <div class="input-group" style="min-width:100%">
-                        <div class="input-group-addon"><span style="font-weight:bold">Search by Question</span></div>
-                        @Html.TextBox("question_search", null, new { @class = "form-control" })
+                        <div class="input-group-addon" style="min-width:156px"><span style="font-weight:bold">Search by Question</span></div>
+                        @Html.TextBox("question_search", null, new { @class = "form-control", style = "min-width:100%" })
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -37,7 +39,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-offset-11 col-sm-offset-1">
-                    <input type="submit" value="Search">
+                    <input type="submit" value="Search" style="min-width:200px; font-weight:bold">
                 </div>
             </div>
         </div>
@@ -45,12 +47,31 @@
             <div class="row">
                 <div class="input-group">
                     <div class="input-group-addon"><span style="font-weight:bold">Function</span></div>
-                    @Html.DropDownList("fullFuncList", ViewBag.fullFuncList as SelectList, "All", new { @class = "form-control" })
+                    @Html.DropDownList("fullFuncList", ViewBag.fullFuncList as SelectList, "All", new { @class = "form-control", style="max-width:87%" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4" @*style="border:solid; border-width: 1px"*@>
+                    <div class="checkbox">
+                        <label style="font-size: 1.5em">
+                            <input type="checkbox" class="form-control" id="chkLive" name="chkLive">
+                            <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                            Only Live
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-5" @*style="border:solid; border-width: 1px"*@>
+                    <div class="checkbox">
+                        <label style="font-size: 1.5em">
+                            <input type="checkbox" class="form-control input-sm" id="chkPublished" name="chkPublished">
+                            <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                            Only Published
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 }
 
 <table class="table table-condensed table-hover" border="1">

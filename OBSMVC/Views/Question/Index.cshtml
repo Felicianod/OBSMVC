@@ -5,6 +5,12 @@
 @{  ViewBag.Title = "Question Maintenance";  }
 
 <div class="well well-sm"><h3>Question Maintenance</h3></div>
+@{
+    if (ViewBag.firstPageDisplay == null )
+    {
+        ViewBag.searchActiveOnly = "Y";
+    }    
+}
 <p>
 @using (Html.BeginForm("Index", "Question", FormMethod.Get))
 {
@@ -14,11 +20,8 @@
            <td style="text-align:left">
                @Html.TextBox("search") <input type="submit" value="Search" />
                &nbsp;
-               <label><input type="checkbox" name="includeActiveOnly" id="includeActiveOnly" 
-                  @if (ViewBag.searchActiveOnly == "Y") { 
-                      @:checked="checked"
-                  }
-                   > Search Active Questions Only
+               <label><input type="checkbox" name="includeActiveOnly" id="includeActiveOnly" @if (ViewBag.searchActiveOnly == "Y") { <text> checked="checked" </text>  }>
+                Search Active Questions Only
                </label>
            </td>
            <td style="text-align:end">

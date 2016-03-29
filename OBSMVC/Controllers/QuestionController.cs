@@ -19,6 +19,7 @@ namespace OBSMVC.Controllers
         [HttpGet]
         public ActionResult Index(string search, string includeActiveOnly, int? page, int? PageSize)
         {
+            if (search != "" || page != null) { ViewBag.firstPageDisplay = "N"; }
             ViewBag.CurrentItemsPerPage = PageSize ?? 10;
             if (!String.IsNullOrEmpty(includeActiveOnly))
             {// If the "includeActiveOnly" parameter is not null, we assume it's "on".  (It can only be "null" or "on")

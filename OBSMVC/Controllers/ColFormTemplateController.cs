@@ -497,13 +497,21 @@ namespace OBSMVC.Controllers
                     // lets check if this answer type requires selectable answers
                     if (db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id).obs_ans_type_has_fxd_ans_yn == "Y")
                     {
-                        {//if true, we need to list all of them and assign them to object's list of selectable answers
-                            foreach (OBS_QUEST_SLCT_ANS temp in db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qaInstanceTemp.obs_qat_id && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now))
-                                questionInfo.selectable_answers.Add(temp);
+                        //if true, we need to list all of them and assign them to object's list of selectable answers
+                        String sel_ans ="(";
+                        foreach (OBS_QUEST_SLCT_ANS temp in db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qaInstanceTemp.obs_qat_id && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now))
+                        {
+                            questionInfo.selectable_answers.Add(temp);
+                            sel_ans = sel_ans=="("? sel_ans+temp.obs_qsa_text: sel_ans+"," +temp.obs_qsa_text;
                         }
-                    }
-                }
+                        sel_ans = sel_ans + ")";   
+                            questionInfo.question_assigned_answer_types.Single(x => Convert.ToInt32(x.Value) == qaInstanceTemp.obs_qat_id).Text = temp_answer.obs_ans_type_name+sel_ans;
 
+                        
+                    }
+
+                }
+                questionInfo.question_assigned_answer_types.Add(new SelectListItem() { Text = "Add New...", Value = "New" });
             }
             if (questionInfo.default_qat_id > 0)
             {

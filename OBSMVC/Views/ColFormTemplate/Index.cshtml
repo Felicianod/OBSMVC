@@ -6,25 +6,53 @@
 
 <div class="well well-sm"><h3>Form Templates</h3></div>
 
-<p>
-    @using (Html.BeginForm("Index", "ColFormTemplate", FormMethod.Get))
-    {
-        
-            <b>Search by Title:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>@Html.TextBox("title_search")
-            @Html.RadioButton("t_search", "Any")  <text>Any</text>
-            @Html.RadioButton("t_search", "All", true)  <text>All</text><br />
-            <p> </p>
-            <b>Search by Question: </b>@Html.TextBox("question_search") 
-            @Html.RadioButton("q_search", "Any")  <text>Any</text>
-            @Html.RadioButton("q_search", "All", true) <text> All </text>
-            @Html.RadioButton("q_search", "Exact")<text> Exact </text><br/><p> </p>
-            <b>Function :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
-            @Html.DropDownList("fullFuncList", ViewBag.fullFuncList as SelectList, "All")
-    <br />
-    <input type="submit" value="Search">
-    <br />
-    }
-</p>
+@using (Html.BeginForm("Index", "ColFormTemplate", FormMethod.Get))
+{
+    <div class="form-group row" style="margin-bottom:6px">
+        <div class="col-sm-7">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="input-group" style="min-width:100%">
+                        <div class="input-group-addon"><span style="font-weight:bold">Search by Title</span></div>
+                        @Html.TextBox("title_search", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    @Html.RadioButton("t_search", "Any")  <text>Any</text>
+                    @Html.RadioButton("t_search", "All", true)  <text>All</text><br />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="input-group" style="min-width:100%">
+                        <div class="input-group-addon"><span style="font-weight:bold">Search by Question</span></div>
+                        @Html.TextBox("question_search", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    @Html.RadioButton("q_search", "Any")  <text>Any</text>
+                    @Html.RadioButton("q_search", "All", true) <text> All </text>
+                    @Html.RadioButton("q_search", "Exact")<text> Exact </text><br />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-offset-11 col-sm-offset-1">
+                    <input type="submit" value="Search">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="row">
+                <div class="input-group">
+                    <div class="input-group-addon"><span style="font-weight:bold">Function</span></div>
+                    @Html.DropDownList("fullFuncList", ViewBag.fullFuncList as SelectList, "All", new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
 <table class="table table-condensed table-hover" border="1">
     <tr style="background-color:gainsboro">
         <th>

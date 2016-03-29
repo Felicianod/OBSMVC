@@ -2,7 +2,69 @@
 @{
     ViewBag.Title = "Edit Employee Profile";
 }
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 
+<style>
+    .checkbox label:after, 
+.radio label:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.checkbox .cr,
+.radio .cr {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #a9a9a9;
+    border-radius: .25em;
+    width: 1.3em;
+    height: 1.3em;
+    float: left;
+    margin-right: .5em;
+}
+
+.radio .cr {
+    border-radius: 50%;
+}
+
+.checkbox .cr .cr-icon,
+.radio .cr .cr-icon {
+    position: absolute;
+    font-size: .8em;
+    line-height: 0;
+    top: 50%;
+    left: 20%;
+}
+
+.radio .cr .cr-icon {
+    margin-left: 0.04em;
+}
+
+.checkbox label input[type="checkbox"],
+.radio label input[type="radio"] {
+    display: none;
+}
+
+.checkbox label input[type="checkbox"] + .cr > .cr-icon,
+.radio label input[type="radio"] + .cr > .cr-icon {
+    transform: scale(3) rotateZ(-20deg);
+    opacity: 0;
+    transition: all .3s ease-in;
+}
+
+.checkbox label input[type="checkbox"]:checked + .cr > .cr-icon,
+.radio label input[type="radio"]:checked + .cr > .cr-icon {
+    transform: scale(1) rotateZ(0deg);
+    opacity: 1;
+}
+
+.checkbox label input[type="checkbox"]:disabled + .cr,
+.radio label input[type="radio"]:disabled + .cr {
+    opacity: .5;
+}
+
+</style>
 <script>
     $(document).ready(function () {
         var isChanged = false;
@@ -32,161 +94,212 @@
 <br />
 <h1>Edit Profile</h1>
 <hr>
- @*    <script type="text/javascript">
-        //$(function () {
-        //    $("input:text.editDate").datepicker();
-        //});
-      $(function () {
-            $("#dsc_emp_hire_dt").datepicker({
-                changeMonth: true,
-                changeYear: true,
-                dateFormat: 'M dd, yy'
-            });
-        });
-        $(function () {
-            $("#dsc_emp_term_dt").datepicker({
-                changeMonth: true,
-                changeYear: true,
-                dateFormat: 'M dd, yy'
-            });
-        });
-    </script> *@
-    <!-- Form Edit State Change Validation -->
-    <!-- left column -->
+<!-- Form Edit State Change Validation -->
+<!-- left column -->
 <div class="row">
-   <div class="col-sm-4">
-      <div class="row">
+    <div class="col-sm-3">
+        <div class="row">
             <img src="~/Images/iconNoAvatar.png" class="avatar img-circle" alt="avatar">
             @*@if (Model.dsc_emp_last_name.Trim() == "Pogany")
-              { <img src="~/Images/KPogany.jpg" class="avatar img-circle" alt="avatar">}
-              else {
-                <img src="~/Images/iconNoAvatar.png" class="avatar img-circle" alt="avatar">
-              }
+                { <img src="~/Images/KPogany.jpg" class="avatar img-circle" alt="avatar">}
+                else {
+                  <img src="~/Images/iconNoAvatar.png" class="avatar img-circle" alt="avatar">
+                }
             *@
         </div>
-      <div class="row">
+        <div class="row">
             <h3>@Model.dsc_emp_first_name @Model.dsc_emp_last_name</h3>
             <h5>@Model.dsc_emp_email_addr</h5>
             <h5>ADP ID: @Model.dsc_emp_adp_id</h5>
-      </div>
-   </div>
+        </div>
+    </div>
 
-   <!-- edit form column -->
-   <div class="col-md-8 personal-info">
-      <form class="form-horizontal" role="form" method="post">
+    <!-- edit form column -->
+    <div class="col-md-9 personal-info">
+        <form class="form-horizontal" role="form" method="post">
+            <div class="form-group row">
+                <div class="input-group">
+                    <span class="input-group-addon" style="min-width:75px">JDE ID</span>
+                    <input class="form-control" type="text" value="@Model.dsc_emp_perm_id" name="dsc_emp_perm_id" id="dsc_emp_perm_id">
+                </div>
+            </div>
 
             <div class="form-group row">
-                <div class="col-md-12">
-                    <div class="input-group">
-                        <span class="input-group-addon">Title</span>
-                        <input class="form-control" type="text" value="@Model.dsc_emp_title" name="dsc_emp_title" id="dsc_emp_title">
-                    </div>
+                <div class="input-group">
+                    <span class="input-group-addon" style="min-width:75px">Title</span>
+                    <input class="form-control" type="text" value="@Model.dsc_emp_title" name="dsc_emp_title" id="dsc_emp_title">
                 </div>
+            </div>
 
-                <div class="input-group col-md-10" >
-                    <div class="input-group-addon">
-                       <span style="width:25%">JDE ID:</span>
-                    </div>
-                    <input class="form-control" type="text" value="@Model.dsc_emp_perm_id" name="dsc_emp_perm_id">
+            <div class="form-group row">
+                <div class="input-group">
+                    <span class="input-group-addon" style="min-width:75px">Facility</span>
+                    @Html.DropDownList("dsc_assigned_lc_id", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="min-width:75px">Hire Date</span>
+                    <input class="datepicker form-control" id="dsc_emp_hire_dt" name="dsc_emp_hire_dt" style="max-width:100%">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+                </div>
+                @Html.ValidationMessageFor(model => model.dsc_emp_hire_dt, "", new { @class = "text-danger" })
+            </div>
+
+
+            <div class="form-group row">
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="min-width:75px">Termination Date</span>
+                    <input class="datepicker form-control" id="dsc_emp_term_dt" name="dsc_emp_term_dt" style="max-width:100%">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+                </div>
+                @Html.ValidationMessageFor(model => model.dsc_emp_term_dt, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group row">
+                <div class="checkbox">
+                    <label style="font-size: 1.5em">
+                        <input type="checkbox" class="form-control input-sm" id="dsc_emp_can_be_obs_yn" @if (Model.dsc_emp_can_be_obs_yn == "Y") { <text> checked="checked" </text>  } name="dsc_emp_can_be_obs_yn">
+                        <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                        Observable
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label style="font-size: 1.5em">
+                        <input type="checkbox" class="form-control" id="dsc_emp_hourly_yn" @if (Model.dsc_emp_hourly_yn == "Y") { <text> checked="checked" </text>  } name="dsc_emp_hourly_yn">
+                        <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                        Hourly
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label style="font-size: 1.5em">
+                        <input type="checkbox" class="form-control input-sm" id="dsc_emp_temp_yn" @if (Model.dsc_emp_temp_yn == "Y") { <text> checked="checked" </text>  } name="dsc_emp_temp_yn">
+                        <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                        Temp
+                    </label>
+                </div>
+            </div>
+
+            <br />
+
+
+            <div class="form-group row">
+                <div class="col-md-1 ">
+                    &nbsp;&nbsp;
+                    <button type="submit" class="btn btn-primary" disabled="disabled" id="btnSubmit">Save Changes</button>
+                </div>
+                <div class="col-md-1 col-md-offset-1">
+                    <input type="reset" class="btn btn-default" value="Cancel" style="min-width:130px">
                 </div>
             </div>
 
 
-          <div class="form-group row">
-              <div class="col-md-12">
-                  <div class="input-group">
-                      <span class="input-group-addon">Title</span>
-                      <input class="form-control" type="text" value="@Model.dsc_emp_title" name="dsc_emp_title" id="dsc_emp_title">
-                  </div>
-              </div>
-          </div>
-
-
-                <div class="form-group row">
-                    <label class="col-lg-4 control-label">Facility:</label>
-                    <div class="col-lg-8">
-                        <div class="ui-select">
-                            @Html.DropDownList("dsc_assigned_lc_id", null, htmlAttributes: new { @class = "form-control" })
-                        </div>
-                    </div>
-                </div>
-            
-            
-            
-                <div class="form-group row">
-                    <div class="input-group col-md-8" data-provide="datepicker">
-                        <div class="input-group-addon">Hire Date</div>
-                        @*<input type="Text" class="editDate form-control" value="@Model.dsc_emp_hire_dt"  name="dsc_emp_hire_dt" id="dsc_emp_hire_dt"/>*@
-                        <input class="datepicker form-control" id="dsc_emp_hire_dt" name="dsc_emp_hire_dt" style="max-width: 100%; width:100%;">
-                        @*@Html.EditorFor(model => Model.dsc_emp_hire_dt, new { htmlAttributes = new { @class = "form-control editDate", name = "dsc_emp_hire_dt", id = "dsc_emp_hire_dt" } })*@
-                        <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                        @Html.ValidationMessageFor(model => model.dsc_emp_hire_dt, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-
-
-                <div class="form-group row">
-                    <label class="col-lg-4 control-label">Termination Date:</label>
-                    <div class="input-group col-lg-8">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                        @*<input type="Text" class="editDate form-control" value="@Model.dsc_emp_term_dt"  name="dsc_emp_term_dt" id="dsc_emp_term_dt"/>*@
-                        @Html.EditorFor(model => Model.dsc_emp_term_dt, new { htmlAttributes = new { @class = "form-control editDate", name = "dsc_emp_term_dt", id = "dsc_emp_term_dt" } })
-                        @Html.ValidationMessageFor(model => model.dsc_emp_term_dt, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-lg-4 control-label">Observable:</label>
-                    <div class="col-lg-8">
-                        <input type="checkbox" class="form-control input-sm" id="dsc_emp_can_be_obs_yn" @if (Model.dsc_emp_can_be_obs_yn == "Y") { <text> checked="checked" </text>    } name="dsc_emp_can_be_obs_yn">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-lg-4 control-label">Hourly:</label>
-                    <div class="col-lg-8">
-                        <input type="checkbox" class="form-control input-sm" id="dsc_emp_hourly_yn" @if (Model.dsc_emp_hourly_yn == "Y") { <text> checked="checked" </text>     } name="dsc_emp_hourly_yn">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-lg-4 control-label">Temp:</label>
-                    <div class="col-lg-8">
-                        <input type="checkbox" class="form-control input-sm" id="dsc_emp_temp_yn" @if (Model.dsc_emp_temp_yn == "Y") { <text> checked="checked" </text>      } name="dsc_emp_temp_yn">
-                    </div>
-                </div>
-                <br />
-                <div class="form-group">
-                    <label class="col-md-4 control-label"></label>
-                    <div class="col-md-8">
-                        <button type="submit" class="btn btn-primary" disabled="disabled" id="btnSubmit">Save Changes</button>
-                        @*<input type="submit" class="btn btn-primary" value="Save Changes">*@
-                        <span></span>
-                        <input type="reset" class="btn btn-default" value="Cancel">
-                    </div>
-                </div>
-                <input type="hidden" value="@Model.dsc_emp_id" name="dsc_emp_id" id="dsc_emp_id">
-</form>
-   </div>
+            <input type="hidden" value="@Model.dsc_emp_id" name="dsc_emp_id" id="dsc_emp_id">
+        </form>
+    </div>
 </div>
 
 
 
-    @if (ViewBag.ConfMsg != null)
-    {
-        <div id="ConfMsg" style="text-align:center; font-weight: bold; color:green">
+@if (ViewBag.ConfMsg != null)
+{
+    <div class="row">   
+        <div class="col-sm-9 col-sm-offset-3" id="ConfMsg" style="font-weight: bold; color:green">
             Employee Information Saved Successfully.
         </div>
-        <script>
-            $(function () {
-                setTimeout(function () {
-                    $("#ConfMsg").hide();
-                }, 3000);
-            });
-        </script>
-    }
+    </div>
+    <script>
+        $(function () {
+            setTimeout(function () {
+                $("#ConfMsg").hide();
+            }, 3000);
+        });
+    </script>
+}
 
 <hr>
 <div>
     @Html.ActionLink("Back to Employee List", "Index")
 </div>
 
+@*<div class="form-group row">
+        <ul class="list-group checked-list-box">
+            <li class="list-group-item"><span>One</span></li>
+            <li class="list-group-item" data-checked="true">Dapibus ac facilisis in</li>
+            <li class="list-group-item">Morbi leo risus</li>
+            <li class="list-group-item">Porta ac consectetur ac</li>
+            <li class="list-group-item">Vestibulum at eros</li>
+        </ul>
+    </div>*@
+@*<script>
+        $(function () {
+            $('.list-group.checked-list-box .list-group-item').each(function () {
 
+                // Settings
+                var $widget = $(this),
+                    $checkbox = $('<input type="checkbox" class="hidden" />'),
+                    color = ($widget.data('color') ? $widget.data('color') : "primary"),
+                    style = ($widget.data('style') == "button" ? "btn-" : "list-group-item-"),
+                    settings = {
+                        on: {
+                            icon: 'glyphicon glyphicon-check'
+                        },
+                        off: {
+                            icon: 'glyphicon glyphicon-unchecked'
+                        }
+                    };
+
+                $widget.css('cursor', 'pointer');
+                $widget.append($checkbox);
+
+                // Event Handlers
+                $widget.on('click', function () {
+                    $checkbox.prop('checked', !$checkbox.is(':checked'));
+                    $checkbox.triggerHandler('change');
+                    updateDisplay();
+                });
+                $checkbox.on('change', function () {
+                    updateDisplay();
+                });
+
+
+                // Actions
+                function updateDisplay() {
+                    var isChecked = $checkbox.is(':checked');
+
+                    // Set the button's state
+                    $widget.data('state', (isChecked) ? "on" : "off");
+
+                    // Set the button's icon
+                    $widget.find('.state-icon')
+                        .removeClass()
+                        .addClass('state-icon ' + settings[$widget.data('state')].icon);
+
+                    // Update the button's color
+                    if (isChecked) {
+                        $widget.addClass(style + color + ' active');
+                    } else {
+                        $widget.removeClass(style + color + ' active');
+                    }
+                }
+
+                // Initialization
+                function init() {
+
+                    if ($widget.data('checked') == true) {
+                        $checkbox.prop('checked', !$checkbox.is(':checked'));
+                    }
+
+                    updateDisplay();
+
+                    // Inject the icon if applicable
+                    if ($widget.find('.state-icon').length == 0) {
+                        $widget.prepend('<span class="state-icon ' + settings[$widget.data('state')].icon + '"></span>');
+                    }
+                }
+                init();
+            });
+
+        });
+    </script>*@

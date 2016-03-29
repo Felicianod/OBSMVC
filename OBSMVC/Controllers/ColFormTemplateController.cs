@@ -21,6 +21,12 @@ namespace OBSMVC.Controllers
         [HttpGet]
         public ActionResult Index(string title_search, string question_search, string t_search, string q_search, FormCollection form)
         {
+            string onlyPublished = "N";
+            try { onlyPublished = Request.QueryString["onlyPublished"]; }
+            catch { }
+            string onlyLive = "N";
+            try { onlyLive = Request.QueryString["onlyonlyLive"]; }
+            catch { }
             var oBS_COLLECT_FORM_TMPLT = db.OBS_COLLECT_FORM_TMPLT.Include(o => o.DSC_CUSTOMER).Include(o => o.DSC_LC).Include(o => o.OBS_TYPE);
             List<SelectListItem> fullFuncList = setfullFuncList();
             int selectedFunctionId = -1;
@@ -268,8 +274,18 @@ namespace OBSMVC.Controllers
 
                 }
 
+            }           
+            if (onlyLive== "Y")
+            {
+                ObsColFormTemplateList.RemoveAll(x => x.isActive != true);
             }
-
+            else
+            {
+                if (onlyPublished == "Y")
+                {
+                    ObsColFormTemplateList.RemoveAll(x => x.isPublished != true);
+                }
+            }
             ViewBag.fullFuncList = fullFuncList;
             return View(ObsColFormTemplateList.ToList());
         }

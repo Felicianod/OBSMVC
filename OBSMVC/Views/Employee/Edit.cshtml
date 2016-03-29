@@ -223,6 +223,23 @@
     @Html.ActionLink("Back to Employee List", "Index")
 </div>
 
+<script>
+    $(document).ready(function () {
+        $("input:text").focus(function () { $(this).select(); });
+
+        //$('.collapse').on('show.bs.collapse', function () {
+        //    $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
+        //}).on('hide.bs.collapse', function () {
+        //    $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
+        //});
+
+        $('.datepicker').datepicker({
+            format: "DD, d MM, yy"
+        });
+    });
+</script>
+
+
 @*<div class="form-group row">
         <ul class="list-group checked-list-box">
             <li class="list-group-item"><span>One</span></li>

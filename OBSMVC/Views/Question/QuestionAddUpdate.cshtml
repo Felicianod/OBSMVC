@@ -1,8 +1,17 @@
 ﻿@model OBSMVC.Models.QuestionCreateEditViewModel
 
-@{ ViewBag.Title = "Create/Edit Question"; 
-   //var test = @Model;
+@{ ViewBag.Title = "Create/Edit Question"; }
+@{
+    string endDateValue;
+    if (Model.questn.obs_question_eff_end_dt.ToString("yyyy").Equals("2060"))
+    { endDateValue = ""; }
+    else
+    {
+        endDateValue = @Model.questn.obs_question_eff_end_dt.ToString("MMM dd, yyyy");
+    }
 }
+
+
 
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
 <style>
@@ -79,17 +88,25 @@
     <div class="row personal-info">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <table style="width:100%">
-                    <tr>
-                        <td>
-                            <button type="button" id="showHeaderPanel" class="btn btn-info" data-toggle="collapse" data-target="#headerInfoPanel" style="min-width:85px">Collapse</button>
-                            <b>Question Header</b>
-                        </td>
-                    </tr>
-                </table>
+                    @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
+                    <a class="accordion-toggle" data-toggle="collapse" href="#headerInfoPanel">
+                        <span class="glyphicon glyphicon-minus">&nbsp;</span>
+                        @*<span class="glyphicon glyphicon-collapse-up">&nbsp;</span>*@
+                        @*<span class="caret">&nbsp;</span>*@
+                        <b>Question Information:</b>                       
+                    </a>
+                    <div class="input-group">
+                        <div class="input-group-addon stdWidth">
+                            @Html.LabelFor(model => model.questn.obs_question_full_text)
+                        </div>
+                        <textarea class="form-control has-feedback" id="questn.obs_question_full_text" name="questn.obs_question_full_text" cols="400" rows="3" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" required>@Model.questn.obs_question_full_text</textarea>
+                        @Html.ValidationMessageFor(model => model.questn.obs_question_full_text, "", new { @class = "text-danger" })
+                    </div>
+
+
             </div>
             <div class="panel-body collapse in" id="headerInfoPanel">
-                <div class="form-group row smallRowMargin">
+                @*<div class="form-group row smallRowMargin">
                     <div class="col-sm-11 col-sm-offset-1">
                         <div class="input-group">
                             <div class="input-group-addon stdWidth">
@@ -99,9 +116,9 @@
                             @Html.ValidationMessageFor(model => model.questn.obs_question_full_text, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                </div>
+                </div>*@
                 <div class="form-group row smallRowMargin">
-                    <div class="col-sm-11 col-sm-offset-1">
+                    <div class="col-sm-11 ">
                         <div class="input-group">
                             <div class="input-group-addon stdWidth">
                                 @Html.LabelFor(model => model.questn.obs_question_desc)
@@ -112,7 +129,7 @@
                     </div>
                 </div>
                 <div class="form-group row smallRowMargin">
-                    <div class="col-sm-4 col-sm-offset-2">
+                    <div class="col-sm-4 col-sm-offset-1">
                         <div class="input-group" data-provide="datepicker">
                             <div class="input-group-addon">
                                 @Html.LabelFor(model => model.questn.obs_question_eff_st_dt)
@@ -127,7 +144,7 @@
                             <div class="input-group-addon">
                                 @Html.LabelFor(model => model.questn.obs_question_eff_end_dt)
                             </div>
-                            <input class="datepicker form-control" id="obs_question_eff_end_dt" name="questn.obs_question_eff_end_dt" value="@Model.questn.obs_question_eff_end_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;">
+                            <input class="datepicker form-control" id="obs_question_eff_end_dt" name="questn.obs_question_eff_end_dt" value="@endDateValue" style="max-width: 100%; width:100%;">
                             <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
                             @Html.ValidationMessageFor(model => model.questn.obs_question_eff_end_dt, "", new { @class = "text-danger" })
                         </div>
@@ -155,8 +172,12 @@
                 <table style="width:100%">
                     <tr>
                         <td>
-                            <button type="button" id="showSelAns" class="btn btn-info" data-toggle="collapse" data-target="#ansTypesPanel" style="min-width:85px">Collapse</button>
-                            <b>Currently Defined Answer Types for this question</b>
+                            <a class="accordion-toggle" data-toggle="collapse" href="#ansTypesPanel">
+                                <span class="glyphicon glyphicon-minus">&nbsp;</span>
+                                @*<span class="glyphicon glyphicon-collapse-up">&nbsp;</span>*@
+                                @*<span class="caret">&nbsp;</span>*@
+                                <b>Currently Defined Answer Types for this question</b>
+                            </a>
                         </td>
                         <td style="text-align:right">
                             <button type="button" class="btn btnAdd" id="addAnsType"><img src="~/Images/Button-Add-icon.png" height="25" />Add New Answer Type</button>
@@ -167,8 +188,10 @@
             <div class="panel-body collapse in" id="ansTypesPanel">
                 @if (Model.Quest_Assigned_qatTags.Count == 0)
                 {
-                    <div class="row">
+                    <div class="row" id="noATmsg" style="text-align:center">
+                        <br />
                         <span style="color:red; font-weight:bold">There are no Answer Types Defined for this Question !!</span>
+                        <br /><br />
                     </div>
                 }
                 else
@@ -202,8 +225,12 @@
                     <table style="width:100%">
                         <tr>
                             <td>
-                                <button type="button" id="showMDPanel" class="btn btn-info" data-toggle="collapse" data-target="#MDTinfo" style="min-width:85px">Collapse</button>
-                                <b>Question Metadata Maintenance</b>
+                                <a class="accordion-toggle" data-toggle="collapse" href="#MDTinfo">
+                                    <span class="glyphicon glyphicon-minus">&nbsp;</span>
+                                    @*<span class="glyphicon glyphicon-collapse-up">&nbsp;</span>*@
+                                    @*<span class="caret">&nbsp;</span>*@
+                                    <b>Question Metadata Maintenance</b>
+                                </a>                                
                             </td>
                             <td style="text-align:right">
                                 <button type="button" class="btnAdd" data-toggle="modal" data-target="#NewMDTag"><img src="~/Images/Button-Add-icon.png" height="25" />Add New Metedata Tag</button>
@@ -353,6 +380,12 @@
 
             $('.datepicker').datepicker({
                 dateFormat: 'M dd, yy'
+            });
+
+            $('.collapse').on('show.bs.collapse', function () {
+                $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
+            }).on('hide.bs.collapse', function () {
+                $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
             });
 
             $('[data-toggle="tooltip"]').tooltip();
@@ -565,14 +598,6 @@
             //        $(this).parent().remove();
             //        // updateValues("An Item was Deleted");  //If we want to all a function when item is dragged/dropped
             //    });
-
-
-            $('#showMDPanel').click(function () {
-                var btnText = $(this).html();
-                if (btnText == "Collapse")
-                { $(this).html("Show") }
-                else { $(this).html("Collapse") }
-            });
         });
     </script>
 
@@ -630,6 +655,9 @@
             }).done(function (d) {
                 //Execute this code After the Ajax call completes successfully
                 $("#divNewSA").html(d);
+                $("#fullSelATlist").focus();
+                $('html,body').animate({ scrollTop: document.body.scrollHeight }, "slow");
+                //window.scrollTo(0, 0);   //Scroll to the top of the Screen
             });
 
         });

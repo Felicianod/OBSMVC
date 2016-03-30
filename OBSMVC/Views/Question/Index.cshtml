@@ -24,7 +24,7 @@
                 Search Active Questions Only
                </label>
            </td>
-           <td style="text-align:end">
+           <td style="text-align:right">
                @*<b>@Html.ActionLink("Add New Question", "Create")</b>*@
                <button type="button" class="btnAdd" onclick="window.location.href = '/Question/QuestionAddUpdate/'">
                    <img src="~/Images/Button-Add-icon.png" height="25" />
@@ -63,7 +63,8 @@
                     @item.obs_question_id
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.obs_question_full_text)
+                    @Html.ActionLink(item.obs_question_full_text, "Details", new { id = item.obs_question_id })
+                    @*@Html.DisplayFor(modelItem => item.obs_question_full_text)*@
                 </td>
                 <td style="text-align:center">
                     <input type="checkbox" disabled="disabled" @if (DateTime.Today >= item.obs_question_eff_st_dt && DateTime.Today < item.obs_question_eff_end_dt) { <TEXT> checked="checked" </TEXT>       } />

@@ -100,7 +100,7 @@ namespace OBSMVC.Controllers
             {
                 obsQCVM = new QuestionCreateEditViewModel();
                 obsQCVM.questn.obs_question_eff_st_dt = DateTime.Now;
-                obsQCVM.questn.obs_question_eff_end_dt = Convert.ToDateTime("2060/12/31");                
+                obsQCVM.questn.obs_question_eff_end_dt = Convert.ToDateTime("2060/12/31");
             }
             else
             {

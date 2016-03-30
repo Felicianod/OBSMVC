@@ -200,13 +200,11 @@
         //------------ BUTTON CANCEL ENTERING NEW ANSWER TYPE -----------------------------------------------------
         $('.cancelNewSA').click(function () {
             $(this).parents("div.answerType").first().remove();
-            $("#addQuestion").removeAttr('disabled');
+            $("#addAnsType").removeAttr('disabled');
         });
         //--------------------- SOFT SAVE NEW SELECTABLE ANSER --------------------------------
         $('#btnSaveNewAT').click(function () {
             var hasEmptyValues = false;
-            
-
             var textValues = "";
             var counter = 0;
             var emptyBoxes = 0;
@@ -234,7 +232,7 @@
 
             ///alert("Parameter passed to Ajax are: " + postParams);
 
-            $('#addQuestion').prop('disabled', false)
+            $('#addAnsType').prop('disabled', false)
             // --------------------------- SOFT SAVE NEW ANSWER TYPE VIA AJAX (NOT POSTED TO DB) --------------
             $.ajax({
                 url: '@Url.Action("saveNewSelectableAnswer", "Question")',
@@ -260,6 +258,7 @@
                 //If saving is successful, enable the Question Save Button
                 $("#btnAddQuestion").removeAttr('disabled');
                 $('#mesageaddedSA').show();
+                $('#noATmsg').remove();
             });
 
 

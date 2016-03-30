@@ -119,7 +119,7 @@ namespace OBSMVC.Controllers
         public ActionResult QuestionAddUpdatePost(FormCollection postedData, QuestionMDViewModel QuestionMDView,
                                  [Bind(Prefix = "questn")] OBS_QUESTION questionHdr, string ans_type_list)
         {
-
+            if (questionHdr.obs_question_eff_end_dt < Convert.ToDateTime("01/01/2000")) { questionHdr.obs_question_eff_end_dt = Convert.ToDateTime("12/31/2060"); }
             string posted_ans_type_list = postedData["ans_type_list"];//represents newly added selectable ans types
             string posted_existing_ans_type_data = postedData["sel_ans_list"]; //represents existing assigned ans types that need to be modified
             //string ans_type_list = "6~true~yes~no~maybe,10~false~1~2~3~4~5";
@@ -144,10 +144,9 @@ namespace OBSMVC.Controllers
                         {
                             updateDefaultAnswerType(defaultQATid, "Y");
                         }
-                        else
-                        {
-                            int temp_qid=db.OBS_QUEST_ANS_TYPES.Single(x => x.obs_qat_id == defaultQATid).obs_question_id;
-                            List<OBS_QUEST_ANS_TYPES> temp_OBS_QUEST_ANS_TYPES= db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == temp_qid).ToList();
+                        else if (questionHdr.obs_question_id > 0)
+                        {             
+                            List<OBS_QUEST_ANS_TYPES> temp_OBS_QUEST_ANS_TYPES = db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == questionHdr.obs_question_id).ToList();
                             foreach(OBS_QUEST_ANS_TYPES x in temp_OBS_QUEST_ANS_TYPES )
                             {
                                 x.obs_qat_default_ans_type_yn = "N";
@@ -164,13 +163,14 @@ namespace OBSMVC.Controllers
                                 List<string> selAnsList_from_form = new List<string>();
                                 string[] splitterm = { "~" };
                                 string[] ans_type_elements = str.Split(splitterm, StringSplitOptions.RemoveEmptyEntries);
-                                short obs_ans_type_id = db.OBS_QUEST_ANS_TYPES.Single(x => x.obs_qat_id == Convert.ToInt32(ans_type_elements[0])).obs_ans_type_id;
+                                int intQATid = Convert.ToInt32(ans_type_elements[0]);
+                                short obs_ans_type_id = db.OBS_QUEST_ANS_TYPES.Single(x => x.obs_qat_id == intQATid).obs_ans_type_id;
                                 for (int i = 1; i < ans_type_elements.Length; i++)
                                 {
                                     selAnsList_from_form.Add(ans_type_elements[i].Trim().ToUpper());
                                 }
                                 OBS_ANS_TYPE ans_type = db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == obs_ans_type_id);
-                                List<string> current_sel_ans_list = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == Convert.ToInt32(ans_type_elements[0]) && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).Select(x => x.obs_qsa_text).ToList();
+                                List<string> current_sel_ans_list = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == intQATid && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).Select(x => x.obs_qsa_text).ToList();
                                 //if (current_sel_ans_list.Count() != selAnsList_from_form.Count() && (ans_type.obs_ans_type_category == "3 Val Range" || ans_type.obs_ans_type_category == "5 Val Range"))
                                 //{
 
@@ -181,7 +181,7 @@ namespace OBSMVC.Controllers
                                         short order = 1;
                                         for (int i = 1; i < ans_type_elements.Length; i++)
                                         {
-                                            OBS_QUEST_SLCT_ANS oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Single(item => item.obs_qat_id == Convert.ToInt32(ans_type_elements[0]) && item.obs_qsa_text == ans_type_elements[i] && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now);
+                                            OBS_QUEST_SLCT_ANS oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Single(item => item.obs_qat_id == intQATid && item.obs_qsa_text == ans_type_elements[i] && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now);
                                             oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
                                             db.SaveChanges();
                                             order++;
@@ -189,13 +189,13 @@ namespace OBSMVC.Controllers
                                 }
                                 else//if we're here, that means user passed a different list of selected answers and we need to disable the current one and add new
                                 {                                  
-                                        List<OBS_QUEST_SLCT_ANS> oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == Convert.ToInt32(ans_type_elements[0])&& item.obs_qsa_eff_end_dt>DateTime.Now).ToList();
+                                        List<OBS_QUEST_SLCT_ANS> oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == intQATid && item.obs_qsa_eff_end_dt>DateTime.Now).ToList();
                                         oBS_QUEST_SLCT_ANS.ForEach(x => x.obs_qsa_eff_end_dt = DateTime.Now);//update end effective date to todays date
                                         short order = 1;
                                         for (int i = 1; i < ans_type_elements.Length; i++)//now lets create a new record with updated selected answers
                                         {
                                             OBS_QUEST_SLCT_ANS UPDATED_oBS_QUEST_SLCT_ANS = new OBS_QUEST_SLCT_ANS();
-                                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qat_id = Convert.ToInt32(ans_type_elements[0]);
+                                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qat_id = intQATid;
                                             UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_text = ans_type_elements[i];
                                             UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
                                             UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_wt = order;

@@ -465,14 +465,16 @@
                 if ($(this).find('.btnIsDefault').first().hasClass("btnYES")) {
                     defaultQATid = $(this).children('#obs_qat_id').val();
                 }
+
                 modifiedQATs = modifiedQATs + $(this).children('#sel_ans_list').val() + "/n";
                 //alert("QAT id: " + $(this).children('#obs_qat_id').val() found );
             });
             document.getElementById("defaultQATid").setAttribute("Value", defaultQATid);
 
+            alert("Changed Values list is: " + modifiedQATs);
 
 
-            alert("Posting Values: Default QAT id: " + $('#defaultQATid').val());
+            //alert("Posting Values: Default QAT id: " + $('#defaultQATid').val());
 
             //if (errorMsg != "") {
             //    //If an validation error is found 

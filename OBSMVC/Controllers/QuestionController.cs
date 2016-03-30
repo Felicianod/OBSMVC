@@ -120,19 +120,98 @@ namespace OBSMVC.Controllers
                                  [Bind(Prefix = "questn")] OBS_QUESTION questionHdr, string ans_type_list)
         {
 
-            string posted_ans_type_list = postedData["ans_type_list"];
+            string posted_ans_type_list = postedData["ans_type_list"];//represents newly added selectable ans types
+            string posted_existing_ans_type_data = postedData["sel_ans_list"]; //represents existing assigned ans types that need to be modified
             //string ans_type_list = "6~true~yes~no~maybe,10~false~1~2~3~4~5";
             //ans_type_list format: at_id~default~sel_ans,
             //                        6~true~yes~no~maybe,
+            //string defaultQATid(null or value)
             //-------- Save the Question Information ----
+            int defaultQATid = -1;
+            try
+            {
+                defaultQATid = Convert.ToInt32(postedData["defaultQATid"]);
+            }
+            catch { }
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
                 using (var transaction = db.Database.BeginTransaction())
                 {
                     try
                     {
+                        
+                        if(defaultQATid>0)
+                        {
+                            updateDefaultAnswerType(defaultQATid, "Y");
+                        }
+                        else
+                        {
+                            int temp_qid=db.OBS_QUEST_ANS_TYPES.Single(x => x.obs_qat_id == defaultQATid).obs_question_id;
+                            List<OBS_QUEST_ANS_TYPES> temp_OBS_QUEST_ANS_TYPES= db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == temp_qid).ToList();
+                            foreach(OBS_QUEST_ANS_TYPES x in temp_OBS_QUEST_ANS_TYPES )
+                            {
+                                x.obs_qat_default_ans_type_yn = "N";
+                                db.SaveChanges();
+                            }
+                        }
+                        ////////////////////////////////This section saves changes to existing answer types/////////////////////////////////
+                        if (!string.IsNullOrEmpty(posted_existing_ans_type_data))
+                        {
+                            string[] split_ans_types_by = { "," };
+                            string[] posted_single_ans_type_data = posted_existing_ans_type_data.Split(split_ans_types_by, StringSplitOptions.RemoveEmptyEntries);
+                            foreach (string str in posted_single_ans_type_data)
+                            {
+                                List<string> selAnsList_from_form = new List<string>();
+                                string[] splitterm = { "~" };
+                                string[] ans_type_elements = str.Split(splitterm, StringSplitOptions.RemoveEmptyEntries);
+                                short obs_ans_type_id = db.OBS_QUEST_ANS_TYPES.Single(x => x.obs_qat_id == Convert.ToInt32(ans_type_elements[0])).obs_ans_type_id;
+                                for (int i = 1; i < ans_type_elements.Length; i++)
+                                {
+                                    selAnsList_from_form.Add(ans_type_elements[i].Trim().ToUpper());
+                                }
+                                OBS_ANS_TYPE ans_type = db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == obs_ans_type_id);
+                                List<string> current_sel_ans_list = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == Convert.ToInt32(ans_type_elements[0]) && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).Select(x => x.obs_qsa_text).ToList();
+                                //if (current_sel_ans_list.Count() != selAnsList_from_form.Count() && (ans_type.obs_ans_type_category == "3 Val Range" || ans_type.obs_ans_type_category == "5 Val Range"))
+                                //{
 
+                                //    ViewBag.Message = "ERROR: Not Enough Selectable Answers for this category!!!!";
+                                //}
+                                if (isEqualList(current_sel_ans_list, selAnsList_from_form, ans_type.obs_ans_type_category))
+                                {//if we're here that means 2 lists are the same and we only need to change the order of selected answers list
+                                        short order = 1;
+                                        for (int i = 1; i < ans_type_elements.Length; i++)
+                                        {
+                                            OBS_QUEST_SLCT_ANS oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Single(item => item.obs_qat_id == Convert.ToInt32(ans_type_elements[0]) && item.obs_qsa_text == ans_type_elements[i] && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now);
+                                            oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
+                                            db.SaveChanges();
+                                            order++;
+                                        }
+                                }
+                                else//if we're here, that means user passed a different list of selected answers and we need to disable the current one and add new
+                                {                                  
+                                        List<OBS_QUEST_SLCT_ANS> oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == Convert.ToInt32(ans_type_elements[0])&& item.obs_qsa_eff_end_dt>DateTime.Now).ToList();
+                                        oBS_QUEST_SLCT_ANS.ForEach(x => x.obs_qsa_eff_end_dt = DateTime.Now);//update end effective date to todays date
+                                        short order = 1;
+                                        for (int i = 1; i < ans_type_elements.Length; i++)//now lets create a new record with updated selected answers
+                                        {
+                                            OBS_QUEST_SLCT_ANS UPDATED_oBS_QUEST_SLCT_ANS = new OBS_QUEST_SLCT_ANS();
+                                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qat_id = Convert.ToInt32(ans_type_elements[0]);
+                                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_text = ans_type_elements[i];
+                                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
+                                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_wt = order;
+                                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_dflt_yn = "N";
+                                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_eff_st_dt = DateTime.Now;
+                                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                                            db.OBS_QUEST_SLCT_ANS.Add(UPDATED_oBS_QUEST_SLCT_ANS);
+                                            order++;
+                                        }// end foreach
+                                       db.SaveChanges();                                                                      
+                                }
+                            }//foreach (string str in posted_single_ans_type_data)
+                        }//end of  if (!string.IsNullOrEmpty(posted_existing_ans_type_data))
+                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+                        //this section saves new question information or new question answer type
                         if (questionHdr.obs_question_id > 0)
                         {
                             OBS_QUESTION editedQuestion = db.OBS_QUESTION.Single(x => x.obs_question_id == questionHdr.obs_question_id);
@@ -835,7 +914,7 @@ namespace OBSMVC.Controllers
         {
             List<string> selAnsList_from_form = new List<string>();
             short obs_ans_type_id = db.OBS_QUEST_ANS_TYPES.Single(x => x.obs_qat_id == qat_id).obs_ans_type_id;
-            string[] splitterm = { "," };
+            string[] splitterm = { "~" };
             string[] selected_new_sel_ans_types = sel_ans_list.Split(splitterm, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in selected_new_sel_ans_types)
             {

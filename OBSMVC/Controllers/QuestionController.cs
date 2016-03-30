@@ -119,7 +119,6 @@ namespace OBSMVC.Controllers
         public ActionResult QuestionAddUpdatePost(FormCollection postedData, QuestionMDViewModel QuestionMDView,
                                  [Bind(Prefix = "questn")] OBS_QUESTION questionHdr, string ans_type_list)
         {
-
             string posted_ans_type_list = postedData["ans_type_list"];
             //string ans_type_list = "6~true~yes~no~maybe,10~false~1~2~3~4~5";
             //ans_type_list format: at_id~default~sel_ans,

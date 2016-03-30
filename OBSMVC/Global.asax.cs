@@ -21,5 +21,15 @@ namespace OBSMVC
             GlobalFilters.Filters.Add(new System.Web.Mvc.AuthorizeAttribute());
             ViewEngines.Engines.Add(new RazorViewEngine());
         }
+        
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            HttpContextWrapper context = new HttpContextWrapper(this.Context);
+
+            if (context.Request.IsAjaxRequest())
+            {
+                context.Response.SuppressFormsAuthenticationRedirect = true;
+            }
+        }
     }
 }

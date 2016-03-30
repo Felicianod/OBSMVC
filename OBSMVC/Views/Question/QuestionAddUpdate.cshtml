@@ -68,7 +68,23 @@
         color: white;
     }
 </style>
-
+<script>
+    function toggleDefault(btnClicked) {
+        if (btnClicked.hasClass('btnYES')) {
+            // Just make the current clicked button "NO" default
+            btnClicked.removeClass("btnYES").addClass("btn-warning");
+            btnClicked.html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
+        }
+        else {
+            //Else, reset all buttons to "No Default" and make this button the default
+            $(".btnIsDefault").removeClass("btnYES").addClass("btn-warning");
+            $(".btnIsDefault").html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
+            btnClicked.removeClass("btn-warning").addClass("btnYES");
+            btnClicked.html('YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up">');
+        }
+        $('#btnAddQuestion').prop('disabled', false);
+    }
+</script>
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
 <div class="well well-sm smallRowMargin" style="padding: 4px; font-size:xx-large; text-align:center">
     <span class="col-md-offset-1" > @Model.viewPageTitle</span>
@@ -186,28 +202,28 @@
                 </table>
             </div>
             <div class="panel-body collapse in" id="ansTypesPanel">
-                @if (Model.Quest_Assigned_qatTags.Count == 0)
-                {
-                    <div class="row" id="noATmsg" style="text-align:center">
-                        <br />
-                        <span style="color:red; font-weight:bold">There are no Answer Types Defined for this Question !!</span>
-                        <br /><br />
-                    </div>
-                }
-                else
-                {
-                    <div class="row">
-                        @foreach (OBSMVC.Models.qatTags qat in Model.Quest_Assigned_qatTags)
+                <div class="row" id="existingQATs">
+                    @if (Model.Quest_Assigned_qatTags.Count == 0)
+                    {
+                        <div class="row" id="noATmsg" style="text-align:center">
+                            <br />
+                            <span style="color:red; font-weight:bold">There are no Answer Types Defined for this Question !!</span>
+                            <br /><br />
+                        </div>
+                    }
+                    else
+                    {
+                        foreach (OBSMVC.Models.qatTags qat in Model.Quest_Assigned_qatTags)
                         {
                             @Html.Partial("_getQuestionAnswerInfo", qat) ; @*<hr />*@
                         }
-                    </div>
-                }
+                    }
+                </div>
 
                 @*// Divissions Defined for Dynamic (Partial Views) content*@
                 <div class="row" id="divaddedSA">
-                    <div class="col-sm-10 col-sm-offset-1" id="mesageaddedSA" style="display:none">
-                    </div>
+                    @*<div class="col-sm-12 " id="messageAddedSA" style="display:none; border:solid; border-width:1px; font-family:Arial">
+                    </div>*@
                 </div>
 
                 <div class="row" id="divNewSA">
@@ -240,6 +256,7 @@
                 </div>
                 <div class="panel-body collapse in" id="MDTinfo">
                     <input type="hidden" id="qAssignedMD" name="qAssignedMD" />
+                    <input type="hidden" id="defaultQATid" name="defaultQATid" />
                     @foreach (int item in Model.preMetaDataIds)
                   {
                     <input type="hidden" id="origTags" name="origTags" value="@item" />
@@ -286,12 +303,12 @@
     <div class="row">
         <div class="col-md-12 ">
             <div class="form-group row">
-                <div class="col-md-offset-2 col-md-10">
-                    <button type="submit" class="btn btn-primary" disabled="disabled" id="btnAddQuestion" onclick="compileTagList();">
-                        <span>SAVE</span> 
+                <div class="col-md-4 col-sm-push-8">
+                    <button type="submit" id="btnAddQuestion" class="btn btn-primary" disabled="disabled" style="min-width:100px" onclick="return compilePostValues();">
+                        <span>SAVE</span>
                     </button>
-                    <span></span>
-                    <input type="reset" class="btn btn-default" value="Reset Form">
+                    <span>&nbsp;&nbsp;&nbsp;</span>
+                    <input type="reset" class="btn btn-default" value="Reset Form" style="min-width:100px">
                 </div>
             </div>
             @if (ViewBag.ConfMsg != null)
@@ -437,12 +454,37 @@
         });
     </script>
     <script>
-        function compileTagList() {
+        function compilePostValues() {
             var tagList = getTagListValues();
+            var defaultQATid = "";
+            var modifiedQATs = "";
+            // Set hidden field value for The Assigned Meta data Tag List
             document.getElementById("qAssignedMD").setAttribute("Value", tagList);
-            //var hiddenFld = document.getElementById("qAssignedMD").value;
-            //alert("Result is: " + hiddenFld);
-            //return true;
+            // Set hidden field value for The Default Question Answer Type "defaultQATid"
+            $('#existingQATs').find('.answerType').each(function () {
+                if ($(this).find('.btnIsDefault').first().hasClass("btnYES")) {
+                    defaultQATid = $(this).children('#obs_qat_id').val();
+                }
+                modifiedQATs = modifiedQATs + $(this).children('#sel_ans_list').val() + "/n";
+                //alert("QAT id: " + $(this).children('#obs_qat_id').val() found );
+            });
+            document.getElementById("defaultQATid").setAttribute("Value", defaultQATid);
+
+
+
+            alert("Posting Values: Default QAT id: " + $('#defaultQATid').val());
+
+            //if (errorMsg != "") {
+            //    //If an validation error is found 
+            //    alert(errorMsg);
+            //    $('#btnSaveForm').button('reset');
+            //}
+            //else {
+            //    //Post the Form
+            //    document.getElementById("CreateForm").submit();
+            //}
+
+
         };
 
         function getTagListValues() {
@@ -520,6 +562,7 @@
                     return undefined;
                 }
             });
+            // ---------------- Execute When Saving the Whole Form --------------
             $("#btnAddQuestion").click(function () {
                 isChanged = false;
                 $(this).button('loading');
@@ -542,9 +585,11 @@
                 //Otherwise We just leave the current uncheck box (all all the others) as they are
             });
 
-
             $(".btnIsDefault").click(function () {
-                var isDefaultValue = true;
+
+                toggleDefault($(this));
+
+                @*var isDefaultValue = true;
                 if ($(this).hasClass('btnYES')) {
                     isDefaultValue = false;
                 }
@@ -582,8 +627,7 @@
                     $(".btnIsDefault").html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
                     $(this).removeClass("btn-warning").addClass("btnYES");
                     $(this).html('YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up">');
-                }
-
+                }*@
             });
 
             //$('.collapse').on('show.bs.collapse', function () {
@@ -705,13 +749,30 @@
             $(this).parent().find('.selAnswerTextb').each(function () {
                 counter++;
                 //Compile a list of Values to post
-                textValues = textValues + $(this).val() + ","                
+                textValues = textValues + $(this).val() + "~"                
             })
 
+            var postingValuesField = $(this).parents(".answerType").first().children("#sel_ans_list");
+            //alert("Original Posting values: " + postingValuesField.val());
+            //Save the New values in the corresponding QAT hidden field for later posting
+            postingValuesField.val(QATid + "~" + textValues);
+            //$(this).parents(".answerType").first().children("#sel_ans_list").val(QATid + "~" + textValues);
+
+            //perform post "save" operations
+            badgeLi.siblings().remove();
+            $(divSAText).find('.selAnswerTextb').each(function () {
+                //  alert("Refreshing Badges from [" + badgeLi.next().children("span").first().text() + "] to [" + $(this).val() + "]");
+                badgeLi.parent().append('<li style="display: inline;" id="testLi"><span class="badge" style="font-size:larger">' + $(this).val() + '</span>&nbsp;&nbsp;</li>');
+            })
+
+            //Enable the Question Save Button if ajax call is successful
+            $("#btnAddQuestion").removeAttr('disabled');
+
             ///alert("Found " + counter + " Text Boxes")
+            alert("Value Saved: " + postingValuesField.val());
 
             //alert("Current Textdiv Id is: " + divSAText + " QATid: " + QATid + " Values Found Are: " + textValues);
-            // ------------ Make the Ajax Call ---------------------------------------------
+            @*// ------------ Make the Ajax Call ---------------------------------------------
             $.ajax({
                 url: '@Url.Action("saveSelAns", "Question")',
                     method: "POST",
@@ -737,7 +798,7 @@
 
                     //Enable the Question Save Button if ajax call is successful
                     $("#btnAddQuestion").removeAttr('disabled');
-                });
+                });*@
 
                 // Hide the "Text Boxes" <Division>
                 $(divSAText).hide();

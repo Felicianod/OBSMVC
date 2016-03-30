@@ -752,8 +752,11 @@
                 textValues = textValues + $(this).val() + "~"                
             })
 
+            var postingValuesField = $(this).parents(".answerType").first().children("#sel_ans_list");
+            //alert("Original Posting values: " + postingValuesField.val());
             //Save the New values in the corresponding QAT hidden field for later posting
-            $("this").parents(".answerType").first().children("#sel_ans_list").val($("this").parents(".answerType").first().children("#obs_qat_id").val() + "~" + textValues);
+            postingValuesField.val(QATid + "~" + textValues);
+            //$(this).parents(".answerType").first().children("#sel_ans_list").val(QATid + "~" + textValues);
 
             //perform post "save" operations
             badgeLi.siblings().remove();
@@ -765,11 +768,8 @@
             //Enable the Question Save Button if ajax call is successful
             $("#btnAddQuestion").removeAttr('disabled');
 
-
-
-
             ///alert("Found " + counter + " Text Boxes")
-            alert("Value Saved: " + $("this").parents(".answerType").first().children("#sel_ans_list").val());
+            alert("Value Saved: " + postingValuesField.val());
 
             //alert("Current Textdiv Id is: " + divSAText + " QATid: " + QATid + " Values Found Are: " + textValues);
             @*// ------------ Make the Ajax Call ---------------------------------------------

@@ -68,7 +68,23 @@
         color: white;
     }
 </style>
-
+<script>
+    function toggleDefault(btnClicked) {
+        if (btnClicked.hasClass('btnYES')) {
+            // Just make the current clicked button "NO" default
+            btnClicked.removeClass("btnYES").addClass("btn-warning");
+            btnClicked.html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
+        }
+        else {
+            //Else, reset all buttons to "No Default" and make this button the default
+            $(".btnIsDefault").removeClass("btnYES").addClass("btn-warning");
+            $(".btnIsDefault").html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
+            btnClicked.removeClass("btn-warning").addClass("btnYES");
+            btnClicked.html('YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up">');
+        }
+        $('#btnAddQuestion').prop('disabled', false);
+    }
+</script>
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
 <div class="well well-sm smallRowMargin" style="padding: 4px; font-size:xx-large; text-align:center">
     <span class="col-md-offset-1" > @Model.viewPageTitle</span>
@@ -541,25 +557,6 @@
                 }
                 //Otherwise We just leave the current uncheck box (all all the others) as they are
             });
-
-            function toggleDefault(btnClicked)
-            {
-                if (btnClicked.hasClass('btnYES')) {
-                    // Just make the current clicked button "NO" default
-                    btnClicked.removeClass("btnYES").addClass("btn-warning");
-                    btnClicked.html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
-                }
-                else {
-                    //Else, reset all buttons to "No Default" and make this button the default
-                    $(".btnIsDefault").removeClass("btnYES").addClass("btn-warning");
-                    $(".btnIsDefault").html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
-                    btnClicked.removeClass("btn-warning").addClass("btnYES");
-                    btnClicked.html('YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up">');
-                }
-                $('#btnAddQuestion').prop('disabled', false);
-            }
-
-
 
             $(".btnIsDefault").click(function () {
 

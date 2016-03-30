@@ -5,7 +5,7 @@
 @{
     var is_default = Model.isDefault ? "true" : "false";
     var value_to_submit = Model.ans_type_id + "~" + is_default;
-    if (Model.selAnsList.Count() > 0)
+    if (Model.selAnsList.Count > 0)
     {
         foreach(string s in Model.selAnsList)
         {
@@ -14,7 +14,7 @@
     }
 }
 
-<div class="col-sm-12 answerType" id="testing" style="border:solid; border-width:1px; margin-left:10px; font-family:Arial">
+<div class="col-sm-12 answerType" id="testing" style="border:solid; border-width:1px; background-color:#ddebfc; border-color:blue; font-family:Arial">
     <input type="hidden" id="ans_type_list" value="@value_to_submit" name="ans_type_list" />
     <div class="row">
         <div class="col-sm-6 form-inline">          
@@ -28,9 +28,9 @@
             <div class="input-group">
                 <span class="input-group-addon">Default </span>
                 @if (Model.isDefault)
-                { <button type="button" class="btn btnIsDefault btnYES">YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span></button> }
+                { <button type="button" class="btn btnIsDefault btnYES" onclick="toggleDefault($(this))">YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span></button> }
                 else
-                { <button type="button" class="btn btnIsDefault btn-warning">NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span></button> }
+                { <button type="button" class="btn btnIsDefault btn-warning" onclick="toggleDefault($(this))">NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span></button> }
                 @*<input type="checkbox" @if (Model.QAT.obs_qat_default_ans_type_yn == "Y") { <text> checked="checked" </text>     }
                     class="form-control primar chkDefault" id="qatDefault" name="qatDefault" style="max-width:20%" />*@
             </div>

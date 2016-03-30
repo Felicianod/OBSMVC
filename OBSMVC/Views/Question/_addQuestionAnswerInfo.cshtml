@@ -8,24 +8,23 @@
                 //{ btnClass = "This is a default Button" }
                 //else { btnClass = "This is not default Button" }
 
-
         if (defaultBtn.hasClass('btnYES')) {
             defaultBtn.removeClass("btnYES").addClass("btn-warning");
             defaultBtn.html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
         }
         else {
-            //Else, reset all buttons to "No Default" and make this button the default
-            $(".btnIsDefault").removeClass("btnYES").addClass("btn-warning");
-            $(".btnIsDefault").html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
+            ////Else, reset all buttons to "No Default" and make this button the default
+            //$(".btnIsDefault").removeClass("btnYES").addClass("btn-warning");
+            //$(".btnIsDefault").html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
             defaultBtn.removeClass("btn-warning").addClass("btnYES");
             defaultBtn.html('YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up">');
         }
     }
 </script>
-<div class="row answerType" id="testing" style="margin-left:10px; border:double; border-color:green; background-color:lightslategray; font-family:Arial">
+<div class="col-sm-12 answerType" id="testing" style="border-style:double; border-width:2px; border-color:green; background-color:lightslategray; font-family:Arial">
     <div class="row">
         <div class="col-sm-6 form-inline">
-            <div class="input-group col-sm-7">
+            <div class="input-group col-sm-7" >
                 <span class="input-group-addon label-primary" style="color:white; max-width:25%">Answer Type:</span>
 
                 @Html.DropDownList("fullSelATlist", null, "-Select Answer Type-", htmlAttributes: new { @class = "form-control selectAT" })
@@ -35,14 +34,14 @@
             <div class="input-group">
                 <span class="input-group-addon">Default </span>
                 <button id="btnNewATdefault" type="button" class="btn btnIsDefault btn-warning" onclick="makeDflt($(this))">
-                     NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
+                    NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
                 </button>
             </div>
         </div>
     </div>
 
 
-    <div id="divNewAT" class="row divText" >
+    <div id="divNewAT" class="row divText">
         &nbsp;
         <div class="col-sm-6 col-sm-offset-1">
             <div class="row" id="noSelection" style="display:none">
@@ -62,38 +61,30 @@
             <div class="row" id="ValRange5" style="display:none">
                 <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
                 <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
-                @*<input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />*@
             </div>
 
             <div class="row form-inline" id="multiList" style="display:none">
                 <button type="button" class="addTextBox"> <span class="glyphicon glyphicon-plus"> Add New Answer</span></button>
                 <div id="newTB" class="row form-inline">
-
+                    @* ------------ This is a placeholder ----- New Text boxes Created Dynamically are placed here ------------- *@
                 </div>
-                @*<div class="row form-inline">
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-                <button type="button" class="deleteTextBox" onclick="removeMe()"> <span class="glyphicon glyphicon-trash"></span></button>
-                </div>
-                *@
             </div>
 
             <br />
-            <input type="button" id="btnSaveNewAT" value="Save Answer Type and Values" style="display:none" />
+            <input type="button" id="btnSaveNewAT" value="Add Answer Type and Values" style="display:none" />
             <span>&nbsp;&nbsp;&nbsp;</span>
             <button id="btnCancel" class="cancelNewSA" type="button">CANCEL</button>
             <br /><br />
 
-        </div>        
+        </div>
         <div id="divTemplates" class="col-md-5 personal-info">
 
             @*  // - - - - - -- - - - - INSERT HERE The Selectable Answers Templates Panel (From External Partial View) --------
-            //------------------------------------------------------------------------------------------------------------------*@
+                //------------------------------------------------------------------------------------------------------------------*@
 
 
             @*  // - - - - - - - END OF Selectable Answers Templates Panel (From External Partial View) --------
-            //-------------------------------------------------------------------------------------------------------
+                //-------------------------------------------------------------------------------------------------------
             *@
         </div>
     </div>
@@ -104,9 +95,8 @@
 
 <script>
     $(document).ready(function () {
-
-        $("#fullSelATlist").change(function () {
-            var selCathegory = "Other";
+        var selCathegory = "Other";
+        $("#fullSelATlist").change(function () {            
             var selectedText = $(this).find('option:selected').text().substring(0,5);
             var selectedValue = $(this).val();
             //var selectedValue = $('#fullSelATlist').val();
@@ -136,13 +126,13 @@
                 $('#ValRange5').show();
             }
             else if (selectedText == "Multi" || selectedText == "Singl") {
+                selCathegory = "Other";
+                $('#noSelection').hide();
                 $('#ValRange3').hide();
                 $('#ValRange3').children('.selAnswerTextb').val("");
                 $('#ValRange5').hide();
-                $('#ValRange5').children('.selAnswerTextb').val("");
-                $('#noSelection').hide();
-                $('#multiList').show();
-
+                $('#ValRange5').children('.selAnswerTextb').val("");                
+                $('#multiList').show();                
                 //var divToAdd = '<div class="row form-inline newTB"> <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /> </div>'
                 var addTextBox = '<input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />'
                 var addDelButton = $('<button  type="button" ><span class="glyphicon glyphicon-trash"></span></button>').click(function () {
@@ -155,17 +145,18 @@
                 $('#newTB').append(addDelButton);
             }
             else {
+                selCathegory = "Other";
+                $('#noSelection').show();
                 $('#ValRange3').hide();
                 $('#ValRange3').children('.selAnswerTextb').val("");
                 $('#ValRange5').hide();
                 $('#ValRange5').children('.selAnswerTextb').val("");
                 $('#multiList').hide();
                 $('#multiList').children('.selAnswerTextb').val("");
-                $('#noSelection').show();
             }
 
             //Load the Templated based on the Cathegory that was selected
-            //alert("Retrieving Templates: " + selCathegory);
+            //alert("Retrieving Templates for the '" + selCathegory + "' Category");
             $.ajax({                
                 url: '@Url.Action("selAnsTemplates", "Question")',
                 method: "GET",
@@ -204,64 +195,83 @@
         });
         //--------------------- SOFT SAVE NEW SELECTABLE ANSER --------------------------------
         $('#btnSaveNewAT').click(function () {
-            var hasEmptyValues = false;
+            var formValidated = true;
             var textValues = "";
             var counter = 0;
             var emptyBoxes = 0;
+            var isDefaultValue = "false";
+            var postParams = "";
+
+            $(this).button('loading');            
+            //Loop through all text boxes in this section
             $('#divNewAT').find('.selAnswerTextb').each(function () {
                 counter = counter + 1;
                 if ($(this).val() != "") {
-
                     textValues = textValues + $(this).val() + ",";
                 }
                 else {
-                    hasEmptyValues = true;
                     emptyBoxes++;
                 }
             });
 
-            ///alert(counter + " Text Boxes were found. The values Found are: " + textValues + " [Empty Boxes: " + emptyBoxes + "]");
+            //Check if we have empty boxes, then the form is not validated.
+            if (selCathegory == "3 Val Range" && emptyBoxes > 2) { formValidated = false; }
+            else if (selCathegory == "5 Val Range" && emptyBoxes > 0) { formValidated = false; }
 
+            //alert("There are " + emptyBoxes + " Empty Fields.");
 
-            var isDefaultValue = "false";
-            if ($('#btnNewATdefault').hasClass('btnYES')) {
-                isDefaultValue = "true";
-            }
-
-            var postParams = $("#fullSelATlist").val() + "," + isDefaultValue + "," + textValues;
-
-            ///alert("Parameter passed to Ajax are: " + postParams);
-
-            $('#addAnsType').prop('disabled', false)
-            // --------------------------- SOFT SAVE NEW ANSWER TYPE VIA AJAX (NOT POSTED TO DB) --------------
-            $.ajax({
-                url: '@Url.Action("saveNewSelectableAnswer", "Question")',
-                method: "GET",
-                cache: false,
-                dataType: "html",
-                data: { input_data: postParams },     //<---- Data Parameters (if not already passed in the Url)
-                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-                //--- On error, execute this function ------
-                error: function () {
-                    alert("Failed to retrieve appropriate Templates for Selection! [" + "selCathegory" + "]");  //<-- Trap and alert of any errors if they occurred
+            // Proceed only if the user input is valid
+            if (formValidated) {
+                //If the new Answer Type is the default, reset all other Answer types to be no default
+                if ($('#btnNewATdefault').hasClass('btnYES')) {
+                    isDefaultValue = "true";
+                    //Reset all other defaults to "NO Default" except the current
+                    $(".btnIsDefault").not('#btnNewATdefault').removeClass("btnYES").addClass("btn-warning");
+                    $(".btnIsDefault").not('#btnNewATdefault').html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
+                    //$('#btnNewATdefault').removeClass("btn-warning").addClass("btnYES");
+                    //$('#btnNewATdefault').html('YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up">');
                 }
-            }).done(function (d) {
-                //Execute this code After the Ajax call completes successfully
-                //$("#accordion").append(d);
-                //alert('Save Resullt: ' + d)
-                $("#divaddedSA").append(d);
-                $("#divNewSA").html("");
-                //If saving is successful, enable the Question Save Button
-                $("#btnAddQuestion").removeAttr('disabled');
-                $('#mesageaddedSA').show();
-                $('#noATmsg').remove();
-            });
 
+                postParams = $("#fullSelATlist").val() + "," + isDefaultValue + "," + textValues;
 
+                ///alert("Parameter passed to Ajax are: " + postParams);
+
+                // Disable the upper level button so no more answer types can bve added until this one is saved
+                $('#addAnsType').prop('disabled', false)
+                // --------------------------- SOFT SAVE NEW ANSWER TYPE VIA AJAX (NOT POSTED TO DB) --------------
+                $.ajax({
+                    url: '@Url.Action("saveNewSelectableAnswer", "Question")',
+                    method: "GET",
+                    cache: false,
+                    dataType: "html",
+                    data: { input_data: postParams },     //<---- Data Parameters (if not already passed in the Url)
+                    //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                    //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                    //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                    //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                    //--- On error, execute this function ------
+                    error: function () {
+                        alert("Failed to retrieve appropriate Templates for Selection! [" + "selCathegory" + "]");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    //Execute this code After the Ajax call completes successfully
+                    //Data "d" received by the Controller is a partial view to display in the screen
+                    //$("#accordion").append(d);
+                    //alert('Save Resullt: ' + d)
+                    //$(this).button('reset');
+                    $("#divaddedSA").append(d);
+                    $("#divNewSA").html("");
+                    //If saving is successful, enable the Question Save Button
+                    $("#btnAddQuestion").removeAttr('disabled');
+                    //$('#messageAddedSA').show();
+                    $('#noATmsg').remove();
+                });
+            }
+            else {
+                alert("Please review your input. No textbox values can be left blank.")
+                $(this).button('reset');
+            }
         });
 
     });

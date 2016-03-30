@@ -17,7 +17,7 @@ var divSATextqatId = "txtQATid" + uniqueCounter;
     <input type="hidden" id="atCat" value="@Model.QAT.OBS_ANS_TYPE.obs_ans_type_category" />
     <div class="row">
         <div class="col-sm-6 form-inline">
-            <span class="label label-primary">[ @uniqueCounter ]&nbsp;</span>
+            @*<span class="label label-primary">[ @uniqueCounter ]&nbsp;</span>*@
             <div class="input-group col-sm-7">
                 <span class="input-group-addon label-primary" style="color:white; max-width:25%">Answer Type:</span>
                 <input type="text" class="form-control" id="qat" value="@Model.answer_type_name" readonly="readonly" style="max-width:100%; width:100%">

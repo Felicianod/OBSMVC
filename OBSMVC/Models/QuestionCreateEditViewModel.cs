@@ -90,6 +90,8 @@ namespace OBSMVC.Models
                         qUnassignedMD.Add(qMD);
                     }
                 }
+                qAssignedMD = qAssignedMD.OrderBy(item => item.md_value).ToList();
+                qUnassignedMD = qUnassignedMD.OrderBy(item => item.md_value).ToList();
                 List<OBS_QUEST_ANS_TYPES> QAInstances = db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == questn.obs_question_id && (x.obs_qat_end_eff_dt == null || x.obs_qat_end_eff_dt > DateTime.Now)).ToList();
                 if (QAInstances.Count() > 0)  //There were no records found in the 'OBS_QUEST_ANS_TYPES' Table for this question Id
                 {
@@ -113,6 +115,7 @@ namespace OBSMVC.Models
                         }
                         Quest_Assigned_qatTags.Add(temp_qat);
                     }
+                    Quest_Assigned_qatTags = Quest_Assigned_qatTags.OrderBy(item => item.answer_type_name).ToList();
                 }
             }//end of  if (questn != null)
         }

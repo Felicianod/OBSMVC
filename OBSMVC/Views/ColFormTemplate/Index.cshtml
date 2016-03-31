@@ -153,8 +153,11 @@
         <td>
             @Html.DisplayFor(modelItem => item.LastCompleteDate)
         </td>
-        <td>
-            @Html.ActionLink("Details", "Details", new { id=item.OBSformID }) 
+        <td style="text-align:center">
+           @if (item.isActive || item.isPublished)
+           {@Html.ActionLink("Manage", "Details", new { id = item.OBSformID }) }
+           else
+           {@Html.ActionLink("Edit", "Details", new { id = item.OBSformID })}             
         </td>
     </tr>
 }

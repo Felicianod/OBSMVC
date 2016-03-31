@@ -22,10 +22,10 @@ namespace OBSMVC.Controllers
         public ActionResult Index(string title_search, string question_search, string t_search, string q_search, FormCollection form)
         {
             string onlyPublished = "N";
-            try { onlyPublished = Request.QueryString["onlyPublished"]; }
+            try { onlyPublished = Request.QueryString["chkPublished"]; }
             catch { }
             string onlyLive = "N";
-            try { onlyLive = Request.QueryString["onlyonlyLive"]; }
+            try { onlyLive = Request.QueryString["chkLive"]; }
             catch { }
             var oBS_COLLECT_FORM_TMPLT = db.OBS_COLLECT_FORM_TMPLT.Include(o => o.DSC_CUSTOMER).Include(o => o.DSC_LC).Include(o => o.OBS_TYPE);
             List<SelectListItem> fullFuncList = setfullFuncList();

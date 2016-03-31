@@ -11,8 +11,6 @@
     }
 }
 
-
-
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
 <style>
     #container .modal.fade {
@@ -467,30 +465,32 @@
                     defaultQATid = $(this).children('#obs_qat_id').val();
                 }
                 //Next variable is for Debug purposes only
-                modifiedQATs = modifiedQATs + $(this).children('#sel_ans_list').val() + "\n";
+                //modifiedQATs = modifiedQATs + $(this).children('#sel_ans_list').val() + "\n";
                 //alert("QAT id: " + $(this).children('#obs_qat_id').val() found );
             });
             document.getElementById("defaultQATid").setAttribute("Value", defaultQATid);
 
             //Debug Only
-            alert("Changed Values list is: " + modifiedQATs);
+            //alert("Changed Values list is: " + modifiedQATs);
 
 
             //Finally, loop through all Newly added answers and set the "ans_type_list" Hidden field to the most uptodate values before posting
             var newValues = "";
-            $('#divaddedSA').find('.answerType').each(function () {               
-                var currentNewDiv = $(this);
-                var sel_list = currentNewDiv.find('#ans_type_id').val() + "~";
-                sel_list = sel_list + (currentNewDiv.find('.btnIsDefault').first().hasClass('.btnYES')) + "~" + currentNewDiv.find('#ans_type_selAns').val();
-                newValues = newValues + sel_list + "\n";
+            $('#divaddedSA').find('div.answerType').each(function () {               
+                //var currentNewDiv = $(this);
+                //var dfltButton = $(this).find('button.btnIsDefault').first();
+                var sel_list = $(this).find('#ans_type_id').val() + "~";
+                sel_list = sel_list + ($(this).find('button.btnIsDefault').first().hasClass("btnYES")) + "~" + $(this).find('#ans_type_selAns').val();
+                $(this).find("#ans_type_list").val(sel_list);
+                newValues = newValues + $(this).find("#ans_type_list").val() + "\n";
             })
 
-            alert("We found " + $('#divaddedSA').find('.answerType').length + " new Answers Types:\n" + newValues);
+            //alert("We found " + $('#divaddedSA').find('.answerType').length + " new Answers Types:\n" + newValues);
 
 
-            //DEBUG ONLY, STOP POSTINGTHE FORM
-            $('#btnAddQuestion').button('reset');
-            return false;
+            ////DEBUG ONLY, STOP POSTINGTHE FORM
+            //$('#btnAddQuestion').button('reset');
+            //return false;
 
 
             //alert("Posting Values: Default QAT id: " + $('#defaultQATid').val());
@@ -789,7 +789,7 @@
             $("#btnAddQuestion").removeAttr('disabled');
 
             ///alert("Found " + counter + " Text Boxes")
-            alert("Value Saved: " + postingValuesField.val());
+            //alert("Value Saved: " + postingValuesField.val());
 
             //alert("Current Textdiv Id is: " + divSAText + " QATid: " + QATid + " Values Found Are: " + textValues);
             @*// ------------ Make the Ajax Call ---------------------------------------------

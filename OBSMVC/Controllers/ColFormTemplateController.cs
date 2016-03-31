@@ -325,8 +325,12 @@ namespace OBSMVC.Controllers
 
         // GET: ColFormTemplate/Create
         [HttpGet]
-        public ActionResult CreateForm()
+        public ActionResult CreateForm(int? formId)
         {
+            if (formId > 0)
+            { 
+               ViewBag.exception = "You are in Edit MODE!!!";
+            }
             ViewData["errMsg"] = "DBOK";
 
             //Delete this line and uncomment next two when at work, for Home Test Only

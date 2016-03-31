@@ -4,7 +4,7 @@
 
 @{
     var is_default = Model.isDefault ? "true" : "false";
-    var selAnswers = String.Join(",", Model.selAnsList);
+    var selAnswers = String.Join("~", Model.selAnsList);
 }
 
 <div class="col-sm-12 answerType qatDIV" id="addedQATs" style="border:solid; border-width:1px; background-color:#ddebfc; border-color:blue; font-family:Arial">

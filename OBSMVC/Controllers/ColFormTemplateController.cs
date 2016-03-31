@@ -36,7 +36,9 @@ namespace OBSMVC.Controllers
             }
             catch { }
 
-            List<ObsColFormTemplate> ObsColFormTemplateList = new List<ObsColFormTemplate>();
+            List<ObsColFormTemplate> ObsColFormTemplateList = new List<ObsColFormTemplate>(
+                
+                );
             if (selectedFunctionId > 0)
             {//case where function is selected
                 if (String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
@@ -275,13 +277,13 @@ namespace OBSMVC.Controllers
                 }
 
             }           
-            if (onlyLive== "Y")
+            if (onlyLive== "on")
             {
                 ObsColFormTemplateList.RemoveAll(x => x.isActive != true);
             }
             else
             {
-                if (onlyPublished == "Y")
+                if (onlyPublished == "on")
                 {
                     ObsColFormTemplateList.RemoveAll(x => x.isPublished != true);
                 }
@@ -537,6 +539,7 @@ namespace OBSMVC.Controllers
                     }
 
                 }
+                questionInfo.question_assigned_answer_types =questionInfo.question_assigned_answer_types.OrderBy(item=>item.Text).ToList();
                 questionInfo.question_assigned_answer_types.Add(new SelectListItem() { Text = "Add New...", Value = "New" });
             }
             if (questionInfo.default_qat_id > 0)

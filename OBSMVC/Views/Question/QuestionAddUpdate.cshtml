@@ -202,7 +202,7 @@
                 </table>
             </div>
             <div class="panel-body collapse in" id="ansTypesPanel">
-                <div class="row" id="existingQATs">
+                <div class="row qatDIV" id="existingQATs">
                     @if (Model.Quest_Assigned_qatTags.Count == 0)
                     {
                         <div class="row" id="noATmsg" style="text-align:center">
@@ -458,24 +458,42 @@
             var tagList = getTagListValues();
             var defaultQATid = "";
             var modifiedQATs = "";
-            // Set hidden field value for The Assigned Meta data Tag List
+            // Compile the list of Metadata Tags and Set the corresponding hidden field value
             document.getElementById("qAssignedMD").setAttribute("Value", tagList);
-            // Set hidden field value for The Default Question Answer Type "defaultQATid"
+
+            // Set hidden field value for The Default Question Answer Type "defaultQATid" (If any)
             $('#existingQATs').find('.answerType').each(function () {
                 if ($(this).find('.btnIsDefault').first().hasClass("btnYES")) {
                     defaultQATid = $(this).children('#obs_qat_id').val();
                 }
-
-                modifiedQATs = modifiedQATs + $(this).children('#sel_ans_list').val() + "/n";
+                //Next variable is for Debug purposes only
+                modifiedQATs = modifiedQATs + $(this).children('#sel_ans_list').val() + "\n";
                 //alert("QAT id: " + $(this).children('#obs_qat_id').val() found );
             });
             document.getElementById("defaultQATid").setAttribute("Value", defaultQATid);
 
+            //Debug Only
             alert("Changed Values list is: " + modifiedQATs);
 
 
-            //alert("Posting Values: Default QAT id: " + $('#defaultQATid').val());
+            //Finally, loop through all Newly added answers and set the "ans_type_list" Hidden field to the most uptodate values before posting
+            var newValues = "";
+            $('#divaddedSA').find('.answerType').each(function () {               
+                var currentNewDiv = $(this);
+                var sel_list = currentNewDiv.find('#ans_type_id').val() + "~";
+                sel_list = sel_list + (currentNewDiv.find('.btnIsDefault').first().hasClass('.btnYES')) + "~" + currentNewDiv.find('#ans_type_selAns').val();
+                newValues = newValues + sel_list + "\n";
+            })
 
+            alert("We found " + $('#divaddedSA').find('.answerType').length + " new Answers Types:\n" + newValues);
+
+
+            //DEBUG ONLY, STOP POSTINGTHE FORM
+            $('#btnAddQuestion').button('reset');
+            return false;
+
+
+            //alert("Posting Values: Default QAT id: " + $('#defaultQATid').val());
             //if (errorMsg != "") {
             //    //If an validation error is found 
             //    alert(errorMsg);

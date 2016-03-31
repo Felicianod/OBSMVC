@@ -331,17 +331,8 @@ namespace OBSMVC.Controllers
             { 
                ViewBag.exception = "You are in Edit MODE!!!"; 
             }
-            ViewData["errMsg"] = "DBOK";
-
-            //Delete this line and uncomment next two when at work, for Home Test Only
-            //ViewData["errMsg"] = "Database Server is down...";
-            try { int testDB = db.DSC_CUSTOMER.Count(); }
-            catch { ViewData["errMsg"] = "Database Server is down..."; }
-
-            //ViewData["errMsg"] = "Database is Up!";
-            //// First Check the Database Connection
-            //try { int testDB = db.DSC_CUSTOMER.Count(); }
-            //catch { ViewData["errMsg"] = "Database Server is down..."; }
+         
+            
 
             ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER.Where(x=>x.dsc_cust_id>=0), "dsc_cust_id", "dsc_cust_name");
             ViewBag.dsc_lc_id = new SelectList(db.DSC_LC.Where(x=>x.dsc_lc_id>=0), "dsc_lc_id", "dsc_lc_name");
@@ -360,7 +351,7 @@ namespace OBSMVC.Controllers
             bool hasQuestions = !String.IsNullOrEmpty(data_from_form);
             if(hasQuestions)
             {
-                cft_id = saveForm(oBS_COLLECT_FORM_TMPLT, data_from_form, is_published);
+                cft_id = saveForm(oBS_COLLECT_FORM_TMPLT, data_from_form, is_published, cft_id);
             }
 
             return RedirectToAction("Details", new { id =cft_id});
@@ -830,9 +821,10 @@ namespace OBSMVC.Controllers
             return fullFuncList;
         }
 
-        private int saveForm(OBS_COLLECT_FORM_TMPLT template_from_form, string form_questions_from_gui, string isPublished)
+        private int saveForm(OBS_COLLECT_FORM_TMPLT template_from_form, string form_questions_from_gui, string isPublished, int cft_id_from_form)
         {
-            if(db.OBS_COLLECT_FORM_TMPLT.Where(item =>item.obs_cft_title == template_from_form.obs_cft_title).Count() > 0)
+            int cft_id = cft_id_from_form;
+            if (cft_id<0 && db.OBS_COLLECT_FORM_TMPLT.Where(item =>item.obs_cft_title == template_from_form.obs_cft_title).Count() > 0)
             {//we need to check if title passed from user is unique. if it already exists, we need to return the error message back to the screen
                 return -1;
             }
@@ -841,47 +833,69 @@ namespace OBSMVC.Controllers
             using (var transaction = db.Database.BeginTransaction())
             {
                 try
-                {
-                   
-                    //first we need to save OBS_COLLECT_FORM_TMPLT table data
-                    OBS_COLLECT_FORM_TMPLT template_to_save = new OBS_COLLECT_FORM_TMPLT();
-                    template_to_save.dsc_cust_id = template_from_form.dsc_cust_id;
-                    template_to_save.obs_type_id = template_from_form.obs_type_id;
-                    template_to_save.dsc_lc_id = template_from_form.dsc_lc_id;
-                    short cft_number = (short)(db.OBS_COLLECT_FORM_TMPLT.Max(x => x.obs_cft_nbr) + 1);
-                    template_to_save.obs_cft_nbr = cft_number;
-                    template_to_save.obs_cft_ver = 1;
-                    template_to_save.obs_cft_title = template_from_form.obs_cft_title;
-                    template_to_save.obs_cft_subtitle = template_from_form.obs_cft_subtitle;
-                    //template_to_save.obs_cft_eff_st_dt = (template_from_form.obs_cft_eff_st_dt == null) || (template_from_form.obs_cft_eff_st_dt < Convert.ToDateTime("01/01/2000")) ? DateTime.Now : template_from_form.obs_cft_eff_st_dt;
-                    
-                    template_to_save.obs_cft_eff_end_dt = (template_from_form.obs_cft_eff_end_dt == null) || (template_from_form.obs_cft_eff_end_dt < Convert.ToDateTime("01/01/2000")) ? Convert.ToDateTime("12/31/2060") : template_from_form.obs_cft_eff_end_dt;
-                    template_to_save.obs_cft_added_dtm = DateTime.Now;
-                    template_to_save.obs_cft_added_uid = User.Identity.Name;
-                    template_to_save.obs_cft_last_saved_dtm = DateTime.Now;
-                    if (isPublished == "true")
+                { 
+                    if(cft_id_from_form >0)//this means we're editing existing form
                     {
-                        template_to_save.obs_cft_pub_by_uid = User.Identity.Name;
-                        template_to_save.obs_cft_pub_dtm = DateTime.Now;
-                        if (template_from_form.obs_cft_eff_end_dt != null)
+                        OBS_COLLECT_FORM_TMPLT template_to_edit = db.OBS_COLLECT_FORM_TMPLT.Find(cft_id);
+                        template_to_edit.dsc_cust_id = template_from_form.dsc_cust_id;
+                        template_to_edit.obs_type_id = template_from_form.obs_type_id;
+                        template_to_edit.dsc_lc_id = template_from_form.dsc_lc_id;                                                                  
+                        template_to_edit.obs_cft_title = template_from_form.obs_cft_title;
+                        template_to_edit.obs_cft_subtitle = template_from_form.obs_cft_subtitle;
+                        template_to_edit.obs_cft_eff_end_dt = (template_from_form.obs_cft_eff_end_dt == null) || (template_from_form.obs_cft_eff_end_dt < Convert.ToDateTime("01/01/2000")) ? Convert.ToDateTime("12/31/2060") : template_from_form.obs_cft_eff_end_dt;                       
+                        template_to_edit.obs_cft_last_saved_dtm = DateTime.Now;
+                        template_to_edit.obs_cft_upd_dtm = DateTime.Now;
+                        template_to_edit.obs_cft_upd_uid = User.Identity.Name;
+                        List<OBS_COL_FORM_QUESTIONS> old_form_questions = db.OBS_COL_FORM_QUESTIONS.Where(x => x.obs_cft_id == cft_id).ToList();
+                        db.OBS_COL_FORM_QUESTIONS.RemoveRange(old_form_questions);
+                        //foreach (OBS_COL_FORM_QUESTIONS old_form_question in old_form_questions)
+                        //{
+                        //    db.OBS_COL_FORM_QUESTIONS.Remove(old_form_question)
+                        //}
+                        db.SaveChanges();
+                    }
+                    else//this means we're saving new form
+                    {
+                        //first we need to save OBS_COLLECT_FORM_TMPLT table data
+                        OBS_COLLECT_FORM_TMPLT template_to_save = new OBS_COLLECT_FORM_TMPLT();
+                        template_to_save.dsc_cust_id = template_from_form.dsc_cust_id;
+                        template_to_save.obs_type_id = template_from_form.obs_type_id;
+                        template_to_save.dsc_lc_id = template_from_form.dsc_lc_id;
+                        short cft_number = (short)(db.OBS_COLLECT_FORM_TMPLT.Max(x => x.obs_cft_nbr) + 1);
+                        template_to_save.obs_cft_nbr = cft_number;
+                        template_to_save.obs_cft_ver = 1;
+                        template_to_save.obs_cft_title = template_from_form.obs_cft_title;
+                        template_to_save.obs_cft_subtitle = template_from_form.obs_cft_subtitle;
+                        template_to_save.obs_cft_eff_end_dt = (template_from_form.obs_cft_eff_end_dt == null) || (template_from_form.obs_cft_eff_end_dt < Convert.ToDateTime("01/01/2000")) ? Convert.ToDateTime("12/31/2060") : template_from_form.obs_cft_eff_end_dt;
+                        template_to_save.obs_cft_added_dtm = DateTime.Now;
+                        template_to_save.obs_cft_added_uid = User.Identity.Name;
+                        template_to_save.obs_cft_last_saved_dtm = DateTime.Now;
+                        if (isPublished == "true")
                         {
-                            template_to_save.obs_cft_eff_st_dt = template_from_form.obs_cft_eff_st_dt;
+                            template_to_save.obs_cft_pub_by_uid = User.Identity.Name;
+                            template_to_save.obs_cft_pub_dtm = DateTime.Now;
+                            if (template_from_form.obs_cft_eff_end_dt != null)
+                            {
+                                template_to_save.obs_cft_eff_st_dt = template_from_form.obs_cft_eff_st_dt;
 
+                            }
+                            else
+                            {
+                                return -1;
+                            }
                         }
                         else
                         {
-                         return -1;
- }
-                    }
-                    else
-                    {
-                        template_to_save.obs_cft_eff_st_dt = template_from_form.obs_cft_eff_st_dt;
-                    }                
-                    db.OBS_COLLECT_FORM_TMPLT.Add(template_to_save);
-                    db.SaveChanges();
+                            template_to_save.obs_cft_eff_st_dt = template_from_form.obs_cft_eff_st_dt;
+                        }
+                        db.OBS_COLLECT_FORM_TMPLT.Add(template_to_save);                       
+                        db.SaveChanges();
+                        cft_id = template_to_save.obs_cft_id;
+                        //now we need to query OBS_COLLECT_FORM_TMPLT table to find CFT ID we just created
+                        //int cft_id = db.OBS_COLLECT_FORM_TMPLT.Single(item => item.obs_cft_nbr == cft_number && item.obs_cft_ver == 1).obs_cft_id;                       
+                    }//end of else(saving new form header form)
 
-                    //now we need to query OBS_COLLECT_FORM_TMPLT table to find CFT ID we just created
-                    int cft_id = db.OBS_COLLECT_FORM_TMPLT.Single(item => item.obs_cft_nbr == cft_number && item.obs_cft_ver == 1).obs_cft_id;
+                    //now we need to save all the form questions
                     string[] splitterm = { "," };
                     string[] parsed_questions = form_questions_from_gui.Split(splitterm, StringSplitOptions.RemoveEmptyEntries);
                     short order_counter = 1;
@@ -896,7 +910,7 @@ namespace OBSMVC.Controllers
                         int form_section_id = getSectionID(question_items[1]);
                         OBS_COL_FORM_QUESTIONS new_form_question = new OBS_COL_FORM_QUESTIONS();
                         new_form_question.obs_cft_id = cft_id;
-                        
+
                         new_form_question.obs_form_section_id = form_section_id;
                         new_form_question.obs_qat_id = qat_id;
                         new_form_question.obs_col_form_quest_order = order;
@@ -905,18 +919,13 @@ namespace OBSMVC.Controllers
                         db.OBS_COL_FORM_QUESTIONS.Add(new_form_question);
                         db.SaveChanges();
                         order_counter++;
-                    }
+                    }//end of foreach
+
                     transaction.Commit();
-                    if (cft_id < 0)
-                    {
-                        ViewBag.exception = "An error Occurred while saving information... ";
-                    }
-                    
                     return cft_id;
-                }
+                }//end of try
                 catch (Exception e)
-                {
-                    ViewBag.exception = "Failed to Save Data: " + e.Message;
+                {                   
                     transaction.Rollback();
                     return -1;
                 }

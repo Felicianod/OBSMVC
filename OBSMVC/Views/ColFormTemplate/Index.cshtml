@@ -157,9 +157,8 @@
            @if (item.isActive || item.isPublished)
            {@Html.ActionLink("Manage", "Details", new { id = item.OBSformID }) }
            else
-           {@Html.ActionLink("Edit", "Details", new { id = item.OBSformID })}             
+           {@Html.ActionLink("Edit", "CreateForm", new { id = item.OBSformID })}             
         </td>
     </tr>
 }
-
 </table>

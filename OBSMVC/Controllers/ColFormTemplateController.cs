@@ -340,9 +340,9 @@ namespace OBSMVC.Controllers
                 selectedColForm.cft_eff_end_dt = Convert.ToDateTime("12/31/2060");
             }
 
-            ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER.Where(x => x.dsc_cust_id >= 0), "dsc_cust_id", "dsc_cust_name");
-            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id >= 0), "dsc_lc_id", "dsc_lc_name");
-            ViewBag.obs_type_id = new SelectList(db.OBS_TYPE.Where(x => x.obs_type_id >= 0), "obs_type_id", "obs_type_name");
+            ViewBag.cft_Cust = new SelectList(db.DSC_CUSTOMER.Where(x => x.dsc_cust_id >= 0), "dsc_cust_id", "dsc_cust_name");
+            ViewBag.cft_LC = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id >= 0), "dsc_lc_id", "dsc_lc_name");
+            ViewBag.cft_obsType = new SelectList(db.OBS_TYPE.Where(x => x.obs_type_id >= 0), "obs_type_id", "obs_type_name");
             return View(selectedColForm);
         }
 

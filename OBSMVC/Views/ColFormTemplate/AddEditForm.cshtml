@@ -175,19 +175,19 @@
                 <div class="col-sm-4">
                     <div class="input-group">
                         <div class="input-group-addon">Observation Type</div>
-                        @Html.DropDownList("obs_type_id", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.DropDownList("obs_type_id", null, htmlAttributes: new { @class = "form-control", name = "cft_obsType" })
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="input-group">
                         <div class="input-group-addon">Customer</div>
-                        @Html.DropDownList("dsc_cust_id", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.DropDownList("dsc_cust_id", null, htmlAttributes: new { @class = "form-control", name = "cft_Cust" })
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="input-group">
                         <div class="input-group-addon">Whse Location</div>
-                        @Html.DropDownList("dsc_lc_id", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.DropDownList("dsc_lc_id", null, htmlAttributes: new { @class = "form-control", name = "cft_LC" })
                     </div>
                 </div>
             </div>
@@ -196,7 +196,7 @@
                 <div class="col-sm-4">
                     <div class="input-group" data-provide="datepicker">
                         <div class="input-group-addon">Usable As of:</div>
-                        <input class="datepicker form-control" id="obs_cft_eff_st_dt" name="obs_cft_eff_st_dt" value="@Model.cft_eff_st_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;">
+                        <input class="datepicker form-control" id="cft_eff_st_dt" name="obs_cft_eff_st_dt" value="@Model.cft_eff_st_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;">
                         @*<input class="datepicker form-control" data-date-format="mm/dd/yyyy" id="obs_cft_eff_st_dt" name="obs_cft_eff_st_dt" style="max-width: 100%; width:100%;">*@
                         <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
                         @Html.ValidationMessageFor(model => model.cft_eff_st_dt, "", new { @class = "text-danger" })
@@ -209,7 +209,7 @@
                             var endEffDate = "";
                             if (Model.cft_eff_end_dt < Convert.ToDateTime("12/31/2060")) { endEffDate = Model.cft_eff_end_dt.ToString("MMM dd, yyyy"); }                          
                           }
-                        <input class="datepicker form-control" id="obs_cft_eff_end_dt" name="obs_cft_eff_end_dt" value="@endEffDate" style="max-width: 100%; width:100%;">
+                        <input class="datepicker form-control" id="cft_eff_end_dt" name="obs_cft_eff_end_dt" value="@endEffDate" style="max-width: 100%; width:100%;">
                         <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
                         @Html.ValidationMessageFor(model => model.cft_eff_end_dt, "", new { @class = "text-danger" })
                     </div>

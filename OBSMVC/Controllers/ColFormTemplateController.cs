@@ -349,16 +349,16 @@ namespace OBSMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddEditForm(oCollectionForm colForm, FormCollection formData)
+        public ActionResult AddEditForm(oCollectionForm colForm, FormCollection formData, int? id)
         {
             string data_from_form = formData["formQuestions"];
             string is_published = formData["isPublished"];
-            int cft_id = -1;
+            int cft_id = id?? -1;
             bool hasQuestions = !String.IsNullOrEmpty(data_from_form);
 
             if (hasQuestions)
             {
-                cft_id = saveForm(colForm, data_from_form, is_published);
+                cft_id = saveForm(colForm, data_from_form, is_published, cft_id);
             }
 
             return RedirectToAction("Details", new { id = cft_id });
@@ -871,9 +871,9 @@ namespace OBSMVC.Controllers
             return fullFuncList;
         }
 
-        private int saveForm(oCollectionForm colForm, string form_questions_from_gui, string isPublished)
+        private int saveForm(oCollectionForm colForm, string form_questions_from_gui, string isPublished, int id)
         {
-            int cft_id = colForm.cft_id;
+            int cft_id = id;
             if (cft_id <= 0 && db.OBS_COLLECT_FORM_TMPLT.Where(item => item.obs_cft_title == colForm.cft_Title).Count() > 0)
             {//we need to check if title passed from user is unique. if it already exists, we need to return the error message back to the screen
                 ViewBag.exception = "ERROR: The Question Id is either invalid or the Form Title Already Exist.";
@@ -885,7 +885,7 @@ namespace OBSMVC.Controllers
             {
                 try
                 {
-                    if (colForm.cft_id > 0)//this means we are editing an existing form
+                    if (cft_id > 0)//this means we are editing an existing form
                     {
                         OBS_COLLECT_FORM_TMPLT template_to_edit = db.OBS_COLLECT_FORM_TMPLT.Find(cft_id);
                         template_to_edit.dsc_cust_id = Convert.ToInt32(colForm.cft_Cust);

@@ -522,13 +522,13 @@
     <Content Include="Views\ColFormTemplate\Edit.cshtml" />
     <Content Include="Views\ColFormTemplate\Index.cshtml" />
     <Content Include="Views\ColFormTemplate\_getQuestionsList.cshtml" />
-    <Content Include="Views\ColFormTemplate\_getQuestionInfo.cshtml" />
+    <Content Include="Views\ColFormTemplate\_getQuestionInfo%28Delete%29.cshtml" />
     <Content Include="Views\Section\Create.cshtml" />
     <Content Include="Views\Section\Delete.cshtml" />
     <Content Include="Views\Section\Details.cshtml" />
     <Content Include="Views\Section\Edit.cshtml" />
     <Content Include="Views\ColFormTemplate\_addNewSection.cshtml" />
-    <Content Include="Views\ColFormTemplate\_getQuestionInfoFD.cshtml" />
+    <Content Include="Views\ColFormTemplate\_getQuestionInfo.cshtml" />
     <Content Include="Views\ColFormTemplate\AddEditForm.cshtml" />
     <Content Include="Views\ColFormTemplate\Create_DeleteMe.cshtml" />
     <Content Include="Views\ColFormTemplate\_getQuestionInfoTest.cshtml" />

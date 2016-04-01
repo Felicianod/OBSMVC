@@ -382,8 +382,9 @@
                 var formSection = $(this);
                 //var sectionTitleBox = $($(this).find("input.sectionTitle").first()).val();
                 var sectionTitleBox = formSection.find("input.sectionTitle").first();
+                var sectionName = sectionTitleBox.val().trim();
                 sectionCounter++;
-                if (sectionTitleBox.val().trim() == "")
+                if (sectionName == "")
                 {
                     errorMsg = errorMsg + " Form Section " + sectionCounter + " is missing the Title.\n";
                     sectionTitleBox.addClass("invalidField");
@@ -393,10 +394,11 @@
                     formSection.find('.divFormQuestion').each(function () {
                         var qatDDL = $(this).find(".viewDropDown").first();
                         var selectedQAT = qatDDL.val();
-                        var trtrt = ""; //hdnFormQuestion
+                        //var trtrt = ""; //hdnFormQuestion
 
                         var qatHiddenField = $(this).find(".hdnFormQuestion").first();
-                        qatHiddenField.val(selectedQAT + "~" + sectionTitleBox);
+                        qatHiddenField.val(selectedQAT + "~" + sectionName);
+                        alert("A questionwas found!\selected QIT = " + selectedQAT + "\nSection Name = " + sectionName + "\nFull Posting String: " + qatHiddenField.val());
                         //alert("Question value to post = " + qatHiddenField.val());
                     });
                 }

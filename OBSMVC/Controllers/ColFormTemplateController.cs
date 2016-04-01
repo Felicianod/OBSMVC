@@ -590,7 +590,7 @@ namespace OBSMVC.Controllers
             {
                 questionInfo.question_assigned_answer_types.Single(x => x.Value == questionInfo.default_qat_id.ToString()).Selected = true;
             }
-            return PartialView("_getQuestionInfoFD", questionInfo);
+            return PartialView("_getQuestionInfo", questionInfo);
         }
 
 

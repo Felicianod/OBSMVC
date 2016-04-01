@@ -1,0 +1,70 @@
+﻿@model  OBSMVC.Controllers.QuestionInfo
+@{
+    var hidden_field = "currentSelectedQAT" + Model.uniqueCounter;
+    var dropdown_id = "AssignedAnswers"  +Model.uniqueCounter;
+    var dropdown2 = "#AssignedAnswers" + Model.uniqueCounter;
+}
+
+    <table class="table table-responsive table-condensed table-hover">
+        <thead>
+            <tr style="background-color:lightgray">
+                <th>ID is: [@Model.uniqueCounter]</th>
+                <th>Question Text</th>
+                <th>Answer Type</th>
+                <th>
+                   <button type="button" class="close" aria-label="Close"><span aria-hidden="true" style="border:inset">&times;</span></button>
+                </th>
+            </tr>
+        </thead>      
+        <tr>
+            <td>@Model.uniqueCounter</td>
+            <td>@Model.full_text</td>
+            <td>@Html.DropDownList("AssignedAnswers", Model.question_assigned_answer_types, "Select Answer Type",new { id = dropdown_id, @class="viewDropDown"}) <br />
+                @{
+                    var current_selected = -1;
+                 }
+                <ul id="@Model.uniqueCounter" >
+                    @if (Model.hasInstances == true && Model.question_assigned_answer_types.Where(item => item.Selected == true).Count() > 0)
+                    {
+                        current_selected = Convert.ToInt32(Model.question_assigned_answer_types.Single(item => item.Selected == true).Value);
+
+                        foreach (var x in Model.selectable_answers.Where(x => x.obs_qat_id == Convert.ToInt32(Model.question_assigned_answer_types.Single(item => item.Selected == true).Value)))
+                        {
+                            <li class="innerListItem" style="display: inline"><span class="badge">@x.obs_qsa_text</span></li>
+                        }
+                    }
+                </ul>
+
+            </td>
+            <td></td>
+    </table>
+
+    <input type="hidden" id="@hidden_field" name="@hidden_field" value= "@current_selected" >
+
+
+<script type="text/javascript">
+    $("@dropdown2").change( function (event) {
+        var $drop_down = $(this);
+        var selectedId = $(this).val();      
+        if (selectedId == '') {
+            selectedId = "-1";           
+            $("#@Model.uniqueCounter").html("");
+        }
+        else {
+            alert("Selected ID "+selectedId);
+            $.ajax({
+                url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
+                method: "GET",
+                cache: false,
+                data: { qat_id: selectedId },
+                error: function () {
+                    alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                $("#@Model.uniqueCounter").html(d);
+            });
+        }
+        var cur_sel = document.getElementById("currentSelectedQAT"+@Model.uniqueCounter);
+        cur_sel.value = selectedId;       
+    })
+</script>

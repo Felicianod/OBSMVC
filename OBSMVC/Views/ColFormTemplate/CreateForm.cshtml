@@ -1,13 +1,11 @@
-﻿@model OBSMVC.Models.OBS_COLLECT_FORM_TMPLT
+﻿@model OBSMVC.Controllers.oCollectionForm
+
 @{ ViewBag.Title = "Create/Edit Form"; }
 
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
 
-@*<script type="text/javascript" src="~/Scripts/pnotify.custom.min.js"></script>
-    <link href="~/Scripts/pnotify.custom.min.css" media="all" rel="stylesheet" type="text/css" />*@
-
 <style>
-        body > li {
+    body > li {
       width: 320px;
       margin: 5px;
       padding: 5px;
@@ -23,13 +21,12 @@
       background-color: #fafafa !important;
       color: #bbb !important;
     }
-
-        .listActive {
+    .listActive {
       border: 1px solid #ccc;
       background-color: #fcfcfc;
       padding: 0.5em 0 3em 0 !important;
     }
-        .placeholder {
+    .placeholder {
       list-style-type: none;
       text-align: center;
       font-style: italic;
@@ -37,7 +34,7 @@
       background-color: #fff !important;
       color: #aaa !important;
     }
-        .dismiss {
+    .dismiss {
       float: right;
       position: relative;
       top: -8px;
@@ -47,8 +44,7 @@
       text-decoration: none !important;
       color: #468847;
     }
-
-        ul.sourceList, ol.targetList {
+    ul.sourceList, ol.targetList {
             min-height: 50px;
       margin: 0px 20px 10px 0px;
       padding: 2px;
@@ -123,14 +119,15 @@
     </div>
 }
 
-    @* - - - - - - - - - - - - - - - - BEGINING OF THE "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
-    @*// ---- Helper Hidden Fields to Control the Inner Ids ----- *@
+
+@* - - - - - - - - - - - - - - - - BEGINING OF THE "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
+@*// ---- Helper Hidden Fields to Control the Inner Ids ----- *@
     <input type="hidden" id="masterItemCounter" value="1" />
     <input type="hidden" id="qCounter" value="1" />
-    <input type="hidden" id="sCounter" value="0" />
-    @{  int masterCounter = 1;
-      //string ulId = "ul00001";
-      string rowInfo = masterCounter.ToString();
+    <input type="hidden" id="sCounter" value="@Model.colFormSections.Count" />
+    @{  
+        int masterCounter = 1;
+        string rowInfo = masterCounter.ToString();
     }
     @*\\ ---- End of Hodden Control Fields section ----- *@
 
@@ -144,20 +141,18 @@
                 <div class="col-sm-7">
                     <div class="input-group">
                         <div class="input-group-addon">Form Title:</div>
-                        @Html.EditorFor(model => model.obs_cft_title, new { htmlAttributes = new { @class = "form-control", required="required", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
+                        @Html.EditorFor(model => model.cft_Title, new { htmlAttributes = new { @class = "form-control", required = "required", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
                     </div>
-                    @Html.ValidationMessageFor(model => model.obs_cft_title, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.cft_Title, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-sm-5">
                     <div class="input-group">
                         <div class="input-group-addon">Subtitle:</div>
-                        @Html.EditorFor(model => model.obs_cft_subtitle, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
+                        @Html.EditorFor(model => model.cft_SubTitle, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
                     </div>
                 </div>
             </div>
 
-            @if (ViewData["errMsg"].ToString() == "DBOK")
-                {
             <div class="form-group row" style="margin-bottom:8px">
                 <div class="col-sm-4">
                     <div class="input-group">
@@ -178,24 +173,28 @@
                     </div>
                 </div>
             </div>
-                }
+
 
             <div class="form-group row" style="margin-bottom:8px">
                 <div class="col-sm-4">
                     <div class="input-group" data-provide="datepicker">
                         <div class="input-group-addon">Usable As of:</div>
-                        <input class="datepicker form-control" id="obs_cft_eff_st_dt" name="obs_cft_eff_st_dt" style="max-width: 100%; width:100%;">
+                        <input class="datepicker form-control" id="obs_cft_eff_st_dt" name="obs_cft_eff_st_dt" value="@Model.cft_eff_st_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;">
                         @*<input class="datepicker form-control" data-date-format="mm/dd/yyyy" id="obs_cft_eff_st_dt" name="obs_cft_eff_st_dt" style="max-width: 100%; width:100%;">*@
                         <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                        @Html.ValidationMessageFor(model => model.obs_cft_eff_st_dt, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.cft_eff_st_dt, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="col-sm-4 col-sm-offset-2">
                     <div class="input-group" data-provide="datepicker">
                         <div class="input-group-addon">Usable Until:</div>
-                        <input class="datepicker form-control" id="obs_cft_eff_end_dt" name="obs_cft_eff_end_dt" style="max-width: 100%; width:100%;">
+                        @{
+                            var endEffDate = "";
+                            if (Model.cft_eff_end_dt < Convert.ToDateTime("12/31/2060")) { endEffDate = Model.cft_eff_end_dt.ToString("MMM dd, yyyy"); }                          
+                          }
+                        <input class="datepicker form-control" id="obs_cft_eff_end_dt" name="obs_cft_eff_end_dt" value="@endEffDate" style="max-width: 100%; width:100%;">
                         <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                        @Html.ValidationMessageFor(model => model.obs_cft_eff_end_dt, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.cft_eff_end_dt, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
@@ -210,16 +209,19 @@
                 <div class="col-md-7 personal-info" style="max-width:100%; height:550px; overflow-y:scroll">
 
                     <div class="panel-group" id="accordion">
-                        @*//Inside the Acordion Panel we place all the sections that will be added to the Form
-                            /-----------------------------------------\
-                            |                                         |
-                            |      FORM SECTIONS GO HERE              |
-                            |      POPULATED BY AJAX CALL             |
-                            \-----------------------------------------/*@
+                     @foreach (OBSMVC.Controllers.CollectionFormSection obsFormSection in Model.colFormSections)
+                     {
+                         Html.RenderAction("addNewSection", new { sCounter = Model.colFormSections.Count, formSection = obsFormSection });                           
+                     }
+                      @*//Inside the Acordion Panel we place all the sections that will be added to the Form
+                            /----------------------------------------------------\
+                            |                                                    |
+                            |             FORM SECTIONS GO HERE                  |
+                            |             POPULATED BY AJAX CALL                 | 
+                            |  @Url.Action("addNewSection", "ColFormTemplate")   |
+                            |    params: sCounter, (opt. ModelSections)          |
+                            \----------------------------------------------------/*@
                     </div> @* - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - -*@
-
-
-
 
                     @*When This button is clicked, add a new view to the "accordion" <DIV> section*@
                     <input type="button" id="btnAddSection" value="Add New Section" />
@@ -431,6 +433,7 @@
             });
 
             $('[data-toggle="tooltip"]').tooltip();
+            makeSectionsDropable();
         });
 
         function removeQuestion(qRowId) {
@@ -817,8 +820,7 @@
             })
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         });  // END Of documetn Ready Startup Scripts
-
-
+        
         function addNewSection() {
             $('#sCounter').val(Number($('#sCounter').val()) + 1);
             // ------------ Make the Ajax Call ---------------------------------------------

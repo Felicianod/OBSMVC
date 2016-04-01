@@ -327,26 +327,22 @@ namespace OBSMVC.Controllers
         [HttpGet]
         public ActionResult CreateForm(int? id)
         {
-            if (id > 0)
-            { 
-               ViewBag.exception = "You are in Edit MODE!!!"; 
+            int cftid = id ?? 0;
+            oCollectionForm selectedColForm = new oCollectionForm(cftid);
+            if (cftid > 0)
+            {
+                ViewBag.exception = "You are in Edit MODE!!!";
             }
-            ViewData["errMsg"] = "DBOK";
-
-            //Delete this line and uncomment next two when at work, for Home Test Only
-            //ViewData["errMsg"] = "Database Server is down...";
-            try { int testDB = db.DSC_CUSTOMER.Count(); }
-            catch { ViewData["errMsg"] = "Database Server is down..."; }
-
-            //ViewData["errMsg"] = "Database is Up!";
-            //// First Check the Database Connection
-            //try { int testDB = db.DSC_CUSTOMER.Count(); }
-            //catch { ViewData["errMsg"] = "Database Server is down..."; }
+            else
+            {
+                selectedColForm.cft_eff_st_dt = DateTime.Now;
+                selectedColForm.cft_eff_end_dt = Convert.ToDateTime("12/31/2060");
+            }
 
             ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER.Where(x=>x.dsc_cust_id>=0), "dsc_cust_id", "dsc_cust_name");
             ViewBag.dsc_lc_id = new SelectList(db.DSC_LC.Where(x=>x.dsc_lc_id>=0), "dsc_lc_id", "dsc_lc_name");
             ViewBag.obs_type_id = new SelectList(db.OBS_TYPE.Where(x=>x.obs_type_id>=0), "obs_type_id", "obs_type_name");
-            return View();
+            return View(selectedColForm);
         }
 
 
@@ -577,7 +573,7 @@ namespace OBSMVC.Controllers
             }
         }
 
-        public PartialViewResult addNewSection(string sCounter)
+        public PartialViewResult addNewSection(string sCounter, CollectionFormSection formSection)
         {
             ViewData["sNumber"] = sCounter;
             return PartialView("_addNewSection");
@@ -954,10 +950,9 @@ namespace OBSMVC.Controllers
 
         //--- CONSTRUCTOR------------------
         public oCollectionForm(int id)
-        {//Ctreate the Collection Form Data (Header Info) from the Id passed as a parameter
+        {//Create the Collection Form Data (Header Info) from the Id passed as a parameter
 
             cft_id = id;
-            // Query the Data from the Database
             var q = (from A in db.OBS_COLLECT_FORM_TMPLT
                      join B in db.OBS_TYPE                          //First Table Left join
                          on A.obs_type_id equals B.obs_type_id
@@ -980,21 +975,39 @@ namespace OBSMVC.Controllers
                          cft_obsType = B.obs_type_name,
                          cft_Cust = C.dsc_cust_name,
                          cft_LC = D.dsc_lc_name,
-                         cft_Status = ((A.obs_cft_eff_st_dt < DateTime.Now) && (A.obs_cft_eff_end_dt > DateTime.Now)&& (A.obs_cft_pub_dtm != null && A.obs_cft_pub_dtm < DateTime.Now)) ? "LIVE" : "NOT LIVE",
-                         cft_isPublished = (A.obs_cft_pub_dtm!=null && A.obs_cft_pub_dtm<DateTime.Now)?"PUBLISHED":"NOT PUBLISHED"
+                         cft_Status = ((A.obs_cft_eff_st_dt < DateTime.Now) && (A.obs_cft_eff_end_dt > DateTime.Now) && (A.obs_cft_pub_dtm != null && A.obs_cft_pub_dtm < DateTime.Now)) ? "LIVE" : "NOT LIVE",
+                         cft_isPublished = (A.obs_cft_pub_dtm != null && A.obs_cft_pub_dtm < DateTime.Now) ? "PUBLISHED" : "NOT PUBLISHED",
+                         cft_eff_st_dt = A.obs_cft_eff_st_dt,
+                         cft_eff_end_dt = A.obs_cft_eff_end_dt
                      }).ToList().FirstOrDefault();
             // Set the properties from query result
-            cft_Title = q.cft_Title;
-            cft_SubTitle = q.cft_SubTitle;
-            cft_obsType = q.cft_obsType;
-            cft_Cust = q.cft_Cust;
-            cft_LC = q.cft_LC;
-            cft_Status = q.cft_Status;
-            cft_isPublished = q.cft_isPublished;
-            cft_Nbr = q.cft_Nbr;
-            cft_Version = q.cft_Version;
-            colFormSections = new List<CollectionFormSection>();
-            retrieveQuestionData();
+            if (q != null)
+            {
+                cft_Title = q.cft_Title;
+                cft_SubTitle = q.cft_SubTitle;
+                cft_obsType = q.cft_obsType;
+                cft_Cust = q.cft_Cust;
+                cft_LC = q.cft_LC;
+                cft_Status = q.cft_Status;
+                cft_isPublished = q.cft_isPublished;
+                cft_Nbr = q.cft_Nbr;
+                cft_Version = q.cft_Version;
+                colFormSections = new List<CollectionFormSection>();
+                retrieveQuestionData();
+            }
+            else { 
+            // Form Id not fouond in the database, leave all values empty
+                cft_Title = "";
+                cft_SubTitle = "";
+                //cft_obsType = q.cft_obsType;
+                //cft_Cust = q.cft_Cust;
+                //cft_LC = q.cft_LC;
+                //cft_Status = q.cft_Status;
+                //cft_isPublished = q.cft_isPublished;
+                cft_Nbr = 0;
+                cft_Version = 0;
+                colFormSections = new List<CollectionFormSection>();
+            }
         }
 
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \\
@@ -1011,6 +1024,8 @@ namespace OBSMVC.Controllers
         public string cft_isPublished { get; set; }
         public int cft_Nbr { get; set; }
         public int cft_Version { get; set; }
+        public DateTime cft_eff_st_dt { get; set; }
+        public DateTime cft_eff_end_dt { get; set; }
         public List<CollectionFormSection> colFormSections { get; set; }
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\\
         //- - - - - - - - - - - - CLASS METHODS - - - - - - - - - - - - - - - - |
@@ -1051,7 +1066,7 @@ namespace OBSMVC.Controllers
                     oQuestion.cfq_fullText = q.OBS_QUEST_ANS_TYPES.OBS_QUESTION.obs_question_full_text.Replace(": (", ":<br/>(");
                     oQuestion.cfq_AT = q.OBS_QUEST_ANS_TYPES.OBS_ANS_TYPE.obs_ans_type_name;
                     oQuestion.cfq_qatId = q.obs_qat_id;
-                    oQuestion.cfq_SelectableAnswers = q.OBS_QUEST_ANS_TYPES.OBS_QUEST_SLCT_ANS.Where(item =>item.obs_qsa_eff_st_dt<=DateTime.Now && item.obs_qsa_eff_end_dt>DateTime.Now).OrderBy(xx => xx.obs_qsa_order).Select(x => x.obs_qsa_text).ToList();
+                    oQuestion.cfq_SelectableAnswers = q.OBS_QUEST_ANS_TYPES.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).OrderBy(xx => xx.obs_qsa_order).Select(x => x.obs_qsa_text).ToList();
                     // .... Populate the rest of the oQuestion properties
                     oSection.colFormQuestionList.Add(oQuestion);
 

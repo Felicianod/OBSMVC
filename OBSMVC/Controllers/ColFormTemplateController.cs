@@ -338,11 +338,25 @@ namespace OBSMVC.Controllers
             {
                 selectedColForm.cft_eff_st_dt = DateTime.Now;
                 selectedColForm.cft_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                
+            }
+            string selected_lc = "0";
+            try { selected_lc = db.DSC_LC.Single(x => x.dsc_lc_name == selectedColForm.cft_LC).dsc_lc_id.ToString(); } catch { }
+            string selected_cust = "0";
+            try { selected_cust = db.DSC_CUSTOMER.Single(x => x.dsc_cust_name == selectedColForm.cft_Cust).dsc_cust_id.ToString(); } catch { }
+            //string selected_obs_type = "";
+            try
+            {
+                string selected_obs_type = db.OBS_TYPE.Single(x => x.obs_type_name==selectedColForm.cft_obsType).obs_type_id.ToString();
+                ViewBag.cft_obsType = new SelectList(db.OBS_TYPE.Where(x => x.obs_type_id >= 0), "obs_type_id", "obs_type_name", selected_obs_type);
+            }
+            catch
+            {
+                ViewBag.cft_obsType = new SelectList(db.OBS_TYPE.Where(x => x.obs_type_id >= 0), "obs_type_id", "obs_type_name");
             }
 
-            ViewBag.cft_Cust = new SelectList(db.DSC_CUSTOMER.Where(x => x.dsc_cust_id >= 0), "dsc_cust_id", "dsc_cust_name");
-            ViewBag.cft_LC = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id >= 0), "dsc_lc_id", "dsc_lc_name");
-            ViewBag.cft_obsType = new SelectList(db.OBS_TYPE.Where(x => x.obs_type_id >= 0), "obs_type_id", "obs_type_name");
+            ViewBag.cft_Cust = new SelectList(db.DSC_CUSTOMER.Where(x => x.dsc_cust_id >= 0), "dsc_cust_id", "dsc_cust_name", selected_cust);
+            ViewBag.cft_LC = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id >= 0), "dsc_lc_id", "dsc_lc_name", selected_lc);          
             return View(selectedColForm);
         }
 

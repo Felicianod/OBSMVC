@@ -19,7 +19,7 @@
         <tr>
             <td>@Model.uniqueCounter</td>
             <td>@Model.full_text</td>
-            <td>@Html.DropDownList("AssignedAnswers", Model.question_assigned_answer_types, "Select Answer Type",new { id = dropdown_id, @class="viewDropDown"}) <br />
+            <td>@Html.DropDownList("AssignedAnswers", Model.question_assigned_answer_types, "-Select Answer Type-",new { id = dropdown_id, @class="viewDropDown"}) <br />
                 @{
                     var current_selected = -1;
                  }

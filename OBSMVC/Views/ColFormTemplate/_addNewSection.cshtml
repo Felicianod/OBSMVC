@@ -31,11 +31,15 @@
                           string listId = "li" + questionCounter.ToString("00");
                         <li id="@listId" >
                             <a href='#' class='dismiss'>x</a>
-                              TEST: This is Question No. @questionCounter.ToString("00") under Section @txtSectionName
-                            @*/--------- --------------------------------------------------------------\
-                              |       If this is an existing form that is being edited,                |
-                              |             Attach all existing question here                          |
-                              \------------------------------------------------------------------------/*@
+                              @*@questionCounter.ToString("00"): This is Question ID=@sectQuest.cfq_questId [under Section "@Model.sectionName"]*@
+                            @*/--------- --------------------------------------------------------------------\
+                              |       If this is an existing form that is being edited,                      |
+                              |         Attach all existing question herewith a "Render Action" command      |
+                              |  url:    '@Url.Action("getQuestionInfo", "ColFormTemplate")'                 |
+                              |  method: "GET", param data: { question_id: qid, qCounter: newCounterSeq }    |
+                              |                                                                              |
+                              \------------------------------------------------------------------------------/*@
+                            @Html.Action("getQuestionInfo", new { question_id = @sectQuest.cfq_questId, qCounter = @sectQuest.cfq_seqInForm+1 })
                         </li>
                         questionCounter++;
                       }

@@ -36,7 +36,14 @@
         overflow-y:scroll;
     }*/
 </style>
-
+@if (Model.cft_id == -1)
+{
+    <div class="row">
+        <div class="alert alert-danger col-sm-12" style="text-align:center">
+            <strong>ERROR! FAILED TO SAVE FORM DATA. Please correct Errors and Try Again.</strong> 
+        </div>
+    </div>
+}
 <div class="panel panel-default">
 @*--------------------------- PANEL HEADER SECTION --------------------------------------*@
   <div class="panel-heading header">

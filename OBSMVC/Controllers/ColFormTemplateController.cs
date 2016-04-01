@@ -348,11 +348,12 @@ namespace OBSMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateForm(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT, FormCollection formData)
+        public ActionResult CreateForm(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT, FormCollection formData,int? id)
         {
             string data_from_form = formData["formQuestions"];
             string is_published = formData["isPublished"];
-            int cft_id = -1;
+            int cft_id = id ?? -1;
+
             bool hasQuestions = !String.IsNullOrEmpty(data_from_form);
             if(hasQuestions)
             {

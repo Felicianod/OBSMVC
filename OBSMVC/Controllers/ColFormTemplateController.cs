@@ -323,9 +323,10 @@ namespace OBSMVC.Controllers
             return View(selectedColForm);
         }
 
-        // GET: ColFormTemplate/Create
+
+        // GET: ColFormTemplate/AddEdit
         [HttpGet]
-        public ActionResult CreateForm(int? id)
+        public ActionResult AddEditForm(int? id)
         {
             int cftid = id ?? 0;
             oCollectionForm selectedColForm = new oCollectionForm(cftid);
@@ -339,31 +340,73 @@ namespace OBSMVC.Controllers
                 selectedColForm.cft_eff_end_dt = Convert.ToDateTime("12/31/2060");
             }
 
-            ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER.Where(x=>x.dsc_cust_id>=0), "dsc_cust_id", "dsc_cust_name");
-            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC.Where(x=>x.dsc_lc_id>=0), "dsc_lc_id", "dsc_lc_name");
-            ViewBag.obs_type_id = new SelectList(db.OBS_TYPE.Where(x=>x.obs_type_id>=0), "obs_type_id", "obs_type_name");
+            ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER.Where(x => x.dsc_cust_id >= 0), "dsc_cust_id", "dsc_cust_name");
+            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id >= 0), "dsc_lc_id", "dsc_lc_name");
+            ViewBag.obs_type_id = new SelectList(db.OBS_TYPE.Where(x => x.obs_type_id >= 0), "obs_type_id", "obs_type_name");
             return View(selectedColForm);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateForm(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT, FormCollection formData,int? id)
+        public ActionResult AddEditForm(oCollectionForm colForm, FormCollection formData)
         {
             string data_from_form = formData["formQuestions"];
             string is_published = formData["isPublished"];
-            int cft_id = id ?? -1;
-
             bool hasQuestions = !String.IsNullOrEmpty(data_from_form);
-            if(hasQuestions)
+
+            if (hasQuestions)
             {
-                cft_id = saveForm(oBS_COLLECT_FORM_TMPLT, data_from_form, is_published, cft_id);
+                cft_id = saveForm(colForm, data_from_form, is_published);
             }
 
-            return RedirectToAction("Details", new { id =cft_id});
+            return RedirectToAction("Details", new { id = colForm.cft_id });
             //return RedirectToAction("Index");
 
         }
+
+
+        //======================================================================================================================
+        // GET: ColFormTemplate/Create
+        //[HttpGet]
+        //public ActionResult CreateForm(int? id)
+        //{
+        //    int cftid = id ?? 0;
+        //    oCollectionForm selectedColForm = new oCollectionForm(cftid);
+        //    if (cftid > 0)
+        //    { 
+        //       ViewBag.exception = "You are in EDIT mode!!!"; 
+        //    }
+        //    else
+        //    {
+        //        selectedColForm.cft_eff_st_dt = DateTime.Now;
+        //        selectedColForm.cft_eff_end_dt = Convert.ToDateTime("12/31/2060");
+        //    }
+
+        //    ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER.Where(x=>x.dsc_cust_id>=0), "dsc_cust_id", "dsc_cust_name");
+        //    ViewBag.dsc_lc_id = new SelectList(db.DSC_LC.Where(x=>x.dsc_lc_id>=0), "dsc_lc_id", "dsc_lc_name");
+        //    ViewBag.obs_type_id = new SelectList(db.OBS_TYPE.Where(x=>x.obs_type_id>=0), "obs_type_id", "obs_type_name");
+        //    return View(selectedColForm);
+        //}
+
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult CreateForm(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT, FormCollection formData)
+        //{
+        //    string data_from_form = formData["formQuestions"];
+        //    string is_published = formData["isPublished"];
+        //    int cft_id = -1;
+        //    bool hasQuestions = !String.IsNullOrEmpty(data_from_form);
+        //    if(hasQuestions)
+        //    {
+        //        cft_id = saveForm(oBS_COLLECT_FORM_TMPLT, data_from_form, is_published, cft_id);
+        //    }
+
+        //    return RedirectToAction("Details", new { id =cft_id});
+        //    //return RedirectToAction("Index");
+
+        //}
 
         // GET: ColFormTemplate/Create
         public ActionResult Create()
@@ -827,10 +870,10 @@ namespace OBSMVC.Controllers
             return fullFuncList;
         }
 
-        private int saveForm(OBS_COLLECT_FORM_TMPLT template_from_form, string form_questions_from_gui, string isPublished, int cft_id_from_form)
+        private int saveForm(oCollectionForm colForm, string form_questions_from_gui, string isPublished, int cft_id_from_form)
         {
             int cft_id = cft_id_from_form;
-            if (cft_id<0 && db.OBS_COLLECT_FORM_TMPLT.Where(item =>item.obs_cft_title == template_from_form.obs_cft_title).Count() > 0)
+            if (cft_id < 0 && db.OBS_COLLECT_FORM_TMPLT.Where(item => item.obs_cft_title == template_from_form.obs_cft_title).Count() > 0)
             {//we need to check if title passed from user is unique. if it already exists, we need to return the error message back to the screen
                 return -1;
             }
@@ -840,7 +883,7 @@ namespace OBSMVC.Controllers
             {
                 try
                 {
-                    if(cft_id_from_form >0)//this means we're editing existing form
+                    if (cft_id_from_form > 0)//this means we're editing existing form
                     {
                         OBS_COLLECT_FORM_TMPLT template_to_edit = db.OBS_COLLECT_FORM_TMPLT.Find(cft_id);
                         template_to_edit.dsc_cust_id = template_from_form.dsc_cust_id;
@@ -909,7 +952,7 @@ namespace OBSMVC.Controllers
                     {
                         //now lets first save split the string we received from the gui
                         // string format should be: order,qat_id,section_text
-                        string[] question_items = question.Split(new string[] {"~"}, StringSplitOptions.RemoveEmptyEntries);
+                        string[] question_items = question.Split(new string[] { "~" }, StringSplitOptions.RemoveEmptyEntries);
                         short order = order_counter;
                         int qat_id = Convert.ToInt32(question_items[0]);
                         int form_section_id = getSectionID(question_items[1]);
@@ -937,6 +980,117 @@ namespace OBSMVC.Controllers
             }//end of  using (var transaction = db.Database.BeginTransaction())
 
         }
+
+ //       private int saveForm(OBS_COLLECT_FORM_TMPLT template_from_form, string form_questions_from_gui, string isPublished, int cft_id_from_form)
+ //       {
+ //           int cft_id = cft_id_from_form;
+ //           if (cft_id<0 && db.OBS_COLLECT_FORM_TMPLT.Where(item =>item.obs_cft_title == template_from_form.obs_cft_title).Count() > 0)
+ //           {//we need to check if title passed from user is unique. if it already exists, we need to return the error message back to the screen
+ //               return -1;
+ //           }
+
+ //           ViewBag.exception = "";
+ //           using (var transaction = db.Database.BeginTransaction())
+ //           {
+ //               try
+ //               {
+ //                   if(cft_id_from_form >0)//this means we're editing existing form
+ //                   {
+ //                       OBS_COLLECT_FORM_TMPLT template_to_edit = db.OBS_COLLECT_FORM_TMPLT.Find(cft_id);
+ //                       template_to_edit.dsc_cust_id = template_from_form.dsc_cust_id;
+ //                       template_to_edit.obs_type_id = template_from_form.obs_type_id;
+ //                       template_to_edit.dsc_lc_id = template_from_form.dsc_lc_id;                                                                  
+ //                       template_to_edit.obs_cft_title = template_from_form.obs_cft_title;
+ //                       template_to_edit.obs_cft_subtitle = template_from_form.obs_cft_subtitle;
+ //                       template_to_edit.obs_cft_eff_end_dt = (template_from_form.obs_cft_eff_end_dt == null) || (template_from_form.obs_cft_eff_end_dt < Convert.ToDateTime("01/01/2000")) ? Convert.ToDateTime("12/31/2060") : template_from_form.obs_cft_eff_end_dt;                       
+ //                       template_to_edit.obs_cft_last_saved_dtm = DateTime.Now;
+ //                       template_to_edit.obs_cft_upd_dtm = DateTime.Now;
+ //                       template_to_edit.obs_cft_upd_uid = User.Identity.Name;
+ //                       List<OBS_COL_FORM_QUESTIONS> old_form_questions = db.OBS_COL_FORM_QUESTIONS.Where(x => x.obs_cft_id == cft_id).ToList();
+ //                       db.OBS_COL_FORM_QUESTIONS.RemoveRange(old_form_questions);
+ //                       //foreach (OBS_COL_FORM_QUESTIONS old_form_question in old_form_questions)
+ //                       //{
+ //                       //    db.OBS_COL_FORM_QUESTIONS.Remove(old_form_question)
+ //                       //}
+ //                       db.SaveChanges();
+ //                   }
+ //                   else//this means we're saving new form
+ //                   {
+ //                   //first we need to save OBS_COLLECT_FORM_TMPLT table data
+ //                   OBS_COLLECT_FORM_TMPLT template_to_save = new OBS_COLLECT_FORM_TMPLT();
+ //                   template_to_save.dsc_cust_id = template_from_form.dsc_cust_id;
+ //                   template_to_save.obs_type_id = template_from_form.obs_type_id;
+ //                   template_to_save.dsc_lc_id = template_from_form.dsc_lc_id;
+ //                   short cft_number = (short)(db.OBS_COLLECT_FORM_TMPLT.Max(x => x.obs_cft_nbr) + 1);
+ //                   template_to_save.obs_cft_nbr = cft_number;
+ //                   template_to_save.obs_cft_ver = 1;
+ //                   template_to_save.obs_cft_title = template_from_form.obs_cft_title;
+ //                   template_to_save.obs_cft_subtitle = template_from_form.obs_cft_subtitle;
+ //                   template_to_save.obs_cft_eff_end_dt = (template_from_form.obs_cft_eff_end_dt == null) || (template_from_form.obs_cft_eff_end_dt < Convert.ToDateTime("01/01/2000")) ? Convert.ToDateTime("12/31/2060") : template_from_form.obs_cft_eff_end_dt;
+ //                   template_to_save.obs_cft_added_dtm = DateTime.Now;
+ //                   template_to_save.obs_cft_added_uid = User.Identity.Name;
+ //                   template_to_save.obs_cft_last_saved_dtm = DateTime.Now;
+ //                   if (isPublished == "true")
+ //                   {
+ //                       template_to_save.obs_cft_pub_by_uid = User.Identity.Name;
+ //                       template_to_save.obs_cft_pub_dtm = DateTime.Now;
+ //                       if (template_from_form.obs_cft_eff_end_dt != null)
+ //                       {
+ //                           template_to_save.obs_cft_eff_st_dt = template_from_form.obs_cft_eff_st_dt;
+
+ //                       }
+ //                       else
+ //                       {
+ //                        return -1;
+ //}
+ //                   }
+ //                   else
+ //                   {
+ //                       template_to_save.obs_cft_eff_st_dt = template_from_form.obs_cft_eff_st_dt;
+ //                   }                
+ //                   db.OBS_COLLECT_FORM_TMPLT.Add(template_to_save);
+ //                   db.SaveChanges();
+ //                       cft_id = template_to_save.obs_cft_id;
+ //                       //now we need to query OBS_COLLECT_FORM_TMPLT table to find CFT ID we just created
+ //                       //int cft_id = db.OBS_COLLECT_FORM_TMPLT.Single(item => item.obs_cft_nbr == cft_number && item.obs_cft_ver == 1).obs_cft_id;                       
+ //                   }//end of else(saving new form header form)
+
+ //                   //now we need to save all the form questions
+ //                   string[] splitterm = { "," };
+ //                   string[] parsed_questions = form_questions_from_gui.Split(splitterm, StringSplitOptions.RemoveEmptyEntries);
+ //                   short order_counter = 1;
+ //                   foreach (string question in parsed_questions)
+ //                   {
+ //                       //now lets first save split the string we received from the gui
+ //                       // string format should be: order,qat_id,section_text
+ //                       string[] question_items = question.Split(new string[] {"~"}, StringSplitOptions.RemoveEmptyEntries);
+ //                       short order = order_counter;
+ //                       int qat_id = Convert.ToInt32(question_items[0]);
+ //                       int form_section_id = getSectionID(question_items[1]);
+ //                       OBS_COL_FORM_QUESTIONS new_form_question = new OBS_COL_FORM_QUESTIONS();
+ //                       new_form_question.obs_cft_id = cft_id;
+                        
+ //                       new_form_question.obs_form_section_id = form_section_id;
+ //                       new_form_question.obs_qat_id = qat_id;
+ //                       new_form_question.obs_col_form_quest_order = order;
+ //                       new_form_question.obs_col_form_quest_wgt = 1;
+ //                       new_form_question.obs_col_form_quest_na_yn = "Y";
+ //                       db.OBS_COL_FORM_QUESTIONS.Add(new_form_question);
+ //                       db.SaveChanges();
+ //                       order_counter++;
+ //                   }//end of foreach
+
+ //                   transaction.Commit();
+ //                   return cft_id;
+ //               }//end of try
+ //               catch (Exception e)
+ //               {
+ //                   transaction.Rollback();
+ //                   return -1;
+ //               }
+ //           }//end of  using (var transaction = db.Database.BeginTransaction())
+
+ //       }
 
         private int getSectionID(string section_name)
         {

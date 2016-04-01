@@ -35,6 +35,7 @@
           <Property Name="dsc_emp_can_be_obs_yn" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="dsc_emp_temp_yn" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="dsc_emp_hourly_yn" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="dsc_emp_pri_src" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="dsc_emp_added_id" Type="varchar" MaxLength="70" Nullable="false" />
           <Property Name="dsc_emp_added_dtm" Type="datetime" Nullable="false" />
           <Property Name="dsc_emp_upd_uid" Type="varchar" MaxLength="70" />
@@ -1004,37 +1005,6 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="EMPLOYEE">
-          <Key>
-            <PropertyRef Name="dsc_emp_id" />
-          </Key>
-          <Property Name="dsc_emp_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="dsc_assigned_lc_id" Type="Int32" />
-          <Property Name="dsc_emp_perm_id" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_wms_clock_nbr" Type="Int32" />
-          <Property Name="dsc_emp_first_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="dsc_emp_last_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="dsc_emp_email_addr" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_adp_id" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="dsc_emp_hire_dt" Type="DateTime" Precision="0" />
-          <Property Name="dsc_emp_init_work_dt" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="dsc_emp_term_dt" Type="DateTime" Precision="0" />
-          <Property Name="dsc_emp_can_be_obs_yn" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="DSC_LC" Relationship="Self.relationship45" FromRole="DSC_EMPLOYEE" ToRole="DSC_LC" />
-          <Property Name="dsc_emp_temp_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_hourly_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_added_id" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_added_dtm" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="dsc_emp_upd_uid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
-          <Property Name="dsc_emp_upd_dtm" Type="DateTime" Precision="3" />
-          <Property Name="dsc_emp_mid_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="OBS_COLLECT_FORM_INST" Relationship="Models.relationship15" FromRole="EMPLOYEE" ToRole="OBS_COLLECT_FORM_INST" />
-          <NavigationProperty Name="OBS_COL_FORM_INST_SIGS" Relationship="Models.relationship32" FromRole="EMPLOYEE" ToRole="OBS_COL_FORM_INST_SIGS" />
-          <NavigationProperty Name="OBS_RVW_FORM_INST" Relationship="Models.relationship39" FromRole="EMPLOYEE" ToRole="OBS_RVW_FORM_INST" />
-          <NavigationProperty Name="OBS_INST" Relationship="Models.relationship40" FromRole="EMPLOYEE" ToRole="OBS_INST" />
-          <Property Name="dsc_emp_supvsr_perm_id" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="DSC_LC">
           <Key>
             <PropertyRef Name="dsc_lc_id" />
@@ -1044,9 +1014,9 @@
           <Property Name="dsc_lc_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="dsc_lc_timezone" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="dsc_lc_eff_end_date" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="DSC_EMPLOYEE" Relationship="Self.relationship45" FromRole="DSC_LC" ToRole="DSC_EMPLOYEE" />
           <NavigationProperty Name="OBS_INST" Relationship="Models.relationship35" FromRole="DSC_LC" ToRole="OBS_INST" />
           <NavigationProperty Name="OBS_COLLECT_FORM_TMPLT" Relationship="Models.relationship9" FromRole="DSC_LC" ToRole="OBS_COLLECT_FORM_TMPLT" />
+          <NavigationProperty Name="DSC_EMPLOYEE" Relationship="Models.relationship45" FromRole="DSC_LC" ToRole="DSC_EMPLOYEE" />
         </EntityType>
         <EntityType Name="OBS_SUB_TYPE">
           <Key>
@@ -1084,18 +1054,6 @@
           <NavigationProperty Name="OBS_TYPE_SUB_TYPES" Relationship="Models.rel_obs_type_sub_type" FromRole="OBS_TYPE" ToRole="OBS_TYPE_SUB_TYPES" />
           <NavigationProperty Name="OBS_COLLECT_FORM_TMPLT" Relationship="Models.rel_type_collect_form" FromRole="OBS_TYPE" ToRole="OBS_COLLECT_FORM_TMPLT" />
         </EntityType>
-        <Association Name="relationship45">
-          <End Role="DSC_LC" Type="Self.DSC_LC" Multiplicity="0..1" />
-          <End Role="DSC_EMPLOYEE" Type="Models.EMPLOYEE" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DSC_LC">
-              <PropertyRef Name="dsc_lc_id" />
-            </Principal>
-            <Dependent Role="DSC_EMPLOYEE">
-              <PropertyRef Name="dsc_assigned_lc_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="obs_super_type_type">
           <End Role="OBS_SUPER_TYPE" Type="Self.OBS_SUPER_TYPE" Multiplicity="1" />
           <End Role="OBS_TYPE" Type="Self.OBS_TYPE" Multiplicity="*" />
@@ -1109,15 +1067,10 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="DSC_OBS_DB_ENTITY" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="EMPLOYEEs" EntityType="Models.EMPLOYEE" />
           <EntitySet Name="DSC_LC" EntityType="Self.DSC_LC" />
           <EntitySet Name="OBS_SUB_TYPE" EntityType="Self.OBS_SUB_TYPE" />
           <EntitySet Name="OBS_SUPER_TYPE" EntityType="Self.OBS_SUPER_TYPE" />
           <EntitySet Name="OBS_TYPE" EntityType="Self.OBS_TYPE" />
-          <AssociationSet Name="relationship45" Association="Self.relationship45">
-            <End Role="DSC_LC" EntitySet="DSC_LC" />
-            <End Role="DSC_EMPLOYEE" EntitySet="EMPLOYEEs" />
-          </AssociationSet>
           <AssociationSet Name="obs_super_type_type" Association="Self.obs_super_type_type">
             <End Role="OBS_SUPER_TYPE" EntitySet="OBS_SUPER_TYPE" />
             <End Role="OBS_TYPE" EntitySet="OBS_TYPE" />
@@ -1150,22 +1103,6 @@
           <EntitySet Name="OBS_MULTIMEDIA_TYPE" EntityType="Models.OBS_MULTIMEDIA_TYPE" />
           <EntitySet Name="OBS_RVW_FORM_INST" EntityType="Models.OBS_RVW_FORM_INST" />
           <EntitySet Name="OBS_TYPE_SUB_TYPES" EntityType="Models.OBS_TYPE_SUB_TYPES" />
-          <AssociationSet Name="relationship15" Association="Models.relationship15">
-            <End Role="EMPLOYEE" EntitySet="EMPLOYEEs" />
-            <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
-          </AssociationSet>
-          <AssociationSet Name="relationship32" Association="Models.relationship32">
-            <End Role="EMPLOYEE" EntitySet="EMPLOYEEs" />
-            <End Role="OBS_COL_FORM_INST_SIGS" EntitySet="OBS_COL_FORM_INST_SIGS" />
-          </AssociationSet>
-          <AssociationSet Name="relationship39" Association="Models.relationship39">
-            <End Role="EMPLOYEE" EntitySet="EMPLOYEEs" />
-            <End Role="OBS_RVW_FORM_INST" EntitySet="OBS_RVW_FORM_INST" />
-          </AssociationSet>
-          <AssociationSet Name="relationship40" Association="Models.relationship40">
-            <End EntitySet="EMPLOYEEs" Role="EMPLOYEE" />
-            <End EntitySet="OBS_INST" Role="OBS_INST" />
-          </AssociationSet>
           <AssociationSet Name="relationship35" Association="Models.relationship35">
             <End Role="DSC_LC" EntitySet="DSC_LC" />
             <End Role="OBS_INST" EntitySet="OBS_INST" />
@@ -1294,6 +1231,27 @@
           <AssociationSet Name="rel_type_collect_form" Association="Models.rel_type_collect_form">
             <End Role="OBS_TYPE" EntitySet="OBS_TYPE" />
             <End Role="OBS_COLLECT_FORM_TMPLT" EntitySet="OBS_COLLECT_FORM_TMPLT" />
+          </AssociationSet>
+          <EntitySet Name="DSC_EMPLOYEE" EntityType="Models.DSC_EMPLOYEE" />
+          <AssociationSet Name="relationship15" Association="Models.relationship15">
+            <End Role="DSC_EMPLOYEE" EntitySet="DSC_EMPLOYEE" />
+            <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
+          </AssociationSet>
+          <AssociationSet Name="relationship32" Association="Models.relationship32">
+            <End Role="DSC_EMPLOYEE" EntitySet="DSC_EMPLOYEE" />
+            <End Role="OBS_COL_FORM_INST_SIGS" EntitySet="OBS_COL_FORM_INST_SIGS" />
+          </AssociationSet>
+          <AssociationSet Name="relationship39" Association="Models.relationship39">
+            <End Role="DSC_EMPLOYEE" EntitySet="DSC_EMPLOYEE" />
+            <End Role="OBS_RVW_FORM_INST" EntitySet="OBS_RVW_FORM_INST" />
+          </AssociationSet>
+          <AssociationSet Name="relationship40" Association="Models.relationship40">
+            <End Role="DSC_EMPLOYEE" EntitySet="DSC_EMPLOYEE" />
+            <End Role="OBS_INST" EntitySet="OBS_INST" />
+          </AssociationSet>
+          <AssociationSet Name="relationship45" Association="Models.relationship45">
+            <End Role="DSC_LC" EntitySet="DSC_LC" />
+            <End Role="DSC_EMPLOYEE" EntitySet="DSC_EMPLOYEE" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="OBS_QUEST_ANS_TYPES">
@@ -1429,8 +1387,8 @@
           <Property Name="obs_cfis_observer_emp_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="obs_cfis_observed_emp_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="obs_cfis_reviewer_emp_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="DSC_EMPLOYEE" Relationship="Models.relationship32" FromRole="OBS_COL_FORM_INST_SIGS" ToRole="EMPLOYEE" />
           <NavigationProperty Name="OBS_COLLECT_FORM_INST" Relationship="Models.relationship33" FromRole="OBS_COL_FORM_INST_SIGS" ToRole="OBS_COLLECT_FORM_INST" />
+          <NavigationProperty Name="DSC_EMPLOYEE" Relationship="Models.relationship32" FromRole="OBS_COL_FORM_INST_SIGS" ToRole="DSC_EMPLOYEE" />
         </EntityType>
         <EntityType Name="OBS_COL_FORM_TMPLT_ATTRIBS">
           <Key>
@@ -1457,13 +1415,13 @@
           <Property Name="obs_cfi_start_dt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="obs_cfi_last_upd_dt" Type="DateTime" Precision="3" />
           <Property Name="obs_cfi_comp_date" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="DSC_EMPLOYEE" Relationship="Models.relationship15" FromRole="OBS_COLLECT_FORM_INST" ToRole="EMPLOYEE" />
           <NavigationProperty Name="OBS_COL_FORM_INST_ATTRIB_VALS" Relationship="Models.relationship28" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_COL_FORM_INST_ATTRIB_VALS" />
           <NavigationProperty Name="OBS_COL_FORM_INST_MM_ATTACH" Relationship="Models.relationship30" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_COL_FORM_INST_MM_ATTACH" />
           <NavigationProperty Name="OBS_COL_FORM_INST_SIGS" Relationship="Models.relationship33" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_COL_FORM_INST_SIGS" />
           <NavigationProperty Name="OBS_INST_EVENT_LOG" Relationship="Models.relationship21" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_INST_EVENT_LOG" />
           <NavigationProperty Name="OBS_INST" Relationship="Models.relationship23" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_INST" />
           <NavigationProperty Name="OBS_COLLECT_FORM_TMPLT" Relationship="Models.relationship14" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_COLLECT_FORM_TMPLT" />
+          <NavigationProperty Name="DSC_EMPLOYEE" Relationship="Models.relationship15" FromRole="OBS_COLLECT_FORM_INST" ToRole="DSC_EMPLOYEE" />
         </EntityType>
         <EntityType Name="OBS_EVENT_TYPE">
           <Key>
@@ -1513,13 +1471,13 @@
           <Property Name="obs_inst_del_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="obs_inst_del_date" Type="DateTime" Precision="3" />
           <Property Name="obs_inst_del_reason" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="DSC_EMPLOYEE" Relationship="Models.relationship40" FromRole="OBS_INST" ToRole="EMPLOYEE" />
           <NavigationProperty Name="DSC_LC" Relationship="Models.relationship35" FromRole="OBS_INST" ToRole="DSC_LC" />
           <NavigationProperty Name="OBS_COLLECT_FORM_INST" Relationship="Models.relationship23" FromRole="OBS_INST" ToRole="OBS_COLLECT_FORM_INST" />
           <NavigationProperty Name="OBS_TYPE" Relationship="Models.relationship19" FromRole="OBS_INST" ToRole="OBS_TYPE" />
           <NavigationProperty Name="OBS_INST_EVENT_LOG" Relationship="Models.relationship20" FromRole="OBS_INST" ToRole="OBS_INST_EVENT_LOG" />
           <NavigationProperty Name="OBS_RVW_FORM_INST" Relationship="Models.relationship36" FromRole="OBS_INST" ToRole="OBS_RVW_FORM_INST" />
           <NavigationProperty Name="DSC_CUSTOMER" Relationship="Models.relationship34" FromRole="OBS_INST" ToRole="DSC_CUSTOMER" />
+          <NavigationProperty Name="DSC_EMPLOYEE" Relationship="Models.relationship40" FromRole="OBS_INST" ToRole="DSC_EMPLOYEE" />
         </EntityType>
         <EntityType Name="OBS_INST_EVENT_LOG">
           <Key>
@@ -1552,9 +1510,9 @@
           <Property Name="obs_cfi_id" Type="Int64" Nullable="false" />
           <Property Name="obs_inst_id" Type="Int64" Nullable="false" />
           <Property Name="dsc_reviewer_emp_id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="DSC_EMPLOYEE" Relationship="Models.relationship39" FromRole="OBS_RVW_FORM_INST" ToRole="EMPLOYEE" />
           <NavigationProperty Name="OBS_INST" Relationship="Models.relationship36" FromRole="OBS_RVW_FORM_INST" ToRole="OBS_INST" />
           <NavigationProperty Name="OBS_INST_EVENT_LOG" Relationship="Models.relationship37" FromRole="OBS_RVW_FORM_INST" ToRole="OBS_INST_EVENT_LOG" />
+          <NavigationProperty Name="DSC_EMPLOYEE" Relationship="Models.relationship39" FromRole="OBS_RVW_FORM_INST" ToRole="DSC_EMPLOYEE" />
         </EntityType>
         <EntityType Name="OBS_TYPE_SUB_TYPES">
           <Key>
@@ -1567,54 +1525,6 @@
           <NavigationProperty Name="OBS_SUB_TYPE" Relationship="Models.rel_sub_type_types" FromRole="OBS_TYPE_SUB_TYPES" ToRole="OBS_SUB_TYPE" />
           <NavigationProperty Name="OBS_TYPE" Relationship="Models.rel_obs_type_sub_type" FromRole="OBS_TYPE_SUB_TYPES" ToRole="OBS_TYPE" />
         </EntityType>
-        <Association Name="relationship15">
-          <End Type="Models.EMPLOYEE" Role="EMPLOYEE" Multiplicity="1" />
-          <End Type="Models.OBS_COLLECT_FORM_INST" Role="OBS_COLLECT_FORM_INST" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="EMPLOYEE">
-              <PropertyRef Name="dsc_emp_id" />
-            </Principal>
-            <Dependent Role="OBS_COLLECT_FORM_INST">
-              <PropertyRef Name="dsc_observer_emp_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="relationship32">
-          <End Type="Models.EMPLOYEE" Role="EMPLOYEE" Multiplicity="1" />
-          <End Type="Models.OBS_COL_FORM_INST_SIGS" Role="OBS_COL_FORM_INST_SIGS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="EMPLOYEE">
-              <PropertyRef Name="dsc_emp_id" />
-            </Principal>
-            <Dependent Role="OBS_COL_FORM_INST_SIGS">
-              <PropertyRef Name="dsc_emp_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="relationship39">
-          <End Type="Models.EMPLOYEE" Role="EMPLOYEE" Multiplicity="1" />
-          <End Type="Models.OBS_RVW_FORM_INST" Role="OBS_RVW_FORM_INST" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="EMPLOYEE">
-              <PropertyRef Name="dsc_emp_id" />
-            </Principal>
-            <Dependent Role="OBS_RVW_FORM_INST">
-              <PropertyRef Name="dsc_reviewer_emp_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="relationship40">
-          <End Type="Models.EMPLOYEE" Multiplicity="0..1" Role="EMPLOYEE" />
-          <End Type="Models.OBS_INST" Multiplicity="*" Role="OBS_INST" />
-          <ReferentialConstraint>
-            <Principal Role="EMPLOYEE">
-              <PropertyRef Name="dsc_emp_id" />
-            </Principal>
-            <Dependent Role="OBS_INST">
-              <PropertyRef Name="dsc_observed_emp_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="relationship35">
           <End Type="Models.DSC_LC" Role="DSC_LC" Multiplicity="1" />
           <End Type="Models.OBS_INST" Role="OBS_INST" Multiplicity="*" />
@@ -2077,39 +1987,104 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="DSC_EMPLOYEE">
+          <Key>
+            <PropertyRef Name="dsc_emp_id" />
+          </Key>
+          <Property Name="dsc_emp_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dsc_assigned_lc_id" Type="Int32" />
+          <Property Name="dsc_emp_perm_id" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_supvsr_perm_id" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_wms_clock_nbr" Type="Int32" />
+          <Property Name="dsc_emp_first_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_mid_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_last_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_email_addr" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_adp_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_hire_dt" Type="DateTime" Precision="0" />
+          <Property Name="dsc_emp_init_work_dt" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="dsc_emp_term_dt" Type="DateTime" Precision="0" />
+          <Property Name="dsc_emp_can_be_obs_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_temp_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_hourly_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_pri_src" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_added_id" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_added_dtm" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="dsc_emp_upd_uid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="dsc_emp_upd_dtm" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="OBS_COLLECT_FORM_INST" Relationship="Models.relationship15" FromRole="DSC_EMPLOYEE" ToRole="OBS_COLLECT_FORM_INST" />
+          <NavigationProperty Name="OBS_COL_FORM_INST_SIGS" Relationship="Models.relationship32" FromRole="DSC_EMPLOYEE" ToRole="OBS_COL_FORM_INST_SIGS" />
+          <NavigationProperty Name="OBS_RVW_FORM_INST" Relationship="Models.relationship39" FromRole="DSC_EMPLOYEE" ToRole="OBS_RVW_FORM_INST" />
+          <NavigationProperty Name="OBS_INST" Relationship="Models.relationship40" FromRole="DSC_EMPLOYEE" ToRole="OBS_INST" />
+          <NavigationProperty Name="DSC_LC" Relationship="Models.relationship45" FromRole="DSC_EMPLOYEE" ToRole="DSC_LC" />
+        </EntityType>
+        <Association Name="relationship15">
+          <End Type="Models.DSC_EMPLOYEE" Role="DSC_EMPLOYEE" Multiplicity="1" />
+          <End Type="Models.OBS_COLLECT_FORM_INST" Role="OBS_COLLECT_FORM_INST" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DSC_EMPLOYEE">
+              <PropertyRef Name="dsc_emp_id" />
+            </Principal>
+            <Dependent Role="OBS_COLLECT_FORM_INST">
+              <PropertyRef Name="dsc_observer_emp_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="relationship32">
+          <End Type="Models.DSC_EMPLOYEE" Role="DSC_EMPLOYEE" Multiplicity="1" />
+          <End Type="Models.OBS_COL_FORM_INST_SIGS" Role="OBS_COL_FORM_INST_SIGS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DSC_EMPLOYEE">
+              <PropertyRef Name="dsc_emp_id" />
+            </Principal>
+            <Dependent Role="OBS_COL_FORM_INST_SIGS">
+              <PropertyRef Name="dsc_emp_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="relationship39">
+          <End Type="Models.DSC_EMPLOYEE" Role="DSC_EMPLOYEE" Multiplicity="1" />
+          <End Type="Models.OBS_RVW_FORM_INST" Role="OBS_RVW_FORM_INST" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DSC_EMPLOYEE">
+              <PropertyRef Name="dsc_emp_id" />
+            </Principal>
+            <Dependent Role="OBS_RVW_FORM_INST">
+              <PropertyRef Name="dsc_reviewer_emp_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="relationship40">
+          <End Type="Models.DSC_EMPLOYEE" Role="DSC_EMPLOYEE" Multiplicity="0..1" />
+          <End Type="Models.OBS_INST" Role="OBS_INST" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DSC_EMPLOYEE">
+              <PropertyRef Name="dsc_emp_id" />
+            </Principal>
+            <Dependent Role="OBS_INST">
+              <PropertyRef Name="dsc_observed_emp_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="relationship45">
+          <End Type="Models.DSC_LC" Role="DSC_LC" Multiplicity="0..1" />
+          <End Type="Models.DSC_EMPLOYEE" Role="DSC_EMPLOYEE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DSC_LC">
+              <PropertyRef Name="dsc_lc_id" />
+            </Principal>
+            <Dependent Role="DSC_EMPLOYEE">
+              <PropertyRef Name="dsc_assigned_lc_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ModelsStoreContainer" CdmEntityContainer="DSC_OBS_DB_ENTITY">
-          <EntitySetMapping Name="EMPLOYEEs">
-            <EntityTypeMapping TypeName="Models.EMPLOYEE">
-              <MappingFragment StoreEntitySet="DSC_EMPLOYEE">
-                <ScalarProperty Name="dsc_emp_supvsr_perm_id" ColumnName="dsc_emp_supvsr_perm_id" />
-                <ScalarProperty Name="dsc_emp_mid_name" ColumnName="dsc_emp_mid_name" />
-                <ScalarProperty Name="dsc_emp_upd_dtm" ColumnName="dsc_emp_upd_dtm" />
-                <ScalarProperty Name="dsc_emp_upd_uid" ColumnName="dsc_emp_upd_uid" />
-                <ScalarProperty Name="dsc_emp_added_dtm" ColumnName="dsc_emp_added_dtm" />
-                <ScalarProperty Name="dsc_emp_added_id" ColumnName="dsc_emp_added_id" />
-                <ScalarProperty Name="dsc_emp_hourly_yn" ColumnName="dsc_emp_hourly_yn" />
-                <ScalarProperty Name="dsc_emp_temp_yn" ColumnName="dsc_emp_temp_yn" />
-                <ScalarProperty Name="dsc_emp_id" ColumnName="dsc_emp_id" />
-                <ScalarProperty Name="dsc_assigned_lc_id" ColumnName="dsc_assigned_lc_id" />
-                <ScalarProperty Name="dsc_emp_perm_id" ColumnName="dsc_emp_perm_id" />
-                <ScalarProperty Name="dsc_emp_wms_clock_nbr" ColumnName="dsc_emp_wms_clock_nbr" />
-                <ScalarProperty Name="dsc_emp_first_name" ColumnName="dsc_emp_first_name" />
-                <ScalarProperty Name="dsc_emp_last_name" ColumnName="dsc_emp_last_name" />
-                <ScalarProperty Name="dsc_emp_email_addr" ColumnName="dsc_emp_email_addr" />
-                <ScalarProperty Name="dsc_emp_title" ColumnName="dsc_emp_title" />
-                <ScalarProperty Name="dsc_emp_adp_id" ColumnName="dsc_emp_adp_id" />
-                <ScalarProperty Name="dsc_emp_hire_dt" ColumnName="dsc_emp_hire_dt" />
-                <ScalarProperty Name="dsc_emp_init_work_dt" ColumnName="dsc_emp_init_work_dt" />
-                <ScalarProperty Name="dsc_emp_term_dt" ColumnName="dsc_emp_term_dt" />
-                <ScalarProperty Name="dsc_emp_can_be_obs_yn" ColumnName="dsc_emp_can_be_obs_yn" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="DSC_LC">
             <EntityTypeMapping TypeName="Models.DSC_LC">
               <MappingFragment StoreEntitySet="DSC_LC">
@@ -2449,6 +2424,34 @@
                 <ScalarProperty Name="dsc_cust_id" ColumnName="dsc_cust_id" />
                 <ScalarProperty Name="obs_type_id" ColumnName="obs_type_id" />
                 <ScalarProperty Name="obs_cft_id" ColumnName="obs_cft_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DSC_EMPLOYEE">
+            <EntityTypeMapping TypeName="Models.DSC_EMPLOYEE">
+              <MappingFragment StoreEntitySet="DSC_EMPLOYEE">
+                <ScalarProperty Name="dsc_emp_upd_dtm" ColumnName="dsc_emp_upd_dtm" />
+                <ScalarProperty Name="dsc_emp_upd_uid" ColumnName="dsc_emp_upd_uid" />
+                <ScalarProperty Name="dsc_emp_added_dtm" ColumnName="dsc_emp_added_dtm" />
+                <ScalarProperty Name="dsc_emp_added_id" ColumnName="dsc_emp_added_id" />
+                <ScalarProperty Name="dsc_emp_pri_src" ColumnName="dsc_emp_pri_src" />
+                <ScalarProperty Name="dsc_emp_hourly_yn" ColumnName="dsc_emp_hourly_yn" />
+                <ScalarProperty Name="dsc_emp_temp_yn" ColumnName="dsc_emp_temp_yn" />
+                <ScalarProperty Name="dsc_emp_can_be_obs_yn" ColumnName="dsc_emp_can_be_obs_yn" />
+                <ScalarProperty Name="dsc_emp_term_dt" ColumnName="dsc_emp_term_dt" />
+                <ScalarProperty Name="dsc_emp_init_work_dt" ColumnName="dsc_emp_init_work_dt" />
+                <ScalarProperty Name="dsc_emp_hire_dt" ColumnName="dsc_emp_hire_dt" />
+                <ScalarProperty Name="dsc_emp_adp_id" ColumnName="dsc_emp_adp_id" />
+                <ScalarProperty Name="dsc_emp_title" ColumnName="dsc_emp_title" />
+                <ScalarProperty Name="dsc_emp_email_addr" ColumnName="dsc_emp_email_addr" />
+                <ScalarProperty Name="dsc_emp_last_name" ColumnName="dsc_emp_last_name" />
+                <ScalarProperty Name="dsc_emp_mid_name" ColumnName="dsc_emp_mid_name" />
+                <ScalarProperty Name="dsc_emp_first_name" ColumnName="dsc_emp_first_name" />
+                <ScalarProperty Name="dsc_emp_wms_clock_nbr" ColumnName="dsc_emp_wms_clock_nbr" />
+                <ScalarProperty Name="dsc_emp_supvsr_perm_id" ColumnName="dsc_emp_supvsr_perm_id" />
+                <ScalarProperty Name="dsc_emp_perm_id" ColumnName="dsc_emp_perm_id" />
+                <ScalarProperty Name="dsc_assigned_lc_id" ColumnName="dsc_assigned_lc_id" />
+                <ScalarProperty Name="dsc_emp_id" ColumnName="dsc_emp_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

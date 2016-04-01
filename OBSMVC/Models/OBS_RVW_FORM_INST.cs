@@ -24,9 +24,9 @@ namespace OBSMVC.Models
         public long obs_inst_id { get; set; }
         public int dsc_reviewer_emp_id { get; set; }
     
-        public virtual EMPLOYEE DSC_EMPLOYEE { get; set; }
         public virtual OBS_INST OBS_INST { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_INST_EVENT_LOG> OBS_INST_EVENT_LOG { get; set; }
+        public virtual DSC_EMPLOYEE DSC_EMPLOYEE { get; set; }
     }
 }

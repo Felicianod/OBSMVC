@@ -1212,15 +1212,22 @@ namespace OBSMVC.Controllers
         public string cft_Cust { get; set; }
         public string cft_LC { get; set; }
         public string cft_Status { get; set; }
-
         public string cft_isPublished { get; set; }
         public int cft_Nbr { get; set; }
-        public int cft_Version { get; set; }
+        public int cft_Version { get; set; }        
         public DateTime cft_eff_st_dt { get; set; }
         public DateTime cft_eff_end_dt { get; set; }
         public List<CollectionFormSection> colFormSections { get; set; }
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\\
         //- - - - - - - - - - - - CLASS METHODS - - - - - - - - - - - - - - - - |
+        public int questCount() {
+            int qCount = 0;
+            foreach (CollectionFormSection formSection in colFormSections)
+            {
+                qCount += formSection.colFormQuestionList.Count;
+            }
+            return qCount;
+        }
         private void retrieveQuestionData()
         {
             DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();  //To give Database access to this Class

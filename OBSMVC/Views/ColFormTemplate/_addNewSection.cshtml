@@ -22,6 +22,24 @@
     <div id="@sectionId" class="panel-collapse collapse in" style="margin-left:20px" @*style="border:dashed; border-width:medium"*@>
         <div class="right row">
             <ol class="list-group targetList connected" id="@olListId" @*ondrop="addQid(event)"*@>
+                  @if (Model.colFormQuestionList.Count > 0)
+                  {
+                      int questionCounter = 1;
+                      
+                      foreach (OBSMVC.Controllers.CollectionFormQuestion sectQuest in Model.colFormQuestionList)
+                      {
+                          string listId = "li" + questionCounter.ToString("00");
+                        <li id="@listId" >
+                            <a href='#' class='dismiss'>x</a>
+                              TEST: This is Question No. @questionCounter.ToString("00")
+                            @*/--------- --------------------------------------------------------------\
+                              |       If this is an existing form that is being edited,                |
+                              |             Attach all existing question here                          |
+                              \------------------------------------------------------------------------/*@
+                        </li>
+                        questionCounter++;
+                      }
+                  }
                 <li class="list-group-item placeholder">
                     <div style="font-weight:bold; font-size:large">
                         <br />Drag a question here...<br /><br />

@@ -897,6 +897,22 @@ namespace OBSMVC.Controllers
                         template_to_edit.obs_cft_last_saved_dtm = DateTime.Now;
                         template_to_edit.obs_cft_upd_dtm = DateTime.Now;
                         template_to_edit.obs_cft_upd_uid = User.Identity.Name;
+                        if (isPublished == "true")
+                        {
+                            if (colForm.cft_eff_st_dt != null || (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000")))
+                            {
+                                template_to_edit.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
+
+                            }
+                            else
+                            {
+                                return -1;
+                            }
+                        }
+                        else if (!(colForm.cft_eff_st_dt != null || (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000"))))
+                        {
+                            template_to_edit.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
+                        }
                         List<OBS_COL_FORM_QUESTIONS> old_form_questions = db.OBS_COL_FORM_QUESTIONS.Where(x => x.obs_cft_id == cft_id).ToList();
                         db.OBS_COL_FORM_QUESTIONS.RemoveRange(old_form_questions);
                         //foreach (OBS_COL_FORM_QUESTIONS old_form_question in old_form_questions)

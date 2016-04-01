@@ -113,6 +113,7 @@
     int masterCounter = 1;
     string rowInfo = masterCounter.ToString();
     string colFormId = "0";
+    int nextQuestion = Model.questCount() + 1;
 }
 
 
@@ -133,6 +134,8 @@
     <div class="row">
         <div class="alert alert-danger col-sm-12">
             <strong>Warning!</strong> @ViewBag.exception
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            [There are currently @Model.questCount() Questions in this Form]
         </div>
     </div>
 }
@@ -141,7 +144,7 @@
 @* - - - - - - - - - - - - - - - - BEGINING OF THE "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
 @*// ---- Helper Hidden Fields to Control the Inner Ids ----- *@
  <input type="hidden" id="masterItemCounter" value="1" />
- <input type="hidden" id="qCounter" value="1" />
+ <input type="hidden" id="qCounter" value="@nextQuestion" />
  <input type="hidden" id="sCounter" value="@Model.colFormSections.Count" />
  <input type="hidden" id="formMode" value="@fMode" />
     @*\\ ---- End of Hidden Control Fields section ----- *@
@@ -607,7 +610,6 @@
                     // updateValues("Question Added Successfully: " + getTestData(qid));   //Method invoked when action is dropped successfully
 
                     getQinfo(qid);
-
                 }
             }).sortable({
                 connectWith: ".connected",
@@ -685,7 +687,7 @@
 
 
 
-        function addQidOLD(ev) {
+        @*function addQidOLD(ev) {
             var newCounterSeq = $("#qCounter").val();
             var qid = ev.dataTransfer.getData("Text"); // "Id" of the dragged data element
             //var target = ev.target || ev.srcElement;
@@ -725,7 +727,7 @@
                 //$("#questionPnl01").append(d);
                 //$btn.button('reset');
             });
-        }
+        }*@
 
         //------------------------------------------------------------------
         function getQinfo(questionId) {
@@ -783,7 +785,6 @@
                 //$btn.button('reset');
                 //return d;
             });
-
         }
 
 

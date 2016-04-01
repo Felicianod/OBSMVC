@@ -353,6 +353,7 @@ namespace OBSMVC.Controllers
         {
             string data_from_form = formData["formQuestions"];
             string is_published = formData["isPublished"];
+            int cft_id = -1;
             bool hasQuestions = !String.IsNullOrEmpty(data_from_form);
 
             if (hasQuestions)
@@ -360,7 +361,7 @@ namespace OBSMVC.Controllers
                 cft_id = saveForm(colForm, data_from_form, is_published);
             }
 
-            return RedirectToAction("Details", new { id = colForm.cft_id });
+            return RedirectToAction("Details", new { id = cft_id });
             //return RedirectToAction("Index");
 
         }
@@ -870,11 +871,12 @@ namespace OBSMVC.Controllers
             return fullFuncList;
         }
 
-        private int saveForm(oCollectionForm colForm, string form_questions_from_gui, string isPublished, int cft_id_from_form)
+        private int saveForm(oCollectionForm colForm, string form_questions_from_gui, string isPublished)
         {
-            int cft_id = cft_id_from_form;
-            if (cft_id < 0 && db.OBS_COLLECT_FORM_TMPLT.Where(item => item.obs_cft_title == template_from_form.obs_cft_title).Count() > 0)
+            int cft_id = colForm.cft_id;
+            if (cft_id < 0 && db.OBS_COLLECT_FORM_TMPLT.Where(item => item.obs_cft_title == colForm.cft_Title).Count() > 0)
             {//we need to check if title passed from user is unique. if it already exists, we need to return the error message back to the screen
+                ViewBag.exception = "ERROR: The Question Id is either invalid or the Form Title Already Exist.";
                 return -1;
             }
 
@@ -883,15 +885,15 @@ namespace OBSMVC.Controllers
             {
                 try
                 {
-                    if (cft_id_from_form > 0)//this means we're editing existing form
+                    if (colForm.cft_id > 0)//this means we are editing an existing form
                     {
                         OBS_COLLECT_FORM_TMPLT template_to_edit = db.OBS_COLLECT_FORM_TMPLT.Find(cft_id);
-                        template_to_edit.dsc_cust_id = template_from_form.dsc_cust_id;
-                        template_to_edit.obs_type_id = template_from_form.obs_type_id;
-                        template_to_edit.dsc_lc_id = template_from_form.dsc_lc_id;
-                        template_to_edit.obs_cft_title = template_from_form.obs_cft_title;
-                        template_to_edit.obs_cft_subtitle = template_from_form.obs_cft_subtitle;
-                        template_to_edit.obs_cft_eff_end_dt = (template_from_form.obs_cft_eff_end_dt == null) || (template_from_form.obs_cft_eff_end_dt < Convert.ToDateTime("01/01/2000")) ? Convert.ToDateTime("12/31/2060") : template_from_form.obs_cft_eff_end_dt;
+                        template_to_edit.dsc_cust_id = Convert.ToInt32(colForm.cft_Cust);
+                        template_to_edit.obs_type_id = Convert.ToInt32(colForm.cft_obsType);
+                        template_to_edit.dsc_lc_id = Convert.ToInt32(colForm.cft_LC);
+                        template_to_edit.obs_cft_title = colForm.cft_Title;
+                        template_to_edit.obs_cft_subtitle = colForm.cft_SubTitle;
+                        template_to_edit.obs_cft_eff_end_dt = (colForm.cft_eff_end_dt == null) || (colForm.cft_eff_end_dt < Convert.ToDateTime("01/01/2000")) ? Convert.ToDateTime("12/31/2060") : colForm.cft_eff_end_dt;
                         template_to_edit.obs_cft_last_saved_dtm = DateTime.Now;
                         template_to_edit.obs_cft_upd_dtm = DateTime.Now;
                         template_to_edit.obs_cft_upd_uid = User.Identity.Name;
@@ -907,15 +909,15 @@ namespace OBSMVC.Controllers
                     {
                         //first we need to save OBS_COLLECT_FORM_TMPLT table data
                         OBS_COLLECT_FORM_TMPLT template_to_save = new OBS_COLLECT_FORM_TMPLT();
-                        template_to_save.dsc_cust_id = template_from_form.dsc_cust_id;
-                        template_to_save.obs_type_id = template_from_form.obs_type_id;
-                        template_to_save.dsc_lc_id = template_from_form.dsc_lc_id;
+                        template_to_save.dsc_cust_id = Convert.ToInt32(colForm.cft_Cust);
+                        template_to_save.obs_type_id = Convert.ToInt32(colForm.cft_obsType);
+                        template_to_save.dsc_lc_id = Convert.ToInt32(colForm.cft_LC);
                         short cft_number = (short)(db.OBS_COLLECT_FORM_TMPLT.Max(x => x.obs_cft_nbr) + 1);
                         template_to_save.obs_cft_nbr = cft_number;
                         template_to_save.obs_cft_ver = 1;
-                        template_to_save.obs_cft_title = template_from_form.obs_cft_title;
-                        template_to_save.obs_cft_subtitle = template_from_form.obs_cft_subtitle;
-                        template_to_save.obs_cft_eff_end_dt = (template_from_form.obs_cft_eff_end_dt == null) || (template_from_form.obs_cft_eff_end_dt < Convert.ToDateTime("01/01/2000")) ? Convert.ToDateTime("12/31/2060") : template_from_form.obs_cft_eff_end_dt;
+                        template_to_save.obs_cft_title = colForm.cft_Title;
+                        template_to_save.obs_cft_subtitle = colForm.cft_SubTitle;
+                        template_to_save.obs_cft_eff_end_dt = (colForm.cft_eff_end_dt == null) || (colForm.cft_eff_end_dt < Convert.ToDateTime("01/01/2000")) ? Convert.ToDateTime("12/31/2060") : colForm.cft_eff_end_dt;
                         template_to_save.obs_cft_added_dtm = DateTime.Now;
                         template_to_save.obs_cft_added_uid = User.Identity.Name;
                         template_to_save.obs_cft_last_saved_dtm = DateTime.Now;
@@ -923,9 +925,9 @@ namespace OBSMVC.Controllers
                         {
                             template_to_save.obs_cft_pub_by_uid = User.Identity.Name;
                             template_to_save.obs_cft_pub_dtm = DateTime.Now;
-                            if (template_from_form.obs_cft_eff_end_dt != null)
+                            if ( colForm.cft_eff_end_dt != null)
                             {
-                                template_to_save.obs_cft_eff_st_dt = template_from_form.obs_cft_eff_st_dt;
+                                template_to_save.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
 
                             }
                             else
@@ -935,7 +937,7 @@ namespace OBSMVC.Controllers
                         }
                         else
                         {
-                            template_to_save.obs_cft_eff_st_dt = template_from_form.obs_cft_eff_st_dt;
+                            template_to_save.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
                         }
                         db.OBS_COLLECT_FORM_TMPLT.Add(template_to_save);
                         db.SaveChanges();

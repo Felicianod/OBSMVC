@@ -1124,6 +1124,7 @@ namespace OBSMVC.Controllers
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();  //To get Database access inside this Class
 
         //--- CONSTRUCTOR------------------
+        public oCollectionForm() : this(0) { }
         public oCollectionForm(int id)
         {//Create the Collection Form Data (Header Info) from the Id passed as a parameter
 

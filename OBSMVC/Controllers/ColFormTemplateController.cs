@@ -908,8 +908,7 @@ namespace OBSMVC.Controllers
                     {
                         //now lets first save split the string we received from the gui
                         // string format should be: order,qat_id,section_text
-                        string[] splitby = { "~" };
-                        string[] question_items = question.Split(splitby, StringSplitOptions.RemoveEmptyEntries);
+                        string[] question_items = question.Split(new string[] {"~"}, StringSplitOptions.RemoveEmptyEntries);
                         short order = order_counter;
                         int qat_id = Convert.ToInt32(question_items[0]);
                         int form_section_id = getSectionID(question_items[1]);

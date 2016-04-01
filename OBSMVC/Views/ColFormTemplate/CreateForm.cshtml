@@ -275,9 +275,9 @@
 
                             <div id="resultPanel" class="left" style="max-width: 100%; width:100%; height:440px; overflow-y:scroll">
 
-                                @* *****************************************************
-                                       Results from Ajax Call will be displayed here!!
-                                    ******************************************************@
+                                @* ****************************************************************************************************
+                                       Results from Ajax Call to Display Question Search Result List will be displayed here!!
+                                    ****************************************************************************************************@
 
                             </div>
 
@@ -374,7 +374,7 @@
             //Process all the form Sections to get Data to post
             $("div.formSection").each(function () {
                 var formSection = $(this);
-                //var sectionTitle = $($(this).find("input.sectionTitle").first()).val();
+                //var sectionTitleBox = $($(this).find("input.sectionTitle").first()).val();
                 var sectionTitleBox = formSection.find("input.sectionTitle").first();
                 sectionCounter++;
                 if (sectionTitleBox.val().trim() == "")
@@ -390,7 +390,7 @@
                         var trtrt = ""; //hdnFormQuestion
 
                         var qatHiddenField = $(this).find(".hdnFormQuestion").first();
-                        qatHiddenField.val(selectedQAT + "~" + sectionTitle);
+                        qatHiddenField.val(selectedQAT + "~" + sectionTitleBox);
                         //alert("Question value to post = " + qatHiddenField.val());
                     });
                 }
@@ -406,21 +406,20 @@
                 }
             }
             //Validate the Form Title
-            if (document.getElementById("obs_cft_title").value.trim() == "") {
+            if (document.getElementById("cft_Title").value.trim() == "") {
                 errorMsg = errorMsg + "The form Title is Required\n";
-                $("#obs_cft_title").addClass("invalidField");
-                $("#obs_cft_title").focus();
+                $("#cft_Title").addClass("invalidField");
+                $("#cft_Title").focus();
             }
 
-
-
             if (errorMsg != "") {
-                //If an validation error is found 
+                //If any validation error is found 
                 alert(errorMsg);
                 $('#btnSaveForm').button('reset');
             }
             else {
                 //Post the Form
+                isChanged = false;  // To prevent the alert of leaving the page from showing up
                 document.getElementById("CreateForm").submit();
             }
         }
@@ -529,7 +528,7 @@
 
     @*//- - - - - - - - -  Ajax Call to Retrieve and Display the Question List Search Results - - - - - - - - - - -\\*@
 
-    <script type="text/javascript">
+    @*<script type="text/javascript">
         function displayMsg(msg) {
             PNotify.removeAll();
             var notice = new PNotify({
@@ -547,9 +546,9 @@
                 }
             });
         };
-
-    </script>
-    @* --- Drag and Drop Java Script - - - - - *@
+    </script>*@
+ 
+   @* --- Drag and Drop Java Script - - - - - *@
     <script type="text/javascript">
         // Function to call everytime we do a drag and drop
         function updateValues(msg) {
@@ -781,7 +780,6 @@
 
 
         function getTestData(questionId) {
-
             return "[You Selected Question Id: " + questionId + "]";
         }
 

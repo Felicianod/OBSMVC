@@ -178,18 +178,21 @@
                 <div class="col-sm-4">
                     <div class="input-group">
                         <div class="input-group-addon">Observation Type</div>
+                        @*@Html.DropDownListFor(model => model.cft_obsType, ViewBag.cft_obsType as SelectList, new { @class = "form-control", name = "cft_obsType" })*@
                         @Html.DropDownList("cft_obsType", null, htmlAttributes: new { @class = "form-control", name = "cft_obsType" })
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="input-group">
                         <div class="input-group-addon">Customer</div>
+                        @*@Html.DropDownListFor(model => model.cft_Cust, ViewBag.cft_Cust as SelectList, new { @class = "form-control", name = "cft_Cust" })*@
                         @Html.DropDownList("cft_Cust", null, htmlAttributes: new { @class = "form-control", name = "cft_Cust" })
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="input-group">
                         <div class="input-group-addon">Whse Location</div>
+                        @*@Html.DropDownListFor(model => model.cft_LC, ViewBag.cft_LC as SelectList, new { @class = "form-control", name = "cft_LC" })*@
                         @Html.DropDownList("cft_LC", null, htmlAttributes: new { @class = "form-control", name = "cft_LC" })
                     </div>
                 </div>

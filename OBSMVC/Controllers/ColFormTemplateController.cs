@@ -330,7 +330,6 @@ namespace OBSMVC.Controllers
         {
             int cftid = id ?? 0;
             oCollectionForm selectedColForm = new oCollectionForm(cftid);
-
             if (cftid > 0)
             {
                 ViewBag.exception = "You are in EDIT mode!!!";
@@ -926,7 +925,7 @@ namespace OBSMVC.Controllers
                         {
                             template_to_save.obs_cft_pub_by_uid = User.Identity.Name;
                             template_to_save.obs_cft_pub_dtm = DateTime.Now;
-                            if ( colForm.cft_eff_end_dt != null)
+                            if ( colForm.cft_eff_st_dt != null || (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000")))
                             {
                                 template_to_save.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
 
@@ -936,7 +935,7 @@ namespace OBSMVC.Controllers
                                 return -1;
                             }
                         }
-                        else
+                        else if (colForm.cft_eff_st_dt != null || (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000")))
                         {
                             template_to_save.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
                         }
@@ -1124,7 +1123,6 @@ namespace OBSMVC.Controllers
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();  //To get Database access inside this Class
 
         //--- CONSTRUCTOR------------------
-        public oCollectionForm() : this(0) { }
         public oCollectionForm(int id)
         {//Create the Collection Form Data (Header Info) from the Id passed as a parameter
 

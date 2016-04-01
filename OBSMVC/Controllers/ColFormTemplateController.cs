@@ -874,7 +874,7 @@ namespace OBSMVC.Controllers
         private int saveForm(oCollectionForm colForm, string form_questions_from_gui, string isPublished)
         {
             int cft_id = colForm.cft_id;
-            if (cft_id < 0 && db.OBS_COLLECT_FORM_TMPLT.Where(item => item.obs_cft_title == colForm.cft_Title).Count() > 0)
+            if (cft_id <= 0 && db.OBS_COLLECT_FORM_TMPLT.Where(item => item.obs_cft_title == colForm.cft_Title).Count() > 0)
             {//we need to check if title passed from user is unique. if it already exists, we need to return the error message back to the screen
                 ViewBag.exception = "ERROR: The Question Id is either invalid or the Form Title Already Exist.";
                 return -1;
@@ -921,10 +921,10 @@ namespace OBSMVC.Controllers
                         template_to_save.obs_cft_added_dtm = DateTime.Now;
                         template_to_save.obs_cft_added_uid = User.Identity.Name;
                         template_to_save.obs_cft_last_saved_dtm = DateTime.Now;
+                        template_to_save.obs_cft_upd_dtm = DateTime.Now;
+                        template_to_save.obs_cft_upd_uid = User.Identity.Name;
                         if (isPublished == "true")
-                        {
-                            template_to_save.obs_cft_pub_by_uid = User.Identity.Name;
-                            template_to_save.obs_cft_pub_dtm = DateTime.Now;
+                        {                          
                             if ( colForm.cft_eff_st_dt != null || (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000")))
                             {
                                 template_to_save.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
@@ -935,7 +935,7 @@ namespace OBSMVC.Controllers
                                 return -1;
                             }
                         }
-                        else if (colForm.cft_eff_st_dt != null || (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000")))
+                        else if (!(colForm.cft_eff_st_dt != null || (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000"))))
                         {
                             template_to_save.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
                         }

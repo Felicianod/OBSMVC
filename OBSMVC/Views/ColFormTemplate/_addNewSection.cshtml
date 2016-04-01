@@ -1,4 +1,5 @@
-﻿@{
+﻿@model OBSMVC.Controllers.CollectionFormSection
+@{
     var sectionNbr = @ViewData["sNumber"].ToString();
     string txtSectionName = "txtSectionName" + sectionNbr;
     string sectionId = "sectionId" + sectionNbr;
@@ -15,7 +16,7 @@
                 <span>Section Title:</span>
             </a>
             &nbsp;&nbsp;
-            <input type="text" id="@txtSectionName" onfocus="$(this).select();" class="form-control input-sm sectionTitle sectionTitle" style="width:50%" placeholder="<Enter Section Name>" required />
+            <input type="text" id="@txtSectionName" onfocus="$(this).select();" class="form-control input-sm sectionTitle" style="width:50%" placeholder="<Enter Section Name>" value="@Model.sectionName" required />
         </h4>
     </div>
     <div id="@sectionId" class="panel-collapse collapse in" style="margin-left:20px" @*style="border:dashed; border-width:medium"*@>
@@ -31,11 +32,11 @@
     </div> @*End of Section*@
 </div>
 
-<script>
+@*<script>
     $(function () {
         $("#@txtSectionName").autocomplete({
             source: "/ColFormTemplate/SectionNameLookup",
-            minLength: 2
+            minLength: 1
         });
     });
-</script>
+</script>*@

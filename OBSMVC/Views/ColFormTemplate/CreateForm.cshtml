@@ -108,7 +108,15 @@
 </style>
 
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
-<div class="well well-sm" style="padding: 4px; font-size:xx-large; text-align:center; margin-bottom:8px">Collection Form Creation</div>
+<div class="well well-sm" style="padding: 4px; font-size:xx-large; text-align:center; margin-bottom:8px">
+    @if(Model.cft_id < 1){
+    <text>Collection Form Creation</text>
+    }
+    else
+    {
+        <text>Collection Form Maintenance</text>
+    }    
+</div>
 
 @if (!String.IsNullOrEmpty(ViewBag.exception))
 {
@@ -122,14 +130,17 @@
 
 @* - - - - - - - - - - - - - - - - BEGINING OF THE "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
 @*// ---- Helper Hidden Fields to Control the Inner Ids ----- *@
-    <input type="hidden" id="masterItemCounter" value="1" />
-    <input type="hidden" id="qCounter" value="1" />
-    <input type="hidden" id="sCounter" value="@Model.colFormSections.Count" />
-    @{  
+    @{
+        string fMode = "add";
+        if (Model.colFormSections.Count > 0) { fMode = "edit"; }
         int masterCounter = 1;
         string rowInfo = masterCounter.ToString();
-    }
-    @*\\ ---- End of Hodden Control Fields section ----- *@
+      }
+ <input type="hidden" id="masterItemCounter" value="1" />
+ <input type="hidden" id="qCounter" value="1" />
+ <input type="hidden" id="sCounter" value="@Model.colFormSections.Count" />
+ <input type="hidden" id="formMode" value="@fMode" />
+    @*\\ ---- End of Hidden Control Fields section ----- *@
 
 
     <form class="form-horizontal" id="CreateForm" role="form" method="post" onkeydown="return event.keyCode!=13">
@@ -211,7 +222,7 @@
                     <div class="panel-group" id="accordion">
                      @foreach (OBSMVC.Controllers.CollectionFormSection obsFormSection in Model.colFormSections)
                      {
-                         Html.RenderAction("addNewSection", new { sCounter = Model.colFormSections.Count, formSection = obsFormSection });                           
+                         Html.RenderAction("addNewSection", new { sCounter = Model.colFormSections.Count, colFormSection = obsFormSection });                           
                      }
                       @*//Inside the Acordion Panel we place all the sections that will be added to the Form
                             /----------------------------------------------------\
@@ -343,11 +354,6 @@
         document.getElementById('myFrame').setAttribute('src', loc);
     }
 </script>
-
-
-
-
-
 
 
 
@@ -632,6 +638,13 @@
                 $(this).parent().remove();
                 // updateValues("An Item was Deleted");  //If we want to call a function when item is dragged/dropped
             });
+
+            //Finally make sure the Section Title are autocomplete
+            $(".sectionTitle").autocomplete({
+                source: "/ColFormTemplate/SectionNameLookup",
+                minLength: 1
+            });
+
         }
         //Sample Code:
         //looping in javascript through all the child elements of the target list
@@ -782,8 +795,8 @@
     <script type="text/jscript">
         $(document).ready(function () {
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-            // As soon as the page first loads, create a new Section
-            addNewSection();
+            // As soon as the page first loads, create a new Section if we are in "add" mode.
+            if ($('#formMode').val() == "add") { addNewSection(); }
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
             //Enable Input fields to be reset when to default css when edited and to set the form status to "changed"
             var isChanged = false;

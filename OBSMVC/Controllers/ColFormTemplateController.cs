@@ -331,7 +331,7 @@ namespace OBSMVC.Controllers
             oCollectionForm selectedColForm = new oCollectionForm(cftid);
             if (cftid > 0)
             { 
-               ViewBag.exception = "You are in Edit MODE!!!"; 
+               ViewBag.exception = "You are in EDIT mode!!!"; 
             }
             else
             {
@@ -573,10 +573,10 @@ namespace OBSMVC.Controllers
             }
         }
 
-        public PartialViewResult addNewSection(string sCounter, CollectionFormSection formSection)
+        public PartialViewResult addNewSection(string sCounter, CollectionFormSection colFormSection)
         {
             ViewData["sNumber"] = sCounter;
-            return PartialView("_addNewSection");
+            return PartialView("_addNewSection", colFormSection);
         }
 
         // GET: ColFormTemplate/Edit/5

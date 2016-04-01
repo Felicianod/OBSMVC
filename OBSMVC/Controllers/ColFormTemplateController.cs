@@ -365,16 +365,10 @@ namespace OBSMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddEditForm(oCollectionForm colForm, FormCollection formData, int? id)
         {
-            string data_from_form = formData["formQuestions"];
+            string data_from_form = String.IsNullOrEmpty(formData["formQuestions"]) ? String.Empty : formData["formQuestions"];         
             string is_published = formData["isPublished"];
             int cft_id = id?? -1;
-            bool hasQuestions = !String.IsNullOrEmpty(data_from_form);
-
-            if (hasQuestions)
-            {
-                cft_id = saveForm(colForm, data_from_form, is_published, cft_id);
-            }
-
+            cft_id = saveForm(colForm, data_from_form, is_published, cft_id);
             return RedirectToAction("Details", new { id = cft_id });
             //return RedirectToAction("Index");
 

@@ -330,6 +330,7 @@ namespace OBSMVC.Controllers
         {
             int cftid = id ?? 0;
             oCollectionForm selectedColForm = new oCollectionForm(cftid);
+
             if (cftid > 0)
             {
                 ViewBag.exception = "You are in EDIT mode!!!";

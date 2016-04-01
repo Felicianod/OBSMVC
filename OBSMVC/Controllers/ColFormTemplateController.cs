@@ -976,6 +976,7 @@ namespace OBSMVC.Controllers
                 }//end of try
                 catch (Exception e)
                 {
+                    string notUsed = e.Message;
                     transaction.Rollback();
                     return -1;
                 }

@@ -31,7 +31,6 @@ namespace OBSMVC.Models
         public Nullable<System.DateTime> obs_cfi_last_upd_dt { get; set; }
         public Nullable<System.DateTime> obs_cfi_comp_date { get; set; }
     
-        public virtual EMPLOYEE DSC_EMPLOYEE { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_COL_FORM_INST_ATTRIB_VALS> OBS_COL_FORM_INST_ATTRIB_VALS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -42,5 +41,6 @@ namespace OBSMVC.Models
         public virtual ICollection<OBS_INST_EVENT_LOG> OBS_INST_EVENT_LOG { get; set; }
         public virtual OBS_INST OBS_INST { get; set; }
         public virtual OBS_COLLECT_FORM_TMPLT OBS_COLLECT_FORM_TMPLT { get; set; }
+        public virtual DSC_EMPLOYEE DSC_EMPLOYEE { get; set; }
     }
 }

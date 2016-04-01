@@ -220,6 +220,9 @@
     <Compile Include="Models\DSC_CUSTOMER.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DSC_EMPLOYEE.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DSC_LC.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
@@ -237,9 +240,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DSC_OBS_ENTITY.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\EMPLOYEE.cs">
-      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EmployeeView.cs" />
     <Compile Include="Models\IdentityModels.cs" />

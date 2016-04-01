@@ -25,7 +25,7 @@ namespace OBSMVC.Models
         public string obs_cfis_observed_emp_yn { get; set; }
         public string obs_cfis_reviewer_emp_yn { get; set; }
     
-        public virtual EMPLOYEE DSC_EMPLOYEE { get; set; }
         public virtual OBS_COLLECT_FORM_INST OBS_COLLECT_FORM_INST { get; set; }
+        public virtual DSC_EMPLOYEE DSC_EMPLOYEE { get; set; }
     }
 }

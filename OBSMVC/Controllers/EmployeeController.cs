@@ -23,7 +23,7 @@ namespace OBSMVC.Controllers
 
             if (!String.IsNullOrWhiteSpace(search))
             {
-                var employeeList = db.EMPLOYEEs.Include(e => e.DSC_LC);
+                var employeeList = db.DSC_EMPLOYEE.Include(e => e.DSC_LC);
                 if (employeeList.Where(emp => emp.dsc_emp_last_name.Contains(search) || emp.dsc_emp_first_name.Contains(search) || emp.DSC_LC.dsc_lc_name.Contains(search) || emp.dsc_emp_perm_id.ToString().Contains(search) || emp.dsc_emp_adp_id.Contains(search) || emp.dsc_emp_email_addr.Contains(search)).ToList().Count != 0)
                 {
                     return View(employeeList.Where(emp => emp.dsc_emp_last_name.Contains(search) || emp.dsc_emp_first_name.Contains(search) || emp.DSC_LC.dsc_lc_name.Contains(search) || emp.dsc_emp_perm_id.ToString().Contains(search) || emp.dsc_emp_adp_id.Contains(search) || emp.dsc_emp_email_addr.Contains(search)).ToList().ToPagedList(page ?? 1, PageSize ?? 10));
@@ -44,7 +44,7 @@ namespace OBSMVC.Controllers
             }
             else
             {
-                var employeeList = db.EMPLOYEEs.Include(e => e.DSC_LC);
+                var employeeList = db.DSC_EMPLOYEE.Include(e => e.DSC_LC);
                return View(employeeList.ToList().ToPagedList(page ?? 1, PageSize ?? 10));               
             }
         }
@@ -60,22 +60,6 @@ namespace OBSMVC.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "dsc_emp_id,dsc_assigned_lc_id,dsc_emp_perm_id,dsc_emp_wms_clock_nbr,dsc_emp_first_name,dsc_emp_last_name,dsc_emp_email_addr,dsc_emp_title,dsc_emp_adp_id,dsc_emp_hire_dt,dsc_emp_init_work_dt,dsc_emp_term_dt,dsc_emp_can_be_obs_yn,dsc_emp_temp_yn,dsc_emp_hourly_yn,dsc_emp_added_id,dsc_emp_added_dtm,dsc_emp_upd_uid,dsc_emp_upd_dtm")] EMPLOYEE newEmployee)
-        {
-            if (ModelState.IsValid)
-            {
-                db.EMPLOYEEs.Add(newEmployee);
-                db.SaveChanges();
-                ViewBag["ConfMsg"] = "Success";
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name", newEmployee.dsc_assigned_lc_id);
-            return View(newEmployee);
-        }
-
         // GET: Employee/Edit/5
         [HttpGet]
         public ActionResult Edit(int? id)
@@ -84,7 +68,7 @@ namespace OBSMVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            EMPLOYEE employeeToUpdate = db.EMPLOYEEs.Find(id);
+            DSC_EMPLOYEE employeeToUpdate = db.DSC_EMPLOYEE.Find(id);
             if (employeeToUpdate == null)
             {
                 return HttpNotFound();
@@ -97,12 +81,12 @@ namespace OBSMVC.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Edit([Bind(Include = "dsc_emp_id,dsc_assigned_lc_id,dsc_emp_perm_id,dsc_emp_wms_clock_nbr,dsc_emp_first_name,dsc_emp_last_name,dsc_emp_email_addr,dsc_emp_title,dsc_emp_adp_id,dsc_emp_hire_dt,dsc_emp_init_work_dt,dsc_emp_term_dt,dsc_emp_can_be_obs_yn,dsc_emp_temp_yn,dsc_emp_hourly_yn,dsc_emp_added_id,dsc_emp_added_dtm,dsc_emp_upd_uid,dsc_emp_upd_dtm")] EMPLOYEE formEmployee)
+        public ActionResult Edit([Bind(Include = "dsc_emp_id,dsc_assigned_lc_id,dsc_emp_perm_id,dsc_emp_wms_clock_nbr,dsc_emp_first_name,dsc_emp_last_name,dsc_emp_email_addr,dsc_emp_title,dsc_emp_adp_id,dsc_emp_hire_dt,dsc_emp_init_work_dt,dsc_emp_term_dt,dsc_emp_can_be_obs_yn,dsc_emp_temp_yn,dsc_emp_hourly_yn,dsc_emp_added_id,dsc_emp_added_dtm,dsc_emp_upd_uid,dsc_emp_upd_dtm")] DSC_EMPLOYEE formEmployee)
         {
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
                 //var employee = db.EMPLOYEEs.Single(x => x.dsc_emp_id == formEmployee.dsc_emp_id);
-                EMPLOYEE employee = db.EMPLOYEEs.Find(formEmployee.dsc_emp_id);
+                DSC_EMPLOYEE employee = db.DSC_EMPLOYEE.Find(formEmployee.dsc_emp_id);
                 employee.dsc_emp_title = formEmployee.dsc_emp_title;
                 employee.dsc_emp_perm_id = formEmployee.dsc_emp_perm_id;
                 employee.dsc_assigned_lc_id = formEmployee.dsc_assigned_lc_id;
@@ -182,7 +166,7 @@ namespace OBSMVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            EMPLOYEE eMPLOYEE = db.EMPLOYEEs.Find(id);
+            DSC_EMPLOYEE eMPLOYEE = db.DSC_EMPLOYEE.Find(id);
             if (eMPLOYEE == null)
             {
                 return HttpNotFound();
@@ -195,8 +179,8 @@ namespace OBSMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            EMPLOYEE eMPLOYEE = db.EMPLOYEEs.Find(id);
-            db.EMPLOYEEs.Remove(eMPLOYEE);
+            DSC_EMPLOYEE eMPLOYEE = db.DSC_EMPLOYEE.Find(id);
+            db.DSC_EMPLOYEE.Remove(eMPLOYEE);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

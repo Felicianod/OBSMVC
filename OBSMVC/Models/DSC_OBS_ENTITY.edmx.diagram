@@ -5,12 +5,10 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="351439614754467e91eec7e236a9b3c6" Name="Diagram1">
-        <EntityTypeShape EntityType="Models.EMPLOYEE" Width="1.5" PointX="3" PointY="3.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.DSC_LC" Width="1.5" PointX="0.5" PointY="3.125" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.OBS_SUB_TYPE" Width="1.5" PointX="7.75" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.OBS_SUPER_TYPE" Width="1.5" PointX="0.5" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.OBS_TYPE" Width="1.5" PointX="2.875" PointY="0.5" IsExpanded="true" />
-        <AssociationConnector Association="Models.relationship45" ManuallyRouted="false" />
         <AssociationConnector Association="Models.obs_super_type_type" ManuallyRouted="false" />
         <EntityTypeShape EntityType="Models.OBS_QUEST_ANS_TYPES" Width="1.5" PointX="6.875" PointY="2.75" />
         <EntityTypeShape EntityType="Models.OBS_QUEST_ASSGND_MD" Width="2" PointX="7.375" PointY="5.875" />
@@ -34,10 +32,6 @@
         <EntityTypeShape EntityType="Models.OBS_MULTIMEDIA_TYPE" Width="1.5" PointX="15.5" PointY="20.5" />
         <EntityTypeShape EntityType="Models.OBS_RVW_FORM_INST" Width="1.5" PointX="15.5" PointY="7.25" />
         <EntityTypeShape EntityType="Models.OBS_TYPE_SUB_TYPES" Width="1.5" PointX="16" PointY="0.75" />
-        <AssociationConnector Association="Models.relationship15" />
-        <AssociationConnector Association="Models.relationship32" />
-        <AssociationConnector Association="Models.relationship39" />
-        <AssociationConnector Association="Models.relationship40" />
         <AssociationConnector Association="Models.relationship35" />
         <AssociationConnector Association="Models.relationship13" />
         <AssociationConnector Association="Models.relationship27" />
@@ -74,6 +68,12 @@
         <AssociationConnector Association="Models.relationship10" />
         <AssociationConnector Association="Models.relationship14" />
         <AssociationConnector Association="Models.rel_type_collect_form" />
+        <EntityTypeShape EntityType="Models.DSC_EMPLOYEE" Width="1.5" PointX="2.5" PointY="4.75" />
+        <AssociationConnector Association="Models.relationship15" />
+        <AssociationConnector Association="Models.relationship32" />
+        <AssociationConnector Association="Models.relationship39" />
+        <AssociationConnector Association="Models.relationship40" />
+        <AssociationConnector Association="Models.relationship45" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

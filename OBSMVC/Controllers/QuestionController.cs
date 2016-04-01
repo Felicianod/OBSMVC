@@ -351,6 +351,7 @@ namespace OBSMVC.Controllers
                     }
                     catch (Exception e)
                     {
+                        string notused = e.Message;
                         transaction.Rollback();
                     }
                 }

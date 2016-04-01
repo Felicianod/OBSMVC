@@ -529,7 +529,7 @@
     <Content Include="Views\Section\Edit.cshtml" />
     <Content Include="Views\ColFormTemplate\_addNewSection.cshtml" />
     <Content Include="Views\ColFormTemplate\_getQuestionInfoFD.cshtml" />
-    <Content Include="Views\ColFormTemplate\CreateForm.cshtml" />
+    <Content Include="Views\ColFormTemplate\AddEditForm.cshtml" />
     <Content Include="Views\ColFormTemplate\Create_DeleteMe.cshtml" />
     <Content Include="Views\ColFormTemplate\_getQuestionInfoTest.cshtml" />
     <Content Include="Views\TestPage\Test.cshtml" />

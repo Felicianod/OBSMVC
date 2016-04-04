@@ -531,7 +531,7 @@ namespace OBSMVC.Controllers
         //}
 
         [HttpGet]
-        public PartialViewResult getQuestionInfo(int question_id, int qCounter)
+        public PartialViewResult getQuestionInfo(int question_id, int question_QATid,int qCounter)
         {
             QuestionInfo questionInfo = new QuestionInfo();
             questionInfo.question_id = question_id;
@@ -589,7 +589,11 @@ namespace OBSMVC.Controllers
                 questionInfo.question_assigned_answer_types =questionInfo.question_assigned_answer_types.OrderBy(item=>item.Text).ToList();
                 questionInfo.question_assigned_answer_types.Add(new SelectListItem() { Text = "Add New...", Value = "New" });
             }
-            if (questionInfo.default_qat_id > 0)
+            if (question_QATid>0)
+            {
+                questionInfo.question_assigned_answer_types.Single(x => x.Value == question_QATid.ToString()).Selected = true;
+            }
+            else if (questionInfo.default_qat_id > 0)
             {
                 questionInfo.question_assigned_answer_types.Single(x => x.Value == questionInfo.default_qat_id.ToString()).Selected = true;
             }

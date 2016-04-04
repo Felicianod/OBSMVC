@@ -203,7 +203,6 @@
                     <div class="input-group" data-provide="datepicker">
                         <div class="input-group-addon">Usable As of:</div>
                         <input class="datepicker form-control" id="cft_eff_st_dt" name="cft_eff_st_dt" value="@Model.str_cft_eff_st_dt")" style="max-width: 100%; width:100%;">
-                        @*<input class="datepicker form-control" data-date-format="mm/dd/yyyy" id="obs_cft_eff_st_dt" name="obs_cft_eff_st_dt" style="max-width: 100%; width:100%;">*@
                         <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
                         @Html.ValidationMessageFor(model => model.cft_eff_st_dt, "", new { @class = "text-danger" })
                     </div>
@@ -458,9 +457,26 @@
                 $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
             });
 
-            $('.datepicker').datepicker({
+            //$('.datepicker').datepicker({
+            //    format: "DD, d MM, yy"
+            //});
+
+            $('#cft_eff_st_dt').datepicker({
                 format: "DD, d MM, yy"
             });
+            $('#cft_eff_end_dt').datepicker({
+                format: "DD, d MM, yy",
+                useCurrent: false //Important! See issue #1075
+            });
+            $("#cft_eff_st_dt").on("dp.change", function (e) {
+                $('#cft_eff_end_dt').data("DateTimePicker").minDate(e.date);
+            });
+            $("#cft_eff_end_dt").on("dp.change", function (e) {
+                $('#cft_eff_st_dt').data("DateTimePicker").maxDate(e.date);
+            });
+
+
+
 
             $('[data-toggle="tooltip"]').tooltip();
             makeSectionsDropable();

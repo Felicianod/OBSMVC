@@ -156,7 +156,7 @@
         
 
     <div class="panel panel-default" style="margin-bottom:8px">
-        @* - - - - - - - - - - - - - - <<<<< FORM HEADER >>>>> - - - - - - - - - - - - - *@
+        @* - - - - - - - - - - - - - - <<<<< STARTS OF FORM HEADER >>>>> - - - - - - - - - - - - - *@
         <div class="panel-heading header" style="margin-bottom:8px">
             <div class="form-group row" style="margin-bottom:8px">
                 <div class="col-sm-7">
@@ -223,33 +223,35 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         </div>  @*- - - - END of panel-heading Section - - - - -*@
 
-        @* - - - - - - - - - - - - - - <<<<< FORM BODY >>>>> - - - - - - - - - - - - - *@
+        @* - - - - - - - - - - - - - - <<<<< START OF FORM BODY >>>>> - - - - - - - - - - - - - *@
 
-        <div class="panel-body content">
-            <div class="row">
+        <div class="panel-body content" style="margin-bottom:4px;">
+            <div class="row" style="margin-bottom:0px;">
                 @*/---------------- Below is the MAIN FORM QUESTION DETAIL DISPLAY PANEL ----------------------\*@
-                <div class="col-md-7 personal-info" id="qFormList" style="max-width:100%; height:550px; overflow-y:scroll">
-
-                    <div class="panel-group" id="accordion">
-                     @foreach (OBSMVC.Controllers.CollectionFormSection obsFormSection in Model.colFormSections)
-                     {
-                         Html.RenderAction("addNewSection", new { sCounter = obsFormSection.sectionNumber, colFormSection = obsFormSection });                           
-                     }
-                      @*//Inside the Acordion Panel we place all the sections that will be added to the Form
-                            /----------------------------------------------------\
-                            |                                                    |
-                            |             FORM SECTIONS GO HERE                  |
-                            |             POPULATED BY AJAX CALL                 | 
-                            |  @Url.Action("addNewSection", "ColFormTemplate")   |
-                            |    params: sCounter, (opt. ModelSections)          |
-                            \----------------------------------------------------/*@
-                    </div> @* - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - -*@
-
-                    @*When This button is clicked, add a new view to the "accordion" <DIV> section*@
-                    <input type="button" id="btnAddSection" value="Add New Section" />
+                <div class="col-md-7 personal-info">
+                    <div class="row" id="qFormList" style="max-width:100%; height:550px; overflow-y:scroll">
+                        <div class="panel-group" id="accordion">
+                            @foreach (OBSMVC.Controllers.CollectionFormSection obsFormSection in Model.colFormSections)
+                            {
+                                Html.RenderAction("addNewSection", new { sCounter = obsFormSection.sectionNumber, colFormSection = obsFormSection });
+                            }
+                               @*//Inside the Acordion Panel we place all the sections that will be added to the Form
+                                /----------------------------------------------------\
+                                |                                                    |
+                                |             FORM SECTIONS GO HERE                  |
+                                |             POPULATED BY AJAX CALL                 |
+                                |  @Url.Action("addNewSection", "ColFormTemplate")   |
+                                |    params: sCounter, (opt. ModelSections)          |
+                                \----------------------------------------------------/*@
+                        </div> @* - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - -*@
+                    </div>
+                    <div class="row" style="margin-top:0px">
+                        <div class="col-sm-10 ">
+                            @*When This button is clicked, add a new view to the "accordion" <DIV> section*@
+                            <input type="button" id="btnAddSection" value="Add New Section" />
+                        </div>
+                    </div>
                 </div>  @*End of Left Form Questions Pannel (7 column Pannel)*@
-
-
 
                 @*// -------------- Below is the Panel with the Question's Library ---------------- *@
                 <div class="col-md-5 personal-info">
@@ -310,7 +312,7 @@
         @*// - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - \\*@
         <div class="row">
             <input type="hidden" id="isPublished" name="isPublished" value="false" >
-            <div class="col-md-offset-2 col-md-10">
+            <div class="col-sm-offset-4 col-sm-8">
                 <input id="btnSaveForm" type="button" value="Save Form" onclick="PostForm($(this))" @*disabled="disabled"*@ />
                 &nbsp;&nbsp;
                 <input id="btnPublishForm" type="button" value="Publish Form" onclick="PostForm($(this))" @if (@Model.cft_isPublished == "PUBLISHED" ) { <text> disabled="disabled" </text>   } />
@@ -330,7 +332,6 @@
 
 <div id="remoteWindow">
 </div>
-
 
 <script>
     function loadModal(btnClkd) {
@@ -855,6 +856,14 @@
     @* - - - - - - - SCRIPT TO ADD A NEW SECTION TO THE FORM AND SET THE "FORM CHANGED" STATUS when form is modified- - - - - - - - - - *@
     <script type="text/jscript">
         $(document).ready(function () {
+            // Variables and a Function Used to Scroll Down the sectons/question panel (Can be Invoked later on from any section inside this script)
+            var height = 0;
+            function scroll(height) {
+                this.stop().animate({ scrollTop: height }, 1000);
+            };
+            var scrollPanel = $('#qFormList');
+            // ----- End of Variables and a Function Used to Scroll Down the sectons/question panel -------
+
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
             // As soon as the page first loads, create a new Section if we are in "add" mode.
             if ($('#formMode').val() == "add") { addNewSection(); }
@@ -892,9 +901,12 @@
                 addNewSection();
                 $btn.button('reset');
 
-                var wtf = $("#qFormList");
-                var height = wtf[0].scrollHeight;
-                wtf.scrollTop(height);
+                //Automatically Scroll to the botton of the Panel where the new Section was Inserted
+                //If we wanted to scroll to the top, we would set the "height = 0"
+                height = scrollPanel[0].scrollHeight;
+                scroll.call(scrollPanel, height);
+
+
                 //$('#qFormList').scrollTop($('#qFormList').scrollHeight);
             })
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 

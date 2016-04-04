@@ -396,12 +396,13 @@
                 //Loopt thorugh all Dropdowns in this section to ensure that they have a valid selection 
                 formSection.find(".viewDropDown").each(function () {
                     if ($(this).val() == "") {
-
+                        errorMsg = errorMsg + "One Dropdown has an invalid Selection\n";
                     }
                 });
 
-                var dropdownArray = formSection.find(".viewDropDown");
-                alert("Section " + sectionName + " has " + dropdownArray + " dropdowns.")
+                //var dropdownArray = formSection.find(".viewDropDown");
+                //alert("Section " + sectionName + " has " + dropdownArray + " dropdowns.")
+
                 sectionCounter++;
                 if (sectionName == "")
                 {

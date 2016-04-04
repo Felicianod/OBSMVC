@@ -1295,6 +1295,7 @@ namespace OBSMVC.Controllers
         public string sectionName = String.Empty;
         public string sectionViewId = String.Empty;
         public List<CollectionFormQuestion> colFormQuestionList { get; set; }
+        //public int seqInForm = 0;
         // --- Constructor --------
         public CollectionFormSection() { colFormQuestionList = new List<CollectionFormQuestion>(); }
     }

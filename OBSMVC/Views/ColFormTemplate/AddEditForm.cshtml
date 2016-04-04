@@ -234,7 +234,7 @@
                     <div class="panel-group" id="accordion">
                      @foreach (OBSMVC.Controllers.CollectionFormSection obsFormSection in Model.colFormSections)
                      {
-                         Html.RenderAction("addNewSection", new { sCounter = Model.colFormSections.Count, colFormSection = obsFormSection });                           
+                         Html.RenderAction("addNewSection", new { sCounter = obsFormSection.sectionNumber, colFormSection = obsFormSection });                           
                      }
                       @*//Inside the Acordion Panel we place all the sections that will be added to the Form
                             /----------------------------------------------------\

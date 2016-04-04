@@ -907,6 +907,8 @@ namespace OBSMVC.Controllers
                         template_to_edit.obs_cft_upd_uid = User.Identity.Name;
                         if (isPublished == "true")
                         {
+                            template_to_edit.obs_cft_pub_by_uid = User.Identity.Name;
+                            template_to_edit.obs_cft_pub_dtm = DateTime.Now;
                             if (colForm.cft_eff_st_dt != null && (colForm.cft_eff_st_dt > Convert.ToDateTime("01/01/2000")))
                             {
                                 template_to_edit.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
@@ -920,6 +922,10 @@ namespace OBSMVC.Controllers
                         else if (!(colForm.cft_eff_st_dt == null || (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000"))))
                         {
                             template_to_edit.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
+                        }
+                        else
+                        {
+                            template_to_edit.obs_cft_eff_st_dt = null;
                         }
                         List<OBS_COL_FORM_QUESTIONS> old_form_questions = db.OBS_COL_FORM_QUESTIONS.Where(x => x.obs_cft_id == cft_id).ToList();
                         db.OBS_COL_FORM_QUESTIONS.RemoveRange(old_form_questions);
@@ -948,7 +954,9 @@ namespace OBSMVC.Controllers
                         template_to_save.obs_cft_upd_dtm = DateTime.Now;
                         template_to_save.obs_cft_upd_uid = User.Identity.Name;
                         if (isPublished == "true")
-                        {                          
+                        {
+                            template_to_save.obs_cft_pub_by_uid= User.Identity.Name;
+                            template_to_save.obs_cft_pub_dtm = DateTime.Now;
                             if ( colForm.cft_eff_st_dt != null && (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000")))
                             {
                                 template_to_save.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;

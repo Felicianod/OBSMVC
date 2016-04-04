@@ -333,6 +333,9 @@ namespace OBSMVC.Controllers
             if (cftid > 0)
             {
                 ViewBag.exception = "You are in EDIT mode!!!";
+                selectedColForm.str_cft_eff_end_dt = selectedColForm.cft_eff_end_dt<Convert.ToDateTime("12/31/2060")? selectedColForm.cft_eff_end_dt.ToString("MMM dd, yyyy"):String.Empty;
+                selectedColForm.str_cft_eff_st_dt = selectedColForm.cft_eff_st_dt.HasValue ? selectedColForm.cft_eff_st_dt.Value.ToString("MMM dd, yyyy") : String.Empty;
+
             }
             else
             {
@@ -1193,8 +1196,8 @@ namespace OBSMVC.Controllers
             cft_isPublished = q.cft_isPublished;
             cft_Nbr = q.cft_Nbr;
             cft_Version = q.cft_Version;
-                cft_eff_st_dt = q.cft_eff_st_dt;
-                cft_eff_end_dt = q.cft_eff_end_dt;
+            cft_eff_st_dt = q.cft_eff_st_dt;
+            cft_eff_end_dt = q.cft_eff_end_dt;           
             colFormSections = new List<CollectionFormSection>();
             retrieveQuestionData();
         }
@@ -1228,6 +1231,8 @@ namespace OBSMVC.Controllers
         public int cft_Version { get; set; }        
         public DateTime? cft_eff_st_dt { get; set; }
         public DateTime cft_eff_end_dt { get; set; }
+        public string str_cft_eff_st_dt { get; set; }
+        public string str_cft_eff_end_dt { get; set; }
         public List<CollectionFormSection> colFormSections { get; set; }
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\\
         //- - - - - - - - - - - - CLASS METHODS - - - - - - - - - - - - - - - - |

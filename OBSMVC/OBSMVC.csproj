@@ -204,6 +204,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OBSTYPEController.cs" />
+    <Compile Include="Controllers\LightQuestionController.cs" />
     <Compile Include="Controllers\SectionController.cs" />
     <Compile Include="Controllers\TestPageController.cs" />
     <Compile Include="Controllers\TestQuestionAnswerTypeDefaultController.cs" />
@@ -538,6 +539,7 @@
     <Content Include="Views\Question\_selAnsTemplates.cshtml" />
     <Content Include="Views\Question\_addQuestionAnswerInfo.cshtml" />
     <Content Include="Views\Question\_saveNewSelectableAnswer.cshtml" />
+    <Content Include="Views\LightQuestion\QuestionAddUpdateEditLight.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

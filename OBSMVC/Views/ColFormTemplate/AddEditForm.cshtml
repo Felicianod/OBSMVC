@@ -114,12 +114,6 @@
     string rowInfo = masterCounter.ToString();
     string colFormId = "0";
     int nextQuestion = Model.questCount() + 1;
-    var startDate = "";
-    if (!(@Model.cft_eff_st_dt ?? Convert.ToDateTime("01/01/1900") < Convert.ToDateTime("01/01/1901")))
-    {
-        startDate = @Model.cft_eff_st_dt.ToString("MMM dd, yyyy");    
-    }
-    //:@Model.cft_eff_st_dt.ToString("MMM dd, yyyy")
 }
 
 

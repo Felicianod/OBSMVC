@@ -336,7 +336,8 @@
     function loadModal(btnClkd) {
         var questionId = btnClkd.attr('id').substring(8);
         //alert("Load Modal for Question Id: " + questionId);
-        var url = "/Question/QuestionAddUpdate/" + questionId;
+        //var url = "/Question/QuestionAddUpdate/" + questionId;
+        var url = "/LightQuestion/QuestionAddUpdateLight/" + questionId;
         opendialog(url);
     }
 

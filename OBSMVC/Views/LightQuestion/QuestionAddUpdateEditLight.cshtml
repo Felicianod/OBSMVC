@@ -1,0 +1,868 @@
+﻿@model OBSMVC.Models.QuestionCreateEditViewModel
+
+@{ ViewBag.Title = "Create/Edit Question"; }
+@{
+    string endDateValue;
+    if (Model.questn.obs_question_eff_end_dt.ToString("yyyy").Equals("2060"))
+    { endDateValue = ""; }
+    else
+    {
+        endDateValue = @Model.questn.obs_question_eff_end_dt.ToString("MMM dd, yyyy");
+    }
+    Layout = null;
+}
+
+@*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
+<style>
+    #container .modal.fade {
+        left: -25%;
+        -webkit-transition: opacity 0.3s linear, left 0.3s ease-out;
+        -moz-transition: opacity 0.3s linear, left 0.3s ease-out;
+        -o-transition: opacity 0.3s linear, left 0.3s ease-out;
+        transition: opacity 0.3s linear, left 0.3s ease-out;
+    }
+
+        #container .modal.fade.in {
+            left: 50%;
+        }
+    /*.input-group-addon {
+    min-width:200px;
+    text-align:left;*/
+    .stdWidth {
+        min-width: 130px;
+        text-align: left;
+    }
+
+    .smallRowMargin {
+        margin-bottom: 5px !important;
+        /*margin:0px !important;  //if we want to remove the margin completelly*/
+    }
+
+    .btnYES {
+        background: #3d85c6;
+        background: -webkit-linear-gradient(#073763, #3d85c6 50%, #073763);
+        background: linear-gradient(#073763, #3d85c6 50%, #073763);
+        border: 1px solid #569;
+        border-radius: 7px;
+        box-shadow: -2px 2px 0 0 #444;
+        color: #fff;
+        display: inline-block;
+        padding: 7px 13px;
+        font: normal 700 14px/1 "Calibri", sans-serif;
+        text-align: center;
+        text-shadow: 2px 2px 0 #070550;
+    }
+
+        .btnYES:hover {
+            background: #3498db;
+            background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+            background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+            font: normal 700 14px/1 "Calibri", sans-serif;
+            color: white;
+        }
+
+        .btnYES:focus {
+            background: #3498db;
+            background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+            background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+            font: normal 700 14px/1 "Calibri", sans-serif;
+            color: white;
+        }
+</style>
+<script>
+    function toggleDefault(btnClicked) {
+        if (btnClicked.hasClass('btnYES')) {
+            // Just make the current clicked button "NO" default
+            btnClicked.removeClass("btnYES").addClass("btn-warning");
+            btnClicked.html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
+        }
+        else {
+            //Else, reset all buttons to "No Default" and make this button the default
+            $(".btnIsDefault").removeClass("btnYES").addClass("btn-warning");
+            $(".btnIsDefault").html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
+            btnClicked.removeClass("btn-warning").addClass("btnYES");
+            btnClicked.html('YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up">');
+        }
+        $('#btnAddQuestion').prop('disabled', false);
+    }
+</script>
+@*===========================================  MAIN VIEW PAGE CODE =======================================================*@
+<div class="well well-sm smallRowMargin" style="padding: 4px; font-size:xx-large; text-align:center">
+    <span class="col-md-offset-1"> @Model.viewPageTitle</span>
+</div>
+
+@using (Html.BeginForm("QuestionAddUpdate", "Question", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+    <input type="hidden" value="@Model.questn.obs_question_id" name="questn.obs_question_id" id="questn.obs_question_id">
+    //-----------------------------------   QUESTION HEADER SECCTION ----------------------------------------------------------
+
+
+    <div class="row personal-info">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
+                <a class="accordion-toggle" data-toggle="collapse" href="#headerInfoPanel">
+                    <span class="glyphicon glyphicon-minus">&nbsp;</span>
+                    @*<span class="glyphicon glyphicon-collapse-up">&nbsp;</span>*@
+                    @*<span class="caret">&nbsp;</span>*@
+                    <b>Question Information:</b>
+                </a>
+                <div class="input-group">
+                    <div class="input-group-addon stdWidth">
+                        @Html.LabelFor(model => model.questn.obs_question_full_text)
+                    </div>
+                    <textarea class="form-control has-feedback" id="questn.obs_question_full_text" name="questn.obs_question_full_text" cols="400" rows="3" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" required>@Model.questn.obs_question_full_text</textarea>
+                    @Html.ValidationMessageFor(model => model.questn.obs_question_full_text, "", new { @class = "text-danger" })
+                </div>
+
+
+            </div>
+            <div class="panel-body collapse in" id="headerInfoPanel">
+                @*<div class="form-group row smallRowMargin">
+                        <div class="col-sm-11 col-sm-offset-1">
+                            <div class="input-group">
+                                <div class="input-group-addon stdWidth">
+                                    @Html.LabelFor(model => model.questn.obs_question_full_text)
+                                </div>
+                                <textarea class="form-control has-feedback" id="questn.obs_question_full_text" name="questn.obs_question_full_text" cols="400" rows="3" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" required>@Model.questn.obs_question_full_text</textarea>
+                                @Html.ValidationMessageFor(model => model.questn.obs_question_full_text, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>*@
+                <div class="form-group row smallRowMargin">
+                    <div class="col-sm-11 ">
+                        <div class="input-group">
+                            <div class="input-group-addon stdWidth">
+                                @Html.LabelFor(model => model.questn.obs_question_desc)
+                            </div>
+                            @Html.EditorFor(model => model.questn.obs_question_desc, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:95%;" } })
+                            @Html.ValidationMessageFor(model => model.questn.obs_question_desc, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row smallRowMargin">
+                    <div class="col-sm-4 col-sm-offset-1">
+                        <div class="input-group" data-provide="datepicker">
+                            <div class="input-group-addon">
+                                @Html.LabelFor(model => model.questn.obs_question_eff_st_dt)
+                            </div>
+                            <input class="datepicker form-control" id="obs_question_eff_st_dt" name="questn.obs_question_eff_st_dt" value="@Model.questn.obs_question_eff_st_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                            @Html.ValidationMessageFor(model => model.questn.obs_question_eff_end_dt, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-sm-offset-1">
+                        <div class="input-group" data-provide="datepicker">
+                            <div class="input-group-addon">
+                                @Html.LabelFor(model => model.questn.obs_question_eff_end_dt)
+                            </div>
+                            <input class="datepicker form-control" id="obs_question_eff_end_dt" name="questn.obs_question_eff_end_dt" value="@endDateValue" style="max-width: 100%; width:100%;">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                            @Html.ValidationMessageFor(model => model.questn.obs_question_eff_end_dt, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row" smallrowmargin>
+                    <div class="form-group">
+                        @Html.HiddenFor(model => model.questn.obs_question_ver)
+                        @*@Html.LabelFor(model => model.obs_question_ver, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.obs_question_ver, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.obs_question_ver, "", new { @class = "text-danger" })
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    //-------------------------   QUESTION ANSWER TYPE AND SELECTABLE ANSWERS SECCTION ----------------------------------------
+    <div class="row personal-info">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <a class="accordion-toggle" data-toggle="collapse" href="#ansTypesPanel">
+                                <span class="glyphicon glyphicon-minus">&nbsp;</span>
+                                @*<span class="glyphicon glyphicon-collapse-up">&nbsp;</span>*@
+                                @*<span class="caret">&nbsp;</span>*@
+                                <b>Currently Defined Answer Types for this question</b>
+                            </a>
+                        </td>
+                        <td style="text-align:right">
+                            <button type="button" class="btn btnAdd" id="addAnsType"><img src="~/Images/Button-Add-icon.png" height="25" />Add New Answer Type</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel-body collapse in" id="ansTypesPanel">
+                <div class="row qatDIV" id="existingQATs">
+                    @if (Model.Quest_Assigned_qatTags.Count == 0)
+                    {
+                        <div class="row" id="noATmsg" style="text-align:center">
+                            <br />
+                            <span style="color:red; font-weight:bold">There are no Answer Types Defined for this Question !!</span>
+                            <br /><br />
+                        </div>
+                    }
+                    else
+                    {
+                        foreach (OBSMVC.Models.qatTags qat in Model.Quest_Assigned_qatTags)
+                        {
+                            @Html.Action("getQuestionAnswerInfo", "Question", qat) ; @*<hr />*@
+                        }
+                    }
+                </div>
+
+                @*// Divissions Defined for Dynamic (Partial Views) content*@
+                <div class="row" id="divaddedSA">
+                    @*<div class="col-sm-12 " id="messageAddedSA" style="display:none; border:solid; border-width:1px; font-family:Arial">
+                        </div>*@
+                </div>
+
+                <div class="row" id="divNewSA">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @* ---------- META DATA QUESTION INFORMATION -- --- Select/Unselect PANELS --------------*@
+
+    <div class="row personal-info">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <a class="accordion-toggle" data-toggle="collapse" href="#MDTinfo">
+                                <span class="glyphicon glyphicon-minus">&nbsp;</span>
+                                @*<span class="glyphicon glyphicon-collapse-up">&nbsp;</span>*@
+                                @*<span class="caret">&nbsp;</span>*@
+                                <b>Question Metadata Maintenance</b>
+                            </a>
+                        </td>
+                        <td style="text-align:right">
+                            <button type="button" class="btnAdd" data-toggle="modal" data-target="#NewMDTag"><img src="~/Images/Button-Add-icon.png" height="25" />Add New Metedata Tag</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel-body collapse in" id="MDTinfo">
+                <input type="hidden" id="qAssignedMD" name="qAssignedMD" />
+                <input type="hidden" id="defaultQATid" name="defaultQATid" />
+                @foreach (int item in Model.preMetaDataIds)
+                {
+                    <input type="hidden" id="origTags" name="origTags" value="@item" />
+                }
+                <table style="width:100%">
+                    <tr>
+                        <td style="width:45%; border:double; text-align:center; vertical-align:top">
+                            <b>ASSIGNED QUESTION METADATA TAGS</b>   <br />
+                            <select id="sbOne" multiple="multiple" size="10" style="width:95%" @*data-toggle="tooltip"*@ data-placement="auto right" title="Double Click Item to remove it">
+                                @foreach (var item in Model.qAssignedMD)
+                                {
+                                    <option value="@item.md_id">@item.md_value [@item.md_cat]</option>
+                                }
+                            </select>
+                            <br /><br />
+                        </td>
+                        <td style="width:10%; text-align:center; font-weight:bold; color:blue ">
+                            <button type="button" title="Add Selected Tags to the Question" class="btn btn-default" id="left" data-toggle="confirmation"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                            <br /><br />
+                            <button type="button" title="Remove Selected Tags from the Question" class="btn btn-default" id="right"><i class="glyphicon glyphicon-chevron-right"></i></button>
+                            @*<input type="button" id="left" style="width:50px" value="<" data-toggle="confirmation" data-placement="left" /> <br /><br />
+                                <input type="button" id="right" style="width:50px" value=">" /> <br /><br />*@
+                            @*<input type="button" id="leftall" style="width:50px" value="<<" /> <br /><br />
+                                <input type="button" id="rightall" style="width:50px" value=">>" /> <br />*@
+                        </td>
+                        <td style="width:45%; border:double; text-align:center; vertical-align:top">
+                            <b>AVAILABLE METADATA TAGS</b>   <br />
+                            <select id="sbTwo" multiple="multiple" size="10" style="width:95%" @*data-toggle="tooltip"*@ data-placement="auto left" title="Double Click Item to Add it">
+                                @foreach (var item in Model.qUnassignedMD)
+                                {
+                                    <option value="@item.md_id">@item.md_value [@item.md_cat]</option>
+                                }
+                            </select>
+                            <br /><br />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+        @* ---------- END OF NEW ROW WITH MOVE Select/Unselect TAGS PANELS --------------*@
+
+        <div class="row">
+            <div class="col-md-12 ">
+                <div class="form-group row">
+                    <div class="col-md-4 col-sm-push-8">
+                        <button type="submit" id="btnAddQuestion" class="btn btn-primary" disabled="disabled" style="min-width:100px" onclick="return compilePostValues();">
+                            <span>SAVE</span>
+                        </button>
+                        <span>&nbsp;&nbsp;&nbsp;</span>
+                        <input type="reset" class="btn btn-default" value="Reset Form" style="min-width:100px">
+                    </div>
+                </div>
+                @if (ViewBag.ConfMsg != null)
+                {
+                    <div id="ConfMsg" style="text-align:center; font-weight: bold; color:green">
+                        @ViewBag.ConfMsg
+                    </div>
+                    <script>
+                    $(function () {
+                        setTimeout(function () {
+                            $("#ConfMsg").hide();
+                        }, 3000);
+                    });
+                    </script>
+                }
+            </div>
+        </div>
+
+
+}
+
+
+@* ------------ END OF THE FORM ---------- *@
+
+@* ---------------------- POP UP "Add New Metadata Tag" FORM ------------------------ *@
+<!-- Modal -->
+<div class="modal" id="NewMDTag" role="dialog">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add New Metadata Tag</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/QuestionMetadata/Create?qId=0" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        <hr />
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="obs_quest_md_value">Metadata Value</label>
+                            <div class="col-md-10">
+                                <input class="form-control text-box single-line" id="obs_quest_md_value" name="obs_quest_md_value" type="text" value="" />
+                                <span class="field-validation-valid text-danger" data-valmsg-for="obs_quest_md_value" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="obs_quest_md_cat">Metadata Category</label>
+                            <div class="col-md-10">
+                                @*<input class="form-control text-box single-line" id="obs_quest_md_cat" name="obs_quest_md_cat" type="text" value="" />
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="obs_quest_md_cat" data-valmsg-replace="true"></span>*@
+                                @Html.DropDownList("obs_quest_md_cat", new SelectList(Model.qMDCategories.Select(x => new { Value = x, Text = x }), "Value", "Text"), "- Select a Category -", new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <input type="hidden" name="qId" id="qId" value="0" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="saveMDTag">Create Tag</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@* ---------------------- END OF "Add New Metadata Tag" FORM ------------------------ *@
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+@****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
+<script>
+        $(document).ready(function () {
+            $("input:text").focus(function () { $(this).select(); });
+
+            //$('.collapse').on('show.bs.collapse', function () {
+            //    $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
+            //}).on('hide.bs.collapse', function () {
+            //    $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
+            //});
+
+            $('.datepicker').datepicker({
+                dateFormat: 'M dd, yy'
+            });
+
+            $('.collapse').on('show.bs.collapse', function () {
+                $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
+            }).on('hide.bs.collapse', function () {
+                $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
+            });
+
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+</script>
+
+
+
+@*SCRIP to move Question Metadata Tags across pannels*@
+
+
+
+<script>
+        $(function () {
+            function moveItems(origin, dest) {
+                $(origin).find(':selected').appendTo(dest);
+            }
+
+            //function moveAllItems(origin, dest) {
+            //    $(origin).children().appendTo(dest);
+            //}
+
+            $('#left').click(function () {
+                moveItems('#sbTwo', '#sbOne');
+            });
+
+            $('#right').on('click', function () {
+                moveItems('#sbOne', '#sbTwo');
+            });
+
+            //$('#leftall').on('click', function () {
+            //    moveAllItems('#sbTwo', '#sbOne');
+            //});
+
+            //$('#rightall').on('click', function () {
+            //    moveAllItems('#sbOne', '#sbTwo');
+            //});
+            $('#sbOne').on('dblclick', function () {
+                moveItems('#sbOne', '#sbTwo');
+            });
+            $('#sbTwo').on('dblclick', function () {
+                moveItems('#sbTwo', '#sbOne');
+            });
+        });
+</script>
+<script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+</script>
+<script>
+        function compilePostValues() {
+            var tagList = getTagListValues();
+            var defaultQATid = "";
+            var modifiedQATs = "";
+            // Compile the list of Metadata Tags and Set the corresponding hidden field value
+            document.getElementById("qAssignedMD").setAttribute("Value", tagList);
+
+            // Set hidden field value for The Default Question Answer Type "defaultQATid" (If any)
+            $('#existingQATs').find('.answerType').each(function () {
+                if ($(this).find('.btnIsDefault').first().hasClass("btnYES")) {
+                    defaultQATid = $(this).children('#obs_qat_id').val();
+                }
+                //Next variable is for Debug purposes only
+                //modifiedQATs = modifiedQATs + $(this).children('#sel_ans_list').val() + "\n";
+                //alert("QAT id: " + $(this).children('#obs_qat_id').val() found );
+            });
+            document.getElementById("defaultQATid").setAttribute("Value", defaultQATid);
+
+            //Debug Only
+            //alert("Changed Values list is: " + modifiedQATs);
+
+
+            //Finally, loop through all Newly added answers and set the "ans_type_list" Hidden field to the most uptodate values before posting
+            var newValues = "";
+            $('#divaddedSA').find('div.answerType').each(function () {
+                //var currentNewDiv = $(this);
+                //var dfltButton = $(this).find('button.btnIsDefault').first();
+                var sel_list = $(this).find('#ans_type_id').val() + "~";
+                sel_list = sel_list + ($(this).find('button.btnIsDefault').first().hasClass("btnYES")) + "~" + $(this).find('#ans_type_selAns').val();
+                $(this).find("#ans_type_list").val(sel_list);
+                newValues = newValues + $(this).find("#ans_type_list").val() + "\n";
+            })
+
+            //alert("We found " + $('#divaddedSA').find('.answerType').length + " new Answers Types:\n" + newValues);
+
+
+            ////DEBUG ONLY, STOP POSTINGTHE FORM
+            //$('#btnAddQuestion').button('reset');
+            //return false;
+
+
+            //alert("Posting Values: Default QAT id: " + $('#defaultQATid').val());
+            //if (errorMsg != "") {
+            //    //If an validation error is found
+            //    alert(errorMsg);
+            //    $('#btnSaveForm').button('reset');
+            //}
+            //else {
+            //    //Post the Form
+            //    document.getElementById("CreateForm").submit();
+            //}
+
+
+        };
+
+        function getTagListValues() {
+            var tagList = document.getElementById("sbOne");
+            var listResult = "";
+            var i;
+            for (i = 0; i < tagList.length; i++) {
+                listResult = listResult + tagList.options[i].value;
+                if (i != tagList.length - 1)
+                { listResult = listResult + ","; }
+            }
+            //alert(tagList);
+            return listResult;
+        };
+
+        function showConfirmation() {
+            bootbox.confirm("Are you sure?", function (result) {
+                //Example.show("Confirm result: " + result);
+                //console.log("Alert Callback");
+                return result;
+            });
+        }
+
+        function loadTemplate(callerBtn, selAnslist) {
+            //Transverse up to the parent "DIV" and then loop through all its "Textbox" children
+            //to set their values based on the selected Template
+
+            // First Get the DIV parent id
+            var parentId = "#" + callerBtn.parent().parent().parent().parent().parent().parent().parent().parent().prop("id");
+            //var textbList = $(parentId).find(".selAnswerTextb").first().val();
+            //alert('Template ' + '[' + selAnslist + '] will be applied for Id: ' + parentId + "-- Note, first text box value is: " + textbList);
+
+            //Create an array of values to apply to the text boxes
+            var templateList = selAnslist.split(",");
+            var textBoxCounter = 0;
+            // Loops through all textboxes in the parent DIV and set their values accordingly
+            $(parentId).find(".selAnswerTextb").each(function () {
+                $(this).val(templateList[textBoxCounter]);
+                textBoxCounter = textBoxCounter + 1;
+            });
+            $('.saveSA').prop('disabled', false);
+        }
+
+
+</script>
+
+<!-- bootbox code -->
+<script src="~/Scripts/bootbox.min.js"></script>
+<script>
+        $(document).on("click", ".alert", function (e) {
+            bootbox.confirm("Are you sure?", function (result) {
+                //Example.show("Confirm result: " + result);
+                //console.log("Alert Callback");
+                return result;
+            });
+        });
+</script>
+
+<script>
+        $(document).ready(function () {
+            var isChanged = false;
+            $('input, select, textarea').change(function () {
+                //$("input[type='submit']").removeAttr("disabled");
+                if ($('#btnAddQuestion').text() != "SAVE" ) {
+                    $('#btnAddQuestion').button('reset');
+                }
+                $("#btnAddQuestion").removeAttr('disabled');
+                //alert('Button Text is:' + btnText);
+                isChanged = true;
+            });
+            $(window).bind('beforeunload', function () {
+                if (isChanged) {
+                    return 'There are unsaved changed. Do you want to discard Changes and Exit?';
+                } else {
+                    return undefined;
+                }
+            });
+            // ---------------- Execute When Saving the Whole Form --------------
+            $("#btnAddQuestion").click(function () {
+                isChanged = false;
+                $(this).button('loading');
+            });
+            //$(".btn").click(function () {
+            //    isChanged = false;
+            //    $(this).button('loading');
+            //});
+            $("#saveMDTag").click(function () {
+                isChanged = false;
+                $(this).button('loading');
+            });
+
+            $(".chkDefault").change(function () {
+                // If the Checkbox is now "Checked", uncheck all other checkboxes
+                if (this.checked) {
+                    $(".chkDefault").prop('checked', false);
+                    $(this).prop('checked', true);
+                }
+                //Otherwise We just leave the current uncheck box (all all the others) as they are
+            });
+
+            $(".btnIsDefault").click(function () {
+
+                toggleDefault($(this));
+
+                @*var isDefaultValue = true;
+                if ($(this).hasClass('btnYES')) {
+                    isDefaultValue = false;
+                }
+
+                var QATid = $(this).parents("div.answerType").first().find("#obs_qat_id").val();
+                //alert("Database will be updated to " + isDefaultValue + " for QAT id: " + QATid);
+
+                // ------------ Make the Ajax Call to Update the Default Answer Type Value---------------------------------------
+                $.ajax({
+                    url: '@Url.Action("setDefaultQAT", "Question")',
+                    method: "POST",
+                    cache: false,
+                    data: { qat_id: QATid, isDefault: isDefaultValue },     //<---- Data Parameters (if not already passed in the Url)
+                    //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                    //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                    //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                    //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                    //--- On error, execute this function ------
+                    error: function () {
+                        alert("An Error has Occurred. Unable to Save Data!!");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    //Execute this code After the Ajax call completes successfully
+                    // If the button is the Default, Just make it "No Default"
+                });
+                //--------- Finished executing Ajax call
+                if ($(this).hasClass('btnYES')) {
+                    $(this).removeClass("btnYES").addClass("btn-warning");
+                    $(this).html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
+                }
+                else {
+                    //Else, reset all buttons to "No Default" and make this button the default
+                    $(".btnIsDefault").removeClass("btnYES").addClass("btn-warning");
+                    $(".btnIsDefault").html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
+                    $(this).removeClass("btn-warning").addClass("btnYES");
+                    $(this).html('YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up">');
+                }*@
+            });
+
+            //$('.collapse').on('show.bs.collapse', function () {
+            //    $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
+            //}).on('hide.bs.collapse', function () {
+            //    $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
+            //});
+
+            //    on("click", ".dismiss", function (event) {
+            //        event.preventDefault();
+            //        //var qdelId = $(this).parent().attr("id");
+            //        $(this).parent().remove();
+            //        // updateValues("An Item was Deleted");  //If we want to all a function when item is dragged/dropped
+            //    });
+        });
+</script>
+
+@*<script type="text/javascript">
+            //$(function () {
+            //    $("input:text.editDate").datepicker();
+            //});
+            $(function () {
+                $("#obs_question_eff_st_dt").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: 'M dd, yy'
+                });
+            });
+            $(function () {
+                $("#obs_question_eff_end_dt").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: 'M dd, yy'
+                });
+            });
+    </script>*@
+<!-- Form Edit State Change Validation -->
+@*---Using Input Groups with Add Ons - Correct Format---
+    <div class="col-sm-4">
+        <div class="input-group">
+            <span class="input-group-addon">$</span>
+            <input type="text" class="form-control bfh-number" id="product_price" placeholder="Price" data-min="0" data-max="9999999">
+            <span class="input-group-addon">.00</span>
+        </div>
+    </div>
+*@
+
+
+<script type="text/jscript">
+    $(document).ready(function () {
+        //------------------------------ ADD NEW ANSWER TYPE BUTTON -----------------------------------------
+        $('#addAnsType').click(function () {
+            $(this).prop('disabled', true);
+            // ------------ Make the Ajax Call ---------------------------------------------
+            $.ajax({
+                url: '@Url.Action("addQuestionAnswerInfo", "Question")',
+                method: "GET",
+                cache: false,
+                //data: { qat_id: QATid, sel_ans_list: textValues },     //<---- Data Parameters (if not already passed in the Url)
+                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                //--- On error, execute this function ------
+                error: function () {
+                    alert("An Error has Occurred. Unable to Add!!");  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                //Execute this code After the Ajax call completes successfully
+                $("#divNewSA").html(d);
+                $("#fullSelATlist").focus();
+                $('html,body').animate({ scrollTop: document.body.scrollHeight }, "slow");
+                //window.scrollTo(0, 0);   //Scroll to the top of the Screen
+            });
+
+        });
+
+        //-------------------------------------- BUTTON EDIT ------------------------------------------------
+        $('.editSA').click(function () {
+            // Get the Ids that will be used in the dynamic execution
+            var ATid = $(this).prop("id").substring(7);  // "Answer Type" Sequence Number to drive the Ids of all components.
+            var divSALabel = "#divSALabel" + ATid;
+            var divSAText = "#divSAText" + ATid;
+
+            // Hide the "Labels" <Division>
+            $(divSALabel).hide(700);
+            // Show The "Text Boxes" <Division>
+            $(divSAText).show();
+
+            //var atCategory = $(this).parents("div.answerType").find('#atCat').first().val();
+            //if (atCategory == "SS List" || atCategory == "MS List") {
+            //    $(divSAText).find('#rangeCol').hide();
+            //    $(divSAText).find('#listCol').show();
+            //}
+            //else if (atCategory == "3 Val Range" || atCategory == "5 Val Range") {
+            //    $(divSAText).find('#rangeCol').show();
+            //    $(divSAText).find('#listCol').hide();
+            //}
+
+
+
+
+
+            //$(this).parent().parent().parent().parent().children().filter(".divText").first().show();      // NOT NEEDED ANYMORE
+        });
+        //------------------------------ BUTTON SAVE ---------------------------------------------
+        $('.saveSA').click(function (e) {
+            // Get the Ids that will be used in the dynamic execution
+            var ATid = $(this).prop("id").substring(7);  // "Answer Type" Sequence Number to drive the Ids of all components.
+            var divSALabel = "#divSALabel" + ATid;
+            var divSAText = "#divSAText" + ATid;
+            var QATid = $(this).parents("div.answerType").first().find("#obs_qat_id").val();
+            var textValues = "";
+            //Retrieve the first <Li> "badge" element of the current QAT
+            var badgeLi = $(divSALabel).find("Li").first();
+
+            var counter = 0;
+            $(this).parent().find('.selAnswerTextb').each(function () {
+                counter++;
+                //Compile a list of Values to post
+                textValues = textValues + $(this).val() + "~"
+            })
+
+            var postingValuesField = $(this).parents(".answerType").first().children("#sel_ans_list");
+            //alert("Original Posting values: " + postingValuesField.val());
+            //Save the New values in the corresponding QAT hidden field for later posting
+            postingValuesField.val(QATid + "~" + textValues);
+            //$(this).parents(".answerType").first().children("#sel_ans_list").val(QATid + "~" + textValues);
+
+            //perform post "save" operations
+            badgeLi.siblings().remove();
+            $(divSAText).find('.selAnswerTextb').each(function () {
+                //  alert("Refreshing Badges from [" + badgeLi.next().children("span").first().text() + "] to [" + $(this).val() + "]");
+                badgeLi.parent().append('<li style="display: inline;" id="testLi"><span class="badge" style="font-size:larger">' + $(this).val() + '</span>&nbsp;&nbsp;</li>');
+            })
+
+            //Enable the Question Save Button if ajax call is successful
+            $("#btnAddQuestion").removeAttr('disabled');
+
+            ///alert("Found " + counter + " Text Boxes")
+            //alert("Value Saved: " + postingValuesField.val());
+
+            //alert("Current Textdiv Id is: " + divSAText + " QATid: " + QATid + " Values Found Are: " + textValues);
+            @*// ------------ Make the Ajax Call ---------------------------------------------
+            $.ajax({
+                url: '@Url.Action("saveSelAns", "Question")',
+                    method: "POST",
+                    cache: false,
+                    data: { qat_id: QATid, sel_ans_list: textValues },     //<---- Data Parameters (if not already passed in the Url)
+                    //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                    //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                    //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                    //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                    //--- On error, execute this function ------
+                    error: function () {
+                        alert("An Error has Occurred. Unable to Save Data!!");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    //Execute this code After the Ajax call completes successfully
+                    // First Remove all the pre-existing Badges
+                    badgeLi.siblings().remove();
+                    $(divSAText).find('.selAnswerTextb').each(function () {
+                        //  alert("Refreshing Badges from [" + badgeLi.next().children("span").first().text() + "] to [" + $(this).val() + "]");
+                        badgeLi.parent().append('<li style="display: inline;" id="testLi"><span class="badge" style="font-size:larger">' + $(this).val() + '</span>&nbsp;&nbsp;</li>');
+                    })
+
+                    //Enable the Question Save Button if ajax call is successful
+                    $("#btnAddQuestion").removeAttr('disabled');
+                });*@
+
+                // Hide the "Text Boxes" <Division>
+                $(divSAText).hide();
+                // Show The "Labels" < Division >
+                $(divSALabel).show();
+            });
+            //------------ BUTTON CANCEL EDIT OF ANSWER TYPE -----------------------------------------------------
+            $('.cancelSA').click(function (e) {
+                var divSAText = "#" + $(this).parents("div.divText").first().prop('id');
+                var divSALabel = "#divSALabel" + divSAText.substring(10, 12);
+                // Hide the "Text Boxes" <Division>
+                $(divSAText).hide();
+                //$(this).parents("div.divText").first().hide();
+                // Show The "Labels" < Division >
+                $(divSALabel).show(500);
+            });
+
+            //------------ ON SELECTABLE ANSWER CHANGE -----------------------------------------------------
+            $(".selAnswerTextb").change(function () {
+                if ($(this).val() == "")
+                {
+                    $('.saveSA').prop('disabled', true);
+                }
+                else
+                    $('.saveSA').prop('disabled', false);
+            });
+
+            //----------------------------------------------------------------------------------------------
+
+
+
+            $('.addOption').click(function () {
+                var divToAdd = '<div class="row form-inline newOption" style="margin-left:2px"><input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /> </div>'
+                var delButton = $('<button s type="button" ><span class="glyphicon glyphicon-trash"></span></button>').click(function () {
+                    $(this).parent().remove();
+                });
+
+                $(this).parent().find('.selectionList').last().append(divToAdd).children(".newOption").last().append(delButton);
+            });
+
+        });
+
+</script>
+

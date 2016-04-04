@@ -1193,6 +1193,8 @@ namespace OBSMVC.Controllers
             cft_isPublished = q.cft_isPublished;
             cft_Nbr = q.cft_Nbr;
             cft_Version = q.cft_Version;
+                cft_eff_st_dt = q.cft_eff_st_dt;
+                cft_eff_end_dt = q.cft_eff_end_dt;
             colFormSections = new List<CollectionFormSection>();
             retrieveQuestionData();
         }
@@ -1224,7 +1226,7 @@ namespace OBSMVC.Controllers
         public string cft_isPublished { get; set; }
         public int cft_Nbr { get; set; }
         public int cft_Version { get; set; }        
-        public DateTime cft_eff_st_dt { get; set; }
+        public DateTime? cft_eff_st_dt { get; set; }
         public DateTime cft_eff_end_dt { get; set; }
         public List<CollectionFormSection> colFormSections { get; set; }
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\\

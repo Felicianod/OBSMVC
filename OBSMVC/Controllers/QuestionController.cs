@@ -438,7 +438,6 @@ namespace OBSMVC.Controllers
         [HttpGet]
         public PartialViewResult getQuestionAnswerInfo(qatTags qatInfo)
         {
-
             return PartialView("_getQuestionAnswerInfo", qatInfo);
         }
 

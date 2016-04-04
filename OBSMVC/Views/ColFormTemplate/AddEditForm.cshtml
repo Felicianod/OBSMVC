@@ -623,7 +623,7 @@
 
                     // updateValues("Question Added Successfully: " + getTestData(qid));   //Method invoked when action is dropped successfully
 
-                    getQinfo(qid);
+                    getQinfo(qid, 0);
                 }
             }).sortable({
                 connectWith: ".connected",
@@ -744,7 +744,7 @@
         }*@
 
         //------------------------------------------------------------------
-        function getQinfo(questionId) {
+        function getQinfo(questionId, questionQATid) {
             var newCounterSeq = $("#qCounter").val();
             //var newCounterSeq = 1;
             var qid = questionId
@@ -758,7 +758,7 @@
                 url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
                 method: "GET",
                 cache: false,
-                data: { question_id: qid, qCounter: newCounterSeq },     //<---- Data Parameters (if not already passed in the Url)
+                data: { question_id: qid, question_QATid: questionQATid, qCounter: newCounterSeq },     //<---- Data Parameters (if not already passed in the Url)
                 //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
                 //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
                 //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object

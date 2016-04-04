@@ -216,7 +216,7 @@
                     {
                         foreach (OBSMVC.Models.qatTags qat in Model.Quest_Assigned_qatTags)
                         {
-                            @Html.Action("getQuestionAnswerInfo", "Question", qat) ; @*<hr />*@
+                            @Html.Action("getQuestionAnswerInfo", "Question", new { qatInfo = qat }) ; @*<hr />*@
                         }
                     }
                 </div>

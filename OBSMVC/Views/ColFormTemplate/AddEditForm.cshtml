@@ -114,6 +114,12 @@
     string rowInfo = masterCounter.ToString();
     string colFormId = "0";
     int nextQuestion = Model.questCount() + 1;
+    var startDate = "";
+    if (!(@Model.cft_eff_st_dt ?? Convert.ToDateTime("01/01/1900") < Convert.ToDateTime("01/01/1901")))
+    {
+        startDate = @Model.cft_eff_st_dt.ToString("MMM dd, yyyy");    
+    }
+    //:@Model.cft_eff_st_dt.ToString("MMM dd, yyyy")
 }
 
 
@@ -202,7 +208,7 @@
                 <div class="col-sm-4">
                     <div class="input-group" data-provide="datepicker">
                         <div class="input-group-addon">Usable As of:</div>
-                        <input class="datepicker form-control" id="cft_eff_st_dt" name="cft_eff_st_dt" value="@Model.cft_eff_st_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;">
+                        <input class="datepicker form-control" id="cft_eff_st_dt" name="cft_eff_st_dt" value="@startDate")" style="max-width: 100%; width:100%;">
                         @*<input class="datepicker form-control" data-date-format="mm/dd/yyyy" id="obs_cft_eff_st_dt" name="obs_cft_eff_st_dt" style="max-width: 100%; width:100%;">*@
                         <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
                         @Html.ValidationMessageFor(model => model.cft_eff_st_dt, "", new { @class = "text-danger" })

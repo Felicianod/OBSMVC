@@ -382,6 +382,10 @@
         function PostForm(btnClicked) {
             var errorMsg = "";
             var sectionCounter = 0;
+
+            //Turn off the "changed" flag so we do not get an alert when posting the form
+            isChanged = false;
+
             // Validate the Form Fields
             //Process all the form Sections to get Data to post
             $("div.formSection").each(function () {
@@ -389,6 +393,15 @@
                 //var sectionTitleBox = $($(this).find("input.sectionTitle").first()).val();
                 var sectionTitleBox = formSection.find("input.sectionTitle").first();
                 var sectionName = sectionTitleBox.val().trim();
+                //Loopt thorugh all Dropdowns in this section to ensure that they have a valid selection 
+                formSection.find(".viewDropDown").each(function () {
+                    if ($(this).val() == "") {
+
+                    }
+                });
+
+                var dropdownArray = formSection.find(".viewDropDown");
+                alert("Section " + sectionName + " has " + dropdownArray + " dropdowns.")
                 sectionCounter++;
                 if (sectionName == "")
                 {

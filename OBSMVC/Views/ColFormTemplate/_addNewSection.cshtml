@@ -34,7 +34,7 @@
                               @*@questionCounter.ToString("00"): This is Question ID=@sectQuest.cfq_questId [under Section "@Model.sectionName"]*@
                             @*/--------- --------------------------------------------------------------------\
                               |       If this is an existing form that is being edited,                      |
-                              |         Attach all existing question herewith a "Render Action" command      |
+                              |         Attach all existing question here with a "Render Action" command     |
                               |  url:    '@Url.Action("getQuestionInfo", "ColFormTemplate")'                 |
                               |  method: "GET", param data: { question_id: qid, qCounter: newCounterSeq }    |
                               |                                                                              |

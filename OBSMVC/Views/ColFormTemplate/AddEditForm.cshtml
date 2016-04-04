@@ -369,13 +369,6 @@
 
 
 
-
-
-
-
-
-
-
     @* ######################  J A V A    S C R I P T S    S E C T I O N   #################################### *@
     @****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
     <script>
@@ -395,7 +388,11 @@
                 var sectionName = sectionTitleBox.val().trim();
                 //Loopt thorugh all Dropdowns in this section to ensure that they have a valid selection 
                 formSection.find(".viewDropDown").each(function () {
-                    if ($(this).val() == "") {
+                    if ($(this).val() == "" || $(this).val() == "New") {
+                        $(this).css({
+                            "color": "white",
+                            "background-color": "red"
+                        });
                         errorMsg = errorMsg + "One Dropdown has an invalid Selection\n";
                     }
                 });

@@ -19,8 +19,7 @@ namespace OBSMVC.Controllers
     public class LoginController : Controller
     {
         [HttpGet]
-        public ActionResult OBSLogin() { return View(); }
-
+        public ActionResult OBSLogin() { return View(); }      
         [HttpPost]
         public ActionResult OBSLogin(FormCollection login_info, string ReturnUrl)
         {

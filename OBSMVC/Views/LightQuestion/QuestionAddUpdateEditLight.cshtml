@@ -16,15 +16,6 @@
     <title></title>
 </head>
 <body>
-@*@{
-    string endDateValue;
-    if (Model.questn.obs_question_eff_end_dt.ToString("yyyy").Equals("2060"))
-    { endDateValue = ""; }
-    else
-    {
-        endDateValue = @Model.questn.obs_question_eff_end_dt.ToString("MMM dd, yyyy");
-    }
-}*@
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
 <style>
     #container .modal.fade {
@@ -104,7 +95,7 @@
     <span class="col-md-offset-1"> @Model.viewPageTitle</span>
 </div>
 
-@using (Html.BeginForm("QuestionAddUpdate", "Question", FormMethod.Post, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("QuestionAddUpdateLight", "LightQuestion", FormMethod.Post, new { @class = "form-horizontal" }))
 {
     @Html.AntiForgeryToken()
 
@@ -263,12 +254,6 @@
 
 
 @* ------------ END OF THE FORM ---------- *@
-
-
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 
 @****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
@@ -528,6 +513,7 @@
 
 </script>
 
-
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
 </body>
 </html>

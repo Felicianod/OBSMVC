@@ -324,7 +324,6 @@
                                 @* ****************************************************************************************************
                                        Results from Ajax Call to Display Question Search Result List will be displayed here!!
                                    ****************************************************************************************************@
-
                             </div>
 
 
@@ -547,6 +546,10 @@
         $('#doSearch').click(function () {
             var $btn = $(this);
             $btn.button('loading');
+            var waitMsg = '<div style="text-align:center"><br /><br />Please wait while we retrieve the questions...<br /><br /><img src="../../Images/ui-anim_basic_16x16.gif" /></div>'
+
+            $("#resultPanel").html(waitMsg);
+
             //$(this).button('loading');
             //e.preventDefault(); // <------------------ stop default behaviour of button (to prevent form submit or other behaviours if neeed)
 
@@ -697,9 +700,9 @@
                     //Scroll the Panel to the botton
                     // Check if we added a question to the last section. If so, scroll the panel to the button
                     //panel id = qFormList
-                    alert("Id: " + $(this).attr("id") + " Was selected.")
-                    alert("This is panel " + $(this).attr("id").substring(6) + " out of " + $("#qFormList").find(".targetList").length);
 
+                    //alert("Id: " + $(this).attr("id") + " Was selected.")  //The olListxx Id were the question was dropped
+                    //alert("This is panel " + $(this).attr("id").substring(6) + " out of " + $("#qFormList").find(".targetList").length);
                 }
             }).sortable({
                 connectWith: ".connected",

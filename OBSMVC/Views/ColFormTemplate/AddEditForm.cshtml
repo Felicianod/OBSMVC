@@ -334,8 +334,8 @@
 </div>
 
 <script>
-    function loadModal(btnClkd) {
-        var questionId = btnClkd.attr('id').substring(8);
+    function loadModal(questionId) {
+        //var questionId = btnClkd.attr('id').substring(8);
         //alert("Load Modal for Question Id: " + questionId);
         //var url = "/Question/QuestionAddUpdate/" + questionId;
         var url = "/LightQuestion/QuestionAddUpdateLight/" + questionId;
@@ -350,8 +350,8 @@
             autoOpen: false,
             dialogClass: 'dialog_fixed, ui-widget-header',
             modal: true,
-            height: 650,
-            width: 1200,
+            height: 620,
+            width: 1400,
             minWidth: 800,
             minHeight: 450,
             draggable: true,

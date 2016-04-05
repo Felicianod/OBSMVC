@@ -5,10 +5,7 @@
     string endDateValue;
     if (Model.questn.obs_question_eff_end_dt.ToString("yyyy").Equals("2060"))
     { endDateValue = ""; }
-    else
-    {
-        endDateValue = @Model.questn.obs_question_eff_end_dt.ToString("MMM dd, yyyy");
-    }
+    else { endDateValue = @Model.questn.obs_question_eff_end_dt.ToString("MMM dd, yyyy"); }
 }
 
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
@@ -65,6 +62,17 @@
         font: normal 700 14px/1 "Calibri", sans-serif;
         color: white;
     }
+    .divDeleted {
+        /*background: #d0d0d0;*/
+        /*background-image: url('~/Images/bgDeleted.png');*/
+        background-image: url('../../Images/bgDeleted.png');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+    }
+    .divNormal {
+        /*background: none;*/
+        background-image: none;
+    }
 </style>
 <script>
     function toggleDefault(btnClicked) {
@@ -80,8 +88,35 @@
             btnClicked.removeClass("btn-warning").addClass("btnYES");
             btnClicked.html('YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up">');
         }
+        // A Change was made. Question changes can be saved. Reenable the Save Button
         $('#btnAddQuestion').prop('disabled', false);
     }
+
+    function toogleSoftDelete(btnClicked) {
+        var parentDIV = btnClicked.parents("div.answerType").first();
+        if (btnClicked.hasClass('deleteQAT')) {
+            // Mark the question as "Deleted" and Convert the Button into a "undelete" button
+            parentDIV.find("#obs_qat_Id_delList").val(parentDIV.find("#obs_qat_id").val());
+            btnClicked.removeClass("deleteQAT").addClass("recoverQAT");
+            btnClicked.html('<span class="glyphicon glyphicon glyphicon-refresh"></span>');
+            parentDIV.removeClass("divNormal").addClass("divDeleted");
+            //Disable the Edit and Default Buttons
+            parentDIV.find(".btnIsDefault").first().prop("disabled", true);
+            parentDIV.find(".editSA").first().prop("disabled", true);
+        }
+        else {
+            // Unmark/Remove the question from the "Delete List" and Convert the Button into a "Delete" button
+            parentDIV.find("#obs_qat_Id_delList").val("");
+            btnClicked.removeClass("recoverQAT").addClass("deleteQAT");
+            btnClicked.html('<span class="glyphicon glyphicon glyphicon-trash"></span>');
+            parentDIV.removeClass("divDeleted").addClass("divNormal");
+            //Re-enable the Edit and Default Buttons
+            parentDIV.find(".btnIsDefault").first().prop("disabled", false);
+            parentDIV.find(".editSA").first().prop("disabled", false);            
+        }
+        // A Change was made. Question changes can be saved. Reenable the Save Button
+        $('#btnAddQuestion').prop('disabled', false);
+    }    
 </script>
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
 <div class="well well-sm smallRowMargin" style="padding: 4px; font-size:xx-large; text-align:center">

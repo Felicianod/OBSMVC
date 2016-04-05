@@ -357,6 +357,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\bgDeleted.png" />
     <Content Include="Images\Button-Add-icon.png" />
     <Content Include="Images\DSCHome_Logo.gif" />
     <Content Include="Images\DSCHOME_Logo.png" />

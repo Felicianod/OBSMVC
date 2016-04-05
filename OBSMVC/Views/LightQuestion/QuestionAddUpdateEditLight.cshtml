@@ -16,7 +16,6 @@
     <title></title>
 </head>
 <body>
-
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
 <style>
     #container .modal.fade {
@@ -27,10 +26,12 @@
         transition: opacity 0.3s linear, left 0.3s ease-out;
     }
 
-    #container .modal.fade.in {
-        left: 50%;
-    }
-
+        #container .modal.fade.in {
+            left: 50%;
+        }
+    /*.input-group-addon {
+    min-width:200px;
+    text-align:left;*/
     .stdWidth {
         min-width: 130px;
         text-align: left;
@@ -56,21 +57,21 @@
         text-shadow: 2px 2px 0 #070550;
     }
 
-    .btnYES:hover {
-        background: #3498db;
-        background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
-        background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
-        font: normal 700 14px/1 "Calibri", sans-serif;
-        color: white;
-    }
+        .btnYES:hover {
+            background: #3498db;
+            background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+            background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+            font: normal 700 14px/1 "Calibri", sans-serif;
+            color: white;
+        }
 
-    .btnYES:focus {
-        background: #3498db;
-        background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
-        background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
-        font: normal 700 14px/1 "Calibri", sans-serif;
-        color: white;
-    }
+        .btnYES:focus {
+            background: #3498db;
+            background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+            background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+            font: normal 700 14px/1 "Calibri", sans-serif;
+            color: white;
+        }
 </style>
 <script>
     function toggleDefault(btnClicked) {
@@ -94,7 +95,7 @@
     <span class="col-md-offset-1"> @Model.viewPageTitle</span>
 </div>
 
-@using (Html.BeginForm("QuestionAddUpdate", "Question", FormMethod.Post, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("QuestionAddUpdateLight", "LightQuestion", FormMethod.Post, new { @class = "form-horizontal" }))
 {
     @Html.AntiForgeryToken()
 
@@ -252,12 +253,6 @@
 
 
 @* ------------ END OF THE FORM ---------- *@
-
-
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 
 @****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
@@ -517,6 +512,7 @@
 
 </script>
 
-
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
 </body>
 </html>

@@ -102,7 +102,9 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
     <input type="hidden" value="@Model.questn.obs_question_id" name="questn.obs_question_id" id="questn.obs_question_id">
-
+    <input type="hidden" id="qAssignedMD" name="qAssignedMD" />
+    <input type="hidden" id="defaultQATid" name="defaultQATid" />
+    
     //-----------------------------------   QUESTION HEADER SECCTION ----------------------------------------------------------
     <div class="row personal-info">
         <div class="panel panel-info">

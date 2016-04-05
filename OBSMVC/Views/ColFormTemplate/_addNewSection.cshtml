@@ -13,7 +13,7 @@
             @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
             <a class="accordion-toggle" data-toggle="collapse" href="@sectionIdHandle">
                 <span class="glyphicon glyphicon-minus">&nbsp; </span>
-                <span>Section Title:</span>
+                <span>Section Name:</span>
             </a>
             &nbsp;&nbsp;
             <input type="text" id="@txtSectionName" onfocus="$(this).select();" class="form-control input-sm sectionTitle" style="width:50%" placeholder="<Enter Section Name>" value="@Model.sectionName" required />

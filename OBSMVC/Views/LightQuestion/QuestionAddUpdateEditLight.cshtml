@@ -1,6 +1,20 @@
 ﻿@model OBSMVC.Models.QuestionCreateEditViewModel
-
-@{ ViewBag.Title = "Create/Edit Question"; }
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>  
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="~/Scripts/jquery.js"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+</head>
+<body>
 @{
     string endDateValue;
     if (Model.questn.obs_question_eff_end_dt.ToString("yyyy").Equals("2060"))
@@ -9,7 +23,6 @@
     {
         endDateValue = @Model.questn.obs_question_eff_end_dt.ToString("MMM dd, yyyy");
     }
-    Layout = null;
 }
 
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
@@ -216,7 +229,7 @@
                     {
                         foreach (OBSMVC.Models.qatTags qat in Model.Quest_Assigned_qatTags)
                         {
-                            @Html.Action("getQuestionAnswerInfo", "Question", qat) ; @*<hr />*@
+                            @Html.Action("getQuestionAnswerInfo","Question", new { qatInfo = qat } ) ; @*<hr />*@
                         }
                     }
                 </div>
@@ -866,3 +879,6 @@
 
 </script>
 
+
+</body>
+</html>

@@ -16,15 +16,7 @@
     <title></title>
 </head>
 <body>
-@*@{
-    string endDateValue;
-    if (Model.questn.obs_question_eff_end_dt.ToString("yyyy").Equals("2060"))
-    { endDateValue = ""; }
-    else
-    {
-        endDateValue = @Model.questn.obs_question_eff_end_dt.ToString("MMM dd, yyyy");
-    }
-}*@
+
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
 <style>
     #container .modal.fade {
@@ -35,12 +27,10 @@
         transition: opacity 0.3s linear, left 0.3s ease-out;
     }
 
-        #container .modal.fade.in {
-            left: 50%;
-        }
-    /*.input-group-addon {
-    min-width:200px;
-    text-align:left;*/
+    #container .modal.fade.in {
+        left: 50%;
+    }
+
     .stdWidth {
         min-width: 130px;
         text-align: left;
@@ -66,21 +56,21 @@
         text-shadow: 2px 2px 0 #070550;
     }
 
-        .btnYES:hover {
-            background: #3498db;
-            background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
-            background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
-            font: normal 700 14px/1 "Calibri", sans-serif;
-            color: white;
-        }
+    .btnYES:hover {
+        background: #3498db;
+        background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+        background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+        font: normal 700 14px/1 "Calibri", sans-serif;
+        color: white;
+    }
 
-        .btnYES:focus {
-            background: #3498db;
-            background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
-            background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
-            font: normal 700 14px/1 "Calibri", sans-serif;
-            color: white;
-        }
+    .btnYES:focus {
+        background: #3498db;
+        background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+        background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+        font: normal 700 14px/1 "Calibri", sans-serif;
+        color: white;
+    }
 </style>
 <script>
     function toggleDefault(btnClicked) {

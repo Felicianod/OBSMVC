@@ -25,7 +25,7 @@ namespace OBSMVC.Controllers
         {
             string username = login_info.Get("Username");
             string password = login_info.Get("Password");
-            WebRequest request = WebRequest.Create("http://192.168.43.112/api/v2/user/session?service=LDAPTUSER");
+            WebRequest request = WebRequest.Create("http://dscdfapidev/api/v2/user/session?service=LDAPTUSER");
             request.Method = "POST";
             request.ContentType = "application/json";
             string parsedContent = "{\"username\":\"" + username + "\",\"password\":\"" + password + "\"}";

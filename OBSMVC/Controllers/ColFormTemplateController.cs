@@ -591,8 +591,9 @@ namespace OBSMVC.Controllers
                 questionInfo.question_assigned_answer_types =questionInfo.question_assigned_answer_types.OrderBy(item=>item.Text).ToList();
                 questionInfo.question_assigned_answer_types.Add(new SelectListItem() { Text = "Add New...", Value = "New" });
             }
-            if (question_QATid>0)
+            if (question_QATid>0)//this if statement is here to cover scenario where we edit previously saved form
             {
+                //we need to make previously selected value to be selected when we reload the edit form
                 questionInfo.question_assigned_answer_types.Single(x => x.Value == question_QATid.ToString()).Selected = true;
             }
             else if (questionInfo.default_qat_id > 0)
@@ -600,6 +601,67 @@ namespace OBSMVC.Controllers
                 questionInfo.question_assigned_answer_types.Single(x => x.Value == questionInfo.default_qat_id.ToString()).Selected = true;
             }
             return PartialView("_getQuestionInfo", questionInfo);
+        }
+
+        public List<SelectListItem> reloadQuestionDropdown(int question_id)
+        {
+            List<OBS_QUEST_ANS_TYPES> QAInstances = db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == question_id && (x.obs_qat_end_eff_dt == null || x.obs_qat_end_eff_dt > DateTime.Now)).ToList();
+            List<SelectListItem> question_assigned_answer_types = new List<SelectListItem>();
+            int default_qat_id = 0;
+            if (QAInstances.Count() == 0)  //There were no records found in the 'OBS_QUEST_ANS_TYPES' Table for this question Id
+            {
+                
+                SelectListItem answer_for_dropdown = new SelectListItem() { Text = "Add New...", Value = "New" };
+                question_assigned_answer_types.Add(answer_for_dropdown);
+            }
+            else
+            {//there's a record(s) in 'OBS_QUEST_ANS_TYPES'. now we need to loop through all of them, add them to the list and find default answer type
+
+                
+                foreach (OBS_QUEST_ANS_TYPES qaInstanceTemp in QAInstances)
+                {
+                    //obs_question_answer_types.Add(qaInstanceTemp);
+                    if (qaInstanceTemp.obs_qat_default_ans_type_yn == "Y")
+                    {   //if we're here, that means we found default default answer type
+                        default_qat_id = qaInstanceTemp.obs_qat_id;//we set our object's qat id to the default qat id                                              
+                    }
+                    //now we need to find the corresponding answer type and assign it to the object
+                    OBS_ANS_TYPE temp_answer = db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id);
+                   // questionInfo.assigned_answer_types.Add(temp_answer);
+                    SelectListItem answer_for_dropdown = new SelectListItem() { Text = temp_answer.obs_ans_type_name, Value = qaInstanceTemp.obs_qat_id.ToString() };
+                    question_assigned_answer_types.Add(answer_for_dropdown);
+                    // lets check if this answer type requires selectable answers
+                    if (db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id).obs_ans_type_has_fxd_ans_yn == "Y")
+                    {
+                        //if true, we need to list all of them and assign them to object's list of selectable answers
+
+                        int count = QAInstances.Count(x => x.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id);
+                        if (count > 1)
+                        {
+                            String sel_ans = "(";
+                            foreach (OBS_QUEST_SLCT_ANS temp in db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qaInstanceTemp.obs_qat_id && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now))
+                            {
+                                
+                                sel_ans = sel_ans == "(" ? sel_ans + temp.obs_qsa_text : sel_ans + "," + temp.obs_qsa_text;
+                            }
+                            sel_ans = sel_ans + ")";
+                            question_assigned_answer_types.Single(x => Convert.ToInt32(x.Value) == qaInstanceTemp.obs_qat_id).Text = temp_answer.obs_ans_type_name + sel_ans;
+                        }                       
+                    }
+
+                }
+                question_assigned_answer_types = question_assigned_answer_types.OrderBy(item => item.Text).ToList();
+                question_assigned_answer_types.Add(new SelectListItem() { Text = "Add New...", Value = "New" });
+            }
+            //if (question_QATid > 0)
+            //{
+            //    questionInfo.question_assigned_answer_types.Single(x => x.Value == question_QATid.ToString()).Selected = true;
+            //}
+            if (default_qat_id > 0)
+            {
+                question_assigned_answer_types.Single(x => x.Value == default_qat_id.ToString()).Selected = true;
+            }
+            return question_assigned_answer_types;
         }
 
 

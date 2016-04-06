@@ -410,6 +410,8 @@
                 }).done(function (d) {
                     //alert("Retrieved Data is: " + d);
                     @*$("#@ulId").html(d);*@
+                    var dropdownId = "#" + ddlId;
+                    alert("Dropdown Id handle is: " + $(dropdownId).attr("id"));
                 });
             },
             /*close: function () { $(this).remove(); },*/

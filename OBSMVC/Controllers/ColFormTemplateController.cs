@@ -658,10 +658,10 @@ namespace OBSMVC.Controllers
             //{
             //    questionInfo.question_assigned_answer_types.Single(x => x.Value == question_QATid.ToString()).Selected = true;
             //}
-            if (default_qat_id > 0)
-            {
-                question_assigned_answer_types.Single(x => x.Value == default_qat_id.ToString()).Selected = true;
-            }
+            //if (default_qat_id > 0)
+            //{
+            //    question_assigned_answer_types.Single(x => x.Value == default_qat_id.ToString()).Selected = true;
+            //}
             ViewBag.dropdownID = dropdownID;
             return PartialView("_addNewSection", question_assigned_answer_types);
         }

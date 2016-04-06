@@ -13,7 +13,7 @@
 
 
 <div class="row divFormQuestion" id="@qViewId" style="text-align:left">
-
+    <input type="hidden" id="qid" value="@Model.question_id" />
     <div class="row" >
         <div class="col-sm-1" style="text-align:right">
             @*[@Model.uniqueCounter]*@
@@ -114,5 +114,5 @@
             "color": "black",
             "background-color": "white"
         });
-    })
+    })    
 </script>

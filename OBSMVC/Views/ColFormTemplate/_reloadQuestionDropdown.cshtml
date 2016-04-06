@@ -3,5 +3,11 @@
     string ddlId = @ViewBag.dropdownID;
 }
 <div class="input-group-addon">Answer Type</div>
-@Html.DropDownList("AssignedAnswers", Model, "-Select Answer Type-", new { id = @ddlId, @class = "viewDropDown form-control" })
+@Html.DropDownList("AssignedAnswers", Model, "-Select Answer Type-", new { id = @ddlId, @class = "viewDropDown newddl form-control" })
 <br />
+
+<script>
+    $(".newddl").change(function (event) {
+        enableDropDown($(this));
+    });
+</script>

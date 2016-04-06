@@ -125,7 +125,7 @@ namespace OBSMVC.Controllers
             //string ans_type_list = "6~true~yes~no~maybe,10~false~1~2~3~4~5";
             //ans_type_list format: at_id~default~sel_ans,
             //                        6~true~yes~no~maybe,
-            //string defaultQATid(null or value)
+            //obs_qat_id_delList = qat_id,qat_id,... list of answer types to be deleted
             //-------- Save the Question Information ----
             int defaultQATid = -1;
             try

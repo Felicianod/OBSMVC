@@ -27,9 +27,10 @@
     </div>
     <div class="row">
         <div class="col-sm-7 col-sm-offset-1">
-            <div class="input-group ">
+            <div class="input-group reloadDDL" >
                 <div class="input-group-addon">Answer Type</div>
-                @Html.DropDownList("AssignedAnswers", Model.question_assigned_answer_types, "-Select Answer Type-", new { id = dropdown_id, @class = "viewDropDown form-control" }) <br />
+                @Html.DropDownList("AssignedAnswers", Model.question_assigned_answer_types, "-Select Answer Type-", new { id = dropdown_id, @class = "viewDropDown form-control" })
+                <br />
             </div>
         </div>
         @*<div class="col-sm-4">

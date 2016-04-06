@@ -119,6 +119,8 @@ namespace OBSMVC.Controllers
         public ActionResult QuestionAddUpdatePost(FormCollection postedData, QuestionMDViewModel QuestionMDView,
                                  [Bind(Prefix = "questn")] OBS_QUESTION questionHdr, string ans_type_list)
         {
+            string posted_deleted_ids = postedData["obs_qat_Id_delList"];
+
             if (questionHdr.obs_question_eff_end_dt < Convert.ToDateTime("01/01/2000")) { questionHdr.obs_question_eff_end_dt = Convert.ToDateTime("12/31/2060"); }
             string posted_ans_type_list = postedData["ans_type_list"];//represents newly added selectable ans types
             string posted_existing_ans_type_data = postedData["sel_ans_list"]; //represents existing assigned ans types that need to be modified

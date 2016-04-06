@@ -27,9 +27,10 @@
     </div>
     <div class="row">
         <div class="col-sm-7 col-sm-offset-1">
-            <div class="input-group ">
+            <div class="input-group reloadDDL" >
                 <div class="input-group-addon">Answer Type</div>
-                @Html.DropDownList("AssignedAnswers", Model.question_assigned_answer_types, "-Select Answer Type-", new { id = dropdown_id, @class = "viewDropDown form-control" }) <br />
+                @Html.DropDownList("AssignedAnswers", Model.question_assigned_answer_types, "-Select Answer Type-", new { id = dropdown_id, @class = "viewDropDown form-control" })
+                <br />
             </div>
         </div>
         @*<div class="col-sm-4">
@@ -47,7 +48,7 @@
                     var ulId = "ul" + @Model.uniqueCounter;
                 }
 
-                <div class="form-inline" id="@ulId">
+                <div class="form-inline selAnsSection" id="@ulId">
                     @if (Model.hasInstances == true && Model.question_assigned_answer_types.Where(item => item.Selected == true).Count() > 0)
                     {
                         current_selected = Model.question_assigned_answer_types.Single(item => item.Selected == true).Value;
@@ -71,8 +72,11 @@
     $("@dropdown2").change( function (event) {
         var $drop_down = $(this);
         var selectedId = $(this).val();
-        var selectedText = $(this).children("option:selected").text()
+        var selectedText = $(this).children("option:selected").text();
+        var ddlId = $(this).prop("id");
+
         //alert("Selected Text is: " + selectedText);
+        //alert("Before opening modal window, the ddl id is: " + ddlId);
         if (selectedId == '') {
             selectedId = "-1";
             $("#@Model.uniqueCounter").html("");
@@ -80,7 +84,8 @@
         }
         else if(selectedId == 'New'){
             //alert("A New Question request has been issued!");
-            loadModal(@Model.question_id);
+            $(this).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");
+            loadModal(@Model.question_id, ddlId);
         }else
         {
             if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")
@@ -100,7 +105,7 @@
                 }).done(function (d) {
                     //alert("Retrieved Data is: " + d);
                     $("#@ulId").html(d);
-                });            
+                });
             }
         }
         var cur_sel = document.getElementById("currentSelectedQAT"+@Model.uniqueCounter);

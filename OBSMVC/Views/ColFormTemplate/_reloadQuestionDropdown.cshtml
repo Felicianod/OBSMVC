@@ -1,0 +1,5 @@
+﻿@model IEnumerable<SelectListItem>
+
+<div class="input-group-addon">Answer Type</div>
+@Html.DropDownList("AssignedAnswers", Model, "-Select Answer Type-", new { id = "dummyDDLid", @class = "viewDropDown form-control" })
+<br />

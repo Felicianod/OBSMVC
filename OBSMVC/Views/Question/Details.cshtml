@@ -13,54 +13,58 @@
      <div class="col-md-8 personal-info" style="margin-bottom:4px">
          <div class="row form-group" style="margin-bottom:4px">
              <div class="input-group">
-                 <div class="input-group-addon" style="width:130px">@Html.DisplayNameFor(model => model.q.obs_question_ver)</div>
-                 @Html.DisplayFor(model => model.q.obs_question_ver)
-             </div>
-         </div>
-         <div class="row form-group" style="margin-bottom:4px">
-             <div class="input-group">
-                 <div class="input-group-addon" style="width:130px">@Html.DisplayNameFor(model => model.q.obs_question_full_text)</div>
-                 @Html.DisplayFor(model => model.q.obs_question_full_text)
-             </div>
-         </div>
-         <div class="row form-group" style="margin-bottom:4px">
-             <div class="input-group" >
-                 <div class="input-group-addon" style="width:130px">@Html.DisplayNameFor(model => model.q.obs_question_short_text)</div>
-                 @Html.DisplayFor(model => model.q.obs_question_short_text)
-             </div>
-         </div>
-         <div class="row form-group" style="margin-bottom:4px">
-             <div class="input-group">
-                 <div class="input-group-addon" style="width:130px">@Html.DisplayNameFor(model => model.q.obs_question_desc)</div>
-                 @Html.DisplayFor(model => model.q.obs_question_desc)
-             </div>         
-         </div>
-         <div class="row form-group" style="margin-bottom:4px">
-                 <div class="input-group">
-                     <div class="input-group-addon" style="width:130px">@Html.DisplayNameFor(model => model.q.obs_question_mm_url)</div>
-                     @Html.DisplayFor(model => model.q.obs_question_mm_url)
+                 <div class="input-group-addon">
+                     <label for="questn_obs_question_desc" class="stdRowWidth">@Html.DisplayNameFor(model => model.q.obs_question_ver)</label>
                  </div>
-         </div>
-         <div class="row form-group" style="margin-bottom:4px">
-             <div class="input-group">
-                 <div class="input-group-addon" style="width:130px">@Html.DisplayNameFor(model => model.q.obs_question_eff_st_dt)</div>
-                 @Html.DisplayFor(model => model.q.obs_question_eff_st_dt)
+                 <input class="form-control text-box single-line" style="min-width: 100%; width:95%;" type="text" value="@Html.DisplayFor(model => model.q.obs_question_ver)" readonly />
              </div>
          </div>
-         <div class="row form-group" style="margin-bottom:4px">
-             <div class="input-group">
-                 <div class="input-group-addon" style="width:130px">@Html.DisplayNameFor(model => model.q.obs_question_eff_end_dt)</div>
-                 @Html.DisplayFor(model => model.q.obs_question_eff_end_dt)
-             </div>
-         </div>
-
-
          <div class="row form-group" style="margin-bottom:4px">
              <div class="input-group">
                  <div class="input-group-addon">
-                     <label for="questn_obs_question_desc" class="stdRowWidth">Description</label>
+                     <label for="questn_obs_question_desc" class="stdRowWidth">@Html.DisplayNameFor(model => model.q.obs_question_full_text)</label>
                  </div>
-                 <input class="form-control text-box single-line" style="min-width: 100%; width:95%;" type="text" value="" />
+                 <input class="form-control text-box single-line" style="min-width: 100%; width:95%;" type="text" value="@Html.DisplayFor(model => model.q.obs_question_full_text)" readonly />
+             </div>
+         </div>
+         <div class="row form-group" style="margin-bottom:4px">
+             <div class="input-group">
+                 <div class="input-group-addon">
+                     <label for="questn_obs_question_desc" class="stdRowWidth">@Html.DisplayNameFor(model => model.q.obs_question_short_text)</label>
+                 </div>
+                 <input class="form-control text-box single-line" style="min-width: 100%; width:95%;" type="text" value="@Html.DisplayFor(model => model.q.obs_question_short_text)" readonly />
+             </div>
+         </div>
+         <div class="row form-group" style="margin-bottom:4px">
+             <div class="input-group">
+                 <div class="input-group-addon">
+                     <label for="questn_obs_question_desc" class="stdRowWidth">@Html.DisplayNameFor(model => model.q.obs_question_desc)</label>
+                 </div>
+                 <input class="form-control text-box single-line" style="min-width: 100%; width:95%;" type="text" value="@Html.DisplayFor(model => model.q.obs_question_desc)" readonly />
+             </div>
+         </div>
+         <div class="row form-group" style="margin-bottom:4px">
+             <div class="input-group">
+                 <div class="input-group-addon">
+                     <label for="questn_obs_question_desc" class="stdRowWidth">@Html.DisplayNameFor(model => model.q.obs_question_mm_url)</label>
+                 </div>
+                 <input class="form-control text-box single-line" style="min-width: 100%; width:95%;" type="text" value="@Html.DisplayFor(model => model.q.obs_question_mm_url)" readonly />
+             </div>
+         </div>
+         <div class="row form-group" style="margin-bottom:4px">
+             <div class="input-group">
+                 <div class="input-group-addon">
+                     <label for="questn_obs_question_desc" class="stdRowWidth">@Html.DisplayNameFor(model => model.q.obs_question_eff_st_dt)</label>
+                 </div>
+                 <input class="form-control text-box single-line" style="min-width: 100%; width:95%;" type="text" value="@Html.DisplayFor(model => model.q.obs_question_eff_st_dt)" readonly />
+             </div>
+         </div>
+         <div class="row form-group" style="margin-bottom:4px">
+             <div class="input-group">
+                 <div class="input-group-addon">
+                     <label for="questn_obs_question_desc" class="stdRowWidth">@Html.DisplayNameFor(model => model.q.obs_question_eff_end_dt)</label>
+                 </div>
+                 <input class="form-control text-box single-line" style="min-width: 100%; width:95%;" type="text" value="@Html.DisplayFor(model => model.q.obs_question_eff_end_dt)" readonly />
              </div>
          </div>
 
@@ -104,8 +108,34 @@
       </div>
   </div>
   <div class="row">
+      <div class="alert-info">Existing Collection Forms where this question is currently being used</div>
+      <table class="table table-responsive table-striped table-hover">
+          <tr>
+              <th>Form Number</th>
+              <th>Form Title</th>
+              <th>Version</th>
+              <th>Published</th>
+              <th>Other</th>
+          </tr>
+          <tr>
+              <td>Sample Data</td>
+              <td>Sample Data</td>
+              <td>Sample Data</td>
+              <td>Sample Data</td>
+              <td>Sample Data</td>
+          </tr>
+          <tr>
+              <td>Sample Data</td>
+              <td>Sample Data</td>
+              <td>Sample Data</td>
+              <td>Sample Data</td>
+              <td>Sample Data</td>
+          </tr>
+      </table>
+  </div>
+  <div class="row">
       <div class="col-md-12">
-          @Html.ActionLink("Edit", "QuestionAddUpdate", new { id = Model.q.obs_question_id }) |
+          @Html.ActionLink("Edit Question", "QuestionAddUpdate", new { id = Model.q.obs_question_id }) |
           @Html.ActionLink("Back to List", "Index")
       </div>
   </div>

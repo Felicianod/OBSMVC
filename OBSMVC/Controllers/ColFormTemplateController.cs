@@ -663,7 +663,7 @@ namespace OBSMVC.Controllers
             //    question_assigned_answer_types.Single(x => x.Value == default_qat_id.ToString()).Selected = true;
             //}
             ViewBag.dropdownID = dropdownID;
-            return PartialView("_addNewSection", question_assigned_answer_types);
+            return PartialView("_reloadQuestionDropdown", question_assigned_answer_types);
         }
 
 

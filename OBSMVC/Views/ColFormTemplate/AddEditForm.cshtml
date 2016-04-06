@@ -387,19 +387,31 @@
             minWidth: 800,
             minHeight: 450,
             draggable: true,
+            //show: {
+            //    effect: "blind",
+            //    duration: 1000
+            //},
+            //hide: {
+            //    effect: "explode",
+            //    duration: 1000
+            //},
+            close: function() {
+                alert("You have closed the popup!");
+            },
             /*close: function () { $(this).remove(); },*/
             buttons: { "Close": function () { $(this).dialog("close"); } }
         });
+        
         $dialog.dialog('open');
     }
 </script>
-<script>
+@*<script>
     function loadModalSourcePage() {
         var loc = "http://localhost/morningmarketweb/index.html";
         //$('#myFrame').attr('src', loc);
         document.getElementById('myFrame').setAttribute('src', loc);
     }
-</script>
+</script>*@
 
 
 
@@ -482,6 +494,7 @@
                 document.getElementById("CreateForm").submit();
             }
         }
+
 
         $(document).ready(function () {
             $("input:text").focus(function () { $(this).select(); });
@@ -696,7 +709,9 @@
 
                     // updateValues("Question Added Successfully: " + getTestData(qid));   //Method invoked when action is dropped successfully
 
+                    //Added second parameter to keep original state of the selected QAT in the dropdown
                     getQinfo(qid, 0);
+
                     //Scroll the Panel to the botton
                     // Check if we added a question to the last section. If so, scroll the panel to the button
                     //panel id = qFormList

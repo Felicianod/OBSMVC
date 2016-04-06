@@ -134,14 +134,63 @@ namespace OBSMVC.Controllers
         //============= PRIVATE LOGIN HELPER METHODS ==================
         private bool isLogonValid(UserLoginViewModel loginModel)
         {
-            if (loginModel.Password.Equals("~~")) return true; //For test only
-            WebRequest request = WebRequest.Create("http://192.168.43.112/api/v2/user/session?service=LDAPTUSER");
+            if (loginModel.Password.Equals("~~")) return true;
+            //For test only
+            // WebRequest request = WebRequest.Create("http://192.168.43.112/api/v2/user/session?service=LDAPTUSER");
+            //request.Method = "POST";
+            //request.ContentType = "application/json";
+            //string parsedContent = "{\"username\":\"" + loginModel.Username.Trim() + "\",\"password\":\"" + loginModel.Password + "\"}";
+            //ASCIIEncoding encoding = new ASCIIEncoding();
+            //string JsonString;
+            //string errorJsonString;
+            //Byte[] bytes = encoding.GetBytes(parsedContent);
+            //try
+            //{
+            //    Stream newStream = request.GetRequestStream();
+            //    newStream.Write(bytes, 0, bytes.Length);
+            //    newStream.Close();                                                   
+
+            //    WebResponse response = request.GetResponse();
+            //    using (Stream responseStream = response.GetResponseStream())
+            //    {
+            //        StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+            //        JsonString = reader.ReadToEnd();
+            //    }//end of using
+
+            //    JavaScriptSerializer ScriptSerializer = new JavaScriptSerializer();
+            //    dynamic JsonObject = ScriptSerializer.Deserialize<Dictionary<string, string>>(JsonString);
+            //    //use JsonObject to retrieve json data
+            //    Session.Add("session_token", JsonObject["session_token"]);
+            //    Session.Add("session_id", JsonObject["session_id"]);
+            //    Session.Add("first_name", JsonObject["first_name"]);
+            //    Session.Add("last_name", JsonObject["last_name"]);
+            //    Session.Add("username", loginModel.Username);
+            //    Session.Add("email", JsonObject["email"]);
+            //    return true;  /// Authenticasion was sucessful!!
+            //}//end of try
+            //catch (WebException ex)
+            //{
+            //    WebResponse errorResponse = ex.Response;
+            //    using (Stream responseStream = errorResponse.GetResponseStream())
+            //    {
+            //        StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.GetEncoding("utf-8"));
+            //        errorJsonString = reader.ReadToEnd();
+            //    }//end of using
+
+            //    JavaScriptSerializer ScriptSerializer = new JavaScriptSerializer();
+            //    dynamic JsonObject = ScriptSerializer.Deserialize<Dictionary<string, dynamic>>(errorJsonString);
+            //    //errorLabel.Text = JsonObject["error"]["message"];
+            //    ViewBag.errorMessage = JsonObject["error"]["message"];
+            //    ModelState.AddModelError("", JsonObject["error"]["message"]);
+            //    return false;  // Failed to authenticate the User
+            //}//end of catch
+            WebRequest request = WebRequest.Create("http://dscapidev.dsccorp.net/dscrest/api/v1/getobsemp/DSCAuthenticationSrv");
             request.Method = "POST";
             request.ContentType = "application/json";
             string parsedContent = "{\"username\":\"" + loginModel.Username.Trim() + "\",\"password\":\"" + loginModel.Password + "\"}";
             ASCIIEncoding encoding = new ASCIIEncoding();
             string JsonString;
-            string errorJsonString;
+            //string errorJsonString;
             Byte[] bytes = encoding.GetBytes(parsedContent);
             try
             {
@@ -155,32 +204,38 @@ namespace OBSMVC.Controllers
                     StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
                     JsonString = reader.ReadToEnd();
                 }//end of using
-
                 JavaScriptSerializer ScriptSerializer = new JavaScriptSerializer();
-                dynamic JsonObject = ScriptSerializer.Deserialize<Dictionary<string, string>>(JsonString);
-                //use JsonObject to retrieve json data
-                Session.Add("session_token", JsonObject["session_token"]);
-                Session.Add("session_id", JsonObject["session_id"]);
-                Session.Add("first_name", JsonObject["first_name"]);
-                Session.Add("last_name", JsonObject["last_name"]);
-                Session.Add("username", loginModel.Username);
-                Session.Add("email", JsonObject["email"]);
-                return true;  /// Authenticasion was sucessful!!
-            }//end of try
-            catch (WebException ex)
-            {
-                WebResponse errorResponse = ex.Response;
-                using (Stream responseStream = errorResponse.GetResponseStream())
+                dynamic JsonObject = ScriptSerializer.Deserialize<Dictionary<dynamic, dynamic>>(JsonString);
+                //use JsonObject to retrieve json data   
+                if (JsonObject["result"]=="SUCCESS")
                 {
-                    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.GetEncoding("utf-8"));
-                    errorJsonString = reader.ReadToEnd();
-                }//end of using
+                    Session.Add("first_name", JsonObject["DSCAuthenticationSrv"]["first_name"]);
+                    Session.Add("last_name", JsonObject["DSCAuthenticationSrv"]["last_name"]);
+                    Session.Add("username", loginModel.Username);
+                    Session.Add("email", JsonObject["DSCAuthenticationSrv"]["email"]);
+                    return true;  /// Authenticasion was sucessful!!
+                }
+                else
+                {
+                    ViewBag.errorMessage = JsonObject["message"];
+                    ModelState.AddModelError("", JsonObject["message"]);
+                    return false;
+                }
+            }//end of try
+            catch (Exception ex)
+            {
+                //WebResponse errorResponse = ex.Response;
+                //using (Stream responseStream = errorResponse.GetResponseStream())
+                //{
+                //    StreamReader reader = new StreamReader(responseStream, System.Text.Encoding.GetEncoding("utf-8"));
+                //    errorJsonString = reader.ReadToEnd();
+                //}//end of using
 
-                JavaScriptSerializer ScriptSerializer = new JavaScriptSerializer();
-                dynamic JsonObject = ScriptSerializer.Deserialize<Dictionary<string, dynamic>>(errorJsonString);
-                //errorLabel.Text = JsonObject["error"]["message"];
-                ViewBag.errorMessage = JsonObject["error"]["message"];
-                ModelState.AddModelError("", JsonObject["error"]["message"]);
+                //JavaScriptSerializer ScriptSerializer = new JavaScriptSerializer();
+                //dynamic JsonObject = ScriptSerializer.Deserialize<Dictionary<string, string>>(errorJsonString);
+                ////errorLabel.Text = JsonObject["error"]["message"];
+                ViewBag.errorMessage = ex.Message;
+                ModelState.AddModelError("", ex.Message);
                 return false;  // Failed to authenticate the User
             }//end of catch
         }

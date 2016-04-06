@@ -7,7 +7,6 @@
 <head>  
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
- 
     <link href="~/Content/jquery-ui.css" rel="stylesheet" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -91,7 +90,7 @@
     }
 </script>
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
-<div class="well well-sm smallRowMargin" style="padding: 4px; font-size:xx-large; text-align:center">
+<div class="well well-sm smallRowMargin" style="padding: 4px; font-size:xx-large; text-align:center; margin-top:0px; ">
     <span class="col-md-offset-1"> @Model.viewPageTitle</span>
 </div>
 
@@ -109,13 +108,6 @@
     <div class="row personal-info">
         <div class="panel panel-info">
             <div class="panel-heading">
-                @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
-                <a class="accordion-toggle" data-toggle="collapse" href="#headerInfoPanel">
-                    <span class="glyphicon glyphicon-minus">&nbsp;</span>
-                    @*<span class="glyphicon glyphicon-collapse-up">&nbsp;</span>*@
-                    @*<span class="caret">&nbsp;</span>*@
-                    <b>Question Information:</b>
-                </a>
                 <div class="input-group">
                     <div class="input-group-addon stdWidth">
                         @Html.LabelFor(model => model.questn.obs_question_full_text)

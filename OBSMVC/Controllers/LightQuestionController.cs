@@ -56,6 +56,7 @@ namespace OBSMVC.Controllers
             //                        6~true~yes~no~maybe,
             //string defaultQATid(null or value)
             //-------- Save the Question Information ----
+          
             int defaultQATid = -1;
             try
             {
@@ -277,20 +278,16 @@ namespace OBSMVC.Controllers
                         db.SaveChanges();
 
                         transaction.Commit();
+                        ViewBag.Message = "Data Saved Successfully.";
                     }
                     catch (Exception e)
                     {
-                        string notused = e.Message;
+                        ViewBag.Message = e.Message;
                         transaction.Rollback();
                     }
                 }//end of using transaction
-
-
             }//end of using
-
-
-            //ViewBag.ConfMsg = "Data Saved Successfully.";
-
+          
             return RedirectToAction("QuestionAddUpdateLight");
 
             //return RedirectToAction("Index", "Question");

@@ -542,6 +542,8 @@ namespace OBSMVC.Controllers
             if (QAInstances.Count() == 0)  //There were no records found in the 'OBS_QUEST_ANS_TYPES' Table for this question Id
             {
                 questionInfo.hasInstances = false;
+                SelectListItem answer_for_dropdown = new SelectListItem() { Text = "Add New...", Value = "New" };
+                questionInfo.question_assigned_answer_types.Add(answer_for_dropdown);
             }
             else
             {//there's a record(s) in 'OBS_QUEST_ANS_TYPES'. now we need to loop through all of them, add them to the list and find default answer type

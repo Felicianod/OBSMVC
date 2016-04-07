@@ -442,9 +442,6 @@
             var errorMsg = "";
             var sectionCounter = 0;
 
-            //Turn off the "changed" flag so we do not get an alert when posting the form
-            isChanged = false;
-
             // Validate the Form Fields
             //Process all the form Sections to get Data to post
             $("div.formSection").each(function () {
@@ -659,26 +656,7 @@
 
     @*//- - - - - - - - -  Ajax Call to Retrieve and Display the Question List Search Results - - - - - - - - - - -\\*@
 
-    @*<script type="text/javascript">
-        function displayMsg(msg) {
-            PNotify.removeAll();
-            var notice = new PNotify({
-                title: 'Success!',
-                text: msg,
-                type: 'success',
-                delay: 2000,
-                history: false,
-                sticker: true,
-                hide: true,
-                animate: {
-                    animate: true,
-                    in_class: 'slideInDown',
-                    out_class: 'slideOutUp'
-                }
-            });
-        };
-    </script>*@
- 
+
    @* --- Drag and Drop Java Script - - - - - *@
     <script type="text/javascript">
         // Function to call everytime we do a drag and drop
@@ -768,6 +746,9 @@
                     var qid2 = $(this).qid;
                     $(this).find(".placeholder").remove();
                     //updateValues("An Item was reordered." + +getTestData(qid2));  // Call function After Sorting
+
+                    //Turn on the "changed" flag since dropping a question indicates that the form has bee changed
+                    isChanged = true;
                 }
             }).on("click", ".dismiss", function (event) {
                 event.preventDefault();

@@ -155,6 +155,16 @@ namespace OBSMVC.Controllers
                                 db.SaveChanges();
                             }
                         }
+                        ////////////////////////////////WE DELETE SEL ANS HERE///////////////////////////////////////////
+                        if (!string.IsNullOrEmpty(posted_deleted_ids))
+                        {
+                            string[] qats_to_delete = posted_deleted_ids.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                            foreach (string qat_to_delete in qats_to_delete)
+                            {
+                                deleteAssignedSelAns(Convert.ToInt32(qat_to_delete), db);
+                            }
+                        }
+                        ///////////////////////////////END OF DELETING SEL ANS///////////////////////////////////////////
                         ///////////////////////////////This section saves changes to existing answer types/////////////////////////////////
                         if (!string.IsNullOrEmpty(posted_existing_ans_type_data))
                         {
@@ -1257,6 +1267,28 @@ namespace OBSMVC.Controllers
 
             }
             
+        }
+
+
+        /*
+        *       This method deletes assigned selected answers and all the selectable answers if needed  
+        */
+        public void deleteAssignedSelAns(int qat_id, DSC_OBS_DB_ENTITY ObsDB)
+        {
+            //first need to check if qat_id is already tied to any Form
+            if (ObsDB.OBS_COL_FORM_QUESTIONS.Where(x => x.obs_qat_id == qat_id).ToList().Count > 0)
+            {
+                //this is a placeholder for soft deletion 
+            }
+            else
+            {//ok, this qat id doesn't belong to any form. We can hard delete it
+                //but first we need to check if there are selectable answers for this answer type and delete them
+                if (ObsDB.OBS_ANS_TYPE.Single(x => x.obs_ans_type_id == ObsDB.OBS_QUEST_ANS_TYPES.Single(y => y.obs_qat_id == qat_id).obs_ans_type_id).obs_ans_type_has_fxd_ans_yn == "Y")
+                {
+                    ObsDB.OBS_QUEST_SLCT_ANS.RemoveRange(ObsDB.OBS_QUEST_SLCT_ANS.Where(x => x.obs_qat_id == qat_id));
+                }
+                ObsDB.OBS_QUEST_ANS_TYPES.Remove(ObsDB.OBS_QUEST_ANS_TYPES.Find(qat_id));
+            }
         }
     }
 }

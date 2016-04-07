@@ -374,7 +374,7 @@ namespace OBSMVC.Controllers
 
             //ViewBag.ConfMsg = "Data Saved Successfully.";
 
-            return RedirectToAction("QuestionAddUpdate");
+            return RedirectToAction("QuestionAddUpdate", new {id = questionHdr.obs_question_id});
 
             //return RedirectToAction("Index", "Question");
             //return View("Edit");

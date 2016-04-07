@@ -468,14 +468,15 @@ namespace OBSMVC.Controllers
                 }
                
             }
-            else
-            {//search by question text and metadata
-
+            else if (full_text_search.Trim().StartsWith("\"")&& full_text_search.Trim().EndsWith("\""))
+            {
                 List<AvailableQuestions> temp_questions_list = new List<AvailableQuestions>();
                 List<AvailableQuestions> temp_md_list = new List<AvailableQuestions>();
+                full_text_search = full_text_search.Remove(full_text_search.Length - 1, 1).Remove(0, 1);
 
                 //first lets search for question text
-                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.ToLower().Contains(full_text_search.ToLower())).ToList();             
+                List<OBS_QUESTION> list_of_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.ToLower().Contains(full_text_search.ToLower())).ToList();
+
                 if (list_of_questions.Count > 0)
                 {
                     foreach (OBS_QUESTION q in list_of_questions)
@@ -499,7 +500,7 @@ namespace OBSMVC.Controllers
                         md_quest.assigned_metadata = md_quest.getAssignedMetadata(q.obs_question_id);
                         foreach (string s in md_quest.assigned_metadata)
                         {
-                            if (s.ToLower().Contains(full_text_search.ToLower())&&(temp_questions_list.Where(x=>x.obs_question_id==q.obs_question_id).Count()==0))
+                            if (s.ToLower().Contains(full_text_search.ToLower()) && (temp_questions_list.Where(x => x.obs_question_id == q.obs_question_id).Count() == 0))
                             {
                                 md_quest.obs_question_id = q.obs_question_id;
                                 md_quest.obs_question_full_text = q.obs_question_full_text;
@@ -510,15 +511,117 @@ namespace OBSMVC.Controllers
 
                         }
                     }
-                }
+                }               
                 availableQuestions = temp_questions_list.Union(temp_md_list).ToList();
+            }
+            else
+            {//search by question text and metadata
+
+                List<AvailableQuestions> temp_questions_list = new List<AvailableQuestions>();
+                List<AvailableQuestions> temp_md_list = new List<AvailableQuestions>();
+                List<OBS_QUESTION> list_of_questions = new List<OBS_QUESTION>() ;
                 
+                string[] individual_strings = full_text_search.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                //first lets search for question text
+                foreach (string s in individual_strings)
+                {
+                    list_of_questions.AddRange(db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.ToLower().Contains(s.ToLower())));                   
+                }
+                list_of_questions = list_of_questions.Distinct().ToList();
+                if (list_of_questions.Count > 0)
+                {
+                    foreach (OBS_QUESTION q in list_of_questions)
+                    {
+                        AvailableQuestions quest = new AvailableQuestions();
+                        quest.obs_question_id = q.obs_question_id;
+                        quest.obs_question_full_text = q.obs_question_full_text;
+                        quest.assigned_metadata = quest.getAssignedMetadata(q.obs_question_id);
+                        temp_questions_list.Add(quest);
+
+                    }
+                }
+                //now lets find all matching metadata
+                List<OBS_QUESTION> list_of_md_questions = db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now).ToList();
+
+                foreach (OBS_QUESTION q in list_of_md_questions)
+                {
+                    AvailableQuestions md_quest = new AvailableQuestions();
+                    if (md_quest.getAssignedMetadata(q.obs_question_id).Count > 0)
+                    {
+                        md_quest.assigned_metadata = md_quest.getAssignedMetadata(q.obs_question_id);
+                        foreach (string s in md_quest.assigned_metadata)
+                        {
+                            foreach(string str in individual_strings)
+                            {
+                                if (s.ToLower().Contains(str.ToLower()) && (temp_questions_list.Where(x => x.obs_question_id == q.obs_question_id).Count() == 0))
+                                {
+                                    md_quest.obs_question_id = q.obs_question_id;
+                                    md_quest.obs_question_full_text = q.obs_question_full_text;
+                                    temp_md_list.Add(md_quest);
+                                    break;
+                                }
+                                else { continue; }
+                            }
+
+                        }
+                    }
+                }
+                temp_md_list = temp_md_list.Distinct().ToList();
+                availableQuestions = temp_questions_list.Union(temp_md_list).ToList();
+
             }//end of else
 
-            
+            //////else
+            //////{//search by question text and metadata
 
-            questions_for_display = availableQuestions.OrderBy(x => x.obs_question_id).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).Take(pageSize ?? 10).ToList();
+            //////    list<availablequestions> temp_questions_list = new list<availablequestions>();
+            //////    list<availablequestions> temp_md_list = new list<availablequestions>();               
 
+            //////    //first lets search for question text
+            //////    list<obs_question> list_of_questions = db.obs_question.where(item => item.obs_question_eff_st_dt <= datetime.now && item.obs_question_eff_end_dt > datetime.now && item.obs_question_full_text.tolower().contains(full_text_search.tolower())).tolist();             
+            //////    if (list_of_questions.count > 0)
+            //////    {
+            //////        foreach (obs_question q in list_of_questions)
+            //////        {
+            //////            availablequestions quest = new availablequestions();
+            //////            quest.obs_question_id = q.obs_question_id;
+            //////            quest.obs_question_full_text = q.obs_question_full_text;
+            //////            quest.assigned_metadata = quest.getassignedmetadata(q.obs_question_id);
+            //////            temp_questions_list.add(quest);
+
+            //////        }
+            //////    }
+            //////    //now lets find all matching metadata
+            //////    list<obs_question> list_of_md_questions = db.obs_question.where(item => item.obs_question_eff_st_dt <= datetime.now && item.obs_question_eff_end_dt > datetime.now).tolist();
+
+            //////    foreach (obs_question q in list_of_md_questions)
+            //////    {
+            //////        availablequestions md_quest = new availablequestions();
+            //////        if (md_quest.getassignedmetadata(q.obs_question_id).count > 0)
+            //////        {
+            //////            md_quest.assigned_metadata = md_quest.getassignedmetadata(q.obs_question_id);
+            //////            foreach (string s in md_quest.assigned_metadata)
+            //////            {
+            //////                if (s.tolower().contains(full_text_search.tolower())&&(temp_questions_list.where(x=>x.obs_question_id==q.obs_question_id).count()==0))
+            //////                {
+            //////                    md_quest.obs_question_id = q.obs_question_id;
+            //////                    md_quest.obs_question_full_text = q.obs_question_full_text;
+            //////                    temp_md_list.add(md_quest);
+            //////                    break;
+            //////                }
+            //////                else { continue; }
+
+            //////            }
+            //////        }
+            //////    }
+            //////    availablequestions = temp_questions_list.union(temp_md_list).tolist();
+
+            //////}//end of else
+
+
+
+            //questions_for_display = availableQuestions.OrderBy(x => x.obs_question_id).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).Take(pageSize ?? 10).ToList();
+            questions_for_display = availableQuestions.OrderBy(x => x.obs_question_id).ToList() ;
             return PartialView("_getQuestionsList", questions_for_display);
         }
 

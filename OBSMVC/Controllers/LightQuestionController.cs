@@ -49,7 +49,8 @@ namespace OBSMVC.Controllers
                 }
                             
             }
-            
+            // Finally Set the ActiveForm Id Flag if needed
+            obsQCVM.activeFormId = cft_id.ToString();
             return View("QuestionAddUpdateEditLight", obsQCVM);
 
         }
@@ -301,8 +302,8 @@ namespace OBSMVC.Controllers
                     }
                 }//end of using transaction
             }//end of using
-          
-            return RedirectToAction("QuestionAddUpdateLight");
+
+            return RedirectToAction("QuestionAddUpdateLight", new { id = questionHdr.obs_question_id, cft_id = postedData["cft_id"] });
 
             //return RedirectToAction("Index", "Question");
             //return View("Edit");

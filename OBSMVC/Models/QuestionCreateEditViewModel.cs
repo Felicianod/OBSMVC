@@ -122,6 +122,7 @@ namespace OBSMVC.Models
         }
         // ----------------------------------- PUBLIC CLASS PROPERTIES ----------------------------------------------
         public string viewPageTitle = String.Empty;
+        public string activeFormId = String.Empty;
         public OBS_QUESTION questn = new OBS_QUESTION();
         public List<metaDataTags> qAssignedMD = new List<metaDataTags>();
         public List<metaDataTags> qUnassignedMD = new List<metaDataTags>();

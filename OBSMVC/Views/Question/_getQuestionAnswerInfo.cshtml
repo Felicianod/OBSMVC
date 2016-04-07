@@ -9,7 +9,6 @@ var divSALabel = "divSALabel" + uniqueCounter;
 var divSALabelqatId = "lblQATid" + uniqueCounter;
 var divSAText = "divSAText" + uniqueCounter;
 var divSATextqatId = "txtQATid" + uniqueCounter;
-
 }
 
 <div class="col-sm-12 answerType" id="ansTypeInfo" style="border:solid; border-width:1px; font-family:Arial">
@@ -45,17 +44,27 @@ var divSATextqatId = "txtQATid" + uniqueCounter;
     <div class="row divLabel" id="@divSALabel">
         @if (Model.selectable_ans_required == "Y")
         {
-        <ul clas="ulSALabel">
+         <ul clas="ulSALabel">
             <li style="display: inline" id="testLi">
-                <button id="@qbtnEditId" class="editSA" type="button" style="background-color:white">Edit&nbsp;<span class="glyphicon glyphicon-pencil"></span></button>
+                @if (Model.editableFromQuestionMaint == "true")
+                {
+                    <button id="@qbtnEditId" class="editSA" type="button" style="background-color:white" >
+                        Edit&nbsp;<span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                }
                 <span>&nbsp;&nbsp;</span>
             </li>
             @foreach (var x in Model.selAns)
             {
                 <li style="display: inline;" id="testLi"><span class="badge" style="font-size:larger">@x.obs_qsa_text</span>&nbsp;&nbsp;</li>
             }
-        </ul>
-        <br /><br />
+         </ul>
+            if (Model.editableFromQuestionMaint == "false") { 
+            <span style="color:red; font-style:italic; font-size:small; margin-left:20px">This Answer Type is already in use in a Collection Form - No Editing is allowed</span>
+            }
+            else
+            {<br /> }
+            <br />
         }
         else
         {

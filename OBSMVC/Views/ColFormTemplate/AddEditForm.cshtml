@@ -147,6 +147,7 @@
  <input type="hidden" id="qCounter" value="@nextQuestion" />
  <input type="hidden" id="sCounter" value="@Model.colFormSections.Count" />
  <input type="hidden" id="formMode" value="@fMode" />
+<input type="hidden" id="cft_id" value="@Model.cft_id" />
     @*\\ ---- End of Hidden Control Fields section ----- *@
 
 
@@ -370,11 +371,15 @@
         //var questionId = btnClkd.attr('id').substring(8);
         //alert("Load Modal for Question Id: " + questionId);
         //var url = "/Question/QuestionAddUpdate/" + questionId;
-        var url = "/LightQuestion/QuestionAddUpdateLight/" + questionId;
+        var cft_id = $('#cft_id').val();
+        alert("CFT_ID is " + cft_id);
+        var url = "/LightQuestion/QuestionAddUpdateLight/" + questionId + "?cft_id="+cft_id;
+
         opendialog(url, questionId, ddlId);
     }
 
     function opendialog(pageURL, questionId, ddlId) {
+       
         var $dialog = $('#remoteWindow')
         .html('<iframe style="border-style:double; border-width:4px; " src="' + pageURL + '" width="100%" height="100%"></iframe>')
         .dialog({
@@ -405,7 +410,7 @@
                     url: '@Url.Action("reloadQuestionDropdown", "ColFormTemplate")',
                     method: "GET",
                     cache: false,
-                    data: { question_id: questionId, dropdownID: ddlId },
+                    data: { question_id: questionId, dropdownID: ddlId},
                     error: function () {
                         alert("Failed to reload the Answer Type Values!!");  //<-- Trap and alert of any errors if they occurred
                     }

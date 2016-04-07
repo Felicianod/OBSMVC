@@ -104,7 +104,14 @@ namespace OBSMVC.Controllers
             }
             else
             {
-                obsQCVM = new QuestionCreateEditViewModel(questionId);                
+                obsQCVM = new QuestionCreateEditViewModel(questionId);
+                foreach (qatTags qatTag in obsQCVM.Quest_Assigned_qatTags)
+                {
+                    if (db.OBS_COL_FORM_QUESTIONS.Where(item => item.obs_qat_id == qatTag.QAT.obs_qat_id).Count() == 0)
+                    {
+                        qatTag.editable = "true";
+                    }
+                }                
             }
             
             return View("QuestionAddUpdate", obsQCVM);

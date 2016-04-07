@@ -19,7 +19,7 @@ namespace OBSMVC.Controllers
         //---------------------------------------- QuestionAddUpd [ GET ] -----------------------------------------------------------------
         [HttpGet]
         [ActionName("QuestionAddUpdateLight")]
-        public ActionResult QuestionAddUpdateEdit(int? id)
+        public ActionResult QuestionAddUpdateEdit(int? id, int cft_id)
         {
             int questionId = id ?? -1;
             QuestionCreateEditViewModel obsQCVM;
@@ -33,7 +33,16 @@ namespace OBSMVC.Controllers
             }
             else
             {
-                obsQCVM = new QuestionCreateEditViewModel(questionId);                
+                obsQCVM = new QuestionCreateEditViewModel(questionId);
+                foreach(qatTags qatTag in obsQCVM.Quest_Assigned_qatTags)
+                {
+                    //if this qat_id is not on any of the forms
+                    if(db.OBS_COL_FORM_QUESTIONS.Where(item => item.obs_qat_id == qatTag.QAT.obs_qat_id && item.obs_cft_id != cft_id).Count()==0)
+                    {
+                        qatTag.editable = "true";
+                    }
+                   
+                }                
             }
             
             return View("QuestionAddUpdateEditLight", obsQCVM);
@@ -351,7 +360,7 @@ namespace OBSMVC.Controllers
         public PartialViewResult getQuestionAnswerInfo(qatTags qatInfo)
         {
 
-            return PartialView("_getQuestionAnswerInfo", qatInfo);
+            return PartialView("_getQuestionAnswerInfoLight", qatInfo);
         }
 
         [HttpGet]

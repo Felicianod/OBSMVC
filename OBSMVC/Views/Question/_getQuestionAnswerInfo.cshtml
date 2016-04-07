@@ -46,7 +46,7 @@ var divSATextqatId = "txtQATid" + uniqueCounter;
         {
          <ul clas="ulSALabel">
             <li style="display: inline" id="testLi">
-                @if (Model.editableFromQuestionMaint == "true")
+                @if (Model.editable == "true")
                 {
                     <button id="@qbtnEditId" class="editSA" type="button" style="background-color:white" >
                         Edit&nbsp;<span class="glyphicon glyphicon-pencil"></span>
@@ -59,7 +59,7 @@ var divSATextqatId = "txtQATid" + uniqueCounter;
                 <li style="display: inline;" id="testLi"><span class="badge" style="font-size:larger">@x.obs_qsa_text</span>&nbsp;&nbsp;</li>
             }
          </ul>
-            if (Model.editableFromQuestionMaint == "false") { 
+            if (Model.editable == "false") { 
             <span style="color:red; font-style:italic; font-size:small; margin-left:20px">This Answer Type is already in use in a Collection Form - No Editing is allowed</span>
             }
             else

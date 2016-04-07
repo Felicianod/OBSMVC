@@ -91,6 +91,9 @@
     });
 </script>
 
+@{
+    var hireDate = @Model.dsc_emp_hire_dt.Value.ToString("MMM dd, yyyy");
+}
 <br />
 <h1>Edit Profile</h1>
 <hr>
@@ -141,7 +144,7 @@
             <div class="form-group row">
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="min-width:75px">Hire Date</span>
-                    <input class="datepicker form-control" id="dsc_emp_hire_dt" name="dsc_emp_hire_dt" style="max-width:100%">
+                    <input class="datepicker form-control" id="dsc_emp_hire_dt" name="dsc_emp_hire_dt" style="max-width:100%" value="@hireDate">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
                 </div>
                 @Html.ValidationMessageFor(model => model.dsc_emp_hire_dt, "", new { @class = "text-danger" })
@@ -151,7 +154,7 @@
             <div class="form-group row">
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="min-width:75px">Termination Date</span>
-                    <input class="datepicker form-control" id="dsc_emp_term_dt" name="dsc_emp_term_dt" style="max-width:100%">
+                    <input class="datepicker form-control" id="dsc_emp_term_dt" name="dsc_emp_term_dt" style="max-width:100%" value="@Model.dsc_emp_term_dt">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
                 </div>
                 @Html.ValidationMessageFor(model => model.dsc_emp_term_dt, "", new { @class = "text-danger" })

@@ -269,7 +269,9 @@
                             <span>SAVE</span>
                         </button>
                         <span>&nbsp;&nbsp;&nbsp;</span>
-                        <input type="reset" class="btn btn-default" value="Reset Form" style="min-width:100px">
+                        <button type="button" class="btn btn-default" style="min-width:100px" >
+                            <span>CANCEL/EXIT</span>
+                        </button>
                     </div>
                 </div>
                 @if(ViewBag.Message != null)
@@ -281,7 +283,7 @@
                     $(function () {
                         setTimeout(function () {
                             $("#ConfMsg").hide();
-                        }, 10000);
+                        }, 5000);
                     });
                     </script>
                 }
@@ -310,13 +312,25 @@
             });
 
         });
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+        function closeWin()   // Tested Code
+        {
+            //parent.$('#remoteWindow').dialog("close");
+            //return false;
+
+
+            //window.parent.jQuery('#upload-form').dialog('close');
+            //window.parent.jQuery('#remoteWindow').dialog('close');
+            
+            //parent.closeIFrame();
+
+            //var someIframe = window.parent.document.getElementById('iframe_callback');
+            //someIframe.parentNode.removeChild(window.parent.document.getElementById('iframe_callback'));
+        }
 </script>
 
-<script>
-        $(document).ready(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-</script>
 <script>
         function compilePostValues() {
             var defaultQATid = "";

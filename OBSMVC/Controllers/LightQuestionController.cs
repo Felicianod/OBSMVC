@@ -24,7 +24,6 @@ namespace OBSMVC.Controllers
             int questionId = id ?? -1;
             QuestionCreateEditViewModel obsQCVM;
 
-
             if (questionId < 1)
             {
                 obsQCVM = new QuestionCreateEditViewModel();

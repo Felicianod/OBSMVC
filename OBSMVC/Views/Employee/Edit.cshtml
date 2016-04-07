@@ -99,13 +99,13 @@
 <div class="row">
     <div class="col-sm-3">
         <div class="row">
-            <img src="~/Images/iconNoAvatar.png" class="avatar img-circle" alt="avatar">
-            @*@if (Model.dsc_emp_last_name.Trim() == "Pogany")
+            @*<img src="~/Images/iconNoAvatar.png" class="avatar img-circle" alt="avatar">*@
+            @if (Model.dsc_emp_last_name.Trim() == "Pogany")
                 { <img src="~/Images/KPogany.jpg" class="avatar img-circle" alt="avatar">}
                 else {
                   <img src="~/Images/iconNoAvatar.png" class="avatar img-circle" alt="avatar">
                 }
-            *@
+            
         </div>
         <div class="row">
             <h3>@Model.dsc_emp_first_name @Model.dsc_emp_last_name</h3>

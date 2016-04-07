@@ -21,7 +21,7 @@
         }
     }
 </script>
-<div class="col-sm-12 answerType" id="testing" style="border-style:double; border-width:2px; border-color:green; background-color:lightslategray; font-family:Arial">
+<div class="col-sm-12 answerType" id="newQATsection" style="border-style:double; border-width:2px; border-color:green; background-color:lightslategray; font-family:Arial">
     <div class="row">
         <div class="col-sm-6 form-inline">
             <div class="input-group col-sm-7" >
@@ -71,9 +71,9 @@
             </div>
 
             <br />
-            <input type="button" id="btnSaveNewAT" value="Add" style="display:none" />
+            <input type="button" id="btnSaveNewAT" value="Add" style="display:none; width:80px" />
             <span>&nbsp;&nbsp;&nbsp;</span>
-            <button id="btnCancel" class="cancelNewSA" type="button">CANCEL</button>
+            <button id="btnCancel" class="cancelNewSA" type="button" style="width:80px">CANCEL</button>
             <br /><br />
 
         </div>
@@ -201,6 +201,7 @@
             var emptyBoxes = 0;
             var isDefaultValue = "false";
             var postParams = "";
+            var validationMessage = "";
 
             $(this).button('loading');            
             //Loop through all text boxes in this section
@@ -215,10 +216,40 @@
             });
 
             //Check if we have empty boxes, then the form is not validated.
-            if (selCathegory == "3 Val Range" && emptyBoxes > 2) { formValidated = false; }
-            else if (selCathegory == "5 Val Range" && emptyBoxes > 0) { formValidated = false; }
+            if (selCathegory == "3 Val Range" && emptyBoxes > 2) {
+                formValidated = false;
+                validationMessage = "No textbox values can be left blank";
+            }
+            else if (selCathegory == "5 Val Range" && emptyBoxes > 0) {
+                formValidated = false;
+                validationMessage = "No textbox values can be left blank";
+            }
 
             //alert("There are " + emptyBoxes + " Empty Fields.");
+
+            //Validate that if the selected Answer Type is a "Free Text" or 'Y/N" type and it already exist (It's a duplicated)
+            //Then do not allow it to be Added again
+            var selectedDDLText = $(this).parents(".answerType").first().find("#fullSelATlist option:selected").text();
+            var selectedDDLText2 = "";
+            if (selectedDDLText.length >= 2) { selectedDDLText2 = selectedDDLText.substring(0,2)}
+            if (selectedDDLText2 == "Fr" || selectedDDLText2 == "YN") {
+                // We are saving a QAT that does not require selectable Answers. Check if that selection already exist
+                //Loop through all existing QAT for this question
+                //alert("Your Selection does not require Selectable Answers!!");
+                var alreadyexist = false;
+                $(".answerType").each(function () {
+                    if ($(this).find("#qat").first().val() == selectedDDLText) {
+                        //The selected option already exist
+                        alreadyexist = true;
+                    }
+                });
+
+                if (alreadyexist) {
+                    //alert("WARNING! This Selection already exist.");
+                    formValidated = false;
+                    validationMessage = "Value Selected Already exist. Chose a different Answer Type.";
+                }
+            }
 
             // Proceed only if the user input is valid
             if (formValidated) {
@@ -267,9 +298,11 @@
                     //$('#messageAddedSA').show();
                     $('#noATmsg').remove();
                 });
+                // Finally once the "add" has been performed, turn the "Form Changed" flag to indicate a change was done to the Question
+                $("#formChanged").val("Y");
             }
             else {
-                alert("Please review your input. No textbox values can be left blank.")
+                alert("Please review your input.\n" + validationMessage);
                 $(this).button('reset');
             }
         });

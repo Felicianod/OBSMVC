@@ -126,7 +126,12 @@
         fMode = "edit";
         colFormId = Model.cft_id.ToString();
         <text>Collection Form Maintenance</text>
-    }    
+    }
+    @if( String.IsNullOrEmpty(Session["saveMessage"]))
+       {
+       
+       }
+    } 
 </div>
 
 @if (!String.IsNullOrEmpty(ViewBag.exception))
@@ -247,9 +252,7 @@
                         @* - - - - - - - - - - FORM FOOTER SECTION (ALWAYS VISIBLE) - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
                         <div class="panel-group" id="accordion">
 
-
-
-                            <div class="panel panel-default formSection" id="FOOTER_SECTION">
+                            @*<div class="panel panel-default formSection" id="FOOTER_SECTION">
                                 <div class="panel-heading form-inline" style="background-color:lightblue">
                                     <h4 class="panel-title">
                                         @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
@@ -275,7 +278,9 @@
                                         </table>
                                     </div>
                                 </div> @*End of Section*@
-                            </div>
+                            </div>*@
+                        <br /><br /><br /><br />
+
                         </div> @* - - - - - - - END OF THE PAPER FORM FOOTER SECTION - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
                     </div>
                     <div class="row" style="margin-top:0px">

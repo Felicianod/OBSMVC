@@ -746,9 +746,6 @@
                     var qid2 = $(this).qid;
                     $(this).find(".placeholder").remove();
                     //updateValues("An Item was reordered." + +getTestData(qid2));  // Call function After Sorting
-
-                    //Turn on the "changed" flag since dropping a question indicates that the form has bee changed
-                    isChanged = true;
                 }
             }).on("click", ".dismiss", function (event) {
                 event.preventDefault();

@@ -126,7 +126,12 @@
         fMode = "edit";
         colFormId = Model.cft_id.ToString();
         <text>Collection Form Maintenance</text>
-    }    
+    }
+    @*@if( String.IsNullOrEmpty(Session["saveMessage"]))
+       {
+       
+       }*@
+    } 
 </div>
 
 @if (!String.IsNullOrEmpty(ViewBag.exception))
@@ -246,14 +251,11 @@
                         </div> @* - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - -*@
 
                         @* - - - - - - - - - - FORM FOOTER SECTION (ALWAYS VISIBLE) - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
-                        <div class="panel-group" id="accordion">
-
-
+                        @*<div class="panel-group" id="accordion">
 
                             <div class="panel panel-default formSection" id="FOOTER_SECTION">
                                 <div class="panel-heading form-inline" style="background-color:lightblue">
-                                    <h4 class="panel-title">
-                                        @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
+                                    <h4 class="panel-title">                                        
                                         <a class="accordion-toggle" data-toggle="collapse" href="#footerSection">
                                             <span class="glyphicon glyphicon-minus">&nbsp; </span>
                                             <span>Footer Section:</span>
@@ -262,7 +264,7 @@
                                         <input type="text" id="FORM FOOTER" class="form-control input-sm sectionTitle" style="width:50%" placeholder="<Enter Section Name>" value="Thank you for your participation and cooperation"  />
                                     </h4>
                                 </div>
-                                <div id="footerSection" class="panel-collapse collapse in" style="margin-left:20px" @*style="border:dashed; border-width:medium"*@>
+                                <div id="footerSection" class="panel-collapse collapse in" style="margin-left:20px" >
                                     <div class="footer_right row">
                                         <table style="width:100%">
                                             <tr>
@@ -275,9 +277,14 @@
                                             </tr>
                                         </table>
                                     </div>
-                                </div> @*End of Section*@
+                                </div> 
+
                             </div>
-                        </div> @* - - - - - - - END OF THE PAPER FORM FOOTER SECTION - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+
+                        </div>*@ 
+    
+                     @* - - - - - - - END OF THE PAPER FORM FOOTER SECTION - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+                        <br /><br /><br /><br />
                     </div>
                     <div class="row" style="margin-top:0px">
                         <div class="col-sm-10 ">

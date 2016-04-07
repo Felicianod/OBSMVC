@@ -15,14 +15,13 @@ namespace OBSMVC.Controllers
     public class LightQuestionController : Controller
     {
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
-        
+
         //---------------------------------------- QuestionAddUpd [ GET ] -----------------------------------------------------------------
         [HttpGet]
         [ActionName("QuestionAddUpdateLight")]
-        public ActionResult QuestionAddUpdateEdit(int? id, int? cft_id)
+        public ActionResult QuestionAddUpdateEdit(int? id, int cft_id)
         {
             int questionId = id ?? -1;
-            int cftid = cft_id ?? -1;
             QuestionCreateEditViewModel obsQCVM;
 
 
@@ -35,24 +34,19 @@ namespace OBSMVC.Controllers
             else
             {
                 obsQCVM = new QuestionCreateEditViewModel(questionId);
-                if (cftid >= 0)
+                foreach (qatTags qatTag in obsQCVM.Quest_Assigned_qatTags)
                 {
-                    foreach (qatTags qatTag in obsQCVM.Quest_Assigned_qatTags)
+                    //if this qat_id is not on any of the forms
+                    if (db.OBS_COL_FORM_QUESTIONS.Where(item => item.obs_qat_id == qatTag.QAT.obs_qat_id && item.obs_cft_id != cft_id).Count() == 0)
                     {
-                        //if this qat_id is not on any of the forms
-                        if (db.OBS_COL_FORM_QUESTIONS.Where(item => item.obs_qat_id == qatTag.QAT.obs_qat_id && item.obs_cft_id != cftid).Count() == 0)
-                        {
-                            qatTag.editable = "true";
-                        }
-
+                        qatTag.editable = "true";
                     }
+
                 }
-                            
             }
             // Finally Set the ActiveForm Id Flag if needed
             obsQCVM.activeFormId = cft_id.ToString();
             return View("QuestionAddUpdateEditLight", obsQCVM);
-
         }
 
 

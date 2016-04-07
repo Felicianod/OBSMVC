@@ -107,7 +107,7 @@
         if (btnClicked.hasClass('deleteQAT')) {
             // Mark the question as "Deleted" and Convert the Button into a "undelete" button
             parentDIV.find("#obs_qat_Id_delList").val(parentDIV.find("#obs_qat_id").val());
-            alert("QATid: " + parentDIV.find("#obs_qat_id").val() + " will be deleted.")
+            //alert("QATid: " + parentDIV.find("#obs_qat_id").val() + " will be deleted.")
             btnClicked.removeClass("deleteQAT").addClass("recoverQAT");
             btnClicked.html('<span class="glyphicon glyphicon glyphicon-refresh"></span>');
             parentDIV.removeClass("divNormal").addClass("divDeleted");

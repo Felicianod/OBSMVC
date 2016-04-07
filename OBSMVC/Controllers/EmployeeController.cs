@@ -26,7 +26,7 @@ namespace OBSMVC.Controllers
                 var employeeList = db.DSC_EMPLOYEE.Include(e => e.DSC_LC);
                 if (employeeList.Where(emp => emp.dsc_emp_last_name.Contains(search) || emp.dsc_emp_first_name.Contains(search) || emp.DSC_LC.dsc_lc_name.Contains(search) || emp.dsc_emp_perm_id.ToString().Contains(search) || emp.dsc_emp_adp_id.Contains(search) || emp.dsc_emp_email_addr.Contains(search)).ToList().Count != 0)
                 {
-                    return View(employeeList.Where(emp => emp.dsc_emp_last_name.Contains(search) || emp.dsc_emp_first_name.Contains(search) || emp.DSC_LC.dsc_lc_name.Contains(search) || emp.dsc_emp_perm_id.ToString().Contains(search) || emp.dsc_emp_adp_id.Contains(search) || emp.dsc_emp_email_addr.Contains(search)).ToList().ToPagedList(page ?? 1, PageSize ?? 10));
+                    return View(employeeList.Where(emp => emp.dsc_emp_last_name.Contains(search) || emp.dsc_emp_first_name.Contains(search) || emp.DSC_LC.dsc_lc_name.Contains(search) || emp.dsc_emp_perm_id.ToString().Contains(search) || emp.dsc_emp_adp_id.Contains(search) || emp.dsc_emp_email_addr.Contains(search)).OrderBy(x => x.dsc_emp_last_name).ThenBy(y => y.dsc_emp_first_name).ToList().ToPagedList(page ?? 1, PageSize ?? 10));
                 }
                 else
                 {
@@ -34,17 +34,17 @@ namespace OBSMVC.Controllers
                         string[] words = search.Split(' ');
                         string word0 = words[0];
                         string word1 = words[1];
-                        return View(employeeList.Where(emp => (emp.dsc_emp_first_name.Contains(word0) && emp.dsc_emp_last_name.Contains(word1)) || (emp.dsc_emp_first_name.Contains(word1) && emp.dsc_emp_last_name.Contains(word0))).ToList().ToPagedList(page ?? 1, PageSize ?? 10));
+                        return View(employeeList.Where(emp => (emp.dsc_emp_first_name.Contains(word0) && emp.dsc_emp_last_name.Contains(word1)) || (emp.dsc_emp_first_name.Contains(word1) && emp.dsc_emp_last_name.Contains(word0))).OrderBy(x => x.dsc_emp_last_name).ThenBy(y => y.dsc_emp_first_name).ToList().ToPagedList(page ?? 1, PageSize ?? 10));
                     }
                     catch
                     {
-                        return View(employeeList.Where(emp => emp.dsc_emp_last_name.Contains(search) || emp.dsc_emp_first_name.Contains(search) || emp.DSC_LC.dsc_lc_name.Contains(search) || emp.dsc_emp_perm_id.ToString().Contains(search) || emp.dsc_emp_adp_id.Contains(search) || emp.dsc_emp_email_addr.Contains(search)).ToList().ToPagedList(page ?? 1, PageSize ?? 10));
+                        return View(employeeList.Where(emp => emp.dsc_emp_last_name.Contains(search) || emp.dsc_emp_first_name.Contains(search) || emp.DSC_LC.dsc_lc_name.Contains(search) || emp.dsc_emp_perm_id.ToString().Contains(search) || emp.dsc_emp_adp_id.Contains(search) || emp.dsc_emp_email_addr.Contains(search)).OrderBy(x =>  x.dsc_emp_last_name).ThenBy(y=>y.dsc_emp_first_name).ToList().ToPagedList(page ?? 1, PageSize ?? 10));
                     }
                 }
             }
             else
             {
-                var employeeList = db.DSC_EMPLOYEE.Include(e => e.DSC_LC);
+                var employeeList = db.DSC_EMPLOYEE.Include(e => e.DSC_LC).OrderBy(x => x.dsc_emp_last_name).ThenBy(y => y.dsc_emp_first_name);
                return View(employeeList.ToList().ToPagedList(page ?? 1, PageSize ?? 10));               
             }
         }

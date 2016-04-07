@@ -158,8 +158,8 @@ namespace OBSMVC.Controllers
                         ////////////////////////////////WE DELETE SEL ANS HERE///////////////////////////////////////////
                         if (!string.IsNullOrEmpty(posted_deleted_ids))
                         {
-                            string[] qats_to_delete = posted_deleted_ids.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-                            foreach (string qat_to_delete in qats_to_delete)
+                            string [] qats_to_delete = posted_deleted_ids.Split(new [] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                            foreach(string qat_to_delete in qats_to_delete)
                             {
                                 deleteAssignedSelAns(Convert.ToInt32(qat_to_delete), db);
                             }
@@ -1269,7 +1269,6 @@ namespace OBSMVC.Controllers
             
         }
 
-
         /*
         *       This method deletes assigned selected answers and all the selectable answers if needed  
         */
@@ -1283,10 +1282,10 @@ namespace OBSMVC.Controllers
             else
             {//ok, this qat id doesn't belong to any form. We can hard delete it
                 //but first we need to check if there are selectable answers for this answer type and delete them
-                if (ObsDB.OBS_ANS_TYPE.Single(x => x.obs_ans_type_id == ObsDB.OBS_QUEST_ANS_TYPES.Single(y => y.obs_qat_id == qat_id).obs_ans_type_id).obs_ans_type_has_fxd_ans_yn == "Y")
+                if(ObsDB.OBS_ANS_TYPE.Single(x=>x.obs_ans_type_id== ObsDB.OBS_QUEST_ANS_TYPES.Single(y=>y.obs_qat_id==qat_id).obs_ans_type_id).obs_ans_type_has_fxd_ans_yn=="Y")
                 {
                     ObsDB.OBS_QUEST_SLCT_ANS.RemoveRange(ObsDB.OBS_QUEST_SLCT_ANS.Where(x => x.obs_qat_id == qat_id));
-                }
+                }               
                 ObsDB.OBS_QUEST_ANS_TYPES.Remove(ObsDB.OBS_QUEST_ANS_TYPES.Find(qat_id));
             }
         }

@@ -468,7 +468,7 @@ namespace OBSMVC.Controllers
                 }
                
             }
-            else if (full_text_search.Trim().StartsWith("\"")&& full_text_search.Trim().EndsWith("\""))
+            else if (full_text_search.Trim().StartsWith("\"")&& full_text_search.Trim().EndsWith("\"") && full_text_search.Length>1)
             {
                 List<AvailableQuestions> temp_questions_list = new List<AvailableQuestions>();
                 List<AvailableQuestions> temp_md_list = new List<AvailableQuestions>();

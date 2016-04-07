@@ -98,6 +98,8 @@
         }
         // A Change was made. Question changes can be saved. Reenable the Save Button
         $('#btnAddQuestion').prop('disabled', false);
+        //Turn the "Form Changed" flag to indicate a change was done
+        $("#formChanged").val("Y");
     }
 
     function toggleSoftDelete(btnClicked) {
@@ -125,6 +127,8 @@
         }
         // A Change was made. Question changes can be saved. Reenable the Save Button
         $('#btnAddQuestion').prop('disabled', false);
+        //Turn the "Form Changed" flag to indicate a change was done
+        $("#formChanged").val("Y");
     }    
 </script>
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
@@ -138,7 +142,7 @@
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-
+    <input type="hidden" value="N" id="formChanged">
     <input type="hidden" value="@Model.questn.obs_question_id" name="questn.obs_question_id" id="questn.obs_question_id">
     //-----------------------------------   QUESTION HEADER SECCTION ----------------------------------------------------------
 
@@ -340,7 +344,7 @@
             </div>
         </div>
     
-    @* ---------- END OF NEW ROW WITH MOVE Select/Unselect TAGS PANELS --------------*@
+    @* ---------------- END OF NEW ROW WITH MOVE Select/Unselect TAGS PANELS ----------------*@
 
     <div class="row">
         <div class="col-md-12 ">
@@ -369,13 +373,10 @@
         </div>
     </div>
 
-
     }
+    @* --------------------------- END OF THE FORM ----------------------------------------- *@
 
-
-    @* ------------ END OF THE FORM ---------- *@
-
-    @* ---------------------- POP UP "Add New Metadata Tag" FORM ------------------------ *@
+    @* ---------------------- POP UP "Add New Metadata Tag" FORM --------------------------- *@
     <!-- Modal -->
     <div class="modal" id="NewMDTag" role="dialog">
         <div class="modal-dialog ">
@@ -418,7 +419,7 @@
     </div>
 
 
-    @* ---------------------- END OF "Add New Metadata Tag" FORM ------------------------ *@
+    @* ------------------------ END OF "Add New Metadata Tag" FORM ------------------------- *@
 
 
     <div>
@@ -463,17 +464,22 @@
                 $(origin).find(':selected').appendTo(dest);
             }
 
-            //function moveAllItems(origin, dest) {
-            //    $(origin).children().appendTo(dest);
-            //}
-
             $('#left').click(function () {
                 moveItems('#sbTwo', '#sbOne');
             });
-
             $('#right').on('click', function () {
                 moveItems('#sbOne', '#sbTwo');
             });
+            $('#sbOne').on('dblclick', function () {
+                moveItems('#sbOne', '#sbTwo');
+            });
+            $('#sbTwo').on('dblclick', function () {
+                moveItems('#sbTwo', '#sbOne');
+            });
+
+            //function moveAllItems(origin, dest) {
+            //    $(origin).children().appendTo(dest);
+            //}
 
             //$('#leftall').on('click', function () {
             //    moveAllItems('#sbTwo', '#sbOne');
@@ -482,12 +488,6 @@
             //$('#rightall').on('click', function () {
             //    moveAllItems('#sbOne', '#sbTwo');
             //});
-            $('#sbOne').on('dblclick', function () {
-                moveItems('#sbOne', '#sbTwo');
-            });
-            $('#sbTwo').on('dblclick', function () {
-                moveItems('#sbTwo', '#sbOne');
-            });
         });
     </script>
     <script>
@@ -620,6 +620,7 @@
                 isChanged = true;
             });
             $(window).bind('beforeunload', function () {
+                if ($("#formChanged").val() == "Y") { isChanged = true;}
                 if (isChanged) {
                     return 'There are unsaved changed. Do you want to discard Changes and Exit?';
                 } else {
@@ -647,6 +648,8 @@
                     $(this).prop('checked', true);
                 }
                 //Otherwise We just leave the current uncheck box (all all the others) as they are
+                // Finally Turn the "Form Changed" flag to indicate a change was done
+                $("#formChanged").val("Y");
             });
 
             $(".btnIsDefault").click(function () {
@@ -868,6 +871,8 @@
                 $(divSAText).hide();
                 // Show The "Labels" < Division >
                 $(divSALabel).show();
+                //Turn the "Form Changed" flag to indicate a change was done
+                $("#formChanged").val("Y");
             });
             //------------ BUTTON CANCEL EDIT OF ANSWER TYPE -----------------------------------------------------
             $('.cancelSA').click(function (e) {

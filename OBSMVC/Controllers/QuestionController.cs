@@ -374,7 +374,7 @@ namespace OBSMVC.Controllers
 
             //ViewBag.ConfMsg = "Data Saved Successfully.";
 
-            return RedirectToAction("Index");
+            return RedirectToAction("QuestionAddUpdate");
 
             //return RedirectToAction("Index", "Question");
             //return View("Edit");
@@ -1282,7 +1282,8 @@ namespace OBSMVC.Controllers
             else
             {//ok, this qat id doesn't belong to any form. We can hard delete it
                 //but first we need to check if there are selectable answers for this answer type and delete them
-                if(ObsDB.OBS_ANS_TYPE.Single(x=>x.obs_ans_type_id== ObsDB.OBS_QUEST_ANS_TYPES.Single(y=>y.obs_qat_id==qat_id).obs_ans_type_id).obs_ans_type_has_fxd_ans_yn=="Y")
+                short ans_type_id = ObsDB.OBS_QUEST_ANS_TYPES.Single(y => y.obs_qat_id == qat_id).obs_ans_type_id;
+                if (ObsDB.OBS_ANS_TYPE.Single(x=>x.obs_ans_type_id== ans_type_id).obs_ans_type_has_fxd_ans_yn=="Y")
                 {
                     ObsDB.OBS_QUEST_SLCT_ANS.RemoveRange(ObsDB.OBS_QUEST_SLCT_ANS.Where(x => x.obs_qat_id == qat_id));
                 }               

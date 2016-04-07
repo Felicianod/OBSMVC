@@ -625,13 +625,6 @@ namespace OBSMVC.Controllers
             return PartialView("_getQuestionsList", questions_for_display);
         }
 
-        //The below code can be deleted
-        //[HttpGet]
-        //public PartialViewResult getQuestionInfoTest(int question_id, int qCounter)
-        //{
-        //    //return "You selected Question Id: " + question_id + "[Counter: " + qCounter + "] via Ajax call.";
-        //    return PartialView("_getQuestionInfoTest");
-        //}
 
         [HttpGet]
         public PartialViewResult getQuestionInfo(int question_id, int question_QATid,int qCounter)

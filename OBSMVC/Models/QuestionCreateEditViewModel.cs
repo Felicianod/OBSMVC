@@ -107,11 +107,17 @@ namespace OBSMVC.Models
                         temp_qat.answer_type_category = temp_answer.obs_ans_type_category;
                         temp_qat.selectable_ans_required = temp_answer.obs_ans_type_has_fxd_ans_yn;
                         temp_qat.uniqueCounter = qatCounter;
-                        if(temp_answer.obs_ans_type_has_fxd_ans_yn=="Y")
+                        temp_qat.editableFromColForm = "false";
+                        temp_qat.editableFromQuestionMaint = "false";
+                        if (temp_answer.obs_ans_type_has_fxd_ans_yn=="Y")
                         {
                             //if true, we need to list all of them and assign them to object's list of selectable answers
                             List<OBS_QUEST_SLCT_ANS> temp_select_ans = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qaInstanceTemp.obs_qat_id && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).OrderBy(x=>x.obs_qsa_order).ToList();
                             temp_qat.selAns = temp_select_ans;
+                            if(db.OBS_COL_FORM_QUESTIONS.Where(item =>item.obs_qat_id == qaInstanceTemp.obs_qat_id).Count()==0)
+                            {
+                                temp_qat.editableFromQuestionMaint = "true";
+                            }
                         }
                         Quest_Assigned_qatTags.Add(temp_qat);
                     }
@@ -151,7 +157,11 @@ namespace OBSMVC.Models
         public string answer_type_category { set; get; }
         public string selectable_ans_required { set; get; }
         public int uniqueCounter { set; get; }
-        
+
+        public string editableFromQuestionMaint { set; get; }
+
+        public string editableFromColForm { set; get; }
+
     }
     public class AddedSelAnswer
     {

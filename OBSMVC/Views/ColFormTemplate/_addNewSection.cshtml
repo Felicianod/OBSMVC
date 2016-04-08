@@ -15,7 +15,7 @@
                 <span class="glyphicon glyphicon-minus">&nbsp; </span>
                 <span>Section Name:</span>
             </a>
-            &nbsp;&nbsp;
+            &nbsp;
             <input type="text" id="@txtSectionName" onfocus="$(this).select();" class="form-control input-sm sectionTitle" style="width:50%" placeholder="<Enter Section Name>" value="@Model.sectionName" required />
         </h4>
     </div>
@@ -53,12 +53,3 @@
         </div>
     </div> @*End of Section*@
 </div>
-
-@*<script>
-    $(function () {
-        $("#@txtSectionName").autocomplete({
-            source: "/ColFormTemplate/SectionNameLookup",
-            minLength: 1
-        });
-    });
-</script>*@

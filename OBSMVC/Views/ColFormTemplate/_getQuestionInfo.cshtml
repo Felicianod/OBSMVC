@@ -75,6 +75,9 @@
         var selectedText = $(this).children("option:selected").text();
         var ddlId = $(this).prop("id");
 
+        if (selectedId != "") {
+            $('#btnSaveForm').button('reset');
+        }
         //alert("Selected Text is: " + selectedText);
         //alert("Before opening modal window, the ddl id is: " + ddlId);
         if (selectedId == '') {

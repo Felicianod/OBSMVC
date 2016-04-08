@@ -34,9 +34,10 @@ var divSATextqatId = "txtQATid" + uniqueCounter;
                     { <button type="button" class="btn btnIsDefault btn-warning">NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span></button> }
                 @*<input type="checkbox" @if (Model.QAT.obs_qat_default_ans_type_yn == "Y") { <text> checked="checked" </text>     }
                     class="form-control primar chkDefault" id="qatDefault" name="qatDefault" style="max-width:20%" />*@
-                <button type="button" class="btn btn-default deleteQAT" onclick='toggleSoftDelete($(this))'>
+                <button type="button" class="btn btn-default deleteQAT" onclick='toggleSoftDelete($(this))'  @if (Model.editable == "false") { <text>disabled = "disabled"</text> }   > 
                     <span class="glyphicon glyphicon-trash"></span>
                 </button>
+
             </div>
         </div>
     </div>
@@ -100,7 +101,7 @@ var divSATextqatId = "txtQATid" + uniqueCounter;
         {
             <div class="col-sm-7" id="listCol">
                 <button type="button" class="addOption"> <span class="glyphicon glyphicon-plus"> Add New Answer</span></button>
-                <div class="row form-inline selectionList">
+                <div class="row form-inline selectionList" style="margin-left:20px">
                     @foreach (var x in Model.selAns)
                     {
                         <div class="form-inline newOption">
@@ -109,7 +110,7 @@ var divSATextqatId = "txtQATid" + uniqueCounter;
                         </div>
                     }
                 </div>
-                <br />
+                <br />&nbsp;&nbsp;&nbsp;&nbsp;
                 <button id="@qbtnSaveId" class="saveSA" type="button">DONE  </button>
                 <span>&nbsp;&nbsp;&nbsp;</span>
                 <button id="btnCancel" class="cancelSA" type="button">CANCEL</button>

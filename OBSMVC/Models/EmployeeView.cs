@@ -9,7 +9,7 @@ using System.Web.Mvc;
 namespace OBSMVC.Models
 {
     [MetadataType(typeof(EmployeeMetaData))]
-    public partial class EMPLOYEE {}
+    public partial class DSC_EMPLOYEE {}
 
     public class EmployeeMetaData
     {

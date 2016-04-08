@@ -132,7 +132,7 @@
        {
        
        }*@
-    } 
+        
 </div>
 
 @if (!String.IsNullOrEmpty(ViewBag.exception))
@@ -430,7 +430,7 @@
                 });
             },
             /*close: function () { $(this).remove(); },*/
-            buttons: { "Close": function () { $(this).dialog("close"); } }
+            //buttons: { "Close": function () { $(this).dialog("close"); } }
         });
 
         $dialog.dialog('open');

@@ -188,17 +188,18 @@
 
 
             <div class="form-group row">
-                <div class="col-md-1 ">
+                <div class="col-md-2 ">
                     &nbsp;&nbsp;
                     <button type="submit" class="btn btn-primary" disabled="disabled" id="btnSubmit">Save Changes</button>
                 </div>
-                <div class="col-md-1 col-md-offset-1">
-                    <input type="reset" class="btn btn-default" value="Cancel" style="min-width:130px">
+                <div class="col-md-2 col-md-offset-1">
+                    <button type="reset" class="btn btn-default" style="min-width:130px">Cancel</button>
                 </div>
             </div>
 
-
-            <input type="hidden" value="@Model.dsc_emp_id" name="dsc_emp_id" id="dsc_emp_id">
+            <div class="form-group row">
+                <input type="hidden" value="@Model.dsc_emp_id" name="dsc_emp_id" id="dsc_emp_id">
+            </div>            
         </form>
     </div>
 </div>

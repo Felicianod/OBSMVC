@@ -128,7 +128,17 @@
         $('#btnAddQuestion').prop('disabled', false);
         //Turn the "Form Changed" flag to indicate a change was done
         $("#formChanged").val("Y");
-    }    
+    }
+
+    function resetFormData() {
+        var isChanged = $("#formChanged");
+        if (isChanged.val() == "Y") {
+            if (confirm("Your form has been modified.\nAre you sure you want to reset all changes?")) {
+                isChanged.val("N");
+                location.href = '/Question/QuestionAddUpdate/@Model.questn.obs_question_id';
+            }
+        }
+    }
 </script>
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
 <div class="well well-sm smallRowMargin" style="padding: 4px; font-size:xx-large; text-align:center">
@@ -353,7 +363,7 @@
                         <span>SAVE</span>
                     </button>
                     <span>&nbsp;&nbsp;&nbsp;</span>
-                    <input type="reset" class="btn btn-default" value="Reset Form" style="min-width:100px">
+                    <button type="button" class="btn btn-default" style="min-width:100px" onclick="resetFormData();">Reset Form</button>
                 </div>
             </div>
             @if (ViewBag.ConfMsg != null)
@@ -519,7 +529,7 @@
 
             //Finally, loop through all Newly added answers and set the "ans_type_list" Hidden field to the most uptodate values before posting
             var newValues = "";
-            $('#divaddedSA').find('div.answerType').each(function () {               
+            $('#divaddedSA').find('div.answerType').each(function () {
                 //var currentNewDiv = $(this);
                 //var dfltButton = $(this).find('button.btnIsDefault').first();
                 var sel_list = $(this).find('#ans_type_id').val() + "~";
@@ -538,7 +548,7 @@
 
             //alert("Posting Values: Default QAT id: " + $('#defaultQATid').val());
             //if (errorMsg != "") {
-            //    //If an validation error is found 
+            //    //If an validation error is found
             //    alert(errorMsg);
             //    $('#btnSaveForm').button('reset');
             //}
@@ -591,7 +601,6 @@
             $('.saveSA').prop('disabled', false);
         }
 
-
     </script>
 
     <!-- bootbox code -->
@@ -608,7 +617,9 @@
 
     <script>
         $(document).ready(function () {
-            var isChanged = false;
+            var isChanged = $("#formChanged");
+
+            //var isChanged = false;
             $('input, select, textarea').change(function () {
                 //$("input[type='submit']").removeAttr("disabled");
                 if ($('#btnAddQuestion').text() != "SAVE" ) {
@@ -616,11 +627,11 @@
                 }
                 $("#btnAddQuestion").removeAttr('disabled');
                 //alert('Button Text is:' + btnText);
-                isChanged = true;
+                isChanged.val("Y");
             });
             $(window).bind('beforeunload', function () {
-                if ($("#formChanged").val() == "Y") { isChanged = true;}
-                if (isChanged) {
+                //if ($("#formChanged").val() == "Y") { isChanged = true;}
+                if (isChanged.val() == "Y") {
                     return 'There are unsaved changed. Do you want to discard Changes and Exit?';
                 } else {
                     return undefined;
@@ -628,8 +639,8 @@
             });
             // ---------------- Execute When Saving the Whole Form --------------
             $("#btnAddQuestion").click(function () {
-                isChanged = false;
-                $("#formChanged").val("N");
+                isChanged.val("N");
+                //isChanged = false;
                 $(this).button('loading');
             });
             //$(".btn").click(function () {
@@ -637,7 +648,7 @@
             //    $(this).button('loading');
             //});
             $("#saveMDTag").click(function () {
-                isChanged = false;
+                isChanged.val("N");
                 $(this).button('loading');
             });
 
@@ -710,6 +721,7 @@
             //        // updateValues("An Item was Deleted");  //If we want to all a function when item is dragged/dropped
             //    });
         });
+
     </script>
 
     @*<script type="text/javascript">

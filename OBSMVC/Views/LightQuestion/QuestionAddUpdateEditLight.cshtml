@@ -313,24 +313,14 @@
 
         });
 
-        $('[data-toggle="tooltip"]').tooltip();
-
-        function closeWin()   // Tested Code
-        {
-            //parent.$('#remoteWindow').dialog("close");
-            //return false;
-
-
-            //window.parent.jQuery('#upload-form').dialog('close');
-            //window.parent.jQuery('#remoteWindow').dialog('close');
-            
-            //parent.closeIFrame();
-
-            //var someIframe = window.parent.document.getElementById('iframe_callback');
-            //someIframe.parentNode.removeChild(window.parent.document.getElementById('iframe_callback'));
-        }
+       
 </script>
 
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 <script>
         function compilePostValues() {
             var defaultQATid = "";
@@ -355,13 +345,7 @@
                 newValues = newValues + $(this).find("#ans_type_list").val() + "\n";
             })
         };
-        function showConfirmation() {
-            bootbox.confirm("Are you sure?", function (result) {
-                //Example.show("Confirm result: " + result);
-                //console.log("Alert Callback");
-                return result;
-            });
-        }
+
 
         function loadTemplate(callerBtn, selAnslist) {
             //Transverse up to the parent "DIV" and then loop through all its "Textbox" children
@@ -386,17 +370,6 @@
 
 </script>
 
-<!-- bootbox code -->
-<script src="~/Scripts/bootbox.min.js"></script>
-<script>
-        $(document).on("click", ".alert", function (e) {
-            bootbox.confirm("Are you sure?", function (result) {
-                //Example.show("Confirm result: " + result);
-                //console.log("Alert Callback");
-                return result;
-            });
-        });
-</script>
 
 <script>
         $(document).ready(function () {

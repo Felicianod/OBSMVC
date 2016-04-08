@@ -53,3 +53,19 @@
         </div>
     </div> @*End of Section*@
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('input').change(function () {
+            if ($(this).val() == "") {
+                $('#btnSaveForm').button('reset');
+            }
+            $("#btnSaveForm").removeAttr('disabled');
+            //isChanged = true;
+            $(this).removeClass("invalidField");
+        });
+    });
+    
+
+
+</script>

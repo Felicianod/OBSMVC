@@ -68,10 +68,8 @@
         background-image: url('../../Images/bgDeleted.png');
         background-size: 100% 100%;
         background-repeat: no-repeat;
-        
         opacity: 0.4;
-        filter: alpha(opacity=40); /* For IE8 and earlier */
-        
+        filter: alpha(opacity=40); /* For IE8 and earlier */     
         /* Blur and de-color */
         /*-webkit-filter: blur(5px) grayscale(50%);*/
         /* Recede */
@@ -80,6 +78,25 @@
     .divNormal {
         /*background: none;*/
         background-image: none;
+    }
+    .answerType {
+      border: 1px solid #d6e9c6;
+      /*background-color: #ebf5e6;*/
+      /*color: #468847;*/
+      /*background-color: ghostwhite;*/
+      background-color: whitesmoke;
+      /*color: #468847;*/
+      color: #073763;
+      min-height: 50px;
+      margin: 0px 20px 5px 0px;
+      padding: 2px;
+      border-width: 1px;
+      border-style: solid;
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+      /*list-style-type: none;
+      list-style-position: inside;*/
     }
 </style>
 <script>
@@ -199,7 +216,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group row smallRowMargin">
+
+                <div class="form-group row smallRowMargin" style="margin-bottom:8px">
                     <div class="col-sm-4 col-sm-offset-1">
                         <div class="input-group" data-provide="datepicker">
                             <div class="input-group-addon">
@@ -221,6 +239,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="row" smallrowmargin>
                     <div class="form-group">
                         @Html.HiddenFor(model => model.questn.obs_question_ver)
@@ -270,11 +289,11 @@
                     {
                         foreach (OBSMVC.Models.qatTags qat in Model.Quest_Assigned_qatTags)
                         {
-                            @Html.Partial("_getQuestionAnswerInfo", qat) ; @*<hr />*@
+                                @Html.Partial("_getQuestionAnswerInfo", qat) @*<hr />*@
                         }
                     }
                 </div>
-
+                
                 @*// Divissions Defined for Dynamic (Partial Views) content*@
                 <div class="row" id="divaddedSA">
                     @*<div class="col-sm-12 " id="messageAddedSA" style="display:none; border:solid; border-width:1px; font-family:Arial">
@@ -447,8 +466,34 @@
             //    $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
             //});
 
-            $('.datepicker').datepicker({
-                dateFormat: 'M dd, yy'
+            //$('.datepicker').datepicker({
+            //    dateFormat: 'M dd, yy'
+            //});
+            $('#obs_question_eff_st_dt').datepicker({
+                dateFormat: 'M dd, yy',
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                minDate: -0,
+                //minDate: -0,
+                //maxDate: "+1M +10D",
+                onClose: function (selectedDate) {
+                    $("#obs_question_eff_end_dt").datepicker("option", "minDate", selectedDate);
+                },
+                useCurrent: false //Important! See issue #1075
+            });
+
+            $('#obs_question_eff_end_dt').datepicker({
+                dateFormat: 'M dd, yy',
+                //format: "DD, d MM, yy",
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                minDate: -0,
+                onClose: function (selectedDate) {
+                    $("#obs_question_eff_st_dt").datepicker("option", "maxDate", selectedDate);
+                },
+                useCurrent: false //Important! See issue #1075
             });
 
             $('.collapse').on('show.bs.collapse', function () {
@@ -724,25 +769,6 @@
 
     </script>
 
-    @*<script type="text/javascript">
-                //$(function () {
-                //    $("input:text.editDate").datepicker();
-                //});
-                $(function () {
-                    $("#obs_question_eff_st_dt").datepicker({
-                        changeMonth: true,
-                        changeYear: true,
-                        dateFormat: 'M dd, yy'
-                    });
-                });
-                $(function () {
-                    $("#obs_question_eff_end_dt").datepicker({
-                        changeMonth: true,
-                        changeYear: true,
-                        dateFormat: 'M dd, yy'
-                    });
-                });
-        </script>*@
     <!-- Form Edit State Change Validation -->
     @*---Using Input Groups with Add Ons - Correct Format---
         <div class="col-sm-4">

@@ -45,7 +45,7 @@
       color: #468847;
     }
     ul.sourceList, ol.targetList {
-            min-height: 50px;
+      min-height: 50px;
       margin: 0px 20px 10px 0px;
       padding: 2px;
       border-width: 1px;
@@ -303,7 +303,7 @@
                             </div>
                             <div class="row">
                                 <div class="input-group col-sm-10 col-sm-offset-1">
-                                    <input type="text" class="form-control" id="full_text_search" name="full_text_search" placeholder="Search Question Library for..." style="max-width: 100%; width:100%;">
+                                    <input type="text" class="form-control" id="full_text_search" name="full_text_search" placeholder="Search Question Library for..." style="max-width: 100%; width:100%;" title="Hint: Use Double Quotes to search for literal text!">
                                     <span class="input-group-btn">
                                         <button class="btn btn-secondary" type="button" id="doSearch" data-loading-text="Please Wait...">Search!</button>
                                     </span>
@@ -537,16 +537,16 @@
             //changeMonth: true,
             //changeYear: true,
             //showButtonPanel: true,
-            //minDate: -0,
-            //maxDate: "+1M +10D"       
             //});
 
             $('#cft_eff_st_dt').datepicker({
-                format: "DD, d MM, yy",
+                dateFormat: 'M dd, yy',
                 changeMonth: true,
                 changeYear: true,
                 showButtonPanel: true,
                 minDate: -0,
+                //minDate: -0,
+                //maxDate: "+1M +10D",
                 onClose: function (selectedDate) {
                     $("#cft_eff_end_dt").datepicker("option", "minDate", selectedDate);
                 },
@@ -554,7 +554,7 @@
             });
 
             $('#cft_eff_end_dt').datepicker({
-                format: "DD, d MM, yy",
+                dateFormat: 'M dd, yy',
                 changeMonth: true,
                 changeYear: true,
                 showButtonPanel: true,
@@ -589,14 +589,6 @@
             var waitMsg = '<div style="text-align:center"><br /><br />Please wait while we retrieve the questions...<br /><br /><img src="../../Images/ui-anim_basic_16x16.gif" /></div>'
 
             $("#resultPanel").html(waitMsg);
-
-            //$(this).button('loading');
-            //e.preventDefault(); // <------------------ stop default behaviour of button (to prevent form submit or other behaviours if neeed)
-
-            //var url = "/ColFormTemplate/getQuestions";
-            //$.get(url, { full_text_search: "", metadata_search: "" }, function (data) {
-            //    $("#resultPanel").html(data);
-            //});
 
             // ---- Fetch the Values that wil be used as parameters on the AJAX call -------
             var searchText = $("#full_text_search").val();

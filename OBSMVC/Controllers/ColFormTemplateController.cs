@@ -627,7 +627,7 @@ namespace OBSMVC.Controllers
 
 
         [HttpGet]
-        public PartialViewResult getQuestionInfo(int question_id, int question_QATid,int qCounter, int cft_id )
+        public PartialViewResult getQuestionInfo(int question_id, int question_QATid,int qCounter)
         {
             QuestionInfo questionInfo = new QuestionInfo();
             questionInfo.question_id = question_id;
@@ -691,12 +691,11 @@ namespace OBSMVC.Controllers
             if (question_QATid>0)//this if statement is here to cover scenario where we edit previously saved form
             {
                 //we need to make previously selected value to be selected when we reload the edit form
-                questionInfo.question_assigned_answer_types.Single(x => x.Value == question_QATid.ToString()).Selected = true;
+                questionInfo.question_assigned_answer_types.Single(x => x.Value == question_QATid.ToString()).Selected = true;              
             }
             else if (questionInfo.default_qat_id > 0)
             {
-                questionInfo.question_assigned_answer_types.Single(x => x.Value == questionInfo.default_qat_id.ToString()).Selected = true;
-
+                questionInfo.question_assigned_answer_types.Single(x => x.Value == questionInfo.default_qat_id.ToString()).Selected = true;            
             }
             return PartialView("_getQuestionInfo", questionInfo);
         }
@@ -1153,15 +1152,14 @@ namespace OBSMVC.Controllers
                         string[] question_items = question.Split(new string[] { "~" }, StringSplitOptions.RemoveEmptyEntries);
                         short order = order_counter;
                         int qat_id = Convert.ToInt32(question_items[0]);
-                        int form_section_id = getSectionID(question_items[1]);
+                        int form_section_id = getSectionID(question_items[1]);                        
                         OBS_COL_FORM_QUESTIONS new_form_question = new OBS_COL_FORM_QUESTIONS();
                         new_form_question.obs_cft_id = cft_id;
-
                         new_form_question.obs_form_section_id = form_section_id;
                         new_form_question.obs_qat_id = qat_id;
                         new_form_question.obs_col_form_quest_order = order;
                         new_form_question.obs_col_form_quest_wgt = 1;
-                        new_form_question.obs_col_form_quest_na_yn = "Y";
+                        new_form_question.obs_col_form_quest_na_yn = question_items[2];
                         db.OBS_COL_FORM_QUESTIONS.Add(new_form_question);
                         db.SaveChanges();
                         order_counter++;
@@ -1530,7 +1528,6 @@ namespace OBSMVC.Controllers
         public string full_text { set; get; }
         public bool hasInstances { get; set; }
         public int default_qat_id = -1;
-        public string isOptional { set; get; }
         public List<OBS_ANS_TYPE> assigned_answer_types = new List<OBS_ANS_TYPE>();
         public List<OBS_QUEST_SLCT_ANS> selectable_answers = new List<OBS_QUEST_SLCT_ANS>();
         public List<OBS_QUEST_ANS_TYPES> obs_question_answer_types = new List<OBS_QUEST_ANS_TYPES>();

@@ -493,12 +493,12 @@
                         // Process data for each of the QATs in the form
                         var qatDDL = $(this).find(".viewDropDown").first();
                         var selectedQAT = qatDDL.val();
-                        var isOptional = $(this).find("#cbOptional").val();
+                        var isOptional = $(this).find("#cbOptional").prop("checked");
 
-                        alert("A checkbox was found. Value : " + isOptional);
-
+                        if (isOptional) { isOptional = "Y";}
+                        else{isOptional = "N"}
                         //var trtrt = ""; //hdnFormQuestion
-
+                        //alert("A checkbox was found. Value : " + isOptional);
                         var qatHiddenField = $(this).find(".hdnFormQuestion").first();
                         qatHiddenField.val(selectedQAT + "~" + sectionName + "~" + isOptional);
                         //alert("A question was found!\nSelected QATid = " + selectedQAT + "\nSection Name = " + sectionName + "\nFull Posting String: " + qatHiddenField.val());

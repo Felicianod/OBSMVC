@@ -33,8 +33,9 @@
             </div>
         </div>
         <div class="col-sm-2 col-sm-offset-2">
-            <div class="checkbox">
-                <label><input type="checkbox" id="cbOptional" value="">Optional </label>
+            <div class="checkbox" >
+                <label><input type="checkbox" id="cbOptional" value=""
+                  @if (@Model.isOptional == "Y") { <text> checked="checked" </text> } >Optional</label>
             </div>
         </div> 
                 @*<div class="col-sm-4">

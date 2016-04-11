@@ -107,7 +107,7 @@ namespace OBSMVC.Models
                         temp_qat.answer_type_category = temp_answer.obs_ans_type_category;
                         temp_qat.selectable_ans_required = temp_answer.obs_ans_type_has_fxd_ans_yn;
                         temp_qat.uniqueCounter = qatCounter;                        
-                        temp_qat.editable = "false";
+                        temp_qat.editable = "false";                       
                         if (temp_answer.obs_ans_type_has_fxd_ans_yn=="Y")
                         {
                             //if true, we need to list all of them and assign them to object's list of selectable answers
@@ -130,6 +130,7 @@ namespace OBSMVC.Models
         public List<int> preMetaDataIds = new List<int>();
         public List<qatTags> Quest_Assigned_qatTags = new List<qatTags>();
         public List<SelectListItem> available_answer_types = new List<SelectListItem>();
+        
 
     }
 
@@ -153,8 +154,10 @@ namespace OBSMVC.Models
         public string answer_type_category { set; get; }
         public string selectable_ans_required { set; get; }
         public int uniqueCounter { set; get; }
-        public string editable { set; get; }
+        public string editable { set; get; }       
 
+        public string usageInfo { set; get; }//example: used on 5 forms
+        
     }
     public class AddedSelAnswer
     {

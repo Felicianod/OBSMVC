@@ -627,7 +627,7 @@ namespace OBSMVC.Controllers
 
 
         [HttpGet]
-        public PartialViewResult getQuestionInfo(int question_id, int question_QATid,int qCounter)
+        public PartialViewResult getQuestionInfo(int question_id, int question_QATid,int qCounter, int cft_id )
         {
             QuestionInfo questionInfo = new QuestionInfo();
             questionInfo.question_id = question_id;
@@ -638,6 +638,7 @@ namespace OBSMVC.Controllers
             if (QAInstances.Count() == 0)  //There were no records found in the 'OBS_QUEST_ANS_TYPES' Table for this question Id
             {
                 questionInfo.hasInstances = false;
+                
                 SelectListItem answer_for_dropdown = new SelectListItem() { Text = "Add New...", Value = "New" };
                 questionInfo.question_assigned_answer_types.Add(answer_for_dropdown);
             }
@@ -651,7 +652,7 @@ namespace OBSMVC.Controllers
                     if (qaInstanceTemp.obs_qat_default_ans_type_yn == "Y")
                     {   //if we're here, that means we found default default answer type
                         questionInfo.default_qat_id = qaInstanceTemp.obs_qat_id;//we set our object's qat id to the default qat id                                              
-                    }
+                    }                  
                     //now we need to find the corresponding answer type and assign it to the object
                     OBS_ANS_TYPE temp_answer = db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id);
                     questionInfo.assigned_answer_types.Add(temp_answer);
@@ -695,6 +696,7 @@ namespace OBSMVC.Controllers
             else if (questionInfo.default_qat_id > 0)
             {
                 questionInfo.question_assigned_answer_types.Single(x => x.Value == questionInfo.default_qat_id.ToString()).Selected = true;
+
             }
             return PartialView("_getQuestionInfo", questionInfo);
         }
@@ -1528,7 +1530,7 @@ namespace OBSMVC.Controllers
         public string full_text { set; get; }
         public bool hasInstances { get; set; }
         public int default_qat_id = -1;
-
+        public string isOptional { set; get; }
         public List<OBS_ANS_TYPE> assigned_answer_types = new List<OBS_ANS_TYPE>();
         public List<OBS_QUEST_SLCT_ANS> selectable_answers = new List<OBS_QUEST_SLCT_ANS>();
         public List<OBS_QUEST_ANS_TYPES> obs_question_answer_types = new List<OBS_QUEST_ANS_TYPES>();

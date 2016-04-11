@@ -11,7 +11,6 @@
   var btnModal = "btnModal" + Model.question_id;
 }
 
-
 <div class="row divFormQuestion" id="@qViewId" style="text-align:left">
     <input type="hidden" id="qid" value="@Model.question_id" />
     <div class="row" >
@@ -33,7 +32,12 @@
                 <br />
             </div>
         </div>
-        @*<div class="col-sm-4">
+        <div class="col-sm-2 col-sm-offset-2">
+            <div class="checkbox">
+                <label><input type="checkbox" id="cbOptional" value="">Optional </label>
+            </div>
+        </div> 
+                @*<div class="col-sm-4">
             <button type="button" class="btnEditQAT" id="@btnModal" onclick="loadModal(@Model.question_id)">Edit Question Info</button>
         </div>*@    
     </div>

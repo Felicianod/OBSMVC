@@ -692,11 +692,11 @@ namespace OBSMVC.Controllers
             if (question_QATid>0)//this if statement is here to cover scenario where we edit previously saved form
             {
                 //we need to make previously selected value to be selected when we reload the edit form
-                questionInfo.question_assigned_answer_types.Single(x => x.Value == question_QATid.ToString()).Selected = true;              
+                questionInfo.question_assigned_answer_types.Single(x => x.Value == question_QATid.ToString()).Selected = true;
             }
             else if (questionInfo.default_qat_id > 0)
             {
-                questionInfo.question_assigned_answer_types.Single(x => x.Value == questionInfo.default_qat_id.ToString()).Selected = true;            
+                questionInfo.question_assigned_answer_types.Single(x => x.Value == questionInfo.default_qat_id.ToString()).Selected = true;
             }
             return PartialView("_getQuestionInfo", questionInfo);
         }
@@ -1153,7 +1153,7 @@ namespace OBSMVC.Controllers
                         string[] question_items = question.Split(new string[] { "~" }, StringSplitOptions.RemoveEmptyEntries);
                         short order = order_counter;
                         int qat_id = Convert.ToInt32(question_items[0]);
-                        int form_section_id = getSectionID(question_items[1]);                        
+                        int form_section_id = getSectionID(question_items[1]);
                         OBS_COL_FORM_QUESTIONS new_form_question = new OBS_COL_FORM_QUESTIONS();
                         new_form_question.obs_cft_id = cft_id;
                         new_form_question.obs_form_section_id = form_section_id;
@@ -1448,6 +1448,7 @@ namespace OBSMVC.Controllers
                     oQuestion.cfq_fullText = q.OBS_QUEST_ANS_TYPES.OBS_QUESTION.obs_question_full_text.Replace(": (", ":<br/>(");
                     oQuestion.cfq_AT = q.OBS_QUEST_ANS_TYPES.OBS_ANS_TYPE.obs_ans_type_name;
                     oQuestion.cfq_qatId = q.obs_qat_id;
+                    oQuestion.cfq_na_yn = q.obs_col_form_quest_na_yn;
                     oQuestion.cfq_SelectableAnswers = q.OBS_QUEST_ANS_TYPES.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).OrderBy(xx => xx.obs_qsa_order).Select(x => x.obs_qsa_text).ToList();
                     // .... Populate the rest of the oQuestion properties
                     oSection.colFormQuestionList.Add(oQuestion);
@@ -1487,6 +1488,7 @@ namespace OBSMVC.Controllers
         public int cfq_questId { get; set; }
         public string cfq_fullText { get; set; }
         public string cfq_AT { get; set; }
+        public string cfq_na_yn { get; set; }
         public List<string> cfq_SelectableAnswers { get; set; }
         public List<string> cfq_AnsHTML { get; set; }      //HTML Code passes to the view to render the answer info
 

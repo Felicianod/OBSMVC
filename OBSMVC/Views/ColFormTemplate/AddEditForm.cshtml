@@ -490,12 +490,17 @@
                 }
                 else {
                     formSection.find('.divFormQuestion').each(function () {
+                        // Process data for each of the QATs in the form
                         var qatDDL = $(this).find(".viewDropDown").first();
                         var selectedQAT = qatDDL.val();
+                        var isOptional = $(this).find("#cbOptional").val();
+
+                        alert("A checkbox was found. Value : " + isOptional);
+
                         //var trtrt = ""; //hdnFormQuestion
 
                         var qatHiddenField = $(this).find(".hdnFormQuestion").first();
-                        qatHiddenField.val(selectedQAT + "~" + sectionName);
+                        qatHiddenField.val(selectedQAT + "~" + sectionName + "~" + isOptional);
                         //alert("A question was found!\nSelected QATid = " + selectedQAT + "\nSection Name = " + sectionName + "\nFull Posting String: " + qatHiddenField.val());
                         //alert("Question value to post = " + qatHiddenField.val());
                     });

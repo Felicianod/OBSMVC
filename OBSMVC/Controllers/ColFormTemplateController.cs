@@ -627,7 +627,7 @@ namespace OBSMVC.Controllers
 
 
         [HttpGet]
-        public PartialViewResult getQuestionInfo(int question_id, int question_QATid,int qCounter )
+        public PartialViewResult getQuestionInfo(int question_id, int question_QATid,int qCounter)
         {
             QuestionInfo questionInfo = new QuestionInfo();
             questionInfo.question_id = question_id;
@@ -696,7 +696,6 @@ namespace OBSMVC.Controllers
             else if (questionInfo.default_qat_id > 0)
             {
                 questionInfo.question_assigned_answer_types.Single(x => x.Value == questionInfo.default_qat_id.ToString()).Selected = true;
-
             }
             return PartialView("_getQuestionInfo", questionInfo);
         }
@@ -1156,12 +1155,11 @@ namespace OBSMVC.Controllers
                         int form_section_id = getSectionID(question_items[1]);
                         OBS_COL_FORM_QUESTIONS new_form_question = new OBS_COL_FORM_QUESTIONS();
                         new_form_question.obs_cft_id = cft_id;
-
                         new_form_question.obs_form_section_id = form_section_id;
                         new_form_question.obs_qat_id = qat_id;
                         new_form_question.obs_col_form_quest_order = order;
                         new_form_question.obs_col_form_quest_wgt = 1;
-                        new_form_question.obs_col_form_quest_na_yn = "Y";
+                        new_form_question.obs_col_form_quest_na_yn = question_items[2];
                         db.OBS_COL_FORM_QUESTIONS.Add(new_form_question);
                         db.SaveChanges();
                         order_counter++;
@@ -1355,20 +1353,20 @@ namespace OBSMVC.Controllers
             // Set the properties from query result
             if (q != null)
             {
-                cft_Title = q.cft_Title;
-                cft_SubTitle = q.cft_SubTitle;
-                cft_obsType = q.cft_obsType;
-                cft_Cust = q.cft_Cust;
-                cft_LC = q.cft_LC;
-                cft_Status = q.cft_Status;
-                cft_isPublished = q.cft_isPublished;
-                cft_Nbr = q.cft_Nbr;
-                cft_Version = q.cft_Version;
-                cft_eff_st_dt = q.cft_eff_st_dt;
-                cft_eff_end_dt = q.cft_eff_end_dt;
-                colFormSections = new List<CollectionFormSection>();
-                retrieveQuestionData();
-            }
+            cft_Title = q.cft_Title;
+            cft_SubTitle = q.cft_SubTitle;
+            cft_obsType = q.cft_obsType;
+            cft_Cust = q.cft_Cust;
+            cft_LC = q.cft_LC;
+            cft_Status = q.cft_Status;
+            cft_isPublished = q.cft_isPublished;
+            cft_Nbr = q.cft_Nbr;
+            cft_Version = q.cft_Version;
+            cft_eff_st_dt = q.cft_eff_st_dt;
+            cft_eff_end_dt = q.cft_eff_end_dt;           
+            colFormSections = new List<CollectionFormSection>();
+            retrieveQuestionData();
+        }
             else { 
             // Form Id not fouond in the database, leave all values empty
                 cft_Title = "";
@@ -1532,7 +1530,6 @@ namespace OBSMVC.Controllers
         public string full_text { set; get; }
         public bool hasInstances { get; set; }
         public int default_qat_id = -1;
-        public string isOptional { set; get; }
         public List<OBS_ANS_TYPE> assigned_answer_types = new List<OBS_ANS_TYPE>();
         public List<OBS_QUEST_SLCT_ANS> selectable_answers = new List<OBS_QUEST_SLCT_ANS>();
         public List<OBS_QUEST_ANS_TYPES> obs_question_answer_types = new List<OBS_QUEST_ANS_TYPES>();

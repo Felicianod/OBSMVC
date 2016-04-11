@@ -627,11 +627,12 @@ namespace OBSMVC.Controllers
 
 
         [HttpGet]
-        public PartialViewResult getQuestionInfo(int question_id, int question_QATid,int qCounter)
+        public PartialViewResult getQuestionInfo(int question_id, int question_QATid,int qCounter, string isOptional)
         {
             QuestionInfo questionInfo = new QuestionInfo();
             questionInfo.question_id = question_id;
             questionInfo.uniqueCounter = qCounter;
+            questionInfo.isOptional = isOptional;
             questionInfo.full_text = db.OBS_QUESTION.Single(item => item.obs_question_id == question_id).obs_question_full_text;
             List<OBS_QUEST_ANS_TYPES> QAInstances = db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == question_id && (x.obs_qat_end_eff_dt == null || x.obs_qat_end_eff_dt > DateTime.Now)).ToList();
 
@@ -1528,6 +1529,7 @@ namespace OBSMVC.Controllers
         public string full_text { set; get; }
         public bool hasInstances { get; set; }
         public int default_qat_id = -1;
+        public string isOptional { set; get; }
         public List<OBS_ANS_TYPE> assigned_answer_types = new List<OBS_ANS_TYPE>();
         public List<OBS_QUEST_SLCT_ANS> selectable_answers = new List<OBS_QUEST_SLCT_ANS>();
         public List<OBS_QUEST_ANS_TYPES> obs_question_answer_types = new List<OBS_QUEST_ANS_TYPES>();

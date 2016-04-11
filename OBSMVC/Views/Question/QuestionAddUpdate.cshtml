@@ -391,7 +391,7 @@
                         <span>SAVE</span>
                     </button>
                     <span>&nbsp;&nbsp;&nbsp;</span>
-                    <button type="button" class="btn btn-default" style="min-width:100px" onclick="resetFormData();">Reset Form</button>
+                    <button type="button" class="btn btn-default" style="min-width:100px" onclick="resetFormData();">Reset Data</button>
                 </div>
             </div>
             @if (ViewBag.ConfMsg != null)
@@ -671,7 +671,7 @@
 
     <script>
         $(document).ready(function () {
-            var isChanged = $("#formChanged");
+            //var isChanged = $("#formChanged");
 
             //var isChanged = false;
             $('input, select, textarea').change(function () {
@@ -681,11 +681,11 @@
                 }
                 $("#btnAddQuestion").removeAttr('disabled');
                 //alert('Button Text is:' + btnText);
-                isChanged.val("Y");
+                $("#formChanged").val("Y");
             });
             $(window).bind('beforeunload', function () {
                 //if ($("#formChanged").val() == "Y") { isChanged = true;}
-                if (isChanged.val() == "Y") {
+                if ($("#formChanged").val() == "Y") {
                     return 'There are unsaved changed. Do you want to discard Changes and Exit?';
                 } else {
                     return undefined;

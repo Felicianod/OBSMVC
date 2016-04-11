@@ -627,7 +627,7 @@ namespace OBSMVC.Controllers
 
 
         [HttpGet]
-        public PartialViewResult getQuestionInfo(int question_id, int question_QATid,int qCounter, int cft_id )
+        public PartialViewResult getQuestionInfo(int question_id, int question_QATid,int qCounter )
         {
             QuestionInfo questionInfo = new QuestionInfo();
             questionInfo.question_id = question_id;
@@ -1355,20 +1355,20 @@ namespace OBSMVC.Controllers
             // Set the properties from query result
             if (q != null)
             {
-            cft_Title = q.cft_Title;
-            cft_SubTitle = q.cft_SubTitle;
-            cft_obsType = q.cft_obsType;
-            cft_Cust = q.cft_Cust;
-            cft_LC = q.cft_LC;
-            cft_Status = q.cft_Status;
-            cft_isPublished = q.cft_isPublished;
-            cft_Nbr = q.cft_Nbr;
-            cft_Version = q.cft_Version;
-            cft_eff_st_dt = q.cft_eff_st_dt;
-            cft_eff_end_dt = q.cft_eff_end_dt;           
-            colFormSections = new List<CollectionFormSection>();
-            retrieveQuestionData();
-        }
+                cft_Title = q.cft_Title;
+                cft_SubTitle = q.cft_SubTitle;
+                cft_obsType = q.cft_obsType;
+                cft_Cust = q.cft_Cust;
+                cft_LC = q.cft_LC;
+                cft_Status = q.cft_Status;
+                cft_isPublished = q.cft_isPublished;
+                cft_Nbr = q.cft_Nbr;
+                cft_Version = q.cft_Version;
+                cft_eff_st_dt = q.cft_eff_st_dt;
+                cft_eff_end_dt = q.cft_eff_end_dt;
+                colFormSections = new List<CollectionFormSection>();
+                retrieveQuestionData();
+            }
             else { 
             // Form Id not fouond in the database, leave all values empty
                 cft_Title = "";
@@ -1449,6 +1449,7 @@ namespace OBSMVC.Controllers
                     oQuestion.cfq_fullText = q.OBS_QUEST_ANS_TYPES.OBS_QUESTION.obs_question_full_text.Replace(": (", ":<br/>(");
                     oQuestion.cfq_AT = q.OBS_QUEST_ANS_TYPES.OBS_ANS_TYPE.obs_ans_type_name;
                     oQuestion.cfq_qatId = q.obs_qat_id;
+                    oQuestion.cfq_na_yn = q.obs_col_form_quest_na_yn;
                     oQuestion.cfq_SelectableAnswers = q.OBS_QUEST_ANS_TYPES.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).OrderBy(xx => xx.obs_qsa_order).Select(x => x.obs_qsa_text).ToList();
                     // .... Populate the rest of the oQuestion properties
                     oSection.colFormQuestionList.Add(oQuestion);
@@ -1488,6 +1489,7 @@ namespace OBSMVC.Controllers
         public int cfq_questId { get; set; }
         public string cfq_fullText { get; set; }
         public string cfq_AT { get; set; }
+        public string cfq_na_yn { get; set; }
         public List<string> cfq_SelectableAnswers { get; set; }
         public List<string> cfq_AnsHTML { get; set; }      //HTML Code passes to the view to render the answer info
 

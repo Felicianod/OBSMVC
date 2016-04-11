@@ -39,7 +39,7 @@
                               |  method: "GET", param data: { question_id: qid, qCounter: newCounterSeq }    |
                               |                                                                              |
                               \------------------------------------------------------------------------------/*@
-                            @Html.Action("getQuestionInfo", new { question_id = @sectQuest.cfq_questId, question_QATid = sectQuest.cfq_qatId, qCounter = @sectQuest.cfq_seqInForm + 1 })
+                            @Html.Action("getQuestionInfo", new { question_id = @sectQuest.cfq_questId, question_QATid = sectQuest.cfq_qatId, qCounter = @sectQuest.cfq_seqInForm + 1, isOptional = @sectQuest.cfq_na_yn })
                         </li>
                         questionCounter++;
                       }

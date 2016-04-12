@@ -9,7 +9,9 @@
   var rowInfo = "";
   var current_selected = "-1";
   var btnModal = "btnModal" + Model.question_id;
+  var ulId = "ul" + @Model.uniqueCounter;
 }
+
 
 <div class="row divFormQuestion" id="@qViewId" style="text-align:left">
     <input type="hidden" id="qid" value="@Model.question_id" />
@@ -48,11 +50,6 @@
                 Selectable Answers: &nbsp;&nbsp;
             </div>
             <div class="col-sm-9">
-                @{
-
-                    var ulId = "ul" + @Model.uniqueCounter;
-                }
-
                 <div class="form-inline selAnsSection" id="@ulId">
                     @if (Model.hasInstances == true && Model.question_assigned_answer_types.Where(item => item.Selected == true).Count() > 0)
                     {
@@ -72,55 +69,59 @@
     @*@{rowInfo += current_selected + "~Header Section";}*@
     <input class="hdnFormQuestion" type="hidden" id="formQuestions" name="formQuestions" value="@rowInfo" />
 </div>
+
 @* ================================= SCRIPTS SECTION ============================================*@
 <script type="text/javascript">
-    $("@dropdown2").change( function (event) {
-        var $drop_down = $(this);
-        var selectedId = $(this).val();
-        var selectedText = $(this).children("option:selected").text();
-        var ddlId = $(this).prop("id");
+    $(document).ready(function(){
+        $("@dropdown2").change( function (event) {
+            var $drop_down = $(this);
+            var selectedId = $(this).val();
+            var selectedText = $(this).children("option:selected").text();
+            var ddlId = $(this).prop("id");
 
-        if (selectedId != "") {
-            $('#btnSaveForm').button('reset');
-        }
-        //alert("Selected Text is: " + selectedText);
-        //alert("Before opening modal window, the ddl id is: " + ddlId);
-        if (selectedId == '') {
-            selectedId = "-1";
-            $("#@Model.uniqueCounter").html("");
-            $("#@ulId").html("");
-        }
-        else if(selectedId == 'New'){
-            //alert("A New Question request has been issued!");
-            $(this).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");
-            loadModal(@Model.question_id, ddlId);
-        }else
-        {
-            if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")
+            if (selectedId != "") {
+                $('#btnSaveForm').button('reset');
+            }
+            //alert("Selected Text is: " + selectedText);
+            //alert("Before opening modal window, the ddl id is: " + ddlId);
+            if (selectedId == '') {
+                selectedId = "-1";
+                $("#@Model.uniqueCounter").html("");
+                $("#@ulId").html("");
+            }
+            else if(selectedId == 'New'){
+                //alert("A New Question request has been issued!");
+                $(this).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");
+                loadModal(@Model.question_id, ddlId);
+            }else
             {
-                $("#@ulId").html('<span style="color:blue">No Selectable Answers Required for this Selection</span>')
+                if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")
+                {
+                    $("#@ulId").html('<span style="color:blue">No Selectable Answers Required for this Selection</span>')
+                }
+                else{
+                    //alert("Selected ID "+selectedId);
+                    $.ajax({
+                        url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
+                        method: "GET",
+                        cache: false,
+                        data: { qat_id: selectedId },
+                        error: function () {
+                            alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
+                        }
+                    }).done(function (d) {
+                        //alert("Retrieved Data is: " + d);
+                        $("#@ulId").html(d);
+                    });
+                }
             }
-            else{
-                //alert("Selected ID "+selectedId);
-                $.ajax({
-                    url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
-                    method: "GET",
-                    cache: false,
-                    data: { qat_id: selectedId },
-                    error: function () {
-                        alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    //alert("Retrieved Data is: " + d);
-                    $("#@ulId").html(d);
-                });
-            }
-        }
-        var cur_sel = document.getElementById("currentSelectedQAT"+@Model.uniqueCounter);
-        cur_sel.value = selectedId;
-        $(this).css({
-            "color": "black",
-            "background-color": "white"
-        });
-    })    
+            var cur_sel = document.getElementById("currentSelectedQAT"+@Model.uniqueCounter);
+            cur_sel.value = selectedId;
+            $(this).css({
+                "color": "black",
+                "background-color": "white"
+            });
+        })    
+    });
 </script>
+@* ================================= END OF SCRIPTS SECTION ============================================*@

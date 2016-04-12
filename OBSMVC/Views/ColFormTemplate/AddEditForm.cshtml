@@ -113,6 +113,8 @@
     }
 </style>
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
 @{
     string fMode = "add";
@@ -385,9 +387,30 @@
     </div>
 
 
+<div id="dialog-confirm-reset" title="Please Confirm" style="display:none">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+        Your form has been modified.<br /> Are you sure you want to reset all changes?
+    </p>
+</div>
+<div id="dialog-confirm-exit" title="Please Confirm" style="display:none">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+        Your form has been modified.<br /> Do you want to discard all changes?
+    </p>
+</div>
 
 <div id="remoteWindow">
 </div>
+
+
+@*if (confirm("Your form has been modified.\nAre you sure you want to reset all changes?")) {
+        $("#formChanged").val("N");
+        //isChanged.val("N");
+        location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
+    }*@
+
+
+
 
 <script>
     function loadModal(questionId, ddlId) {
@@ -396,7 +419,6 @@
         //var url = "/Question/QuestionAddUpdate/" + questionId;
         var cft_id = $('#cft_id').val();
         var url = "/LightQuestion/QuestionAddUpdateLight/" + questionId + "?cft_id="+cft_id;
-
         opendialog(url, questionId, ddlId);
     }
 
@@ -418,9 +440,9 @@
             //    effect: "blind",
             //    duration: 1000
             //},
-            hide: {effect:"explode",
-                //duration: 1000
-            },
+            //hide: {effect:"explode",
+            //    //duration: 1000
+            //},
             //hide: {
             //    effect: "explode",
             //    duration: 1000
@@ -549,11 +571,29 @@
             $("#btnCancel").click(function () {
                 if ( $("#formChanged").val() == "Y")
                 {
-                    if (confirm("Your form has been modified.\nAre you sure you want to reset all changes?")) {
+
+                    $( "#dialog-confirm-reset" ).dialog({
+                        resizable: false,
+                        height:200,
+                        modal: true,
+                        buttons: {
+                            "Reset Form": function() {
+                                $("#formChanged").val("N");
+                                //isChanged.val("N");
+                                location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id                                
+                            },
+                            Cancel: function() {
+                                $( this ).dialog( "close" );
+                            }
+                        }
+                    });
+
+                    @*if (confirm("Your form has been modified.\nAre you sure you want to reset all changes?")) {
                         $("#formChanged").val("N");
                         //isChanged.val("N");
                         location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
-                    }
+                    }*@
+
                 }
             });
             //$('.datepicker').datepicker({
@@ -943,10 +983,10 @@
             var scrollPanel = $('#qFormList');
             // ----- End of Variables and a Function Used to Scroll Down the sectons/question panel -------
 
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             // As soon as the page first loads, create a new Section if we are in "add" mode.
             if ($('#formMode').val() == "add") { addNewSection(); }
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             //Enable Input fields to be reset when to default css when edited and to set the form status to "changed"
             //var isChanged = false;
             $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
@@ -960,26 +1000,45 @@
                 $("#btnSaveForm").removeAttr('disabled');
                 $("#btnCancel").removeAttr('disabled');
                 //alert('Button Text is:' + btnText);
-                $("#formChanged").val("Y");   // Re-enabke the form "changed" status 
+                $("#formChanged").val("Y");   // Re-enable the form "changed" status
                 //isChanged = true;
                 $(this).removeClass("invalidField");
             });
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             $(window).bind('beforeunload', function () {
                 if($("#formChanged").val() == "Y") {
-                //if (isChanged) {
+                    //if (isChanged) {
                     return 'There are unsaved changed. Do you want to discard Changes and Exit?';
-                } else {
+                    //var response = 
+                    //$( "#dialog-confirm-exit" ).dialog({
+                    //    resizable: false,
+                    //    height:250,
+                    //    modal: true,
+                    //    buttons: {
+                    //        "Discard Changes": function() {
+                    //            //$("#formChanged").val("N");
+                    //            //isChanged.val("N");
+                    //            response = true;
+                    //        },
+                    //        Cancel: function() {
+                    //            //$( this ).dialog( "close" );
+                    //            response = false;
+                    //        }
+                    //    }
+                    //});
+                    //return response;
+                }
+                else {
                     return undefined;
                 }
             });
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             $("#btnSaveForm").click(function () {
                 //isChanged = false;
                 $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
                 $(this).button('loading');
             });
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             $('#btnAddSection').click(function () {
                 var $btn = $(this);
                 $btn.button('loading');
@@ -994,9 +1053,9 @@
 
                 //$('#qFormList').scrollTop($('#qFormList').scrollHeight);
             })
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         });  // END Of documetn Ready Startup Scripts
-        
+
         function addNewSection() {
             $('#sCounter').val(Number($('#sCounter').val()) + 1);
             // ------------ Make the Ajax Call ---------------------------------------------
@@ -1029,55 +1088,55 @@
                 });
             });
 
-        } // ------ End of addNewSection() function -----
+            } // ------ End of addNewSection() function -----
 
-        function enableDropDown(dropdown) {
-            //var $drop_down = $(this);
-            var selectedId = dropdown.val();
-            var selectedText = dropdown.children("option:selected").text();
-            var ddlId = dropdown.prop("id");
+            function enableDropDown(dropdown) {
+                //var $drop_down = $(this);
+                var selectedId = dropdown.val();
+                var selectedText = dropdown.children("option:selected").text();
+                var ddlId = dropdown.prop("id");
 
-            var selansDiv = dropdown.parents(".divFormQuestion").first().find(".selAnsSection").first();
-            var qid = dropdown.parents(".divFormQuestion").first().find("#qid").val();
-            //alert("Selected Text is: " + selectedText);
-            //alert("Before opening modal window, the ddl id is: " + ddlId);
-            if (selectedId == '') {
-                selectedId = "-1";
-                @*$("#@Model.uniqueCounter").html("");*@
-                selansDiv.html("");
-            }
-            else if(selectedId == 'New'){
-                //alert("A New Question request has been issued!");
-                selansDiv.html("");
-                loadModal(qid, ddlId);
-            }else
-            {
-                if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")
+                var selansDiv = dropdown.parents(".divFormQuestion").first().find(".selAnsSection").first();
+                var qid = dropdown.parents(".divFormQuestion").first().find("#qid").val();
+                //alert("Selected Text is: " + selectedText);
+                //alert("Before opening modal window, the ddl id is: " + ddlId);
+                if (selectedId == '') {
+                    selectedId = "-1";
+                    @*$("#@Model.uniqueCounter").html("");*@
+                    selansDiv.html("");
+                }
+                else if(selectedId == 'New'){
+                    //alert("A New Question request has been issued!");
+                    selansDiv.html("");
+                    loadModal(qid, ddlId);
+                }else
                 {
-                    selansDiv.html('<span style="color:blue">No Selectable Answers Required for this Selection</span>')
+                    if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")
+                    {
+                        selansDiv.html('<span style="color:blue">No Selectable Answers Required for this Selection</span>')
+                    }
+                    else{
+                        //alert("Selected ID "+selectedId);
+                        $.ajax({
+                            url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
+                            method: "GET",
+                            cache: false,
+                            data: { qat_id: selectedId },
+                            error: function () {
+                                alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
+                            }
+                        }).done(function (d) {
+                            //alert("Retrieved Data is: " + d);
+                            selansDiv.html(d);
+                        });
+                    }
                 }
-                else{
-                    //alert("Selected ID "+selectedId);
-                    $.ajax({
-                        url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
-                        method: "GET",
-                        cache: false,
-                        data: { qat_id: selectedId },
-                        error: function () {
-                            alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-                        }
-                    }).done(function (d) {
-                        //alert("Retrieved Data is: " + d);
-                        selansDiv.html(d);
-                    });
-                }
-            }
-            @*var cur_sel = document.getElementById("currentSelectedQAT"+@Model.uniqueCounter);
+                @*var cur_sel = document.getElementById("currentSelectedQAT"+@Model.uniqueCounter);
             cur_sel.value = selectedId;*@
 
-            $(this).css({
-                "color": "black",
-                "background-color": "white"
-            });
-        }
+                $(this).css({
+                    "color": "black",
+                    "background-color": "white"
+                });
+            }
     </script>

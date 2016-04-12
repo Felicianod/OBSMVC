@@ -1284,7 +1284,18 @@ namespace OBSMVC.Controllers
             //first need to check if qat_id is already tied to any Form
             if (ObsDB.OBS_COL_FORM_QUESTIONS.Where(x => x.obs_qat_id == qat_id).ToList().Count > 0)
             {
-                //this is a placeholder for soft deletion 
+                //if answer type requires selectable answers, lets deactivate them first
+                short ans_type_id = ObsDB.OBS_QUEST_ANS_TYPES.Single(y => y.obs_qat_id == qat_id).obs_ans_type_id;
+                if (ObsDB.OBS_ANS_TYPE.Single(x => x.obs_ans_type_id == ans_type_id).obs_ans_type_has_fxd_ans_yn == "Y")
+                {
+                    List<OBS_QUEST_SLCT_ANS> sel_answers = ObsDB.OBS_QUEST_SLCT_ANS.Where(x => x.obs_qat_id == qat_id && x.obs_qsa_eff_st_dt >= DateTime.Now && x.obs_qsa_eff_end_dt < DateTime.Now).ToList();
+                    foreach (OBS_QUEST_SLCT_ANS sel_ans in sel_answers) 
+                    {
+                        sel_ans.obs_qsa_eff_st_dt = DateTime.Now;
+                    }
+                }
+                ObsDB.OBS_QUEST_ANS_TYPES.Single(x => x.obs_qat_id == qat_id).obs_qat_end_eff_dt = DateTime.Now;
+
             }
             else
             {//ok, this qat id doesn't belong to any form. We can hard delete it
@@ -1296,6 +1307,7 @@ namespace OBSMVC.Controllers
                 }               
                 ObsDB.OBS_QUEST_ANS_TYPES.Remove(ObsDB.OBS_QUEST_ANS_TYPES.Find(qat_id));
             }
+            ObsDB.SaveChanges();
         }
     }
 }

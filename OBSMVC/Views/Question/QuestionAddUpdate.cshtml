@@ -693,7 +693,7 @@
             });
             // ---------------- Execute When Saving the Whole Form --------------
             $("#btnAddQuestion").click(function () {
-                isChanged.val("N");
+                $("#formChanged").val("N");
                 //isChanged = false;
                 $(this).button('loading');
             });
@@ -702,7 +702,7 @@
             //    $(this).button('loading');
             //});
             $("#saveMDTag").click(function () {
-                isChanged.val("N");
+                $("#formChanged").val("N");
                 $(this).button('loading');
             });
 

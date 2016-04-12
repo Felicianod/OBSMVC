@@ -238,7 +238,7 @@
                     {
                         foreach (OBSMVC.Models.qatTags qat in Model.Quest_Assigned_qatTags)
                         {
-                            @Html.Action("getQuestionAnswerInfo","Question", new { qatInfo = qat } ) ; @*<hr />*@
+                            @Html.Action("getQuestionAnswerInfo","Question", new { qatInfo = qat } ) ; @*<hr />*@                        
                         }
                     }
                 </div>
@@ -310,10 +310,8 @@
             }).on('hide.bs.collapse', function () {
                 $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
             });
-
-        });
-
-       
+            $(".deleteQAT").remove();
+        });       
 </script>
 
     <script>

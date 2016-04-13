@@ -236,18 +236,18 @@
                 //Loop through all existing QAT for this question
                 //alert("Your Selection does not require Selectable Answers!!");
                 var alreadyexist = false;
-                $(".answerType").each(function () {
-                    if ($(this).find("#qat").first().val() == selectedDDLText) {
-                        //The selected option already exist
-                        alreadyexist = true;
-                    }
-                });
+                //$(".answerType").each(function () {
+                //    if ($(this).find("#qat").first().val() == selectedDDLText) {
+                //        //The selected option already exist
+                //        alreadyexist = true;
+                //    }
+                //});
 
-                if (alreadyexist) {
-                    //alert("WARNING! This Selection already exist.");
-                    formValidated = false;
-                    validationMessage = "Value Selected Already exist. Choose a different Answer Type.";
-                }
+                //if (alreadyexist) {
+                //    //alert("WARNING! This Selection already exist.");
+                //    formValidated = false;
+                //    validationMessage = "Value Selected Already exist. Choose a different Answer Type.";
+                //}
             }
 
             // Proceed only if the user input is valid
@@ -291,14 +291,14 @@
                     //alert('Save Resullt: ' + d)
                     //$(this).button('reset');
                     $("#divaddedSA").append(d);
-                    $("#divNewSA").html("");
+                    //$("#divNewSA").html("");       //We do not need to clear the Entry form since we want to let users keep entering new data if needed
                     //If saving is successful, enable the Question Save Button
                     $("#btnAddQuestion").removeAttr('disabled');
                     //$('#messageAddedSA').show();
                     $('#noATmsg').remove();
                 });
                 // Finally once the "add" has been performed, turn the "Form Changed" flag to indicate a change was done to the Question
-                $("#formChanged").val("Y");
+                $("#popupFormChanged").val("Y");
             }
             else {
                 alert("Please review your input.\n" + validationMessage);

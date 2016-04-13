@@ -6,7 +6,7 @@
 <html>
 <head>  
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.7">
     <link href="~/Content/jquery-ui.css" rel="stylesheet" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -25,7 +25,7 @@
         transition: opacity 0.3s linear, left 0.3s ease-out;
     }
 
-        #container .modal.fade.in {
+    #container .modal.fade.in {
             left: 50%;
         }
     /*.input-group-addon {
@@ -152,55 +152,12 @@
 
     //-----------------------------------   QUESTION HEADER SECCTION ----------------------------------------------------------
     <div class="row personal-info">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <div class="input-group">
-                    <div class="input-group-addon stdWidth">
-                        @Html.LabelFor(model => model.questn.obs_question_full_text)
-                    </div>
-                    <textarea class="form-control has-feedback" id="questn.obs_question_full_text" name="questn.obs_question_full_text" cols="400" rows="3" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" required readonly>@Model.questn.obs_question_full_text</textarea>
-                    @Html.ValidationMessageFor(model => model.questn.obs_question_full_text, "", new { @class = "text-danger" })
-                </div>
-
-
+        <div class="input-group">
+            <div class="input-group-addon stdWidth">
+                @Html.LabelFor(model => model.questn.obs_question_full_text)
             </div>
-            @*<div class="panel-body collapse in" id="headerInfoPanel">
-               
-                <div class="form-group row smallRowMargin">
-                    <div class="col-sm-11 ">
-                        <div class="input-group">
-                            <div class="input-group-addon stdWidth">
-                                @Html.LabelFor(model => model.questn.obs_question_desc)
-                            </div>
-                            @Html.EditorFor(model => model.questn.obs_question_desc, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:95%;" } })
-                            @Html.ValidationMessageFor(model => model.questn.obs_question_desc, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row smallRowMargin">
-                    <div class="col-sm-4 col-sm-offset-1">
-                        <div class="input-group" data-provide="datepicker">
-                            <div class="input-group-addon">
-                                @Html.LabelFor(model => model.questn.obs_question_eff_st_dt)
-                            </div>
-                            <input class="datepicker form-control" id="obs_question_eff_st_dt" name="questn.obs_question_eff_st_dt" value="@Model.questn.obs_question_eff_st_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;">
-                            <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                            @Html.ValidationMessageFor(model => model.questn.obs_question_eff_end_dt, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="col-sm-4 col-sm-offset-1">
-                        <div class="input-group" data-provide="datepicker">
-                            <div class="input-group-addon">
-                                @Html.LabelFor(model => model.questn.obs_question_eff_end_dt)
-                            </div>
-                            <input class="datepicker form-control" id="obs_question_eff_end_dt" name="questn.obs_question_eff_end_dt" value="@endDateValue" style="max-width: 100%; width:100%;">
-                            <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                            @Html.ValidationMessageFor(model => model.questn.obs_question_eff_end_dt, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-               </div>
-                
-            </div>*@
+            <textarea class="form-control has-feedback" id="questn.obs_question_full_text" name="questn.obs_question_full_text" cols="400" rows="3" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" required readonly>@Model.questn.obs_question_full_text</textarea>
+            @Html.ValidationMessageFor(model => model.questn.obs_question_full_text, "", new { @class = "text-danger" })
         </div>
     </div>
 

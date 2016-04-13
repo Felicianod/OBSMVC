@@ -111,9 +111,73 @@
     .newBtn:hover  {
         box-shadow: 0 4px 4px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
     }
+    .modal-header, .close {
+      background-color: #444444;
+      color:white !important;
+      text-align: center;
+      font-size: 30px;
+      }
+    .modal-footer {
+      background-color: #f9f9f9;
+    }
+    .modal.modal-wide .modal-dialog {
+        width: 85%;
+    }
+    .modal-wide .modal-body {
+        overflow-y: auto;
+        height: 500px;
+    }
+
+    .modal-wide .modal-content  {
+        -webkit-border-radius: 0px !important;
+        -moz-border-radius: 0px !important;
+        border-radius: 0px !important;
+        border-width:6px;
+        border-style:double;
+        border-color: #c6e0ff;
+     }
+    
+    #editQATWindow .modal-body p { margin-bottom: 900px }
+    .btnYES {
+        background: #3d85c6;
+        background: -webkit-linear-gradient(#073763, #3d85c6 50%, #073763);
+        background: linear-gradient(#073763, #3d85c6 50%, #073763);
+        border: 1px solid #569;
+        border-radius: 7px;
+        box-shadow: -2px 2px 0 0 #444;
+        color: #fff;
+        display: inline-block;
+        padding: 7px 13px;
+        font: normal 700 14px/1 "Calibri", sans-serif;
+        text-align: center;
+        text-shadow: 2px 2px 0 #070550;
+    }
+    .btnYES:hover {
+        background: #3498db;
+        background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+        background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+        font: normal 700 14px/1 "Calibri", sans-serif;
+        color: white;
+    }
+    .btnYES:focus {
+        background: #3498db;
+        background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+        background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+        font: normal 700 14px/1 "Calibri", sans-serif;
+        color: white;
+    }
 </style>
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+<script>
+    $(document).ready(function(){
+        $(".modal-wide").on("show.bs.modal", function() {
+            var height = $(window).height() - 200;
+            $(this).find(".modal-body").css("max-height", height);
+        });
+    });
+</script>
 
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
 @{
@@ -401,6 +465,49 @@
 
 <div id="remoteWindow">
 </div>
+@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@ 
+@* ------------------------------------- POP UP "QUESTION MAINTENANCE LIGHT" FORM ------------------------------------------------ *@
+<!-- Modal -->
+@*loadModal(@Model.question_id, ddlId);*@
+<div class="modal  modal-wide fade" id="editQATWindow" role="dialog">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">ADD NEW ANSWER TYPE</h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <span style="font-weight:bold; font-size:larger; margin-left:10px" class="label label-default">Question Full Text: </span>
+                        <span style="font-weight:bold; font-size:larger; margin-left:10px" id="selQText" class="label label-primary"> </span>
+                    </div>
+                </div>
+                <br />
+                <div class="row" id="divaddedSA" style="max-width:100%; width:100%; margin-left:10px">
+                    @*----------------------------------------------------------------------------
+                           Placeholder for Newly Added Questions Answer Types  through this window
+                        ------------------------------------------------------------------------------*@
+                </div>
+                <div class="row" id="divNewSA" style="max-width:100%; width:1000%; margin-left:10px">
+                    @*-----------------------------------------------------------------------------
+                                    Placeholder for ADD MODE for new Questions Answer Types
+                        -------------------------------------------------------------------------------*@
+                    @Html.Action("addQuestionAnswerInfo", "Question")
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+@* ------------------------ END OF "Add New Metadata Tag" FORM ------------------------- *@
+
+
 
 
 @*if (confirm("Your form has been modified.\nAre you sure you want to reset all changes?")) {
@@ -439,9 +546,6 @@
             //show: {
             //    effect: "blind",
             //    duration: 1000
-            //},
-            //hide: {effect:"explode",
-            //    //duration: 1000
             //},
             //hide: {
             //    effect: "explode",
@@ -1139,4 +1243,20 @@
                     "background-color": "white"
                 });
             }
+
+        // Function to load the selected template values into the Edit Mode ANswer Types
+        function loadTemplate(callerBtn, selAnslist) {
+            //Create an array of values (From parameter selAnslist value) to apply to the text boxes
+            var templateList = selAnslist.split(",");
+
+            // Loops through all textboxes of the upper level parent DIV and set their values accordingly
+            var textBoxCounter = 0;
+            $("#divNewAT").find(".selAnswerTextb").each(function () {
+                $(this).val(templateList[textBoxCounter]);
+                textBoxCounter = textBoxCounter + 1;
+            });
+
+            $('.saveSA').prop('disabled', false);
+        }
+
     </script>

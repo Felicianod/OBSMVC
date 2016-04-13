@@ -189,12 +189,7 @@ namespace OBSMVC.Controllers
                                     selAnsList_from_form.Add(ans_type_elements[i].Trim().ToUpper());
                                 }
                                 OBS_ANS_TYPE ans_type = db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == obs_ans_type_id);
-                                List<string> current_sel_ans_list = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == intQATid && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).Select(x => x.obs_qsa_text).ToList();
-                                //if (current_sel_ans_list.Count() != selAnsList_from_form.Count() && (ans_type.obs_ans_type_category == "3 Val Range" || ans_type.obs_ans_type_category == "5 Val Range"))
-                                //{
-
-                                //    ViewBag.Message = "ERROR: Not Enough Selectable Answers for this category!!!!";
-                                //}
+                                List<string> current_sel_ans_list = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == intQATid && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).Select(x => x.obs_qsa_text).ToList();                           
                                 if (isEqualList(current_sel_ans_list, selAnsList_from_form, ans_type.obs_ans_type_category))
                                 {//if we're here that means 2 lists are the same and we only need to change the order of selected answers list
                                         short order = 1;
@@ -206,10 +201,10 @@ namespace OBSMVC.Controllers
                                             order++;
                                         }
                                 }
-                                else//if we're here, that means user passed a different list of selected answers and we need to disable the current one and add new
+                                else//if we're here, that means user passed a different list of selected answers and we need to delete the current one and add new
                                 {                                  
-                                        List<OBS_QUEST_SLCT_ANS> oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == intQATid && item.obs_qsa_eff_end_dt>DateTime.Now).ToList();
-                                        oBS_QUEST_SLCT_ANS.ForEach(x => x.obs_qsa_eff_end_dt = DateTime.Now);//update end effective date to todays date
+                                        //List<OBS_QUEST_SLCT_ANS> oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == intQATid).ToList();
+                                        db.OBS_QUEST_SLCT_ANS.RemoveRange(db.OBS_QUEST_SLCT_ANS.Where(x => x.obs_qat_id == intQATid)); ;//update end effective date to todays date
                                         short order = 1;
                                         for (int i = 1; i < ans_type_elements.Length; i++)//now lets create a new record with updated selected answers
                                         {

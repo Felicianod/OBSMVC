@@ -689,10 +689,15 @@ namespace OBSMVC.Controllers
                 questionInfo.question_assigned_answer_types =questionInfo.question_assigned_answer_types.OrderBy(item=>item.Text).ToList();
                 questionInfo.question_assigned_answer_types.Add(new SelectListItem() { Text = "Add New...", Value = "New" });
             }
-            if (question_QATid>0)//this if statement is here to cover scenario where we edit previously saved form
+            if (question_QATid > 0 )//this if statement is here to cover scenario where we edit previously saved form
             {
                 //we need to make previously selected value to be selected when we reload the edit form
-                questionInfo.question_assigned_answer_types.Single(x => x.Value == question_QATid.ToString()).Selected = true;
+                try {
+                    questionInfo.question_assigned_answer_types.Single(x => x.Value == question_QATid.ToString()).Selected = true;
+                }
+                catch { 
+                    // No Selectable Answer values found for the Selected QAT, so there is nothing to set as default
+                }
             }
             else if (questionInfo.default_qat_id > 0)
             {

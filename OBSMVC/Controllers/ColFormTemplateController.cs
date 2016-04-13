@@ -664,8 +664,7 @@ namespace OBSMVC.Controllers
                     {
                         //if true, we need to list all of them and assign them to object's list of selectable answers
                       
-                        int count =QAInstances.Count(x => x.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id);
-                        if (count > 1)
+                        if (db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id).obs_ans_type_category.Contains("Range"))
                         {
                               String sel_ans ="(";
                             foreach (OBS_QUEST_SLCT_ANS temp in db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qaInstanceTemp.obs_qat_id && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now))
@@ -689,15 +688,13 @@ namespace OBSMVC.Controllers
                 questionInfo.question_assigned_answer_types =questionInfo.question_assigned_answer_types.OrderBy(item=>item.Text).ToList();
                 questionInfo.question_assigned_answer_types.Add(new SelectListItem() { Text = "Add New...", Value = "New" });
             }
-            if (question_QATid > 0 )//this if statement is here to cover scenario where we edit previously saved form
+            if (question_QATid>0 )//this if statement is here to cover scenario where we edit previously saved form
             {
-                //we need to make previously selected value to be selected when we reload the edit form
-                try {
-                    questionInfo.question_assigned_answer_types.Single(x => x.Value == question_QATid.ToString()).Selected = true;
-                }
-                catch { 
-                    // No Selectable Answer values found for the Selected QAT, so there is nothing to set as default
-                }
+                //we need to make previously selected value to be selected when we reload the edit form if it's still enabled
+                if((db.OBS_QUEST_ANS_TYPES.Single(x => x.obs_qat_id == question_QATid).obs_qat_end_eff_dt == null || db.OBS_QUEST_ANS_TYPES.Single(x => x.obs_qat_id == question_QATid).obs_qat_end_eff_dt > DateTime.Now))
+            {
+                questionInfo.question_assigned_answer_types.Single(x => x.Value == question_QATid.ToString()).Selected = true;
+            }
             }
             else if (questionInfo.default_qat_id > 0)
             {

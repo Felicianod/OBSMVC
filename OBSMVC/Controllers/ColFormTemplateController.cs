@@ -370,49 +370,7 @@ namespace OBSMVC.Controllers
         }
 
 
-        //======================================================================================================================
-        // GET: ColFormTemplate/Create
-        //[HttpGet]
-        //public ActionResult CreateForm(int? id)
-        //{
-        //    int cftid = id ?? 0;
-        //    oCollectionForm selectedColForm = new oCollectionForm(cftid);
-        //    if (cftid > 0)
-        //    { 
-        //       ViewBag.exception = "You are in EDIT mode!!!"; 
-        //    }
-        //    else
-        //    {
-        //        selectedColForm.cft_eff_st_dt = DateTime.Now;
-        //        selectedColForm.cft_eff_end_dt = Convert.ToDateTime("12/31/2060");
-        //    }
-
-        //    ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER.Where(x=>x.dsc_cust_id>=0), "dsc_cust_id", "dsc_cust_name");
-        //    ViewBag.dsc_lc_id = new SelectList(db.DSC_LC.Where(x=>x.dsc_lc_id>=0), "dsc_lc_id", "dsc_lc_name");
-        //    ViewBag.obs_type_id = new SelectList(db.OBS_TYPE.Where(x=>x.obs_type_id>=0), "obs_type_id", "obs_type_name");
-        //    return View(selectedColForm);
-        //}
-
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult CreateForm(OBS_COLLECT_FORM_TMPLT oBS_COLLECT_FORM_TMPLT, FormCollection formData)
-        //{
-        //    string data_from_form = formData["formQuestions"];
-        //    string is_published = formData["isPublished"];
-        //    int cft_id = -1;
-        //    bool hasQuestions = !String.IsNullOrEmpty(data_from_form);
-        //    if(hasQuestions)
-        //    {
-        //        cft_id = saveForm(oBS_COLLECT_FORM_TMPLT, data_from_form, is_published, cft_id);
-        //    }
-
-        //    return RedirectToAction("Details", new { id =cft_id});
-        //    //return RedirectToAction("Index");
-
-        //}
-
-        // GET: ColFormTemplate/Create
+ 
         public ActionResult Create()
         {
             ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER.Where(x => x.dsc_cust_id >= 0), "dsc_cust_id", "dsc_cust_name");
@@ -624,8 +582,6 @@ namespace OBSMVC.Controllers
             questions_for_display = availableQuestions.OrderBy(x => x.obs_question_id).ToList() ;
             return PartialView("_getQuestionsList", questions_for_display);
         }
-
-
         [HttpGet]
         public PartialViewResult getQuestionInfo(int question_id, int question_QATid,int qCounter, string isOptional)
         {
@@ -798,6 +754,76 @@ namespace OBSMVC.Controllers
             return PartialView("_addNewSection", colFormSection);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public bool saveNewSelAnswer(FormCollection postedData)
+        {
+            string posted_ans_type_list = postedData["ans_type_list"];//represents newly added selectable ans types
+            if (!String.IsNullOrEmpty(posted_ans_type_list))
+            {
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+
+                        string[] passed_sel_ans_info = posted_ans_type_list.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);//all passed selectable answers data
+                        foreach (string s in passed_sel_ans_info)
+                        {
+                            string[] single_sel_ans_info = s.Split(new[] { "~" }, StringSplitOptions.RemoveEmptyEntries);//individual answer type data
+                            OBS_QUEST_ANS_TYPES new_assigned_ans_type = new OBS_QUEST_ANS_TYPES();
+                            if (!isDuplicate(single_sel_ans_info))//if not duplicate
+                            {
+                                new_assigned_ans_type.obs_question_id = Convert.ToInt32(single_sel_ans_info[0]);
+                                new_assigned_ans_type.obs_ans_type_id = Convert.ToInt16(single_sel_ans_info[1]);
+                                if (single_sel_ans_info[2] == "true")
+                                {
+                                    try
+                                    {
+                                        db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == new_assigned_ans_type.obs_question_id).Select(y => y.obs_qat_default_ans_type_yn == "N");
+                                    }
+                                    catch { }                                   
+                                    
+                                } 
+                                else
+                                {
+                                    new_assigned_ans_type.obs_qat_default_ans_type_yn = "N";
+                                }                                                            
+                                db.OBS_QUEST_ANS_TYPES.Add(new_assigned_ans_type);
+                                db.SaveChanges();//at this point we've saved the OBS_QUEST_ANS_TYPES record.
+                                if (single_sel_ans_info.Count() > 2)//now we need to check if there's selectable answers for this question
+                                {
+                                    short order = 1;
+                                    for (int i = 3; i < single_sel_ans_info.Count(); i++)
+                                    {
+                                        OBS_QUEST_SLCT_ANS new_sel_ans = new OBS_QUEST_SLCT_ANS();
+                                        new_sel_ans.obs_qat_id = new_assigned_ans_type.obs_qat_id;
+                                        new_sel_ans.obs_qsa_text = single_sel_ans_info[i];
+                                        new_sel_ans.obs_qsa_order = order;
+                                        new_sel_ans.obs_qsa_wt = order;
+                                        new_sel_ans.obs_qsa_dflt_yn = "N";
+                                        new_sel_ans.obs_qsa_eff_st_dt = DateTime.Now;
+                                        new_sel_ans.obs_qsa_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                                        db.OBS_QUEST_SLCT_ANS.Add(new_sel_ans);
+                                        db.SaveChanges();
+                                    }
+                                }
+                            }
+                        }
+                        transaction.Commit();
+                        return true;
+                    }//end of try
+                    catch (Exception e)
+                    {
+
+                        transaction.Rollback();
+                        return false;
+
+                    }
+                }//end of  using (var transaction = db.Database.BeginTransaction())                
+            }
+            return true;
+        }
+
         // GET: ColFormTemplate/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -842,6 +868,72 @@ namespace OBSMVC.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public bool isDuplicate(string[] ans_type)
+        {
+            int question_id = Convert.ToInt32(ans_type[0]);
+            short ans_type_id = Convert.ToInt16(ans_type[1]);   
+            //first lets check if this question and answer type combination is already exist         
+            if(db.OBS_QUEST_ANS_TYPES.Where(item=>item.obs_ans_type_id==ans_type_id && item.obs_question_id==question_id && (item.obs_qat_end_eff_dt !=null||item.obs_qat_end_eff_dt>DateTime.Now) ).Count()==0)
+            {   //if it doesn't exist, we know it's not a duplicate
+                return false;
+            }
+            else
+            {//if we're here, that means  this question and answer type already exist and we need to futher investigate whether it's a duplicate or not
+             // lets check if this answer type requires selectable answers
+             // if it doesn't, we can exit since we know it's a duplicate  
+                if (db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == ans_type_id).obs_ans_type_has_fxd_ans_yn == "N")
+                {
+                    // this question and answer type already exist and this answer type doens't need selectable answers
+                    //that means it's free text or yes/no answer type and user is trying to insert a duplicate 
+                    return true;
+                }
+                else
+                {//looks like this answer type requires selectable answers. we need to continue checking
+                    //lets check what the category is
+                    string category = db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == ans_type_id).obs_ans_type_category;
+                    //now lets loop through all the existing QATs for this question/answer type combination and check if it's a duplicate
+                    List<int> qat_ids = db.OBS_QUEST_ANS_TYPES.Where(item => item.obs_ans_type_id == ans_type_id && item.obs_question_id == question_id && (item.obs_qat_end_eff_dt != null || item.obs_qat_end_eff_dt > DateTime.Now)).Select(x => x.obs_qat_id).ToList();
+                    foreach (int qat_id in qat_ids)
+                    {
+                        if (category.Contains("Range"))//this is a range answer type, we don't have to compare the number of selectable answers
+                        {                           
+                            int counter = 3;//we need to start counter with 3 because selectable answers start with 3rd position in the array that gets passed from the form
+                            foreach (string s in db.OBS_QUEST_SLCT_ANS.Where(x => x.obs_qat_id == qat_id && x.obs_qsa_eff_st_dt<=DateTime.Now && x.obs_qsa_eff_end_dt>DateTime.Now).Select(y => y.obs_qsa_text).ToList())
+                            {
+                                if(ans_type[counter].Trim().ToUpper() !=s)//comparing existing sel answers with passed ones
+                                {
+                                    return false;
+                                }
+                                counter++;
+                            }
+
+                        }//end of if (category.Contains("Range"))
+                        else//this means this is a MS LIST or SS LIST
+                        {
+                            if (ans_type.Length-3!= db.OBS_QUEST_SLCT_ANS.Where(x => x.obs_qat_id == qat_id && x.obs_qsa_eff_st_dt <= DateTime.Now && x.obs_qsa_eff_end_dt > DateTime.Now).Count())
+                            {//size of the existing set of selectable answers is different form the size of passed. This means they're are not duplicates
+                                return false;
+                            }
+                            else
+                            {
+                                int counter = 3;
+                                foreach (string s in db.OBS_QUEST_SLCT_ANS.Where(x => x.obs_qat_id == qat_id && x.obs_qsa_eff_st_dt <= DateTime.Now && x.obs_qsa_eff_end_dt > DateTime.Now).Select(y => y.obs_qsa_text).ToList())
+                                {
+                                    if (ans_type[counter].Trim().ToUpper() != s)
+                                    {
+                                        return false;
+                                    }
+                                    counter++;
+                                }
+                            }
+                        }
+                    }
+
+                    return true;
+                }
+            }
         }
         public class ObsColFormTemplate
         {

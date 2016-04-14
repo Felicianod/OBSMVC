@@ -180,7 +180,7 @@
             var questionId = $("#popupQID").val();
             var modalddlId = $("#popupDDLid").val();
 
-            alert('Selectable Answer Edit Mode completed for drop down control id ' + modalddlId);
+            //alert('Selectable Answer Edit Mode completed for drop down control id ' + modalddlId);
             $.ajax({
                 url: '@Url.Action("reloadQuestionDropdown", "ColFormTemplate")',
                 method: "GET",
@@ -828,8 +828,8 @@
                         alert("ERROR: Failed to Save the New Question Answer Type Information.!!");  //<-- Trap and alert of any errors if they occurred
                     }
             }).done(function (d) {
-                if (d == "true") { alert("Data posted successfully!"); }
-                else { alert("WARNING: Failed to post!\nPlease review your input and try again..."); }
+                if (d == true) { alert("Data posted successfully!"); }
+                else { alert("WARNING: Failed to post!\nPlease review your input and try again: " + d); }
             });
         });
 

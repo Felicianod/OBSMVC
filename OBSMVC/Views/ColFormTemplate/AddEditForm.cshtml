@@ -588,196 +588,196 @@
     @* ######################  J A V A    S C R I P T S    S E C T I O N   #################################### *@
     @****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
     <script>
-        function PostForm(btnClicked) {
-            var errorMsg = "";
-            var sectionCounter = 0;
+    function PostForm(btnClicked) {
+        var errorMsg = "";
+        var sectionCounter = 0;
 
-            // Validate the Form Fields
-            //Process all the form Sections to get Data to post
-            $("div.formSection").each(function () {
-                var formSection = $(this);
-                //var sectionTitleBox = $($(this).find("input.sectionTitle").first()).val();
-                var sectionTitleBox = formSection.find("input.sectionTitle").first();
-                var sectionName = sectionTitleBox.val().trim();
-                //Loopt thorugh all Dropdowns in this section to ensure that they have a valid selection
-                formSection.find(".viewDropDown").each(function () {
-                    if ($(this).val() == "" || $(this).val() == "New") {
-                        $(this).css({
-                            "color": "white",
-                            "background-color": "red"
-                        });
-                        errorMsg = errorMsg + "One Dropdown has an invalid Selection\n";
+        // Validate the Form Fields
+        //Process all the form Sections to get Data to post
+        $("div.formSection").each(function () {
+            var formSection = $(this);
+            //var sectionTitleBox = $($(this).find("input.sectionTitle").first()).val();
+            var sectionTitleBox = formSection.find("input.sectionTitle").first();
+            var sectionName = sectionTitleBox.val().trim();
+            //Loopt thorugh all Dropdowns in this section to ensure that they have a valid selection
+            formSection.find(".viewDropDown").each(function () {
+                if ($(this).val() == "" || $(this).val() == "New") {
+                    $(this).css({
+                        "color": "white",
+                        "background-color": "red"
+                    });
+                    errorMsg = errorMsg + "One Dropdown has an invalid Selection\n";
+                }
+            });
+
+            //var dropdownArray = formSection.find(".viewDropDown");
+            //alert("Section " + sectionName + " has " + dropdownArray + " dropdowns.")
+
+            sectionCounter++;
+            if (sectionName == "")
+            {
+                errorMsg = errorMsg + " Form Section " + sectionCounter + " is missing the Title.\n";
+                sectionTitleBox.addClass("invalidField");
+                sectionTitleBox.focus();
+            }
+            else {
+                formSection.find('.divFormQuestion').each(function () {
+                    // Process data for each of the QATs in the form
+                    var qatDDL = $(this).find(".viewDropDown").first();
+                    var selectedQAT = qatDDL.val();
+                    var isOptional = $(this).find("#cbOptional").prop("checked");
+
+                    if (isOptional) { isOptional = "Y";}
+                    else{isOptional = "N"}
+                    //var trtrt = ""; //hdnFormQuestion
+                    //alert("A checkbox was found. Value : " + isOptional);
+                    var qatHiddenField = $(this).find(".hdnFormQuestion").first();
+                    qatHiddenField.val(selectedQAT + "~" + sectionName + "~" + isOptional);
+                    //alert("A question was found!\nSelected QATid = " + selectedQAT + "\nSection Name = " + sectionName + "\nFull Posting String: " + qatHiddenField.val());
+                    //alert("Question value to post = " + qatHiddenField.val());
+                });
+            }
+        });  // Finished Processing all Form Sections
+
+        // Validat the Start Date if the Form is being published
+        if (btnClicked.attr("id") == "btnPublishForm") {
+            document.getElementById("isPublished").value = "true"
+            if ($('#obs_cft_eff_st_dt').val() == "") {
+                errorMsg = errorMsg + "The Effective Start Date id required when Publishing a Form\n";
+                $('#obs_cft_eff_st_dt').addClass("invalidField");
+                $('#obs_cft_eff_st_dt').focus();
+            }
+        }
+        //Validate the Form Title
+        if (document.getElementById("cft_Title").value.trim() == "") {
+            errorMsg = errorMsg + "The form Title is Required\n";
+            $("#cft_Title").addClass("invalidField");
+            $("#cft_Title").focus();
+        }
+
+        if (errorMsg != "") {
+            //If any validation error is found
+            $('#btnSaveForm').button('reset');
+            alert(errorMsg);
+        }
+        else {
+            //Post the Form
+            //isChanged = false;  // To prevent the alert of leaving the page from showing up
+            $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
+            document.getElementById("CreateForm").submit();
+        }
+    }
+
+
+    $(document).ready(function () {
+        $("input:text").focus(function () { $(this).select(); });
+
+        $('.collapse').on('show.bs.collapse', function () {
+            $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
+        }).on('hide.bs.collapse', function () {
+            $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
+        });
+
+        $("#btnCancel").click(function () {
+            if ( $("#formChanged").val() == "Y")
+            {
+
+                $( "#dialog-confirm-reset" ).dialog({
+                    resizable: false,
+                    height:200,
+                    modal: true,
+                    buttons: {
+                        "Reset Form": function() {
+                            $("#formChanged").val("N");
+                            //isChanged.val("N");
+                            location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
+                        },
+                        Cancel: function() {
+                            $( this ).dialog( "close" );
+                        }
                     }
                 });
 
-                //var dropdownArray = formSection.find(".viewDropDown");
-                //alert("Section " + sectionName + " has " + dropdownArray + " dropdowns.")
-
-                sectionCounter++;
-                if (sectionName == "")
-                {
-                    errorMsg = errorMsg + " Form Section " + sectionCounter + " is missing the Title.\n";
-                    sectionTitleBox.addClass("invalidField");
-                    sectionTitleBox.focus();
-                }
-                else {
-                    formSection.find('.divFormQuestion').each(function () {
-                        // Process data for each of the QATs in the form
-                        var qatDDL = $(this).find(".viewDropDown").first();
-                        var selectedQAT = qatDDL.val();
-                        var isOptional = $(this).find("#cbOptional").prop("checked");
-
-                        if (isOptional) { isOptional = "Y";}
-                        else{isOptional = "N"}
-                        //var trtrt = ""; //hdnFormQuestion
-                        //alert("A checkbox was found. Value : " + isOptional);
-                        var qatHiddenField = $(this).find(".hdnFormQuestion").first();
-                        qatHiddenField.val(selectedQAT + "~" + sectionName + "~" + isOptional);
-                        //alert("A question was found!\nSelected QATid = " + selectedQAT + "\nSection Name = " + sectionName + "\nFull Posting String: " + qatHiddenField.val());
-                        //alert("Question value to post = " + qatHiddenField.val());
-                    });
-                }
-            });  // Finished Processing all Form Sections
-
-            // Validat the Start Date if the Form is being published
-            if (btnClicked.attr("id") == "btnPublishForm") {
-                document.getElementById("isPublished").value = "true"
-                if ($('#obs_cft_eff_st_dt').val() == "") {
-                    errorMsg = errorMsg + "The Effective Start Date id required when Publishing a Form\n";
-                    $('#obs_cft_eff_st_dt').addClass("invalidField");
-                    $('#obs_cft_eff_st_dt').focus();
-                }
-            }
-            //Validate the Form Title
-            if (document.getElementById("cft_Title").value.trim() == "") {
-                errorMsg = errorMsg + "The form Title is Required\n";
-                $("#cft_Title").addClass("invalidField");
-                $("#cft_Title").focus();
-            }
-
-            if (errorMsg != "") {
-                //If any validation error is found
-                $('#btnSaveForm').button('reset');
-                alert(errorMsg);
-            }
-            else {
-                //Post the Form
-                //isChanged = false;  // To prevent the alert of leaving the page from showing up
-                $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
-                document.getElementById("CreateForm").submit();
-            }
-        }
-
-
-        $(document).ready(function () {
-            $("input:text").focus(function () { $(this).select(); });
-
-            $('.collapse').on('show.bs.collapse', function () {
-                $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
-            }).on('hide.bs.collapse', function () {
-                $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
-            });
-
-            $("#btnCancel").click(function () {
-                if ( $("#formChanged").val() == "Y")
-                {
-
-                    $( "#dialog-confirm-reset" ).dialog({
-                        resizable: false,
-                        height:200,
-                        modal: true,
-                        buttons: {
-                            "Reset Form": function() {
-                                $("#formChanged").val("N");
-                                //isChanged.val("N");
-                                location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
-                            },
-                            Cancel: function() {
-                                $( this ).dialog( "close" );
-                            }
-                        }
-                    });
-
-                    @*if (confirm("Your form has been modified.\nAre you sure you want to reset all changes?")) {
+                @*if (confirm("Your form has been modified.\nAre you sure you want to reset all changes?")) {
                         $("#formChanged").val("N");
                         //isChanged.val("N");
                         location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
                     }*@
 
-                }
+            }
+        });
+        //$('.datepicker').datepicker({
+        //    format: "DD, d MM, yy",
+        //changeMonth: true,
+        //changeYear: true,
+        //showButtonPanel: true,
+        //});
+
+        $('#cft_eff_st_dt').datepicker({
+            dateFormat: 'M dd, yy',
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            minDate: -0,
+            //minDate: -0,
+            //maxDate: "+1M +10D",
+            onClose: function (selectedDate) {
+                $("#cft_eff_end_dt").datepicker("option", "minDate", selectedDate);
+            },
+            useCurrent: false //Important! See issue #1075
+        });
+
+        $('#cft_eff_end_dt').datepicker({
+            dateFormat: 'M dd, yy',
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            minDate: -0,
+            onClose: function( selectedDate ) {
+                $("#cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
+            },
+            useCurrent: false //Important! See issue #1075
+        });
+
+        $('#CreateForm').keypress(function (e) {
+            if (e.keyCode == 13)
+                $('#doSearch').click();
+        });
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $("#btnSaveNewSelAnswer").click(function(){
+            var postQid = $("#popupQID").val();
+            var postData = "";
+            $("#ans_type_selAns").each(function(){
+                postData = postData + postQid + "~" + $(this).val() + ",";
             });
-            //$('.datepicker').datepicker({
-            //    format: "DD, d MM, yy",
-            //changeMonth: true,
-            //changeYear: true,
-            //showButtonPanel: true,
-            //});
-
-            $('#cft_eff_st_dt').datepicker({
-                dateFormat: 'M dd, yy',
-                changeMonth: true,
-                changeYear: true,
-                showButtonPanel: true,
-                minDate: -0,
-                //minDate: -0,
-                //maxDate: "+1M +10D",
-                onClose: function (selectedDate) {
-                    $("#cft_eff_end_dt").datepicker("option", "minDate", selectedDate);
-                },
-                useCurrent: false //Important! See issue #1075
-            });
-
-            $('#cft_eff_end_dt').datepicker({
-                dateFormat: 'M dd, yy',
-                changeMonth: true,
-                changeYear: true,
-                showButtonPanel: true,
-                minDate: -0,
-                onClose: function( selectedDate ) {
-                    $("#cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
-                },
-                useCurrent: false //Important! See issue #1075
-            });
-
-            $('#CreateForm').keypress(function (e) {
-                if (e.keyCode == 13)
-                    $('#doSearch').click();
-            });
-
-            $('[data-toggle="tooltip"]').tooltip();
-
-            $("#btnSaveNewSelAnswer").click(function(){
-                var postQid = $("#popupQID").val();
-                var postData = "";
-                $("#ans_type_selAns").each(function(){
-                    postData = postData + postQid + "~" + $(this).val() + ",";
-                });
-                alert("Saving New Answer Types...<br/>" + postData);
-                @*$.ajax({
-                    url: '@Url.Action("NewActionfromRasul", "ColFormTemplate")',
+            alert("Saving New Answer Types...<br/>" + postData);
+            $.ajax({
+                    url: '@Url.Action("saveNewSelAnswer", "ColFormTemplate")',
                     method: "POST",
                     cache: false,
-                    data: { sel_ans_list???? : postData},
+                    data: { ans_type_list : postData},
                     error: function () {
                         alert("ERROR: Failed to Save the New Question Answer Type Information.!!");  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
                     alert("Post Status : " + d);
-                    var dropdownId = "#" + ddlId;
-                    $(dropdownId).parents(".reloadDDL").first().html(d);
+                    //var dropdownId = "#" + ddlId;
+                    //$(dropdownId).parents(".reloadDDL").first().html(d);
                     //alert("Dropdown Id handle is: " + $(dropdownId).attr("id"));
-                });*@
+                });
 
-            });
-
-
-            makeSectionsDropable();
         });
 
-        function removeQuestion(qRowId) {
-            $("#" + qRowId).remove();
-        }
-    </script>
+
+        makeSectionsDropable();
+    });
+
+    function removeQuestion(qRowId) {
+        $("#" + qRowId).remove();
+    }
+</script>
 
     @*********************************************************************************************************************@
     @*//- - - - - - - - -  Ajax Call to Retrieve and Display the Question List Search Results - - - - - - - - - - -\\*@

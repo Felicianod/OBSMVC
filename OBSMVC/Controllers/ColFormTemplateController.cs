@@ -754,11 +754,10 @@ namespace OBSMVC.Controllers
             return PartialView("_addNewSection", colFormSection);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public bool saveNewSelAnswer(FormCollection postedData)
+         [HttpPost]
+        public bool saveNewSelAnswer(string ans_type_list)
         {
-            string posted_ans_type_list = postedData["ans_type_list"];//represents newly added selectable ans types
+            string posted_ans_type_list = ans_type_list;//represents newly added selectable ans types
             if (!String.IsNullOrEmpty(posted_ans_type_list))
             {
                 using (var transaction = db.Database.BeginTransaction())
@@ -781,13 +780,13 @@ namespace OBSMVC.Controllers
                                     {
                                         db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == new_assigned_ans_type.obs_question_id).Select(y => y.obs_qat_default_ans_type_yn == "N");
                                     }
-                                    catch { }                                   
-                                    
-                                } 
+                                    catch { }
+
+                                }
                                 else
                                 {
                                     new_assigned_ans_type.obs_qat_default_ans_type_yn = "N";
-                                }                                                            
+                                }
                                 db.OBS_QUEST_ANS_TYPES.Add(new_assigned_ans_type);
                                 db.SaveChanges();//at this point we've saved the OBS_QUEST_ANS_TYPES record.
                                 if (single_sel_ans_info.Count() > 2)//now we need to check if there's selectable answers for this question

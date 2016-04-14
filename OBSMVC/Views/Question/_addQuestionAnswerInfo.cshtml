@@ -306,6 +306,7 @@
                         //If this is the modal version of the Question Maintennce, clear the whole entry form
                         clearNewSAbox();
                     }
+                    $("#btnSaveNewSelAnswer").removeAttr('disabled');
                 });
                 // Finally once the "add" has been performed, turn the "Form Changed" flag to indicate a change was done to the Question
                 $("#popupFormChanged").val("Y");

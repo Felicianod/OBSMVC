@@ -499,6 +499,7 @@
                 <input type="hidden" id="windowType" value="MODAL">
                 <input type="hidden" id="popupFormChanged" value="N">
                 <input type="hidden" id="popupQID" value="">
+                <input type="hidden" id="popupDDLid" value="">
                 <div class="row">
                     <div class="col-sm-10 col-sm-offset-1">
                         <span style="font-weight:bold; font-size:larger; margin-left:10px" class="label label-default">Question Full Text: </span>
@@ -520,7 +521,7 @@
             </div>
             <div class="modal-footer">
                 <div class="col-sm-1 col-sm-offset-3">
-                    <button type="button" class="btn btn-primary" id="btnSaveNewSelAnswer">Save changes</button>
+                    <button type="button" class="btn btn-primary" id="btnSaveNewSelAnswer" disabled="disabled">Save changes</button>
                 </div>
                 <div class="col-sm-1 col-sm-offset-1">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -790,24 +791,25 @@
                 var postSelAnswers = $(this).find("#ans_type_selAns").first().val();
                 postData = postData + postQid +  "~" + postAnsTypeId + "~" + postIsDefault + "~" + postSelAnswers + ",";
             });
+
             alert("Saving New Answer Types...\n" + postData);
+
             $.ajax({
                     url: '@Url.Action("saveNewSelAnswer", "ColFormTemplate")',
                     method: "POST",
                     cache: false,
-                    data: { ans_type_list : postData},
+                    data: { ans_type_list : postData },
                     error: function () {
                         alert("ERROR: Failed to Save the New Question Answer Type Information.!!");  //<-- Trap and alert of any errors if they occurred
                     }
-                }).done(function (d) {
-                    alert("Post Status : " + d);
-                    //var dropdownId = "#" + ddlId;
-                    //$(dropdownId).parents(".reloadDDL").first().html(d);
-                    //alert("Dropdown Id handle is: " + $(dropdownId).attr("id"));
-                });
-
+            }).done(function (d) {
+                alert("Post Status : " + d);
+            });
         });
 
+        $("#editQATWindow").on('hidden.bs.modal', function () {
+            alert('Selectable Answer Edit Mode completed.');
+        });
 
         makeSectionsDropable();
     });

@@ -755,10 +755,9 @@ namespace OBSMVC.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public bool saveNewSelAnswer(FormCollection postedData)
+        public bool saveNewSelAnswer(string ans_type_list)
         {
-            string posted_ans_type_list = postedData["ans_type_list"];//represents newly added selectable ans types
+            string posted_ans_type_list = ans_type_list;//represents newly added selectable ans types
             if (!String.IsNullOrEmpty(posted_ans_type_list))
             {
                 using (var transaction = db.Database.BeginTransaction())
@@ -770,9 +769,10 @@ namespace OBSMVC.Controllers
                         foreach (string s in passed_sel_ans_info)
                         {
                             string[] single_sel_ans_info = s.Split(new[] { "~" }, StringSplitOptions.RemoveEmptyEntries);//individual answer type data
-                            OBS_QUEST_ANS_TYPES new_assigned_ans_type = new OBS_QUEST_ANS_TYPES();
+                           
                             if (!isDuplicate(single_sel_ans_info))//if not duplicate
                             {
+                                OBS_QUEST_ANS_TYPES new_assigned_ans_type = new OBS_QUEST_ANS_TYPES();
                                 new_assigned_ans_type.obs_question_id = Convert.ToInt32(single_sel_ans_info[0]);
                                 new_assigned_ans_type.obs_ans_type_id = Convert.ToInt16(single_sel_ans_info[1]);
                                 if (single_sel_ans_info[2] == "true")
@@ -790,7 +790,7 @@ namespace OBSMVC.Controllers
                                 }                                                            
                                 db.OBS_QUEST_ANS_TYPES.Add(new_assigned_ans_type);
                                 db.SaveChanges();//at this point we've saved the OBS_QUEST_ANS_TYPES record.
-                                if (single_sel_ans_info.Count() > 2)//now we need to check if there's selectable answers for this question
+                                if (single_sel_ans_info.Count() > 3)//now we need to check if there's selectable answers for this question
                                 {
                                     short order = 1;
                                     for (int i = 3; i < single_sel_ans_info.Count(); i++)
@@ -875,7 +875,7 @@ namespace OBSMVC.Controllers
             int question_id = Convert.ToInt32(ans_type[0]);
             short ans_type_id = Convert.ToInt16(ans_type[1]);   
             //first lets check if this question and answer type combination is already exist         
-            if(db.OBS_QUEST_ANS_TYPES.Where(item=>item.obs_ans_type_id==ans_type_id && item.obs_question_id==question_id && (item.obs_qat_end_eff_dt !=null||item.obs_qat_end_eff_dt>DateTime.Now) ).Count()==0)
+            if(db.OBS_QUEST_ANS_TYPES.Where(item=>item.obs_ans_type_id==ans_type_id && item.obs_question_id==question_id && (item.obs_qat_end_eff_dt ==null||item.obs_qat_end_eff_dt>DateTime.Now) ).Count()==0)
             {   //if it doesn't exist, we know it's not a duplicate
                 return false;
             }
@@ -894,7 +894,7 @@ namespace OBSMVC.Controllers
                     //lets check what the category is
                     string category = db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == ans_type_id).obs_ans_type_category;
                     //now lets loop through all the existing QATs for this question/answer type combination and check if it's a duplicate
-                    List<int> qat_ids = db.OBS_QUEST_ANS_TYPES.Where(item => item.obs_ans_type_id == ans_type_id && item.obs_question_id == question_id && (item.obs_qat_end_eff_dt != null || item.obs_qat_end_eff_dt > DateTime.Now)).Select(x => x.obs_qat_id).ToList();
+                    List<int> qat_ids = db.OBS_QUEST_ANS_TYPES.Where(item => item.obs_ans_type_id == ans_type_id && item.obs_question_id == question_id && (item.obs_qat_end_eff_dt == null || item.obs_qat_end_eff_dt > DateTime.Now)).Select(x => x.obs_qat_id).ToList();
                     foreach (int qat_id in qat_ids)
                     {
                         if (category.Contains("Range"))//this is a range answer type, we don't have to compare the number of selectable answers

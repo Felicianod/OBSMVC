@@ -189,8 +189,14 @@
         });
         //------------ BUTTON CANCEL ENTERING NEW ANSWER TYPE -----------------------------------------------------
         $('.cancelNewSA').click(function () {
-            $(this).parents("div.answerType").first().remove();
-            $("#addAnsType").removeAttr('disabled');
+            if ($("#windowType").val() == "MODAL") {
+                clearNewSAbox();
+            }
+            else {
+                // Remove the Entry box only for the Standalone version of the Question Maintenance Entry Form
+                $(this).parents("div.answerType").first().remove();
+                $("#addAnsType").removeAttr('disabled');
+            }            
         });
         //--------------------- SOFT SAVE NEW SELECTABLE ANSER --------------------------------
         $('#btnSaveNewAT').click(function () {
@@ -296,6 +302,10 @@
                     $("#btnAddQuestion").removeAttr('disabled');
                     //$('#messageAddedSA').show();
                     $('#noATmsg').remove();
+                    if ($("#windowType").val() == "MODAL") {
+                        //If this is the modal version of the Question Maintennce, clear the whole entry form
+                        clearNewSAbox();
+                    }
                 });
                 // Finally once the "add" has been performed, turn the "Form Changed" flag to indicate a change was done to the Question
                 $("#popupFormChanged").val("Y");
@@ -305,7 +315,6 @@
                 $(this).button('reset');
             }
         });
-
     });
 </script>
 

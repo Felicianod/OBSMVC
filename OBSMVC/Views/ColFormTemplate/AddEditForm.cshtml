@@ -167,7 +167,6 @@
         color: white;
     }
 </style>
-
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
 <script>
@@ -177,6 +176,25 @@
             $(this).find(".modal-body").css("max-height", height);
         });
     });
+
+    function toggleDefault(btnClicked) {
+        if (btnClicked.hasClass('btnYES')) {
+            // Just make the current clicked button "NO" default
+            btnClicked.removeClass("btnYES").addClass("btn-warning");
+            btnClicked.html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
+        }
+        else {
+            //Else, reset all buttons to "No Default" and make this button the default
+            $(".btnIsDefault").removeClass("btnYES").addClass("btn-warning");
+            $(".btnIsDefault").html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
+            btnClicked.removeClass("btn-warning").addClass("btnYES");
+            btnClicked.html('YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up">');
+        }
+        // A Change was made. Question changes can be saved. Reenable the Save Button
+        $('#btnAddQuestion').prop('disabled', false);
+        //Turn the "Form Changed" flag to indicate a change was done
+        $("#formChanged").val("Y");
+    }
 </script>
 
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
@@ -467,6 +485,7 @@
 </div>
 @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@ 
 @* ------------------------------------- POP UP "QUESTION MAINTENANCE LIGHT" FORM ------------------------------------------------ *@
+@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@ 
 <!-- Modal -->
 @*loadModal(@Model.question_id, ddlId);*@
 <div class="modal  modal-wide fade" id="editQATWindow" role="dialog">
@@ -477,6 +496,7 @@
                 <h3 class="modal-title">ADD NEW ANSWER TYPE</h3>
             </div>
             <div class="modal-body">
+                <input type="hidden" id="windowType" value="MODAL">
                 <input type="hidden" id="popupFormChanged" value="N">
                 <input type="hidden" id="popupQID" value="">
                 <div class="row">
@@ -495,7 +515,7 @@
                     @*-----------------------------------------------------------------------------
                                     Placeholder for ADD MODE for new Questions Answer Types
                         -------------------------------------------------------------------------------*@
-                    @Html.Action("addQuestionAnswerInfo", "Question")
+                    @*@Html.Action("addQuestionAnswerInfo", "Question")*@
                 </div>
             </div>
             <div class="modal-footer">
@@ -526,6 +546,21 @@
 
 
 <script>
+    function clearNewSAbox(){
+        $("#divNewSA").html("");
+        $.ajax({
+            url: '@Url.Action("addQuestionAnswerInfo", "Question")',
+            method: "GET",
+            cache: false,
+            //data: { question_id: questionId, dropdownID: ddlId},
+            error: function () {
+                alert("Failed to reload Selectable Answer Data Entry Form!!");  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (d) {
+            $("#divNewSA").html(d);
+        });    
+    }
+
     function loadModal(questionId, ddlId) {
         //var questionId = btnClkd.attr('id').substring(8);
         //alert("Load Modal for Question Id: " + questionId);
@@ -747,12 +782,15 @@
         $('[data-toggle="tooltip"]').tooltip();
 
         $("#btnSaveNewSelAnswer").click(function(){
-            var postQid = $("#popupQID").val();
+            var postQid = $("#popupQID").val();            
             var postData = "";
-            $("#ans_type_selAns").each(function(){
-                postData = postData + postQid + "~" + $(this).val() + ",";
+            $(".qatDIV").each(function(){
+                var postAnsTypeId = $(this).find("#ans_type_id").first().val();
+                var postIsDefault = $(this).find("#ans_type_default").first().val();
+                var postSelAnswers = $(this).find("#ans_type_selAns").first().val();
+                postData = postData + postQid +  "~" + postAnsTypeId + "~" + postIsDefault + "~" + postSelAnswers + ",";
             });
-            alert("Saving New Answer Types...<br/>" + postData);
+            alert("Saving New Answer Types...\n" + postData);
             $.ajax({
                     url: '@Url.Action("saveNewSelAnswer", "ColFormTemplate")',
                     method: "POST",

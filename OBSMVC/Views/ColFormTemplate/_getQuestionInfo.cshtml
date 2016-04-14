@@ -95,6 +95,8 @@
             else if(selectedId == 'New'){
                 //alert("A New Question request has been issued!");
                 $(this).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");
+                //Reset the modal Window contents
+                clearNewSAbox();
                 $("#editQATWindow").modal();
                 $("#selQText").html("@Model.full_text");
                 @*loadModal(@Model.question_id, ddlId);*@

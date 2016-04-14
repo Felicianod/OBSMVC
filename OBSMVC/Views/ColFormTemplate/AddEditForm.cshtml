@@ -180,7 +180,7 @@
             // If the form was recently saved/posted successfuly, this indicates a change on the AT list
             // reload the drop down with the new values
             if ($("#popupStatus").val() == "saved"){
-                alert('Selectable Answer Edit Mode completed for drop down control id ' + modalddlId + "\nList is being refreshed...");
+                //alert('Selectable Answer Edit Mode completed for drop down control id ' + modalddlId + "\nList is being refreshed...");
                 var questionId = $("#popupQID").val();
                 var modalddlId = $("#popupDDLid").val();
             
@@ -1342,9 +1342,18 @@
                 }
                 else if(selectedId == 'New'){
                     //alert("A New Question request has been issued!");
+                    $("#popupStatus").val("");
                     $(this).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");
                     //Reset the modal Window contents
                     clearNewSAbox();
+
+                    //Set the Hidden Field Values that will be used in Edit Mode
+                    if ($("#popupDDLid").val() != ddlId)
+                    {  // This indicates that a new Dropdown is being selected for edition!
+                        //Reset the old values from the "added" section, as they do not need to be kept from a previous different Selectable Answer
+                        $("#divaddedSA").html("");
+                    }
+                    $("#popupDDLid").val(ddlId);
                     var questionText = dropdown.parents(".divFormQuestion").first().find(qText).text();
                     $("#selQText").html(questionText);
                     $("#editQATWindow").modal();

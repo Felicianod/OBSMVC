@@ -207,8 +207,9 @@
             var isDefaultValue = "false";
             var postParams = "";
             var validationMessage = "";
+            var doneButton = $(this);
 
-            $(this).button('loading');            
+            $(this).button('loading');
             //Loop through all text boxes in this section
             $('#divNewAT').find('.selAnswerTextb').each(function () {
                 counter = counter + 1;
@@ -298,14 +299,21 @@
                     //$(this).button('reset');
                     $("#divaddedSA").append(d);
                     //$("#divNewSA").html("");       //We do not need to clear the Entry form since we want to let users keep entering new data if needed
-                    //If saving is successful, enable the Question Save Button
-                    $("#btnAddQuestion").removeAttr('disabled');
                     //$('#messageAddedSA').show();
                     $('#noATmsg').remove();
                     if ($("#windowType").val() == "MODAL") {
                         //If this is the modal version of the Question Maintennce, clear the whole entry form
                         clearNewSAbox();
                     }
+                    else {
+                        //If saving is successful in the full page, enable the Question Save Button
+                        $("#btnAddQuestion").removeAttr('disabled');   // Re-enable the "Add New Answer Type" button
+                        $("#addAnsType").removeAttr('disabled');       // Re-enable the "SAVE" button
+                        // Remove the Entry box only for the Standalone version of the Question Maintenance Entry Form
+                        doneButton.parents("div.answerType").first().remove();
+                        doneButton.button('reset');
+                    }
+                    $("#btnSaveNewSelAnswer").removeAttr('disabled');
                 });
                 // Finally once the "add" has been performed, turn the "Form Changed" flag to indicate a change was done to the Question
                 $("#popupFormChanged").val("Y");
@@ -317,4 +325,3 @@
         });
     });
 </script>
-

@@ -175,7 +175,31 @@
             var height = $(window).height() - 200;
             $(this).find(".modal-body").css("max-height", height);
         });
+
+        $("#editQATWindow").on('hidden.bs.modal', function () {            
+            var questionId = $("#popupQID").val();
+            var modalddlId = $("#popupDDLid").val();
+
+            alert('Selectable Answer Edit Mode completed for drop down control id ' + modalddlId);
+            $.ajax({
+                url: '@Url.Action("reloadQuestionDropdown", "ColFormTemplate")',
+                method: "GET",
+                cache: false,
+                data: { question_id: questionId, dropdownID: modalddlId},
+                error: function () {
+                    alert("Failed to reload the Answer Type Values!!");  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                //alert("Retrieved Data is: " + d);
+                @*$("#@ulId").html(d);*@
+                //alert(d);
+                var dropdownId = "#" + modalddlId;
+                $(dropdownId).parents(".reloadDDL").first().html(d);
+                //alert("Dropdown Id handle is: " + $(dropdownId).attr("id"));
+            });
+        });
     });
+
 
     function toggleDefault(btnClicked) {
         if (btnClicked.hasClass('btnYES')) {
@@ -499,6 +523,7 @@
                 <input type="hidden" id="windowType" value="MODAL">
                 <input type="hidden" id="popupFormChanged" value="N">
                 <input type="hidden" id="popupQID" value="">
+                <input type="hidden" id="popupDDLid" value="">
                 <div class="row">
                     <div class="col-sm-10 col-sm-offset-1">
                         <span style="font-weight:bold; font-size:larger; margin-left:10px" class="label label-default">Question Full Text: </span>
@@ -520,7 +545,7 @@
             </div>
             <div class="modal-footer">
                 <div class="col-sm-1 col-sm-offset-3">
-                    <button type="button" class="btn btn-primary" id="btnSaveNewSelAnswer">Save changes</button>
+                    <button type="button" class="btn btn-primary" id="btnSaveNewSelAnswer" disabled="disabled">Save changes</button>
                 </div>
                 <div class="col-sm-1 col-sm-offset-1">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -716,6 +741,7 @@
         $("#btnCancel").click(function () {
             if ( $("#formChanged").val() == "Y")
             {
+                $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window
 
                 $( "#dialog-confirm-reset" ).dialog({
                     resizable: false,
@@ -790,24 +816,22 @@
                 var postSelAnswers = $(this).find("#ans_type_selAns").first().val();
                 postData = postData + postQid +  "~" + postAnsTypeId + "~" + postIsDefault + "~" + postSelAnswers + ",";
             });
+
             alert("Saving New Answer Types...\n" + postData);
+
             $.ajax({
                     url: '@Url.Action("saveNewSelAnswer", "ColFormTemplate")',
                     method: "POST",
                     cache: false,
-                    data: { ans_type_list : postData},
+                    data: { ans_type_list : postData },
                     error: function () {
                         alert("ERROR: Failed to Save the New Question Answer Type Information.!!");  //<-- Trap and alert of any errors if they occurred
                     }
-                }).done(function (d) {
-                    alert("Post Status : " + d);
-                    //var dropdownId = "#" + ddlId;
-                    //$(dropdownId).parents(".reloadDDL").first().html(d);
-                    //alert("Dropdown Id handle is: " + $(dropdownId).attr("id"));
-                });
-
+            }).done(function (d) {
+                if (d == "true") { alert("Data posted successfully!"); }
+                else { alert("WARNING: Failed to post!\nPlease review your input and try again..."); }
+            });
         });
-
 
         makeSectionsDropable();
     });
@@ -1307,8 +1331,15 @@
                 }
                 else if(selectedId == 'New'){
                     //alert("A New Question request has been issued!");
-                    selansDiv.html("");
-                    loadModal(qid, ddlId);
+                    $(this).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");
+                    //Reset the modal Window contents
+                    clearNewSAbox();
+                    var questionText = dropdown.parents(".divFormQuestion").first().find(qText).text();
+                    $("#selQText").html(questionText);
+                    $("#editQATWindow").modal();
+                    @*loadModal(@Model.question_id, ddlId);*@
+                    //selansDiv.html("");
+                    //loadModal(qid, ddlId);
                 }else
                 {
                     if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")

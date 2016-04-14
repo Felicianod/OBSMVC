@@ -492,6 +492,7 @@ namespace OBSMVC.Controllers
            return updateSel_Ans_Types(qat_id, sel_ans_list);                    
                           
         }
+
         [HttpPost]
         public string setDefaultQAT(int qat_id,bool isDefault)
         {
@@ -505,7 +506,9 @@ namespace OBSMVC.Controllers
                 return e.Message;
             }
         }
-       
+
+
+
         //-----------------------------------------------------------------------------------------------------------------
         // GET: QuestionMetadata
         [ChildActionOnly]     [OutputCache(Duration =2000)]
@@ -1210,6 +1213,7 @@ namespace OBSMVC.Controllers
             }
 
         }
+
         public bool isQuest_Slct_Ans_Required(int ans_type_id)
         {
             short temp = (short)ans_type_id;

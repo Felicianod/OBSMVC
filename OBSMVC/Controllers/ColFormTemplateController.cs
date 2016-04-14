@@ -753,6 +753,36 @@ namespace OBSMVC.Controllers
             ViewData["sNumber"] = sCounter;
             return PartialView("_addNewSection", colFormSection);
         }
+        [HttpPost]
+        public string addNewQuestion(string full_text, string desc)
+        {
+            try
+            {
+                if (db.OBS_QUESTION.Where(x => x.obs_question_full_text.Trim().ToUpper() == full_text.Trim().ToUpper()).Count() == 0)
+                {
+                    OBS_QUESTION quest_to_save = new OBS_QUESTION();
+                    quest_to_save.obs_question_full_text = full_text;
+                    quest_to_save.obs_question_desc = desc;
+                    quest_to_save.obs_question_eff_st_dt = DateTime.Today;
+                    quest_to_save.obs_question_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                    quest_to_save.obs_question_added_uid = User.Identity.Name;
+                    quest_to_save.obs_question_added_dtm = DateTime.Now;
+                    quest_to_save.obs_question_ver = 1;
+                    db.OBS_QUESTION.Add(quest_to_save);
+                    db.SaveChanges();
+                    return "True";
+                }
+                else
+                {
+                    return "Duplicate Question";
+                }
+
+            }
+            catch(Exception e)
+            {
+                return e.Message;
+            }
+        }
 
         [HttpPost]
         public bool saveNewSelAnswer(string ans_type_list)
@@ -780,7 +810,11 @@ namespace OBSMVC.Controllers
                                 {
                                     try
                                     {
-                                        db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == new_assigned_ans_type.obs_question_id).Select(y => y.obs_qat_default_ans_type_yn == "N");
+                                        List<OBS_QUEST_ANS_TYPES> temp = db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == new_assigned_ans_type.obs_question_id).ToList();
+                                        foreach(OBS_QUEST_ANS_TYPES temp_OBS_QUEST_ANS_TYPE in temp)
+                                        {
+                                            temp_OBS_QUEST_ANS_TYPE.obs_qat_default_ans_type_yn = "N";
+                                        }
                                     }
                                     catch { }                                   
                                     

@@ -175,7 +175,31 @@
             var height = $(window).height() - 200;
             $(this).find(".modal-body").css("max-height", height);
         });
+
+        $("#editQATWindow").on('hidden.bs.modal', function () {            
+            var questionId = $("#popupQID").val();
+            var modalddlId = $("#popupDDLid").val();
+
+            alert('Selectable Answer Edit Mode completed for drop down control id ' + modalddlId);
+            $.ajax({
+                url: '@Url.Action("reloadQuestionDropdown", "ColFormTemplate")',
+                method: "GET",
+                cache: false,
+                data: { question_id: questionId, dropdownID: modalddlId},
+                error: function () {
+                    alert("Failed to reload the Answer Type Values!!");  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                //alert("Retrieved Data is: " + d);
+                @*$("#@ulId").html(d);*@
+                //alert(d);
+                var dropdownId = "#" + modalddlId;
+                $(dropdownId).parents(".reloadDDL").first().html(d);
+                //alert("Dropdown Id handle is: " + $(dropdownId).attr("id"));
+            });
+        });
     });
+
 
     function toggleDefault(btnClicked) {
         if (btnClicked.hasClass('btnYES')) {
@@ -809,10 +833,6 @@
             });
         });
 
-        $("#editQATWindow").on('hidden.bs.modal', function () {
-            alert('Selectable Answer Edit Mode completed.');
-        });
-
         makeSectionsDropable();
     });
 
@@ -1311,8 +1331,15 @@
                 }
                 else if(selectedId == 'New'){
                     //alert("A New Question request has been issued!");
-                    selansDiv.html("");
-                    loadModal(qid, ddlId);
+                    $(this).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");
+                    //Reset the modal Window contents
+                    clearNewSAbox();
+                    var questionText = dropdown.parents(".divFormQuestion").first().find(qText).text();
+                    $("#selQText").html(questionText);
+                    $("#editQATWindow").modal();
+                    @*loadModal(@Model.question_id, ddlId);*@
+                    //selansDiv.html("");
+                    //loadModal(qid, ddlId);
                 }else
                 {
                     if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")

@@ -20,7 +20,7 @@
             @*[@Model.uniqueCounter]*@
         </div>
         <div class="col-sm-10">
-            <p>@Model.full_text</p>
+            <p id="qText">@Model.full_text</p>
         </div>
         @*<div class="col-sm-1">
             <button type="button" id="@qbtnCloseId" class="btnClose" onclick="removeSection('@qViewId')" aria-label="Close"><span aria-hidden="true" >&times;</span></button>
@@ -97,8 +97,10 @@
                 $(this).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");
                 //Reset the modal Window contents
                 clearNewSAbox();
-                $("#editQATWindow").modal();
+                //Set the Hidden Field Values that will be used in Edit Mode
+                $("#popupDDLid").val(ddlId);
                 $("#selQText").html("@Model.full_text");
+                $("#editQATWindow").modal();
                 @*loadModal(@Model.question_id, ddlId);*@
             }else
             {
@@ -128,7 +130,7 @@
                 "color": "black",
                 "background-color": "white"
             });
-        })    
+        })
     });
 </script>
 @* ================================= END OF SCRIPTS SECTION ============================================*@

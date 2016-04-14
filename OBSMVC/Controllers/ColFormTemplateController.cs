@@ -775,6 +775,7 @@ namespace OBSMVC.Controllers
                                 OBS_QUEST_ANS_TYPES new_assigned_ans_type = new OBS_QUEST_ANS_TYPES();
                                 new_assigned_ans_type.obs_question_id = Convert.ToInt32(single_sel_ans_info[0]);
                                 new_assigned_ans_type.obs_ans_type_id = Convert.ToInt16(single_sel_ans_info[1]);
+                                new_assigned_ans_type.obs_qat_default_ans_type_yn = single_sel_ans_info[2] == "true" ? "Y" : "N";
                                 if (single_sel_ans_info[2] == "true")
                                 {
                                     try

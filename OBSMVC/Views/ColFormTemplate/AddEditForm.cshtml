@@ -478,6 +478,7 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" id="popupFormChanged" value="N">
+                <input type="hidden" id="popupQID" value="">
                 <div class="row">
                     <div class="col-sm-10 col-sm-offset-1">
                         <span style="font-weight:bold; font-size:larger; margin-left:10px" class="label label-default">Question Full Text: </span>
@@ -498,8 +499,12 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="btnSaveNewSelAnswer">Save changes</button>
+                <div class="col-sm-1 col-sm-offset-3">
+                    <button type="button" class="btn btn-primary" id="btnSaveNewSelAnswer">Save changes</button>
+                </div>
+                <div class="col-sm-1 col-sm-offset-1">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -685,7 +690,7 @@
                             "Reset Form": function() {
                                 $("#formChanged").val("N");
                                 //isChanged.val("N");
-                                location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id                                
+                                location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
                             },
                             Cancel: function() {
                                 $( this ).dialog( "close" );
@@ -742,29 +747,29 @@
             $('[data-toggle="tooltip"]').tooltip();
 
             $("#btnSaveNewSelAnswer").click(function(){
+                var postQid = $("#popupQID").val();
                 var postData = "";
                 $("#ans_type_selAns").each(function(){
-                    postData = postData + $(this).val() + ",";                
+                    postData = postData + postQid + "~" + $(this).val() + ",";
                 });
                 alert("Saving New Answer Types...<br/>" + postData);
                 @*$.ajax({
-                    url: '@Url.Action("reloadQuestionDropdown", "ColFormTemplate")',
-                    method: "GET",
+                    url: '@Url.Action("NewActionfromRasul", "ColFormTemplate")',
+                    method: "POST",
                     cache: false,
-                    data: { question_id: questionId, dropdownID: ddlId},
+                    data: { sel_ans_list???? : postData},
                     error: function () {
-                        alert("Failed to reload the Answer Type Values!!");  //<-- Trap and alert of any errors if they occurred
+                        alert("ERROR: Failed to Save the New Question Answer Type Information.!!");  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
-                    //alert("Retrieved Data is: " + d);
-                    //alert(d);
+                    alert("Post Status : " + d);
                     var dropdownId = "#" + ddlId;
                     $(dropdownId).parents(".reloadDDL").first().html(d);
                     //alert("Dropdown Id handle is: " + $(dropdownId).attr("id"));
                 });*@
 
             });
-            
+
 
             makeSectionsDropable();
         });

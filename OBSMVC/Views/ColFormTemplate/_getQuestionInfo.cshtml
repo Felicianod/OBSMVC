@@ -78,6 +78,9 @@
             var selectedId = $(this).val();
             var selectedText = $(this).children("option:selected").text();
             var ddlId = $(this).prop("id");
+            var selectedQId = $(this).parents(".divFormQuestion").first().find("#qid").first().val();
+            // Dynamically Set the Question Id within the Popup form Scope before it is opened
+            $("#popupQID").val(selectedQId);
 
             if (selectedId != "") {
                 $('#btnSaveForm').button('reset');

@@ -717,6 +717,7 @@
         $("#btnCancel").click(function () {
             if ( $("#formChanged").val() == "Y")
             {
+                $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window
 
                 $( "#dialog-confirm-reset" ).dialog({
                     resizable: false,
@@ -803,7 +804,8 @@
                         alert("ERROR: Failed to Save the New Question Answer Type Information.!!");  //<-- Trap and alert of any errors if they occurred
                     }
             }).done(function (d) {
-                alert("Post Status : " + d);
+                if (d == "true") { alert("Data posted successfully!"); }
+                else { alert("WARNING: Failed to post!\nPlease review your input and try again..."); }
             });
         });
 

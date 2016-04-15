@@ -605,12 +605,13 @@
             </div>
             <div class="modal-body" style="margin-left:25px">
                 <br /><br />
+
                 <div class="row" style="margin-bottom:15px">
                     <div class="input-group">
                         <div class="input-group-addon stdAddonWidth">
                             Question Full Text:
                         </div>
-                        <textarea class="form-control qInput" id="modalQFullText" cols="400" rows="3" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" required></textarea>
+                        <textarea id="modalQFullText" class="form-control qInput" cols="400" rows="3" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" required></textarea>
                     </div>
                 </div>
 
@@ -622,6 +623,7 @@
                         <input type="text" id="modalQDesc" class="form-control qInput" placeholder="Enter Question Description" style="max-width: 100%; width:95%;" />
                     </div>
                 </div>
+
             </div>
             <div class="modal-footer">
                 <div class="col-sm-1 col-sm-offset-3">
@@ -929,8 +931,30 @@
         });
 
         $("#btnSaveLibQuestion").click(function(){
-            alert("Saving functionality is not enabled yet");
-        });
+            if ($("#modalQFullText").val() == ""){
+                alert("The Question Text is requiered.\nPLease review your input.");
+            }
+            else{
+                $.ajax({
+                    url: '@Url.Action("addNewQuestion", "ColFormTemplate")',
+                    method: "POST",
+                    cache: false,
+                    data: { full_text: $("#modalQFullText").val(), desc: $("#modalQDesc").val()},
+                    error: function () {
+                        alert("An error occurred when saving the question information to the LIbrary Database!!");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    if (d == "True"){
+                        $("#modalQFullText").val("");
+                        $("#modalQDesc").val("");
+                        alert("Data Posted Successfully!");
+                    }
+                    else{
+                        alert("ERROR Savind Data: " + d);
+                    }                    
+                });            
+            }
+        }); //--------- End of btnSaveLibQuestion click() event
 
         makeSectionsDropable();
     });

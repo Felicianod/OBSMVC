@@ -753,6 +753,7 @@ namespace OBSMVC.Controllers
             ViewData["sNumber"] = sCounter;
             return PartialView("_addNewSection", colFormSection);
         }
+
         [HttpPost]
         public string addNewQuestion(string full_text, string desc)
         {

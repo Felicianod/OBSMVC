@@ -22,28 +22,26 @@
     }
 </script>
 <div class="col-sm-12 answerType" id="newQATsection" style="border-style:double; border-width:2px; border-color:green; background-color:lightslategray; font-family:Arial; min-height:300px;">
-    <div class="row">
-        <div class="col-sm-6 form-inline">
-            <div class="input-group col-sm-7" >
-                <span class="input-group-addon label-primary" style="color:white; max-width:25%">Answer Type:</span>
-
-                @Html.DropDownList("fullSelATlist", null, "-Select Answer Type-", htmlAttributes: new { @class = "form-control selectAT" })
-            </div>
-        </div>
-        <div class="col-sm-3 col-sm-offset-3 form-inline" style="text-align:right">
-            <div class="input-group">
-                <span class="input-group-addon">Default </span>
-                <button id="btnNewATdefault" type="button" class="btn btnIsDefault btn-warning" onclick="makeDflt($(this))">
-                    NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-
     <div id="divNewAT" class="row divText">
-        &nbsp;
-        <div class="col-sm-6 col-sm-offset-1">
+        <div class="col-sm-6" style="margin-left:5px">
+            <br />
+            <div class="row">
+                <div class="col-sm-8 form-inline">
+                    <div class="input-group ">
+                        <span class="input-group-addon label-primary" style="color:white; max-width:25%">Answer Type:</span>
+                        @Html.DropDownList("fullSelATlist", null, "-Select Answer Type-", htmlAttributes: new { @class = "form-control selectAT" })
+                    </div>
+                </div>
+                <div class="col-sm-3 col-sm-offset-1 form-inline" style="text-align:right">
+                    <div class="input-group">
+                        <span class="input-group-addon">Default </span>
+                        <button id="btnNewATdefault" type="button" class="btn btnIsDefault btn-warning" onclick="makeDflt($(this))">
+                            NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <div class="row" id="noSelection" style="display:none">
                 <div class="col-sm-10 col-sm-offset-1">
                     <br />
@@ -51,19 +49,35 @@
                     <br /><br />
                 </div>
             </div>
-            <div class="row" id="ValRange3" style="display:none">
+            <div class="row" id="ValRange3" style="display:none; margin-left:20px; margin-bottom: 2px; margin-top: 2px">
                 <br />
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
+                <div class="line">
+                    <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value"/>
+                </div>
+                <div class="line">
+                    <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value"  />
+                </div>
+                <div class="line">
+                    <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                </div>
+                @*<div class="line">
+                    <label for="input">Last Name</label>
+                    <div class="input">
+                        <input type="text" name="input" size="30">
+                    </div>
+                </div>*@
             </div>
 
-            <div class="row" id="ValRange5" style="display:none">
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
-                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /><br />
+            <div class="row" id="ValRange5" style="display:none; margin-left:20px">
+                <div class="line">
+                    <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                </div>
+                <div class="line">
+                    <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                </div>
             </div>
 
-            <div class="row form-inline" id="multiList" style="display:none">
+            <div class="row form-inline" id="multiList" style="display:none;  margin-left:20px">
                 <button type="button" class="addTextBox btn btn-success" style="text-align:left; margin-bottom:7px; margin-top:5px"> <span class="glyphicon glyphicon-plus"> Add New Answer</span></button>
                 <div id="newTB" class="row form-inline">
                     @* ------------ This is a placeholder ----- New Text boxes Created Dynamically are placed here ------------- *@
@@ -71,11 +85,15 @@
             </div>
 
             <br />
-            <button id="btnSaveNewAT" type="button" style="display:none; width:80px">DONE</button>
-            <span>&nbsp;&nbsp;&nbsp;</span>
-            <button id="btnCancel" class="cancelNewSA" type="button" style="width:80px">CANCEL</button>
-            <br /><br />
-
+            <div class="row" style="margin-left:40px">
+                <div class="col-sm-2" style="text-align:center">
+                    <button id="btnSaveNewAT" type="button" style="display:none; width:80px">DONE</button>
+                </div>
+                <div class="col-sm-2" style="text-align:center">
+                    <button id="btnCancel" class="cancelNewSA" type="button" style="width:80px">CANCEL</button>
+                </div>                
+                <br /><br />
+            </div>
         </div>
         <div id="divTemplates" class="col-md-5 personal-info">
 

@@ -125,9 +125,8 @@
     }
     .modal-wide .modal-body {
         overflow-y: auto;
-        height: 500px;
+        height: 600px;
     }
-
     .modal-wide .modal-content  {
         -webkit-border-radius: 0px !important;
         -moz-border-radius: 0px !important;
@@ -136,7 +135,22 @@
         border-style:double;
         border-color: #c6e0ff;
      }
-    
+    .modal-NewQ .modal-dialog{
+        width: 70%;
+    }
+    .modal-NewQ .modal-body {
+        overflow-y: auto;
+        height: 400px;
+    }
+    .modal-NewQ .modal-content  {
+        -webkit-border-radius: 0px !important;
+        -moz-border-radius: 0px !important;
+        border-radius: 0px !important;
+        border-width:6px;
+        border-style:double;
+        border-color: #c6e0ff;
+     }
+
     #editQATWindow .modal-body p { margin-bottom: 900px }
     .btnYES {
         background: #3d85c6;
@@ -165,6 +179,16 @@
         background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
         font: normal 700 14px/1 "Calibri", sans-serif;
         color: white;
+    }
+    .selAnswerTextb {
+        background-color: lightgreen;
+    }
+    .line {
+        margin-bottom: 8px;
+    }
+    .stdAddonWidth {
+        min-width: 180px;
+        text-align: left;
     }
 </style>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -430,9 +454,10 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-2 right" style="padding:0px">
-                                    <a href="/Question/QuestionAddUpdate/0" class="btn btn-primary btn-sm newBtn" style="padding:2px">
+                                    <button type="button" class="btn btn-primary btn-sm newBtn" id="btnAddQuestionPopup" style="padding:2px"><span class="glyphicon glyphicon-plus-sign"></span> Add New</button>
+                                    @*<a href="/Question/QuestionAddUpdate/0" class="btn btn-primary btn-sm newBtn" style="padding:2px">
                                         <span class="glyphicon glyphicon-plus-sign"></span> Add New
-                                    </a>
+                                    </a>*@                                    
                                 </div>
                             </div>
                             @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
@@ -509,9 +534,12 @@
         Your form has been modified.<br /> Do you want to discard all changes?
     </p>
 </div>
+@* ------------------------ END OF "Add New Metadata Tag" FORM ------------------------- *@
+
 
 <div id="remoteWindow">
 </div>
+
 @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@ 
 @* ------------------------------------- POP UP "QUESTION MAINTENANCE LIGHT" FORM ------------------------------------------------ *@
 @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@ 
@@ -560,9 +588,54 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+@*------------------------------ END OF POP UP FOR QUESTION MAINTENANCE --------------------------*@
 
 
-@* ------------------------ END OF "Add New Metadata Tag" FORM ------------------------- *@
+@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+@* ------------------------------------- POP UP "ADD QUESTION TO LIBRARY" FORM ------------------------------------------------ *@
+@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+<!-- Modal -->
+@*loadModal(@Model.question_id, ddlId);*@
+<div class="modal  modal-NewQ fade" id="addQuestionWindow" role="dialog"> 
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">ADD QUESTION TO QUESTION LIBRARY</h3>
+            </div>
+            <div class="modal-body" style="margin-left:25px">
+                <br /><br />
+                <div class="row" style="margin-bottom:15px">
+                    <div class="input-group">
+                        <div class="input-group-addon stdAddonWidth">
+                            Question Full Text:
+                        </div>
+                        <textarea class="form-control qInput" id="modalQFullText" cols="400" rows="3" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" required></textarea>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-group">
+                        <div class="input-group-addon stdAddonWidth">
+                            Question Description:
+                        </div>
+                        <input type="text" id="modalQDesc" class="form-control qInput" placeholder="Enter Question Description" style="max-width: 100%; width:95%;" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-1 col-sm-offset-3">
+                    <button type="button" class="btn btn-primary" id="btnSaveLibQuestion" disabled="disabled">Save changes</button>
+                </div>
+                <div class="col-sm-1 col-sm-offset-1">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
 
 
 
@@ -842,6 +915,21 @@
                 }
                 else { alert("WARNING: Failed to post!\nPlease review your input and try again: " + d); }
             });
+        });
+
+        $("#btnAddQuestionPopup").click(function(){
+            $("#addQuestionWindow").modal();
+        });
+        
+        $('.qInput').change(function () {
+            if ($(this).val() != ""){
+                $("#btnSaveLibQuestion").removeAttr('disabled');
+                //$("#xxx").val("Y");   // Re-enable the form "changed" status
+            }
+        });
+
+        $("#btnSaveLibQuestion").click(function(){
+            alert("Saving functionality is not enabled yet");
         });
 
         makeSectionsDropable();
@@ -1224,7 +1312,7 @@
             //var isChanged = false;
             $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
 
-            $('input, select, textarea').change(function () {
+            $('input, select, textarea').not(".qInput").change(function () {
                 //$("input[type='submit']").removeAttr("disabled");
 
                 if ($('#btnSaveForm').val() != "Save Form") {

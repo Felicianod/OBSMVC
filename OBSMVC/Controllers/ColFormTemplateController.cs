@@ -843,7 +843,7 @@ namespace OBSMVC.Controllers
                                     }
                                 }
                             }
-                        }
+                        }// end of foreach (string s in passed_sel_ans_info)
                         transaction.Commit();
                         return true;
                     }//end of try

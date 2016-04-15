@@ -114,6 +114,8 @@ namespace OBSMVC.Models
                             List<OBS_QUEST_SLCT_ANS> temp_select_ans = db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qaInstanceTemp.obs_qat_id && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).OrderBy(x=>x.obs_qsa_order).ToList();
                             temp_qat.selAns = temp_select_ans;                            
                         }
+                        int usage_count = db.OBS_COL_FORM_QUESTIONS.Where(x => x.obs_qat_id == qaInstanceTemp.obs_qat_id).Select(y=>y.obs_cft_id).Distinct().Count();
+                        temp_qat.usageInfo = usage_count > 0 ? "This answer type is on " + usage_count + " different forms" : String.Empty;
                         Quest_Assigned_qatTags.Add(temp_qat);
                     }
                     Quest_Assigned_qatTags = Quest_Assigned_qatTags.OrderBy(item => item.answer_type_name).ToList();

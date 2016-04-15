@@ -17,19 +17,20 @@ var divSATextqatId = "txtQATid" + uniqueCounter;
     <input type="hidden" id="sel_ans_list" name="sel_ans_list" value="" />
     <input type="hidden" id="atCat" value="@Model.QAT.OBS_ANS_TYPE.obs_ans_type_category" />
     <div class="row">
-        <div class="col-sm-6 form-inline">
+        <div class="col-sm-4 form-inline">
             @*<span class="label label-primary">[ @uniqueCounter ]&nbsp;</span>*@
             <div class="input-group col-sm-7">
-                <span class="input-group-addon label-primary" style="color:white; max-width:25%">Answer Type:</span>
+                <span class="input-group-addon label-primary" style="color:white; max-width:35%">Answer Type:</span>
                 <input type="text" class="form-control" id="qat" value="@Model.answer_type_name" readonly="readonly" style="max-width:100%; width:100%">
             </div>
-            <div class="input-group col-sm-5" style="text-align:center">
-                <span class="bg-info" style="font-size:small; font-weight:bold">@Model.usageInfo</span>
-            </div>
         </div>
+        <div class="col-sm-6 form-inline" style="text-align:center">
 
-        <div class="col-sm-3 col-sm-offset-3 form-inline" style="text-align:right">
-            <div class="input-group">                
+                <span class="bg-info" style="font-size:small; font-weight:bold">@Model.usageInfo</span>
+
+        </div>
+        <div class="col-sm-2 form-inline" style="text-align:right">
+            <div class="input-group">
                 <span class="input-group-addon">Default? </span>
                 @if (Model.QAT.obs_qat_default_ans_type_yn == "Y")
                     { <button type="button" class="btn btnIsDefault btnYES">YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span></button> }
@@ -37,7 +38,7 @@ var divSATextqatId = "txtQATid" + uniqueCounter;
                     { <button type="button" class="btn btnIsDefault btn-warning">NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span></button> }
                 @*<input type="checkbox" @if (Model.QAT.obs_qat_default_ans_type_yn == "Y") { <text> checked="checked" </text>     }
                     class="form-control primar chkDefault" id="qatDefault" name="qatDefault" style="max-width:20%" />*@
-                <button type="button" class="btn btn-default deleteQAT" onclick='toggleSoftDelete($(this))'  > 
+                <button type="button" class="btn btn-default deleteQAT" onclick='toggleSoftDelete($(this))'  >
                     <span class="glyphicon glyphicon-trash"></span>
                 </button>
 

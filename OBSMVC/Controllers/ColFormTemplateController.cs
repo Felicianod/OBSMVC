@@ -688,13 +688,10 @@ namespace OBSMVC.Controllers
                     SelectListItem answer_for_dropdown = new SelectListItem() { Text = temp_answer.obs_ans_type_name, Value = qaInstanceTemp.obs_qat_id.ToString() };
                     question_assigned_answer_types.Add(answer_for_dropdown);
                     // lets check if this answer type requires selectable answers
-                    if (db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id).obs_ans_type_has_fxd_ans_yn == "Y")
+                    if (db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id).obs_ans_type_has_fxd_ans_yn == "Y" && db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id).obs_ans_type_category.Contains("Range"))
                     {
                         //if true, we need to list all of them and assign them to object's list of selectable answers
 
-                        int count = QAInstances.Count(x => x.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id);
-                        if (count > 1)
-                        {
                             String sel_ans = "(";
                             foreach (OBS_QUEST_SLCT_ANS temp in db.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qat_id == qaInstanceTemp.obs_qat_id && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now))
                             {
@@ -703,7 +700,7 @@ namespace OBSMVC.Controllers
                             }
                             sel_ans = sel_ans + ")";
                             question_assigned_answer_types.Single(x => Convert.ToInt32(x.Value) == qaInstanceTemp.obs_qat_id).Text = temp_answer.obs_ans_type_name + sel_ans;
-                        }                       
+                                               
                     }
 
                 }
@@ -833,7 +830,7 @@ namespace OBSMVC.Controllers
                                     {
                                         OBS_QUEST_SLCT_ANS new_sel_ans = new OBS_QUEST_SLCT_ANS();
                                         new_sel_ans.obs_qat_id = new_assigned_ans_type.obs_qat_id;
-                                        new_sel_ans.obs_qsa_text = single_sel_ans_info[i];
+                                        new_sel_ans.obs_qsa_text = single_sel_ans_info[i].ToUpper();
                                         new_sel_ans.obs_qsa_order = order;
                                         new_sel_ans.obs_qsa_wt = order;
                                         new_sel_ans.obs_qsa_dflt_yn = "N";

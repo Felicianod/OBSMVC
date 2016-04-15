@@ -118,6 +118,8 @@
             var selectedValue = $(this).val();
             //var selectedValue = $('#fullSelATlist').val();
 
+            //At any change, reset all the text boxes
+            $('.selAnswerTextb').val("");
             //If the selected Index from the dropdown list is empty, disable the Save Button
             if (selectedText == "-Sele") {
                 $('#btnSaveNewAT').hide();
@@ -125,12 +127,13 @@
             else { $('#btnSaveNewAT').show(); }
 
             if (selectedText == "3 Val") {
-                selCathegory = "3 Val Range";                
+                selCathegory = "3 Val Range";
+                //alert("You selected a 3-val range!")
                 $('#noSelection').hide();
-                $('#ValRange5').hide();
                 $('#ValRange5').children('.selAnswerTextb').val("");
-                $('#multiList').hide();
+                $('#ValRange5').hide();
                 $('#multiList').children('.selAnswerTextb').val("");
+                $('#multiList').hide();
                 $('#ValRange3').show();
             }
             else if (selectedText == "5 Val") {
@@ -145,10 +148,10 @@
             else if (selectedText == "Multi" || selectedText == "Singl") {
                 selCathegory = "Other";
                 $('#noSelection').hide();
-                $('#ValRange3').hide();
                 $('#ValRange3').children('.selAnswerTextb').val("");
+                $('#ValRange3').hide();
+                $('#ValRange5').children('.selAnswerTextb').val("");
                 $('#ValRange5').hide();
-                $('#ValRange5').children('.selAnswerTextb').val("");                
                 $('#multiList').show();                
                 //var divToAdd = '<div class="row form-inline newTB"> <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /> </div>'
                 var addTextBox = '<input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />'

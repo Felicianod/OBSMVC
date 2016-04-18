@@ -2,7 +2,7 @@
 <div class="row answerType divText" id="newQATsection" style="border-style:double; border-width:2px; font-family:Arial; min-height:300px;">
     <div class="col-sm-6" >
         <div class="row">
-            <div class="col-sm-12 form-inline" style="max-width:100%; width:100%">
+            <div class="col-sm-12 form-inline" style="max-width:100%; width:100%; margin-left:10px">
                 <div class="input-group" style="max-width:100%; width:100%">
                     <span class="input-group-addon label-primary" style="color:white; ">Answer Type:</span>
                     @Html.DropDownList("fullSelATlist", null, "-Select Answer Type-", htmlAttributes: new { @class = "form-control selectAT" })
@@ -47,7 +47,7 @@
 
         <div class="row form-inline" id="multiList" style="display:none;  margin-left:20px">
             <button type="button" class="addTextBox btn btn-success" style="text-align:left; margin-bottom:7px; margin-top:5px"> <span class="glyphicon glyphicon-plus"> Add New Answer</span></button>
-            <div id="newTB" class="row form-inline">
+            <div id="newTB" class="row form-inline mlSection">
                 @* ------------ This is a placeholder ----- New Text boxes Created Dynamically are placed here ------------- *@
             </div>
         </div>
@@ -78,13 +78,14 @@
         var selCathegory = "Other";
         $(".selAnswerTextb").change(function () {
             $("#newErrorMsg").hide();
-            //$("#btnSaveNewSelAnswer").removeAttr('disabled');
-            $("#btnSaveNewSelAnswer").button('reset');            
+            $("#btnSaveNewSelAnswer").removeAttr('disabled');
+            $("#btnSaveNewSelAnswer").button('reset');
         });
 
         $("#fullSelATlist").change(function () {
             var selectedText = $(this).find('option:selected').text().substring(0,5);
             var selectedValue = $(this).val();
+
             //var selectedValue = $('#fullSelATlist').val();
             $("#newErrorMsg").hide();
 
@@ -95,7 +96,7 @@
                 $('#btnSaveNewSelAnswer').attr('disabled', true);
             }
             else {
-                //$("#btnSaveNewSelAnswer").removeAttr('disabled');
+                $("#btnSaveNewSelAnswer").removeAttr('disabled');
                 $("#btnSaveNewSelAnswer").button('reset');
             }
 
@@ -175,12 +176,16 @@
 
 
         $('.addTextBox').click(function () {
+            addNewTextBox();
+        });
+
+        function addNewTextBox() {
             var divToAdd = '<div class="row form-inline newTB"> <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /></div>'
             var delButton = $('<button  type="button" ><span class="glyphicon glyphicon-trash"></span></button>').click(function () {
                 $(this).parent().remove();
             });
             $('#multiList').append(divToAdd).children(".newTB").last().append(delButton);
-        });
+        }
 
     });
 </script>

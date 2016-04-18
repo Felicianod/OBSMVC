@@ -1,113 +1,75 @@
 ﻿@* ===== THIS PARTIAL VIEW REPRESENTS THE 'ADD NEW SELECTABLE ANSWER' VIEW USED IN THE FORM POPUP WINDOW ======= *@
-<script>
-    function makeDflt(defaultBtn) {
-                //var btnClass = "test";
-                //if (defaultBtn.hasClass('btnYES'))
-                //{ btnClass = "This is a default Button" }
-                //else { btnClass = "This is not default Button" }
-
-        if (defaultBtn.hasClass('btnYES')) {
-            defaultBtn.removeClass("btnYES").addClass("btn-warning");
-            defaultBtn.html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
-        }
-        else {
-            ////Else, reset all buttons to "No Default" and make this button the default
-            //$(".btnIsDefault").removeClass("btnYES").addClass("btn-warning");
-            //$(".btnIsDefault").html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
-            defaultBtn.removeClass("btn-warning").addClass("btnYES");
-            defaultBtn.html('YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up">');
-        }
-    }
-</script>
-<div class="col-sm-12 answerType" id="newQATsection" style="border-style:double; border-width:2px; border-color:green; background-color:lightslategray; font-family:Arial; min-height:300px;">
-    <div id="divNewAT" class="row divText">
-        <div class="col-sm-6" style="margin-left:5px">
-            <br />
-            <div class="row">
-                <div class="col-sm-8 form-inline">
-                    <div class="input-group ">
-                        <span class="input-group-addon label-primary" style="color:white; max-width:25%">Answer Type:</span>
-                        @Html.DropDownList("fullSelATlist", null, "-Select Answer Type-", htmlAttributes: new { @class = "form-control selectAT" })
-                    </div>
-                </div>
-                <div class="col-sm-3 col-sm-offset-1 form-inline" style="text-align:right">
-                    <div class="input-group">
-                        <span class="input-group-addon">Default </span>
-                        <button id="btnNewATdefault" type="button" class="btn btnIsDefault btn-warning" onclick="makeDflt($(this))">
-                            NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
-                        </button>
-                    </div>
+<div class="row answerType divText" id="newQATsection" style="border-style:double; border-width:2px; font-family:Arial; min-height:300px;">
+    <div class="col-sm-6" >
+        <div class="row">
+            <div class="col-sm-12 form-inline" style="max-width:100%; width:100%">
+                <div class="input-group" style="max-width:100%; width:100%">
+                    <span class="input-group-addon label-primary" style="color:white; ">Answer Type:</span>
+                    @Html.DropDownList("fullSelATlist", null, "-Select Answer Type-", htmlAttributes: new { @class = "form-control selectAT" })
                 </div>
             </div>
+        </div>
 
-            <div class="row" id="noSelection" style="display:none">
-                <div class="col-sm-10 col-sm-offset-1">
-                    <br />
-                    <span class="label label-primary" style="font-size:larger; font-weight:bold">This Selection does not require Selectable answers</span>
-                    <br /><br />
-                </div>
-            </div>
-            <div class="row" id="ValRange3" style="display:none; margin-left:20px; margin-bottom: 2px; margin-top: 2px">
+        <div class="row" id="noSelection" style="display:none">
+            <div class="col-sm-10 col-sm-offset-1">
                 <br />
-                <div class="line">
-                    <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-                </div>
-                <div class="line">
-                    <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-                </div>
-                <div class="line">
-                    <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-                </div>
-                @*<div class="line">
-                        <label for="input">Last Name</label>
-                        <div class="input">
-                            <input type="text" name="input" size="30">
-                        </div>
-                    </div>*@
-            </div>
-
-            <div class="row" id="ValRange5" style="display:none; margin-left:20px">
-                <div class="line">
-                    <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-                </div>
-                <div class="line">
-                    <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-                </div>
-            </div>
-
-            <div class="row form-inline" id="multiList" style="display:none;  margin-left:20px">
-                <button type="button" class="addTextBox btn btn-success" style="text-align:left; margin-bottom:7px; margin-top:5px"> <span class="glyphicon glyphicon-plus"> Add New Answer</span></button>
-                <div id="newTB" class="row form-inline">
-                    @* ------------ This is a placeholder ----- New Text boxes Created Dynamically are placed here ------------- *@
-                </div>
-            </div>
-
-            <br />
-            <div class="row" style="margin-left:40px">
-                <div class="col-sm-2" style="text-align:center">
-                    <button id="btnSaveNewAT" type="button" style="display:none; width:80px">DONE</button>
-                </div>
-                <div class="col-sm-2" style="text-align:center">
-                    <button id="btnCancel" class="cancelNewSA" type="button" style="width:80px">CANCEL</button>
-                </div>
+                <span class="label label-primary" style="font-size:larger; font-weight:bold">This Selection does not require Selectable answers</span>
                 <br /><br />
             </div>
-            <div id="newErrorMsg" class="label label-danger" style="font-size:medium; display:none">
-                @*---------------- Placeholder for Error Messages ---------------*@
+        </div>
+        <div class="row" id="ValRange3" style="display:none; margin-left:20px; margin-bottom: 2px; margin-top: 2px">
+            <br />
+            <div class="line">
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+            </div>
+            <div class="line">
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+            </div>
+            <div class="line">
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+            </div>
+            @*<div class="line">
+                <label for="input">Last Name</label>
+                <div class="input">
+                    <input type="text" name="input" size="30">
+                </div>
+            </div>*@
+        </div>
+
+        <div class="row" id="ValRange5" style="display:none; margin-left:20px">
+            <div class="line">
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+            </div>
+            <div class="line">
+                <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
             </div>
         </div>
-        <div id="divTemplates" class="col-md-5 personal-info">
 
-            @*  // - - - - - -- - - - - INSERT HERE The Selectable Answers Templates Panel (From External Partial View) --------
-                //------------------------------------------------------------------------------------------------------------------*@
-
-            @*  // - - - - - - - END OF Selectable Answers Templates Panel (From External Partial View) --------
-                //-------------------------------------------------------------------------------------------------------
-            *@
+        <div class="row form-inline" id="multiList" style="display:none;  margin-left:20px">
+            <button type="button" class="addTextBox btn btn-success" style="text-align:left; margin-bottom:7px; margin-top:5px"> <span class="glyphicon glyphicon-plus"> Add New Answer</span></button>
+            <div id="newTB" class="row form-inline">
+                @* ------------ This is a placeholder ----- New Text boxes Created Dynamically are placed here ------------- *@
+            </div>
         </div>
+
+        <br />
+
+
+        <div id="newErrorMsg" class="label label-danger" style="font-size:medium; display:none">
+            @*---------------- Placeholder for Error Messages ---------------*@
+        </div>
+
+    </div>
+    <div id="divTemplates" class="col-sm-6" >        
+        @*  // - - - - - -- - - - - INSERT HERE The Selectable Answers Templates Panel (From External Partial View) --------
+            //--------------------------------------------------------------------------------------------------------------
+            // - - - - - - - END OF Selectable Answers Templates Panel (From External Partial View) ------------------------
+        //------------------------------------------------------------------------------------------------------------------
+        *@
     </div>
 </div>
 <br />
+
 
 
 
@@ -116,6 +78,8 @@
         var selCathegory = "Other";
         $(".selAnswerTextb").change(function () {
             $("#newErrorMsg").hide();
+            //$("#btnSaveNewSelAnswer").removeAttr('disabled');
+            $("#btnSaveNewSelAnswer").button('reset');            
         });
 
         $("#fullSelATlist").change(function () {
@@ -128,9 +92,12 @@
             $('.selAnswerTextb').val("");
             //If the selected Index from the dropdown list is empty, disable the Save Button
             if (selectedText == "-Sele") {
-                $('#btnSaveNewAT').hide();
+                $('#btnSaveNewSelAnswer').attr('disabled', true);
             }
-            else { $('#btnSaveNewAT').show(); }
+            else {
+                //$("#btnSaveNewSelAnswer").removeAttr('disabled');
+                $("#btnSaveNewSelAnswer").button('reset');
+            }
 
             if (selectedText == "3 Val") {
                 selCathegory = "3 Val Range";
@@ -214,176 +181,7 @@
             });
             $('#multiList').append(divToAdd).children(".newTB").last().append(delButton);
         });
-        //------------ BUTTON CANCEL ENTERING NEW ANSWER TYPE -----------------------------------------------------
-        $('.cancelNewSA').click(function () {
-            if ($("#windowType").val() == "MODAL") {
-                clearNewSAbox();
-            }
-            else {
-                // Remove the Entry box only for the Standalone version of the Question Maintenance Entry Form
-                $(this).parents("div.answerType").first().remove();
-                $("#addAnsType").removeAttr('disabled');
-            }
-        });
-        //--------------------- SOFT SAVE NEW SELECTABLE ANSER --------------------------------
-        $('#btnSaveNewAT').click(function () {
-            var formValidated = true;
-            var textValues = "";
-            var counter = 0;
-            var emptyBoxes = 0;
-            var isDefaultValue = "false";
-            var postParams = "";
-            var validationMessage = "";
-            var doneButton = $(this);
 
-            var comparisonNewString = $("#divNewSA").find("#fullSelATlist").first().children("option").filter(":selected").text();  //Save the answer Type that is being added
-            //$("#yourdropdownid option:selected").text();
-            //$("#fullSelATlist").children("option").filter(":selected").text()
-            var comparisonOldString = "";
-
-            $(this).button('loading');
-            //Loop through all text boxes in this section and save the answers for comparison
-            $('#divNewAT').find('.selAnswerTextb').each(function () {
-                counter = counter + 1;
-                if ($(this).val() != "") {
-                    textValues = textValues + $(this).val().trim().toUpperCase() + ",";
-                    comparisonNewString = comparisonNewString + $(this).val().trim().toUpperCase();
-                }
-                else {
-                    emptyBoxes++;
-                }
-            });
-
-            //Check if we have empty boxes, then the form is not validated.
-            if (selCathegory == "3 Val Range" && emptyBoxes > 2) {
-                formValidated = false;
-                validationMessage = "No textbox values can be left blank";
-            }
-            else if (selCathegory == "5 Val Range" && emptyBoxes > 0) {
-                formValidated = false;
-                validationMessage = "No textbox values can be left blank";
-            }
-
-            //alert("There are " + emptyBoxes + " Empty Fields.");
-
-            //-----------------------------------------------------------------------------------------------------------------
-            //Validate that the newly entered QAT and values do not exist in any of the other sections (Existing or to be added)
-            //Must not exist under the <div #existingQATs> and <#divaddedSA> divisions (both have a class = ".answerType"
-
-            $(".answerType").each(function () {
-                var existingAnswers = "";
-                $(this).find(".SAitem").each(function () { existingAnswers = existingAnswers.concat($(this).html()) });
-                if (formValidated == true) {
-                    comparisonOldString = $(this).find("#qat").first().val() + existingAnswers;
-                    if (comparisonNewString == comparisonOldString) {
-                        formValidated = false;
-                        validationMessage = "The selected values already exist for this answer.";
-                    }
-                }
-            });
-
-            $("#divNewSA").find("#fullSelATlist").first().val();  //Save the answer Type that is being added
-
-            //Validate that if the selected Answer Type is a "Free Text" or 'Y/N" type and it already exist (It's a duplicated)
-            //Then do not allow it to be Added again
-
-
-            // This code will not be used anymore due to validation change on 04/18/2016 to validate all answer valies no
-            // just the Free Form Text and Y/N types
-            //var selectedDDLText = $(this).parents(".answerType").first().find("#fullSelATlist option:selected").text();
-            //var selectedDDLText2 = "";
-            //if (selectedDDLText.length >= 2) { selectedDDLText2 = selectedDDLText.substring(0,2)}
-            //if (selectedDDLText2 == "Fr" || selectedDDLText2 == "YN") {
-            //    // We are saving a QAT that does not require selectable Answers. Check if that selection already exist
-            //    //Loop through all existing QAT for this question
-            //    //alert("Your Selection does not require Selectable Answers!!");
-            //    var alreadyexist = false;
-            //    //$(".answerType").each(function () {
-            //    //    if ($(this).find("#qat").first().val() == selectedDDLText) {
-            //    //        //The selected option already exist
-            //    //        alreadyexist = true;
-            //    //    }
-            //    //});
-
-            //    //if (alreadyexist) {
-            //    //    //alert("WARNING! This Selection already exist.");
-            //    //    formValidated = false;
-            //    //    validationMessage = "Value Selected Already exist. Choose a different Answer Type.";
-            //    //}
-            //}
-
-
-            // Proceed only if the user input is valid
-            if (formValidated) {
-                //If the new Answer Type is the default, reset all other Answer types to be no default
-                if ($('#btnNewATdefault').hasClass('btnYES')) {
-                    isDefaultValue = "true";
-                    //Reset all other defaults to "NO Default" except the current
-                    $(".btnIsDefault").not('#btnNewATdefault').removeClass("btnYES").addClass("btn-warning");
-                    $(".btnIsDefault").not('#btnNewATdefault').html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
-                    //$('#btnNewATdefault').removeClass("btn-warning").addClass("btnYES");
-                    //$('#btnNewATdefault').html('YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up">');
-                }
-
-                postParams = $("#fullSelATlist").val() + "," + isDefaultValue + "," + textValues;
-
-                ///alert("Parameter passed to Ajax are: " + postParams);
-
-                // Disable the upper level button so no more answer types can bve added until this one is saved
-                $('#addAnsType').prop('disabled', false)
-                // --------------------------- SOFT SAVE NEW ANSWER TYPE VIA AJAX (NOT POSTED TO DB) --------------
-                $.ajax({
-                    url: '@Url.Action("saveNewSelectableAnswer", "Question")',
-                    method: "GET",
-                    cache: false,
-                    dataType: "html",
-                    data: { input_data: postParams },     //<---- Data Parameters (if not already passed in the Url)
-                    //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                    //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                    //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                    //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-                    //--- On error, execute this function ------
-                    error: function () {
-                        alert("Failed to retrieve appropriate Templates for Selection! [" + "selCathegory" + "]");  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    //Execute this code After the Ajax call completes successfully
-                    //Data "d" received by the Controller is a partial view to display in the screen
-                    //$("#accordion").append(d);
-                    //alert('Save Resullt: ' + d)
-                    //$(this).button('reset');
-                    $("#divaddedSA").append(d);
-                    //$("#divNewSA").html("");       //We do not need to clear the Entry form since we want to let users keep entering new data if needed
-                    //$('#messageAddedSA').show();
-                    $('#noATmsg').remove();
-                    if ($("#windowType").val() == "MODAL") {
-                        //If this is the modal version of the Question Maintennce, clear the whole entry form
-                        clearNewSAbox();
-                    }
-                    else {
-                        //If saving is successful in the full page, enable the Question Save Button
-                        $("#btnAddQuestion").removeAttr('disabled');   // Re-enable the "Add New Answer Type" button
-                        $("#addAnsType").removeAttr('disabled');       // Re-enable the "SAVE" button
-                        // Remove the Entry box only for the Standalone version of the Question Maintenance Entry Form
-                        doneButton.parents("div.answerType").first().remove();
-                        doneButton.button('reset');
-                    }
-                    $("#btnSaveNewSelAnswer").removeAttr('disabled');
-                });
-                // Finally once the "add" has been performed, turn the "Form Changed" flag to indicate a change was done to the Question
-                $("#popupFormChanged").val("Y");
-            }
-            else {
-                var errorMessage = "<span> VALIDATION ERROR: Please review your input:</span><br/>&nbsp;" + validationMessage + "<span>";
-                //errorMessage = errorMessage.concat("</span><br/>&nbsp;&nbsp;<span>You are comparing Answer Type Id and values:</span><br/>");
-                //errorMessage = errorMessage.concat("<span>'" + comparisonNewString + "'</span>" + "<span> against: </span>");
-                //errorMessage = errorMessage.concat("<span> '" + comparisonOldString + "'</span>");
-                $("#newErrorMsg").html(errorMessage);
-                $("#newErrorMsg").show();
-                $(this).button('reset');
-            }
-        });
     });
 </script>
 

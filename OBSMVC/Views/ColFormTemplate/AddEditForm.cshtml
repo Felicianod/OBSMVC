@@ -208,6 +208,8 @@
                 var questionId = $("#popupQID").val();
                 var modalddlId = $("#popupDDLid").val();
             
+                alert("Modal is closed, ddl QAT id ;" + modalddlId + "' will be reloaded");
+
                 $.ajax({
                     url: '@Url.Action("reloadQuestionDropdown", "ColFormTemplate")',
                     method: "GET",
@@ -558,6 +560,7 @@
                 <input type="hidden" id="popupFormChanged" value="N">
                 <input type="hidden" id="popupQID" value="">
                 <input type="hidden" id="popupDDLid" value="">
+                <input type="hidden" id="lastSavedAns" value="">
                 <div class="row">                    
                     <div class="input-group" style="margin-left:25px">
                         <div class="input-group-addon" style="max-width:100%">
@@ -930,11 +933,15 @@
                         alert("ERROR: Failed to Save the New Question Answer Type Information.!!");  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
-                    if (d.substring(0,4) == "QAT") { alert("Data posted successfully!\n" + d);
+                    if (d.substring(0,3) == "QAT") { alert("Data posted successfully!\n" + d);
                         // Set the popupstatus to "saved" to indicate that the post succeded and that the drop down needs to be updated.
                         $("#popupStatus").val("saved");
-                        // Reset the list of answers that have already been saved so they do not need to be dusplayed anymore
+                        // Reset the list of answers that have already been saved so they do not need to be displayed anymore
                         $("#divaddedSA").html("");
+
+                        $("#editQATWindow").modal('hide');
+                        //After Saving Data successfully and clossing the popup modal window, reload the drop down list with new AT values
+
                     }
                     else { 
                         alert("Server Response: " + d); 

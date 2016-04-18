@@ -121,11 +121,11 @@
       background-color: #f9f9f9;
     }
     .modal.modal-wide .modal-dialog {
-        width: 85%;
+        width: 55%;
     }
     .modal-wide .modal-body {
         overflow-y: auto;
-        height: 600px;
+        height: 400px;
     }
     .modal-wide .modal-content  {
         -webkit-border-radius: 0px !important;
@@ -136,11 +136,11 @@
         border-color: #c6e0ff;
      }
     .modal-NewQ .modal-dialog{
-        width: 70%;
+        width: 40%;
     }
     .modal-NewQ .modal-body {
         overflow-y: auto;
-        height: 400px;
+        height: 350px;
     }
     .modal-NewQ .modal-content  {
         -webkit-border-radius: 0px !important;
@@ -151,7 +151,7 @@
         border-color: #c6e0ff;
      }
 
-    #editQATWindow .modal-body p { margin-bottom: 900px }
+    #editQATWindow .modal-body p { margin-bottom: 600px }
     .btnYES {
         background: #3d85c6;
         background: -webkit-linear-gradient(#073763, #3d85c6 50%, #073763);
@@ -935,7 +935,7 @@
 
         $("#btnSaveLibQuestion").click(function(){
             if ($("#modalQFullText").val() == ""){
-                alert("The Question Text is requiered.\nPLease review your input.");
+                alert("The Question Text is requiered.\nPlease review your input.");
             }
             else{
                 $.ajax({

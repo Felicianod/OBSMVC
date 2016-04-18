@@ -907,15 +907,12 @@
                 // Proceed to Save the new Answer Type
                 //Parameter to post are:  QuestionId~AnswerTypeId~defaultT/F~answerlist
 
-                var postQid = $("#popupQID").val();    // Question Id from Modal Popup DIV        
-                var postData = postQid + "";  
+                //Build the posting parameters: "Question Id" plus "Answer Type Id" and hardcode default="false" plus sel answers from "texvalues" variable
+                var postData = $("#popupQID").val() + "~" + $("#fullSelATlist").val() + "~false~" + textValues;              
+                alert("posting Question Id: " + $("#popupQID").val() + "\nPosting Parameter: " + postData);
 
-                var atidFound = $("#fullSelATlist").val();   //Save the answer Type Id that is being added/posted
-                alert("posting Question Id: " + postQid + " and Answer Type id:" + atidFound);
+                //$(this).button('loading');  // Disable the button until posting is complete
 
-                $(this).button('loading');  // Disable the button until posting is complete
-
-                textValues
 
                 @*$(".qatDIV").each(function(){
                     var postAnsTypeId = $(this).find("#ans_type_id").first().val();

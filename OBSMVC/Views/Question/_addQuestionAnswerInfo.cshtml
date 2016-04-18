@@ -277,10 +277,8 @@
                 comparisonOldString = $(this).find("#qat").first().val() + existingAnswers;
                 if (comparisonNewString == comparisonOldString) {
                     formValidated = false;
-                    alert("Your Selected Chioce already exist");
-
-                }
-                
+                    validationMessage = "The selected values already exist for this answer.";
+                }                
             });
 
             $("#divNewSA").find("#fullSelATlist").first().val();  //Save the answer Type that is being added            
@@ -376,7 +374,7 @@
                 $("#popupFormChanged").val("Y");
             }
             else {
-                var errorMessage = "<span>Please review your input:</span><br/>&nbsp;<span>";
+                var errorMessage = "<span> VALIDATION ERROR: Please review your input:</span><br/>&nbsp;<span>";
                 errorMessage = errorMessage.concat(validationMessage, "</span><br/>&nbsp;&nbsp;<span>You are comparing Answer Type Id and values:</span>&nbsp;");
                 errorMessage = errorMessage.concat("<span>" + comparisonNewString + "</span>" + "<span>against:</span>");
                 errorMessage = errorMessage.concat("<span>" + comparisonOldString + "</span>");

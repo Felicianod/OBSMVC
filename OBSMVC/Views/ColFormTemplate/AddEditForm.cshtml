@@ -208,13 +208,13 @@
                 var questionId = $("#popupQID").val();
                 var modalddlId = $("#popupDDLid").val();
             
-                alert("Modal is closed, ddl QAT id ;" + modalddlId + "' will be reloaded");
+                alert("Modal is closed, ddl QATid is '" + $("#savedQATid").val() + "' will be reloaded");
 
                 $.ajax({
                     url: '@Url.Action("reloadQuestionDropdown", "ColFormTemplate")',
                     method: "GET",
                     cache: false,
-                    data: { question_id: questionId, dropdownID: modalddlId},
+                    data: { question_id: questionId, dropdownID: modalddlId, selectedQATid: "12345"},
                     error: function () {
                         alert("Failed to reload the Answer Type Values!!");  //<-- Trap and alert of any errors if they occurred
                     }
@@ -560,7 +560,7 @@
                 <input type="hidden" id="popupFormChanged" value="N">
                 <input type="hidden" id="popupQID" value="">
                 <input type="hidden" id="popupDDLid" value="">
-                <input type="hidden" id="lastSavedAns" value="">
+                <input type="hidden" id="savedQATid" value="">
                 <div class="row">                    
                     <div class="input-group" style="margin-left:25px">
                         <div class="input-group-addon" style="max-width:100%">
@@ -938,7 +938,7 @@
                         $("#popupStatus").val("saved");
                         // Reset the list of answers that have already been saved so they do not need to be displayed anymore
                         $("#divaddedSA").html("");
-
+                        $("#savedQATid").val(d.substring(3));
                         $("#editQATWindow").modal('hide');
                         //After Saving Data successfully and clossing the popup modal window, reload the drop down list with new AT values
 

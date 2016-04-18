@@ -48,38 +48,21 @@ namespace OBSMVC.Models
                         qUnassignedMD.Add(x);
                     }
                 }
+                
+                var temp_cft = (from q in db.OBS_QUEST_ANS_TYPES
+                                join f in db.OBS_COL_FORM_QUESTIONS
+                                on q.obs_qat_id equals f.obs_qat_id
+                                where q.obs_question_id == qId && (q.obs_qat_end_eff_dt==null || q.obs_qat_end_eff_dt>DateTime.Now)
+                                select f.obs_cft_id).Distinct();
+                foreach(var cft in temp_cft)
+                {
+                    OBS_COLLECT_FORM_TMPLT x = new OBS_COLLECT_FORM_TMPLT();
+                    x = db.OBS_COLLECT_FORM_TMPLT.Single(item => item.obs_cft_id == cft);
+                    forms.Add(x);
+                } 
             }
         }
 
-        ////= = = = = = = = = = = = = = = CONSTRUCTOR FILTERED METADATA LIST  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
-        //public QuestionMDViewModel(int qId, bool isDetail)
-        //{
-        //    q = db.OBS_QUESTION.Find(qId);       
-        //    if (q != null)
-        //    {
-        //        // Add all Metadata List to the QuestionMD Object
-        //        var tempMD = from t1 in db.OBS_QUESTION_METADATA
-        //                     join t2 in db.OBS_QUEST_ASSGND_MD.Where(item => item.obs_question_id == qId && DateTime.Today >= item.obs_qad_eff_st_dt && DateTime.Today < item.obs_qad_eff_end_dt)
-        //                     on t1.obs_quest_md_id equals t2.obs_quest_md_id into t1Group
-        //                     from t2 in t1Group.DefaultIfEmpty()
-        //                     select new
-        //                     {
-        //                         md_id = t1.obs_quest_md_id,
-        //                         mdValue = t1.obs_quest_md_value,
-        //                         mdCat = t1.obs_quest_md_cat,
-        //                         mdSelected = (t2 == null) ? false : true
-        //                         //xmdSelected = (t1Group == null) ? false : true
-        //                     };
-        //        foreach (var mdNew in tempMD)
-        //        {
-        //            metaData x = new metaData();
-        //            x.obs_quest_md_id = mdNew.md_id;
-        //            x.obs_quest_md_value = mdNew.mdValue;
-        //            x.obs_quest_md_cat = mdNew.mdCat;
-        //            if (mdNew.mdSelected)  { qAssignedMD.Add(x); }
-        //        }
-        //    }
-        //}
 
         // ----------------------------------- PUBLIC CLASS PROPERTIES ----------------------------------------------
         
@@ -87,6 +70,7 @@ namespace OBSMVC.Models
         public List<metaData> qAssignedMD = new List<metaData>();
         public List<metaData> qUnassignedMD = new List<metaData>();
         public List<int> preMetaDataIds = new List<int>();
+        public List<OBS_COLLECT_FORM_TMPLT> forms = new List<OBS_COLLECT_FORM_TMPLT>();
     }
 
     public class metaData

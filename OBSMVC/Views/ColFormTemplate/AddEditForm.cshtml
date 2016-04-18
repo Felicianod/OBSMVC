@@ -214,7 +214,7 @@
                     url: '@Url.Action("reloadQuestionDropdown", "ColFormTemplate")',
                     method: "GET",
                     cache: false,
-                    data: { question_id: questionId, dropdownID: modalddlId, selectedQATid: "12345"},
+                    data: { question_id: questionId, dropdownID: modalddlId, selectedQATid: $("#savedQATid").val()},
                     error: function () {
                         alert("Failed to reload the Answer Type Values!!");  //<-- Trap and alert of any errors if they occurred
                     }

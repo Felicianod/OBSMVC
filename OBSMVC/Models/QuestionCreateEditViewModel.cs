@@ -115,7 +115,7 @@ namespace OBSMVC.Models
                             temp_qat.selAns = temp_select_ans;                            
                         }
                         int usage_count = db.OBS_COL_FORM_QUESTIONS.Where(x => x.obs_qat_id == qaInstanceTemp.obs_qat_id).Select(y=>y.obs_cft_id).Distinct().Count();
-                        temp_qat.usageInfo = usage_count > 0 ? "This answer type is IN " + usage_count + " form(s)" : String.Empty;
+                        temp_qat.usageInfo = usage_count > 0 ? "This answer type is on " + usage_count + " form(s)" : String.Empty;
                         Quest_Assigned_qatTags.Add(temp_qat);
                     }
                     Quest_Assigned_qatTags = Quest_Assigned_qatTags.OrderBy(item => item.answer_type_name).ToList();

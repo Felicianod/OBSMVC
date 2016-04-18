@@ -867,11 +867,14 @@ namespace OBSMVC.Controllers
         public bool isDuplicate(string[] ans_type)
         {
             int question_id = Convert.ToInt32(ans_type[0]);
-            short ans_type_id = Convert.ToInt16(ans_type[1]);   
+            short ans_type_id = Convert.ToInt16(ans_type[1]);
+            bool status = false;
             //first lets check if this question and answer type combination is already exist         
             if(db.OBS_QUEST_ANS_TYPES.Where(item=>item.obs_ans_type_id==ans_type_id && item.obs_question_id==question_id && (item.obs_qat_end_eff_dt ==null||item.obs_qat_end_eff_dt>DateTime.Now) ).Count()==0)
             {   //if it doesn't exist, we know it's not a duplicate
-                return false;
+                status = false;
+                return status;
+                    
             }
             else
             {//if we're here, that means  this question and answer type already exist and we need to futher investigate whether it's a duplicate or not
@@ -881,7 +884,8 @@ namespace OBSMVC.Controllers
                 {
                     // this question and answer type already exist and this answer type doens't need selectable answers
                     //that means it's free text or yes/no answer type and user is trying to insert a duplicate 
-                    return true;
+                    status = true;
+                    return status;
                 }
                 else
                 {//looks like this answer type requires selectable answers. we need to continue checking
@@ -896,9 +900,14 @@ namespace OBSMVC.Controllers
                             int counter = 3;//we need to start counter with 3 because selectable answers start with 3rd position in the array that gets passed from the form
                             foreach (string s in db.OBS_QUEST_SLCT_ANS.Where(x => x.obs_qat_id == qat_id && x.obs_qsa_eff_st_dt<=DateTime.Now && x.obs_qsa_eff_end_dt>DateTime.Now).Select(y => y.obs_qsa_text).ToList())
                             {
-                                if(ans_type[counter].Trim().ToUpper() !=s)//comparing existing sel answers with passed ones
+                                if(ans_type[counter].Trim().ToUpper() !=s.Trim().ToUpper())//comparing existing sel answers with passed ones
                                 {
-                                    return false;
+                                    status = false;
+                                    break;
+                                }
+                                else
+                                {
+                                    status = true;                                    
                                 }
                                 counter++;
                             }
@@ -908,24 +917,31 @@ namespace OBSMVC.Controllers
                         {
                             if (ans_type.Length-3!= db.OBS_QUEST_SLCT_ANS.Where(x => x.obs_qat_id == qat_id && x.obs_qsa_eff_st_dt <= DateTime.Now && x.obs_qsa_eff_end_dt > DateTime.Now).Count())
                             {//size of the existing set of selectable answers is different form the size of passed. This means they're are not duplicates
-                                return false;
+                                status = false;
+                                break;
                             }
                             else
                             {
                                 int counter = 3;
                                 foreach (string s in db.OBS_QUEST_SLCT_ANS.Where(x => x.obs_qat_id == qat_id && x.obs_qsa_eff_st_dt <= DateTime.Now && x.obs_qsa_eff_end_dt > DateTime.Now).Select(y => y.obs_qsa_text).ToList())
                                 {
-                                    if (ans_type[counter].Trim().ToUpper() != s)
+                                    if (ans_type[counter].Trim().ToUpper() != s.Trim().ToUpper())
                                     {
-                                        return false;
+                                        status = false;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        status = true;
                                     }
                                     counter++;
                                 }
                             }
                         }
-                    }
+                        if (status) { return status; }
+                    }// end of foreach (int qat_id in qat_ids)
 
-                    return true;
+                    return false;
                 }
             }
         }

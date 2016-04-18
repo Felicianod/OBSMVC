@@ -125,7 +125,7 @@
     }
     .modal-wide .modal-body {
         overflow-y: auto;
-        height: 400px;
+        height: 420px;
     }
     .modal-wide .modal-content  {
         -webkit-border-radius: 0px !important;
@@ -181,7 +181,7 @@
         color: white;
     }
     .selAnswerTextb {
-        background-color: lightyellow;
+        background-color: #eaf2f9;
     }
     .line {
         margin-bottom: 8px;
@@ -541,7 +541,7 @@
 </div>
 
 @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@ 
-@* ------------------------------------- POP UP "QUESTION MAINTENANCE LIGHT" FORM ------------------------------------------------ *@
+@* ------------------------------------- MODAL "QUESTION MAINTENANCE LIGHT" FORM WINDOW ------------------------------------------ *@
 @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@ 
 <!-- Modal -->
 @*loadModal(@Model.question_id, ddlId);*@
@@ -568,12 +568,7 @@
                     </div>
                 </div>
                 <br />
-                <div class="row" id="divaddedSA" style="max-width:100%; width:100%; margin-left:10px">
-                    @*----------------------------------------------------------------------------
-                           Placeholder for Newly Added Questions Answer Types  through this window
-                        ------------------------------------------------------------------------------*@
-                </div>
-                <div class="row" id="divNewSA" style="max-width:100%; width:1000%; margin-left:10px">
+                <div class="row" id="divNewSA" style="max-width:100%; width:100%;">
                     @*-----------------------------------------------------------------------------
                                     Placeholder for ADD MODE for new Questions Answer Types
                         -------------------------------------------------------------------------------*@
@@ -585,7 +580,7 @@
                     <button type="button" class="btn btn-primary" id="btnSaveNewSelAnswer" disabled="disabled">Save changes</button>
                 </div>
                 <div class="col-sm-1 col-sm-offset-1">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
                 </div>
             </div>
         </div><!-- /.modal-content -->
@@ -658,7 +653,7 @@
     function clearNewSAbox(){
         $("#divNewSA").html("");
         $.ajax({
-            url: '@Url.Action("addQuestionAnswerInfo", "Question")',
+            url: '@Url.Action("addFormQAInfo", "colFormTemplate")',
             method: "GET",
             cache: false,
             //data: { question_id: questionId, dropdownID: ddlId},
@@ -814,6 +809,16 @@
 
 
     $(document).ready(function () {
+
+        var selCathegory = "Other";
+        var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0,5);
+        if (selectedText == "3 Val"){
+            selCathegory = "3 Val Range"
+        }        
+        else if (selectedText == "5 Val") {
+            selCathegory = "5 Val Range";
+        }
+
         $("input:text").focus(function () { $(this).select(); });
 
         $('.collapse').on('show.bs.collapse', function () {
@@ -892,18 +897,84 @@
         $('[data-toggle="tooltip"]').tooltip();
 
         $("#btnSaveNewSelAnswer").click(function(){
-            var postQid = $("#popupQID").val();            
-            var postData = "";
-            $(".qatDIV").each(function(){
-                var postAnsTypeId = $(this).find("#ans_type_id").first().val();
-                var postIsDefault = $(this).find("#ans_type_default").first().val();
-                var postSelAnswers = $(this).find("#ans_type_selAns").first().val();
-                postData = postData + postQid +  "~" + postAnsTypeId + "~" + postIsDefault + "~" + postSelAnswers + ",";
+            // ------------------- Before Saving data, validate the user input -------------------------------------------------
+            var formValidated = true;
+            var textValues = "";
+            var counter = 0;
+            var emptyBoxes = 0;
+            var isDefaultValue = "false";
+            var postParams = "";
+            var validationMessage = "";
+            var doneButton = $(this);
+
+            var comparisonNewString = $("#divNewSA").find("#fullSelATlist").first().children("option").filter(":selected").text();  //Save the answer Type that is being added
+            //$("#yourdropdownid option:selected").text();
+            //$("#fullSelATlist").children("option").filter(":selected").text()
+            var comparisonOldString = "";
+
+            $(this).button('loading');
+            //Loop through all text boxes in this section and save the answers for comparison
+            $('#newQATsection').find('.selAnswerTextb').each(function () {
+                counter = counter + 1;
+                if ($(this).val() != "") {
+                    textValues = textValues + $(this).val().trim().toUpperCase() + ",";
+                    comparisonNewString = comparisonNewString + $(this).val().trim().toUpperCase();
+                }
+                else {
+                    emptyBoxes++;
+                }
             });
 
-            alert("Saving New Answer Types...\n" + postData);
+            //Check if we have empty boxes, then the form is not validated.
+            if (selCathegory == "3 Val Range" && emptyBoxes > 2) {
+                formValidated = false;
+                validationMessage = "No textbox values can be left blank";
+            }
+            else if (selCathegory == "5 Val Range" && emptyBoxes > 0) {
+                formValidated = false;
+                validationMessage = "No textbox values can be left blank";
+            }
 
-            $.ajax({
+            //alert("There are " + emptyBoxes + " Empty Fields.");
+
+            //-----------------------------------------------------------------------------------------------------------------
+            //Validate that the newly entered QAT and values do not exist in any of the other sections (Existing or to be added)
+            //Must not exist under the <div #existingQATs> and <#divaddedSA> divisions (both have a class = ".answerType"
+            $(".answerType").each(function () {
+                var existingAnswers = "";
+                $(this).find(".SAitem").each(function () { existingAnswers = existingAnswers.concat($(this).html()) });
+                if (formValidated == true) {
+                    comparisonOldString = $(this).find("#qat").first().val() + existingAnswers;
+                    if (comparisonNewString == comparisonOldString) {
+                        formValidated = false;
+                        validationMessage = "The selected values already exist for this answer.";
+                    }
+                }
+            });
+            $("#divNewSA").find("#fullSelATlist").first().val();  //Save the answer Type that is being added
+            //-------------- Finished Validating Form Inputs -----------------------------------------------------------------------
+
+            // If the form input is valid, procced with saving data, else just display the Error message
+            if (formValidated) {
+                // Proceed to Save the new Answer Type
+
+                var postQid = $("#popupQID").val();    // From Modal Popup DIV        
+                var postData = "";                     // Must be built dynamically
+
+                var atidFound = $('#newQATsection').find('.selectAT').first().find("option:selected").val();
+                alert("posting Question Id: " + postQid + " and Answer Type id:" + atidFound);
+
+
+                @*$(".qatDIV").each(function(){
+                    var postAnsTypeId = $(this).find("#ans_type_id").first().val();
+                    var postIsDefault = "false";
+                    var postSelAnswers = $(this).find("#ans_type_selAns").first().val();
+                    postData = postData + postQid +  "~" + postAnsTypeId + "~" + postIsDefault + "~" + postSelAnswers + ",";
+                });
+
+                alert("Saving New Answer Types...\n" + postData);
+
+                $.ajax({
                     url: '@Url.Action("saveNewSelAnswer", "ColFormTemplate")',
                     method: "POST",
                     cache: false,
@@ -911,16 +982,30 @@
                     error: function () {
                         alert("ERROR: Failed to Save the New Question Answer Type Information.!!");  //<-- Trap and alert of any errors if they occurred
                     }
-            }).done(function (d) {
-                if (d == "True") { alert("Data posted successfully!");
-                    // Set the popupstatus to "saved" to indicate that the post succeded and that the drop down needs to be updated.
-                    $("#popupStatus").val("saved");
-                    // Reset the list of answers that have already been saved so they do not need to be dusplayed anymore
-                    $("#divaddedSA").html("");
-                }
-                else { alert("WARNING: Failed to post!\nPlease review your input and try again: " + d); }
-            });
+                }).done(function (d) {
+                    if (d == "True") { alert("Data posted successfully!");
+                        // Set the popupstatus to "saved" to indicate that the post succeded and that the drop down needs to be updated.
+                        $("#popupStatus").val("saved");
+                        // Reset the list of answers that have already been saved so they do not need to be dusplayed anymore
+                        $("#divaddedSA").html("");
+                    }
+                    else { alert("WARNING: Failed to post!\nPlease review your input and try again: " + d); }
+                });*@
+
+
+                // ----------- Finished Saving New Abnswer Type and Answer values ----------------
+            }
+            else {
+                var errorMessage = "<span> VALIDATION ERROR: Please review your input:</span><br/>&nbsp;" + validationMessage + "<span>";
+                //errorMessage = errorMessage.concat("</span><br/>&nbsp;&nbsp;<span>You are comparing Answer Type Id and values:</span><br/>");
+                //errorMessage = errorMessage.concat("<span>'" + comparisonNewString + "'</span>" + "<span> against: </span>");
+                //errorMessage = errorMessage.concat("<span> '" + comparisonOldString + "'</span>");
+                $("#newErrorMsg").html(errorMessage);
+                $("#newErrorMsg").show();
+                $(this).button('reset');
+            }
         });
+
 
         $("#btnAddQuestionPopup").click(function(){
             $("#addQuestionWindow").modal();
@@ -1458,7 +1543,7 @@
                 else if(selectedId == 'New'){
                     //alert("A New Question request has been issued!");
                     $("#popupStatus").val("");
-                    $(this).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");
+                    $(this).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");  // Reset Sel Answers
                     //Reset the modal Window contents
                     clearNewSAbox();
 
@@ -1517,7 +1602,7 @@
 
             // Loops through all textboxes of the upper level parent DIV and set their values accordingly
             var textBoxCounter = 0;
-            $("#divNewAT").find(".selAnswerTextb").each(function () {
+            $("#newQATsection").find(".selAnswerTextb").each(function () {
                 $(this).val(templateList[textBoxCounter]);
                 textBoxCounter = textBoxCounter + 1;
             });

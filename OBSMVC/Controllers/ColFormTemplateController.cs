@@ -1357,7 +1357,7 @@ namespace OBSMVC.Controllers
             retrieveQuestionData();
         }
             else { 
-            // Form Id not fouond in the database, leave all values empty
+            // Form Id not found in the database, leave all values empty
                 cft_Title = "";
                 cft_SubTitle = "";
                 //cft_obsType = q.cft_obsType;

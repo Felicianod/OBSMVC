@@ -1462,12 +1462,15 @@
                     //Reset the modal Window contents
                     clearNewSAbox();
 
-                    //Set the Hidden Field Values that will be used in Edit Mode
-                    if ($("#popupDDLid").val() != ddlId)
-                    {  // This indicates that a new Dropdown is being selected for edition!
-                        //Reset the old values from the "added" section, as they do not need to be kept from a previous different Selectable Answer
-                        $("#divaddedSA").html("");
-                    }
+                    // Following code not used anymore as we will no longer keep a list of AT to add (New functionality 
+                    // will only save one AT at a time)
+                    ////Set the Hidden Field Values that will be used in Edit Mode
+                    //if ($("#popupDDLid").val() != ddlId)
+                    //{  // This indicates that a new Dropdown is being selected for edition!
+                    //    //Reset the old values from the "added" section, as they do not need to be kept from a previous different Selectable Answer
+                    //    $("#divaddedSA").html("");
+                    //}
+
                     $("#popupDDLid").val(ddlId);
                     var questionText = dropdown.parents(".divFormQuestion").first().find(qText).text();
                     $("#selQText").html(questionText);

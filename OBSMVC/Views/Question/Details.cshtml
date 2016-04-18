@@ -112,10 +112,11 @@
       @*<div class="alert-danger">This functionality is under maintenance</div>*@
       <table class="table table-responsive table-striped table-hover" border="1">
           <tr>
-              <th style="text-align:center">Form Title</thstyle="text-align:center">
+              <th style="text-align:center">Form Title</th>
               <th style="text-align:center">Form Number</th>
               <th style="text-align:center">Version</th>
               <th style="text-align:center">Published</th>
+              <th style="text-align:center">Live</th>
           </tr>
           @foreach (var x in Model.forms)
           {
@@ -126,6 +127,9 @@
                   <td style="text-align:center">@x.obs_cft_ver</td>
                   <td style="text-align:center">
                       <input type="checkbox" disabled="disabled" @if (x.obs_cft_pub_dtm != null || DateTime.Today < x.obs_cft_pub_dtm) { <TEXT> checked="checked" </TEXT>          } />
+                  </td>
+                  <td style="text-align:center">
+                      <input type="checkbox" disabled="disabled" @if ((x.obs_cft_pub_dtm != null || DateTime.Today < x.obs_cft_pub_dtm)&&x.obs_cft_eff_st_dt<=DateTime.Now && x.obs_cft_eff_end_dt>DateTime.Now) { <TEXT> checked="checked" </TEXT>           } />
                   </td>
               </tr>
 

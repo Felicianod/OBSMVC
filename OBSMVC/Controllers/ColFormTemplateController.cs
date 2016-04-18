@@ -792,10 +792,11 @@ namespace OBSMVC.Controllers
                                         new_sel_ans.obs_qsa_eff_end_dt = Convert.ToDateTime("12/31/2060");
                                         db.OBS_QUEST_SLCT_ANS.Add(new_sel_ans);
                                         db.SaveChanges();
-                                        status = "QAT_id" + new_assigned_ans_type.obs_qat_id;
+                                        
 
                                     }
                                 }
+                                status = "QAT_id" + new_assigned_ans_type.obs_qat_id;
                             }//if (!isDuplicate(single_sel_ans_info))
                             else
                             {//user passed duplicate record

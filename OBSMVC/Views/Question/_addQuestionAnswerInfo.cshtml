@@ -22,7 +22,7 @@
     }
 </script>
 <div class="col-sm-12 answerType" id="newQATsection" style="border-style:double; border-width:2px; border-color:green; background-color:lightslategray; font-family:Arial; min-height:300px;">
-    <div id="divNewAT" class="row divText">
+    <div id="divNewAT" class="row divText"> 
         <div class="col-sm-6" style="margin-left:5px">
             <br />
             <div class="row">
@@ -94,6 +94,9 @@
                 </div>                
                 <br /><br />
             </div>
+            <div id="newErrorMsg" class="label label-danger" style="font-size:medium; display:none">
+                @*---------------- Placeholder for Error Messages ---------------*@
+            </div>
         </div>
         <div id="divTemplates" class="col-md-5 personal-info">
 
@@ -113,10 +116,15 @@
 <script>
     $(document).ready(function () {
         var selCathegory = "Other";
-        $("#fullSelATlist").change(function () {            
+        $(".selAnswerTextb").change(function () {
+            $("#newErrorMsg").hide();
+        });
+        
+        $("#fullSelATlist").change(function () {
             var selectedText = $(this).find('option:selected').text().substring(0,5);
             var selectedValue = $(this).val();
             //var selectedValue = $('#fullSelATlist').val();
+            $("#newErrorMsg").hide();
 
             //At any change, reset all the text boxes
             $('.selAnswerTextb').val("");
@@ -230,12 +238,18 @@
             var validationMessage = "";
             var doneButton = $(this);
 
+            var comparisonNewString = $("#divNewSA").find("#fullSelATlist").first().children("option").filter(":selected").text();  //Save the answer Type that is being added
+            //$("#yourdropdownid option:selected").text();
+            //$("#fullSelATlist").children("option").filter(":selected").text()
+            var comparisonOldString = "";
+
             $(this).button('loading');
-            //Loop through all text boxes in this section
+            //Loop through all text boxes in this section and save the answers for comparison
             $('#divNewAT').find('.selAnswerTextb').each(function () {
                 counter = counter + 1;
                 if ($(this).val() != "") {
-                    textValues = textValues + $(this).val() + ",";
+                    textValues = textValues + $(this).val().trim().toUpperCase() + ",";
+                    comparisonNewString = comparisonNewString + $(this).val().trim().toUpperCase();
                 }
                 else {
                     emptyBoxes++;
@@ -253,6 +267,28 @@
             }
 
             //alert("There are " + emptyBoxes + " Empty Fields.");
+
+            //-----------------------------------------------------------------------------------------------------------------
+            //Validate that the newly entered QAT and values do not exist in any of the other sections (Existing or to be added)
+            //Must not exist under the <div #existingQATs> and <#divaddedSA> divisions
+            $(".answerType").each(function () {
+                var existingAnswers = "";
+                $(this).find(".SAitem").each(function () { existingAnswers = existingAnswers.concat($(this).html())});
+                comparisonOldString = $(this).find("#qat").first().val() + existingAnswers;
+                if (comparisonNewString == comparisonOldString) {
+                    formValidated = false;
+                    alert("Your Selected Chioce already exist");
+
+                }
+                
+            });
+
+            $("#divNewSA").find("#fullSelATlist").first().val();  //Save the answer Type that is being added            
+            //$("#newErrorMsg").text("Validating...");
+            //$("#newErrorMsg").html("You are comparing Answer Type Id and values: <br/>" + comparisonNewString + "<br/>against: " + comparisonNewString);
+
+            
+
 
             //Validate that if the selected Answer Type is a "Free Text" or 'Y/N" type and it already exist (It's a duplicated)
             //Then do not allow it to be Added again
@@ -340,7 +376,12 @@
                 $("#popupFormChanged").val("Y");
             }
             else {
-                alert("Please review your input.\n" + validationMessage);
+                var errorMessage = "<span>Please review your input:</span><br/>&nbsp;<span>";
+                errorMessage = errorMessage.concat(validationMessage, "</span><br/>&nbsp;&nbsp;<span>You are comparing Answer Type Id and values:</span>&nbsp;");
+                errorMessage = errorMessage.concat("<span>" + comparisonNewString + "</span>" + "<span>against:</span>");
+                errorMessage = errorMessage.concat("<span>" + comparisonOldString + "</span>");
+                $("#newErrorMsg").html(errorMessage);
+                $("#newErrorMsg").show();
                 $(this).button('reset');
             }
         });

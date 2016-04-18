@@ -109,30 +109,28 @@
   </div>
   <div class="row">
       <div class="alert-info">Existing Collection Forms where this question is currently being used</div>
-      <div class="alert-danger">This functionality is under maintenance</div>
-      <table class="table table-responsive table-striped table-hover">
+      @*<div class="alert-danger">This functionality is under maintenance</div>*@
+      <table class="table table-responsive table-striped table-hover" border="1">
           <tr>
-              <th>Form Number</th>
-              <th>Form Title</th>
-              <th>Version</th>
-              <th>Published</th>
-              <th>Other</th>
+              <th style="text-align:center">Form Title</thstyle="text-align:center">
+              <th style="text-align:center">Form Number</th>
+              <th style="text-align:center">Version</th>
+              <th style="text-align:center">Published</th>
           </tr>
-          <tr>
-              <td>Sample Data</td>
-              <td>Sample Data</td>
-              <td>Sample Data</td>
-              <td>Sample Data</td>
-              <td>Sample Data</td>
-          </tr>
-          <tr>
-              <td>Sample Data</td>
-              <td>Sample Data</td>
-              <td>Sample Data</td>
-              <td>Sample Data</td>
-              <td>Sample Data</td>
-          </tr>
-      </table>
+          @foreach (var x in Model.forms)
+          {
+
+              <tr>
+                  <td style="text-align:center">@x.obs_cft_title</td>
+                  <td style="text-align:center">@x.obs_cft_nbr</td>
+                  <td style="text-align:center">@x.obs_cft_ver</td>
+                  <td style="text-align:center">
+                      <input type="checkbox" disabled="disabled" @if (x.obs_cft_pub_dtm != null || DateTime.Today < x.obs_cft_pub_dtm) { <TEXT> checked="checked" </TEXT>          } />
+                  </td>
+              </tr>
+
+          }
+      </table>      
   </div>
   <div class="row">
       <div class="col-md-12">

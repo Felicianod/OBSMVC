@@ -69,6 +69,10 @@ namespace OBSMVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             DSC_EMPLOYEE employeeToUpdate = db.DSC_EMPLOYEE.Find(id);
+            if(employeeToUpdate.dsc_emp_hire_dt==null)
+            {
+                employeeToUpdate.dsc_emp_hire_dt = employeeToUpdate.dsc_emp_init_work_dt;
+            }
             if (employeeToUpdate == null)
             {
                 return HttpNotFound();

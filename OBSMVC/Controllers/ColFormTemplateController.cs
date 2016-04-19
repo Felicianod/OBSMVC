@@ -365,7 +365,13 @@ namespace OBSMVC.Controllers
             int cft_id = id?? -1;
             cft_id = saveForm(colForm, data_from_form, is_published, cft_id);
             Session["saveMessage"] = "Form Data was saved Successfully";
-            return RedirectToAction("AddEditForm", new { id = cft_id });
+            if (is_published == "true")
+            {
+                return RedirectToAction("Details", new { id = cft_id });
+            }
+            else { return RedirectToAction("AddEditForm", new { id = cft_id }); 
+            }
+            
             //return RedirectToAction("Index");
         }
 

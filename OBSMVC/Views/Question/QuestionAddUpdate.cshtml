@@ -858,6 +858,7 @@
             var counter = 0;
             $(this).parent().find('.selAnswerTextb').each(function () {
                 counter++;
+                $(this).val($(this).val().replace(",", " ").toUpperCase());
                 //Compile a list of Values to post
                 textValues = textValues + $(this).val() + "~"                
             })
@@ -930,12 +931,14 @@
 
             //------------ ON SELECTABLE ANSWER CHANGE -----------------------------------------------------
             $(".selAnswerTextb").change(function () {
-                if ($(this).val() == "")
-                {
-                    $('.saveSA').prop('disabled', true);
-                }
-                else
-                    $('.saveSA').prop('disabled', false);
+                
+                //alert("Textbox text is: " + $(this).val());
+                //if ($(this).val() == "")
+                //{
+                //    $('.saveSA').prop('disabled', true);
+                //}
+                //else
+                //    $('.saveSA').prop('disabled', false);
             });
 
             //----------------------------------------------------------------------------------------------

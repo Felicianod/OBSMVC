@@ -210,7 +210,7 @@
                 var modalddlId = $("#popupDDLid").val();
             
                 //alert("Modal is closed, ddl QATid is '" + $("#savedQATid").val() + "' will be reloaded");
-
+                alert("Modal is closed, question ID = " + questionId + ", drpdown Id=" + modalddlId + " and selected QATid= '" + $("#savedQATid").val() + "' will be reloaded");
                 $.ajax({
                     url: '@Url.Action("reloadQuestionDropdown", "ColFormTemplate")',
                     method: "GET",

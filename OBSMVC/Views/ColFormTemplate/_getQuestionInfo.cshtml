@@ -5,7 +5,7 @@
   var qbtnCloseId = "btnClose" + @Model.uniqueCounter;
   var hidden_field = "currentSelectedQAT" + Model.uniqueCounter;
   var dropdown_id = "AssignedAnswers" + Model.uniqueCounter;
-  var dropdown2 = "#AssignedAnswers" + Model.uniqueCounter;
+  var dropdownHandle = "#AssignedAnswers" + Model.uniqueCounter;
   var rowInfo = "";
   var current_selected = "-1";
   var btnModal = "btnModal" + Model.question_id;
@@ -69,12 +69,14 @@
     <input class="currentQATid" type="hidden" id="@hidden_field" name="@hidden_field" value="@current_selected"> @*This line might not be needed anymore*@
     @*@{rowInfo += current_selected + "~Header Section";}*@
     <input class="hdnFormQuestion" type="hidden" id="formQuestions" name="formQuestions" value="@rowInfo" />
+
+    <input type="hidden" id="ddlSelValue" value="" />
 </div>
 
 @* ================================= SCRIPTS SECTION ============================================*@
 <script type="text/javascript">
     $(document).ready(function(){
-        $("@dropdown2").change( function (event) {
+        $("@dropdownHandle").change( function (event) {
             var $drop_down = $(this);
             var selectedId = $(this).val();
             var selectedText = $(this).children("option:selected").text();
@@ -95,7 +97,7 @@
             }
             else if(selectedId == 'New'){
                 //alert("A New Question request has been issued!");
-                //Refresh the popup status indicator.                
+                //Refresh the popup status indicator.
                 $("#popupStatus").val("");
                 $(this).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");
                 //Reset the modal Window contents
@@ -139,6 +141,10 @@
                 "background-color": "white"
             });
         })
+
+        //When partial view is rendered, save the original dropdown list value in a hidden field for later use/reset
+        $("#ddlSelValue").val($("@dropdownHandle").children("option:selected").val())
+
     });
 </script>
 @* ================================= END OF SCRIPTS SECTION ============================================*@

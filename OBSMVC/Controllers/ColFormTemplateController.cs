@@ -368,6 +368,10 @@ namespace OBSMVC.Controllers
             string data_from_form = String.IsNullOrEmpty(formData["formQuestions"]) ? String.Empty : formData["formQuestions"];         
             string is_published = formData["isPublished"];
             int cft_id = id?? -1;
+            if (cft_id > 0 && db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_id == cft_id && x.obs_cft_pub_dtm!=null).Count()>0) 
+            {
+                return RedirectToAction("Details", new { id = cft_id });
+            }
             cft_id = saveForm(colForm, data_from_form, is_published, cft_id);
             Session["saveMessage"] = "Form Data was saved Successfully";
             if (is_published == "true")

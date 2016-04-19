@@ -351,7 +351,7 @@ namespace OBSMVC.Controllers
             }
 
             ViewBag.cft_Cust = new SelectList(db.DSC_CUSTOMER.Where(x => x.dsc_cust_id >= 0), "dsc_cust_id", "dsc_cust_name", selected_cust);
-            ViewBag.cft_LC = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id >= 0), "dsc_lc_id", "dsc_lc_name", selected_lc);          
+            ViewBag.cft_LC = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id >= 0).OrderBy(y=>y.dsc_lc_name), "dsc_lc_id", "dsc_lc_name", selected_lc);          
             return View(selectedColForm);
         }
 
@@ -641,7 +641,7 @@ namespace OBSMVC.Controllers
                     SelectListItem answer_for_dropdown = new SelectListItem() { Text = temp_answer.obs_ans_type_name, Value = qaInstanceTemp.obs_qat_id.ToString() };
                     question_assigned_answer_types.Add(answer_for_dropdown);
                     // lets check if this answer type requires selectable answers
-                    if (db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id).obs_ans_type_has_fxd_ans_yn == "Y" && db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id).obs_ans_type_category.Contains("Range"))
+                    if (db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id).obs_ans_type_has_fxd_ans_yn == "Y" && db.OBS_ANS_TYPE.Single(item => item.obs_ans_type_id == qaInstanceTemp.obs_ans_type_id ).obs_ans_type_category.Contains("Range") )
                     {
                         //if true, we need to list all of them and assign them to object's list of selectable answers
 
@@ -823,9 +823,9 @@ namespace OBSMVC.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER, "dsc_cust_id", "dsc_cust_name", oBS_COLLECT_FORM_TMPLT.dsc_cust_id);
-            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name", oBS_COLLECT_FORM_TMPLT.dsc_lc_id);
-            ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name", oBS_COLLECT_FORM_TMPLT.obs_type_id);
+            ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER.OrderBy(x => x.dsc_cust_name), "dsc_cust_id", "dsc_cust_name", oBS_COLLECT_FORM_TMPLT.dsc_cust_id);
+            ViewBag.dsc_lc_id = new SelectList(db.DSC_LC.OrderBy(x => x.dsc_lc_name), "dsc_lc_id", "dsc_lc_name", oBS_COLLECT_FORM_TMPLT.dsc_lc_id).OrderBy(y=>y.Text);
+            ViewBag.obs_type_id = new SelectList(db.OBS_TYPE.OrderBy(x => x.obs_type_name), "obs_type_id", "obs_type_name", oBS_COLLECT_FORM_TMPLT.obs_type_id);
             return View(oBS_COLLECT_FORM_TMPLT);
         }
 
@@ -841,7 +841,7 @@ namespace OBSMVC.Controllers
                 db.Entry(oBS_COLLECT_FORM_TMPLT).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
-            }
+            }           
             ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER, "dsc_cust_id", "dsc_cust_name", oBS_COLLECT_FORM_TMPLT.dsc_cust_id);
             ViewBag.dsc_lc_id = new SelectList(db.DSC_LC, "dsc_lc_id", "dsc_lc_name", oBS_COLLECT_FORM_TMPLT.dsc_lc_id);
             ViewBag.obs_type_id = new SelectList(db.OBS_TYPE, "obs_type_id", "obs_type_name", oBS_COLLECT_FORM_TMPLT.obs_type_id);

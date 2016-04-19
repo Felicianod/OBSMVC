@@ -224,11 +224,9 @@
                     var dropdownId = "#" + modalddlId;
                     $(dropdownId).parents(".reloadDDL").first().html(d);
                     //alert("Dropdown Id handle is: " + $(dropdownId).attr("id"));
+
                     //After Dropdown is loaded, retrieve the selectable answers for the item that is selected on the dropdown
-                    //
-                    //      TO DO !!!!!!!!
-                    //
-                    /////////////////////////////////////////////////////
+                    resetSelAns(questionId, dropdownId);
                 });
             }
             else{
@@ -238,11 +236,42 @@
                 var stringUsed = dropDownIdused + " option[value='" + dropDownStoredValue + "']";
                 //alert(stringUsed);
                 //alert("Changes aborted... Restoring value for dropdown '" + dropDownIdused + "' to: " + dropDownStoredValue );
+
                 //$(stringUsed).attr('selected', 'selected'); // added single quotes
-                $(dropDownIdused + " option:contains(" + "Answer" + ")").attr('selected', 'selected');
+                //For NOw default the selected Option to the first index
+                $(dropDownIdused + " option:contains(" + "Answer" + ")").attr('selected', 'selected');  //Reset dropdown to the first index
             }
         });
 
+        function resetSelAns(qId, ddlId){
+        
+            $qatDIV = $(ddlId).parents(".divFormQuestion").first();
+            $qatDIV.find("#ddlSelValue").val($(ddlId).find('option:selected').val())
+
+            var selectedText = $(ddlId).children("option:selected").text();
+            var selectedQATid = $(ddlId).children("option:selected").val();
+            alert("Refreshing SelAns: Selected Text: " + selectedText + " and QAT id is: " + selectedQATid);
+            
+            if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")
+            {
+                $qatDIV.find(".selAnsSection").first().html('<span style="color:blue">No Selectable Answers Required for this Selection</span>')
+            }
+            else{
+                //alert("Selected ID "+selectedId);
+                $.ajax({
+                    url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
+                    method: "GET",
+                    cache: false,
+                    data: { qat_id: selectedQATid },
+                    error: function () {
+                        alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    //alert("Retrieved Data is: " + d);
+                    $qatDIV.find(".selAnsSection").first().html(d);
+                });
+            }
+        };
 
     });
 </script>
@@ -563,8 +592,9 @@
                     </div>
                 </div>
                 <br />
-                <div id="divATLoading" style="display:none">
-                    <img src="~/Images/LoadingData.gif" />
+                <div id="divATLoading" style="display:none; text-align:center;">
+                    <br /><br />
+                    <img src="~/Images/ui-anim_basic_16x16.gif" />
                 </div>
                 <div class="row" id="divNewSA" style="max-width:100%; width:100%;">
                     @*-------------------------------------------------------------------------------------------

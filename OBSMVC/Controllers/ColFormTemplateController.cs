@@ -325,6 +325,11 @@ namespace OBSMVC.Controllers
         {
             int cftid = id ?? 0;
             oCollectionForm selectedColForm = new oCollectionForm(cftid);
+            if (selectedColForm.cft_isPublished == "PUBLISHED")
+            {
+                return RedirectToAction("Details", new { id = cftid });
+            }
+
             if (cftid > 0)
             {
                 selectedColForm.str_cft_eff_end_dt = selectedColForm.cft_eff_end_dt<Convert.ToDateTime("12/31/2060")? selectedColForm.cft_eff_end_dt.ToString("MMM dd, yyyy"):String.Empty;
@@ -351,7 +356,7 @@ namespace OBSMVC.Controllers
             }
 
             ViewBag.cft_Cust = new SelectList(db.DSC_CUSTOMER.Where(x => x.dsc_cust_id >= 0), "dsc_cust_id", "dsc_cust_name", selected_cust);
-            ViewBag.cft_LC = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id >= 0).OrderBy(y=>y.dsc_lc_name), "dsc_lc_id", "dsc_lc_name", selected_lc);          
+            ViewBag.cft_LC = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id >= 0).OrderBy(y=>y.dsc_lc_name), "dsc_lc_id", "dsc_lc_name", selected_lc);
             return View(selectedColForm);
         }
 

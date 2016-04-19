@@ -209,7 +209,7 @@
                 var questionId = $("#popupQID").val();
                 var modalddlId = $("#popupDDLid").val();
             
-                //alert("Modal is closed, ddl QATid is '" + $("#savedQATid").val() + "' will be reloaded");
+                //alert("Modal is closed, question ID = " + questionId + ", drpdown Id=" + modalddlId + " and selected QATid= '" + $("#savedQATid").val() + "' will be reloaded");
 
                 $.ajax({
                     url: '@Url.Action("reloadQuestionDropdown", "ColFormTemplate")',
@@ -230,6 +230,11 @@
                     //
                     /////////////////////////////////////////////////////
                 });
+            }
+            else{
+                //Modal Form was nor saved, so we just need to restore the previusly selected value on the dropdown list
+                alert("Changes aborted... Restoring value for dropdown id ' " + $("#popupDDLid").val() + " ' to: " + $("#" + $("#popupDDLid").val()).val());
+                
             }
         });
     });
@@ -820,6 +825,7 @@
             $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
         });
 
+        // **** SAVE ACTION FROM MODAL POPUP QUESTION MAINTENANCE ****
         $("#btnSaveNewSelAnswer").click(function () {
             // ------------------- Before Saving data, validate the user input -------------------------------------------------
             var formValidated = true;
@@ -922,12 +928,11 @@
                         $("#divaddedSA").html("");
                         $("#savedQATid").val(d.substring(6));
                         $("#editQATWindow").modal('hide');
-                        //After Saving Data successfully and clossing the popup modal window, reload the drop down list with new AT values
-
                     }
                     else { 
                         //alert("Server Response: " + d); 
-                        $("#newErrorMsg").html("<span> " + d + "</span>");
+                        $("#newErrorMsg").html("<span>ERROR SAVING INFORMATION:</span><br/><span> " + d + "</span>");
+                        $("#newErrorMsg").show();
                     }
                     //else { alert("WARNING: Failed to post!\nPlease review your input and try again: " + d); }
                 });

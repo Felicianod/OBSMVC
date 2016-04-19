@@ -613,7 +613,7 @@ namespace OBSMVC.Controllers
         }
 
         //[ChildActionOnly]
-        public PartialViewResult reloadQuestionDropdown(int question_id, string dropdownID, string selectedQAT_id)
+        public PartialViewResult reloadQuestionDropdown(int question_id, string dropdownID, string selectedQATid)
         {
             List<OBS_QUEST_ANS_TYPES> QAInstances = db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == question_id && (x.obs_qat_end_eff_dt == null || x.obs_qat_end_eff_dt > DateTime.Now)).ToList();
             List<SelectListItem> question_assigned_answer_types = new List<SelectListItem>();
@@ -659,7 +659,7 @@ namespace OBSMVC.Controllers
                 }
                 question_assigned_answer_types = question_assigned_answer_types.OrderBy(item => item.Text).ToList();
                 question_assigned_answer_types.Add(new SelectListItem() { Text = "Add New...", Value = "New" });
-                question_assigned_answer_types.Single(x => x.Value == selectedQAT_id).Selected = true;
+                question_assigned_answer_types.Single(x => x.Value == selectedQATid).Selected = true;
             }
             ViewBag.dropdownID = dropdownID;
             return PartialView("_reloadQuestionDropdown", question_assigned_answer_types);

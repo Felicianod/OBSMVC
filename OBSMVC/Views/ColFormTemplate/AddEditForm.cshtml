@@ -201,14 +201,14 @@
             $(this).find(".modal-body").css("max-height", height);
         });
 
-        $("#editQATWindow").on('hidden.bs.modal', function () {  
+        $("#editQATWindow").on('hidden.bs.modal', function () {
             // If the form was recently saved/posted successfuly, this indicates a change on the AT list
             // reload the drop down with the new values
             if ($("#popupStatus").val() == "saved"){
                 //alert('Selectable Answer Edit Mode completed for drop down control id ' + modalddlId + "\nList is being refreshed...");
                 var questionId = $("#popupQID").val();
                 var modalddlId = $("#popupDDLid").val();
-            
+
                 //alert("Modal is closed, question ID = " + questionId + ", drpdown Id=" + modalddlId + " and selected QATid= '" + $("#savedQATid").val() + "' will be reloaded");
 
                 $.ajax({
@@ -233,10 +233,17 @@
             }
             else{
                 //Modal Form was nor saved, so we just need to restore the previusly selected value on the dropdown list
-                alert("Changes aborted... Restoring value for dropdown id ' " + $("#popupDDLid").val() + " ' to: " + $("#" + $("#popupDDLid").val()).val());
-                
+                var dropDownIdused = "#" + $("#popupDDLid").val();
+                var dropDownStoredValue = $("#ddlSelValue").val();
+                var stringUsed = dropDownIdused + " option[value='" + dropDownStoredValue + "']";
+                //alert(stringUsed);
+                //alert("Changes aborted... Restoring value for dropdown '" + dropDownIdused + "' to: " + dropDownStoredValue );
+                //$(stringUsed).attr('selected', 'selected'); // added single quotes
+                $(dropDownIdused + " option:contains(" + "Answer" + ")").attr('selected', 'selected');
             }
         });
+
+
     });
 </script>
 

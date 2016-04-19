@@ -1351,23 +1351,27 @@ namespace OBSMVC.Controllers
                      }).ToList().FirstOrDefault();
             // Set the properties from query result
             if (q != null)
-            {
-            cft_Title = q.cft_Title;
-            cft_SubTitle = q.cft_SubTitle;
-            cft_obsType = q.cft_obsType;
-            cft_Cust = q.cft_Cust;
-            cft_LC = q.cft_LC;
-            cft_Status = q.cft_Status;
-            cft_isPublished = q.cft_isPublished;
-            cft_Nbr = q.cft_Nbr;
-            cft_Version = q.cft_Version;
-            cft_eff_st_dt = q.cft_eff_st_dt;
-            cft_eff_end_dt = q.cft_eff_end_dt;           
-            colFormSections = new List<CollectionFormSection>();
-            retrieveQuestionData();
-        }
+            { // A matching cft form was fopund in the database. Assume we are in "edit" mode
+                screen_Title = "Collection Form Maintenance";
+                cft_editMode = "edit";
+                cft_Title = q.cft_Title;
+                cft_SubTitle = q.cft_SubTitle;
+                cft_obsType = q.cft_obsType;
+                cft_Cust = q.cft_Cust;
+                cft_LC = q.cft_LC;
+                cft_Status = q.cft_Status;
+                cft_isPublished = q.cft_isPublished;
+                cft_Nbr = q.cft_Nbr;
+                cft_Version = q.cft_Version;
+                cft_eff_st_dt = q.cft_eff_st_dt;
+                cft_eff_end_dt = q.cft_eff_end_dt;
+                colFormSections = new List<CollectionFormSection>();
+                retrieveQuestionData();
+            }
             else { 
-            // Form Id not found in the database, leave all values empty
+            // Form Id not found in the database, leave all values empty. Assume we are in "add" mode
+                screen_Title = "Collection Form Creation";
+                cft_editMode = "add";
                 cft_Title = "";
                 cft_SubTitle = "";
                 //cft_obsType = q.cft_obsType;
@@ -1384,14 +1388,16 @@ namespace OBSMVC.Controllers
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \\
         //- - - - - - - - - - Properties - - - - - - - - - - - - - - - - - - - - |
         // All Properties are set at Constructor Time
+        public string screen_Title { get; set; }
         public int cft_id { get; set; }
         public string cft_Title { get; set; }
         public string cft_SubTitle { get; set; }
         public string cft_obsType { get; set; }
         public string cft_Cust { get; set; }
         public string cft_LC { get; set; }
-        public string cft_Status { get; set; }
-        public string cft_isPublished { get; set; }
+        public string cft_Status { get; set; }          //"LIVE" : "NOT LIVE"
+        public string cft_isPublished { get; set; }     //"PUBLISHED" : "NOT PUBLISHED"
+        public string cft_editMode { get; set; }        // "add" : "edit"
         public int cft_Nbr { get; set; }
         public int cft_Version { get; set; }        
         public DateTime? cft_eff_st_dt { get; set; }

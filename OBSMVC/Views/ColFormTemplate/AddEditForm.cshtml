@@ -83,7 +83,7 @@
       /*color: #468847;*/
       /*background-color: ghostwhite;*/
       background-color: whitesmoke;
-      //color: #468847;
+      /*color: #468847;*/
       color: black;
     }
     .sortable-dragging {
@@ -221,49 +221,33 @@
                     }
                 }).done(function (d) {
                     //alert("Retrieved Data is: " + d);
-                    @*$("#@ulId").html(d);*@
-                    //alert(d);
                     var dropdownId = "#" + modalddlId;
                     $(dropdownId).parents(".reloadDDL").first().html(d);
                     //alert("Dropdown Id handle is: " + $(dropdownId).attr("id"));
+                    //After Dropdown is loaded, retrieve the selectable answers for the item that is selected on the dropdown
+                    //
+                    //      TO DO !!!!!!!!
+                    //
+                    /////////////////////////////////////////////////////
                 });
             }
-
         });
     });
-
-
-    function toggleDefault(btnClicked) {
-        if (btnClicked.hasClass('btnYES')) {
-            // Just make the current clicked button "NO" default
-            btnClicked.removeClass("btnYES").addClass("btn-warning");
-            btnClicked.html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
-        }
-        else {
-            //Else, reset all buttons to "No Default" and make this button the default
-            $(".btnIsDefault").removeClass("btnYES").addClass("btn-warning");
-            $(".btnIsDefault").html('NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down">');
-            btnClicked.removeClass("btn-warning").addClass("btnYES");
-            btnClicked.html('YES&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up">');
-        }
-        // A Change was made. Question changes can be saved. Reenable the Save Button
-        $('#btnAddQuestion').prop('disabled', false);
-        //Turn the "Form Changed" flag to indicate a change was done
-        $("#formChanged").val("Y");
-    }
 </script>
 
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
 @{
-    string fMode = "add";
+    string fMode = @Model.cft_editMode;
     int masterCounter = 1;
     string rowInfo = masterCounter.ToString();
-    string colFormId = "0";
+    string colFormId = Model.cft_id.ToString();
     int nextQuestion = Model.questCount() + 1;
 }
 
 <div class="well well-sm" style="padding: 4px; font-size:xx-large; text-align:center; margin-bottom:8px">
-    @if(Model.cft_id < 1)
+    @Model.screen_Title
+    @*Next lines not needed anymore since those values are now performed on the back end*@
+    @*@if(Model.cft_id < 1)
     {
         <text>Collection Form Creation</text>
     }
@@ -272,11 +256,7 @@
         fMode = "edit";
         colFormId = Model.cft_id.ToString();
         <text>Collection Form Maintenance</text>
-    }
-    @*@if( String.IsNullOrEmpty(Session["saveMessage"]))
-       {
-       
-       }*@        
+    }*@
 </div>
 
 @if (!String.IsNullOrEmpty(ViewBag.exception))
@@ -547,7 +527,6 @@
 @* ------------------------------------- MODAL "QUESTION MAINTENANCE LIGHT" FORM WINDOW ------------------------------------------ *@
 @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@ 
 <!-- Modal -->
-@*loadModal(@Model.question_id, ddlId);*@
 <div class="modal  modal-wide fade" id="editQATWindow" role="dialog">
     <div class="modal-dialog ">
         <div class="modal-content">
@@ -556,12 +535,12 @@
                 <h3 class="modal-title">ADD NEW ANSWER TYPE</h3>
             </div>
             <div class="modal-body">
-                <input type="hidden" id="windowType" value="MODAL">
-                <input type="hidden" id="popupStatus" value="">
-                <input type="hidden" id="popupFormChanged" value="N">
-                <input type="hidden" id="popupQID" value="">
-                <input type="hidden" id="popupDDLid" value="">
-                <input type="hidden" id="savedQATid" value="">
+                <input type="hidden" id="windowType" value="MODAL" />
+                <input type="hidden" id="popupStatus" value="" />
+                <input type="hidden" id="popupFormChanged" value="N" />
+                <input type="hidden" id="popupQID" value="" />
+                <input type="hidden" id="popupDDLid" value="" />
+                <input type="hidden" id="savedQATid" value="" />
                 <div class="row">                    
                     <div class="input-group" style="margin-left:25px">
                         <div class="input-group-addon" style="max-width:100%">
@@ -576,9 +555,10 @@
                     <img src="~/Images/LoadingData.gif" />
                 </div>
                 <div class="row" id="divNewSA" style="max-width:100%; width:100%;">
-                    @*-----------------------------------------------------------------------------
+                    @*-------------------------------------------------------------------------------------------
                                     Placeholder for ADD MODE for new Questions Answer Types
-                        -------------------------------------------------------------------------------*@
+                          Populated before modal window is opened based on the selection within the main form
+                     --------------------------------------------------------------------------------------------*@
                     @*@Html.Action("addQuestionAnswerInfo", "Question")*@
                 </div>
             </div>
@@ -600,7 +580,6 @@
 @* ------------------------------------- POP UP "ADD QUESTION TO LIBRARY" FORM ------------------------------------------------ *@
 @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
 <!-- Modal -->
-@*loadModal(@Model.question_id, ddlId);*@
 <div class="modal  modal-NewQ fade" id="addQuestionWindow" role="dialog"> 
     <div class="modal-dialog ">
         <div class="modal-content">
@@ -674,14 +653,15 @@
         });    
     }
 
-    function loadModal(questionId, ddlId) {
-        //var questionId = btnClkd.attr('id').substring(8);
-        //alert("Load Modal for Question Id: " + questionId);
-        //var url = "/Question/QuestionAddUpdate/" + questionId;
-        var cft_id = $('#cft_id').val();
-        var url = "/LightQuestion/QuestionAddUpdateLight/" + questionId + "?cft_id="+cft_id;
-        opendialog(url, questionId, ddlId);
-    }
+    // Not used anymore
+    //function loadModal(questionId, ddlId) {
+    //    //var questionId = btnClkd.attr('id').substring(8);
+    //    //alert("Load Modal for Question Id: " + questionId);
+    //    //var url = "/Question/QuestionAddUpdate/" + questionId;
+    //    var cft_id = $('#cft_id').val();
+    //    var url = "/LightQuestion/QuestionAddUpdateLight/" + questionId + "?cft_id="+cft_id;
+    //    opendialog(url, questionId, ddlId);
+    //}
 
     function opendialog(pageURL, questionId, ddlId) {       
         var $dialog = $('#remoteWindow')
@@ -910,10 +890,10 @@
                 // Proceed to Save the new Answer Type
                 //Parameter to post are:  QuestionId~AnswerTypeId~defaultT/F~answerlist
 
-                //Build the posting parameters: "Question Id" plus "Answer Type Id" and hardcode default="false" plus sel answers from "texvalues" variable
-                var postData = $("#popupQID").val() + "~" + $("#fullSelATlist").val() + "~false~" + textValues;
                 $(this).button('loading');  // Disable the button until posting is complete
 
+                //Build the posting parameters: "Question Id" plus "Answer Type Id" and hardcode default="false" plus sel answers from "texvalues" variable
+                var postData = $("#popupQID").val() + "~" + $("#fullSelATlist").val() + "~false~" + textValues;
 
                 @*$(".qatDIV").each(function(){
                     var postAnsTypeId = $(this).find("#ans_type_id").first().val();
@@ -952,7 +932,7 @@
                     //else { alert("WARNING: Failed to post!\nPlease review your input and try again: " + d); }
                 });
 
-                // ----------- Finished Saving New Abnswer Type and Answer values ----------------
+                // ----------- Finished Saving New Answer Type and Answer values ----------------
                 }
             else {
                 var errorMessage = "<span> VALIDATION ERROR: Please review your input:</span><br/>&nbsp;" + validationMessage + "<span>";
@@ -961,8 +941,11 @@
                 //errorMessage = errorMessage.concat("<span> '" + comparisonOldString + "'</span>");
                 $("#newErrorMsg").html(errorMessage);
                 $("#newErrorMsg").show();
-                $(this).button('reset');
             }
+
+            // Finally, whether the save action failed or posted correctly, reset the "SAVE" button to avoid leaving it stcuk in "Loading..."
+            $(this).button('reset');
+
         });
 
 
@@ -1586,9 +1569,7 @@
                     $("#selQText").html(questionText);
                     //$("#selQText").text(questionText);
                     $("#editQATWindow").modal();
-                    @*loadModal(@Model.question_id, ddlId);*@
                     //selansDiv.html("");
-                    //loadModal(qid, ddlId);
                 }else
                 {
                     if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")

@@ -117,6 +117,17 @@ namespace OBSMVC.Models
                         int usage_count = db.OBS_COL_FORM_QUESTIONS.Where(x => x.obs_qat_id == qaInstanceTemp.obs_qat_id).Select(y=>y.obs_cft_id).Distinct().Count();
                         temp_qat.usageInfo = usage_count > 0 ? "This answer type is on " + usage_count + " form(s)" : String.Empty;
                         Quest_Assigned_qatTags.Add(temp_qat);
+                        if(usedOnActiveForm=="false")
+                        {
+                            foreach(int cft in db.OBS_COL_FORM_QUESTIONS.Where(x => x.obs_qat_id == qaInstanceTemp.obs_qat_id).Select(y => y.obs_cft_id).Distinct())
+                            {
+                                if(db.OBS_COLLECT_FORM_TMPLT.Single(x=>x.obs_cft_id ==cft).obs_cft_pub_dtm!=null)
+                                {
+                                    usedOnActiveForm = "true";
+                                    break;
+                                }
+                            }
+                        }
                     }
                     Quest_Assigned_qatTags = Quest_Assigned_qatTags.OrderBy(item => item.answer_type_name).ToList();
                 }
@@ -126,6 +137,7 @@ namespace OBSMVC.Models
         public string viewPageTitle = String.Empty;
         public string activeFormId = String.Empty;
         public string qat_usage = String.Empty;
+        public string usedOnActiveForm = "false";
         public OBS_QUESTION questn = new OBS_QUESTION();
         public List<metaDataTags> qAssignedMD = new List<metaDataTags>();
         public List<metaDataTags> qUnassignedMD = new List<metaDataTags>();

@@ -223,6 +223,7 @@ namespace OBSMVC.Controllers
                             if (!editedQuestion.obs_question_full_text.Equals(questionHdr.obs_question_full_text))
                             {
                                 editedQuestion.obs_question_ver++;
+                                
                             }                            
                             editedQuestion.obs_question_full_text = questionHdr.obs_question_full_text;
                             editedQuestion.obs_question_desc = questionHdr.obs_question_desc;

@@ -3,6 +3,7 @@
 @{ ViewBag.Title = "Create/Edit Form"; }
 
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
 <style>
     body > li {
@@ -191,8 +192,13 @@
         min-width: 180px;
         text-align: left;
     }
+    input.break {
+        word-wrap: break-word;
+        word-break: break-all;
+        height: 80px;
+    }
 </style>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
 
 <script>
     $(document).ready(function(){
@@ -471,7 +477,7 @@
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             <div class="row" style="text-align:center; font-size:large">
-                                "QUESTION LIBRARY"
+                                QUESTION LIBRARY
                             </div>
                             <div class="row">
                                 <div class="col-sm-10" style="padding-left:3px">
@@ -483,7 +489,9 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-2 right" style="padding:0px">
-                                    <button type="button" class="btn btn-primary btn-sm newBtn" id="btnAddQuestionPopup" style="padding:2px"><span class="glyphicon glyphicon-plus-sign"></span> Add New</button>
+                                    <button type="button" class="btn btn-primary btn-sm newBtn" id="btnAddQuestionPopup" style="padding:2px">
+                                        <span class="glyphicon glyphicon-plus-sign"></span> Add New
+                                    </button>
                                     @*<a href="/Question/QuestionAddUpdate/0" class="btn btn-primary btn-sm newBtn" style="padding:2px">
                                         <span class="glyphicon glyphicon-plus-sign"></span> Add New
                                     </a>*@                                    
@@ -645,6 +653,16 @@
                         <textarea id="modalQFullText" class="form-control qInput" cols="400" rows="3" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" required></textarea>
                     </div>
                 </div>
+
+                <div class="row" style="margin-bottom:15px">
+                    <div class="input-group">
+                        <div class="input-group-addon stdAddonWidth">
+                            Question Full Text:
+                        </div>
+                        <input type="text" class="form-control break" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" value="This is a really long long quetiosnd kahofaoi poauiip isafioas fo uofoi sfhoisafoy  iofy osf  iuf iusio  ftuispf  uifupqu9rru pqro[9rj';jad  pfuiu pohyuf9oyf o   ifif oa of i f yio fgs gdfi  fgi  gfp[  EUIR IO OFHI ] HFHS FHPIUP9RYQ [QUR08WQY R9]" required />
+                    </div>
+                </div>
+
 
                 <div class="row">
                     <div class="input-group">
@@ -1299,6 +1317,7 @@
                     });
                 }
             });
+
             $(".sectionTitle").on("change", function(){
                 if ($(this).val() == "")
                 {

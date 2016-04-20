@@ -79,6 +79,8 @@
         <th>
             @Html.DisplayNameFor(model => model.OBSformID)
         </th>
+        <th>Action
+        </th>
         <th>
             @Html.DisplayNameFor(model => model.FormTitle)
         </th>
@@ -112,13 +114,18 @@
         <th>
             @Html.DisplayNameFor(model => model.LastCompleteDate)
         </th>
-        <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td style="text-align:center">
             @Html.DisplayFor(modelItem => item.OBSformID)
+        </td>
+        <td style="text-align:center">
+            @if (item.isActive || item.isPublished)
+            {@Html.ActionLink("Manage", "Details", new { id = item.OBSformID }) }
+            else
+            {@Html.ActionLink("Edit", "AddEditForm", new { id = item.OBSformID })}
         </td>
         <td>
             @Html.ActionLink(item.FormTitle, "Details", new { id = item.OBSformID })            
@@ -153,12 +160,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.LastCompleteDate)
         </td>
-        <td style="text-align:center">
-           @if (item.isActive || item.isPublished)
-           {@Html.ActionLink("Manage", "Details", new { id = item.OBSformID }) }
-           else
-           {@Html.ActionLink("Edit", "AddEditForm", new { id = item.OBSformID })}             
-        </td>
+    
     </tr>
 }
 </table>

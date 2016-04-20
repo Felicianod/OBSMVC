@@ -991,7 +991,7 @@ namespace OBSMVC.Controllers
             public bool isActive { get; set; }
             [Display(Name = "Published")]
             public bool isPublished { get; set; } 
-            [Display(Name = "Last Submitted on")]
+            [Display(Name = "Last Used on")]
             [DisplayFormat(DataFormatString = "{0:g}")]
             public DateTime? LastCompleteDate { get; set; }
 

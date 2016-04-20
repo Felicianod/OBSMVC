@@ -421,34 +421,6 @@ namespace OBSMVC.Controllers
 
         //----------------------------------------------------------------
 
-
-        //-----------------------------------------[ "EDIT"   Action: GET ] ---------------------------------------------------
-        // GET: Question/Edit/5
-        public ActionResult Edit(int id)
-        {
-            //if (id == null)
-            //{
-            //    return RedirectToAction("Index");
-            //}
-            //OBS_QUESTION oBS_QUESTION = db.OBS_QUESTION.Find(id);
-            //if (oBS_QUESTION == null)
-            //{
-            //    return HttpNotFound();
-            //}
-            //ViewBag.mdTags = db.OBS_QUESTION_METADATA.ToList();
-            
-            // Populate the new QuestionMD Model from the selected Id and forward it to the View
-
-            //QuestionCreateViewModel obsQMD = new QuestionCreateViewModel((int)id);
-            QuestionMDViewModel obsQMD = new QuestionMDViewModel((int)id);
-            if (obsQMD == null) {
-                return HttpNotFound();
-            }
-
-            _listAnswerTypes((int)id);
-            return View(obsQMD);
-        }
-
         [HttpGet]
         public PartialViewResult getQuestionAnswerInfo(qatTags qatInfo)
         {

@@ -168,7 +168,7 @@
 </script>
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
 <div class="well well-sm smallRowMargin" style="padding: 4px; font-size:xx-large; text-align:center">
-    <span class="col-md-offset-1" > @Model.viewPageTitle</span>
+    <span > @Model.viewPageTitle</span>
 </div>
 
 @using (Html.BeginForm("QuestionAddUpdate", "Question", FormMethod.Post, new { @class = "form-horizontal" }))
@@ -285,7 +285,15 @@
             </div>
             <div class="panel-body collapse in" id="ansTypesPanel">
                 <div class="row qatDIV" id="existingQATs">
-                    @if (Model.Quest_Assigned_qatTags.Count == 0)
+                    @if (Model.questn.obs_question_id == 0 )
+                    {
+                        <div class="row" id="noATmsg" style="text-align:center; margin-left:30px; margin-right:30px; border:dotted; border-width:1px">
+                            <br />
+                            <span style="color:lightgray; font-weight:bold">ANSWER TYPE PLACEHOLDER</span>
+                            <br /><br />
+                        </div>
+                    }
+                    else if (Model.Quest_Assigned_qatTags.Count == 0)
                     {
                         <div class="row" id="noATmsg" style="text-align:center">
                             <br />

@@ -296,19 +296,11 @@
     int nextQuestion = Model.questCount() + 1;
 }
 
-<div class="well well-sm" style="padding: 4px; font-size:xx-large; text-align:center; margin-bottom:8px">
+@*<div class="well well-sm" style="padding: 4px; font-size:xx-large; text-align:center; margin-bottom:8px">
     @Model.screen_Title
-    @*Next lines not needed anymore since those values are now performed on the back end*@
-    @*@if(Model.cft_id < 1)
-    {
-        <text>Collection Form Creation</text>
-    }
-    else
-    {
-        fMode = "edit";
-        colFormId = Model.cft_id.ToString();
-        <text>Collection Form Maintenance</text>
-    }*@
+</div>*@
+<div class="well well-sm smallRowMargin" style="padding: 4px; font-size:xx-large; text-align:center; margin-bottom:8px">
+    <span>@Model.screen_Title</span>
 </div>
 
 @if (!String.IsNullOrEmpty(ViewBag.exception))

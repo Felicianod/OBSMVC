@@ -105,6 +105,11 @@
             $("#frmModified").val("false");
             $(this).button('loading');
         });
+
+        $('input').on('keydown keyup change ', function (e) {
+            $("#btnSubmit").removeAttr('disabled');
+            $("#frmModified").val("true");
+        });
     });
 </script>
 

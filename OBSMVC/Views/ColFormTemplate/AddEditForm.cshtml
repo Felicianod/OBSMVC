@@ -199,7 +199,6 @@
     }
 </style>
 
-
 <script>
     $(document).ready(function(){
         $(".modal-wide").on("show.bs.modal", function() {
@@ -252,6 +251,10 @@
                 $(dropdownId).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");
             }
         });
+
+        //$("#addQuestionWindow").on('hidden.bs.modal', function () {
+        
+        //});
 
         function resetSelAns(qId, ddlId){
         
@@ -474,7 +477,7 @@
                             <div class="row">
                                 <div class="col-sm-10" style="padding-left:3px">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="full_text_search" name="full_text_search" placeholder="Search Question Library for..." style="max-width: 100%; width:100%;" title="Hint: Use Double Quotes to search for literal text!">
+                                        <input type="text" class="form-control searchBox" id="full_text_search" name="full_text_search" placeholder="Search Question Library for..." style="max-width: 100%; width:100%;" title="Hint: Use Double Quotes to search for literal text!">
                                         <span class="input-group-btn">
                                             <button class="btn btn-secondary" type="button" id="doSearch" data-loading-text="Please Wait...">Search!</button>
                                         </span>
@@ -1055,7 +1058,9 @@
 
         $('#CreateForm').keypress(function (e) {
             if (e.keyCode == 13)
+            {
                 $('#doSearch').click();
+            }                    
         });
 
         $('[data-toggle="tooltip"]').tooltip();
@@ -1066,16 +1071,9 @@
             $("#addQuestionWindow").modal();
         });
 
-        $('.qInput').change(function () {
-            if ($(this).val() != "") {
-                $("#btnSaveLibQuestion").removeAttr('disabled');
-                //$("#xxx").val("Y");   // Re-enable the form "changed" status
-            }
-        });
-
         $("#btnSaveLibQuestion").click(function () {
             if ($("#modalQFullText").val() == "") {
-                alert("The Question Text is requiered.\nPlease review your input.");
+                alert("The Question Text is required.\nPlease review your input.");
             }
             else {
                 $.ajax({
@@ -1088,9 +1086,18 @@
                     }
                 }).done(function (d) {
                     if (d == "True") {
+                        var searchText = '"' + $("#modalQFullText").val() + '"';
                         $("#modalQFullText").val("");
                         $("#modalQDesc").val("");
-                        alert("Data Posted Successfully!");
+                        //alert("Data Posted Successfully!");
+
+                        // Close the popup
+                        //$("#addQuestionWindow").dialog( "close" );
+                        $("#btnCancelLibQuestion").click();
+                        // Perform ajax to "search" the recently saved question
+                        $("#full_text_search").val(searchText);
+                        $('#doSearch').click();
+                        $("#full_text_search").val("");
                     }
                     else {
                         alert("ERROR Savind Data: " + d);
@@ -1116,6 +1123,28 @@
                 e.preventDefault();
             }
         });
+
+        $('input').not(".searchBox").on('keydown keyup change ', function (e) {
+            $("#btnSaveForm").removeAttr('disabled');
+            $("#btnCancel").removeAttr('disabled');
+            $("#formChanged").val("Y");   // Re-enable the form "changed" status
+        });
+
+        $('input').not(".searchBox").not(".qInput").on('keydown keyup change ', function (e) {
+            $("#btnSaveForm").removeAttr('disabled');
+            $("#btnCancel").removeAttr('disabled');
+            $("#formChanged").val("Y");   // Re-enable the form "changed" status
+        });
+
+        $('.qInput').on('keydown keyup change ', function (e) {
+            $("#btnSaveLibQuestion").removeAttr('disabled');
+        });
+
+        $("#btnCancelLibQuestion").click(function(){
+            $(".qInput").val("");
+            $("#btnSaveLibQuestion").prop('disabled', true);
+        });
+        
 
         makeSectionsDropable();
     });

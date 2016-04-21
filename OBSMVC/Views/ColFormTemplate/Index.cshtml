@@ -9,7 +9,6 @@
     .centered {
         text-align:center
     }
-
 </style>
 
 
@@ -79,6 +78,11 @@
                         </label>
                     </div>
                 </div>
+            </div>
+            <div class="row" style="text-align:right">
+                <button type="button" class="btn btnAdd" id="btnNewForm" onclick="window.location = '/ColFormTemplate/AddEditForm/0';">
+                    <img src="~/Images/Button-Add-icon.png" height="25" /> Start New Form
+                </button>
             </div>
         </div>
     </div>
@@ -152,3 +156,11 @@
     </tr>
 }
 </table>
+
+<script>
+    $(document).ready(function () {
+        $("#btnNewForm").click(function () {
+            $(this).button('loading');
+        });
+    });
+</script>

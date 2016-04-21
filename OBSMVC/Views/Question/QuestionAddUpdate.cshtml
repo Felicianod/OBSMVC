@@ -6,7 +6,15 @@
     if (Model.questn.obs_question_eff_end_dt.ToString("yyyy").Equals("2060"))
     { endDateValue = ""; }
     else { endDateValue = @Model.questn.obs_question_eff_end_dt.ToString("MMM dd, yyyy"); }
+
+    string qReadonly = @Model.usedOnActiveForm;
 }
+
+@*@if (qReadonly == "true"){
+    qReadonly = "readonly";
+}else{
+    qReadonly = "";    
+}*@
 
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
 <style>
@@ -177,7 +185,7 @@
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <input type="hidden" value="N" id="formChanged">
+    <input type="hidden" value="N" id="formChanged" >
     <input type="hidden" value="@Model.questn.obs_question_id" name="questn.obs_question_id" id="questn.obs_question_id">
     //-----------------------------------   QUESTION HEADER SECCTION ----------------------------------------------------------
 
@@ -196,11 +204,9 @@
                         <div class="input-group-addon stdWidth">
                             @Html.LabelFor(model => model.questn.obs_question_full_text)
                         </div>
-                        <textarea class="form-control has-feedback" id="questn.obs_question_full_text" name="questn.obs_question_full_text" cols="400" rows="3" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" required>@Model.questn.obs_question_full_text</textarea>
+                        <textarea class="form-control has-feedback" id="questn.obs_question_full_text" name="questn.obs_question_full_text" cols="400" rows="3" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" required @qReadonly >@Model.questn.obs_question_full_text</textarea>
                         @Html.ValidationMessageFor(model => model.questn.obs_question_full_text, "", new { @class = "text-danger" })
                     </div>
-
-
             </div>
             <div class="panel-body collapse in" id="headerInfoPanel">
                 @*<div class="form-group row smallRowMargin">

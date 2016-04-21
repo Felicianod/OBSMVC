@@ -355,7 +355,7 @@
                     <div class="input-group">
                         <div class="input-group-addon">Observation Type</div>
                         @*@Html.DropDownListFor(model => model.cft_obsType, ViewBag.cft_obsType as SelectList, new { @class = "form-control", name = "cft_obsType" })*@
-                        @Html.DropDownList("cft_obsType", null, htmlAttributes: new { @class = "form-control", name = "cft_obsType" })
+                        @Html.DropDownList("cft_obsType", null,"- Select Observation Type -", htmlAttributes: new { @class = "form-control", name = "cft_obsType" })
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -651,7 +651,8 @@
                         <div class="input-group-addon stdAddonWidth">
                             Question Full Text:
                         </div>
-                        <input type="text" class="form-control break" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" value="This is a really long long quetiosnd kahofaoi poauiip isafioas fo uofoi sfhoisafoy  iofy osf  iuf iusio  ftuispf  uifupqu9rru pqro[9rj';jad  pfuiu pohyuf9oyf o   ifif oa of i f yio fgs gdfi  fgi  gfp[  EUIR IO OFHI ] HFHS FHPIUP9RYQ [QUR08WQY R9]" required />
+                        <input type="text" class="form-control break" style="max-width: 100%; width:95% " 
+                               placeholder="Enter The Question Full Text" value="This is a really long long quetiosnd kahofaoi poauiip isafioas fo uofoi sfhoisafoy  iofy osf  iuf iusio  ftuispf  uifupqu9rru pqro[9rj';jad  pfuiu pohyuf9oyf o   ifif oa of i f yio fgs gdfi  fgi  gfp[  EUIR IO OFHI ] HFHS FHPIUP9RYQ [QUR08WQY R9]" required />
                     </div>
                 </div>
 
@@ -1108,6 +1109,24 @@
                 });
             }
         }); //--------- End of btnSaveLibQuestion click() event
+
+
+        $('textarea').on('keydown keyup change focus blur', function(e) {
+            if (e.type === 'change') {
+                // this event is triggered when the text is changed through drag and drop too,
+                // or by pasting something inside the textarea;
+
+                // remove commas with empty                
+                $textarea.val($textarea.val().replace(/,/,"","g"));
+                // remove carriage returns (\r) and newlines (\n) with spaces:                
+                $textarea.val($textarea.val().replace(/\r?\n/g, ' '));
+                //$textarea.val($textarea.val().replace(/[,\n\r]/," ","g");
+            }
+            if (e.which === 13 || e.which === 44) {
+                // the enter key has been pressed, avoid producing a carriage return from it:
+                e.preventDefault();
+            }
+        });
 
         makeSectionsDropable();
     });

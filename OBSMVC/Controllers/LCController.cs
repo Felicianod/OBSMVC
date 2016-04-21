@@ -52,7 +52,7 @@ namespace OBSMVC.Controllers
                 lcview.Add(new LCViewModel(lc.dsc_lc_id,lc.dsc_lc_name, lc.dsc_lc_code, lc.dsc_lc_timezone, isActive, isActive == "YES" ? "Deactivate" : "Activate"));
             }//end of foreach
 
-                return View(lcview);
+                return View(lcview.OrderBy(x=>x.dsc_lc_name));
         }
 
         [HttpGet]

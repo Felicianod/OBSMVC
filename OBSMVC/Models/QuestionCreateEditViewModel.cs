@@ -124,7 +124,12 @@ namespace OBSMVC.Models
                                 if(db.OBS_COLLECT_FORM_TMPLT.Single(x=>x.obs_cft_id ==cft).obs_cft_pub_dtm!=null)
                                 {
                                     usedOnActiveForm = "readonly";
+                                    formUsageMessage = "This question is on active form";
                                     break;
+                                }
+                                else if (db.OBS_COLLECT_FORM_TMPLT.Single(x => x.obs_cft_id == cft).obs_cft_pub_dtm == null)
+                                {
+                                    formUsageMessage = "Warning.  This question is used on saved form";
                                 }
                             }
                         }
@@ -138,6 +143,7 @@ namespace OBSMVC.Models
         public string activeFormId = String.Empty;
         public string qat_usage = String.Empty;
         public string usedOnActiveForm = String.Empty;
+        public string formUsageMessage = String.Empty;
         public OBS_QUESTION questn = new OBS_QUESTION();
         public List<metaDataTags> qAssignedMD = new List<metaDataTags>();
         public List<metaDataTags> qUnassignedMD = new List<metaDataTags>();

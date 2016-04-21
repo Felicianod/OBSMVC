@@ -5,8 +5,18 @@
 }
 <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 <link href="~/Content/chkboxRadio.css" rel="stylesheet" />
+<style>
+    .centered {
+        text-align:center
+    }
 
-<div class="well well-sm"><h3>Form Templates Search</h3></div>
+</style>
+
+
+
+<div class="well well-sm smallRowMargin" style="padding: 4px; font-size:xx-large; text-align:center">
+    <span> Form Templates Search</span>
+</div>
 
 @using (Html.BeginForm("Index", "ColFormTemplate", FormMethod.Get))
 {
@@ -76,44 +86,19 @@
 
 <table class="table table-condensed table-hover" border="1">
     <tr style="background-color:gainsboro">
-        <th>
-            @Html.DisplayNameFor(model => model.OBSformID)
-        </th>
-        <th>Action
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FormTitle)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FormNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FormVersion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Customer)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LC)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OBS_Type)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.isPublished)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.isActive)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.QuestionCount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ObservationCount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastCompleteDate)
-        </th>
+        <th class="centered"> @Html.DisplayNameFor(model => model.OBSformID)  </th>
+        <th class="centered"> Action        </th>
+        <th> @Html.DisplayNameFor(model => model.FormTitle)        </th>
+        <th class="centered"> @Html.DisplayNameFor(model => model.FormNumber) </th>
+        <th class="centered"> @Html.DisplayNameFor(model => model.FormVersion)</th>
+        <th> @Html.DisplayNameFor(model => model.Customer)   </th>
+        <th> @Html.DisplayNameFor(model => model.LC)         </th>
+        <th> @Html.DisplayNameFor(model => model.OBS_Type)   </th>
+        <th> @Html.DisplayNameFor(model => model.isPublished)</th>
+        <th> @Html.DisplayNameFor(model => model.isActive)   </th>
+        <th class="centered"> @Html.DisplayNameFor(model => model.QuestionCount)   </th>
+        <th class="centered"> @Html.DisplayNameFor(model => model.ObservationCount)</th>
+        <th class="centered"> @Html.DisplayNameFor(model => model.LastCompleteDate)</th>
     </tr>
 
 @foreach (var item in Model) {
@@ -123,7 +108,10 @@
         </td>
         <td style="text-align:center">
             @if (item.isActive || item.isPublished)
-            {@Html.ActionLink("Manage", "Details", new { id = item.OBSformID }) }
+            {
+                @*@Html.ActionLink("Manage", "Details", new { id = item.OBSformID })*@
+                <text>Manage</text>
+            }
             else
             {@Html.ActionLink("Edit", "AddEditForm", new { id = item.OBSformID })}
         </td>

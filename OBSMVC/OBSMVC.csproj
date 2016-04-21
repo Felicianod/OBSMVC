@@ -524,7 +524,6 @@
     <Content Include="Views\Question\Create.cshtml" />
     <Content Include="Views\Question\Delete.cshtml" />
     <Content Include="Views\Question\Details.cshtml" />
-    <Content Include="Views\Question\Edit.cshtml" />
     <Content Include="Views\Question\Index.cshtml" />
     <Content Include="Views\Question\Manage.cshtml" />
     <Content Include="Views\Question\_MDView.cshtml" />
@@ -557,7 +556,6 @@
     <Content Include="Views\Question\_selAnsTemplates.cshtml" />
     <Content Include="Views\Question\_addQuestionAnswerInfo.cshtml" />
     <Content Include="Views\Question\_saveNewSelectableAnswer.cshtml" />
-    <Content Include="Views\LightQuestion\QuestionAddUpdateEditLight.cshtml" />
     <Content Include="Views\ColFormTemplate\_reloadQuestionDropdown.cshtml" />
     <Content Include="Views\ColFormTemplate\_addFormQAInfo.cshtml" />
   </ItemGroup>
@@ -572,6 +570,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\themes\base\images\" />
     <Folder Include="Views\Error\" />
+    <Folder Include="Views\LightQuestion\" />
     <Folder Include="Views\Shared\EditorTemplates\" />
   </ItemGroup>
   <PropertyGroup>

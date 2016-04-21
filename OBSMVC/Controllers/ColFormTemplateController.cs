@@ -302,7 +302,7 @@ namespace OBSMVC.Controllers
             // *****************************************************************************
 
             //var data = from s in db.OBS_FORM_SECTION select new { label = s.obs_form_section_name, value = s.obs_form_section_name};
-            var data = db.OBS_FORM_SECTION.Where(x => x.obs_form_section_name.Contains(term)).Select(item => item.obs_form_section_name).ToArray();
+            var data = db.OBS_FORM_SECTION.Where(x => x.obs_form_section_name.StartsWith(term)).Select(item => item.obs_form_section_name).ToArray();
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 

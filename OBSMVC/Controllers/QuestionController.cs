@@ -76,16 +76,6 @@ namespace OBSMVC.Controllers
             return View(obsQMD);
         }
 
-        //---------------------------------------- ADDUPDATE  [GET] -----------------------------------------------------------------
-
-        //[HttpGet]
-        //public ActionResult QuestionCreate()
-        //{
-        //    QuestionCreateViewModel obsQMD = new QuestionCreateViewModel();
-        //    obsQMD.questn.obs_question_eff_st_dt = DateTime.Today;
-        //    obsQMD.questn.obs_question_eff_end_dt = Convert.ToDateTime("2060/12/31");
-        //    return View("QuestionAddUpdate", obsQMD);
-        //}
 
         //---------------------------------------- QuestionAddUpd [ GET ] -----------------------------------------------------------------
         [HttpGet]

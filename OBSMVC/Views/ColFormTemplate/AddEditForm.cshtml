@@ -596,7 +596,7 @@
                             <span style="font-weight:bold; font-size:larger; max-width:100%; width:100%">Question Full Text: </span>
                         </div>
                         @*<input type="text" id="selQText" class="form-control" style="font-weight:bold; font-size:larger; margin-left:10px; max-width: 90%; width:80%;" />*@
-                        <span style="font-weight:bold; font-size:x-large; margin-left:10px" id="selQText" class="label label-default"> </span>
+                        <span style="font-weight:bold; font-size:x-large; margin-left:10px;  padding:2px" id="selQText"  > </span>
                     </div>
                 </div>
                 <br />
@@ -713,6 +713,7 @@
     //    opendialog(url, questionId, ddlId);
     //}
 
+    @*//Not Used for the light version built-in pop up 04/16/2016
     function opendialog(pageURL, questionId, ddlId) {       
         var $dialog = $('#remoteWindow')
         .html('<iframe style="border-style:double; border-width:4px; " src="' + pageURL + '" width="100%" height="100%"></iframe>')
@@ -747,8 +748,6 @@
                     }
                 }).done(function (d) {
                     //alert("Retrieved Data is: " + d);
-                    @*$("#@ulId").html(d);*@
-                    //alert(d);
                     var dropdownId = "#" + ddlId;
                     $(dropdownId).parents(".reloadDDL").first().html(d);
                     //alert("Dropdown Id handle is: " + $(dropdownId).attr("id"));
@@ -759,7 +758,7 @@
         });
 
         $dialog.dialog('open');
-    }
+    }*@
 </script>
 
 
@@ -894,7 +893,8 @@
                 }
             });
 
-            //Next, Check if we have empty boxes, then the form is not validated.
+            //Check if we have empty boxes, then the form is not validated.
+            var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
             if (selCathegory == "3 Val Range" && emptyBoxes > 2) {
                 formValidated = false;
                 validationMessage = "No textbox values can be left blank";
@@ -902,6 +902,19 @@
             else if (selCathegory == "5 Val Range" && emptyBoxes > 0) {
                 formValidated = false;
                 validationMessage = "No textbox values can be left blank";
+            }
+            else if (selectedText == "Multi" || selectedText == "Singl") {
+                //If user is entering a List, verify that the list contains at least two item
+                var filledInBoxes = 0;
+                $("#multiList").find(".selAnswerTextb").each(function () {
+                    if ($(this).val().trim() != "") {
+                        filledInBoxes = filledInBoxes + 1;
+                    }
+                });
+                if (filledInBoxes < 2) {
+                    formValidated = false;
+                    validationMessage = "A valid list must contain at least two elements.";
+                }
             }
             // ------- Finished looking for boxes left blank------------------------------------------------
 

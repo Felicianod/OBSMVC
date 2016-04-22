@@ -22,90 +22,91 @@
     }
 </script>
 <div class="col-sm-12 answerType" id="newQATsection" style="border-style:double; border-width:2px; border-color:green; background-color:lightslategray; font-family:Arial; min-height:300px;">
-    <div id="divNewAT" class="row divText"> 
-        <div class="col-sm-6" style="margin-left:5px">
-            <br />
-            <div class="row">
-                <div class="col-sm-8 form-inline">
-                    <div class="input-group ">
-                        <span class="input-group-addon label-primary" style="color:white; max-width:25%">Answer Type:</span>
-                        @Html.DropDownList("fullSelATlist", null, "-Select Answer Type-", htmlAttributes: new { @class = "form-control selectAT" })
-                    </div>
-                </div>
-                <div class="col-sm-3 col-sm-offset-1 form-inline" style="text-align:right">
-                    <div class="input-group">
-                        <span class="input-group-addon">Default </span>
-                        <button id="btnNewATdefault" type="button" class="btn btnIsDefault btn-warning" onclick="makeDflt($(this))">
-                            NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row" id="noSelection" style="display:none">
-                <div class="col-sm-10 col-sm-offset-1">
-                    <br />
-                    <span class="label label-primary" style="font-size:larger; font-weight:bold">This Selection does not require Selectable answers</span>
-                    <br /><br />
-                </div>
-            </div>
-            <div class="row" id="ValRange3" style="display:none; margin-left:20px; margin-bottom: 2px; margin-top: 2px">
+    <div id="divNewAT" class="row divText">
+        <div class="row" style="margin-left:5px">
+            <div class="col-sm-6" id="newATcol01" >
                 <br />
-                <div class="line">
-                    <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value"/>
+                <div class="row">
+                    <div class="col-sm-8 form-inline">
+                        <div class="input-group ">
+                            <span class="input-group-addon label-primary" style="color:white; max-width:25%">Answer Type:</span>
+                            @Html.DropDownList("fullSelATlist", null, "-Select Answer Type-", htmlAttributes: new { @class = "form-control selectAT" })
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-sm-offset-1 form-inline" style="text-align:right">
+                        <div class="input-group">
+                            <span class="input-group-addon">Default </span>
+                            <button id="btnNewATdefault" type="button" class="btn btnIsDefault btn-warning" onclick="makeDflt($(this))">
+                                NO&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="line">
-                    <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value"  />
+                <div class="row" id="noSelection" style="display:none">
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <br />
+                        <span class="label label-primary" style="font-size:larger; font-weight:bold">This Selection does not require Selectable answers</span>
+                        <br /><br />
+                    </div>
                 </div>
-                <div class="line">
-                    <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
-                </div>
-                @*<div class="line">
+                <div class="row" id="ValRange3" style="display:none; margin-left:20px; ">
+                    <br />
+                    <div class="line" style="margin-bottom: 2px;">
+                        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                    </div>
+                    <div class="line" style="margin-bottom: 2px;">
+                        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                    </div>
+                    <div class="line" style="margin-bottom: 2px;">
+                        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                    </div>
+                    @*<div class="line">
                     <label for="input">Last Name</label>
                     <div class="input">
                         <input type="text" name="input" size="30">
                     </div>
                 </div>*@
-            </div>
-
-            <div class="row" id="ValRange5" style="display:none; margin-left:20px">
-                <div class="line">
-                    <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
                 </div>
-                <div class="line">
-                    <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                <div class="row" id="ValRange5" style="display:none; margin-left:20px">
+                    <div class="line" style="margin-bottom: 2px;">
+                        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                    </div>
+                    <div class="line" style="margin-bottom: 2px;">
+                        <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />
+                    </div>
+                </div>
+
+                <div class="row form-inline" id="multiList" style="display:none;  margin-left:20px">
+                    <button type="button" class="addTextBox btn btn-success" style="text-align:left; margin-bottom:7px; margin-top:5px"> <span class="glyphicon glyphicon-plus"> Add New Answer</span></button>
+                    <div id="newTB" class="row form-inline">
+                        @* ------------ This is a placeholder ----- New Text boxes Created Dynamically are placed here ------------- *@
+                    </div>
+                </div>
+
+                <br />
+                <div class="row" style="margin-left:40px">
+                    <div class="col-sm-2" style="text-align:center">
+                        <button id="btnSaveNewAT" type="button" style="display:none; width:80px">DONE</button>
+                    </div>
+                    <div class="col-sm-2" style="text-align:center">
+                        <button id="btnCancel" class="cancelNewSA" type="button" style="width:80px">CANCEL</button>
+                    </div>
+                    <br /><br />
+                </div>
+                <div id="newErrorMsg" class="label label-danger" style="font-size:medium; display:none">
+                    @*---------------- Placeholder for Error Messages ---------------*@
                 </div>
             </div>
+            <div id="divTemplates" class="col-md-5 personal-info" style="margin-top:20px">
 
-            <div class="row form-inline" id="multiList" style="display:none;  margin-left:20px">
-                <button type="button" class="addTextBox btn btn-success" style="text-align:left; margin-bottom:7px; margin-top:5px"> <span class="glyphicon glyphicon-plus"> Add New Answer</span></button>
-                <div id="newTB" class="row form-inline">
-                    @* ------------ This is a placeholder ----- New Text boxes Created Dynamically are placed here ------------- *@
-                </div>
+                @*  // - - - - - -- - - - - INSERT HERE The Selectable Answers Templates Panel (From External Partial View) --------
+            //------------------------------------------------------------------------------------------------------------------*@
+
+                @*  // - - - - - - - END OF Selectable Answers Templates Panel (From External Partial View) --------
+            //-------------------------------------------------------------------------------------------------------
+                *@
             </div>
 
-            <br />
-            <div class="row" style="margin-left:40px">
-                <div class="col-sm-2" style="text-align:center">
-                    <button id="btnSaveNewAT" type="button" style="display:none; width:80px">DONE</button>
-                </div>
-                <div class="col-sm-2" style="text-align:center">
-                    <button id="btnCancel" class="cancelNewSA" type="button" style="width:80px">CANCEL</button>
-                </div>                
-                <br /><br />
-            </div>
-            <div id="newErrorMsg" class="label label-danger" style="font-size:medium; display:none">
-                @*---------------- Placeholder for Error Messages ---------------*@
-            </div>
-        </div>
-        <div id="divTemplates" class="col-md-5 personal-info">
-
-            @*  // - - - - - -- - - - - INSERT HERE The Selectable Answers Templates Panel (From External Partial View) --------
-                //------------------------------------------------------------------------------------------------------------------*@
-
-            @*  // - - - - - - - END OF Selectable Answers Templates Panel (From External Partial View) --------
-                //-------------------------------------------------------------------------------------------------------
-            *@
         </div>
     </div>
 </div>
@@ -173,39 +174,54 @@
                 $('#newTB').append(addDelButton);
             }
             else {
-                selCathegory = "Other";
-                $('#noSelection').show();
+                selCathegory = "Other";                
                 $('#ValRange3').hide();
                 $('#ValRange3').children('.selAnswerTextb').val("");
                 $('#ValRange5').hide();
                 $('#ValRange5').children('.selAnswerTextb').val("");
                 $('#multiList').hide();
                 $('#multiList').children('.selAnswerTextb').val("");
+                if (selectedText == "-Sele") {
+                    $('#noSelection').hide();
+                }
+                else {
+                    $('#noSelection').show();
+                }
             }
 
             //Load the Templated based on the Cathegory that was selected
+            //Only for the "non-Other" cathegories
             //alert("Retrieving Templates for the '" + selCathegory + "' Category");
-            $.ajax({                
-                url: '@Url.Action("selAnsTemplates", "Question")',
-                method: "GET",
-                cache: false,
-                dataType: "html",
-                data: { templateCathegory: selCathegory },     //<---- Data Parameters (if not already passed in the Url)
-                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+            if (selCathegory != "Other") {
+                $.ajax({
+                    url: '@Url.Action("selAnsTemplates", "Question")',
+                    method: "GET",
+                    cache: false,
+                    dataType: "html",
+                    data: { templateCathegory: selCathegory },     //<---- Data Parameters (if not already passed in the Url)
+                    //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                    //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                    //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                    //traditional: true,                                       //<--- In case we wanted to post a JSON data object
 
-                //--- On error, execute this function ------
-                error: function () {
-                    alert("Failed to retrieve appropriate Templates for Selection! [" + "selCathegory" + "]");  //<-- Trap and alert of any errors if they occurred
-                }
-            }).done(function (d) {
-                //Execute this code After the Ajax call completes successfully
-                //$("#accordion").append(d);
-                //alert('Save Resullt: ' + d)
-                $("#divTemplates").html(d);
-            });
+                    //--- On error, execute this function ------
+                    error: function () {
+                        alert("Failed to retrieve appropriate Templates for Selection! [" + "selCathegory" + "]");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    //Execute this code After the Ajax call completes successfully
+                    //Adjust the Columns widts and show the templates column
+                    //$("#newATcol01").removeClass("col-sm-10");
+                    //$("#newATcol01").addClass("col-sm-6");
+                    $("#divTemplates").show();
+                    $("#divTemplates").html(d);
+                });
+            }
+            else {
+                //$("#newATcol01").removeClass("col-sm-6");
+                //$("#newATcol01").addClass("col-sm-10");
+                $("#divTemplates").hide();
+            }
         });
 
 
@@ -257,6 +273,7 @@
             });
 
             //Check if we have empty boxes, then the form is not validated.
+            var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
             if (selCathegory == "3 Val Range" && emptyBoxes > 2) {
                 formValidated = false;
                 validationMessage = "No textbox values can be left blank";
@@ -265,6 +282,20 @@
                 formValidated = false;
                 validationMessage = "No textbox values can be left blank";
             }
+            else if (selectedText == "Multi" || selectedText == "Singl") {
+                //If user is entering a List, verify that the list contains at least two item
+                var filledInBoxes = 0;
+                $("#multiList").find(".selAnswerTextb").each(function () {
+                    if ($(this).val().trim() != "") {
+                        filledInBoxes = filledInBoxes + 1;
+                    }
+                });
+                if (filledInBoxes < 2) {
+                    formValidated = false;
+                    validationMessage = "A valid list must contain at least two elements.";
+                }
+            }
+
 
             //alert("There are " + emptyBoxes + " Empty Fields.");
 

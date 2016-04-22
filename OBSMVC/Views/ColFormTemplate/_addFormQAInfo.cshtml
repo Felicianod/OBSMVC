@@ -56,12 +56,12 @@
         <br />
 
 
-        <div id="newErrorMsg" class="label label-danger" style="font-size:medium; display:none">
+        <div id="newErrorMsg" style="font-size:medium; font-weight:bold; color:red; display:none">
             @*---------------- Placeholder for Error Messages ---------------*@
         </div>
 
     </div>
-    <div id="divTemplates" class="col-sm-6" >        
+    <div id="divTemplates" class="col-sm-6" style="margin-top:10px">        
         @*  // - - - - - -- - - - - INSERT HERE The Selectable Answers Templates Panel (From External Partial View) --------
             //--------------------------------------------------------------------------------------------------------------
             // - - - - - - - END OF Selectable Answers Templates Panel (From External Partial View) ------------------------
@@ -141,38 +141,53 @@
             }
             else {
                 selCathegory = "Other";
-                $('#noSelection').show();
                 $('#ValRange3').hide();
                 $('#ValRange3').children('.selAnswerTextb').val("");
                 $('#ValRange5').hide();
                 $('#ValRange5').children('.selAnswerTextb').val("");
                 $('#multiList').hide();
                 $('#multiList').children('.selAnswerTextb').val("");
+                if (selectedText == "-Sele") {
+                    $('#noSelection').hide();
+                }
+                else {
+                    $('#noSelection').show();
+                }
             }
 
             //Load the Templated based on the Cathegory that was selected
+            //Only for the "non-Other" cathegories
             //alert("Retrieving Templates for the '" + selCathegory + "' Category");
-            $.ajax({
-                url: '@Url.Action("selAnsTemplates", "Question")',
-                method: "GET",
-                cache: false,
-                dataType: "html",
-                data: { templateCathegory: selCathegory },     //<---- Data Parameters (if not already passed in the Url)
-                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+            if (selCathegory != "Other") {
+                $.ajax({
+                    url: '@Url.Action("selAnsTemplates", "Question")',
+                    method: "GET",
+                    cache: false,
+                    dataType: "html",
+                    data: { templateCathegory: selCathegory },     //<---- Data Parameters (if not already passed in the Url)
+                    //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                    //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                    //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                    //traditional: true,                                       //<--- In case we wanted to post a JSON data object
 
-                //--- On error, execute this function ------
-                error: function () {
-                    alert("Failed to retrieve appropriate Templates for Selection! [" + "selCathegory" + "]");  //<-- Trap and alert of any errors if they occurred
-                }
-            }).done(function (d) {
-                //Execute this code After the Ajax call completes successfully
-                //$("#accordion").append(d);
-                //alert('Save Resullt: ' + d)
-                $("#divTemplates").html(d);
-            });
+                    //--- On error, execute this function ------
+                    error: function () {
+                        alert("Failed to retrieve appropriate Templates for Selection! [" + "selCathegory" + "]");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    //Execute this code After the Ajax call completes successfully
+                    //Adjust the Columns widts and show the templates column
+                    //$("#newATcol01").removeClass("col-sm-10");
+                    //$("#newATcol01").addClass("col-sm-6");
+                    $("#divTemplates").show();
+                    $("#divTemplates").html(d);
+                });
+            }
+            else {
+                //$("#newATcol01").removeClass("col-sm-6");
+                //$("#newATcol01").addClass("col-sm-10");
+                $("#divTemplates").hide();
+            }
         });
 
 

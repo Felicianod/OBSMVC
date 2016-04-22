@@ -657,8 +657,14 @@
                         <input type="text" id="modalQDesc" class="form-control qInput" placeholder="Enter Question Description" style="max-width: 100%; width:95%;" />
                     </div>
                 </div>
-
+                <br />
+                <div id="msgAddQ" class="alert alert-danger" style="font-weight:bold; display:none">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    The Question Text is required.<br />Please review your input.
+                    <!------------------PLACE-HOLDER FOR VALIDATION ERROR NOTIFICATION --------------------------------------->
+                </div>
             </div>
+            <br />
             <div class="modal-footer">
                 <div class="col-sm-1 col-sm-offset-3">
                     <button type="button" id="btnSaveLibQuestion" class="btn btn-primary" disabled="disabled">Save changes</button>
@@ -1085,8 +1091,10 @@
         });
 
         $("#btnSaveLibQuestion").click(function () {
-            if ($("#modalQFullText").val() == "") {
-                alert("The Question Text is required.\nPlease review your input.");
+            if ($("#modalQFullText").val().trim() == "") {
+                $("#msgAddQ").show();
+                $("#btnSaveLibQuestion").prop("disabled", true);
+                //alert("The Question Text is required.\nPlease review your input.");
             }
             else {
                 $.ajax({
@@ -1113,7 +1121,7 @@
                         $("#full_text_search").val("");
                     }
                     else {
-                        alert("ERROR Savind Data: " + d);
+                        alert("ERROR Saving Data: " + d);
                     }
                 });
             }
@@ -1151,6 +1159,7 @@
 
         $('.qInput').on('keydown keyup change ', function (e) {
             $("#btnSaveLibQuestion").removeAttr('disabled');
+            $("#msgAddQ").hide();
         });
 
         $("#btnCancelLibQuestion").click(function(){

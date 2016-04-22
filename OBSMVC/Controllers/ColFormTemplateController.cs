@@ -331,14 +331,16 @@ namespace OBSMVC.Controllers
             }
 
             if (cftid > 0)
-            {
-                selectedColForm.str_cft_eff_end_dt = selectedColForm.cft_eff_end_dt<Convert.ToDateTime("12/31/2060")? selectedColForm.cft_eff_end_dt.ToString("MMM dd, yyyy"):String.Empty;
+            {                
                 selectedColForm.str_cft_eff_st_dt = selectedColForm.cft_eff_st_dt.HasValue ? selectedColForm.cft_eff_st_dt.Value.ToString("MMM dd, yyyy") : String.Empty;
+                selectedColForm.str_cft_eff_end_dt = selectedColForm.cft_eff_end_dt < Convert.ToDateTime("12/31/2060") ? selectedColForm.cft_eff_end_dt.ToString("MMM dd, yyyy") : String.Empty;
             }
             else
             {
                 selectedColForm.cft_eff_st_dt = DateTime.Now;
                 selectedColForm.cft_eff_end_dt = Convert.ToDateTime("12/31/2060");
+                selectedColForm.str_cft_eff_st_dt = String.Empty;
+                selectedColForm.str_cft_eff_end_dt = String.Empty;
             }
             string selected_lc = "0";
             try { selected_lc = db.DSC_LC.Single(x => x.dsc_lc_name == selectedColForm.cft_LC).dsc_lc_id.ToString(); } catch { }

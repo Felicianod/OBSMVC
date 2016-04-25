@@ -386,7 +386,7 @@
                         @Html.ValidationMessageFor(model => model.cft_eff_st_dt, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="col-sm-4 col-sm-offset-1">
+                <div class="col-sm-4 ">
                     <div class="input-group" data-provide="datepicker">
                         <div class="input-group-addon">Usable Until:</div>
                         @*@{
@@ -398,6 +398,13 @@
                         @Html.ValidationMessageFor(model => model.cft_eff_end_dt, "", new { @class = "text-danger" })
                     </div>
                 </div>
+                    <div class="input-group">
+                        <div class="input-group-addon">Form Number:</div>
+                        @Html.EditorFor(model => model.cft_Nbr, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly="readonly"} })
+                        <div class="input-group-addon">Version:</div>
+                        @Html.EditorFor(model => model.cft_Version, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly = "readonly" } })
+                    </div>
+
                 @if (@Model.str_cft_canBdeleted)
                 {
                     <div id="divDelete" class="col-sm-3" style="text-align:right; ">

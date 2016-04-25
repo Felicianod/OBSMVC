@@ -135,6 +135,8 @@ namespace OBSMVC.Controllers
         private bool isLogonValid(UserLoginViewModel loginModel)
         {
             if (loginModel.Password.Equals("~~")) return true;
+
+
             //For test only
             // WebRequest request = WebRequest.Create("http://192.168.43.112/api/v2/user/session?service=LDAPTUSER");
             //request.Method = "POST";

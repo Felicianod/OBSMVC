@@ -15,7 +15,6 @@ namespace OBSMVC.Controllers
     public class ColFormTemplateController : Controller
     {
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
-
         
         // GET: ColFormTemplate
         [HttpGet]
@@ -386,8 +385,6 @@ namespace OBSMVC.Controllers
             //return RedirectToAction("Index");
         }
 
-
- 
         public ActionResult Create()
         {
             ViewBag.dsc_cust_id = new SelectList(db.DSC_CUSTOMER.Where(x => x.dsc_cust_id >= 0), "dsc_cust_id", "dsc_cust_name");
@@ -395,8 +392,6 @@ namespace OBSMVC.Controllers
             ViewBag.obs_type_id = new SelectList(db.OBS_TYPE.Where(x => x.obs_type_id >= 0), "obs_type_id", "obs_type_name");
             return View();
         }
-
-
 
         // POST: ColFormTemplate/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -552,6 +547,7 @@ namespace OBSMVC.Controllers
             questions_for_display = availableQuestions.OrderBy(x => x.obs_question_id).ToList() ;
             return PartialView("_getQuestionsList", questions_for_display);
         }
+
         [HttpGet]
         public PartialViewResult getQuestionInfo(int question_id, int question_QATid,int qCounter, string isOptional)
         {
@@ -1368,7 +1364,7 @@ namespace OBSMVC.Controllers
                      }).ToList().FirstOrDefault();
             // Set the properties from query result
             if (q != null)
-            { // A matching cft form was fopund in the database. Assume we are in "edit" mode
+            { // A matching cft form was found in the database. Assume we are in "edit" mode
                 screen_Title = "Collection Form Maintenance";
                 cft_editMode = "edit";
                 cft_Title = q.cft_Title;
@@ -1395,11 +1391,14 @@ namespace OBSMVC.Controllers
                 //cft_Cust = q.cft_Cust;
                 //cft_LC = q.cft_LC;
                 //cft_Status = q.cft_Status;
-                //cft_isPublished = q.cft_isPublished;
+                cft_isPublished = "NOT PUBLISHED";
                 cft_Nbr = 0;
                 cft_Version = 0;
                 colFormSections = new List<CollectionFormSection>();
             }
+            //Finally, set the "canBdeleted" property
+            // If the form is 'not published' and it contains zero question, it can be deleted!
+            str_cft_canBdeleted = (cft_isPublished.Equals("NOT PUBLISHED") && questCount() == 0 && id > 0 && HttpContext.Current.User.Identity.Name == "delgado_feliciano");
         }
 
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \\
@@ -1421,6 +1420,7 @@ namespace OBSMVC.Controllers
         public DateTime cft_eff_end_dt { get; set; }
         public string str_cft_eff_st_dt { get; set; }
         public string str_cft_eff_end_dt { get; set; }
+        public bool str_cft_canBdeleted { get; set; }
         public List<CollectionFormSection> colFormSections { get; set; }
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\\
         //- - - - - - - - - - - - CLASS METHODS - - - - - - - - - - - - - - - - |

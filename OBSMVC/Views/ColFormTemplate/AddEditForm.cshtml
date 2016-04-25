@@ -297,6 +297,8 @@
     string rowInfo = masterCounter.ToString();
     string colFormId = Model.cft_id.ToString();
     int nextQuestion = Model.questCount() + 1;
+    string form_num = Model.cft_Nbr > 0 ? Model.cft_Nbr.ToString() : String.Empty;
+    string form_version = Model.cft_Nbr > 0 ? Model.cft_Version.ToString() : String.Empty;
 }
 
 @*<div class="well well-sm" style="padding: 4px; font-size:xx-large; text-align:center; margin-bottom:8px">
@@ -358,7 +360,7 @@
                     <div class="input-group">
                         <div class="input-group-addon">Observation Type</div>
                         @*@Html.DropDownListFor(model => model.cft_obsType, ViewBag.cft_obsType as SelectList, new { @class = "form-control", name = "cft_obsType" })*@
-                        @Html.DropDownList("cft_obsType", null,"- Select Observation Type -", htmlAttributes: new { @class = "form-control", name = "cft_obsType" })
+                        @Html.DropDownList("cft_obsType", null, "- Select Observation Type -", htmlAttributes: new { @class = "form-control", name = "cft_obsType" })
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -400,9 +402,11 @@
                 </div>
                     <div class="input-group">
                         <div class="input-group-addon">Form Number:</div>
-                        @Html.EditorFor(model => model.cft_Nbr, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly="readonly"} })
+                        <input type="text" readonly class="form-control" value="@form_num" style = "max-width: 60%; width:60%"  />
+                       @*@Html.EditorFor(model => model.cft_Nbr, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly="readonly"} })*@
                         <div class="input-group-addon">Version:</div>
-                        @Html.EditorFor(model => model.cft_Version, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly = "readonly" } })
+                        <input type="text" readonly class="form-control" value="@form_version" style = "max-width: 60%; width:60%" />
+                        @*@Html.EditorFor(model => model.cft_Version, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly = "readonly" } })*@
                     </div>
 
                 @if (@Model.str_cft_canBdeleted)

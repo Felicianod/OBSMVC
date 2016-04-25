@@ -1509,7 +1509,8 @@ namespace OBSMVC.Controllers
                     oQuestion.cfq_AT = q.OBS_QUEST_ANS_TYPES.OBS_ANS_TYPE.obs_ans_type_name;
                     oQuestion.cfq_qatId = q.obs_qat_id;
                     oQuestion.cfq_na_yn = q.obs_col_form_quest_na_yn;
-                    oQuestion.cfq_SelectableAnswers = q.OBS_QUEST_ANS_TYPES.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).OrderBy(xx => xx.obs_qsa_order).Select(x => x.obs_qsa_text).ToList();
+                    //oQuestion.cfq_SelectableAnswers = q.OBS_QUEST_ANS_TYPES.OBS_QUEST_SLCT_ANS.Where(item => item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now).OrderBy(xx => xx.obs_qsa_order).Select(x => x.obs_qsa_text).ToList();
+                    oQuestion.cfq_SelectableAnswers = q.OBS_QUEST_ANS_TYPES.OBS_QUEST_SLCT_ANS.OrderBy(xx => xx.obs_qsa_order).Select(x => x.obs_qsa_text).ToList();
                     // .... Populate the rest of the oQuestion properties
                     oSection.colFormQuestionList.Add(oQuestion);
 

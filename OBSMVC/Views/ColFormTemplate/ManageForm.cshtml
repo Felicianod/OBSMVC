@@ -311,17 +311,6 @@
     </div>
 </div>
 
-@if (!String.IsNullOrEmpty(ViewBag.exception))
-{
-    <div class="row">
-        <div class="alert alert-danger col-sm-12">
-            <strong>Warning!</strong> @ViewBag.exception
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            [There are currently @Model.questCount() Questions in this Form]
-        </div>
-    </div>
-}
-
 
 @* - - - - - - - - - - - - - - - - BEGINING OF THE "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
 @*// ---- Helper Hidden Fields to Control the Inner Ids ----- *@
@@ -333,8 +322,6 @@
  <input type="hidden" id="formChanged" value="N">
     @*\\ ---- End of Hidden Control Fields section ----- *@
 
-
-    <form class="form-horizontal" id="CreateForm" role="form" method="post" @*onkeydown="return event.keyCode!=13"*@>
     @Html.AntiForgeryToken()
         <input type="hidden" id="cft_id" value="@fMode" />
         
@@ -560,7 +547,7 @@
         @*\\ - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - //*@
 
     </div> @* ----- END OF FORM PANEL*@
-</form>
+
     @* - - - - - - - - - - - - - - - - END OF "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
 
     <div>
@@ -568,301 +555,10 @@
     </div>
 
 
-<div id="dialog-confirm-reset" title="Please Confirm" style="display:none">
-    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-        Your form has been modified.<br /> Are you sure you want to reset all changes?
-    </p>
-</div>
-<div id="dialog-confirm-exit" title="Please Confirm" style="display:none">
-    <p>
-        <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-        Your form has been modified.<br /> Do you want to discard all changes?
-    </p>
-</div>
-@* ------------------------ END OF "Add New Metadata Tag" FORM ------------------------- *@
-
-
-<div id="remoteWindow">
-</div>
-
-@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@ 
-@* ------------------------------------- MODAL "QUESTION MAINTENANCE LIGHT" FORM WINDOW ------------------------------------------ *@
-@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@ 
-<!-- Modal -->
-<div class="modal  modal-wide fade" id="editQATWindow" role="dialog">
-    <div class="modal-dialog ">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3 class="modal-title">ADD NEW ANSWER TYPE</h3>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="windowType" value="MODAL" />
-                <input type="hidden" id="popupStatus" value="" />
-                <input type="hidden" id="popupFormChanged" value="N" />
-                <input type="hidden" id="popupQID" value="" />
-                <input type="hidden" id="popupDDLid" value="" />
-                <input type="hidden" id="savedQATid" value="" />
-                <div class="row">                    
-                    <div class="input-group" style="margin-left:25px">
-                        <div class="input-group-addon" style="max-width:100%">
-                            <span style="font-weight:bold; font-size:larger; max-width:100%; width:100%">Question Full Text: </span>
-                        </div>
-                        @*<input type="text" id="selQText" class="form-control" style="font-weight:bold; font-size:larger; margin-left:10px; max-width: 90%; width:80%;" />*@
-                        <span style="font-weight:bold; font-size:x-large; margin-left:10px;  padding:2px" id="selQText"  > </span>
-                    </div>
-                </div>
-                <br />
-                <div id="divATLoading" style="display:none; text-align:center;">
-                    <br /><br />
-                    <img src="~/Images/ui-anim_basic_16x16.gif" />
-                </div>
-                <div class="row" id="divNewSA" style="max-width:100%; width:100%;">
-                    @*-------------------------------------------------------------------------------------------
-                                    Placeholder for ADD MODE for new Questions Answer Types
-                          Populated before modal window is opened based on the selection within the main form
-                     --------------------------------------------------------------------------------------------*@
-                    @*@Html.Action("addQuestionAnswerInfo", "Question")*@
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div class="col-sm-1 col-sm-offset-3">
-                    <button type="button" class="btn btn-primary" id="btnSaveNewSelAnswer" disabled="disabled">Save changes</button>
-                </div>
-                <div class="col-sm-1 col-sm-offset-1">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
-                </div>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-@*------------------------------ END OF POP UP FOR QUESTION MAINTENANCE --------------------------*@
-
-
-@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
-@* ------------------------------------- POP UP "ADD QUESTION TO LIBRARY" FORM ------------------------------------------------ *@
-@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
-<!-- Modal -->
-<div class="modal  modal-NewQ fade" id="addQuestionWindow" role="dialog"> 
-    <div class="modal-dialog ">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3 class="modal-title">ADD QUESTION TO QUESTION LIBRARY</h3>
-            </div>
-            <div class="modal-body" style="margin-left:25px">
-                <br /><br />
-
-                <div class="row" style="margin-bottom:15px">
-                    <div class="input-group">
-                        <div class="input-group-addon stdAddonWidth">
-                            Question Full Text:
-                        </div>
-                        <textarea id="modalQFullText" class="form-control qInput" cols="400" rows="3" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" required></textarea>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="input-group">
-                        <div class="input-group-addon stdAddonWidth">
-                            Question Description:
-                        </div>
-                        <input type="text" id="modalQDesc" class="form-control qInput" placeholder="Enter Question Description" style="max-width: 100%; width:95%;" />
-                    </div>
-                </div>
-                <br />
-                <div id="msgAddQ" class="alert alert-danger" style="font-weight:bold; display:none">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    The Question Text is required.<br />Please review your input.
-                                        
-                </div>
-            </div>
-            <br />
-            <div class="modal-footer">
-                <div class="col-sm-1 col-sm-offset-3">
-                    <button type="button" id="btnSaveLibQuestion" class="btn btn-primary" disabled="disabled">Save changes</button>
-                </div>
-                <div class="col-sm-1 col-sm-offset-1">
-                    <button type="button" id="btnCancelLibQuestion" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-
-
-
-
-
-@*if (confirm("Your form has been modified.\nAre you sure you want to reset all changes?")) {
-        $("#formChanged").val("N");
-        //isChanged.val("N");
-        location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
-    }*@
-
-
-
-
-<script>
-    function clearNewSAbox(){
-        $("#divNewSA").html("");
-        $("#divATLoading").show();
-        $.ajax({
-            url: '@Url.Action("addFormQAInfo", "colFormTemplate")',
-            method: "GET",
-            cache: false,
-            //data: { question_id: questionId, dropdownID: ddlId},
-            error: function () {
-                alert("Failed to reload Selectable Answer Data Entry Form!!");  //<-- Trap and alert of any errors if they occurred
-            }
-        }).done(function (d) {
-            $("#divATLoading").hide();
-            $("#divNewSA").html(d);
-        });    
-    }
-
-    // Not used anymore
-    //function loadModal(questionId, ddlId) {
-    //    //var questionId = btnClkd.attr('id').substring(8);
-    //    //alert("Load Modal for Question Id: " + questionId);
-    //    //var url = "/Question/QuestionAddUpdate/" + questionId;
-    //    var cft_id = $('#cft_id').val();
-    //    var url = "/LightQuestion/QuestionAddUpdateLight/" + questionId + "?cft_id="+cft_id;
-    //    opendialog(url, questionId, ddlId);
-    //}
-
-    @*//Not Used for the light version built-in pop up 04/16/2016
-    function opendialog(pageURL, questionId, ddlId) {       
-        var $dialog = $('#remoteWindow')
-        .html('<iframe style="border-style:double; border-width:4px; " src="' + pageURL + '" width="100%" height="100%"></iframe>')
-        .dialog({
-            title: "Question Maintenance",
-            autoOpen: false,
-            //dialogClass: 'dialog_fixed, ui-widget-header',
-            modal: true,
-            height: 620,
-            width: 1400,
-            minWidth: 800,
-            minHeight: 450,
-            draggable: false,
-            closeOnEscape: false,
-            //show: {
-            //    effect: "blind",
-            //    duration: 1000
-            //},
-            //hide: {
-            //    effect: "explode",
-            //    duration: 1000
-            //},
-            close: function() {
-                //alert("You have closed the popup for dropdown for ddl id =  " + ddlId);
-                $.ajax({
-                    url: '@Url.Action("reloadQuestionDropdown", "ColFormTemplate")',
-                    method: "GET",
-                    cache: false,
-                    data: { question_id: questionId, dropdownID: ddlId},
-                    error: function () {
-                        alert("Failed to reload the Answer Type Values!!");  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    //alert("Retrieved Data is: " + d);
-                    var dropdownId = "#" + ddlId;
-                    $(dropdownId).parents(".reloadDDL").first().html(d);
-                    //alert("Dropdown Id handle is: " + $(dropdownId).attr("id"));
-                });
-            },
-            /*close: function () { $(this).remove(); },*/
-            //buttons: { "Close": function () { $(this).dialog("close"); } }
-        });
-
-        $dialog.dialog('open');
-    }*@
-</script>
-
 
     @* ######################  J A V A    S C R I P T S    S E C T I O N   #################################### *@
     @****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
     <script>
-    function PostForm(btnClicked) {
-        var errorMsg = "";
-        var sectionCounter = 0;
-
-        // Validate the Form Fields
-        //Process all the form Sections to get Data to post
-        $("div.formSection").each(function () {
-            var formSection = $(this);
-            //var sectionTitleBox = $($(this).find("input.sectionTitle").first()).val();
-            var sectionTitleBox = formSection.find("input.sectionTitle").first();
-            var sectionName = sectionTitleBox.val().trim();
-            //Loopt thorugh all Dropdowns in this section to ensure that they have a valid selection
-            formSection.find(".viewDropDown").each(function () {
-                if ($(this).val() == "" || $(this).val() == "New") {
-                    $(this).css({
-                        "color": "white",
-                        "background-color": "red"
-                    });
-                    errorMsg = errorMsg + "One Dropdown has an invalid Selection\n";
-                }
-            });
-
-            //var dropdownArray = formSection.find(".viewDropDown");
-            //alert("Section " + sectionName + " has " + dropdownArray + " dropdowns.")
-
-            sectionCounter++;
-            if (sectionName == "") {
-                errorMsg = errorMsg + " Form Section " + sectionCounter + " is missing the Title.\n";
-                sectionTitleBox.addClass("invalidField");
-                sectionTitleBox.focus();
-            }
-            else {
-                formSection.find('.divFormQuestion').each(function () {
-                    // Process data for each of the QATs in the form
-                    var qatDDL = $(this).find(".viewDropDown").first();
-                    var selectedQAT = qatDDL.val();
-                    var isOptional = $(this).find("#cbOptional").prop("checked");
-
-                    if (isOptional) { isOptional = "Y"; }
-                    else { isOptional = "N" }
-                    //var trtrt = ""; //hdnFormQuestion
-                    //alert("A checkbox was found. Value : " + isOptional);
-                    var qatHiddenField = $(this).find(".hdnFormQuestion").first();
-                    qatHiddenField.val(selectedQAT + "~" + sectionName + "~" + isOptional);
-                    //alert("A question was found!\nSelected QATid = " + selectedQAT + "\nSection Name = " + sectionName + "\nFull Posting String: " + qatHiddenField.val());
-                    //alert("Question value to post = " + qatHiddenField.val());
-                });
-            }
-        });  // Finished Processing all Form Sections
-
-        // Validat the Start Date if the Form is being published
-        if (btnClicked.attr("id") == "btnPublishForm") {
-            document.getElementById("isPublished").value = "true"
-            if ($('#obs_cft_eff_st_dt').val() == "") {
-                errorMsg = errorMsg + "The Effective Start Date id required when Publishing a Form\n";
-                $('#obs_cft_eff_st_dt').addClass("invalidField");
-                $('#obs_cft_eff_st_dt').focus();
-            }
-        }
-        //Validate the Form Title
-        if (document.getElementById("cft_Title").value.trim() == "") {
-            errorMsg = errorMsg + "The form Title is Required\n";
-            $("#cft_Title").addClass("invalidField");
-            $("#cft_Title").focus();
-        }
-
-        if (errorMsg != "") {
-            //If any validation error is found
-            $('#btnSaveForm').button('reset');
-            alert(errorMsg);
-        }
-        else {
-            //Post the Form
-            //isChanged = false;  // To prevent the alert of leaving the page from showing up
-            $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
-            document.getElementById("CreateForm").submit();
-        }
-    }
-
 
     $(document).ready(function () {
         function getATcategory() {
@@ -1213,292 +909,14 @@
 </script>
 
     @*********************************************************************************************************************@
-    @*//- - - - - - - - -  Ajax Call to Retrieve and Display the Question List Search Results - - - - - - - - - - -\\*@
-    <script type="text/jscript">
-        $('#doSearch').click(function () {
-            var $btn = $(this);
-            $btn.button('loading');
-            var waitMsg = '<div style="text-align:center"><br /><br />Please wait while we retrieve the questions...<br /><br /><img src="../../Images/ui-anim_basic_16x16.gif" /></div>'
-
-            $("#resultPanel").html(waitMsg);
-
-            // ---- Fetch the Values that wil be used as parameters on the AJAX call -------
-            var searchText = $("#full_text_search").val();
-            var searchMD = $("#metadata_search").val();
-            // ------------ Make the Ajax Call ---------------------------------------------
-            $.ajax({
-                @*url: '@Url.Action("getQuestions", "ColFormTemplate", new { full_text_search = searchText, metadata_search = searchMD })',*@
-                url: '@Url.Action("getQuestionsList", "ColFormTemplate")',
-                method: "GET",
-                cache: false,
-                data: { full_text_search: searchText, metadata_search: searchMD, page: 1, pageSize: 30 },     //<---- Data Parameters (if not already passed in the Url)
-                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-                //--- On error, execute this function ------
-                error: function () {
-                    alert("Failed to render the Question List from the Database !!");  //<-- Trap and alert of any errors if they occurred
-                    $btn.button('reset');
-                }
-            }).done(function (d) {
-                //Execute this code After the Ajax call completes successfully
-                $("#resultPanel").html(d);
-                //$("#dummyResults ul").append('<li id="qId017" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 017</span>last question New</li>');
-
-                //Make the New Source List Dragable
-                $(".sourceList li").draggable({
-                    //If you want to limit the area inside which a user can drag elements,
-                    // Simply set the "appendTo" attribute to  "#myContainerName" or similar.
-                    addClasses: false,
-                    appendTo: "body",
-                    helper: "clone"
-                });
-
-                //Make the Target List Dropable and force it to accept newly created source List
-                makeSectionsDropable();
-                $btn.button('reset');
-            });
-        });
-
-
-
-        $('#doSearchDummyData').click(function () {
-            // ---- This is a simmulated call that returns mocked up Results -------
-            var $btn = $(this);
-            $btn.button('loading');
-            $('#dummyResults').show();
-            //displayMsg("Data Retrieved Successfully.");
-
-            //Make the New Source List Dragable
-            $(".sourceList li").draggable({
-                //If you want to limit the area inside which a user can drag elements,
-                // Simply set the "appendTo" attribute to  "#myContainerName" or similar.
-                addClasses: false,
-                appendTo: "body",
-                helper: "clone"
-            });
-
-            //Make the Target List Dropable and force it to accept newly created source List
-            makeSectionsDropable();
-            $btn.button('reset');
-        });
-
-    </script>
-
 
     @*//- - - - - - - - -  Ajax Call to Retrieve and Display the Question List Search Results - - - - - - - - - - -\\*@
 
 
    @* --- Drag and Drop Java Script - - - - - *@
     <script type="text/javascript">
-        // Function to call everytime we do a drag and drop
-        function updateValues(msg) {
-            alert(msg);
 
-            //var items = [];
-            //$("ul.target").children().each(function () {
-            //    var item = { manufacturer: $(this).text() };
-            //    items.push(item);
-            //});
-            //var jsonData = JSON.stringify(items);
-            //$.ajax({
-            //    url: "dnd.xsp/setfavourites",
-            //    type: "PUT",
-            //    data: jsonData,
-            //    dataType: "json",
-            //    contentType: "application/json; charset=utf-8",
-            //    success: function () { },
-            //    error: function () { }
-            //});
-        };
-
-        function makeSectionsDropable() {
-            $(".targetList").droppable({
-                addClasses: false,
-                activeClass: "listActive",
-                accept: ":not(.ui-sortable-helper)",
-                drop: function (event, ui) {
-                    //This function is executed everytime an item is dragged and dropped (After drop)
-                    $(this).find(".placeholder").remove();
-
-                    var link = $("<a href='#' class='dismiss'>x</a>");
-
-                    var qid = ui.draggable.attr("id");
-                    //var listId = "liID" + qid;
-
-                    //var list = $("<li></li>").text(ui.draggable.text());
-                    //var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text("Question Id is: " + qid); //    .setAttribute('class', 'newliItem');
-                    var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text(""); //    .setAttribute('class', 'newliItem');
-
-                    //list.setAttribute('class', 'newliItem');
-                    //alert($(list).attr("id"));   //It works, the Id is "li99" (99=qid)
-                    $(list).append(link);
-                    $(list).appendTo(this);
-
-                    //getQinfo(qid);
-                    //updateValues(ui.draggable.text().substring(3, 5));
-
-                    // updateValues("Question Added Successfully: " + getTestData(qid));   //Method invoked when action is dropped successfully
-
-                    //Added second parameter to keep original state of the selected QAT in the dropdown
-                    getQinfo(qid, 0);
-                    $("#formChanged").val("Y");
-                    $("#btnCancel").removeAttr('disabled');
-                    //Scroll the Panel to the botton
-                    // Check if we added a question to the last section. If so, scroll the panel to the button
-                    //panel id = qFormList                    
-                    //alert("Id: " + $(this).attr("id") + " Was selected.")  //The olListxx Id were the question was dropped
-                    //alert("This is panel " + $(this).attr("id").substring(6) + " out of " + $("#qFormList").find(".targetList").length);
-                }
-            }).sortable({
-                connectWith: ".connected",
-                items: "li:not(.placeholder)",                
-                //start: function (event, ui) {
-                //},
-                //stop: function (event, ui) {
-                //    var item = $(ui.item);
-                //    alert($(this).attr("id"));
-                //    var to = item.parent().is("#droppable_widget");
-                //    var siblingsCount = item.siblings().size();
-                //    if (to && siblingsCount > 0) {
-                //        alert("only one item allowed here");
-                //        return false;
-                //    }
-                //},
-
-                sort: function () {
-                    $(this).removeClass("listActive");
-                },
-                //beforeStop: function(ev, ui) {
-                //    if ($(ui.item).hasClass('innerListItem') ) {
-                //        $(this).sortable('cancel');
-                //    }
-                //},
-                update: function () {
-                    //This function is executed everythime an item is sorted complete (After sort)
-                    var qid2 = $(this).qid;
-                    $(this).find(".placeholder").remove();
-                    $("#formChanged").val("Y");
-                    $("#btnCancel").removeAttr('disabled');
-                    //updateValues("An Item was reordered." + +getTestData(qid2));  // Call function After Sorting
-                }
-            }).on("click", ".dismiss", function (event) {
-                event.preventDefault();
-                //var qdelId = $(this).parent().attr("id");
-                $(this).parent().remove();
-                // updateValues("An Item was Deleted");  //If we want to call a function when item is dragged/dropped
-            });
-
-            //Finally make sure the Section Title are autocomplete
-            $(".sectionTitle").autocomplete({
-                source: "/ColFormTemplate/SectionNameLookup",
-                minLength: 1,
-                select: function( event, ui ) {
-                    //Perform 'error reset' steps after a valid selection is done from the autocomplete list
-                    $('#btnSaveForm').button('reset');
-                    $(this).css({
-                        "color": "black",
-                        "background-color": "white"
-                    });
-                }
-            });
-
-            $(".sectionTitle").on("change", function(){
-                if ($(this).val() == "")
-                {
-                    $(this).css({
-                        "color": "white",
-                        "background-color": "red"
-                    });
-                }
-                else{
-                    //Perform 'error reset' steps after a valid selection is done from the autocomplete list
-                    $('#btnSaveForm').button('reset');
-                    $(this).css({
-                        "color": "black",
-                        "background-color": "white"
-                    });                
-                }
-            });
-
-        }
-        //Sample Code:
-        //looping in javascript through all the child elements of the target list
-        //var items = [];
-        //$("ul.target").children().each(function () {
-        //    var item = { manufacturer: $(this).data("stock-symbol") };
-        //    items.push(item);
-        //});
-        //var jsonData = JSON.stringify(items);
-        //
-        //or
-        //
-        //var items = [];
-        //$("ul.target").children().each(function () {
-        //    var item = { manufacturer: $(this).text() };
-        //    items.push(item);
-        //});
-        //var jsonData = JSON.stringify(items);
-        //
-        //
-        //and then we can also invoke Ajax call to manipulate/retrieve DataCue
-        //$.ajax ({
-        //    url: "dnd.xsp/setfavourites",
-        //    type: "PUT",
-        //    data: jsonData,
-        //    dataType: "json",
-        //    contentType: "application/json; charset=utf-8",
-        //    success: function(){},
-        //    error: function(){}
-        //});
-
-
-
-        @*function addQidOLD(ev) {
-            var newCounterSeq = $("#qCounter").val();
-            var qid = ev.dataTransfer.getData("Text"); // "Id" of the dragged data element
-            //var target = ev.target || ev.srcElement;
-            //var myId = $(event.target).attr("id");;
-
-            ev.target.style.border = "";
-            //event.target.appendChild(document.getElementById(dataId));
-
-
-            // ------------ Make the Ajax Call ---------------------------------------------
-            $.ajax({
-                url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
-                method: "GET",
-                cache: false,
-                data: { question_id: qid, qCounter: newCounterSeq },     //<---- Data Parameters (if not already passed in the Url)
-                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-                //--- On error, execute this function ------
-                error: function () {
-                    alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-                    //$btn.button('reset');
-                }
-            }).done(function (d) {
-                //Execute this code After the Ajax call completes successfully
-                //ev.target.append(d);
-                var targetId = $(this);
-                //alert('Source Id is: ' + qid + ' & Target Id is: ' + targetId.id);
-                $mydata = $(ev.target);
-                $mydata.append(d);
-
-                $('#qCounter').val(Number($('#qCounter').val()) + 1);
-                //alert("You jusr added question View Id: " + "qRow" + newCounterSeq)
-                //ev.target.html(d);
-                //$("#questionPnl01").append(d);
-                //$btn.button('reset');
-            });
-        }*@
-
-        //------------------------------------------------------------------
+       //------------------------------------------------------------------
         function getQinfo(questionId, questionQATid) {
             var newCounterSeq = $("#qCounter").val();
             //var newCounterSeq = 1;
@@ -1557,13 +975,7 @@
         }
 
 
-        function getTestData(questionId) {
-            return "[You Selected Question Id: " + questionId + "]";
-        }
 
-        function removeSection(qSectionId) {
-            $("#" + qSectionId).remove();
-        }
     </script>
 
     @* - - - - - - - SCRIPT TO ADD A NEW SECTION TO THE FORM AND SET THE "FORM CHANGED" STATUS when form is modified- - - - - - - - - - *@
@@ -1627,27 +1039,6 @@
                 }
             });
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            $("#btnSaveForm").click(function () {
-                //isChanged = false;
-                $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
-                $(this).button('loading');
-            });
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            $('#btnAddSection').click(function () {
-                var $btn = $(this);
-                $btn.button('loading');
-                addNewSection();
-                $btn.button('reset');
-
-                //Automatically Scroll to the botton of the Panel where the new Section was Inserted
-                //If we wanted to scroll to the top, we would set the "height = 0"
-                height = scrollPanel[0].scrollHeight;
-                scroll.call(scrollPanel, height);
-
-
-                //$('#qFormList').scrollTop($('#qFormList').scrollHeight);
-            })
-
 
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         });  // END Of documetn Ready Startup Scripts
@@ -1655,36 +1046,6 @@
         function addNewSection() {
             $('#sCounter').val(Number($('#sCounter').val()) + 1);
             // ------------ Make the Ajax Call ---------------------------------------------
-            $.ajax({
-                url: '@Url.Action("addNewSection", "ColFormTemplate")',
-                method: "GET",
-                cache: false,
-                data: { sCounter: $('#sCounter').val() },     //<---- Data Parameters (if not already passed in the Url)
-                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-                //--- On error, execute this function ------
-                error: function () {
-                    alert("An Error has Occurred. Unable to Add New Sections to Form!!");  //<-- Trap and alert of any errors if they occurred
-                    $btn.button('reset');
-                }
-            }).done(function (d) {
-                //Execute this code After the Ajax call completes successfully
-                $("#accordion").append(d);
-                makeSectionsDropable();
-                // Reenable the "form change" validation on the newly created section
-                $('input').change(function () {
-                    $("#formChanged").val("Y");
-                    //isChanged = true;
-                    $("#btnSaveForm").removeAttr('disabled');
-                    $('#btnSaveForm').button('reset');
-                    $(this).removeClass("invalidField");
-                });
-            });
-
-            } // ------ End of addNewSection() function -----
 
             function enableDropDown(dropdown) {
                 //var $drop_down = $(this);
@@ -1745,6 +1106,7 @@
                         });
                     }
                 }
+
                 @*var cur_sel = document.getElementById("currentSelectedQAT"+@Model.uniqueCounter);
             cur_sel.value = selectedId;*@
 

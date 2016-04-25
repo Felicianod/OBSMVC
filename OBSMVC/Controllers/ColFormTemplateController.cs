@@ -324,10 +324,6 @@ namespace OBSMVC.Controllers
         {
             int cftid = id ?? 0;
             oCollectionForm selectedColForm = new oCollectionForm(cftid);
-            if (selectedColForm.cft_isPublished == "PUBLISHED")
-            {
-                return RedirectToAction("Details", new { id = cftid });
-            }
 
             if (cftid > 0)
             {                
@@ -358,7 +354,14 @@ namespace OBSMVC.Controllers
 
             ViewBag.cft_Cust = new SelectList(db.DSC_CUSTOMER.Where(x => x.dsc_cust_id >= 0), "dsc_cust_id", "dsc_cust_name", selected_cust);
             ViewBag.cft_LC = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id >= 0).OrderBy(y=>y.dsc_lc_name), "dsc_lc_id", "dsc_lc_name", selected_lc);
-            return View(selectedColForm);
+
+            if (!selectedColForm.manageAction.Equals(""))
+            { // Is published and it has instances
+                return View("ManageForm", selectedColForm);
+            }
+            else {
+                return View(selectedColForm);
+            }
         }
 
 
@@ -383,6 +386,32 @@ namespace OBSMVC.Controllers
             }
             
             //return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public bool deleteForm(int cft_id)
+        {
+            OBS_COLLECT_FORM_TMPLT formToDelete = db.OBS_COLLECT_FORM_TMPLT.Find(cft_id);
+            int qCount = db.OBS_COL_FORM_QUESTIONS.Count(x => x.obs_cft_id == cft_id);
+
+            if (qCount > 0 || formToDelete == null)
+            {
+                //The form has question on it or it was not found on the Database.  It cannot be deleted!
+                return false;
+            }
+            else
+            {// It is in the database and it has no questions
+                try
+                { //Try Removing it from the DB
+                    db.OBS_COLLECT_FORM_TMPLT.Remove(formToDelete);
+                    db.SaveChanges();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
         }
 
         public ActionResult Create()
@@ -1367,6 +1396,7 @@ namespace OBSMVC.Controllers
             { // A matching cft form was found in the database. Assume we are in "edit" mode
                 screen_Title = "Collection Form Maintenance";
                 cft_editMode = "edit";
+                hasInstances = db.OBS_COLLECT_FORM_INST.Count(x => x.obs_cft_id == cft_id) > 0 ? true:false;
                 cft_Title = q.cft_Title;
                 cft_SubTitle = q.cft_SubTitle;
                 cft_obsType = q.cft_obsType;
@@ -1380,6 +1410,11 @@ namespace OBSMVC.Controllers
                 cft_eff_end_dt = q.cft_eff_end_dt;
                 colFormSections = new List<CollectionFormSection>();
                 retrieveQuestionData();
+                if (cft_isPublished.Equals("PUBLISHED"))
+                {
+                    manageAction = hasInstances ? "NEW VERSION" : "EDIT";
+                }
+                else { manageAction = ""; }
             }
             else { 
             // Form Id not found in the database, leave all values empty. Assume we are in "add" mode
@@ -1392,6 +1427,8 @@ namespace OBSMVC.Controllers
                 //cft_LC = q.cft_LC;
                 //cft_Status = q.cft_Status;
                 cft_isPublished = "NOT PUBLISHED";
+                hasInstances = false;
+                manageAction = "";
                 cft_Nbr = 0;
                 cft_Version = 0;
                 colFormSections = new List<CollectionFormSection>();
@@ -1421,6 +1458,8 @@ namespace OBSMVC.Controllers
         public string str_cft_eff_st_dt { get; set; }
         public string str_cft_eff_end_dt { get; set; }
         public bool str_cft_canBdeleted { get; set; }
+        public bool hasInstances { get; set; }
+        public string manageAction { get; set; }
         public List<CollectionFormSection> colFormSections { get; set; }
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\\
         //- - - - - - - - - - - - CLASS METHODS - - - - - - - - - - - - - - - - |

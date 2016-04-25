@@ -113,8 +113,8 @@
         <td style="text-align:center">
             @if (item.isActive || item.isPublished)
             {
-                @*@Html.ActionLink("Manage", "Details", new { id = item.OBSformID })*@
-                <text>Manage</text>
+                @Html.ActionLink("Manage", "AddEditForm", new { id = item.OBSformID })
+                @*<text>Manage</text>*@
             }
             else
             {@Html.ActionLink("Edit", "AddEditForm", new { id = item.OBSformID })}

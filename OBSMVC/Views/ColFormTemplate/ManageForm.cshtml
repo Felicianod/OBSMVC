@@ -302,9 +302,14 @@
 @*<div class="well well-sm" style="padding: 4px; font-size:xx-large; text-align:center; margin-bottom:8px">
     @Model.screen_Title
 </div>*@
-        <div class="well well-sm smallRowMargin" style="padding: 4px; font-size:xx-large; text-align:center; margin-bottom:8px">
-            <span>@Model.screen_Title</span>
-        </div>      
+<div class="row" style="margin-left:10px">
+    <div class="well well-sm smallRowMargin col-sm-11" style="padding: 4px; font-size:xx-large; margin-bottom:8px; text-align:center">
+        <span>@Model.screen_Title</span>
+    </div>
+    <div class="col-sm-1" style="padding: 4px; margin-bottom:8px; text-align:right">
+        <button type="button" class="btn btnAdd" id="btnManageAction" style="width:110px">@Model.manageAction</button>
+    </div>
+</div>
 
 @if (!String.IsNullOrEmpty(ViewBag.exception))
 {

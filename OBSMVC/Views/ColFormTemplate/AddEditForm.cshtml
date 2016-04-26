@@ -4,6 +4,11 @@
 
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+@{
+    var testVariable = @Model.manageAction.Substring(0,6);
+    var canEnabled = (testVariable == "MANAGE")?"disabled":"";  
+  }
+
 
 <style>
     body > li {
@@ -201,6 +206,8 @@
 
 <script>
     $(document).ready(function(){
+        if (@testVariable == "MANAGE"){$("#formChanged").val("Y");}
+        
         $(".modal-wide").on("show.bs.modal", function() {
             var height = $(window).height() - 200;
             $(this).find(".modal-body").css("max-height", height);
@@ -557,10 +564,10 @@
             <div class="col-sm-offset-5 col-sm-4">
                 <input id="btnSaveForm" type="button" value="Save Form" onclick="PostForm($(this))" @*disabled="disabled"*@ />
                 &nbsp;&nbsp;
-                <input id="btnPublishForm" type="button" value="Publish Form" onclick="PostForm($(this))" @if (@Model.cft_isPublished == "PUBLISHED" ) { <text> disabled="disabled" </text>   } />
+                <input id="btnPublishForm" type="button" value="Publish Form" onclick="PostForm($(this))" @if (@Model.cft_isPublished == "PUBLISHED" ) { <text> disabled="disabled" readonly</text>   } />
             </div>
             <div class="col-sm-3">
-                <button type="button" class="btn btn-warning" id="btnCancel" disabled>Reset/Cancel</button>
+                <button type="button" class="btn btn-warning" id="btnCancel" @canEnabled>Reset/Cancel</button>
             </div>
         </div>
         @*\\ - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - //*@

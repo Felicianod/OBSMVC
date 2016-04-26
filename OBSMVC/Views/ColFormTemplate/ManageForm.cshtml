@@ -250,7 +250,8 @@
     </div>
     <div class="col-sm-1" style="padding: 4px; margin-bottom:8px; text-align:right">
         <form method="post">
-            <input type="hidden" id="id" name="id" value="Model.cft_id.ToString()" />
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="id" name="id" value="@Model.cft_id.ToString()" />
             <input type="hidden" id="frmAction" name="frmAction" value="@Model.manageAction" />
             <button type="submit" class="btn btnAdd" id="btnManageAction" style="width:110px">@Model.manageAction</button>
         </form>        
@@ -268,7 +269,7 @@
  <input type="hidden" id="formChanged" value="N">
     @*\\ ---- End of Hidden Control Fields section ----- *@
 
-    @Html.AntiForgeryToken()
+
     <input type="hidden" id="cft_id" value="@fMode" />
 
     <div class="panel panel-default" style="margin-bottom:8px">

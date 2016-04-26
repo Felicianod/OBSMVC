@@ -366,10 +366,10 @@ namespace OBSMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddEditForm(oCollectionForm colForm, FormCollection formData, int? id, string flag_from_feliciano)
+        public ActionResult AddEditForm(oCollectionForm colForm, FormCollection formData, int? id, string frmAction)
         {
             int cft_id = id ?? -1;
-            if (flag_from_feliciano == "true")//this means we're came here from Manage form and user needs to unpublish this form
+            if (!String.IsNullOrEmpty(frmAction))//this means we're came here from Manage form and user needs to unpublish this form
             {
                 OBS_COLLECT_FORM_TMPLT form_to_unpublish = db.OBS_COLLECT_FORM_TMPLT.Find(cft_id);
                 oCollectionForm selectedColForm = new oCollectionForm(cft_id);

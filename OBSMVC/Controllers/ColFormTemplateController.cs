@@ -307,7 +307,7 @@ namespace OBSMVC.Controllers
 
 
         // GET: ColFormTemplate/Details/5
-        public ActionResult Details(int id, string origin)
+        public ActionResult Details(int id)
         {
             //if (id == null) { return HttpNotFound(); }
 
@@ -327,7 +327,7 @@ namespace OBSMVC.Controllers
             oCollectionForm selectedColForm = new oCollectionForm(cftid);
             
             if (cftid > 0)
-            {
+            {                
                 string frmAction = String.Empty;
                 try
                 {

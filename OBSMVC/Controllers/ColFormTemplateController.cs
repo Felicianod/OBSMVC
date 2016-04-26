@@ -1575,7 +1575,7 @@ namespace OBSMVC.Controllers
                     oQuestion.cfq_questId = q.OBS_QUEST_ANS_TYPES.obs_question_id;
                     oQuestion.cfq_order = q.obs_col_form_quest_order;
                     oQuestion.cfq_seqInForm = questionCounter.ToString("00");
-                    oQuestion.cfq_fullText = q.OBS_QUEST_ANS_TYPES.OBS_QUESTION.obs_question_full_text.Replace(": (", ":<br/>(").Replace(System.Environment.NewLine.ToString(), "").Trim();
+                    oQuestion.cfq_fullText = q.OBS_QUEST_ANS_TYPES.OBS_QUESTION.obs_question_full_text.Replace(System.Environment.NewLine.ToString(), "").Trim();
                     oQuestion.cfq_AT = q.OBS_QUEST_ANS_TYPES.OBS_ANS_TYPE.obs_ans_type_name;
                     oQuestion.cfq_qatId = q.obs_qat_id;
                     oQuestion.cfq_na_yn = q.obs_col_form_quest_na_yn;

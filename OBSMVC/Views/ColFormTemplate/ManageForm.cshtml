@@ -390,241 +390,70 @@
     @* ######################  J A V A    S C R I P T S    S E C T I O N   #################################### *@
     @****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
     <script>
-
         $(document).ready(function () {
+            function getATcategory() {
+                var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
+                if (selectedText == "3 Val") {
+                    return "3 Val Range"
+                }
+                else if (selectedText == "5 Val") {
+                    return "5 Val Range";
+                }
+                else {
+                    return "Other"
+                }
+            };
+
+            var selCathegory = getATcategory();
+
 
             $("#btnManageAction").click(function(){
-                alert("Posting Data...");
-                @*$.ajax({
+                var frmAction = "@Model.manageAction";
+                var formId = "@Model.cft_id";
+
+                alert("Posting Data: " + frmAction + " for Form Id: " + formId);
+                $.ajax({
                     url: '@Url.Action("addEditForm", "ColFormTemplate")',
                     method: "POST",
                     cache: false,
-                    data: { id: formId, reEdit: "true" },
+                    data: { id: formId, action: frmAction},
                     error: function () {
                         alert("An error occurred while switching to Edit Mode!!");  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
-                    if (d == "True") {
-                        var searchText = '"' + $("#modalQFullText").val() + '"';
-                        $("#modalQFullText").val("");
-                        $("#modalQDesc").val("");
-                        //alert("Data Posted Successfully!");
+                    alert("Data posted Successfully");
+                });
 
-                        // Close the popup
-                        //$("#addQuestionWindow").dialog( "close" );
-                        $("#btnCancelLibQuestion").click();
-                        // Perform ajax to "search" the recently saved question
-                        $("#full_text_search").val(searchText);
-                        $('#doSearch').click();
-                        $("#full_text_search").val("");
-                    }
-                    else {
-                        alert("ERROR Saving Data: " + d);
-                    }*@
-                });            
+
+            $('.collapse').on('show.bs.collapse', function () {
+                $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
+            }).on('hide.bs.collapse', function () {
+                $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
             });
+            $("#btnCancel").click(function () {
+                if ( $("#formChanged").val() == "Y")
+                {
+                    $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window
 
-        function getATcategory() {
-            var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
-            if (selectedText == "3 Val") {
-                return "3 Val Range"
-            }
-            else if (selectedText == "5 Val") {
-                return "5 Val Range";
-            }
-            else {
-                return "Other"
-            }
-        };
-
-        var selCathegory = getATcategory();
-
-        $("input:text").focus(function () { $(this).select(); });
-
-        $('.collapse').on('show.bs.collapse', function () {
-            $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
-        }).on('hide.bs.collapse', function () {
-            $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
-        });
-
-        $("#btnCancel").click(function () {
-            if ( $("#formChanged").val() == "Y")
-            {
-                $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window
-
-                $( "#dialog-confirm-reset" ).dialog({
-                    resizable: false,
-                    height:200,
-                    modal: true,
-                    buttons: {
-                        "Reset Form": function() {
-                            $("#formChanged").val("N");
-                            //isChanged.val("N");
-                            location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
-                        },
-                        Cancel: function() {
-                            $( this ).dialog( "close" );
+                    $( "#dialog-confirm-reset" ).dialog({
+                        resizable: false,
+                        height:200,
+                        modal: true,
+                        buttons: {
+                            "Reset Form": function() {
+                                $("#formChanged").val("N");
+                                //isChanged.val("N");
+                                location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
+                            },
+                            Cancel: function() {
+                                $( this ).dialog( "close" );
+                            }
                         }
-                    }
-                });
-
-                @*if (confirm("Your form has been modified.\nAre you sure you want to reset all changes?")) {
-                        $("#formChanged").val("N");
-                        //isChanged.val("N");
-                        location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
-                    }*@
-
-            }
-        });
-
-
-        $('#cft_eff_st_dt').datepicker({
-            dateFormat: 'M dd, yy',
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            minDate: -0,
-            //minDate: -0,
-            //maxDate: "+1M +10D",
-            onClose: function (selectedDate) {
-                $("#cft_eff_end_dt").datepicker("option", "minDate", selectedDate);
-            },
-            useCurrent: false //Important! See issue #1075
-        });
-
-        $('#cft_eff_end_dt').datepicker({
-            dateFormat: 'M dd, yy',
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            minDate: -0,
-            onClose: function (selectedDate) {
-                $("#cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
-            },
-            useCurrent: false //Important! See issue #1075
-        });
-
-        $('#CreateForm').keypress(function (e) {
-            if (e.keyCode == 13)
-            {
-                $('#doSearch').click();
-            }
-        });
-
-        $('[data-toggle="tooltip"]').tooltip();
-
-
-
-        $("#btnAddQuestionPopup").click(function () {
-            $("#addQuestionWindow").modal();
-        });
-
-        $("#btnSaveLibQuestion").click(function () {
-            if ($("#modalQFullText").val().trim() == "") {
-                $("#msgAddQ").show();
-                $("#btnSaveLibQuestion").prop("disabled", true);
-                //alert("The Question Text is required.\nPlease review your input.");
-            }
-            else {
-                $.ajax({
-                    url: '@Url.Action("addNewQuestion", "ColFormTemplate")',
-                    method: "POST",
-                    cache: false,
-                    data: { full_text: $("#modalQFullText").val(), desc: $("#modalQDesc").val() },
-                    error: function () {
-                        alert("An error occurred when saving the question information to the LIbrary Database!!");  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    if (d == "True") {
-                        var searchText = '"' + $("#modalQFullText").val() + '"';
-                        $("#modalQFullText").val("");
-                        $("#modalQDesc").val("");
-                        //alert("Data Posted Successfully!");
-
-                        // Close the popup
-                        //$("#addQuestionWindow").dialog( "close" );
-                        $("#btnCancelLibQuestion").click();
-                        // Perform ajax to "search" the recently saved question
-                        $("#full_text_search").val(searchText);
-                        $('#doSearch').click();
-                        $("#full_text_search").val("");
-                    }
-                    else {
-                        alert("ERROR Saving Data: " + d);
-                    }
-                });
-            }
-        }); //--------- End of btnSaveLibQuestion click() event
-
-
-        $('textarea').on('keydown keyup change focus blur', function(e) {
-            if (e.type === 'change') {
-                // this event is triggered when the text is changed through drag and drop too,
-                // or by pasting something inside the textarea;
-
-                // remove commas with empty
-                $(this).val($(this).val().replace(/,/,"","g"));
-                // remove carriage returns (\r) and newlines (\n) with spaces:
-                $(this).val($(this).val().replace(/\r?\n/g, ' '));
-                //$textarea.val($textarea.val().replace(/[,\n\r]/," ","g");
-            }
-            // the enter key has been pressed, avoid producing a carriage return from it:
-            if (e.which === 13) {
-                e.preventDefault();
-            }
-        });
-
-        $('input').not(".searchBox").on('keydown keyup change ', function (e) {
-            $("#btnSaveForm").removeAttr('disabled');
-            $("#btnCancel").removeAttr('disabled');
-            $("#formChanged").val("Y");   // Re-enable the form "changed" status
-        });
-
-        $('input').not(".searchBox").not(".qInput").on('keydown keyup change ', function (e) {
-            $("#btnSaveForm").removeAttr('disabled');
-            $("#btnCancel").removeAttr('disabled');
-            $("#formChanged").val("Y");   // Re-enable the form "changed" status
-        });
-
-        $('.qInput').on('keydown keyup change ', function (e) {
-            $("#btnSaveLibQuestion").removeAttr('disabled');
-            $("#msgAddQ").hide();
-        });
-
-        $("#btnCancelLibQuestion").click(function(){
-            $(".qInput").val("");
-            $("#btnSaveLibQuestion").prop('disabled', true);
-        });
-
-        $("#btnDeleteForever").click(function(){
-            // Perform an Ajax call to either hard or soft delete the current form
-            $.ajax({
-                url: '@Url.Action("deleteForm", "ColFormTemplate")',
-                method: "POST",
-                cache: false,
-                data: { cft_id: @Model.cft_id },     //<---- Data Parameters (if not already passed in the Url)
-                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-                //--- On error, execute this function ------
-                error: function () {
-                    alert("Failed to Remove Form id " + @Model.cft_id+ " from Database !!");  //<-- Trap and alert of any errors if they occurred
+                    });
                 }
-            }).done(function (d) {
-                //Execute this code After the Ajax call completes successfully
-                //alert("Form Id: " + @Model.cft_id + " has been Deleted!")
-                location.href = "/ColFormTemplate/";
-            });            
+            });
+        
         });
-
-
-        function removeQuestion(qRowId) {
-            $("#" + qRowId).remove();
-        }
-
-    });
 </script>
 
     @*********************************************************************************************************************@
@@ -693,5 +522,3 @@
             });
         }
     </script>
-
-

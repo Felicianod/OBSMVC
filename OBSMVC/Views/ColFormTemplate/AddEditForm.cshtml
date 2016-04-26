@@ -1159,7 +1159,7 @@
                 //$textarea.val($textarea.val().replace(/[,\n\r]/," ","g");
             }
             // the enter key has been pressed, avoid producing a carriage return from it:
-            if (e.which === 13) {
+            if (e.which === 13 || e.which === 188) {
                 e.preventDefault();
             }
         });

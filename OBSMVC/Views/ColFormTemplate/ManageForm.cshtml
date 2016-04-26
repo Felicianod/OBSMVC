@@ -27,14 +27,6 @@
       background-color: #fcfcfc;
       padding: 0.5em 0 3em 0 !important;
     }
-    .placeholder {
-      list-style-type: none;
-      text-align: center;
-      font-style: italic;
-      border: 1px dashed #ddd !important;
-      background-color: #fff !important;
-      color: #aaa !important;
-    }
     .dismiss {
       float: right;
       position: relative;
@@ -201,56 +193,6 @@
 
 <script>
     $(document).ready(function(){
-        $(".modal-wide").on("show.bs.modal", function() {
-            var height = $(window).height() - 200;
-            $(this).find(".modal-body").css("max-height", height);
-        });
-
-        $("#editQATWindow").on('hidden.bs.modal', function () {
-            // If the form was recently saved/posted successfuly, this indicates a change on the AT list
-            // reload the drop down with the new values
-            var dropdownId = "#" + $("#popupDDLid").val();
-
-            if ($("#popupStatus").val() == "saved"){
-                //alert('Selectable Answer Edit Mode completed for drop down control id ' + modalddlId + "\nList is being refreshed...");
-                var questionId = $("#popupQID").val();
-                var modalddlId = $("#popupDDLid").val();
-
-                //alert("Modal is closed, question ID = " + questionId + ", drpdown Id=" + modalddlId + " and selected QATid= '" + $("#savedQATid").val() + "' will be reloaded");
-
-                $.ajax({
-                    url: '@Url.Action("reloadQuestionDropdown", "ColFormTemplate")',
-                    method: "GET",
-                    cache: false,
-                    data: { question_id: questionId, dropdownID: modalddlId, selectedQATid: $("#savedQATid").val()},
-                    error: function () {
-                        alert("Failed to reload the Answer Type Values!!");  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    //alert("Retrieved Data is: " + d);
-                    
-                    $(dropdownId).parents(".reloadDDL").first().html(d);
-                    //alert("Dropdown Id handle is: " + $(dropdownId).attr("id"));
-
-                    //After Dropdown is loaded, retrieve the selectable answers for the item that is selected on the dropdown
-                    resetSelAns(questionId, dropdownId);
-                });
-            }
-            else{
-                //Modal Form was nor saved, so we just need to restore the previusly selected value on the dropdown list
-                var dropDownIdused = "#" + $("#popupDDLid").val();
-                var dropDownStoredValue = $("#ddlSelValue").val();
-                var stringUsed = dropDownIdused + " option[value='" + dropDownStoredValue + "']";
-                //alert(stringUsed);
-                //alert("Changes aborted... Restoring value for dropdown '" + dropDownIdused + "' to: " + dropDownStoredValue );
-
-                //$(stringUsed).attr('selected', 'selected'); // added single quotes
-                //For NOw default the selected Option to the first index
-                $(dropDownIdused + " option:contains(" + "Answer" + ")").attr('selected', 'selected');  //Reset dropdown to the first index
-
-                $(dropdownId).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");
-            }
-        });
 
         //$("#addQuestionWindow").on('hidden.bs.modal', function () {
         
@@ -323,8 +265,7 @@
     @*\\ ---- End of Hidden Control Fields section ----- *@
 
     @Html.AntiForgeryToken()
-        <input type="hidden" id="cft_id" value="@fMode" />
-        
+    <input type="hidden" id="cft_id" value="@fMode" />
 
     <div class="panel panel-default" style="margin-bottom:8px">
         @* - - - - - - - - - - - - - - <<<<< STARTS OF FORM HEADER >>>>> - - - - - - - - - - - - - *@
@@ -333,14 +274,13 @@
                 <div class="col-sm-7">
                     <div class="input-group">
                         <div class="input-group-addon">Form Title:</div>
-                        @Html.EditorFor(model => model.cft_Title, new { htmlAttributes = new { @class = "form-control", required = "required", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
+                        @Html.EditorFor(model => model.cft_Title, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", disabled = "disabled", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold"} })
                     </div>
-                    @Html.ValidationMessageFor(model => model.cft_Title, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-sm-5">
                     <div class="input-group">
                         <div class="input-group-addon">Subtitle:</div>
-                        @Html.EditorFor(model => model.cft_SubTitle, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
+                        @Html.EditorFor(model => model.cft_SubTitle, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", disabled = "disabled", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold"} })
                     </div>
                 </div>
             </div>
@@ -350,21 +290,21 @@
                     <div class="input-group">
                         <div class="input-group-addon">Observation Type</div>
                         @*@Html.DropDownListFor(model => model.cft_obsType, ViewBag.cft_obsType as SelectList, new { @class = "form-control", name = "cft_obsType" })*@
-                        @Html.DropDownList("cft_obsType", null,"- Select Observation Type -", htmlAttributes: new { @class = "form-control", name = "cft_obsType" })
+                        @Html.DropDownList("cft_obsType", null, "- Select Observation Type -", htmlAttributes: new { @class = "form-control", name = "cft_obsType", @readonly = "readonly", disabled = "disabled" })
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="input-group">
                         <div class="input-group-addon">Customer</div>
                         @*@Html.DropDownListFor(model => model.cft_Cust, ViewBag.cft_Cust as SelectList, new { @class = "form-control", name = "cft_Cust" })*@
-                        @Html.DropDownList("cft_Cust", null, htmlAttributes: new { @class = "form-control", name = "cft_Cust" })
+                        @Html.DropDownList("cft_Cust", null, htmlAttributes: new { @class = "form-control", name = "cft_Cust", @readonly = "readonly", disabled = "disabled" })
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="input-group">
                         <div class="input-group-addon">Whse Location</div>
                         @*@Html.DropDownListFor(model => model.cft_LC, ViewBag.cft_LC as SelectList, new { @class = "form-control", name = "cft_LC" })*@
-                        @Html.DropDownList("cft_LC", null, htmlAttributes: new { @class = "form-control", name = "cft_LC" })
+                        @Html.DropDownList("cft_LC", null, htmlAttributes: new { @class = "form-control", name = "cft_LC", @readonly = "readonly", disabled = "disabled" })
                     </div>
                 </div>
             </div>
@@ -373,9 +313,8 @@
                 <div class="col-sm-4">
                     <div class="input-group" data-provide="datepicker">
                         <div class="input-group-addon">Usable As of:</div>
-                        <input class="datepicker form-control" id="cft_eff_st_dt" name="cft_eff_st_dt" value="@Model.str_cft_eff_st_dt" style="max-width: 100%; width:100%;">
+                        <input readonly disabled class="datepicker form-control" id="cft_eff_st_dt" name="cft_eff_st_dt" value="@Model.str_cft_eff_st_dt" style="max-width: 100%; width:100%;">
                         <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                        @Html.ValidationMessageFor(model => model.cft_eff_st_dt, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -385,9 +324,8 @@
                             var endEffDate = "";
                             if (Model.cft_eff_end_dt < Convert.ToDateTime("12/31/2060")) { endEffDate = Model.cft_eff_end_dt.ToString("MMM dd, yyyy"); }                          
                           }*@
-                        <input class="datepicker form-control" id="cft_eff_end_dt" name="cft_eff_end_dt" value="@Model.str_cft_eff_end_dt" style="max-width: 100%; width:100%;">
+                        <input class="datepicker form-control" id="cft_eff_end_dt" name="cft_eff_end_dt" readonly disabled value="@Model.str_cft_eff_end_dt" style="max-width: 100%; width:100%;">
                         <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                        @Html.ValidationMessageFor(model => model.cft_eff_end_dt, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="input-group">
@@ -412,127 +350,20 @@
         <div class="panel-body content" style="margin-bottom:4px;">
             <div class="row" style="margin-bottom:0px;">
                 @*/---------------- Below is the MAIN FORM QUESTION DETAIL DISPLAY PANEL ----------------------\*@
-                <div class="col-md-7 personal-info">
-                    <div class="row" id="qFormList" style="max-width:100%; height:550px; overflow-y:scroll">
+                <div class="col-md-12 personal-info">
+                    <div class="row" id="qFormList" style="max-width:100%; height:550px; overflow-y:scroll; margin-left:15px; margin-right:15px">
                         <div class="panel-group" id="accordion">
+                          @* - - - - - ADD HERE a partial view for each Form Section - - - - - - - *@
                             @foreach (OBSMVC.Controllers.CollectionFormSection obsFormSection in Model.colFormSections)
                             {
-                                Html.RenderAction("addNewSection", new { sCounter = obsFormSection.sectionNumber, colFormSection = obsFormSection });
+                                Html.RenderAction("addReadOnlySection", new { sCounter = obsFormSection.sectionNumber, colFormSection = obsFormSection });
                             }
-                               @*//Inside the Acordion Panel we place all the sections that will be added to the Form
-                                /----------------------------------------------------\
-                                |                                                    |
-                                |             FORM SECTIONS GO HERE                  |
-                                |             POPULATED BY AJAX CALL                 |
-                                |  @Url.Action("addNewSection", "ColFormTemplate")   |
-                                |    params: sCounter, (opt. ModelSections)          |
-                                \----------------------------------------------------/*@
                         </div> @* - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - -*@
 
-                        @* - - - - - - - - - - FORM FOOTER SECTION (ALWAYS VISIBLE) - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
-                        @*<div class="panel-group" id="accordion">
-
-                            <div class="panel panel-default formSection" id="FOOTER_SECTION">
-                                <div class="panel-heading form-inline" style="background-color:lightblue">
-                                    <h4 class="panel-title">                                        
-                                        <a class="accordion-toggle" data-toggle="collapse" href="#footerSection">
-                                            <span class="glyphicon glyphicon-minus">&nbsp; </span>
-                                            <span>Footer Section:</span>
-                                        </a>
-                                        &nbsp;&nbsp;
-                                        <input type="text" id="FORM FOOTER" class="form-control input-sm sectionTitle" style="width:50%" placeholder="<Enter Section Name>" value="Thank you for your participation and cooperation"  />
-                                    </h4>
-                                </div>
-                                <div id="footerSection" class="panel-collapse collapse in" style="margin-left:20px" >
-                                    <div class="footer_right row">
-                                        <table style="width:100%">
-                                            <tr>
-                                                <td style ="width:75%">Employee Signature: _______________________________________</td>
-                                                <td style="width:25%">Date: _______________</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Observer Signature: _______________________________________</td>
-                                                <td>Date: _______________</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div> 
-
-                            </div>
-
-                        </div>*@ 
-    
                      @* - - - - - - - END OF THE PAPER FORM FOOTER SECTION - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
                         <br /><br /><br /><br />
                     </div>
-                    <div class="row" style="margin-top:0px">
-                        <div class="col-sm-10 ">
-                            @*When This button is clicked, add a new view to the "accordion" <DIV> section*@
-                            <input type="button" id="btnAddSection" value="Add New Section" />
-                        </div>
-                    </div>
                 </div>  @*End of Left Form Questions Pannel (7 column Pannel)*@
-
-                @*// -------------- Below is the Panel with the Question's Library ---------------- *@
-                <div class="col-md-5 personal-info">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <div class="row" style="text-align:center; font-size:large">
-                                QUESTION LIBRARY
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-10" style="padding-left:3px">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control searchBox" id="full_text_search" name="full_text_search" placeholder="Search Question Library for..." style="max-width: 100%; width:100%;" title="Hint: Use Double Quotes to search for literal text!">
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-secondary" type="button" id="doSearch" data-loading-text="Please Wait...">Search!</button>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 right" style="padding:0px">
-                                    <button type="button" class="btn btn-primary btn-sm newBtn" id="btnAddQuestionPopup" style="padding:2px">
-                                        <span class="glyphicon glyphicon-plus-sign"></span> Add New
-                                    </button>
-                                    @*<a href="/Question/QuestionAddUpdate/0" class="btn btn-primary btn-sm newBtn" style="padding:2px">
-                                        <span class="glyphicon glyphicon-plus-sign"></span> Add New
-                                    </a>*@                                    
-                                </div>
-                            </div>
-                            @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
-                                        HttpMethod = "GET",
-                                        UpdateTargetId = "resultPanel",
-                                        InsertionMode = InsertionMode.Replace,
-                                        LoadingElementId = "divLoading"
-                                })*@
-                        </div>
-
-                        @* -------- <Body Section> This section is Used to Render all the Question Library list Results ---------------- *@
-                        <div class="panel-body">
-                            <div id="dummyResults" class="left" style="max-width: 100%; width:100%; display:none">
-                                <ul class="list-group sourceList" id="libraryQuestions">
-                                    <li id="7" class="list-group-item" data-toggle="tooltip" title="Drag to the left to Add!" data-qid="7"><span class="badge" style="width:48px">Id: 007</span>This is dummy Question 1</li>
-                                    <li id="127" class="list-group-item" data-toggle="tooltip" title="Drag to the left to Add!" data-qid="127"><span class="badge" style="width:48px">Id: 127</span>Some other Question too</li>
-                                    <li id="16" class="list-group-item" data-toggle="tooltip" title="Drag to the left to Add!" data-qid="16"><span class="badge" style="width:48px">Id: 016</span>last question</li>
-                                </ul>
-                            </div>
-
-                            <div id="resultPanel" class="left" style="max-width: 100%; width:100%; height:440px; overflow-y:scroll">
-
-                                @* ****************************************************************************************************
-                                       Results from Ajax Call to Display Question Search Result List will be displayed here!!
-                                   ****************************************************************************************************@
-                            </div>
-
-
-                            <div id="divLoading" style="display:none">
-                                @*<img src="@Url.Content("~/Images/LoadingData.gif")" alt="" />*@
-                                <img src="~/Images/LoadingData.gif" />
-                            </div>
-                        </div>
-
-                        @* ---------<Body Section> End of section Used to Render all the Question LIbrary list Results ---------------- *@
-                    </div> @*------------- End of Question Library Panel ---------------*@
-                </div>
             </div>
         </div>@*---- END OF FORM BODY -------*@
 
@@ -540,14 +371,8 @@
 
         @*// - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - \\*@
         <div class="row">
-            <input type="hidden" id="isPublished" name="isPublished" value="false" >
-            <div class="col-sm-offset-5 col-sm-4">
-                <input id="btnSaveForm" type="button" value="Save Form" onclick="PostForm($(this))" @*disabled="disabled"*@ />
-                &nbsp;&nbsp;
-                <input id="btnPublishForm" type="button" value="Publish Form" onclick="PostForm($(this))" @if (@Model.cft_isPublished == "PUBLISHED" ) { <text> disabled="disabled" </text>   } />
-            </div>
-            <div class="col-sm-3">
-                <button type="button" class="btn btn-warning" id="btnCancel" disabled>Reset/Cancel</button>
+            <div class="col-sm-12" style="text-align:center">
+                <button type="button" class="btn btn-warning" id="btnCancel" on-click="location.href = '/ColFormTemplate'">Cancel</button>
             </div>
         </div>
         @*\\ - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - //*@
@@ -566,7 +391,39 @@
     @****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
     <script>
 
-    $(document).ready(function () {
+        $(document).ready(function () {
+
+            $("#btnManageAction").click(function(){
+                alert("Posting Data...");
+                @*$.ajax({
+                    url: '@Url.Action("addEditForm", "ColFormTemplate")',
+                    method: "POST",
+                    cache: false,
+                    data: { id: formId, reEdit: "true" },
+                    error: function () {
+                        alert("An error occurred while switching to Edit Mode!!");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    if (d == "True") {
+                        var searchText = '"' + $("#modalQFullText").val() + '"';
+                        $("#modalQFullText").val("");
+                        $("#modalQDesc").val("");
+                        //alert("Data Posted Successfully!");
+
+                        // Close the popup
+                        //$("#addQuestionWindow").dialog( "close" );
+                        $("#btnCancelLibQuestion").click();
+                        // Perform ajax to "search" the recently saved question
+                        $("#full_text_search").val(searchText);
+                        $('#doSearch').click();
+                        $("#full_text_search").val("");
+                    }
+                    else {
+                        alert("ERROR Saving Data: " + d);
+                    }*@
+                });            
+            });
+
         function getATcategory() {
             var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
             if (selectedText == "3 Val") {
@@ -589,149 +446,6 @@
         }).on('hide.bs.collapse', function () {
             $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
         });
-
-        // **** SAVE ACTION FROM MODAL POPUP QUESTION MAINTENANCE ****
-        $("#btnSaveNewSelAnswer").click(function () {
-            // ------------------- Before Saving data, validate the user input -------------------------------------------------
-            var formValidated = true;
-            var emptyBoxes = 0;
-            var textValues = "";
-            var counter = 0;
-            var validationMessage = "";
-
-            selCathegory = getATcategory();
-
-            // ----------- First verify that no boxes have been left blank and compile the New Answer String for posting ---------------
-            //var comparisonNewString = $("#divNewSA").find("#fullSelATlist").first().children("option").filter(":selected").text();  //Save the answer Type that is being added
-            $('#newQATsection').find('.selAnswerTextb').each(function () {
-                counter = counter + 1;
-                if ($(this).val() != "") {
-                    textValues = textValues + $(this).val().trim().toUpperCase() + "~";
-                    //comparisonNewString = comparisonNewString + $(this).val().trim().toUpperCase();
-                }
-                else {
-                    emptyBoxes++;
-                }
-            });
-
-            //Check if we have empty boxes, then the form is not validated.
-            var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
-            if (selCathegory == "3 Val Range" && emptyBoxes > 2) {
-                formValidated = false;
-                validationMessage = "No textbox values can be left blank";
-            }
-            else if (selCathegory == "5 Val Range" && emptyBoxes > 0) {
-                formValidated = false;
-                validationMessage = "No textbox values can be left blank";
-            }
-            else if (selectedText == "Multi" || selectedText == "Singl") {
-                //If user is entering a List, verify that the list contains at least two item
-                var filledInBoxes = 0;
-                $("#multiList").find(".selAnswerTextb").each(function () {
-                    if ($(this).val().trim() != "") {
-                        filledInBoxes = filledInBoxes + 1;
-                    }
-                });
-                if (filledInBoxes < 2) {
-                    formValidated = false;
-                    validationMessage = "A valid list must contain at least two elements.";
-                }
-            }
-            // ------- Finished looking for boxes left blank------------------------------------------------
-
-            //if (formValidated){...
-            //Loop through all text boxes in this section and save the answers for comparison
-            //-----------------------------------------------------------------------------------------------------------------
-            //Validate that the newly entered QAT and values do not exist in any of the other sections (Existing or to be added)
-            //Must not exist under the <div #existingQATs> and <#divaddedSA> divisions (both have a class = ".answerType"
-
-            // Answer Type duplicate values cannot be implemented here since we add just one value at a time
-            // Validation must be performed on the back-end
-            //$(".answerType").each(function () {
-            //    var existingAnswers = "";
-            //    $(this).find(".SAitem").each(function () { existingAnswers = existingAnswers.concat($(this).html()) });
-            //    if (formValidated == true) {
-            //        comparisonOldString = $(this).find("#qat").first().val() + existingAnswers;
-            //        if (comparisonNewString == comparisonOldString) {
-            //            formValidated = false;
-            //            validationMessage = "The selected values already exist for this answer.";
-            //        }
-            //    }
-            //});
-
-
-            //if (formValidated){
-            //    // Continue with rest of validation/posting only if the form Validation Status is true
-            //    //var isDefaultValue = "false";
-            //    //var postParams = "";
-            //    //var comparisonOldString = "";
-            //    //$("#fullSelATlist").find('option:selected').text().substring(0,5);
-            //}
-
-            //-------------- Finished Validating Form Inputs -----------------------------------------------------------------------
-
-            // If the form input is valid, procced with saving data, else just display the Error message
-            if (formValidated) {
-                // Proceed to Save the new Answer Type
-                //Parameter to post are:  QuestionId~AnswerTypeId~defaultT/F~answerlist
-
-                $(this).button('loading');  // Disable the button until posting is complete
-
-                //Build the posting parameters: "Question Id" plus "Answer Type Id" and hardcode default="false" plus sel answers from "texvalues" variable
-                var postData = $("#popupQID").val() + "~" + $("#fullSelATlist").val() + "~false~" + textValues;
-
-                @*$(".qatDIV").each(function(){
-                    var postAnsTypeId = $(this).find("#ans_type_id").first().val();
-                    var postIsDefault = "false";
-                    var postSelAnswers = $(this).find("#ans_type_selAns").first().val();
-                    postData = postData + postQid +  "~" + postAnsTypeId + "~" + postIsDefault + "~" + postSelAnswers + ",";
-                });
-
-                alert("Saving New Answer Types...\n" + postData);
-                *@
-
-                $.ajax({
-                    url: '@Url.Action("saveNewSelAnswer", "ColFormTemplate")',
-                    method: "POST",
-                    cache: false,
-                    data: { ans_type_list : postData },
-                    error: function () {
-                        alert("ERROR: Failed to Save the New Question Answer Type Information.!!");  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    if (d.substring(0,3) == "QAT") {
-                        //alert("Data posted successfully!\n" + d);
-                        // Set the popupstatus to "saved" to indicate that the post succeded and that the drop down needs to be updated.
-                        $("#popupStatus").val("saved");
-                        // Reset the list of answers that have already been saved so they do not need to be displayed anymore
-                        $("#divaddedSA").html("");
-                        $("#savedQATid").val(d.substring(6));
-                        $("#editQATWindow").modal('hide');
-                    }
-                    else {
-                        //alert("Server Response: " + d);
-                        $("#newErrorMsg").html("<span>ERROR SAVING INFORMATION:</span><br/><span> " + d + "</span>");
-                        $("#newErrorMsg").show();
-                    }
-                    //else { alert("WARNING: Failed to post!\nPlease review your input and try again: " + d); }
-                });
-
-                // ----------- Finished Saving New Answer Type and Answer values ----------------
-            }
-            else {
-                var errorMessage = "<span> VALIDATION ERROR: Please review your input:</span><br/>&nbsp;" + validationMessage + "<span>";
-                //errorMessage = errorMessage.concat("</span><br/>&nbsp;&nbsp;<span>You are comparing Answer Type Id and values:</span><br/>");
-                //errorMessage = errorMessage.concat("<span>'" + comparisonNewString + "'</span>" + "<span> against: </span>");
-                //errorMessage = errorMessage.concat("<span> '" + comparisonOldString + "'</span>");
-                $("#newErrorMsg").html(errorMessage);
-                $("#newErrorMsg").show();
-            }
-
-            // Finally, whether the save action failed or posted correctly, reset the "SAVE" button to avoid leaving it stcuk in "Loading..."
-            $(this).button('reset');
-
-        });
-
 
         $("#btnCancel").click(function () {
             if ( $("#formChanged").val() == "Y")
@@ -910,7 +624,6 @@
             $("#" + qRowId).remove();
         }
 
-        makeSectionsDropable();
     });
 </script>
 
@@ -979,165 +692,6 @@
                 //return d;
             });
         }
-
-
-
     </script>
 
-    @* - - - - - - - SCRIPT TO ADD A NEW SECTION TO THE FORM AND SET THE "FORM CHANGED" STATUS when form is modified- - - - - - - - - - *@
-    <script type="text/jscript">
-        $(document).ready(function () {
-            // Variables and a Function Used to Scroll Down the sectons/question panel (Can be Invoked later on from any section inside this script)
-            var height = 0;
-            function scroll(height) {
-                this.stop().animate({ scrollTop: height }, 1000);
-            };
-            var scrollPanel = $('#qFormList');
-            // ----- End of Variables and a Function Used to Scroll Down the sectons/question panel -------
 
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            // As soon as the page first loads, create a new Section if we are in "add" mode.
-            if ($('#formMode').val() == "add") { addNewSection(); }
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            //Enable Input fields to be reset when to default css when edited and to set the form status to "changed"
-            //var isChanged = false;
-            $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
-
-            $('input, select, textarea').not(".qInput").change(function () {
-                //$("input[type='submit']").removeAttr("disabled");
-
-                if ($('#btnSaveForm').val() != "Save Form") {
-                    $('#btnSaveForm').button('reset');
-                }
-                $("#btnSaveForm").removeAttr('disabled');
-                $("#btnCancel").removeAttr('disabled');
-                //alert('Button Text is:' + btnText);
-                $("#formChanged").val("Y");   // Re-enable the form "changed" status
-                //isChanged = true;
-                $(this).removeClass("invalidField");
-            });
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            $(window).bind('beforeunload', function () {
-                if($("#formChanged").val() == "Y") {
-                    //if (isChanged) {
-                    return 'There are unsaved changed. Do you want to discard Changes and Exit?';
-                    //var response = 
-                    //$( "#dialog-confirm-exit" ).dialog({
-                    //    resizable: false,
-                    //    height:250,
-                    //    modal: true,
-                    //    buttons: {
-                    //        "Discard Changes": function() {
-                    //            //$("#formChanged").val("N");
-                    //            //isChanged.val("N");
-                    //            response = true;
-                    //        },
-                    //        Cancel: function() {
-                    //            //$( this ).dialog( "close" );
-                    //            response = false;
-                    //        }
-                    //    }
-                    //});
-                    //return response;
-                }
-                else {
-                    return undefined;
-                }
-            });
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        });  // END Of documetn Ready Startup Scripts
-
-        function addNewSection() {
-            $('#sCounter').val(Number($('#sCounter').val()) + 1);
-            // ------------ Make the Ajax Call ---------------------------------------------
-
-            function enableDropDown(dropdown) {
-                //var $drop_down = $(this);
-                var selectedId = dropdown.val();
-                var selectedText = dropdown.children("option:selected").text();
-                var ddlId = dropdown.prop("id");
-
-                var selansDiv = dropdown.parents(".divFormQuestion").first().find(".selAnsSection").first();
-                var qid = dropdown.parents(".divFormQuestion").first().find("#qid").val();
-                //alert("Selected Text is: " + selectedText);
-                //alert("Before opening modal window, the ddl id is: " + ddlId);
-                if (selectedId == '') {
-                    selectedId = "-1";
-                    @*$("#@Model.uniqueCounter").html("");*@
-                    selansDiv.html("");
-                }
-                else if(selectedId == 'New'){
-                    //alert("A New Question request has been issued!");
-                    $("#popupStatus").val("");
-                    $(this).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");  // Reset Sel Answers
-                    //Reset the modal Window contents
-                    clearNewSAbox();
-
-                    // Following code not used anymore as we will no longer keep a list of AT to add (New functionality 
-                    // will only save one AT at a time)
-                    ////Set the Hidden Field Values that will be used in Edit Mode
-                    //if ($("#popupDDLid").val() != ddlId)
-                    //{  // This indicates that a new Dropdown is being selected for edition!
-                    //    //Reset the old values from the "added" section, as they do not need to be kept from a previous different Selectable Answer
-                    //    $("#divaddedSA").html("");
-                    //}
-
-                    $("#popupDDLid").val(ddlId);
-                    var questionText = dropdown.parents(".divFormQuestion").first().find(qText).text();
-                    $("#selQText").html(questionText);
-                    //$("#selQText").text(questionText);
-                    $("#editQATWindow").modal();
-                    //selansDiv.html("");
-                }else
-                {
-                    if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")
-                    {
-                        selansDiv.html('<span style="color:blue">No Selectable Answers Required for this Selection</span>')
-                    }
-                    else{
-                        //alert("Selected ID "+selectedId);
-                        $.ajax({
-                            url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
-                            method: "GET",
-                            cache: false,
-                            data: { qat_id: selectedId },
-                            error: function () {
-                                alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-                            }
-                        }).done(function (d) {
-                            //alert("Retrieved Data is: " + d);
-                            selansDiv.html(d);
-                        });
-                    }
-                }
-
-                @*var cur_sel = document.getElementById("currentSelectedQAT"+@Model.uniqueCounter);
-            cur_sel.value = selectedId;*@
-
-                $(this).css({
-                    "color": "black",
-                    "background-color": "white"
-                });
-            }
-
-        // Function to load the selected template values into the Edit Mode ANswer Types
-        function loadTemplate(callerBtn, selAnslist) {
-            //Create an array of values (From parameter selAnslist value) to apply to the text boxes
-            var templateList = selAnslist.split(",");
-
-            // Loops through all textboxes of the upper level parent DIV and set their values accordingly
-            var textBoxCounter = 0;
-            $("#newQATsection").find(".selAnswerTextb").each(function () {
-                $(this).val(templateList[textBoxCounter]);
-                textBoxCounter = textBoxCounter + 1;
-            });
-
-            //$('.saveSA').prop('disabled', false);
-            $("#btnSaveNewSelAnswer").removeAttr('disabled');
-            $("#btnSaveNewSelAnswer").button('reset');
-            $("#newErrorMsg").html("");
-        }
-
-    </script>

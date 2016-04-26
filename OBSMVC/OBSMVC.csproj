@@ -560,6 +560,7 @@
     <Content Include="Views\ColFormTemplate\_reloadQuestionDropdown.cshtml" />
     <Content Include="Views\ColFormTemplate\_addFormQAInfo.cshtml" />
     <Content Include="Views\ColFormTemplate\ManageForm.cshtml" />
+    <Content Include="Views\ColFormTemplate\_addReadOnlySection.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -739,6 +739,12 @@ namespace OBSMVC.Controllers
             return PartialView("_addNewSection", colFormSection);
         }
 
+        public PartialViewResult addReadOnlySection(string sCounter, CollectionFormSection colFormSection)
+        {
+            ViewData["sNumber"] = sCounter;
+            return PartialView("_addReadOnlySection", colFormSection);
+        }
+
         [HttpPost]
         public string addNewQuestion(string full_text, string desc)
         {
@@ -1435,7 +1441,7 @@ namespace OBSMVC.Controllers
             }
             //Finally, set the "canBdeleted" property
             // If the form is 'not published' and it contains zero question, it can be deleted!
-            str_cft_canBdeleted = (cft_isPublished.Equals("NOT PUBLISHED") && questCount() == 0 && id > 0 && HttpContext.Current.User.Identity.Name == "delgado_feliciano");
+            str_cft_canBdeleted = (cft_isPublished.Equals("NOT PUBLISHED") && questCount() == 0 && id > 0 && (HttpContext.Current.User.Identity.Name == "delgado_feliciano" || HttpContext.Current.User.Identity.Name == "A_Rasul") );
         }
 
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \\

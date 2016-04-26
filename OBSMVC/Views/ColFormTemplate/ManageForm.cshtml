@@ -249,7 +249,11 @@
         <span>@Model.screen_Title</span>
     </div>
     <div class="col-sm-1" style="padding: 4px; margin-bottom:8px; text-align:right">
-        <button type="button" class="btn btnAdd" id="btnManageAction" style="width:110px">@Model.manageAction</button>
+        <form method="post">
+            <input type="hidden" id="id" name="id" value="Model.cft_id.ToString()" />
+            <input type="hidden" id="frmAction" name="frmAction" value="@Model.manageAction" />
+            <button type="submit" class="btn btnAdd" id="btnManageAction" style="width:110px">@Model.manageAction</button>
+        </form>        
     </div>
 </div>
 
@@ -408,11 +412,11 @@
 
 
             $("#btnManageAction").click(function(){
-                var frmAction = "@Model.manageAction";
-                var formId = "@Model.cft_id";
+                var frmAction = $("#frmAction").val();
+                var formId = $("#id").val();
 
                 alert("Posting Data: " + frmAction + " for Form Id: " + formId);
-                $.ajax({
+                @*$.ajax({
                     url: '@Url.Action("addEditForm", "ColFormTemplate")',
                     method: "POST",
                     cache: false,
@@ -422,7 +426,7 @@
                     }
                 }).done(function (d) {
                     alert("Data posted Successfully");
-                });
+                });*@
             });
 
 

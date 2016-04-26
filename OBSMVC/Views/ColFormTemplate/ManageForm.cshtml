@@ -416,7 +416,7 @@
                     url: '@Url.Action("addEditForm", "ColFormTemplate")',
                     method: "POST",
                     cache: false,
-                    data: { id: formId, action: frmAction},
+                    data: { id: formId, frmAction: frmAction},
                     error: function () {
                         alert("An error occurred while switching to Edit Mode!!");  //<-- Trap and alert of any errors if they occurred
                     }

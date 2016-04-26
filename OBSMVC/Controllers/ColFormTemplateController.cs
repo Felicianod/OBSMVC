@@ -487,6 +487,23 @@ namespace OBSMVC.Controllers
             //return View(oBS_COLLECT_FORM_TMPLT);
             return RedirectToAction("Index");
         }
+        
+        [HttpPost]
+        public string republishFormOnCancel(int cft_id, string publishedBy, DateTime publishedOn)
+        {//This method is called by AJAX from the front end. it reupdates the publish date and published user_id
+            try
+            {
+                OBS_COLLECT_FORM_TMPLT form_to_republish = db.OBS_COLLECT_FORM_TMPLT.Find(cft_id);
+                form_to_republish.obs_cft_pub_by_uid = publishedBy;
+                form_to_republish.obs_cft_pub_dtm = publishedOn;
+                db.SaveChanges();
+                return "Success";
+            }
+            catch(Exception e)
+            {
+                return e.Message;
+            }
+        }
 
 
         //GET: List of Quesions

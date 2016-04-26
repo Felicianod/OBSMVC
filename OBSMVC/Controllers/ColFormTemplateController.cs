@@ -320,11 +320,10 @@ namespace OBSMVC.Controllers
 
         // GET: ColFormTemplate/AddEdit
         [HttpGet]
-        public ActionResult AddEditForm(int? id)
+        public ActionResult AddEditForm(int? id, string flag_from_feliciano)
         {
             int cftid = id ?? 0;
             oCollectionForm selectedColForm = new oCollectionForm(cftid);
-
             if (cftid > 0)
             {                
                 selectedColForm.str_cft_eff_st_dt = selectedColForm.cft_eff_st_dt.HasValue ? selectedColForm.cft_eff_st_dt.Value.ToString("MMM dd, yyyy") : String.Empty;
@@ -367,11 +366,27 @@ namespace OBSMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddEditForm(oCollectionForm colForm, FormCollection formData, int? id)
+        public ActionResult AddEditForm(oCollectionForm colForm, FormCollection formData, int? id, string flag_from_feliciano)
         {
+            int cft_id = id ?? -1;
+            if (flag_from_feliciano == "true")//this means we're came here from Manage form and user needs to unpublish this form
+            {
+                OBS_COLLECT_FORM_TMPLT form_to_unpublish = db.OBS_COLLECT_FORM_TMPLT.Find(cft_id);
+                oCollectionForm selectedColForm = new oCollectionForm(cft_id);
+                selectedColForm.cft_isPublished = "NOT PUBLISHED";
+                selectedColForm.cft_Status = "NOT LIVE";
+                selectedColForm.originalPublishDate = form_to_unpublish.obs_cft_pub_dtm;
+                selectedColForm.originalyPublishedBy = form_to_unpublish.obs_cft_pub_by_uid;
+                form_to_unpublish.obs_cft_pub_by_uid = null;
+                form_to_unpublish.obs_cft_pub_dtm = null;
+                db.SaveChanges();
+                // return RedirectToAction("AddEditForm", new { id = cft_id });
+                return View(selectedColForm);
+
+            }
             string data_from_form = String.IsNullOrEmpty(formData["formQuestions"]) ? String.Empty : formData["formQuestions"];         
             string is_published = formData["isPublished"];
-            int cft_id = id?? -1;
+            
             if (cft_id > 0 && db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_id == cft_id && x.obs_cft_pub_dtm!=null).Count()>0) 
             {
                 return RedirectToAction("Details", new { id = cft_id });
@@ -1466,6 +1481,8 @@ namespace OBSMVC.Controllers
         public bool str_cft_canBdeleted { get; set; }
         public bool hasInstances { get; set; }
         public string manageAction { get; set; }
+        public string originalyPublishedBy { set; get; }
+        public DateTime? originalPublishDate { set; get; }
         public List<CollectionFormSection> colFormSections { get; set; }
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\\
         //- - - - - - - - - - - - CLASS METHODS - - - - - - - - - - - - - - - - |

@@ -5,9 +5,10 @@
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 @{
-    var testVariable = @Model.manageAction.Substring(0,6);
-    var canEnabled = (testVariable == "MANAGE")?"disabled":"";  
-  }
+    var canEnabled = "";
+    var frmWasChanged = "N";
+    if (!@Model.manageAction.Contains("MANAGE")) { canEnabled = "disabled"; } else { frmWasChanged = "Y"; }
+ }
 
 
 <style>
@@ -206,8 +207,6 @@
 
 <script>
     $(document).ready(function(){
-        if (@testVariable == "MANAGE"){$("#formChanged").val("Y");}
-        
         $(".modal-wide").on("show.bs.modal", function() {
             var height = $(window).height() - 200;
             $(this).find(".modal-body").css("max-height", height);
@@ -235,7 +234,7 @@
                     }
                 }).done(function (d) {
                     //alert("Retrieved Data is: " + d);
-                    
+
                     $(dropdownId).parents(".reloadDDL").first().html(d);
                     //alert("Dropdown Id handle is: " + $(dropdownId).attr("id"));
 
@@ -260,19 +259,19 @@
         });
 
         //$("#addQuestionWindow").on('hidden.bs.modal', function () {
-        
+
         //});
 
         function resetSelAns(qId, ddlId){
-        
+
             $qatDIV = $(ddlId).parents(".divFormQuestion").first();
             $qatDIV.find("#ddlSelValue").val($(ddlId).find('option:selected').val())
 
             var selectedText = $(ddlId).children("option:selected").text();
             var selectedQATid = $(ddlId).children("option:selected").val();
-            
+
             //alert("Refreshing SelAns: Selected Text: " + selectedText + " and QAT id is: " + selectedQATid);
-            
+
             if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")
             {
                 $qatDIV.find(".selAnsSection").first().html('<span style="color:blue">No Selectable Answers Required for this Selection</span>')
@@ -334,7 +333,7 @@
  <input type="hidden" id="sCounter" value="@Model.colFormSections.Count" />
  <input type="hidden" id="formMode" value="@fMode" />
  <input type="hidden" id="cft_id" value="@Model.cft_id" />
- <input type="hidden" id="formChanged" value="N">
+ <input type="hidden" id="formChanged" value="@frmWasChanged">
     @*\\ ---- End of Hidden Control Fields section ----- *@
 
 
@@ -566,9 +565,13 @@
                 &nbsp;&nbsp;
                 <input id="btnPublishForm" type="button" value="Publish Form" onclick="PostForm($(this))" @if (@Model.cft_isPublished == "PUBLISHED" ) { <text> disabled="disabled" readonly</text>   } />
             </div>
-            <div class="col-sm-3">
-                <button type="button" class="btn btn-warning" id="btnCancel" @canEnabled>Reset/Cancel</button>
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-warning" id="btnReset" @canEnabled>Reset Form</button>
             </div>
+            <div class="col-sm-1 col-sm-offset-1">
+                <button type="button" class="btn btn-warning" id="btnCancel" >Cancel/Back to List</button>
+            </div>
+
         </div>
         @*\\ - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - //*@
 
@@ -1043,8 +1046,51 @@
 
         });
 
-
         $("#btnCancel").click(function () {
+            if ( $("#formChanged").val() == "Y")
+            {
+                $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window
+
+                $( "#dialog-confirm-reset" ).dialog({
+                    resizable: false,
+                    height:200,
+                    modal: true,
+                    buttons: {
+                        "Exit": function() {
+                            $("#formChanged").val("N");
+                            // Reset the published Date/Time via Ajax
+                            var publishedDateTime = "@Model.originalPublishDate";
+                            var publishedUser = "@Model.originalyPublishedBy";
+                            var formCftid = "@Model.cft_id";
+
+                            $.ajax({
+                                url: '@Url.Action("republishFormOnCancel", "ColFormTemplate")',
+                                method: "POST",
+                                cache: false,
+                                data: { cft_id: formCftid, publishedBy: publishedUser, publishedOn: publishedDateTime },
+                                error: function () {
+                                    alert("Failed to reset Changes...");  //<-- Trap and alert of any errors if they occurred
+                                }
+                            }).done(function (d) {
+                                if (d == "Success") {
+                                    alert("Success!");
+                                    location.href = "/ColFormTemplate/AddEditForm/" + formCftid;
+                                }
+                                else {
+                                    alert("ERROR Reseting Published Date/Time: " + d);
+                                }
+                            });
+                            //--- Finished Resetting the ajax values
+                        },
+                        Cancel: function() {
+                            $( this ).dialog( "close" );
+                        }
+                    }
+                });
+            }
+        });
+
+        $("#btnReset").click(function () {
             if ( $("#formChanged").val() == "Y")
             {
                 $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window
@@ -1213,7 +1259,7 @@
                 //Execute this code After the Ajax call completes successfully
                 //alert("Form Id: " + @Model.cft_id + " has been Deleted!")
                 location.href = "/ColFormTemplate/";
-            });            
+            });
         });
 
 

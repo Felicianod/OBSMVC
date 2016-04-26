@@ -382,8 +382,8 @@ namespace OBSMVC.Controllers
                 db.SaveChanges();
                 // return RedirectToAction("AddEditForm", new { id = cft_id });
                 return View(selectedColForm);
-
             }
+
             string data_from_form = String.IsNullOrEmpty(formData["formQuestions"]) ? String.Empty : formData["formQuestions"];         
             string is_published = formData["isPublished"];
             

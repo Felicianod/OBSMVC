@@ -408,9 +408,13 @@ namespace OBSMVC.Controllers
                 {
                     Session["frmAction"] = "MANAGE-EDIT";                
                 }
-                else if(frmAction== "NEW VERSION")
+                else if(frmAction == "NEW VERSION")
                 {
                     Session["frmAction"] = "MANAGE-NEW-VERSION";  
+                }
+                else if(frmAction == "MANAGE-NEW-VERSION")
+                {
+                    //Logic to Edit saved data in versioning mode goes here
                 }
                 return RedirectToAction("AddEditForm", new { id = cft_id });
             }

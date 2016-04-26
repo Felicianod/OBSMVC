@@ -307,7 +307,7 @@ namespace OBSMVC.Controllers
 
 
         // GET: ColFormTemplate/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(int id, string origin)
         {
             //if (id == null) { return HttpNotFound(); }
 
@@ -320,12 +320,44 @@ namespace OBSMVC.Controllers
 
         // GET: ColFormTemplate/AddEdit
         [HttpGet]
-        public ActionResult AddEditForm(int? id, string flag_from_feliciano)
+        public ActionResult AddEditForm(int? id)
         {
             int cftid = id ?? 0;
+
             oCollectionForm selectedColForm = new oCollectionForm(cftid);
+            
             if (cftid > 0)
-            {                
+            {
+                string frmAction = String.Empty;
+                try
+                {
+                    frmAction = Session["frmAction"].ToString();
+                    Session["frmAction"] = null;
+                }
+                catch { }
+                if (!String.IsNullOrEmpty(frmAction))
+                {
+                    if (frmAction == "MANAGE-EDIT")
+                    {
+                        try
+                        {
+                            OBS_COLLECT_FORM_TMPLT form_to_unpublish = db.OBS_COLLECT_FORM_TMPLT.Find(cftid);
+                            selectedColForm.originalPublishDate = form_to_unpublish.obs_cft_pub_dtm;
+                            selectedColForm.originalyPublishedBy = form_to_unpublish.obs_cft_pub_by_uid;
+                            selectedColForm.manageAction = frmAction;
+                            form_to_unpublish.obs_cft_pub_by_uid = null;
+                            form_to_unpublish.obs_cft_pub_dtm = null;
+                            db.SaveChanges();
+                        }
+                        catch { }
+                    }
+                    else if (frmAction == "MANAGE-NEW-VERSION")
+                    {
+                        selectedColForm.manageAction = frmAction;
+                    }
+
+                }
+
                 selectedColForm.str_cft_eff_st_dt = selectedColForm.cft_eff_st_dt.HasValue ? selectedColForm.cft_eff_st_dt.Value.ToString("MMM dd, yyyy") : String.Empty;
                 selectedColForm.str_cft_eff_end_dt = selectedColForm.cft_eff_end_dt < Convert.ToDateTime("12/31/2060") ? selectedColForm.cft_eff_end_dt.ToString("MMM dd, yyyy") : String.Empty;
             }
@@ -354,7 +386,7 @@ namespace OBSMVC.Controllers
             ViewBag.cft_Cust = new SelectList(db.DSC_CUSTOMER.Where(x => x.dsc_cust_id >= 0), "dsc_cust_id", "dsc_cust_name", selected_cust);
             ViewBag.cft_LC = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id >= 0).OrderBy(y=>y.dsc_lc_name), "dsc_lc_id", "dsc_lc_name", selected_lc);
 
-            if (!selectedColForm.manageAction.Equals(""))
+            if (selectedColForm.manageAction.Equals("EDIT")|| selectedColForm.manageAction.Equals("NEW VERSION"))
             { // Is published and it has instances
                 return View("ManageForm", selectedColForm);
             }
@@ -371,18 +403,16 @@ namespace OBSMVC.Controllers
             int cft_id = id ?? -1;
             if (!String.IsNullOrEmpty(frmAction))//this means we're came here from Manage form and user needs to unpublish this form
             {
-                OBS_COLLECT_FORM_TMPLT form_to_unpublish = db.OBS_COLLECT_FORM_TMPLT.Find(cft_id);
-                oCollectionForm selectedColForm = new oCollectionForm(cft_id);
-                selectedColForm.cft_isPublished = "NOT PUBLISHED";
-                selectedColForm.cft_Status = "NOT LIVE";
-                selectedColForm.originalPublishDate = form_to_unpublish.obs_cft_pub_dtm;
-                selectedColForm.originalyPublishedBy = form_to_unpublish.obs_cft_pub_by_uid;
-                form_to_unpublish.obs_cft_pub_by_uid = null;
-                form_to_unpublish.obs_cft_pub_dtm = null;
-                db.SaveChanges();
-                // return RedirectToAction("AddEditForm", new { id = cft_id });
-                return View(selectedColForm);
-
+                //frmAction = "EDIT" or "NEW VERSION"
+                if (frmAction == "EDIT")//if edit, we need to unpublish
+                {
+                    Session["frmAction"] = "MANAGE-EDIT";                
+                }
+                else if(frmAction== "NEW VERSION")
+                {
+                    Session["frmAction"] = "MANAGE-NEW-VERSION";  
+                }
+                return RedirectToAction("AddEditForm", new { id = cft_id });
             }
             string data_from_form = String.IsNullOrEmpty(formData["formQuestions"]) ? String.Empty : formData["formQuestions"];         
             string is_published = formData["isPublished"];

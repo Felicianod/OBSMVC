@@ -191,46 +191,6 @@
     }
 </style>
 
-<script>
-    $(document).ready(function(){
-
-        //$("#addQuestionWindow").on('hidden.bs.modal', function () {
-        
-        //});
-
-        function resetSelAns(qId, ddlId){
-        
-            $qatDIV = $(ddlId).parents(".divFormQuestion").first();
-            $qatDIV.find("#ddlSelValue").val($(ddlId).find('option:selected').val())
-
-            var selectedText = $(ddlId).children("option:selected").text();
-            var selectedQATid = $(ddlId).children("option:selected").val();
-            
-            //alert("Refreshing SelAns: Selected Text: " + selectedText + " and QAT id is: " + selectedQATid);
-            
-            if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")
-            {
-                $qatDIV.find(".selAnsSection").first().html('<span style="color:blue">No Selectable Answers Required for this Selection</span>')
-            }
-            else{
-                //alert("Selected ID "+selectedId);
-                $.ajax({
-                    url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
-                    method: "GET",
-                    cache: false,
-                    data: { qat_id: selectedQATid },
-                    error: function () {
-                        alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    //alert("Retrieved Data is: " + d);
-                    $qatDIV.find(".selAnsSection").first().html(d);
-                });
-            }
-        };
-
-    });
-</script>
 
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
 @{
@@ -238,7 +198,6 @@
     int masterCounter = 1;
     string rowInfo = masterCounter.ToString();
     string colFormId = Model.cft_id.ToString();
-    int nextQuestion = Model.questCount() + 1;
 }
 
 @*<div class="well well-sm" style="padding: 4px; font-size:xx-large; text-align:center; margin-bottom:8px">
@@ -262,8 +221,7 @@
 @* - - - - - - - - - - - - - - - - BEGINING OF THE "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
 @*// ---- Helper Hidden Fields to Control the Inner Ids ----- *@
  <input type="hidden" id="masterItemCounter" value="1" />
- <input type="hidden" id="qCounter" value="@nextQuestion" />
- <input type="hidden" id="sCounter" value="@Model.colFormSections.Count" />
+  <input type="hidden" id="sCounter" value="@Model.colFormSections.Count" />
  <input type="hidden" id="formMode" value="@fMode" />
  <input type="hidden" id="cft_id" value="@Model.cft_id" />
  <input type="hidden" id="formChanged" value="N">
@@ -416,7 +374,7 @@
                 var frmAction = $("#frmAction").val();
                 var formId = $("#id").val();
 
-                alert("Posting Data: " + frmAction + " for Form Id: " + formId);
+                //alert("Posting Data: " + frmAction + " for Form Id: " + formId);
                 @*$.ajax({
                     url: '@Url.Action("addEditForm", "ColFormTemplate")',
                     method: "POST",

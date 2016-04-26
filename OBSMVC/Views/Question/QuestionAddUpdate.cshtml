@@ -690,6 +690,24 @@
 
     <script>
         $(document).ready(function () {
+            // Prevent Invalid Characters like Carriage Return or comma from being entered in the textbox
+            $('textarea').on('keydown keyup change focus blur', function (e) {
+                if (e.type === 'change') {
+                    // this event is triggered when the text is changed through drag and drop too,
+                    // or by pasting something inside the textarea;
+
+                    // remove commas with empty
+                    $(this).val($(this).val().replace(/,/, "", "g"));
+                    // remove carriage returns (\r) and newlines (\n) with spaces:
+                    $(this).val($(this).val().replace(/\r?\n/g, ' '));
+                    //$textarea.val($textarea.val().replace(/[,\n\r]/," ","g");
+                }
+                // the enter key has been pressed, avoid producing a carriage return from it:
+                if (e.which === 13 || e.which === 188) {
+                    e.preventDefault();
+                }
+            });
+
             //var isChanged = $("#formChanged");
 
             //var isChanged = false;

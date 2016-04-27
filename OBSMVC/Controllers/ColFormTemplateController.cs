@@ -344,6 +344,7 @@ namespace OBSMVC.Controllers
                             OBS_COLLECT_FORM_TMPLT form_to_unpublish = db.OBS_COLLECT_FORM_TMPLT.Find(cftid);
                             selectedColForm.originalPublishDate = form_to_unpublish.obs_cft_pub_dtm;
                             selectedColForm.originalyPublishedBy = form_to_unpublish.obs_cft_pub_by_uid;
+                            selectedColForm.cft_isPublished = "NOT PUBLISHED";
                             selectedColForm.manageAction = frmAction;
                             form_to_unpublish.obs_cft_pub_by_uid = null;
                             form_to_unpublish.obs_cft_pub_dtm = null;
@@ -354,6 +355,12 @@ namespace OBSMVC.Controllers
                     else if (frmAction == "MANAGE-NEW-VERSION")
                     {
                         selectedColForm.manageAction = frmAction;
+                        selectedColForm.cft_isPublished = "NOT PUBLISHED";
+                        selectedColForm.previous_vers_cft_id = selectedColForm.cft_id;
+                        selectedColForm.cft_id = 0;
+                        selectedColForm.cft_Version++;
+                        
+
                     }
 
                 }
@@ -411,11 +418,7 @@ namespace OBSMVC.Controllers
                 else if(frmAction == "NEW VERSION")
                 {
                     Session["frmAction"] = "MANAGE-NEW-VERSION";  
-                }
-                else if(frmAction == "MANAGE-NEW-VERSION")
-                {
-                    //Logic to Edit saved data in versioning mode goes here
-                }
+                }               
                 return RedirectToAction("AddEditForm", new { id = cft_id });
             }
             string data_from_form = String.IsNullOrEmpty(formData["formQuestions"]) ? String.Empty : formData["formQuestions"];         
@@ -1534,6 +1537,7 @@ namespace OBSMVC.Controllers
         public string manageAction { get; set; }
         public string originalyPublishedBy { set; get; }
         public DateTime? originalPublishDate { set; get; }
+        public int previous_vers_cft_id { set; get; }
         public List<CollectionFormSection> colFormSections { get; set; }
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\\
         //- - - - - - - - - - - - CLASS METHODS - - - - - - - - - - - - - - - - |

@@ -418,10 +418,14 @@ namespace OBSMVC.Controllers
                 }               
                 return RedirectToAction("AddEditForm", new { id = cft_id });
             }
-            if (frmAction == "MANAGE-NEW-VERSION") { return RedirectToAction("Index"); }
+           
             string data_from_form = String.IsNullOrEmpty(formData["formQuestions"]) ? String.Empty : formData["formQuestions"];         
             string is_published = formData["isPublished"];
-            
+            if (frmAction == "MANAGE-NEW-VERSION")
+            {
+                int new_cft_id = versionForm(colForm, data_from_form, is_published, cft_id);
+                return RedirectToAction("AddEditForm", new { id = new_cft_id });
+            }
             if (cft_id > 0 && db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_id == cft_id && x.obs_cft_pub_dtm!=null).Count()>0) 
             {
                 return RedirectToAction("AddEditForm", new { id = cft_id });
@@ -1391,6 +1395,92 @@ namespace OBSMVC.Controllers
 
         }
 
+        private int versionForm(oCollectionForm colForm, string form_questions_from_gui, string isPublished, int id)
+        {
+            int cft_id = 0;
+            colForm.previous_vers_cft_id=id;//represents previous version cft_id
+
+            ViewBag.exception = "";
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                try
+                {                    
+
+                        //first we need to save OBS_COLLECT_FORM_TMPLT table data
+                        OBS_COLLECT_FORM_TMPLT template_to_save = new OBS_COLLECT_FORM_TMPLT();
+                        template_to_save.dsc_cust_id = Convert.ToInt32(colForm.cft_Cust);
+                        template_to_save.obs_type_id = Convert.ToInt32(colForm.cft_obsType);
+                        template_to_save.dsc_lc_id = Convert.ToInt32(colForm.cft_LC);
+                        //short cft_number = (short)(db.OBS_COLLECT_FORM_TMPLT.Max(x => x.obs_cft_nbr) + 1);
+                        template_to_save.obs_cft_nbr = (short)colForm.cft_Nbr;
+                        template_to_save.obs_cft_ver = (short)colForm.cft_Version;
+                        template_to_save.obs_cft_title = colForm.cft_Title;
+                        template_to_save.obs_cft_subtitle = colForm.cft_SubTitle;
+                        template_to_save.obs_cft_eff_end_dt = (colForm.cft_eff_end_dt == null) || (colForm.cft_eff_end_dt < Convert.ToDateTime("01/01/2000")) ? Convert.ToDateTime("12/31/2060") : colForm.cft_eff_end_dt;
+                        template_to_save.obs_cft_added_dtm = DateTime.Now;
+                        template_to_save.obs_cft_added_uid = User.Identity.Name;
+                        template_to_save.obs_cft_last_saved_dtm = DateTime.Now;
+                        template_to_save.obs_cft_upd_dtm = DateTime.Now;
+                        template_to_save.obs_cft_upd_uid = User.Identity.Name;
+                        if (isPublished == "true")
+                        {
+                            return -1;
+                            template_to_save.obs_cft_pub_by_uid = User.Identity.Name;
+                            template_to_save.obs_cft_pub_dtm = DateTime.Now;
+                            if (colForm.cft_eff_st_dt != null && (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000")))
+                            {
+                                template_to_save.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
+
+                            }
+                            else
+                            {
+                                return -1;
+                            }
+                        }
+                        else if (!(colForm.cft_eff_st_dt == null || (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000"))))
+                        {
+                            template_to_save.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
+                        }
+                        db.OBS_COLLECT_FORM_TMPLT.Add(template_to_save);
+                        db.SaveChanges();
+                        cft_id = template_to_save.obs_cft_id;
+
+                    //now we need to save all the form questions
+                    string[] splitterm = { "," };
+                    string[] parsed_questions = form_questions_from_gui.Split(splitterm, StringSplitOptions.RemoveEmptyEntries);
+                    short order_counter = 1;
+                    foreach (string question in parsed_questions)
+                    {
+                        //now lets first save split the string we received from the gui
+                        // string format should be: order,qat_id,section_text
+                        string[] question_items = question.Split(new string[] { "~" }, StringSplitOptions.RemoveEmptyEntries);
+                        short order = order_counter;
+                        int qat_id = Convert.ToInt32(question_items[0]);
+                        int form_section_id = getSectionID(question_items[1]);
+                        OBS_COL_FORM_QUESTIONS new_form_question = new OBS_COL_FORM_QUESTIONS();
+                        new_form_question.obs_cft_id = cft_id;
+                        new_form_question.obs_form_section_id = form_section_id;
+                        new_form_question.obs_qat_id = qat_id;
+                        new_form_question.obs_col_form_quest_order = order;
+                        new_form_question.obs_col_form_quest_wgt = 1;
+                        new_form_question.obs_col_form_quest_na_yn = question_items[2];
+                        db.OBS_COL_FORM_QUESTIONS.Add(new_form_question);
+                        db.SaveChanges();
+                        order_counter++;
+                    }//end of foreach
+
+                    transaction.Commit();
+                    return cft_id;
+                }//end of try
+                catch (Exception e)
+                {
+                    string notUsed = e.Message;
+                    transaction.Rollback();
+                    return -1;
+                }
+            }//end of  using (var transaction = db.Database.BeginTransaction())
+
+        }
         private int getSectionID(string section_name)
         {
             if (db.OBS_FORM_SECTION.Where(item => item.obs_form_section_name == section_name).Count() > 0)

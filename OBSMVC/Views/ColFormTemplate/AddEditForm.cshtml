@@ -591,8 +591,9 @@
 </div>
 <div id="dialog-confirm-exit" title="Please Confirm" style="display:none">
     <p>
+        <br />
         <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-        Your form has been modified.<br /> Do you want to discard all changes?
+        Your form has been modified.<br /> Exit and discard all changes?
     </p>
 </div>
 @* ------------------------ END OF "Add New Metadata Tag" FORM ------------------------- *@
@@ -1050,13 +1051,12 @@
             if ( $("#formChanged").val() == "Y")
             {
                 $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window
-
-                $( "#dialog-confirm-reset" ).dialog({
+                $( "#dialog-confirm-exit" ).dialog({
                     resizable: false,
-                    height:200,
+                    height:250,
                     modal: true,
                     buttons: {
-                        "Exit": function() {
+                        "Discard Changes": function() {
                             $("#formChanged").val("N");
                             // Reset the published Date/Time via Ajax
                             var publishedDateTime = "@Model.originalPublishDate";
@@ -1073,11 +1073,11 @@
                                 }
                             }).done(function (d) {
                                 if (d == "Success") {
-                                    alert("Success!");
+                                    //alert("Success!");
                                     location.href = "/ColFormTemplate/AddEditForm/" + formCftid;
                                 }
                                 else {
-                                    alert("ERROR Reseting Published Date/Time: " + d);
+                                    alert("ERROR Resetting Published Date/Time: " + d);
                                 }
                             });
                             //--- Finished Resetting the ajax values
@@ -1087,6 +1087,9 @@
                         }
                     }
                 });
+            }
+            else{
+                location.href = "/ColFormTemplate/";
             }
         });
 

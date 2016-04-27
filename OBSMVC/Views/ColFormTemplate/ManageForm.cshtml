@@ -200,9 +200,6 @@
     string colFormId = Model.cft_id.ToString();
 }
 
-@*<div class="well well-sm" style="padding: 4px; font-size:xx-large; text-align:center; margin-bottom:8px">
-    @Model.screen_Title
-</div>*@
 <div class="row" style="margin-left:10px">
     <div class="well well-sm smallRowMargin col-sm-11" style="padding: 4px; font-size:xx-large; margin-bottom:8px; text-align:center">
         <span>@Model.screen_Title</span>
@@ -335,7 +332,7 @@
         @*// - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - \\*@
         <div class="row">
             <div class="col-sm-12" style="text-align:center">
-                <button type="button" class="btn btn-warning" id="btnCancel" on-click="location.href = '/ColFormTemplate'">Cancel</button>
+                <button type="button" class="btn btn-warning" id="btnCancel" >Cancel</button>
             </div>
         </div>
         @*\\ - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - //*@
@@ -370,25 +367,6 @@
             var selCathegory = getATcategory();
 
 
-            @*$("#btnManageAction").click(function(){
-                var frmAction = $("#frmAction").val();
-                var formId = $("#id").val();
-
-                //alert("Posting Data: " + frmAction + " for Form Id: " + formId);
-                $.ajax({
-                    url: '@Url.Action("addEditForm", "ColFormTemplate")',
-                    method: "POST",
-                    cache: false,
-                    data: {colForm: null, formData:null, id: formId, frmAction: frmAction},
-                    error: function () {
-                        alert("An error occurred while switching to Edit Mode!!");  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    alert("Data posted Successfully");
-                });
-            });*@
-
-
             $('.collapse').on('show.bs.collapse', function () {
                 $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
             }).on('hide.bs.collapse', function () {
@@ -414,6 +392,9 @@
                             }
                         }
                     });
+                }
+                else{
+                    location.href = "/ColFormTemplate/";
                 }
             });
         

@@ -206,7 +206,9 @@
         height: 80px;
     }
     .lookatMe {
-        background-color: #02610e;
+        color: #fb7f4b;
+        font-weight:bold;
+        font-size:larger;
     }
 </style>
 
@@ -217,9 +219,9 @@
             $(this).find(".modal-body").css("max-height", height);
         });
 
+        // If the form was recently saved/posted successfuly, this indicates a change on the AT list
+        // reload the drop down with the new values
         $("#editQATWindow").on('hidden.bs.modal', function () {
-            // If the form was recently saved/posted successfuly, this indicates a change on the AT list
-            // reload the drop down with the new values
             var dropdownId = "#" + $("#popupDDLid").val();
 
             if ($("#popupStatus").val() == "saved"){
@@ -262,10 +264,6 @@
                 $(dropdownId).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");
             }
         });
-
-        //$("#addQuestionWindow").on('hidden.bs.modal', function () {
-
-        //});
 
         function resetSelAns(qId, ddlId){
 
@@ -315,8 +313,8 @@
 @*<div class="well well-sm" style="padding: 4px; font-size:xx-large; text-align:center; margin-bottom:8px">
     @Model.screen_Title
 </div>*@
-        <div class="well well-sm smallRowMargin" style="padding: 4px; font-size:xx-large; text-align:center; margin-bottom:8px">
-            <span>@Model.screen_Title</span>
+        <div class="well well-sm smallRowMargin" style="padding: 4px; text-align:center; margin-bottom:8px">
+            <span style="font-size:xx-large; ">@Model.screen_Title </span>&nbsp;&nbsp;&nbsp;&nbsp; [@Model.manageAction]
         </div>      
 
 @if (!String.IsNullOrEmpty(ViewBag.exception))
@@ -415,7 +413,7 @@
                         <div class="input-group-addon">Form Number:</div>
                         <input type="text" id="cft_Nbr" name="cft_Nbr" readonly class="form-control" value="@form_num" style="max-width: 60%; width:60%" />
                        @*@Html.EditorFor(model => model.cft_Nbr, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly="readonly"} })*@
-                        <div class="input-group-addon">Version:</div>
+                        <div class="input-group-addon @attentionCalss">Version:</div>
                         <input type="text" id="cft_Version" name="cft_Version" readonly class="form-control @attentionCalss" value="@form_version" style="max-width: 60%; width:60%" />
                         @*@Html.EditorFor(model => model.cft_Version, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly = "readonly" } })*@
                     </div>
@@ -716,18 +714,6 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-
-
-
-
-
-@*if (confirm("Your form has been modified.\nAre you sure you want to reset all changes?")) {
-        $("#formChanged").val("N");
-        //isChanged.val("N");
-        location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
-    }*@
-
 
 
 
@@ -1067,30 +1053,39 @@
                     modal: true,
                     buttons: {
                         "Discard Changes": function() {
+                            var editMode = "@Model.manageAction";
                             $("#formChanged").val("N");
-                            // Reset the published Date/Time via Ajax
-                            var publishedDateTime = "@Model.originalPublishDate";
-                            var publishedUser = "@Model.originalyPublishedBy";
-                            var formCftid = "@Model.cft_id";
 
-                            $.ajax({
-                                url: '@Url.Action("republishFormOnCancel", "ColFormTemplate")',
-                                method: "POST",
-                                cache: false,
-                                data: { cft_id: formCftid, publishedBy: publishedUser, publishedOn: publishedDateTime },
-                                error: function () {
-                                    alert("Failed to reset Changes...");  //<-- Trap and alert of any errors if they occurred
-                                }
-                            }).done(function (d) {
-                                if (d == "Success") {
-                                    //alert("Success!");
-                                    location.href = "/ColFormTemplate/AddEditForm/" + formCftid;
-                                }
-                                else {
-                                    alert("ERROR Resetting Published Date/Time: " + d);
-                                }
-                            });
-                            //--- Finished Resetting the ajax values
+                            // When in "MANAGE-NEW-VERSION" edit mode, just exit after the user confirms that changes can be discarded
+                            if(editMode == "MANAGE-NEW-VERSION"){
+                                location.href = "/ColFormTemplate/";
+                            }
+
+                            // When in "MANAGE-EDIT" mode, we need to Reset the published Date/Time via Ajax to it's previous state
+                            if(editMode == "MANAGE-EDIT"){
+                                var publishedDateTime = "@Model.originalPublishDate";
+                                var publishedUser = "@Model.originalyPublishedBy";
+                                var formCftid = "@Model.cft_id";
+
+                                $.ajax({
+                                    url: '@Url.Action("republishFormOnCancel", "ColFormTemplate")',
+                                    method: "POST",
+                                    cache: false,
+                                    data: { cft_id: formCftid, publishedBy: publishedUser, publishedOn: publishedDateTime },
+                                    error: function () {
+                                        alert("Failed to reset Changes...");  //<-- Trap and alert of any errors if they occurred
+                                    }
+                                }).done(function (d) {
+                                    if (d == "Success") {
+                                        //alert("Success!");
+                                        location.href = "/ColFormTemplate/AddEditForm/" + formCftid;
+                                    }
+                                    else {
+                                        alert("ERROR Resetting Published Date/Time: " + d);
+                                    }
+                                });
+                                //--- Finished Resetting the ajax values
+                            }
                         },
                         Cancel: function() {
                             $( this ).dialog( "close" );
@@ -1123,13 +1118,6 @@
                         }
                     }
                 });
-
-                @*if (confirm("Your form has been modified.\nAre you sure you want to reset all changes?")) {
-                        $("#formChanged").val("N");
-                        //isChanged.val("N");
-                        location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
-                    }*@
-
             }
         });
 
@@ -1641,7 +1629,7 @@
     @* - - - - - - - SCRIPT TO ADD A NEW SECTION TO THE FORM AND SET THE "FORM CHANGED" STATUS when form is modified- - - - - - - - - - *@
     <script type="text/jscript">
         $(document).ready(function () {
-            // Variables and a Function Used to Scroll Down the sectons/question panel (Can be Invoked later on from any section inside this script)
+            // Variables and a Function Used to Scroll Down the sections/question panel (Can be Invoked later on from any section inside this script)
             var height = 0;
             function scroll(height) {
                 this.stop().animate({ scrollTop: height }, 1000);
@@ -1651,11 +1639,10 @@
 
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             // As soon as the page first loads, create a new Section if we are in "add" mode.
-            if ($('#formMode').val() == "add") { addNewSection(); }
+            if ($('#formMode').val() == "add") { addNewSection(); 
+                $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up after a section was added on first load
+            }
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            //Enable Input fields to be reset when to default css when edited and to set the form status to "changed"
-            //var isChanged = false;
-            $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
 
             $('input, select, textarea').not(".qInput").change(function () {
                 //$("input[type='submit']").removeAttr("disabled");

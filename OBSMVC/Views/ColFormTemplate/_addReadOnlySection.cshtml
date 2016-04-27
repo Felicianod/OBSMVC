@@ -27,19 +27,19 @@
                     foreach (OBSMVC.Controllers.CollectionFormQuestion sectQuest in Model.colFormQuestionList)
                     {
                         string listId = "li" + questionCounter.ToString("00");
-                        <li id="@listId">
+                        <li id="@listId" style="margin-bottom:8px">
                             @*<a href='#' class='dismiss'>x</a>*@
 
                             <div class="row divFormQuestion" style="text-align:left">
-                                <div class="row">
-                                    <div class="col-sm-10" style="margin-left:20px">
+                                <div class="row" style="margin-top:8px;">
+                                    <div class="col-sm-11" style="margin-left:20px">
                                         <p id="qText" style="font-family:Arial; font-weight:bold; font-size:larger">@sectQuest.cfq_fullText</p>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-7 col-sm-offset-1">
                                         <div class="input-group reloadDDL">
-                                            <div class="input-group-addon">Answer Type</div>
+                                            <div class="input-group-addon" style="font-weight:bold">Answer Type:</div>
                                             <input type="text" class="form-control" value="@sectQuest.cfq_AT" readonly="readonly" disabled>
                                             <br />
                                         </div>
@@ -53,7 +53,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row" style="margin-bottom:8px">
                                     <div class="col-sm-11 col-sm-offset-1">
                                         <div class="col-sm-2">
                                             Selectable Answers: &nbsp;&nbsp;

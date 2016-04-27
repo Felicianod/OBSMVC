@@ -563,22 +563,27 @@
         @*\\ - - - - - - - - - - - - - <<<<< END OF FORM BODY >>>>> - - - - - - - - - - - - //*@
 
         @*// - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - \\*@
-        <div class="row">
-            <input type="hidden" id="isPublished" name="isPublished" value="false" >
-            <div class="col-sm-offset-5 col-sm-4">
-                <input id="btnSaveForm" type="button" value="Save Form" onclick="PostForm($(this))" @*disabled="disabled"*@ />
-                &nbsp;&nbsp;
-                <input id="btnPublishForm" type="button" value="Publish Form" onclick="PostForm($(this))" @if (@Model.cft_isPublished == "PUBLISHED" ) { <text> disabled="disabled" readonly</text>   } />
-            </div>
-            <div class="col-sm-1">
-                <button type="button" class="btn btn-warning" id="btnReset" @canEnabled>Reset Form</button>
-            </div>
-            <div class="col-sm-1 col-sm-offset-1">
-                <button type="button" class="btn btn-warning" id="btnCancel" >Cancel/Back to List</button>
+        <div class="row" style="margin-left:20px; margin-right:20px;">
+            <div class="col-sm-4 col-sm-offset-3">
+                <div class="col-sm-6" style="text-align:center">
+                    <input id="btnSaveForm" type="button" value="Save Form" onclick="PostForm($(this))" style="min-width:120px; min-height:34px" @*disabled="disabled"*@ />
+                </div>
+                <div class="col-sm-6" style="text-align:center">
+                    <input id="btnPublishForm" type="button" value="Publish Form" onclick="PostForm($(this))" style="min-width:120px; min-height:34px" @if (@Model.cft_isPublished == "PUBLISHED") { <text> disabled="disabled" readonly</text>   } />
+                </div>
             </div>
 
+            <div class="col-sm-3 col-sm-offset-2">
+                <div class="col-sm-6" style="text-align:center">
+                    <button type="button" class="btn btn-warning" id="btnReset" style="min-width:130px" @canEnabled>Reset Form</button>
+                </div>                
+                <div class="col-sm-6" style="text-align:center">
+                    <button type="button" class="btn btn-warning" id="btnCancel" style="min-width:120px">Cancel/Back to List</button>
+                </div>                
+            </div>
         </div>
-        @*\\ - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - //*@
+        <input type="hidden" id="isPublished" name="isPublished" value="false">
+        @*\\ - - - - - - - - - - - - - <<<<< END OF FORM FOOTER SECTION >>>>> - - - - - - - - - - - - //*@
 
     </div> @* ----- END OF FORM PANEL*@
 </form>

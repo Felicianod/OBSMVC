@@ -335,7 +335,7 @@ namespace OBSMVC.Controllers
                     Session["frmAction"] = null;
                 }
                 catch { }
-                if (!String.IsNullOrEmpty(frmAction) && frmAction!= "MANAGE-NEW-VERSION")
+                if (!String.IsNullOrEmpty(frmAction))
                 {
                     if (frmAction == "MANAGE-EDIT")
                     {
@@ -405,7 +405,7 @@ namespace OBSMVC.Controllers
         public ActionResult AddEditForm(oCollectionForm colForm, FormCollection formData, int? id, string frmAction)
         {
             int cft_id = id ?? -1;
-            if (!String.IsNullOrEmpty(frmAction))//this means we're came here from Manage form and user needs to unpublish this form
+            if (!String.IsNullOrEmpty(frmAction) && frmAction != "MANAGE-NEW-VERSION")//this means we're came here from Manage form and user needs to unpublish this form
             {
                 //frmAction = "EDIT" or "NEW VERSION"
                 if (frmAction == "EDIT")//if edit, we need to unpublish
@@ -418,6 +418,7 @@ namespace OBSMVC.Controllers
                 }               
                 return RedirectToAction("AddEditForm", new { id = cft_id });
             }
+            if (frmAction == "MANAGE-NEW-VERSION") { return RedirectToAction("Index"); }
             string data_from_form = String.IsNullOrEmpty(formData["formQuestions"]) ? String.Empty : formData["formQuestions"];         
             string is_published = formData["isPublished"];
             

@@ -345,7 +345,7 @@
     <form class="form-horizontal" id="CreateForm" role="form" method="post" @*onkeydown="return event.keyCode!=13"*@>
     @Html.AntiForgeryToken()
         <input type="hidden" id="cft_id" value="@fMode" />
-        
+        <input type="hidden" id="frmAction" name="frmAction" value="@Model.manageAction" />        
 
     <div class="panel panel-default" style="margin-bottom:8px">
         @* - - - - - - - - - - - - - - <<<<< STARTS OF FORM HEADER >>>>> - - - - - - - - - - - - - *@

@@ -335,7 +335,7 @@ namespace OBSMVC.Controllers
                     Session["frmAction"] = null;
                 }
                 catch { }
-                if (!String.IsNullOrEmpty(frmAction))
+                if (!String.IsNullOrEmpty(frmAction) && frmAction!= "MANAGE-NEW-VERSION")
                 {
                     if (frmAction == "MANAGE-EDIT")
                     {
@@ -358,8 +358,7 @@ namespace OBSMVC.Controllers
                         selectedColForm.cft_isPublished = "NOT PUBLISHED";
                         selectedColForm.previous_vers_cft_id = selectedColForm.cft_id;
                         selectedColForm.cft_id = 0;
-                        selectedColForm.cft_Version++;                      
-
+                        selectedColForm.cft_Version++;                       
                     }
 
                 }
@@ -378,7 +377,6 @@ namespace OBSMVC.Controllers
             try { selected_lc = db.DSC_LC.Single(x => x.dsc_lc_name == selectedColForm.cft_LC).dsc_lc_id.ToString(); } catch { }
             string selected_cust = "0";
             try { selected_cust = db.DSC_CUSTOMER.Single(x => x.dsc_cust_name == selectedColForm.cft_Cust).dsc_cust_id.ToString(); } catch { }
-            //string selected_obs_type = "";
             try
             {
                 string selected_obs_type = db.OBS_TYPE.Single(x => x.obs_type_name==selectedColForm.cft_obsType).obs_type_id.ToString();

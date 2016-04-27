@@ -423,13 +423,13 @@ namespace OBSMVC.Controllers
             
             if (cft_id > 0 && db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_id == cft_id && x.obs_cft_pub_dtm!=null).Count()>0) 
             {
-                return RedirectToAction("Details", new { id = cft_id });
+                return RedirectToAction("AddEditForm", new { id = cft_id });
             }
             cft_id = saveForm(colForm, data_from_form, is_published, cft_id);
             Session["saveMessage"] = "Form Data was saved Successfully";
             if (is_published == "true")
             {
-                return RedirectToAction("Details", new { id = cft_id });
+                return RedirectToAction("AddEditForm", new { id = cft_id });
             }
             else { return RedirectToAction("AddEditForm", new { id = cft_id }); 
             }

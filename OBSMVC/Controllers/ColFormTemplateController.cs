@@ -358,8 +358,7 @@ namespace OBSMVC.Controllers
                         selectedColForm.cft_isPublished = "NOT PUBLISHED";
                         selectedColForm.previous_vers_cft_id = selectedColForm.cft_id;
                         selectedColForm.cft_id = 0;
-                        selectedColForm.cft_Version++;
-                        
+                        selectedColForm.cft_Version++;                      
 
                     }
 

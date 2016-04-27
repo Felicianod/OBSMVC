@@ -7,7 +7,9 @@
 @{
     var canEnabled = "";
     var frmWasChanged = "N";
+    var attentionCalss = "";
     if (!@Model.manageAction.Contains("MANAGE")) { canEnabled = "disabled"; } else { frmWasChanged = "Y"; }
+    if (Model.cft_Version > 1) { attentionCalss = "lookatMe"; }    
  }
 
 
@@ -202,6 +204,9 @@
         word-wrap: break-word;
         word-break: break-all;
         height: 80px;
+    }
+    .lookatMe {
+        background-color: #02610e;
     }
 </style>
 
@@ -408,10 +413,10 @@
                 </div>
                     <div class="input-group">
                         <div class="input-group-addon">Form Number:</div>
-                        <input type="text" readonly class="form-control" value="@form_num" style = "max-width: 60%; width:60%"  />
+                        <input type="text" id="cft_Nbr" name="cft_Nbr" readonly class="form-control" value="@form_num" style="max-width: 60%; width:60%" />
                        @*@Html.EditorFor(model => model.cft_Nbr, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly="readonly"} })*@
                         <div class="input-group-addon">Version:</div>
-                        <input type="text" readonly class="form-control" value="@form_version" style = "max-width: 60%; width:60%" />
+                        <input type="text" id="cft_Version" name="cft_Version" readonly class="form-control @attentionCalss" value="@form_version" style="max-width: 60%; width:60%" />
                         @*@Html.EditorFor(model => model.cft_Version, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly = "readonly" } })*@
                     </div>
 

@@ -390,7 +390,7 @@ namespace OBSMVC.Controllers
             ViewBag.cft_Cust = new SelectList(db.DSC_CUSTOMER.Where(x => x.dsc_cust_id >= 0), "dsc_cust_id", "dsc_cust_name", selected_cust);
             ViewBag.cft_LC = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id >= 0).OrderBy(y=>y.dsc_lc_name), "dsc_lc_id", "dsc_lc_name", selected_lc);
 
-            if (selectedColForm.manageAction.Equals("EDIT")|| selectedColForm.manageAction.Equals("NEW VERSION"))
+            if (selectedColForm.manageAction.Equals("EDIT")|| selectedColForm.manageAction.Equals("NEW VERSION")|| selectedColForm.manageAction.Equals("RESTRICTED")|| selectedColForm.manageAction.Equals("VIEW-ONLY"))
             { // Is published and it has instances
                 return View("ManageForm", selectedColForm);
             }
@@ -1573,21 +1573,36 @@ namespace OBSMVC.Controllers
                 cft_Version = q.cft_Version;
                 cft_eff_st_dt = q.cft_eff_st_dt;
                 cft_eff_end_dt = q.cft_eff_end_dt;
-                if(cft_Version>1)
+                //Retrieve the cft_id of the new form's version (If any) (Value greater than zero means that this forms has a newer version)
+                //cft_new_vers_cft_id = db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1).Select(y => y.obs_cft_id).FirstOrDefault();
+                if (cft_Version>1)
                 {
-                  
+                    OBS_COLLECT_FORM_TMPLT prev_version = db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version -1).FirstOrDefault();
+                    previous_vers_cft_id = prev_version.obs_cft_id;
+                    previous_vers_end_eff_dt = (DateTime)prev_version.obs_cft_pub_dtm;
                 }
                 //previous_vers_cft_id =
                 colFormSections = new List<CollectionFormSection>();
                 retrieveQuestionData();
                 if (cft_isPublished.Equals("PUBLISHED"))
                 {
-                    manageAction = hasInstances ? "NEW VERSION" : "EDIT";//  "VIEW-ONLY", "RESTRICTED"
+                    if(db.OBS_COLLECT_FORM_TMPLT.Any(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1))
+                    {
+                        OBS_COLLECT_FORM_TMPLT next_version = db.OBS_COLLECT_FORM_TMPLT.Single(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1);
+                        cft_new_vers_cft_id = next_version.obs_cft_id;
+                        manageAction = next_version.obs_cft_pub_dtm == null ? "RESTRICTED" : "VIEW-ONLY";
+                    }
+                    else
+                    {
+                        manageAction = hasInstances ? "NEW VERSION" : "EDIT";//  "VIEW-ONLY", "RESTRICTED"
+                    }
+                    
                 }
                 else { manageAction = ""; }
 
-                //Retrieve the cft_id of the new form's version (If any) (Value greater than zero means that this forms has a newer version)
-                cft_new_vers_cft_id =  db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1).Select(y => y.obs_cft_id).FirstOrDefault();
+               
+                //int cft_new_vers_cft_id =  db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1).Select(y => y.obs_cft_id).FirstOrDefault();
+
             }
             else { 
             // Form Id not found in the database, leave all values empty or use defaults. The Assumpsion is that we are in "add" mode

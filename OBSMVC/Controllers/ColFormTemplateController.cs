@@ -1573,9 +1573,13 @@ namespace OBSMVC.Controllers
                 cft_Version = q.cft_Version;
                 cft_eff_st_dt = q.cft_eff_st_dt;
                 cft_eff_end_dt = q.cft_eff_end_dt;
-                if(cft_Version>1)
+                //Retrieve the cft_id of the new form's version (If any) (Value greater than zero means that this forms has a newer version)
+                int cft_new_vers_cft_id = db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1).Select(y => y.obs_cft_id).FirstOrDefault();
+                if (cft_Version>1)
                 {
-                  
+                    OBS_COLLECT_FORM_TMPLT prev_version = db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version -1).FirstOrDefault();
+                    previous_vers_cft_id = prev_version.obs_cft_id;
+                    previous_vers_end_eff_dt = (DateTime)prev_version.obs_cft_pub_dtm;
                 }
                 //previous_vers_cft_id =
                 colFormSections = new List<CollectionFormSection>();
@@ -1586,8 +1590,8 @@ namespace OBSMVC.Controllers
                 }
                 else { manageAction = ""; }
 
-                //Retrieve the cft_id of the new form's version (If any) (Value greater than zero means that this forms has a newer version)
-                int cft_new_vers_cft_id =  db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1).Select(y => y.obs_cft_id).FirstOrDefault();
+               
+                //int cft_new_vers_cft_id =  db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1).Select(y => y.obs_cft_id).FirstOrDefault();
 
             }
             else { 

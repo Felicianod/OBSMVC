@@ -203,13 +203,13 @@
 <div class="row" style="margin-left:10px">
     <div class="well well-sm smallRowMargin col-sm-11" style="padding: 4px; margin-bottom:8px; text-align:center">
         <span style="font-size:xx-large;">@Model.screen_Title</span>
-@if (Model.hasNewVersion)
+@if (Model.cft_new_vers_cft_id > 0)
 {
     <br />
     <span style="font-size:small; color:red; font-style:italic">A new version exists for this form!  Editting is restricted.</span>
 }
     </div>
-    @if (!Model.hasNewVersion)
+    @if (!(Model.cft_new_vers_cft_id > 0))
     {
         <div class="col-sm-1" style="padding: 4px; margin-bottom:8px; text-align:right">
             <form method="post">

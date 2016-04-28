@@ -1576,7 +1576,7 @@ namespace OBSMVC.Controllers
                 retrieveQuestionData();
                 if (cft_isPublished.Equals("PUBLISHED"))
                 {
-                    manageAction = hasInstances ? "NEW VERSION" : "EDIT";
+                    manageAction = hasInstances ? "NEW VERSION" : "EDIT";//  "VIEW-ONLY", "RESTRICTED"
                 }
                 else { manageAction = ""; }
             }
@@ -1623,6 +1623,7 @@ namespace OBSMVC.Controllers
         public string str_cft_eff_st_dt { get; set; }
         public string str_cft_eff_end_dt { get; set; }
         public bool str_cft_canBdeleted { get; set; }
+        public int cft_new_vers_cft_id { set; get; }
         public bool hasInstances { get; set; }
         public bool hasNewVersion { get; set; }
         public string manageAction { get; set; }

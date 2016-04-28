@@ -1637,6 +1637,7 @@ namespace OBSMVC.Controllers
         public string originalyPublishedBy { set; get; }
         public DateTime? originalPublishDate { set; get; }
         public int previous_vers_cft_id { set; get; }
+        public DateTime previous_vers_end_eff_dt { set; get; }
         public List<CollectionFormSection> colFormSections { get; set; }
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\\
         //- - - - - - - - - - - - CLASS METHODS - - - - - - - - - - - - - - - - |

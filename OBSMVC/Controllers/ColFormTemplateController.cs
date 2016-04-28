@@ -1588,7 +1588,6 @@ namespace OBSMVC.Controllers
 
                 //Retrieve the cft_id of the new form's version (If any) (Value greater than zero means that this forms has a newer version)
                 cft_new_vers_cft_id =  db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1).Select(y => y.obs_cft_id).FirstOrDefault();
-
             }
             else { 
             // Form Id not found in the database, leave all values empty or use defaults. The Assumpsion is that we are in "add" mode

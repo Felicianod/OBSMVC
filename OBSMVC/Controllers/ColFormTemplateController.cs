@@ -1572,6 +1572,11 @@ namespace OBSMVC.Controllers
                 cft_Version = q.cft_Version;
                 cft_eff_st_dt = q.cft_eff_st_dt;
                 cft_eff_end_dt = q.cft_eff_end_dt;
+                if(cft_Version>1)
+                {
+                  
+                }
+                //previous_vers_cft_id =
                 colFormSections = new List<CollectionFormSection>();
                 retrieveQuestionData();
                 if (cft_isPublished.Equals("PUBLISHED"))

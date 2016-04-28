@@ -201,19 +201,26 @@
 }
 
 <div class="row" style="margin-left:10px">
-    <div class="well well-sm smallRowMargin col-sm-11" style="padding: 4px; font-size:xx-large; margin-bottom:8px; text-align:center">
-        <span>@Model.screen_Title</span>
+    <div class="well well-sm smallRowMargin col-sm-11" style="padding: 4px; margin-bottom:8px; text-align:center">
+        <span style="font-size:xx-large;">@Model.screen_Title</span>
+@if (Model.hasNewVersion)
+{
+    <br />
+    <span style="font-size:small; color:red; font-style:italic">A new version exists for this form!  Editting is restricted.</span>
+}
     </div>
-    <div class="col-sm-1" style="padding: 4px; margin-bottom:8px; text-align:right">
-        <form method="post">
-            @Html.AntiForgeryToken()
-            <input type="hidden" id="id" name="id" value="@Model.cft_id.ToString()" />
-            <input type="hidden" id="frmAction" name="frmAction" value="@Model.manageAction" />
-            <button type="submit" class="btn btnAdd" id="btnManageAction" style="width:110px">@Model.manageAction</button>
-        </form>        
-    </div>
+    @if (!Model.hasNewVersion)
+    {
+        <div class="col-sm-1" style="padding: 4px; margin-bottom:8px; text-align:right">
+            <form method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="id" name="id" value="@Model.cft_id.ToString()" />
+                <input type="hidden" id="frmAction" name="frmAction" value="@Model.manageAction" />
+                <button type="submit" class="btn btnAdd" id="btnManageAction" style="width:110px">@Model.manageAction</button>
+            </form>
+        </div>
+    }
 </div>
-
 
 @* - - - - - - - - - - - - - - - - BEGINING OF THE "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
 @*// ---- Helper Hidden Fields to Control the Inner Ids ----- *@

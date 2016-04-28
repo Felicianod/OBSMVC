@@ -26,7 +26,7 @@ namespace OBSMVC.Controllers
             string onlyLive = "N";
             try { onlyLive = Request.QueryString["chkLive"]; }
             catch { }
-            var oBS_COLLECT_FORM_TMPLT = db.OBS_COLLECT_FORM_TMPLT.Include(o => o.DSC_CUSTOMER).Include(o => o.DSC_LC).Include(o => o.OBS_TYPE);
+            var oBS_COLLECT_FORM_TMPLT = db.OBS_COLLECT_FORM_TMPLT.Include(o => o.DSC_CUSTOMER).Include(o => o.DSC_LC).Include(o => o.OBS_TYPE).OrderBy(x => x.obs_cft_nbr);
             List<SelectListItem> fullFuncList = setfullFuncList();
             int selectedFunctionId = -1;
             try
@@ -1560,6 +1560,7 @@ namespace OBSMVC.Controllers
                 screen_Title = "Collection Form Maintenance";
                 cft_editMode = "edit";
                 hasInstances = db.OBS_COLLECT_FORM_INST.Count(x => x.obs_cft_id == cft_id) > 0 ? true:false;
+                hasNewVersion = db.OBS_COLLECT_FORM_TMPLT.Count(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver > q.cft_Version) > 0 ? true : false;
                 cft_Title = q.cft_Title;
                 cft_SubTitle = q.cft_SubTitle;
                 cft_obsType = q.cft_obsType;
@@ -1591,6 +1592,7 @@ namespace OBSMVC.Controllers
                 //cft_Status = q.cft_Status;
                 cft_isPublished = "NOT PUBLISHED";
                 hasInstances = false;
+                hasNewVersion = false;
                 manageAction = "";
                 cft_Nbr = 0;
                 cft_Version = 0;
@@ -1622,6 +1624,7 @@ namespace OBSMVC.Controllers
         public string str_cft_eff_end_dt { get; set; }
         public bool str_cft_canBdeleted { get; set; }
         public bool hasInstances { get; set; }
+        public bool hasNewVersion { get; set; }
         public string manageAction { get; set; }
         public string originalyPublishedBy { set; get; }
         public DateTime? originalPublishDate { set; get; }

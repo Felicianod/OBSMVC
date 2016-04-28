@@ -1425,17 +1425,18 @@ namespace OBSMVC.Controllers
                         if (isPublished == "true")
                         {
                             return -1;
-                            template_to_save.obs_cft_pub_by_uid = User.Identity.Name;
-                            template_to_save.obs_cft_pub_dtm = DateTime.Now;
-                            if (colForm.cft_eff_st_dt != null && (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000")))
-                            {
-                                template_to_save.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
 
-                            }
-                            else
-                            {
-                                return -1;
-                            }
+                            //template_to_save.obs_cft_pub_by_uid = User.Identity.Name;
+                            //template_to_save.obs_cft_pub_dtm = DateTime.Now;
+                            //if (colForm.cft_eff_st_dt != null && (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000")))
+                            //{
+                            //    template_to_save.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
+
+                            //}
+                            //else
+                            //{
+                            //    return -1;
+                            //}
                         }
                         else if (!(colForm.cft_eff_st_dt == null || (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000"))))
                         {
@@ -1560,7 +1561,7 @@ namespace OBSMVC.Controllers
                 screen_Title = "Collection Form Maintenance";
                 cft_editMode = "edit";
                 hasInstances = db.OBS_COLLECT_FORM_INST.Count(x => x.obs_cft_id == cft_id) > 0 ? true:false;
-                hasNewVersion = db.OBS_COLLECT_FORM_TMPLT.Count(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver > q.cft_Version) > 0 ? true : false;
+                //hasNewVersion = db.OBS_COLLECT_FORM_TMPLT.Count(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver > q.cft_Version) > 0 ? true : false;
                 cft_Title = q.cft_Title;
                 cft_SubTitle = q.cft_SubTitle;
                 cft_obsType = q.cft_obsType;
@@ -1579,9 +1580,13 @@ namespace OBSMVC.Controllers
                     manageAction = hasInstances ? "NEW VERSION" : "EDIT";//  "VIEW-ONLY", "RESTRICTED"
                 }
                 else { manageAction = ""; }
+
+                //Retrieve the cft_id of the new form's version (If any) (Value greater than zero means that this forms has a newer version)
+                int cft_new_vers_cft_id =  db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver > q.cft_Version).Select(y => y.obs_cft_id).FirstOrDefault();
+
             }
             else { 
-            // Form Id not found in the database, leave all values empty. Assume we are in "add" mode
+            // Form Id not found in the database, leave all values empty or use defaults. The Assumpsion is that we are in "add" mode
                 screen_Title = "Collection Form Creation";
                 cft_editMode = "add";
                 cft_Title = "";
@@ -1592,7 +1597,9 @@ namespace OBSMVC.Controllers
                 //cft_Status = q.cft_Status;
                 cft_isPublished = "NOT PUBLISHED";
                 hasInstances = false;
-                hasNewVersion = false;
+                //hasNewVersion = false;
+                cft_new_vers_cft_id = 0;
+                previous_vers_cft_id = 0;
                 manageAction = "";
                 cft_Nbr = 0;
                 cft_Version = 0;
@@ -1623,9 +1630,9 @@ namespace OBSMVC.Controllers
         public string str_cft_eff_st_dt { get; set; }
         public string str_cft_eff_end_dt { get; set; }
         public bool str_cft_canBdeleted { get; set; }
-        public int cft_new_vers_cft_id { set; get; }
         public bool hasInstances { get; set; }
-        public bool hasNewVersion { get; set; }
+        //public bool hasNewVersion { get; set; }
+        public int cft_new_vers_cft_id { set; get; }
         public string manageAction { get; set; }
         public string originalyPublishedBy { set; get; }
         public DateTime? originalPublishDate { set; get; }

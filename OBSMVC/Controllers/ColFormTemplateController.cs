@@ -513,6 +513,9 @@ namespace OBSMVC.Controllers
                 OBS_COLLECT_FORM_TMPLT form_to_republish = db.OBS_COLLECT_FORM_TMPLT.Find(cft_id);
                 form_to_republish.obs_cft_pub_by_uid = publishedBy;
                 form_to_republish.obs_cft_pub_dtm = publishedOn;
+                form_to_republish.obs_cft_upd_dtm = DateTime.Now;
+                form_to_republish.obs_cft_last_saved_dtm = DateTime.Now;
+                form_to_republish.obs_cft_upd_uid = User.Identity.Name;
                 db.SaveChanges();
                 return "Success";
             }
@@ -528,6 +531,9 @@ namespace OBSMVC.Controllers
             {
                 OBS_COLLECT_FORM_TMPLT form_to_update = db.OBS_COLLECT_FORM_TMPLT.Find(cft_id);
                 form_to_update.obs_cft_eff_end_dt = end_eff_date;
+                form_to_update.obs_cft_upd_dtm = DateTime.Now;
+                form_to_update.obs_cft_last_saved_dtm = DateTime.Now;
+                form_to_update.obs_cft_upd_uid = User.Identity.Name;
                 db.SaveChanges();
                 return "Success";
             }

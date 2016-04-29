@@ -62,6 +62,7 @@ namespace OBSMVC.Controllers
                             obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
                             obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
                             obsForm.FormSubtitle = x.obs_cft_subtitle;
+                            obsForm.manageAction = obsForm.getManageAction(obsForm.isPublished, x.obs_cft_id, x.obs_cft_nbr, x.obs_cft_ver);
                             ObsColFormTemplateList.Add(obsForm);
                         }
 
@@ -91,6 +92,7 @@ namespace OBSMVC.Controllers
                                 obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
                                 obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
                                 obsForm.FormSubtitle = x.obs_cft_subtitle;
+                                obsForm.manageAction = obsForm.getManageAction(obsForm.isPublished, x.obs_cft_id, x.obs_cft_nbr, x.obs_cft_ver);
                                 ObsColFormTemplateList.Add(obsForm);
                             }
 
@@ -122,6 +124,7 @@ namespace OBSMVC.Controllers
                                 obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
                                 obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
                                 obsForm.FormSubtitle = x.obs_cft_subtitle;
+                                obsForm.manageAction = obsForm.getManageAction(obsForm.isPublished, x.obs_cft_id, x.obs_cft_nbr, x.obs_cft_ver);
                                 ObsColFormTemplateList.Add(obsForm);
                             }
 
@@ -152,6 +155,7 @@ namespace OBSMVC.Controllers
                                 obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
                                 obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
                                 obsForm.FormSubtitle = x.obs_cft_subtitle;
+                                obsForm.manageAction = obsForm.getManageAction(obsForm.isPublished, x.obs_cft_id, x.obs_cft_nbr, x.obs_cft_ver);
                                 ObsColFormTemplateList.Add(obsForm);//title search match
 
                             }
@@ -186,6 +190,7 @@ namespace OBSMVC.Controllers
                         obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
                         obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
                         obsForm.FormSubtitle = x.obs_cft_subtitle;
+                        obsForm.manageAction = obsForm.getManageAction(obsForm.isPublished, x.obs_cft_id, x.obs_cft_nbr, x.obs_cft_ver);
                         ObsColFormTemplateList.Add(obsForm);
                     }//end of foreach
 
@@ -212,6 +217,7 @@ namespace OBSMVC.Controllers
                             obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
                             obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
                             obsForm.FormSubtitle = x.obs_cft_subtitle;
+                            obsForm.manageAction = obsForm.getManageAction(obsForm.isPublished, x.obs_cft_id, x.obs_cft_nbr, x.obs_cft_ver);
                             ObsColFormTemplateList.Add(obsForm);
                         }
                     }//end of foreach
@@ -239,6 +245,7 @@ namespace OBSMVC.Controllers
                             obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
                             obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
                             obsForm.FormSubtitle = x.obs_cft_subtitle;
+                            obsForm.manageAction = obsForm.getManageAction(obsForm.isPublished, x.obs_cft_id, x.obs_cft_nbr, x.obs_cft_ver);
                             ObsColFormTemplateList.Add(obsForm);
                         }
                     }
@@ -266,6 +273,7 @@ namespace OBSMVC.Controllers
                             obsForm.ObservationCount = obsForm.getTimesCompletedCount(x.obs_cft_id);
                             obsForm.LastCompleteDate = obsForm.getLastCompleteDate(x.obs_cft_id);
                             obsForm.FormSubtitle = x.obs_cft_subtitle;
+                            obsForm.manageAction = obsForm.getManageAction(obsForm.isPublished, x.obs_cft_id, x.obs_cft_nbr, x.obs_cft_ver);
                             ObsColFormTemplateList.Add(obsForm);//title search match
                         }
                     }//end of foreach
@@ -1116,7 +1124,7 @@ namespace OBSMVC.Controllers
 
             public string FormSubtitle { get; set; }
             public List<int> AssignedFunctions = new List<int>();
-
+            public string manageAction { get; set; }
 
             public int getAssignedQuestionCount(int cft_id)
             {
@@ -1142,6 +1150,29 @@ namespace OBSMVC.Controllers
                                                where fc.obs_cft_id == cft_if && os.obs_sub_type_group == "FUNCTION"
                                                select os.obs_sub_type_id).ToList();
                 return AssignedFunctions;
+            }
+            public string getManageAction(bool isPublished, int cft_id, short formNum, short formVer)
+            {
+                if(isPublished)
+                {
+                    
+                    OBS_COLLECT_FORM_TMPLT next_version = new OBS_COLLECT_FORM_TMPLT();
+                    if (OBSdb.OBS_COLLECT_FORM_TMPLT.Any(x => x.obs_cft_nbr == formNum && x.obs_cft_ver == formVer + 1))
+                    {
+                        next_version = OBSdb.OBS_COLLECT_FORM_TMPLT.Single(x => x.obs_cft_nbr == formNum && x.obs_cft_ver == formVer + 1);
+                        manageAction = next_version.obs_cft_pub_dtm == null ? "RESTRICTED" : "VIEW-ONLY";
+                    }
+                    else
+                    {
+                        manageAction = OBSdb.OBS_COLLECT_FORM_INST.Count(x => x.obs_cft_id == cft_id) > 0  ? "NEW VERSION" : "EDIT";
+                    }
+                    return manageAction;
+
+                }
+                else
+                {
+                    return "";
+                }
             }
 
 
@@ -1603,6 +1634,12 @@ namespace OBSMVC.Controllers
                 cft_eff_st_dt = q.cft_eff_st_dt;
                 cft_eff_end_dt = q.cft_eff_end_dt;
                 previous_vers_cft_id = 0;
+                OBS_COLLECT_FORM_TMPLT next_version = new OBS_COLLECT_FORM_TMPLT();
+                if (db.OBS_COLLECT_FORM_TMPLT.Any(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1))
+                {
+                     next_version = db.OBS_COLLECT_FORM_TMPLT.Single(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1);
+                    cft_new_vers_cft_id = next_version.obs_cft_id;                    
+                }
                 //Retrieve the cft_id of the new form's version (If any) (Value greater than zero means that this forms has a newer version)
                 //cft_new_vers_cft_id = db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1).Select(y => y.obs_cft_id).FirstOrDefault();
                 if (cft_Version>1)
@@ -1616,10 +1653,8 @@ namespace OBSMVC.Controllers
                 retrieveQuestionData();
                 if (cft_isPublished.Equals("PUBLISHED"))
                 {
-                    if(db.OBS_COLLECT_FORM_TMPLT.Any(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1))
+                    if(cft_new_vers_cft_id>0)
                     {
-                        OBS_COLLECT_FORM_TMPLT next_version = db.OBS_COLLECT_FORM_TMPLT.Single(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1);
-                        cft_new_vers_cft_id = next_version.obs_cft_id;
                         manageAction = next_version.obs_cft_pub_dtm == null ? "RESTRICTED" : "VIEW-ONLY";
                     }
                     else

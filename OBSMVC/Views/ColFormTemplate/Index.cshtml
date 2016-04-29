@@ -111,13 +111,18 @@
             @Html.DisplayFor(modelItem => item.OBSformID)
         </td>
         <td style="text-align:center">
-            @if (item.isActive || item.isPublished)
+            @*@if (item.isActive || item.isPublished)*@
+            @if (item.manageAction== "VIEW-ONLY")
             {
-                @Html.ActionLink("Manage", "AddEditForm", new { id = item.OBSformID })
+                @Html.ActionLink("View", "AddEditForm", new { id = item.OBSformID })
                 @*<text>Manage</text>*@
             }
+            else if (item.manageAction == "")
+            {
+                @Html.ActionLink("Edit", "AddEditForm", new { id = item.OBSformID })
+            }
             else
-            {@Html.ActionLink("Edit", "AddEditForm", new { id = item.OBSformID })}
+            { @Html.ActionLink("Manage", "AddEditForm", new { id = item.OBSformID })}
         </td>
         <td>
             @Html.ActionLink(item.FormTitle, "Details", new { id = item.OBSformID })            

@@ -405,7 +405,7 @@ namespace OBSMVC.Controllers
         public ActionResult AddEditForm(oCollectionForm colForm, FormCollection formData, int? id, string frmAction)
         {
             int cft_id = id ?? -1;
-            if (!String.IsNullOrEmpty(frmAction) && frmAction != "MANAGE-NEW-VERSION")   //This means we're came here from Manage form and user needs to unpublish this form
+            if (!String.IsNullOrEmpty(frmAction) && (frmAction == "EDIT" || frmAction== "NEW VERSION"))//this means we're came here from Manage form and user needs to unpublish this form
             {
                 //frmAction = "EDIT" or "NEW VERSION"
                 if (frmAction == "EDIT")//if edit, we need to unpublish
@@ -509,6 +509,21 @@ namespace OBSMVC.Controllers
                 return "Success";
             }
             catch(Exception e)
+            {
+                return e.Message;
+            }
+        }
+        [HttpPost]
+        public string updateEndEffDate(int cft_id, DateTime end_eff_date)
+        {//This method is called by AJAX from the front end. it updates  end_effective_date
+            try
+            {
+                OBS_COLLECT_FORM_TMPLT form_to_update = db.OBS_COLLECT_FORM_TMPLT.Find(cft_id);
+                form_to_update.obs_cft_eff_end_dt = end_eff_date;
+                db.SaveChanges();
+                return "Success";
+            }
+            catch (Exception e)
             {
                 return e.Message;
             }
@@ -1287,17 +1302,25 @@ namespace OBSMVC.Controllers
                         template_to_edit.obs_cft_upd_uid = User.Identity.Name;
                         if (isPublished == "true")
                         {
-                            template_to_edit.obs_cft_pub_by_uid = User.Identity.Name;
-                            template_to_edit.obs_cft_pub_dtm = DateTime.Now;
-                            if (colForm.cft_eff_st_dt != null && (colForm.cft_eff_st_dt > Convert.ToDateTime("01/01/2000")))
+                            //if (colForm.cft_eff_st_dt != null && (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000")))
+                            if (colForm.cft_eff_st_dt != null)
                             {
                                 template_to_edit.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
-
+                                if (colForm.previous_vers_cft_id > 0)
+                                {
+                                    OBS_COLLECT_FORM_TMPLT prev_form = db.OBS_COLLECT_FORM_TMPLT.Find(colForm.previous_vers_cft_id);
+                                    if (prev_form.obs_cft_eff_end_dt > colForm.cft_eff_st_dt)
+                                    {
+                                        prev_form.obs_cft_eff_end_dt = ((DateTime)colForm.cft_eff_st_dt).AddSeconds(-1);
+                                    }
+                                }// end ofif (colForm.previous_vers_cft_id > 0)
                             }
                             else
                             {
                                 return -1;
                             }
+                            template_to_edit.obs_cft_pub_by_uid = User.Identity.Name;
+                            template_to_edit.obs_cft_pub_dtm = DateTime.Now;
                         }
                         else if (!(colForm.cft_eff_st_dt == null || (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000"))))
                         {
@@ -1335,10 +1358,10 @@ namespace OBSMVC.Controllers
                         template_to_save.obs_cft_upd_uid = User.Identity.Name;
                         if (isPublished == "true")
                         {
-                            template_to_save.obs_cft_pub_by_uid= User.Identity.Name;
-                            template_to_save.obs_cft_pub_dtm = DateTime.Now;
-                            if ( colForm.cft_eff_st_dt != null && (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000")))
+
+                            if (colForm.cft_eff_st_dt != null && (colForm.cft_eff_st_dt > Convert.ToDateTime("01/01/2000")))
                             {
+
                                 template_to_save.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
 
                             }
@@ -1346,6 +1369,8 @@ namespace OBSMVC.Controllers
                             {
                                 return -1;
                             }
+                            template_to_save.obs_cft_pub_by_uid = User.Identity.Name;
+                            template_to_save.obs_cft_pub_dtm = DateTime.Now;
                         }
                         else if (!(colForm.cft_eff_st_dt == null || (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000"))))
                         {
@@ -1424,19 +1449,23 @@ namespace OBSMVC.Controllers
                         template_to_save.obs_cft_upd_uid = User.Identity.Name;
                         if (isPublished == "true")
                         {
-                            return -1;
-
-                            //template_to_save.obs_cft_pub_by_uid = User.Identity.Name;
-                            //template_to_save.obs_cft_pub_dtm = DateTime.Now;
+                            
                             //if (colForm.cft_eff_st_dt != null && (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000")))
-                            //{
-                            //    template_to_save.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
-
-                            //}
-                            //else
-                            //{
-                            //    return -1;
-                            //}
+                            if (colForm.cft_eff_st_dt != null)
+                            {                                
+                                OBS_COLLECT_FORM_TMPLT prev_form = db.OBS_COLLECT_FORM_TMPLT.Find(colForm.previous_vers_cft_id);
+                                template_to_save.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
+                                if(prev_form.obs_cft_eff_end_dt > colForm.cft_eff_st_dt)
+                                { 
+                                   prev_form.obs_cft_eff_end_dt = ((DateTime)colForm.cft_eff_st_dt).AddSeconds(-1);
+                                }                                                              
+                            }
+                            else
+                            {
+                                return -1;
+                            }
+                            template_to_save.obs_cft_pub_by_uid = User.Identity.Name;
+                            template_to_save.obs_cft_pub_dtm = DateTime.Now;
                         }
                         else if (!(colForm.cft_eff_st_dt == null || (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000"))))
                         {
@@ -1573,6 +1602,7 @@ namespace OBSMVC.Controllers
                 cft_Version = q.cft_Version;
                 cft_eff_st_dt = q.cft_eff_st_dt;
                 cft_eff_end_dt = q.cft_eff_end_dt;
+                previous_vers_cft_id = 0;
                 //Retrieve the cft_id of the new form's version (If any) (Value greater than zero means that this forms has a newer version)
                 //cft_new_vers_cft_id = db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1).Select(y => y.obs_cft_id).FirstOrDefault();
                 if (cft_Version>1)

@@ -850,7 +850,7 @@
 
         // Validat the Start Date if the Form is being published
         if (btnClicked.attr("id") == "btnPublishForm") {
-            alert("Publishing Start Date: " + $('#cft_eff_st_dt').val() + "\nPublishing End Date: " + $('#cft_eff_end_dt').val())
+            //alert("Publishing Start Date: " + $('#cft_eff_st_dt').val() + "\nPublishing End Date: " + $('#cft_eff_end_dt').val())
             document.getElementById("isPublished").value = "true"
             if ($('#cft_eff_st_dt').val() == "") {
                 errorMsg = errorMsg + "The Effective Start Date id required when Publishing a Form\n";

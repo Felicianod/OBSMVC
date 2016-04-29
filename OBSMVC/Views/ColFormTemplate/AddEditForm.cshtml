@@ -850,12 +850,22 @@
 
         // Validat the Start Date if the Form is being published
         if (btnClicked.attr("id") == "btnPublishForm") {
+
             document.getElementById("isPublished").value = "true"
             if ($('#obs_cft_eff_st_dt').val() == "") {
                 errorMsg = errorMsg + "The Effective Start Date id required when Publishing a Form\n";
                 $('#obs_cft_eff_st_dt').addClass("invalidField");
                 $('#obs_cft_eff_st_dt').focus();
             }
+            else{
+                var todaysDate = new Date();
+                var effStartDate = new Date($('#obs_cft_eff_st_dt').val());
+                if (effStartDate.toDateString() < todaysDate.toDateString()) {
+                    errorMsg = errorMsg + "Warning, the Effective Start Date of a Published Form must be greater than today.\n";
+                    $('#obs_cft_eff_st_dt').addClass("invalidField");
+                    $('#obs_cft_eff_st_dt').focus();
+                }
+            } 
         }
         //Validate the Form Title
         if (document.getElementById("cft_Title").value.trim() == "") {

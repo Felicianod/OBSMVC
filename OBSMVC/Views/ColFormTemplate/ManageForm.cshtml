@@ -194,10 +194,14 @@
 
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
 @{
+    string manageAction = @Model.manageAction;
     string fMode = @Model.cft_editMode;
     int masterCounter = 1;
     string rowInfo = masterCounter.ToString();
     string colFormId = Model.cft_id.ToString();
+    string endDateMode = "readonly";
+
+    if (manageAction.Equals("RESTRICTED"))  endDateMode = "";
 }
 
 <div class="row" style="margin-left:10px">
@@ -293,7 +297,7 @@
                             var endEffDate = "";
                             if (Model.cft_eff_end_dt < Convert.ToDateTime("12/31/2060")) { endEffDate = Model.cft_eff_end_dt.ToString("MMM dd, yyyy"); }                          
                           }*@
-                        <input class="datepicker form-control" id="cft_eff_end_dt" name="cft_eff_end_dt" readonly disabled value="@Model.str_cft_eff_end_dt" style="max-width: 100%; width:100%;">
+                        <input class="datepicker form-control" id="cft_eff_end_dt" name="cft_eff_end_dt" @endDateMode disabled value="@Model.str_cft_eff_end_dt" style="max-width: 100%; width:100%;">
                         <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
                     </div>
                 </div>

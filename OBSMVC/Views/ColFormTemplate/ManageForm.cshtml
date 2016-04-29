@@ -345,6 +345,12 @@
         @*// - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - \\*@
         <div class="row">
             <div class="col-sm-12" style="text-align:center">
+
+                @if (manageAction.Equals("RESTRICTED"))
+                {
+                    <button type="button" class="btn btn-success" id="btnSave">Save</button>
+                    <text>&nbsp;&nbsp;&nbsp;</text>
+                }
                 <button type="button" class="btn btn-warning" id="btnCancel" >Cancel</button>
             </div>
         </div>
@@ -421,6 +427,34 @@
                     $("#cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
                 },
                 useCurrent: false //Important! See issue #1075
+            });
+
+            $("#btnSave").click(function(){            
+                //updateEndEffDate(int cft_id, DateTime end_eff_date)
+                var newEndEffDate = $("#cft_eff_end_dt").val();
+
+                alert("Saving form Id: " + "@colFormId" + " __ New End Date is: " + newEndEffDate);
+
+                $.ajax({
+                    url: '@Url.Action("updateEndEffDate", "ColFormTemplate")',
+                    method: "POST",
+                    cache: false,
+                    data: { cft_id: @colFormId, end_eff_date: newEndEffDate },
+                    error: function () {
+                        alert("Failed to Save the Form.");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    if (d == "Success") {
+                        alert("Data Saved Successfully!");
+                        //location.href = "/ColFormTemplate/AddEditForm/" + formCftid;
+                        //location.href = "/ColFormTemplate";
+                    }
+                    else {
+                        alert("ERROR Saving Form: " + d);
+                    }
+                });
+                //--- Finished Resetting the ajax values
+
             });
 
         });

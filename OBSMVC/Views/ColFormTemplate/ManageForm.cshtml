@@ -411,6 +411,18 @@
                 }
             });
         
+            $('#cft_eff_end_dt').datepicker({
+                dateFormat: 'M dd, yy',
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                minDate: -0,
+                onClose: function (selectedDate) {
+                    $("#cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
+                },
+                useCurrent: false //Important! See issue #1075
+            });
+
         });
 </script>
 
@@ -420,7 +432,7 @@
 
 
    @* --- Drag and Drop Java Script - - - - - *@
-    <script type="text/javascript">
+    @*<script type="text/javascript">
 
        //------------------------------------------------------------------
         function getQinfo(questionId, questionQATid) {
@@ -479,4 +491,4 @@
                 //return d;
             });
         }
-    </script>
+    </script>*@

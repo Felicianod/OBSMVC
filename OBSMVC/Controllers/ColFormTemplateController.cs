@@ -686,6 +686,7 @@ namespace OBSMVC.Controllers
             questionInfo.uniqueCounter = qCounter;
             questionInfo.isOptional = isOptional;
             questionInfo.full_text = db.OBS_QUESTION.Single(item => item.obs_question_id == question_id).obs_question_full_text;
+            questionInfo.isValid = db.OBS_QUESTION.Any(x => x.obs_question_eff_st_dt <= DateTime.Now && x.obs_question_eff_end_dt > DateTime.Now) ? true : false;
             List<OBS_QUEST_ANS_TYPES> QAInstances = db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == question_id && (x.obs_qat_end_eff_dt == null || x.obs_qat_end_eff_dt > DateTime.Now)).ToList();
 
             if (QAInstances.Count() == 0)  //There were no records found in the 'OBS_QUEST_ANS_TYPES' Table for this question Id
@@ -1862,6 +1863,7 @@ namespace OBSMVC.Controllers
         public bool hasInstances { get; set; }
         public int default_qat_id = -1;
         public string isOptional { set; get; }
+        public bool isValid { set; get; }
         public List<OBS_ANS_TYPE> assigned_answer_types = new List<OBS_ANS_TYPE>();
         public List<OBS_QUEST_SLCT_ANS> selectable_answers = new List<OBS_QUEST_SLCT_ANS>();
         public List<OBS_QUEST_ANS_TYPES> obs_question_answer_types = new List<OBS_QUEST_ANS_TYPES>();

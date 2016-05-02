@@ -1,4 +1,20 @@
-﻿<nav class="navbar navbar-inverse navbar-fixed-top">
+﻿
+@{
+    bool authorized = false;
+    try {
+        if (String.IsNullOrEmpty(Session["role"].ToString()) || Session["role"].ToString().Equals("Not Authorized"))
+        {
+            authorized = false;
+        }
+        else
+        { authorized = true; }
+    }
+    catch {
+        authorized = false;
+    }
+}
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
     <a style="position:fixed; top:0; left:0" href="/home">
         <img class="img-responsive" src="~/Images/DSCHOME_Logo.png" />
     </a>
@@ -15,7 +31,7 @@
     </div>
 
     <div class="collapse navbar-collapse" id="myNavbar" style="font-size:large" >
-        @if(Session["role"].ToString() != "Not Authorized")
+        @if (authorized)
         {
             <div class="col-md-8 col-md-offset-2">
                 <ul class="nav navbar-nav">

@@ -291,7 +291,7 @@ namespace OBSMVC.Controllers
                 }
             }
             ViewBag.fullFuncList = fullFuncList;
-            return View(ObsColFormTemplateList.ToList());
+            return View(ObsColFormTemplateList.OrderBy(x=>x.OBS_Type).ThenBy(y=>y.FormNumber).ToList());
         }
 
         [HttpGet]

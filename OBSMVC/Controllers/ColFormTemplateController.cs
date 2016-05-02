@@ -676,8 +676,6 @@ namespace OBSMVC.Controllers
 
             }//end of else
 
-
-
             //questions_for_display = availableQuestions.OrderBy(x => x.obs_question_id).Skip(((page ?? 1) - 1) * (pageSize ?? 10)).Take(pageSize ?? 10).ToList();
             questions_for_display = availableQuestions.OrderBy(x => x.obs_question_id).ToList() ;
             return PartialView("_getQuestionsList", questions_for_display);

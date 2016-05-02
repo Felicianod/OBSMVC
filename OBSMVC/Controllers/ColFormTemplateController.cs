@@ -418,11 +418,11 @@ namespace OBSMVC.Controllers
                 //frmAction = "EDIT" or "NEW VERSION"
                 if (frmAction == "EDIT")//if edit, we need to unpublish
                 {
-                    Session["frmAction"] = "MANAGE-EDIT";                
+                    Session["frmAction"] = "MANAGE-EDIT";
                 }
                 else if(frmAction == "NEW VERSION")
                 {
-                    Session["frmAction"] = "MANAGE-NEW-VERSION";  
+                    Session["frmAction"] = "MANAGE-NEW-VERSION";
                 }               
                 return RedirectToAction("AddEditForm", new { id = cft_id });
             }

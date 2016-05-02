@@ -346,7 +346,7 @@
 
         @*// - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - \\*@
         <div class="row">
-            <div class="col-sm-12" style="text-align:center">
+            <div class="col-sm-7" style="text-align:right">
 
                 @if (manageAction.Equals("RESTRICTED"))
                 {
@@ -354,6 +354,9 @@
                     <text>&nbsp;&nbsp;&nbsp;</text>
                 }
                 <button type="button" class="btn btn-warning" id="btnCancel" >Cancel</button>
+            </div>
+            <div class="col-sm-4 alert-success" id="saveMsg" style="text-align:center; font-size:x-large; display:none ">
+                Data Saved Successfully
             </div>
         </div>
         @*\\ - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - //*@
@@ -434,8 +437,12 @@
             $("#btnSave").click(function(){            
                 //updateEndEffDate(int cft_id, DateTime end_eff_date)
                 var newEndEffDate = $("#cft_eff_end_dt").val();
+                if (newEndEffDate == "")
+                {
+                    newEndEffDate = "Dec 31, 2060";
+                }
 
-                alert("Saving form Id: " + "@colFormId" + " __ New End Date is: " + newEndEffDate);
+                //alert("Saving form Id: " + "@colFormId" + " __ New End Date is: " + newEndEffDate);
 
                 $.ajax({
                     url: '@Url.Action("updateEndEffDate", "ColFormTemplate")',
@@ -447,9 +454,14 @@
                     }
                 }).done(function (d) {
                     if (d == "Success") {
-                        alert("Data Saved Successfully!");
+                        //alert("Data Saved Successfully!");
+
                         //location.href = "/ColFormTemplate/AddEditForm/" + formCftid;
                         //location.href = "/ColFormTemplate";
+                        $("#saveMsg").show();
+                        setTimeout(function () {
+                            $("#saveMsg").hide();
+                        }, 3000);
                     }
                     else {
                         alert("ERROR Saving Form: " + d);

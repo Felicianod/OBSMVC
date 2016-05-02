@@ -18,6 +18,7 @@ namespace OBSMVC.Controllers
     [AllowAnonymous]
     public class LoginController : Controller
     {
+        private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
         [HttpGet]
         public ActionResult OBSLogin() { return View(); }      
         [HttpPost]
@@ -215,6 +216,22 @@ namespace OBSMVC.Controllers
                     Session.Add("last_name", JsonObject["DSCAuthenticationSrv"]["last_name"]);
                     Session.Add("username", loginModel.Username);
                     Session.Add("email", JsonObject["DSCAuthenticationSrv"]["email"]);
+                    string role = (from r in db.OBS_ROLE
+                                   join ur in db.OBS_USER_ROLE
+                                   on r.obs_role_id equals ur.obs_role_id
+                                   join ua in db.OBS_USER_AUTH
+                                    on ur.obs_user_auth_id equals ua.obs_user_auth_id
+                                   where ua.obs_user_auth_dsc_ad_name == loginModel.Username && r.obs_role_active_yn=="Y"
+                                   && ua.obs_user_auth_active_yn =="Y" && ur.obs_user_role_eff_start_dt<= DateTime.Now && ur.obs_user_role_eff_end_dt>DateTime.Now
+                                   select r.obs_role_name).FirstOrDefault();
+                    if(!String.IsNullOrEmpty(role))
+                    {
+                        Session.Add("role", role);
+                    }
+                    else
+                    {
+                        Session.Add("role", "Not Authorized");
+                    }
                     return true;  /// Authenticasion was sucessful!!
                 }
                 else

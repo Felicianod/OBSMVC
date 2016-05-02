@@ -74,6 +74,11 @@
         <AssociationConnector Association="Models.relationship39" />
         <AssociationConnector Association="Models.relationship40" />
         <AssociationConnector Association="Models.relationship45" />
+        <EntityTypeShape EntityType="Models.OBS_ROLE" Width="1.5" PointX="10.375" PointY="20.25" />
+        <EntityTypeShape EntityType="Models.OBS_USER_AUTH" Width="1.5" PointX="10.375" PointY="17.25" />
+        <EntityTypeShape EntityType="Models.OBS_USER_ROLE" Width="1.5" PointX="12.625" PointY="17" />
+        <AssociationConnector Association="Models.rel_role_user_role" />
+        <AssociationConnector Association="Models.rel_user_auth_user_role" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -15,51 +15,60 @@
     </div>
 
     <div class="collapse navbar-collapse" id="myNavbar" style="font-size:large" >
-        <div class="col-md-8 col-md-offset-2">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        Reference Data
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("Customers", "Index", "Cust")</li>
-                        <li>@Html.ActionLink("Logistic Center", "Index", "LC")</li>
-                        <li>@Html.ActionLink("Employees", "Index", "Employee")</li>
-                        <li class="disabled">@Html.ActionLink("Observation Types", "Index", "OBSTYPE")</li>
-                        <li class="disabled">@Html.ActionLink("Observation Subtypes", "Index", "OBSsubtype")</li>
+        @if(Session["role"].ToString() != "Not Authorized")
+        {
+            <div class="col-md-8 col-md-offset-2">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Reference Data
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Customers", "Index", "Cust")</li>
+                            <li>@Html.ActionLink("Logistic Center", "Index", "LC")</li>
+                            <li>@Html.ActionLink("Employees", "Index", "Employee")</li>
+                            <li class="disabled">@Html.ActionLink("Observation Types", "Index", "OBSTYPE")</li>
+                            <li class="disabled">@Html.ActionLink("Observation Subtypes", "Index", "OBSsubtype")</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" href="#">
+                            Questions Library
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Search", "Index", "Question")</li>
+                            <li>@Html.ActionLink("Add New Question", "QuestionAddUpdate", "Question", new { id = 0 }, null)</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" href="#">
+                            Collection Forms
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Search", "Index", "ColFormTemplate")</li>
+                            <li>@Html.ActionLink("Create New Form", "AddEditForm", "ColFormTemplate", new { id = "0" }, null)</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown disabled"><a data-toggle="tab" href="#">Menu 4</a></li>
+                </ul>
+            </div>
+
+        }
+        else
+        {
+            <div class="col-md-8 col-md-offset-2">
+            </div>
+        }
+                <div class="col-md-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <span class="glyphicon glyphicon-log-in" style="font-size:large; color:white">@Html.ActionLink(" Logout |", "OBSLogout", "Login", null, new { style = "color:white" })</span>
+                        </li>
                     </ul>
-                </li>
-                <li class="dropdown">
-                    <a data-toggle="dropdown" href="#">
-                        Questions Library
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("Search", "Index", "Question")</li>
-                        <li>@Html.ActionLink("Add New Question", "QuestionAddUpdate", "Question", new { id =0},null)</li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a data-toggle="dropdown" href="#">
-                        Collection Forms
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("Search", "Index", "ColFormTemplate")</li>
-                        <li>@Html.ActionLink("Create New Form", "AddEditForm", "ColFormTemplate", new { id = "0"}, null)</li>                        
-                    </ul>
-                </li>
-                <li class="dropdown disabled"><a data-toggle="tab" href="#">Menu 4</a></li>
-            </ul>
-        </div>
-        <div class="col-md-1">
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <span class="glyphicon glyphicon-log-in" style="font-size:large; color:white">@Html.ActionLink(" Logout |", "OBSLogout", "Login", null, new { style = "color:white" })</span>
-                </li>
-            </ul>  
-        </div>
-    </div>
+                </div>
+            </div>
 <br />
 </nav>

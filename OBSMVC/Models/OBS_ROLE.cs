@@ -12,21 +12,19 @@ namespace OBSMVC.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class OBS_SUPER_TYPE
+    public partial class OBS_ROLE
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public OBS_SUPER_TYPE()
+        public OBS_ROLE()
         {
-            this.OBS_TYPE = new HashSet<OBS_TYPE>();
+            this.OBS_USER_ROLE = new HashSet<OBS_USER_ROLE>();
         }
     
-        public short obs_super_type_id { get; set; }
-        public string obs_super_type_name { get; set; }
-        public string obs_super_type_desc { get; set; }
-        public string obs_super_type_col_form_only_yn { get; set; }
-        public string obs_super_type_api_tag_val { get; set; }
+        public int obs_role_id { get; set; }
+        public string obs_role_name { get; set; }
+        public string obs_role_active_yn { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OBS_TYPE> OBS_TYPE { get; set; }
+        public virtual ICollection<OBS_USER_ROLE> OBS_USER_ROLE { get; set; }
     }
 }

@@ -530,7 +530,8 @@ namespace OBSMVC.Controllers
             try
             {
                 OBS_COLLECT_FORM_TMPLT form_to_update = db.OBS_COLLECT_FORM_TMPLT.Find(cft_id);
-                form_to_update.obs_cft_eff_end_dt = end_eff_date;
+                if (end_eff_date == null || end_eff_date< Convert.ToDateTime("12/31/1999")) { form_to_update.obs_cft_eff_end_dt = Convert.ToDateTime("12/31/2060"); }
+                else { form_to_update.obs_cft_eff_end_dt = end_eff_date; }                
                 form_to_update.obs_cft_upd_dtm = DateTime.Now;
                 form_to_update.obs_cft_last_saved_dtm = DateTime.Now;
                 form_to_update.obs_cft_upd_uid = User.Identity.Name;

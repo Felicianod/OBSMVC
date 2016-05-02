@@ -371,6 +371,11 @@ namespace OBSMVC.Controllers
 
                 }
 
+                //Validate that the start Date is equal or greater than today. Otherwise, reset it to be today.
+
+                selectedColForm.cft_eff_st_dt = selectedColForm.cft_eff_st_dt.HasValue ? selectedColForm.cft_eff_st_dt : DateTime.Now;
+                if (selectedColForm.cft_eff_st_dt < DateTime.Now) { selectedColForm.cft_eff_st_dt = DateTime.Now; }
+
                 selectedColForm.str_cft_eff_st_dt = selectedColForm.cft_eff_st_dt.HasValue ? selectedColForm.cft_eff_st_dt.Value.ToString("MMM dd, yyyy") : String.Empty;
                 selectedColForm.str_cft_eff_end_dt = selectedColForm.cft_eff_end_dt < Convert.ToDateTime("12/31/2060") ? selectedColForm.cft_eff_end_dt.ToString("MMM dd, yyyy") : String.Empty;
             }
@@ -693,8 +698,7 @@ namespace OBSMVC.Controllers
             {
                 questionInfo.hasInstances = false;
                 
-                SelectListItem answer_for_dropdown = new SelectListItem() { Text = "Add New...", Value = "New" };
-                questionInfo.question_assigned_answer_types.Add(answer_for_dropdown);
+                
             }
             else
             {//there's a record(s) in 'OBS_QUEST_ANS_TYPES'. now we need to loop through all of them, add them to the list and find default answer type
@@ -739,8 +743,11 @@ namespace OBSMVC.Controllers
 
                 }
                 questionInfo.question_assigned_answer_types =questionInfo.question_assigned_answer_types.OrderBy(item=>item.Text).ToList();
-                questionInfo.question_assigned_answer_types.Add(new SelectListItem() { Text = "Add New...", Value = "New" });
             }
+
+            //In all instances, add the "Add New..." selection option
+            questionInfo.question_assigned_answer_types.Add(new SelectListItem() { Text = "Add New...", Value = "New" });                
+
             if (question_QATid>0 )//this if statement is here to cover scenario where we edit previously saved form
             {
                 //we need to make previously selected value to be selected when we reload the edit form if it's still enabled

@@ -1681,214 +1681,207 @@
 
     @* - - - - - - - SCRIPT TO ADD A NEW SECTION TO THE FORM AND SET THE "FORM CHANGED" STATUS when form is modified- - - - - - - - - - *@
     <script type="text/jscript">
-        $(document).ready(function () {
-            // Variables and a Function Used to Scroll Down the sections/question panel (Can be Invoked later on from any section inside this script)
-            var height = 0;
-            function scroll(height) {
-                this.stop().animate({ scrollTop: height }, 1000);
-            };
-            var scrollPanel = $('#qFormList');
-            // ----- End of Variables and a Function Used to Scroll Down the sectons/question panel -------
+    $(document).ready(function () {
+        // Variables and a Function Used to Scroll Down the sections/question panel (Can be Invoked later on from any section inside this script)
+        var height = 0;
+        function scroll(height) {
+            this.stop().animate({ scrollTop: height }, 1000);
+        };
+        var scrollPanel = $('#qFormList');
+        // ----- End of Variables and a Function Used to Scroll Down the sectons/question panel -------
 
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            // As soon as the page first loads, create a new Section if we are in "add" mode.
-            if ($('#formMode').val() == "add") { addNewSection(); 
-                $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up after a section was added on first load
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        // As soon as the page first loads, create a new Section if we are in "add" mode.
+        if ($('#formMode').val() == "add") { addNewSection();
+            $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up after a section was added on first load
+        }
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        $('input, select, textarea').not(".qInput").change(function () {
+            //$("input[type='submit']").removeAttr("disabled");
+
+            if ($('#btnSaveForm').val() != "Save Form") {
+                $('#btnSaveForm').button('reset');
             }
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-            $('input, select, textarea').not(".qInput").change(function () {
-                //$("input[type='submit']").removeAttr("disabled");
-
-                if ($('#btnSaveForm').val() != "Save Form") {
-                    $('#btnSaveForm').button('reset');
-                }
-                $("#btnSaveForm").removeAttr('disabled');
-                $("#btnCancel").removeAttr('disabled');
-                //alert('Button Text is:' + btnText);
-                $("#formChanged").val("Y");   // Re-enable the form "changed" status
-                //isChanged = true;
-                $(this).removeClass("invalidField");
-            });
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            $(window).bind('beforeunload', function () {
-                if($("#formChanged").val() == "Y") {
-                    //if (isChanged) {
-                    return 'There are unsaved changed. Do you want to discard Changes and Exit?';
-                    //var response = 
-                    //$( "#dialog-confirm-exit" ).dialog({
-                    //    resizable: false,
-                    //    height:250,
-                    //    modal: true,
-                    //    buttons: {
-                    //        "Discard Changes": function() {
-                    //            //$("#formChanged").val("N");
-                    //            //isChanged.val("N");
-                    //            response = true;
-                    //        },
-                    //        Cancel: function() {
-                    //            //$( this ).dialog( "close" );
-                    //            response = false;
-                    //        }
-                    //    }
-                    //});
-                    //return response;
-                }
-                else {
-                    return undefined;
-                }
-            });
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            $("#btnSaveForm").click(function () {
-                //isChanged = false;
-                $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
-                $(this).button('loading');
-            });
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            $('#btnAddSection').click(function () {
-                var $btn = $(this);
-                $btn.button('loading');
-                addNewSection();
-                $btn.button('reset');
-
-                //Automatically Scroll to the botton of the Panel where the new Section was Inserted
-                //If we wanted to scroll to the top, we would set the "height = 0"
-                height = scrollPanel[0].scrollHeight;
-                scroll.call(scrollPanel, height);
-                //$('#qFormList').scrollTop($('#qFormList').scrollHeight);
-            })
-
-            // If the Effective Start Date is less than today, reset it to be updated by default to today's Date
-            var todaysDate = new Date();                
-            var effStartDate = new Date($('#cft_eff_st_dt').val());
-            if (effStartDate.toDateString() < todaysDate.toDateString()) {
-                alert("Warning, the Effective Start Date must be greater than today.");
-                $('#cft_eff_st_dt').val() = todaysDate.toString();
+            $("#btnSaveForm").removeAttr('disabled');
+            $("#btnCancel").removeAttr('disabled');
+            //alert('Button Text is:' + btnText);
+            $("#formChanged").val("Y");   // Re-enable the form "changed" status
+            //isChanged = true;
+            $(this).removeClass("invalidField");
+        });
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        $(window).bind('beforeunload', function () {
+            if($("#formChanged").val() == "Y") {
+                //if (isChanged) {
+                return 'There are unsaved changed. Do you want to discard Changes and Exit?';
+                //var response =
+                //$( "#dialog-confirm-exit" ).dialog({
+                //    resizable: false,
+                //    height:250,
+                //    modal: true,
+                //    buttons: {
+                //        "Discard Changes": function() {
+                //            //$("#formChanged").val("N");
+                //            //isChanged.val("N");
+                //            response = true;
+                //        },
+                //        Cancel: function() {
+                //            //$( this ).dialog( "close" );
+                //            response = false;
+                //        }
+                //    }
+                //});
+                //return response;
             }
+            else {
+                return undefined;
+            }
+        });
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        $("#btnSaveForm").click(function () {
+            //isChanged = false;
+            $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
+            $(this).button('loading');
+        });
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        $('#btnAddSection').click(function () {
+            var $btn = $(this);
+            $btn.button('loading');
+            addNewSection();
+            $btn.button('reset');
 
-            //Whenever the "Edit" form loads, do a "search" automatically to load all library question as a default action
-            $('#doSearch').click();
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        });  // END Of documetn Ready Startup Scripts
+            //Automatically Scroll to the botton of the Panel where the new Section was Inserted
+            //If we wanted to scroll to the top, we would set the "height = 0"
+            height = scrollPanel[0].scrollHeight;
+            scroll.call(scrollPanel, height);
+            //$('#qFormList').scrollTop($('#qFormList').scrollHeight);
+        })
+
+        
+        //Whenever the "Edit" form loads, do a "search" automatically to load all library question as a default action
+        $('#doSearch').click();
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    });  // END Of documetn Ready Startup Scripts
 
         function addNewSection() {
             $('#sCounter').val(Number($('#sCounter').val()) + 1);
             // ------------ Make the Ajax Call ---------------------------------------------
             $.ajax({
                 url: '@Url.Action("addNewSection", "ColFormTemplate")',
-                method: "GET",
-                cache: false,
-                data: { sCounter: $('#sCounter').val() },     //<---- Data Parameters (if not already passed in the Url)
-                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+            method: "GET",
+            cache: false,
+            data: { sCounter: $('#sCounter').val() },     //<---- Data Parameters (if not already passed in the Url)
+            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
 
-                //--- On error, execute this function ------
-                error: function () {
-                    alert("An Error has Occurred. Unable to Add New Sections to Form!!");  //<-- Trap and alert of any errors if they occurred
-                    $btn.button('reset');
-                }
-            }).done(function (d) {
-                //Execute this code After the Ajax call completes successfully
-                $("#accordion").append(d);
-                makeSectionsDropable();
-                // Reenable the "form change" validation on the newly created section
-                $('input').change(function () {
-                    $("#formChanged").val("Y");
-                    //isChanged = true;
-                    $("#btnSaveForm").removeAttr('disabled');
-                    $('#btnSaveForm').button('reset');
-                    $(this).removeClass("invalidField");
-                });
+            //--- On error, execute this function ------
+            error: function () {
+                alert("An Error has Occurred. Unable to Add New Sections to Form!!");  //<-- Trap and alert of any errors if they occurred
+                $btn.button('reset');
+            }
+        }).done(function (d) {
+            //Execute this code After the Ajax call completes successfully
+            $("#accordion").append(d);
+            makeSectionsDropable();
+            // Reenable the "form change" validation on the newly created section
+            $('input').change(function () {
+                $("#formChanged").val("Y");
+                //isChanged = true;
+                $("#btnSaveForm").removeAttr('disabled');
+                $('#btnSaveForm').button('reset');
+                $(this).removeClass("invalidField");
             });
+        });
 
-            } // ------ End of addNewSection() function -----
+    } // ------ End of addNewSection() function -----
 
-            function enableDropDown(dropdown) {
-                //var $drop_down = $(this);
-                var selectedId = dropdown.val();
-                var selectedText = dropdown.children("option:selected").text();
-                var ddlId = dropdown.prop("id");
+    function enableDropDown(dropdown) {
+        //var $drop_down = $(this);
+        var selectedId = dropdown.val();
+        var selectedText = dropdown.children("option:selected").text();
+        var ddlId = dropdown.prop("id");
 
-                var selansDiv = dropdown.parents(".divFormQuestion").first().find(".selAnsSection").first();
-                var qid = dropdown.parents(".divFormQuestion").first().find("#qid").val();
-                //alert("Selected Text is: " + selectedText);
-                //alert("Before opening modal window, the ddl id is: " + ddlId);
-                if (selectedId == '') {
-                    selectedId = "-1";
-                    @*$("#@Model.uniqueCounter").html("");*@
-                    selansDiv.html("");
-                }
-                else if(selectedId == 'New'){
-                    //alert("A New Question request has been issued!");
-                    $("#popupStatus").val("");
-                    $(this).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");  // Reset Sel Answers
-                    //Reset the modal Window contents
-                    clearNewSAbox();
+        var selansDiv = dropdown.parents(".divFormQuestion").first().find(".selAnsSection").first();
+        var qid = dropdown.parents(".divFormQuestion").first().find("#qid").val();
+        //alert("Selected Text is: " + selectedText);
+        //alert("Before opening modal window, the ddl id is: " + ddlId);
+        if (selectedId == '') {
+            selectedId = "-1";
+            @*$("#@Model.uniqueCounter").html("");*@
+            selansDiv.html("");
+        }
+        else if(selectedId == 'New'){
+            //alert("A New Question request has been issued!");
+            $("#popupStatus").val("");
+            $(this).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");  // Reset Sel Answers
+            //Reset the modal Window contents
+            clearNewSAbox();
 
-                    // Following code not used anymore as we will no longer keep a list of AT to add (New functionality 
-                    // will only save one AT at a time)
-                    ////Set the Hidden Field Values that will be used in Edit Mode
-                    //if ($("#popupDDLid").val() != ddlId)
-                    //{  // This indicates that a new Dropdown is being selected for edition!
-                    //    //Reset the old values from the "added" section, as they do not need to be kept from a previous different Selectable Answer
-                    //    $("#divaddedSA").html("");
-                    //}
+            // Following code not used anymore as we will no longer keep a list of AT to add (New functionality
+            // will only save one AT at a time)
+            ////Set the Hidden Field Values that will be used in Edit Mode
+            //if ($("#popupDDLid").val() != ddlId)
+            //{  // This indicates that a new Dropdown is being selected for edition!
+            //    //Reset the old values from the "added" section, as they do not need to be kept from a previous different Selectable Answer
+            //    $("#divaddedSA").html("");
+            //}
 
-                    $("#popupDDLid").val(ddlId);
-                    var questionText = dropdown.parents(".divFormQuestion").first().find(qText).text();
-                    $("#selQText").html(questionText);
-                    //$("#selQText").text(questionText);
-                    $("#editQATWindow").modal();
-                    //selansDiv.html("");
-                }else
-                {
-                    if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")
-                    {
-                        selansDiv.html('<span style="color:blue">No Selectable Answers Required for this Selection</span>')
+            $("#popupDDLid").val(ddlId);
+            var questionText = dropdown.parents(".divFormQuestion").first().find(qText).text();
+            $("#selQText").html(questionText);
+            //$("#selQText").text(questionText);
+            $("#editQATWindow").modal();
+            //selansDiv.html("");
+        }else
+        {
+            if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")
+            {
+                selansDiv.html('<span style="color:blue">No Selectable Answers Required for this Selection</span>')
+            }
+            else{
+                //alert("Selected ID "+selectedId);
+                $.ajax({
+                    url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
+                    method: "GET",
+                    cache: false,
+                    data: { qat_id: selectedId },
+                    error: function () {
+                        alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
                     }
-                    else{
-                        //alert("Selected ID "+selectedId);
-                        $.ajax({
-                            url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
-                            method: "GET",
-                            cache: false,
-                            data: { qat_id: selectedId },
-                            error: function () {
-                                alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-                            }
-                        }).done(function (d) {
-                            //alert("Retrieved Data is: " + d);
-                            selansDiv.html(d);
-                        });
-                    }
-                }
-                @*var cur_sel = document.getElementById("currentSelectedQAT"+@Model.uniqueCounter);
-            cur_sel.value = selectedId;*@
-
-                $(this).css({
-                    "color": "black",
-                    "background-color": "white"
+                }).done(function (d) {
+                    //alert("Retrieved Data is: " + d);
+                    selansDiv.html(d);
                 });
             }
-
-        // Function to load the selected template values into the Edit Mode ANswer Types
-        function loadTemplate(callerBtn, selAnslist) {
-            //Create an array of values (From parameter selAnslist value) to apply to the text boxes
-            var templateList = selAnslist.split(",");
-
-            // Loops through all textboxes of the upper level parent DIV and set their values accordingly
-            var textBoxCounter = 0;
-            $("#newQATsection").find(".selAnswerTextb").each(function () {
-                $(this).val(templateList[textBoxCounter]);
-                textBoxCounter = textBoxCounter + 1;
-            });
-
-            //$('.saveSA').prop('disabled', false);
-            $("#btnSaveNewSelAnswer").removeAttr('disabled');
-            $("#btnSaveNewSelAnswer").button('reset');
-            $("#newErrorMsg").html("");
         }
+        @*var cur_sel = document.getElementById("currentSelectedQAT"+@Model.uniqueCounter);
+            cur_sel.value = selectedId;*@
+
+        $(this).css({
+            "color": "black",
+            "background-color": "white"
+        });
+    }
+
+    // Function to load the selected template values into the Edit Mode ANswer Types
+    function loadTemplate(callerBtn, selAnslist) {
+        //Create an array of values (From parameter selAnslist value) to apply to the text boxes
+        var templateList = selAnslist.split(",");
+
+        // Loops through all textboxes of the upper level parent DIV and set their values accordingly
+        var textBoxCounter = 0;
+        $("#newQATsection").find(".selAnswerTextb").each(function () {
+            $(this).val(templateList[textBoxCounter]);
+            textBoxCounter = textBoxCounter + 1;
+        });
+
+        //$('.saveSA').prop('disabled', false);
+        $("#btnSaveNewSelAnswer").removeAttr('disabled');
+        $("#btnSaveNewSelAnswer").button('reset');
+        $("#newErrorMsg").html("");
+    }
 
     </script>

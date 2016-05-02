@@ -55,5 +55,8 @@ namespace OBSMVC.Models
         public virtual DbSet<DSC_CUSTOMER> DSC_CUSTOMER { get; set; }
         public virtual DbSet<OBS_COLLECT_FORM_TMPLT> OBS_COLLECT_FORM_TMPLT { get; set; }
         public virtual DbSet<DSC_EMPLOYEE> DSC_EMPLOYEE { get; set; }
+        public virtual DbSet<OBS_ROLE> OBS_ROLE { get; set; }
+        public virtual DbSet<OBS_USER_AUTH> OBS_USER_AUTH { get; set; }
+        public virtual DbSet<OBS_USER_ROLE> OBS_USER_ROLE { get; set; }
     }
 }

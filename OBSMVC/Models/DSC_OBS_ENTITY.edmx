@@ -298,6 +298,14 @@
           <Property Name="obs_quest_md_value" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="obs_quest_md_cat" Type="varchar" MaxLength="25" />
         </EntityType>
+        <EntityType Name="OBS_ROLE">
+          <Key>
+            <PropertyRef Name="obs_role_id" />
+          </Key>
+          <Property Name="obs_role_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="obs_role_name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="obs_role_active_yn" Type="varchar" MaxLength="1" Nullable="false" />
+        </EntityType>
         <EntityType Name="OBS_RVW_FORM_INST">
           <Key>
             <PropertyRef Name="obs_cfi_id" />
@@ -324,6 +332,7 @@
           <Property Name="obs_super_type_name" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="obs_super_type_desc" Type="varchar" MaxLength="100" />
           <Property Name="obs_super_type_col_form_only_yn" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="obs_super_type_api_tag_val" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="OBS_TYPE">
           <Key>
@@ -344,6 +353,24 @@
           <Property Name="obs_type_id" Type="int" Nullable="false" />
           <Property Name="obs_sub_type_id" Type="int" Nullable="false" />
           <Property Name="obs_sub_type_end_eff_dt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="OBS_USER_AUTH">
+          <Key>
+            <PropertyRef Name="obs_user_auth_id" />
+          </Key>
+          <Property Name="obs_user_auth_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="obs_user_auth_dsc_ad_name" Type="varchar" MaxLength="70" Nullable="false" />
+          <Property Name="obs_user_auth_active_yn" Type="varchar" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OBS_USER_ROLE">
+          <Key>
+            <PropertyRef Name="obs_user_role_id" />
+          </Key>
+          <Property Name="obs_user_role_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="obs_user_auth_id" Type="int" Nullable="false" />
+          <Property Name="obs_role_id" Type="int" Nullable="false" />
+          <Property Name="obs_user_role_eff_start_dt" Type="datetime" Nullable="false" />
+          <Property Name="obs_user_role_eff_end_dt" Type="datetime" Nullable="false" />
         </EntityType>
         <Association Name="obs_super_type_type">
           <End Role="OBS_SUPER_TYPE" Type="Self.OBS_SUPER_TYPE" Multiplicity="1" />
@@ -405,6 +432,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="rel_role_user_role">
+          <End Role="OBS_ROLE" Type="Self.OBS_ROLE" Multiplicity="1" />
+          <End Role="OBS_USER_ROLE" Type="Self.OBS_USER_ROLE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_ROLE">
+              <PropertyRef Name="obs_role_id" />
+            </Principal>
+            <Dependent Role="OBS_USER_ROLE">
+              <PropertyRef Name="obs_role_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="rel_section_from_question">
           <End Role="OBS_FORM_SECTION" Type="Self.OBS_FORM_SECTION" Multiplicity="1" />
           <End Role="OBS_COL_FORM_QUESTIONS" Type="Self.OBS_COL_FORM_QUESTIONS" Multiplicity="*" />
@@ -450,6 +489,18 @@
             </Principal>
             <Dependent Role="OBS_COLLECT_FORM_TMPLT">
               <PropertyRef Name="obs_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rel_user_auth_user_role">
+          <End Role="OBS_USER_AUTH" Type="Self.OBS_USER_AUTH" Multiplicity="1" />
+          <End Role="OBS_USER_ROLE" Type="Self.OBS_USER_ROLE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_USER_AUTH">
+              <PropertyRef Name="obs_user_auth_id" />
+            </Principal>
+            <Dependent Role="OBS_USER_ROLE">
+              <PropertyRef Name="obs_user_auth_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -839,11 +890,14 @@
           <EntitySet Name="OBS_QUEST_SLCT_ANS" EntityType="Self.OBS_QUEST_SLCT_ANS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_QUESTION" EntityType="Self.OBS_QUESTION" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_QUESTION_METADATA" EntityType="Self.OBS_QUESTION_METADATA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OBS_ROLE" EntityType="Self.OBS_ROLE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_RVW_FORM_INST" EntityType="Self.OBS_RVW_FORM_INST" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_SUB_TYPE" EntityType="Self.OBS_SUB_TYPE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_SUPER_TYPE" EntityType="Self.OBS_SUPER_TYPE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_TYPE" EntityType="Self.OBS_TYPE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_TYPE_SUB_TYPES" EntityType="Self.OBS_TYPE_SUB_TYPES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OBS_USER_AUTH" EntityType="Self.OBS_USER_AUTH" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OBS_USER_ROLE" EntityType="Self.OBS_USER_ROLE" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="obs_super_type_type" Association="Self.obs_super_type_type">
             <End Role="OBS_SUPER_TYPE" EntitySet="OBS_SUPER_TYPE" />
             <End Role="OBS_TYPE" EntitySet="OBS_TYPE" />
@@ -864,6 +918,10 @@
             <End Role="OBS_QUESTION" EntitySet="OBS_QUESTION" />
             <End Role="OBS_QUEST_ASSGND_MD" EntitySet="OBS_QUEST_ASSGND_MD" />
           </AssociationSet>
+          <AssociationSet Name="rel_role_user_role" Association="Self.rel_role_user_role">
+            <End Role="OBS_ROLE" EntitySet="OBS_ROLE" />
+            <End Role="OBS_USER_ROLE" EntitySet="OBS_USER_ROLE" />
+          </AssociationSet>
           <AssociationSet Name="rel_section_from_question" Association="Self.rel_section_from_question">
             <End Role="OBS_FORM_SECTION" EntitySet="OBS_FORM_SECTION" />
             <End Role="OBS_COL_FORM_QUESTIONS" EntitySet="OBS_COL_FORM_QUESTIONS" />
@@ -879,6 +937,10 @@
           <AssociationSet Name="rel_type_collect_form" Association="Self.rel_type_collect_form">
             <End Role="OBS_TYPE" EntitySet="OBS_TYPE" />
             <End Role="OBS_COLLECT_FORM_TMPLT" EntitySet="OBS_COLLECT_FORM_TMPLT" />
+          </AssociationSet>
+          <AssociationSet Name="rel_user_auth_user_role" Association="Self.rel_user_auth_user_role">
+            <End Role="OBS_USER_AUTH" EntitySet="OBS_USER_AUTH" />
+            <End Role="OBS_USER_ROLE" EntitySet="OBS_USER_ROLE" />
           </AssociationSet>
           <AssociationSet Name="relationship10" Association="Self.relationship10">
             <End Role="OBS_COLLECT_FORM_TMPLT" EntitySet="OBS_COLLECT_FORM_TMPLT" />
@@ -1038,6 +1100,7 @@
           <Property Name="obs_super_type_desc" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="obs_super_type_col_form_only_yn" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="OBS_TYPE" Relationship="Self.obs_super_type_type" FromRole="OBS_SUPER_TYPE" ToRole="OBS_TYPE" />
+          <Property Name="obs_super_type_api_tag_val" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="OBS_TYPE">
           <Key>
@@ -1252,6 +1315,17 @@
           <AssociationSet Name="relationship45" Association="Models.relationship45">
             <End Role="DSC_LC" EntitySet="DSC_LC" />
             <End Role="DSC_EMPLOYEE" EntitySet="DSC_EMPLOYEE" />
+          </AssociationSet>
+          <EntitySet Name="OBS_ROLE" EntityType="Models.OBS_ROLE" />
+          <EntitySet Name="OBS_USER_AUTH" EntityType="Models.OBS_USER_AUTH" />
+          <EntitySet Name="OBS_USER_ROLE" EntityType="Models.OBS_USER_ROLE" />
+          <AssociationSet Name="rel_role_user_role" Association="Models.rel_role_user_role">
+            <End Role="OBS_ROLE" EntitySet="OBS_ROLE" />
+            <End Role="OBS_USER_ROLE" EntitySet="OBS_USER_ROLE" />
+          </AssociationSet>
+          <AssociationSet Name="rel_user_auth_user_role" Association="Models.rel_user_auth_user_role">
+            <End Role="OBS_USER_AUTH" EntitySet="OBS_USER_AUTH" />
+            <End Role="OBS_USER_ROLE" EntitySet="OBS_USER_ROLE" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="OBS_QUEST_ANS_TYPES">
@@ -2079,6 +2153,60 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="OBS_ROLE">
+          <Key>
+            <PropertyRef Name="obs_role_id" />
+          </Key>
+          <Property Name="obs_role_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="obs_role_name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="obs_role_active_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OBS_USER_ROLE" Relationship="Models.rel_role_user_role" FromRole="OBS_ROLE" ToRole="OBS_USER_ROLE" />
+        </EntityType>
+        <EntityType Name="OBS_USER_AUTH">
+          <Key>
+            <PropertyRef Name="obs_user_auth_id" />
+          </Key>
+          <Property Name="obs_user_auth_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="obs_user_auth_dsc_ad_name" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="obs_user_auth_active_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OBS_USER_ROLE" Relationship="Models.rel_user_auth_user_role" FromRole="OBS_USER_AUTH" ToRole="OBS_USER_ROLE" />
+        </EntityType>
+        <EntityType Name="OBS_USER_ROLE">
+          <Key>
+            <PropertyRef Name="obs_user_role_id" />
+          </Key>
+          <Property Name="obs_user_role_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="obs_user_auth_id" Type="Int32" Nullable="false" />
+          <Property Name="obs_role_id" Type="Int32" Nullable="false" />
+          <Property Name="obs_user_role_eff_start_dt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="obs_user_role_eff_end_dt" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="OBS_ROLE" Relationship="Models.rel_role_user_role" FromRole="OBS_USER_ROLE" ToRole="OBS_ROLE" />
+          <NavigationProperty Name="OBS_USER_AUTH" Relationship="Models.rel_user_auth_user_role" FromRole="OBS_USER_ROLE" ToRole="OBS_USER_AUTH" />
+        </EntityType>
+        <Association Name="rel_role_user_role">
+          <End Type="Models.OBS_ROLE" Role="OBS_ROLE" Multiplicity="1" />
+          <End Type="Models.OBS_USER_ROLE" Role="OBS_USER_ROLE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_ROLE">
+              <PropertyRef Name="obs_role_id" />
+            </Principal>
+            <Dependent Role="OBS_USER_ROLE">
+              <PropertyRef Name="obs_role_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rel_user_auth_user_role">
+          <End Type="Models.OBS_USER_AUTH" Role="OBS_USER_AUTH" Multiplicity="1" />
+          <End Type="Models.OBS_USER_ROLE" Role="OBS_USER_ROLE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_USER_AUTH">
+              <PropertyRef Name="obs_user_auth_id" />
+            </Principal>
+            <Dependent Role="OBS_USER_ROLE">
+              <PropertyRef Name="obs_user_auth_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2110,6 +2238,7 @@
           <EntitySetMapping Name="OBS_SUPER_TYPE">
             <EntityTypeMapping TypeName="Models.OBS_SUPER_TYPE">
               <MappingFragment StoreEntitySet="OBS_SUPER_TYPE">
+                <ScalarProperty Name="obs_super_type_api_tag_val" ColumnName="obs_super_type_api_tag_val" />
                 <ScalarProperty Name="obs_super_type_id" ColumnName="obs_super_type_id" />
                 <ScalarProperty Name="obs_super_type_name" ColumnName="obs_super_type_name" />
                 <ScalarProperty Name="obs_super_type_desc" ColumnName="obs_super_type_desc" />
@@ -2452,6 +2581,35 @@
                 <ScalarProperty Name="dsc_emp_perm_id" ColumnName="dsc_emp_perm_id" />
                 <ScalarProperty Name="dsc_assigned_lc_id" ColumnName="dsc_assigned_lc_id" />
                 <ScalarProperty Name="dsc_emp_id" ColumnName="dsc_emp_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OBS_ROLE">
+            <EntityTypeMapping TypeName="Models.OBS_ROLE">
+              <MappingFragment StoreEntitySet="OBS_ROLE">
+                <ScalarProperty Name="obs_role_active_yn" ColumnName="obs_role_active_yn" />
+                <ScalarProperty Name="obs_role_name" ColumnName="obs_role_name" />
+                <ScalarProperty Name="obs_role_id" ColumnName="obs_role_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OBS_USER_AUTH">
+            <EntityTypeMapping TypeName="Models.OBS_USER_AUTH">
+              <MappingFragment StoreEntitySet="OBS_USER_AUTH">
+                <ScalarProperty Name="obs_user_auth_active_yn" ColumnName="obs_user_auth_active_yn" />
+                <ScalarProperty Name="obs_user_auth_dsc_ad_name" ColumnName="obs_user_auth_dsc_ad_name" />
+                <ScalarProperty Name="obs_user_auth_id" ColumnName="obs_user_auth_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OBS_USER_ROLE">
+            <EntityTypeMapping TypeName="Models.OBS_USER_ROLE">
+              <MappingFragment StoreEntitySet="OBS_USER_ROLE">
+                <ScalarProperty Name="obs_user_role_eff_end_dt" ColumnName="obs_user_role_eff_end_dt" />
+                <ScalarProperty Name="obs_user_role_eff_start_dt" ColumnName="obs_user_role_eff_start_dt" />
+                <ScalarProperty Name="obs_role_id" ColumnName="obs_role_id" />
+                <ScalarProperty Name="obs_user_auth_id" ColumnName="obs_user_auth_id" />
+                <ScalarProperty Name="obs_user_role_id" ColumnName="obs_user_role_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

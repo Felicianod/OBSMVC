@@ -315,6 +315,9 @@
     <Compile Include="Models\OBS_QUEST_SLCT_ANS.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\OBS_ROLE.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OBS_RVW_FORM_INST.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
@@ -328,6 +331,12 @@
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OBS_TYPE_SUB_TYPES.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_USER_AUTH.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBS_USER_ROLE.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\QuestAnsTypes.cs" />

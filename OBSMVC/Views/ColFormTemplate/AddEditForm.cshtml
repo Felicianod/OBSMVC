@@ -5,11 +5,13 @@
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 @{
-    var canEnabled = "";
+    var cancelEnabled = "";
     var frmWasChanged = "N";
     var attentionCalss = "";
-    if (!@Model.manageAction.Contains("MANAGE")) { canEnabled = "disabled"; }
-    if (Model.cft_Version > 1) { attentionCalss = "lookatMe"; } 
+    bool disableDropdowns = true;
+    if (!@Model.manageAction.Contains("MANAGE")) { cancelEnabled = "disabled"; }
+    if (@Model.manageAction.Equals("MANAGE-NEW-VERSION")) { attentionCalss = "lookatMe"; }
+    if (@Model.cft_Version == 1) { disableDropdowns = false; }
  }
 
 
@@ -343,7 +345,7 @@
 
     <form class="form-horizontal" id="CreateForm" role="form" method="post" @*onkeydown="return event.keyCode!=13"*@>
     @Html.AntiForgeryToken()
-        <input type="hidden" id="cft_id" value="@fMode" />
+        <input type="hidden" id="cft_id" value="@fMode"  />
         <input type="hidden" id="frmAction" name="frmAction" value="@Model.manageAction" />        
 
     <div class="panel panel-default" style="margin-bottom:8px">
@@ -370,21 +372,41 @@
                     <div class="input-group">
                         <div class="input-group-addon">Observation Type</div>
                         @*@Html.DropDownListFor(model => model.cft_obsType, ViewBag.cft_obsType as SelectList, new { @class = "form-control", name = "cft_obsType" })*@
-                        @Html.DropDownList("cft_obsType", null, "- Select Observation Type -", htmlAttributes: new { @class = "form-control", name = "cft_obsType" })
+                        @if (disableDropdowns) { 
+                            @Html.DropDownList("cft_obsType", null, "- Select Observation Type -", htmlAttributes: new { @class = "form-control", name = "cft_obsType", @readonly = "readonly", disabled = "disabled" })
+                        }
+                        else
+                        {
+                            @Html.DropDownList("cft_obsType", null, "- Select Observation Type -", htmlAttributes: new { @class = "form-control", name = "cft_obsType" })
+                        }                        
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="input-group">
                         <div class="input-group-addon">Customer</div>
                         @*@Html.DropDownListFor(model => model.cft_Cust, ViewBag.cft_Cust as SelectList, new { @class = "form-control", name = "cft_Cust" })*@
-                        @Html.DropDownList("cft_Cust", null, htmlAttributes: new { @class = "form-control", name = "cft_Cust" })
+                        @if (disableDropdowns)
+                        {
+                            @Html.DropDownList("cft_Cust", null, htmlAttributes: new { @class = "form-control", name = "cft_Cust", @readonly = "readonly", disabled = "disabled" })
+                        }
+                        else
+                        {
+                            @Html.DropDownList("cft_Cust", null, htmlAttributes: new { @class = "form-control", name = "cft_Cust"})
+                        }
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="input-group">
                         <div class="input-group-addon">Whse Location</div>
                         @*@Html.DropDownListFor(model => model.cft_LC, ViewBag.cft_LC as SelectList, new { @class = "form-control", name = "cft_LC" })*@
-                        @Html.DropDownList("cft_LC", null, htmlAttributes: new { @class = "form-control", name = "cft_LC" })
+                        @if (disableDropdowns)
+                        {
+                            @Html.DropDownList("cft_LC", null, htmlAttributes: new { @class = "form-control", name = "cft_LC", @readonly = "readonly", disabled = "disabled" })
+                        }
+                        else
+                        {
+                            @Html.DropDownList("cft_LC", null, htmlAttributes: new { @class = "form-control", name = "cft_LC" })
+                        }
                     </div>
                 </div>
             </div>
@@ -574,7 +596,7 @@
 
             <div class="col-sm-3 col-sm-offset-2">
                 <div class="col-sm-6" style="text-align:center">
-                    <button type="button" class="btn btn-warning" id="btnReset" style="min-width:130px" @canEnabled>Reset Form</button>
+                    <button type="button" class="btn btn-warning" id="btnReset" style="min-width:130px" @cancelEnabled>Reset Form</button>
                 </div>                
                 <div class="col-sm-6" style="text-align:center">
                     <button type="button" class="btn btn-warning" id="btnCancel" style="min-width:120px">Cancel/Back to List</button>
@@ -849,25 +871,34 @@
             }
         });  // Finished Processing all Form Sections
 
-        // Validat the Start Date if the Form is being published
+        // Validat that a valid Start Date is entered when the Form is being published
         if (btnClicked.attr("id") == "btnPublishForm") {
             //alert("Publishing Start Date: " + $('#cft_eff_st_dt').val() + "\nPublishing End Date: " + $('#cft_eff_end_dt').val())
             document.getElementById("isPublished").value = "true"
             if ($('#cft_eff_st_dt').val() == "") {
-                errorMsg = errorMsg + "The Effective Start Date id required when Publishing a Form\n";
+                errorMsg = errorMsg + "The Effective Start Date is required when Publishing a Form\n";
                 $('#cft_eff_st_dt').addClass("invalidField");
                 $('#cft_eff_st_dt').focus();
             }
-            else{
-                var todaysDate = new Date();
-                var effStartDate = new Date($('#cft_eff_st_dt').val());
-                if (effStartDate.toDateString() < todaysDate.toDateString()) {
-                    errorMsg = errorMsg + "Warning, the Effective Start Date of a Published Form must be greater than today.\n";
-                    $('#cft_eff_st_dt').addClass("invalidField");
-                    $('#cft_eff_st_dt').focus();
-                }
-            }
         }
+
+        //Validate that the start Date must not be in the past
+        var todaysDate = new Date();                
+        var effStartDate = new Date($('#cft_eff_st_dt').val());
+
+        if (effStartDate.toDateString() < todaysDate.toDateString()) {
+            errorMsg = errorMsg + "Warning, the Effective Start Date must be greater than today.\n";
+            $('#cft_eff_st_dt').addClass("invalidField");
+            $('#cft_eff_st_dt').focus();
+        }
+
+        //Validate the Observation Type
+        if (document.getElementById("cft_obsType").value == "") {
+            errorMsg = errorMsg + "The Observation Type is invalid.\n";
+            $("#cft_obsType").addClass("invalidField");
+            $("#cft_obsType").focus();
+        }
+
         //Validate the Form Title
         if (document.getElementById("cft_Title").value.trim() == "") {
             errorMsg = errorMsg + "The form Title is Required\n";
@@ -1722,12 +1753,19 @@
                 //If we wanted to scroll to the top, we would set the "height = 0"
                 height = scrollPanel[0].scrollHeight;
                 scroll.call(scrollPanel, height);
-
-
                 //$('#qFormList').scrollTop($('#qFormList').scrollHeight);
             })
 
+            // If the Effective Start Date is less than today, reset it to be updated by default to today's Date
+            var todaysDate = new Date();                
+            var effStartDate = new Date($('#cft_eff_st_dt').val());
+            if (effStartDate.toDateString() < todaysDate.toDateString()) {
+                alert("Warning, the Effective Start Date must be greater than today.");
+                $('#cft_eff_st_dt').val() = todaysDate.toString();
+            }
 
+            //Whenever the "Edit" form loads, do a "search" automatically to load all library question as a default action
+            $('#doSearch').click();
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         });  // END Of documetn Ready Startup Scripts
 

@@ -8,8 +8,8 @@
     var canEnabled = "";
     var frmWasChanged = "N";
     var attentionCalss = "";
-    if (!@Model.manageAction.Contains("MANAGE")) { canEnabled = "disabled"; } else { frmWasChanged = "Y"; }
-    if (Model.cft_Version > 1) { attentionCalss = "lookatMe"; }    
+    if (!@Model.manageAction.Contains("MANAGE")) { canEnabled = "disabled"; }
+    if (Model.cft_Version > 1) { attentionCalss = "lookatMe"; } 
  }
 
 
@@ -337,6 +337,7 @@
  <input type="hidden" id="formMode" value="@fMode" />
  <input type="hidden" id="cft_id" value="@Model.cft_id" />
  <input type="hidden" id="formChanged" value="@frmWasChanged">
+ <input type="hidden" id="bootstrapBtnReset" value="N">
     @*\\ ---- End of Hidden Control Fields section ----- *@
 
 
@@ -865,7 +866,7 @@
                     $('#cft_eff_st_dt').addClass("invalidField");
                     $('#cft_eff_st_dt').focus();
                 }
-            } 
+            }
         }
         //Validate the Form Title
         if (document.getElementById("cft_Title").value.trim() == "") {
@@ -1057,7 +1058,11 @@
         $("#btnCancel").click(function () {
             if ( $("#formChanged").val() == "Y")
             {
-                $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window
+                if ( $("#bootstrapBtnReset").val() == "N"){
+                    $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window. Must be done only once (at most) to prevent js errors
+                    $("#bootstrapBtnReset").val("Y");   // Set it to "Y" so we don't try to reset it again which would cause an error
+                }
+
                 $( "#dialog-confirm-exit" ).dialog({
                     resizable: false,
                     height:250,
@@ -1099,7 +1104,7 @@
                                 //--- Finished Resetting the ajax values
                             }
                         },
-                        Cancel: function() {
+                        "Continue Working": function() {
                             $( this ).dialog( "close" );
                         }
                     }
@@ -1113,7 +1118,10 @@
         $("#btnReset").click(function () {
             if ( $("#formChanged").val() == "Y")
             {
-                $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window
+                if ( $("#bootstrapBtnReset").val() == "N"){
+                    $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window
+                    $("#bootstrapBtnReset").val("Y");
+                }
 
                 $( "#dialog-confirm-reset" ).dialog({
                     resizable: false,
@@ -1125,7 +1133,7 @@
                             //isChanged.val("N");
                             location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
                         },
-                        Cancel: function() {
+                        "Don't Reset!": function() {
                             $( this ).dialog( "close" );
                         }
                     }

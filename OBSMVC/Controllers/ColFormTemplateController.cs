@@ -683,6 +683,7 @@ namespace OBSMVC.Controllers
             return PartialView("_getQuestionsList", questions_for_display);
         }
 
+        //=================================================================================================================================
         [HttpGet]
         public PartialViewResult getQuestionInfo(int question_id, int question_QATid,int qCounter, string isOptional)
         {
@@ -762,7 +763,8 @@ namespace OBSMVC.Controllers
             return PartialView("_getQuestionInfo", questionInfo);
         }
 
-        //[ChildActionOnly]
+        // ===============================================================================================================================
+        //[ChildActionOnly]  
         public PartialViewResult reloadQuestionDropdown(int question_id, string dropdownID, string selectedQATid)
         {
             List<OBS_QUEST_ANS_TYPES> QAInstances = db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == question_id && (x.obs_qat_end_eff_dt == null || x.obs_qat_end_eff_dt > DateTime.Now)).ToList();

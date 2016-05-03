@@ -1,6 +1,7 @@
 ﻿
 @{
-    bool authorized = false;
+    bool authorized = false; 
+    bool isAdmin = User.IsInRole("Admin");
     try {
         if (User.IsInRole("Admin")|| User.IsInRole("Super User")|| User.IsInRole("Editor") || User.IsInRole("Viewer"))
         {
@@ -11,6 +12,7 @@
     {
         authorized = false;
     }
+   
 }
 
 <nav class="navbar navbar-inverse navbar-fixed-top">

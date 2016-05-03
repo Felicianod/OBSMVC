@@ -372,9 +372,9 @@ namespace OBSMVC.Controllers
                 }
 
                 //Validate that the start Date is equal or greater than today. Otherwise, reset it to be today.
-
                 selectedColForm.cft_eff_st_dt = selectedColForm.cft_eff_st_dt.HasValue ? selectedColForm.cft_eff_st_dt : DateTime.Now;
-                if (selectedColForm.cft_eff_st_dt < DateTime.Now) { selectedColForm.cft_eff_st_dt = DateTime.Now; }
+                if (selectedColForm.cft_eff_st_dt < DateTime.Now && (frmAction == "MANAGE-NEW-VERSION" || frmAction == "MANAGE-EDIT"))
+                { selectedColForm.cft_eff_st_dt = DateTime.Now; }
 
                 selectedColForm.str_cft_eff_st_dt = selectedColForm.cft_eff_st_dt.HasValue ? selectedColForm.cft_eff_st_dt.Value.ToString("MMM dd, yyyy") : String.Empty;
                 selectedColForm.str_cft_eff_end_dt = selectedColForm.cft_eff_end_dt < Convert.ToDateTime("12/31/2060") ? selectedColForm.cft_eff_end_dt.ToString("MMM dd, yyyy") : String.Empty;

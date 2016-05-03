@@ -1337,11 +1337,12 @@ namespace OBSMVC.Controllers
                     if (cft_id > 0)//this means we are editing an existing form
                     {
                         OBS_COLLECT_FORM_TMPLT template_to_edit = db.OBS_COLLECT_FORM_TMPLT.Find(cft_id);
-                        template_to_edit.dsc_cust_id = Convert.ToInt32(colForm.cft_Cust);
-                        template_to_edit.obs_type_id = Convert.ToInt32(colForm.cft_obsType);
-                        template_to_edit.dsc_lc_id = Convert.ToInt32(colForm.cft_LC);
-                        template_to_edit.obs_cft_title = colForm.cft_Title;
-                        template_to_edit.obs_cft_subtitle = colForm.cft_SubTitle;
+                        if (colForm.cft_Version == 1)
+                        {
+                            template_to_edit.dsc_cust_id = Convert.ToInt32(colForm.cft_Cust);
+                            template_to_edit.obs_type_id = Convert.ToInt32(colForm.cft_obsType);
+                            template_to_edit.dsc_lc_id = Convert.ToInt32(colForm.cft_LC);
+                        }
                         template_to_edit.obs_cft_eff_end_dt = (colForm.cft_eff_end_dt == null) || (colForm.cft_eff_end_dt < Convert.ToDateTime("01/01/2000")) ? Convert.ToDateTime("12/31/2060") : colForm.cft_eff_end_dt;
                         template_to_edit.obs_cft_last_saved_dtm = DateTime.Now;
                         template_to_edit.obs_cft_upd_dtm = DateTime.Now;
@@ -1479,10 +1480,10 @@ namespace OBSMVC.Controllers
 
                         //first we need to save OBS_COLLECT_FORM_TMPLT table data
                         OBS_COLLECT_FORM_TMPLT template_to_save = new OBS_COLLECT_FORM_TMPLT();
-                        template_to_save.dsc_cust_id = Convert.ToInt32(colForm.cft_Cust);
-                        template_to_save.obs_type_id = Convert.ToInt32(colForm.cft_obsType);
-                        template_to_save.dsc_lc_id = Convert.ToInt32(colForm.cft_LC);
-                        //short cft_number = (short)(db.OBS_COLLECT_FORM_TMPLT.Max(x => x.obs_cft_nbr) + 1);
+                        OBS_COLLECT_FORM_TMPLT prev_form = db.OBS_COLLECT_FORM_TMPLT.Find(colForm.previous_vers_cft_id);
+                        template_to_save.dsc_cust_id = prev_form.dsc_cust_id;
+                        template_to_save.obs_type_id = prev_form.obs_type_id;
+                        template_to_save.dsc_lc_id = prev_form.dsc_lc_id;                 
                         template_to_save.obs_cft_nbr = (short)colForm.cft_Nbr;
                         template_to_save.obs_cft_ver = (short)colForm.cft_Version;
                         template_to_save.obs_cft_title = colForm.cft_Title;
@@ -1494,12 +1495,11 @@ namespace OBSMVC.Controllers
                         template_to_save.obs_cft_upd_dtm = DateTime.Now;
                         template_to_save.obs_cft_upd_uid = User.Identity.Name;
                         if (isPublished == "true")
-                        {
-                            
+                        {                            
                             //if (colForm.cft_eff_st_dt != null && (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000")))
                             if (colForm.cft_eff_st_dt != null)
                             {                                
-                                OBS_COLLECT_FORM_TMPLT prev_form = db.OBS_COLLECT_FORM_TMPLT.Find(colForm.previous_vers_cft_id);
+                                
                                 template_to_save.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
                                 if(prev_form.obs_cft_eff_end_dt > colForm.cft_eff_st_dt)
                                 { 

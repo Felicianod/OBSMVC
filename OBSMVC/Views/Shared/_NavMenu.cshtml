@@ -2,14 +2,13 @@
 @{
     bool authorized = false;
     try {
-        if (String.IsNullOrEmpty(Session["role"].ToString()) || Session["role"].ToString().Equals("Not Authorized"))
+        if (User.IsInRole("Admin")|| User.IsInRole("Super User")|| User.IsInRole("Editor") || User.IsInRole("Viewer"))
         {
-            authorized = false;
+            authorized = true;
         }
-        else
-        { authorized = true; }
     }
-    catch {
+    catch
+    {
         authorized = false;
     }
 }
@@ -46,6 +45,7 @@
                             <li>@Html.ActionLink("Employees", "Index", "Employee")</li>
                             <li class="disabled">@Html.ActionLink("Observation Types", "Index", "OBSTYPE")</li>
                             <li class="disabled">@Html.ActionLink("Observation Subtypes", "Index", "OBSsubtype")</li>
+
                         </ul>
                     </li>
                     <li class="dropdown">

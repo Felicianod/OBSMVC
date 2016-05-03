@@ -110,6 +110,7 @@ namespace OBSMVC.Models
                             }
                             int usage_count = db.OBS_COL_FORM_QUESTIONS.Where(x => x.obs_qat_id == qaInstanceTemp.obs_qat_id).Select(y => y.obs_cft_id).Distinct().Count();
                             temp_qat.usageInfo = usage_count > 0 ? "This answer type is on " + usage_count + " form(s)" : String.Empty;
+                            questUsedOnForm_Counter = questUsedOnForm_Counter + usage_count;
                             Quest_Assigned_qatTags.Add(temp_qat);
                             if (String.IsNullOrEmpty(usedOnActiveForm))
                             {
@@ -124,9 +125,7 @@ namespace OBSMVC.Models
                                     else if (db.OBS_COLLECT_FORM_TMPLT.Single(x => x.obs_cft_id == cft).obs_cft_pub_dtm == null)
                                     {
                                         formUsageMessage = "Warning.  This question is used on saved form";
-                                    }
-                                    //If an instance is found, we know that the question is being used already on form. Increase the form counter
-                                    questUsedOnForm_Counter++;
+                                    }                                   
                                 }
                             }
                         }

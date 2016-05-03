@@ -19,10 +19,6 @@ namespace OBSMVC.Models
         //= = = = = = = = = = = = = = = CONSTRUCTOR (Needs a Question Id parameter) = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
         public QuestionCreateEditViewModel(int qId)
         {
-            qMDCategories = new List<string>();
-            qAssignedMD = new List<metaDataTags>();
-            qUnassignedMD = new List<metaDataTags>();
-
 
             //Retrieve a full list of all Answer Types
             var all_ans_types = db.OBS_ANS_TYPE.ToList();
@@ -34,7 +30,10 @@ namespace OBSMVC.Models
 
             //We will always receive a parameter. Default is zero. Initialize values depending on that parameter
             if (qId < 1) {
-                viewPageTitle = "New Question Data Entry";
+                // Set the question default Dates
+                questn.obs_question_eff_st_dt = DateTime.Now;
+                questn.obs_question_eff_end_dt = Convert.ToDateTime("2060/12/31");
+
                 var mdList = db.OBS_QUESTION_METADATA.ToList();
                 foreach (var md in mdList)
                 {
@@ -84,6 +83,7 @@ namespace OBSMVC.Models
                             qUnassignedMD.Add(qMD);
                         }
                     }
+
                     qAssignedMD = qAssignedMD.OrderBy(item => item.md_value).ToList();
                     qUnassignedMD = qUnassignedMD.OrderBy(item => item.md_value).ToList();
                     List<OBS_QUEST_ANS_TYPES> QAInstances = db.OBS_QUEST_ANS_TYPES.Where(x => x.obs_question_id == questn.obs_question_id && (x.obs_qat_end_eff_dt == null || x.obs_qat_end_eff_dt > DateTime.Now)).ToList();
@@ -131,12 +131,21 @@ namespace OBSMVC.Models
                             }
                         }
                         Quest_Assigned_qatTags = Quest_Assigned_qatTags.OrderBy(item => item.answer_type_name).ToList();
+
+                        //Loop through the QATtags and set the "Selected" QAT item.
+                        foreach (qatTags qatTag in Quest_Assigned_qatTags)
+                        {
+                            if (db.OBS_COL_FORM_QUESTIONS.Where(item => item.obs_qat_id == qatTag.QAT.obs_qat_id).Count() == 0)
+                            {
+                                qatTag.editable = "true";
+                            }
+                        }                
                     }
                 }//end of  if (questn != null)
             } //============== END OF INITIALIZATION FOR EXISTING QUESTION =============      
         } //============ END OF CONSTRUCTOR ========================
         // ----------------------------------- PUBLIC CLASS PROPERTIES ----------------------------------------------
-        public string viewPageTitle = String.Empty;           // Screen Title to display
+        public string viewPageTitle = "New Question Data Entry";           // Screen Title to display
         public string activeFormId = String.Empty;
         public string qat_usage = String.Empty;
         public string usedOnActiveForm = String.Empty;

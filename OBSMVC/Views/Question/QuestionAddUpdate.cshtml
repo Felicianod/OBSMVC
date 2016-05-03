@@ -3,7 +3,7 @@
 @{ ViewBag.Title = "Create/Edit Question"; }
 @{
     string endDateValue;
-    string userRoles = Roles.GetRolesForUser(User.Identity.Name); 
+    //string userRoles = Roles.GetRolesForUser(User.Identity.Name)[0]; 
     if (Model.questn.obs_question_eff_end_dt.ToString("yyyy").Equals("2060"))
     { endDateValue = ""; }
     else { endDateValue = @Model.questn.obs_question_eff_end_dt.ToString("MMM dd, yyyy"); }    
@@ -263,11 +263,11 @@
                     </div>
                 </div>
                 
-                <div class="row" smallrowmargin>
+                @*<div class="row" smallrowmargin>
                     This Question is being used on @Model.questUsedOnForm_Counter form(s)
                     <br />
                     The Currren User Roles are: @userRoles
-                </div>
+                </div>*@
             </div>
         </div>
     </div>

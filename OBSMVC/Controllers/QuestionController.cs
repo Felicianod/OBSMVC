@@ -85,27 +85,7 @@ namespace OBSMVC.Controllers
         public ActionResult QuestionAddUpdateEdit(int? id)
         {
             int questionId = id ?? -1;
-            QuestionCreateEditViewModel obsQCVM;
-
-
-            if (questionId < 1)
-            {
-                obsQCVM = new QuestionCreateEditViewModel();
-            }
-            else
-            {
-                obsQCVM = new QuestionCreateEditViewModel(questionId);
-                foreach (qatTags qatTag in obsQCVM.Quest_Assigned_qatTags)
-                {
-                    if (db.OBS_COL_FORM_QUESTIONS.Where(item => item.obs_qat_id == qatTag.QAT.obs_qat_id).Count() == 0)
-                    {
-                        qatTag.editable = "true";
-                    }
-                }                
-            }
-
-            //RolePrincipal r = (RolePrincipal) User;
-            //ViewBag.roles = String.Join(",", r.GetRoles());
+            QuestionCreateEditViewModel obsQCVM = new QuestionCreateEditViewModel(questionId);
 
             return View("QuestionAddUpdate", obsQCVM);
 

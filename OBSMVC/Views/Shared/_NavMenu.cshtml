@@ -1,6 +1,7 @@
 ﻿
 @{
-    bool authorized = false;
+    bool authorized = false; 
+    bool isAdmin = User.IsInRole("Admin");
     try {
         if (String.IsNullOrEmpty(Session["role"].ToString()) || Session["role"].ToString().Equals("Not Authorized"))
         {
@@ -12,6 +13,7 @@
     catch {
         authorized = false;
     }
+   
 }
 
 <nav class="navbar navbar-inverse navbar-fixed-top">

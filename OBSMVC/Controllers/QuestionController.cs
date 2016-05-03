@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using OBSMVC.Models;
 using PagedList;
 using PagedList.Mvc;
+using System.Web.Security;
 
 namespace OBSMVC.Controllers
 {
@@ -102,7 +103,10 @@ namespace OBSMVC.Controllers
                     }
                 }                
             }
-            
+
+            //RolePrincipal r = (RolePrincipal) User;
+            //ViewBag.roles = String.Join(",", r.GetRoles());
+
             return View("QuestionAddUpdate", obsQCVM);
 
         }

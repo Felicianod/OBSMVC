@@ -243,8 +243,10 @@
                             @if (Model.questUsedOnForm_Counter == 0) {
                                 <input class="datepicker form-control" id="obs_question_eff_st_dt" name="questn.obs_question_eff_st_dt" value="@Model.questn.obs_question_eff_st_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;" >
                             }
-                            else {
-                                <input class="datepicker form-control" id="obs_question_eff_st_dt" name="questn.obs_question_eff_st_dt" value="@Model.questn.obs_question_eff_st_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;" disabled readonly="readonly">
+                            else
+                            {
+                                <input class="datepicker form-control" id="obs_question_eff_st_dt" name="questn.obs_question_eff_st_dt" value="@Model.questn.obs_question_eff_st_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;" disabled readonly="readonly" title="The Start Date can't be Edited. The Question is in use on @Model.questUsedOnForm_Counter form(s)">
+                                <input type="hidden" name="questn.obs_question_eff_st_dt" value="@Model.questn.obs_question_eff_st_dt.ToString("MMM dd, yyyy")" />
                             }
                             
                             <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
@@ -266,7 +268,6 @@
                 @*<div class="row" smallrowmargin>
                     This Question is being used on @Model.questUsedOnForm_Counter form(s)
                     <br />
-                    The Currren User Roles are: @userRoles
                 </div>*@
             </div>
         </div>
@@ -532,8 +533,10 @@
                 changeYear: true,
                 showButtonPanel: true,
                 minDate: -0,
-                onClose: function (selectedDate) {                    
+                onClose: function (selectedDate) {
+                    var original_st_dt = $("#obs_question_eff_st_dt").val();
                     $("#obs_question_eff_st_dt").datepicker("option", "maxDate", selectedDate);
+                    $("#obs_question_eff_st_dt").val(original_st_dt);
                 },
                 useCurrent: false //Important! See issue #1075
             });

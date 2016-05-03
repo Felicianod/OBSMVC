@@ -548,6 +548,17 @@ namespace OBSMVC.Controllers
                 return e.Message;
             }
         }
+        [HttpGet]
+        public string checkFormInstance(int cft_id)
+        {//This method is called by AJAX from the front end when user wants to edit previously published but not used form.
+            //this method checks if this form was retrieved by user while user was on Edit page
+            if (db.OBS_COLLECT_FORM_INST.Any(x=>x.obs_cft_id==cft_id))
+            {
+                return "This collection form is already in use. Please refresh this page!!";
+            }
+            else { return "Success"; }
+            
+        }
 
 
         //GET: List of Quesions

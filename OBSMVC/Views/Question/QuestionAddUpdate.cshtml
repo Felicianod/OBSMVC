@@ -5,8 +5,7 @@
     string endDateValue;
     if (Model.questn.obs_question_eff_end_dt.ToString("yyyy").Equals("2060"))
     { endDateValue = ""; }
-    else { endDateValue = @Model.questn.obs_question_eff_end_dt.ToString("MMM dd, yyyy"); }
-
+    else { endDateValue = @Model.questn.obs_question_eff_end_dt.ToString("MMM dd, yyyy"); }    
     string qReadonly = @Model.usedOnActiveForm;
 }
 
@@ -184,9 +183,9 @@
     @Html.AntiForgeryToken()
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
     <input type="hidden" value="N" id="formChanged" >
     <input type="hidden" value="@Model.questn.obs_question_id" name="questn.obs_question_id" id="questn.obs_question_id">
+    @Html.HiddenFor(model => model.questn.obs_question_ver)
     //-----------------------------------   QUESTION HEADER SECCTION ----------------------------------------------------------
 
 
@@ -228,7 +227,7 @@
                             <div class="input-group-addon stdWidth">
                                 @Html.LabelFor(model => model.questn.obs_question_desc)
                             </div>
-                            @Html.EditorFor(model => model.questn.obs_question_desc, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:95%;" } })
+                            @Html.EditorFor(model => model.questn.obs_question_desc, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:95%;"} })
                             @Html.ValidationMessageFor(model => model.questn.obs_question_desc, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -240,7 +239,13 @@
                             <div class="input-group-addon">
                                 @Html.LabelFor(model => model.questn.obs_question_eff_st_dt)
                             </div>
-                            <input class="datepicker form-control" id="obs_question_eff_st_dt" name="questn.obs_question_eff_st_dt" value="@Model.questn.obs_question_eff_st_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;">
+                            @if (Model.questUsedOnForm_Counter == 0) {
+                                <input class="datepicker form-control" id="obs_question_eff_st_dt" name="questn.obs_question_eff_st_dt" value="@Model.questn.obs_question_eff_st_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;" >
+                            }
+                            else {
+                                <input class="datepicker form-control" id="obs_question_eff_st_dt" name="questn.obs_question_eff_st_dt" value="@Model.questn.obs_question_eff_st_dt.ToString("MMM dd, yyyy")" style="max-width: 100%; width:100%;" disabled readonly="readonly">
+                            }
+                            
                             <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
                             @Html.ValidationMessageFor(model => model.questn.obs_question_eff_end_dt, "", new { @class = "text-danger" })
                         </div>
@@ -256,17 +261,10 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="row" smallrowmargin>
-                    <div class="form-group">
-                        @Html.HiddenFor(model => model.questn.obs_question_ver)
-                        @*@Html.LabelFor(model => model.obs_question_ver, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.obs_question_ver, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.obs_question_ver, "", new { @class = "text-danger" })
+                
+                @*<div class="row" smallrowmargin>
+                    This Question is being used on @Model.questUsedOnForm_Counter form(s)
                 </div>*@
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -506,7 +504,20 @@
                 //minDate: -0,
                 //maxDate: "+1M +10D",
                 onClose: function (selectedDate) {
-                    $("#obs_question_eff_end_dt").datepicker("option", "minDate", selectedDate);
+                    //The end date "Min Date" should be the higher of today's date or the "eff_start_dt". 
+                    var todaysDate = new Date();
+                    var dateSelected = new Date(selectedDate);
+                    var minEndDate;
+                    if (dateSelected > todaysDate) {
+                        minEndDate = selectedDate;
+                        //alert("Min End Date should be: " + minEndDate);
+                    }
+                    else {
+                        minEndDate = todaysDate;
+                        //alert("End Date should be: " + minEndDate);
+                    }
+                    
+                    $("#obs_question_eff_end_dt").datepicker("option", "minDate", minEndDate);
                 },
                 useCurrent: false //Important! See issue #1075
             });
@@ -518,7 +529,7 @@
                 changeYear: true,
                 showButtonPanel: true,
                 minDate: -0,
-                onClose: function (selectedDate) {
+                onClose: function (selectedDate) {                    
                     $("#obs_question_eff_st_dt").datepicker("option", "maxDate", selectedDate);
                 },
                 useCurrent: false //Important! See issue #1075

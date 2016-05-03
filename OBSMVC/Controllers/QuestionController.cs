@@ -79,6 +79,7 @@ namespace OBSMVC.Controllers
 
         //---------------------------------------- QuestionAddUpd [ GET ] -----------------------------------------------------------------
         [HttpGet]
+        //[Authorize(Roles = "Admin,Tech")]
         [ActionName("QuestionAddUpdate")]
         public ActionResult QuestionAddUpdateEdit(int? id)
         {
@@ -89,8 +90,6 @@ namespace OBSMVC.Controllers
             if (questionId < 1)
             {
                 obsQCVM = new QuestionCreateEditViewModel();
-                obsQCVM.questn.obs_question_eff_st_dt = DateTime.Now;
-                obsQCVM.questn.obs_question_eff_end_dt = Convert.ToDateTime("2060/12/31");
             }
             else
             {

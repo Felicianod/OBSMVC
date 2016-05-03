@@ -885,7 +885,7 @@
         }
 
         //Validate that the start Date must not be in the past
-        var todaysDate = new Date();                
+        var todaysDate = new Date();
         var effStartDate = new Date($('#cft_eff_st_dt').val());
 
         if (effStartDate.toDateString() < todaysDate.toDateString()) {

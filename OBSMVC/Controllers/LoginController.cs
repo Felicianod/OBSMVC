@@ -108,6 +108,7 @@ namespace OBSMVC.Controllers
             {  // Is password is Valid, set the Authorization cookie and redirect
                // the user to the link it came from (Or the Home page is noreturn URL was specified)
                 FormsAuthentication.SetAuthCookie(loginModel.Username, true);
+                setUserRoles(loginModel.Username, new string[] {Session["role"].ToString() });
                 if (Url.IsLocalUrl(ReturnUrl) && ReturnUrl.Length > 1 && ReturnUrl.StartsWith("/")
                     && !ReturnUrl.StartsWith("//") && !ReturnUrl.StartsWith("/\\"))
                      { return Redirect(ReturnUrl); }
@@ -259,5 +260,28 @@ namespace OBSMVC.Controllers
                 return false;  // Failed to authenticate the User
             }//end of catch
         }
+        private void setUserRoles(string userName, string[] roles)
+        {
+            string userRoles = String.Join(";",roles);
+
+            var authTicket = new FormsAuthenticationTicket(
+                 1,                             // version
+                 userName,                      // user name
+                 DateTime.Now,                  // created
+                 DateTime.Now.AddMinutes(20),   // expires
+                 true,                          // persistent?
+                 userRoles              // can be used to store roles
+              );
+
+            string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
+
+            var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+            this.ControllerContext.HttpContext.Response.Cookies.Add(authCookie);
+
+            //HttpContext.Current.Response.Cookies.Add(authCookie);
+        }
     }
+
+
+
 }

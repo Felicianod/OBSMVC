@@ -221,10 +221,12 @@
             <div class="alert-success" id="divMessage" style="text-align:center; font-size:x-large; display:none ">
                 Data Saved Successfully
             </div>
-            <div class="alert-success">This form is Published</div>
             @if (Model.cft_new_vers_cft_id > 0)
             {
-                <span style="font-size:small; color:red; font-style:italic">A new version exists for this form!  Editting is restricted.</span>
+                <span class="alert-danger" style="font-size:small; color:red; font-style:italic">A new version exists for this form!  Editting is restricted.</span>
+            }
+            else {
+                <div class="alert-success">This form is Published</div>
             }
         </div>
     </div>

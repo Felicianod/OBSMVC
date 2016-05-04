@@ -1353,11 +1353,14 @@ namespace OBSMVC.Controllers
                             template_to_edit.dsc_cust_id = Convert.ToInt32(colForm.cft_Cust);
                             template_to_edit.obs_type_id = Convert.ToInt32(colForm.cft_obsType);
                             template_to_edit.dsc_lc_id = Convert.ToInt32(colForm.cft_LC);
+                            template_to_edit.obs_cft_title = colForm.cft_Title;
+                            
                         }
                         template_to_edit.obs_cft_eff_end_dt = (colForm.cft_eff_end_dt == null) || (colForm.cft_eff_end_dt < Convert.ToDateTime("01/01/2000")) ? Convert.ToDateTime("12/31/2060") : colForm.cft_eff_end_dt;
                         template_to_edit.obs_cft_last_saved_dtm = DateTime.Now;
                         template_to_edit.obs_cft_upd_dtm = DateTime.Now;
                         template_to_edit.obs_cft_upd_uid = User.Identity.Name;
+                        template_to_edit.obs_cft_subtitle = colForm.cft_SubTitle;
                         if (isPublished == "true")
                         {
                             //if (colForm.cft_eff_st_dt != null && (colForm.cft_eff_st_dt < Convert.ToDateTime("01/01/2000")))
@@ -1504,7 +1507,7 @@ namespace OBSMVC.Controllers
                         template_to_save.dsc_lc_id = prev_form.dsc_lc_id;                 
                         template_to_save.obs_cft_nbr = (short)colForm.cft_Nbr;
                         template_to_save.obs_cft_ver = (short)colForm.cft_Version;
-                        template_to_save.obs_cft_title = colForm.cft_Title;
+                        //template_to_save.obs_cft_title = colForm.cft_Title;
                         template_to_save.obs_cft_subtitle = colForm.cft_SubTitle;
                         template_to_save.obs_cft_eff_end_dt = (colForm.cft_eff_end_dt == null) || (colForm.cft_eff_end_dt < Convert.ToDateTime("01/01/2000")) ? Convert.ToDateTime("12/31/2060") : colForm.cft_eff_end_dt;
                         template_to_save.obs_cft_added_dtm = DateTime.Now;

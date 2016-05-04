@@ -8,10 +8,10 @@
     var cancelEnabled = "";
     var frmWasChanged = "N";
     var attentionCalss = "";
-    bool disableDropdowns = true;
+    bool disableDropdowns = false;
     if (!@Model.manageAction.Contains("MANAGE")) { cancelEnabled = "disabled"; }
     if (@Model.manageAction.Equals("MANAGE-NEW-VERSION")) { attentionCalss = "lookatMe"; }
-    if (@Model.cft_Version == 1) { disableDropdowns = false; }
+    if (@Model.cft_Version > 1) { disableDropdowns = true; }
  }
 
 

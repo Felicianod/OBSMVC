@@ -477,28 +477,36 @@
 
             //Unpublish Form (if ajax validation passes)
             $("#btnManageAction").click(function(){
-                //Call Ajax
-                $.ajax({
-                    url: '@Url.Action("checkFormInstance", "ColFormTemplate")',
-                    method: "GET",
-                    cache: false,
-                    data: { cft_id: @colFormId},
-                    error: function () {
-                        alert("Failed to Edit the Form.");  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    if (d == "Success") {
-                        // On ajax success:
-                        document.getElementById("unPublishFrm").submit();
-                        //Post Form is ajax is success else alert
-                    }
-                    else {
-                        alert(d);
-                        location.href = "/ColFormTemplate/AddEditForm/" + @colFormId;
-                    }
-                });
+                var action = "@manageAction";
+                if(action=="EDIT"){
+                    //Call Ajax
+                    $.ajax({
+                        url: '@Url.Action("checkFormInstance", "ColFormTemplate")',
+                        method: "GET",
+                        cache: false,
+                        data: { cft_id: @colFormId},
+                        error: function () {
+                            alert("Failed to Edit the Form.");  //<-- Trap and alert of any errors if they occurred
+                        }
+                    }).done(function (d) {
+                        if (d == "Success") {
+                            // On ajax success:
+                            document.getElementById("unPublishFrm").submit();
+                            //Post Form is ajax is success else alert
+                        }
+                        else {
+                            alert(d);
+                            location.href = "/ColFormTemplate/AddEditForm/" + @colFormId;
+                        }
+                    });
+                }
+                else
+                {
+                    document.getElementById("unPublishFrm").submit();
+                }
 
-           
+
+
 
             });
 

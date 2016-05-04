@@ -482,7 +482,7 @@
                     cache: false,
                     data: { cft_id: @colFormId},
                     error: function () {
-                        alert("Failed to Save the Form.");  //<-- Trap and alert of any errors if they occurred
+                        alert("Failed to Edit the Form.");  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
                     if (d == "Success") {
@@ -492,6 +492,7 @@
                     }
                     else {
                         alert(d);
+                        location.href = "/ColFormTemplate/AddEditForm/" + @colFormId;
                     }
                 });
 

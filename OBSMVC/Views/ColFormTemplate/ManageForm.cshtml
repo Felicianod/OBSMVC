@@ -208,7 +208,7 @@
         @if (!(Model.cft_new_vers_cft_id > 0))
         {
             <div class="col-sm-1" style="padding: 4px; margin-bottom:8px; text-align:right">
-                <form method="post" id="unPublish">
+                <form method="post" id="unPublishFrm">
                     @Html.AntiForgeryToken()
                     <input type="hidden" id="id" name="id" value="@Model.cft_id.ToString()" />
                     <input type="hidden" id="frmAction" name="frmAction" value="@Model.manageAction" />
@@ -476,6 +476,8 @@
             $("#btnManageAction").click(function(){
                 //Call Ajax
 
+                // On ajax success:
+                document.getElementById("unPublishFrm").submit();
                 //Post Form is ajax is success else alert
             
             });

@@ -255,7 +255,7 @@
                 //Modal Form was nor saved, so we just need to restore the previusly selected value on the dropdown list
                 var dropDownIdused = "#" + $("#popupDDLid").val();
                 var dropDownStoredValue = $("#ddlSelValue").val();
-                var stringUsed = dropDownIdused + " option[value='" + dropDownStoredValue + "']";
+                //var stringUsed = dropDownIdused + " option[value='" + dropDownStoredValue + "']";
                 //alert(stringUsed);
                 //alert("Changes aborted... Restoring value for dropdown '" + dropDownIdused + "' to: " + dropDownStoredValue );
 
@@ -617,7 +617,7 @@
         Form Action: @Model.manageAction
     </div>
 
-
+<input type="hidden" id="DatesConfirmed" value="" />
 <div id="dialog-confirm-reset" title="Please Confirm" style="display:none">
     <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
         Your form has been modified.<br /> Are you sure you want to reset all changes?
@@ -741,7 +741,55 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+@* ------------------------------------- POP UP "CONFIRM PUBLISH DATES" FORM ------------------------------------------------ *@
+@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+<!-- Modal -->
+<div class="modal  modal-NewQ fade" id="confPubDates" role="dialog">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">CONFIRM FORM PUBLISH DATES</h3>
+            </div>
+            <div class="modal-body" style="margin-left:25px">
+                <br /><br />
 
+                <div class="form-group row" style="margin-bottom:8px">
+                    <div class="col-sm-4">
+                        <div class="input-group" data-provide="datepicker">
+                            <div class="input-group-addon">Usable As of:</div>
+                            <input class="datepicker form-control" id="conf_cft_eff_st_dt" style="max-width: 100%; width:100%;">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="input-group" data-provide="datepicker">
+                            <div class="input-group-addon">Usable Until:</div>
+                            <input class="datepicker form-control" id="conf_cft_eff_end_dt" style="max-width: 100%; width:100%;">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+            </div>
+            <br />
+            <div class="modal-footer">
+                <div class="col-sm-1 col-sm-offset-3">
+                    <button type="button" id="btnSaveDateConf" class="btn btn-primary" >Confirm Dates</button>
+                </div>
+                <div class="col-sm-1 col-sm-offset-1">
+                    <button type="button" id="btnCancelDateConf" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <script>
     function clearNewSAbox(){
@@ -827,7 +875,9 @@
         var errorMsg = "";
         var sectionCounter = 0;
 
-        // Validate the Form Fields
+        $(this).button('loading');
+        
+        //----------------------- Perform Front-End Form Validation ----------------------------------------
         //Process all the form Sections to get Data to post
         $("div.formSection").each(function () {
             var formSection = $(this);
@@ -873,7 +923,7 @@
             }
         });  // Finished Processing all Form Sections
 
-        // Validat that a valid Start Date is entered when the Form is being published
+        // Validate that a valid Start Date is entered when the Form is being published
         if (btnClicked.attr("id") == "btnPublishForm") {
             //alert("Publishing Start Date: " + $('#cft_eff_st_dt').val() + "\nPublishing End Date: " + $('#cft_eff_end_dt').val())
             document.getElementById("isPublished").value = "true"
@@ -888,7 +938,7 @@
         var todaysDate = new Date();
         var effStartDate = new Date($('#cft_eff_st_dt').val());     
         if(effStartDate < todaysDate) {
-            errorMsg = errorMsg + "Warning, the Effective Start Date must be greater than today.\n";
+            errorMsg = errorMsg + "Warning, the Effective Start Date [" + effStartDate + "] must be greater than today[" + effStartDate + "].\n";
             $('#cft_eff_st_dt').addClass("invalidField");
             $('#cft_eff_st_dt').focus();
         }
@@ -908,9 +958,10 @@
         }
 
         if (errorMsg != "") {
-            //If any validation error is found
+            //If any validation error is found give alert and reset the Save Button
             $('#btnSaveForm').button('reset');
             alert(errorMsg);
+
         }
         else {
             //Post the Form
@@ -1087,6 +1138,42 @@
 
         });
 
+        function leavePage(){
+            alert("Leaving page...");
+            var editMode = "@Model.manageAction";
+            $("#formChanged").val("N");   //To prevent the browser to present the confirm-exit dialog.
+
+            // When in "MANAGE-EDIT" mode, we need to Reset the published Date/Time via Ajax to it's previous state
+            if(editMode == "MANAGE-EDIT"){
+                var publishedDateTime = "@Model.originalPublishDate";
+                var publishedUser = "@Model.originalyPublishedBy";
+                var formCftid = "@Model.cft_id";
+
+                alert("Reseting the published date/time...");
+                $.ajax({
+                    url: '@Url.Action("republishFormOnCancel", "ColFormTemplate")',
+                    method: "POST",
+                    cache: false,
+                    data: { cft_id: formCftid, publishedBy: publishedUser, publishedOn: publishedDateTime },
+                    error: function () {
+                        alert("Failed to reset Changes...");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    if (d == "Success") {
+                        alert("Edit mode cancelled! Form has been republished.");
+                        //location.href = "/ColFormTemplate/AddEditForm/" + formCftid;
+                    }
+                    else {
+                        alert("ERROR Resetting Published Date/Time: " + d);
+                    }
+                });
+                //--- Finished Resetting the ajax values
+            }
+
+            //Finally, just leave the page and redirect to the Form Index page
+            location.href = "/ColFormTemplate/";
+        };
+
         $("#btnCancel").click(function () {
             if ( $("#formChanged").val() == "Y")
             {
@@ -1101,40 +1188,7 @@
                     modal: true,
                     buttons: {
                         "Discard Changes": function() {
-                            var editMode = "@Model.manageAction";
-                            $("#formChanged").val("N");
-
-                            // When in "MANAGE-NEW-VERSION" edit mode, just exit after the user confirms that changes can be discarded
-                            if(editMode == "MANAGE-NEW-VERSION"){
-                                location.href = "/ColFormTemplate/";
-                            }
-
-                            // When in "MANAGE-EDIT" mode, we need to Reset the published Date/Time via Ajax to it's previous state
-                            if(editMode == "MANAGE-EDIT"){
-                                var publishedDateTime = "@Model.originalPublishDate";
-                                var publishedUser = "@Model.originalyPublishedBy";
-                                var formCftid = "@Model.cft_id";
-
-                                $.ajax({
-                                    url: '@Url.Action("republishFormOnCancel", "ColFormTemplate")',
-                                    method: "POST",
-                                    cache: false,
-                                    data: { cft_id: formCftid, publishedBy: publishedUser, publishedOn: publishedDateTime },
-                                    error: function () {
-                                        alert("Failed to reset Changes...");  //<-- Trap and alert of any errors if they occurred
-                                    }
-                                }).done(function (d) {
-                                    if (d == "Success") {
-                                        //alert("Success!");
-                                        //location.href = "/ColFormTemplate/AddEditForm/" + formCftid;
-                                        location.href = "/ColFormTemplate";
-                                    }
-                                    else {
-                                        alert("ERROR Resetting Published Date/Time: " + d);
-                                    }
-                                });
-                                //--- Finished Resetting the ajax values
-                            }
+                            leavePage();
                         },
                         "Continue Working": function() {
                             $( this ).dialog( "close" );
@@ -1143,7 +1197,7 @@
                 });
             }
             else{
-                location.href = "/ColFormTemplate/";
+                leavePage();
             }
         });
 
@@ -1741,7 +1795,6 @@
         $("#btnSaveForm").click(function () {
             //isChanged = false;
             $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
-            $(this).button('loading');
         });
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         $('#btnAddSection').click(function () {

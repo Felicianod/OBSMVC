@@ -1369,7 +1369,14 @@ namespace OBSMVC.Controllers
                                     OBS_COLLECT_FORM_TMPLT prev_form = db.OBS_COLLECT_FORM_TMPLT.Find(colForm.previous_vers_cft_id);
                                     if (prev_form.obs_cft_eff_end_dt > colForm.cft_eff_st_dt)
                                     {
-                                        prev_form.obs_cft_eff_end_dt = ((DateTime)colForm.cft_eff_st_dt).AddSeconds(-1);
+                                        if (prev_form.obs_cft_eff_st_dt == (DateTime)colForm.cft_eff_st_dt)
+                                        {
+                                            prev_form.obs_cft_eff_end_dt = (DateTime)colForm.cft_eff_st_dt;
+                                        }
+                                        else
+                                        {
+                                            prev_form.obs_cft_eff_end_dt = ((DateTime)colForm.cft_eff_st_dt).AddSeconds(-1);
+                                        }                                        
                                     }
                                 }// end ofif (colForm.previous_vers_cft_id > 0)
                             }
@@ -1420,9 +1427,7 @@ namespace OBSMVC.Controllers
 
                             if (colForm.cft_eff_st_dt != null && (colForm.cft_eff_st_dt > Convert.ToDateTime("01/01/2000")))
                             {
-
                                 template_to_save.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
-
                             }
                             else
                             {
@@ -1516,7 +1521,14 @@ namespace OBSMVC.Controllers
                                 template_to_save.obs_cft_eff_st_dt = colForm.cft_eff_st_dt;
                                 if(prev_form.obs_cft_eff_end_dt > colForm.cft_eff_st_dt)
                                 { 
-                                   prev_form.obs_cft_eff_end_dt = ((DateTime)colForm.cft_eff_st_dt).AddSeconds(-1);
+                                   if (prev_form.obs_cft_eff_st_dt == (DateTime)colForm.cft_eff_st_dt)
+                                   {
+                                      prev_form.obs_cft_eff_end_dt = (DateTime)colForm.cft_eff_st_dt;
+                                   }
+                                   else
+                                   {
+                                      prev_form.obs_cft_eff_end_dt = ((DateTime)colForm.cft_eff_st_dt).AddSeconds(-1);
+                                   }  
                                 }                                                              
                             }
                             else

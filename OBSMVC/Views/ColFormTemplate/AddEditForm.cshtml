@@ -152,7 +152,7 @@
     }
     .modal-NewQ .modal-body {
         overflow-y: auto;
-        height: 350px;
+        height: 300px;
     }
     .modal-NewQ .modal-content  {
         -webkit-border-radius: 0px !important;
@@ -587,10 +587,10 @@
         <div class="row" style="margin-left:20px; margin-right:20px;">
             <div class="col-sm-4 col-sm-offset-3">
                 <div class="col-sm-6" style="text-align:center">
-                    <input id="btnSaveForm" type="button" value="Save Form" onclick="PostForm($(this))" style="min-width:120px; min-height:34px" @*disabled="disabled"*@ />
+                    <input id="btnSaveForm" type="button" value="Save Form" style="min-width:120px; min-height:34px" @*disabled="disabled"*@ />
                 </div>
                 <div class="col-sm-6" style="text-align:center">
-                    <input id="btnPublishForm" type="button" value="Publish Form" onclick="PostForm($(this))" style="min-width:120px; min-height:34px" @if (@Model.cft_isPublished == "PUBLISHED") { <text> disabled="disabled" readonly</text>   } />
+                    <input id="btnPublishForm" type="button" value="Publish Form" style="min-width:120px; min-height:34px" @if (@Model.cft_isPublished == "PUBLISHED") { <text> disabled="disabled" readonly</text>   } />
                 </div>
             </div>
 
@@ -750,11 +750,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3 class="modal-title">CONFIRM FORM PUBLISH DATES</h3>
+                <h3 class="modal-title">CONFIRM THE PUBLISH DATES FOR THIS FORM</h3>
             </div>
             <div class="modal-body" style="margin-left:25px">
+                <br />
+                <div class="form-group row" style="margin-bottom:8px">
+                    you are publishing a form. this form will be usable "From" and "To" the dates specified below.
+                </div>                    
                 <br /><br />
-
                 <div class="form-group row" style="margin-bottom:8px">
                     <div class="col-sm-4">
                         <div class="input-group" data-provide="datepicker">
@@ -871,12 +874,9 @@
     @* ######################  J A V A    S C R I P T S    S E C T I O N   #################################### *@
     @****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
     <script>
-    function PostForm(btnClicked) {
+    function PostForm() {
         var errorMsg = "";
         var sectionCounter = 0;
-
-        $(this).button('loading');
-        
         //----------------------- Perform Front-End Form Validation ----------------------------------------
         //Process all the form Sections to get Data to post
         $("div.formSection").each(function () {
@@ -923,23 +923,12 @@
             }
         });  // Finished Processing all Form Sections
 
-        // Validate that a valid Start Date is entered when the Form is being published
-        if (btnClicked.attr("id") == "btnPublishForm") {
-            //alert("Publishing Start Date: " + $('#cft_eff_st_dt').val() + "\nPublishing End Date: " + $('#cft_eff_end_dt').val())
-            document.getElementById("isPublished").value = "true"
-            if ($('#cft_eff_st_dt').val() == "") {
-                errorMsg = errorMsg + "The Effective Start Date is required when Publishing a Form\n";
-                $('#cft_eff_st_dt').addClass("invalidField");
-                $('#cft_eff_st_dt').focus();
-            }
-        }
-
         //Validate that the start Date must not be in the past
         var todaysDate = new Date();
         var effStartDate = new Date($('#cft_eff_st_dt').val());
 
         if( !((effStartDate = todaysDate) || (effStartDate > todaysDate))  ) {
-            errorMsg = errorMsg + "Warning, the Effective Start Date [" + effStartDate + "] must be greater than today[" + todaysDate + "].\n";
+            errorMsg = errorMsg + "Warning!\nThe Effective Start Date [" + effStartDate + "] \nmust be greater than today[" + todaysDate + "].\n";
             $('#cft_eff_st_dt').addClass("invalidField");
             $('#cft_eff_st_dt').focus();
         }
@@ -962,7 +951,6 @@
             //If any validation error is found give alert and reset the Save Button
             $('#btnSaveForm').button('reset');
             alert(errorMsg);
-
         }
         else {
             //Post the Form
@@ -974,6 +962,27 @@
 
 
     $(document).ready(function () {
+
+        $("#btnPublishForm").click(function(){
+            $(this).button('loading');
+
+            // Validate that a valid Start Date is entered when the Form is being published
+            //alert("Publishing Start Date: " + $('#cft_eff_st_dt').val() + "\nPublishing End Date: " + $('#cft_eff_end_dt').val())
+            document.getElementById("isPublished").value = "true"
+            if ($('#cft_eff_st_dt').val() == "") {
+                $('#btnSaveForm').button('reset');
+                alert("The Effective Start Date is required when Publishing a Form");
+                $('#cft_eff_st_dt').addClass("invalidField");
+                $('#cft_eff_st_dt').focus();
+            }
+            else{
+                //Set the Pop up dates to match what is currently selected on the Form before showing the popup
+                $("#conf_cft_eff_st_dt").val($("#cft_eff_st_dt").val());
+                $("#conf_cft_eff_end_dt").val($("#cft_eff_end_dt").val());
+                $("#confPubDates").modal();
+            }
+        });
+
         function getATcategory() {
             var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
             if (selectedText == "3 Val") {
@@ -1793,9 +1802,10 @@
             }
         });
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        $("#btnSaveForm").click(function () {
-            //isChanged = false;
+        $("#btnSaveForm").click(function () {            
+            $(this).button('loading');
             $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
+            PostForm();
         });
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         $('#btnAddSection').click(function () {

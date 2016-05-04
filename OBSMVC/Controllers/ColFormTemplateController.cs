@@ -548,6 +548,17 @@ namespace OBSMVC.Controllers
                 return e.Message;
             }
         }
+        [HttpGet]
+        public string checkFormInstance(int cft_id)
+        {//This method is called by AJAX from the front end when user wants to edit previously published but not used form.
+            //this method checks if this form was retrieved by user while user was on Edit page
+            if (db.OBS_COLLECT_FORM_INST.Any(x=>x.obs_cft_id==cft_id))
+            {
+                return "This collection form is already in use. Please refresh this page!!";
+            }
+            else { return "Success"; }
+            
+        }
 
 
         //GET: List of Quesions
@@ -1322,14 +1333,14 @@ namespace OBSMVC.Controllers
 
         private int saveForm(oCollectionForm colForm, string form_questions_from_gui, string isPublished, int id)
         {
+
             int cft_id = id;
             if (cft_id <= 0 && db.OBS_COLLECT_FORM_TMPLT.Where(item => item.obs_cft_title == colForm.cft_Title).Count() > 0)
             {//we need to check if title passed from user is unique. if it already exists, we need to return the error message back to the screen
-                ViewBag.exception = "ERROR: The Question Id is either invalid or the Form Title Already Exist.";
+                Session.Add("errorMessage", "ERROR: The Question Id is either invalid or the Form Title Already Exist.");
                 return -1;
             }
 
-            ViewBag.exception = "";
             using (var transaction = db.Database.BeginTransaction())
             {
                 try
@@ -1364,6 +1375,7 @@ namespace OBSMVC.Controllers
                             }
                             else
                             {
+                                Session.Add("errorMessage", "ERROR:Can't publish this form. Effective start date is required");
                                 return -1;
                             }
                             template_to_edit.obs_cft_pub_by_uid = User.Identity.Name;
@@ -1414,6 +1426,7 @@ namespace OBSMVC.Controllers
                             }
                             else
                             {
+                                Session.Add("errorMessage", "ERROR:Can't publish this form. Effective start date is required");
                                 return -1;
                             }
                             template_to_save.obs_cft_pub_by_uid = User.Identity.Name;
@@ -1459,7 +1472,7 @@ namespace OBSMVC.Controllers
                 }//end of try
                 catch (Exception e)
                 {
-                    string notUsed = e.Message;
+                    Session.Add("errorMessage", e.Message);
                     transaction.Rollback();
                     return -1;
                 }
@@ -1508,6 +1521,7 @@ namespace OBSMVC.Controllers
                             }
                             else
                             {
+                                Session.Add("errorMessage", "ERROR:Can't publish this form. Effective start date is required");
                                 return -1;
                             }
                             template_to_save.obs_cft_pub_by_uid = User.Identity.Name;
@@ -1550,7 +1564,7 @@ namespace OBSMVC.Controllers
                 }//end of try
                 catch (Exception e)
                 {
-                    string notUsed = e.Message;
+                    Session.Add("errorMessage", e.Message);
                     transaction.Rollback();
                     return -1;
                 }

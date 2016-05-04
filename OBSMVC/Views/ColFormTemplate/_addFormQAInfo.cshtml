@@ -61,7 +61,12 @@
         </div>
 
     </div>
-    <div id="divTemplates" class="col-sm-6" style="margin-top:10px">        
+    <div id="divTemplates" class="col-sm-6" style="margin-top:10px">
+        <div id="divTemplateLoading" style="display:none">
+            <div style="margin:30px; text-align:center">
+                <img src="~/Images/LoadingData.gif" />
+            </div>
+        </div>
         @*  // - - - - - -- - - - - INSERT HERE The Selectable Answers Templates Panel (From External Partial View) --------
             //--------------------------------------------------------------------------------------------------------------
             // - - - - - - - END OF Selectable Answers Templates Panel (From External Partial View) ------------------------
@@ -159,6 +164,7 @@
             //Only for the "non-Other" cathegories
             //alert("Retrieving Templates for the '" + selCathegory + "' Category");
             if (selCathegory != "Other") {
+                $("#divTemplates").show();
                 $.ajax({
                     url: '@Url.Action("selAnsTemplates", "Question")',
                     method: "GET",
@@ -172,6 +178,7 @@
 
                     //--- On error, execute this function ------
                     error: function () {
+                        $("#divTemplates").hide();
                         alert("Failed to retrieve appropriate Templates for Selection! [" + "selCathegory" + "]");  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
@@ -179,6 +186,7 @@
                     //Adjust the Columns widts and show the templates column
                     //$("#newATcol01").removeClass("col-sm-10");
                     //$("#newATcol01").addClass("col-sm-6");
+                    $("#divTemplates").hide();
                     $("#divTemplates").show();
                     $("#divTemplates").html(d);
                 });
@@ -186,6 +194,7 @@
             else {
                 //$("#newATcol01").removeClass("col-sm-6");
                 //$("#newATcol01").addClass("col-sm-10");
+                $("#divTemplates").hide();
                 $("#divTemplates").hide();
             }
         });

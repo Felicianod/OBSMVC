@@ -674,17 +674,21 @@
         function loadTemplate(callerBtn, selAnslist) {
             //Transverse up to the parent "DIV" and then loop through all its "Textbox" children
             //to set their values based on the selected Template
-            aler("Loading Template");
-            // First Get the DIV parent id
-            var parentId = "#" + callerBtn.parent().parent().parent().parent().parent().parent().parent().parent().prop("id");
+           
+            //var parentId = "#" + callerBtn.parent().parent().parent().parent().parent().parent().parent().parent().parent().prop("id");
             //var textbList = $(parentId).find(".selAnswerTextb").first().val();
-            //alert('Template ' + '[' + selAnslist + '] will be applied for Id: ' + parentId + "-- Note, first text box value is: " + textbList);
+            //alert('Template ' + '[' + selAnslist + '] will be applied for Id: ' + parentId );
 
             //Create an array of values to apply to the text boxes
             var templateList = selAnslist.split(",");
             var textBoxCounter = 0;
             // Loops through all textboxes in the parent DIV and set their values accordingly
-            $(parentId).find(".selAnswerTextb").each(function () {
+            //$(parentId).find(".selAnswerTextb").each(function () {
+            //    $(this).val(templateList[textBoxCounter]);
+            //    textBoxCounter = textBoxCounter + 1;
+            //});
+
+            $("#divNewAT").find(".selAnswerTextb").each(function () {
                 $(this).val(templateList[textBoxCounter]);
                 textBoxCounter = textBoxCounter + 1;
             });

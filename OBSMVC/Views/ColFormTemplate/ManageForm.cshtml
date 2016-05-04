@@ -420,7 +420,7 @@
                     location.href = "/ColFormTemplate/";
                 }
             });
-        
+
             $('#cft_eff_end_dt').datepicker({
                 dateFormat: 'M dd, yy',
                 changeMonth: true,
@@ -433,7 +433,7 @@
                 useCurrent: false //Important! See issue #1075
             });
 
-            $("#btnSave").click(function(){            
+            $("#btnSave").click(function(){
                 //updateEndEffDate(int cft_id, DateTime end_eff_date)
                 var newEndEffDate = $("#cft_eff_end_dt").val();
                 if (newEndEffDate == "")
@@ -475,11 +475,27 @@
             //Unpublish Form (if ajax validation passes)
             $("#btnManageAction").click(function(){
                 //Call Ajax
+                $.ajax({
+                    url: '@Url.Action("checkFormInstance", "ColFormTemplate")',
+                    method: "GET",
+                    cache: false,
+                    data: { cft_id: @colFormId},
+                    error: function () {
+                        alert("Failed to Save the Form.");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    if (d == "Success") {
+                        // On ajax success:
+                        document.getElementById("unPublishFrm").submit();
+                        //Post Form is ajax is success else alert
+                    }
+                    else {
+                        alert(d);
+                    }
+                });
 
-                // On ajax success:
-                document.getElementById("unPublishFrm").submit();
-                //Post Form is ajax is success else alert
-            
+           
+
             });
 
         });

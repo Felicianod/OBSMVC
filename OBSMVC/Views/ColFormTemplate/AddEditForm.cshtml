@@ -938,7 +938,7 @@
         var todaysDate = new Date();
         var effStartDate = new Date($('#cft_eff_st_dt').val());     
         if(effStartDate < todaysDate) {
-            errorMsg = errorMsg + "Warning, the Effective Start Date [" + effStartDate + "] must be greater than today[" + effStartDate + "].\n";
+            errorMsg = errorMsg + "Warning, the Effective Start Date [" + effStartDate + "] must be greater than today[" + todaysDate + "].\n";
             $('#cft_eff_st_dt').addClass("invalidField");
             $('#cft_eff_st_dt').focus();
         }

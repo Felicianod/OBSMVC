@@ -208,21 +208,21 @@
         @if (!(Model.cft_new_vers_cft_id > 0))
         {
             <div class="col-sm-1" style="padding: 4px; margin-bottom:8px; text-align:right">
-                <form method="post">
+                <form method="post" id="unPublish">
                     @Html.AntiForgeryToken()
                     <input type="hidden" id="id" name="id" value="@Model.cft_id.ToString()" />
                     <input type="hidden" id="frmAction" name="frmAction" value="@Model.manageAction" />
-                    <button type="submit" class="btn btnAdd" id="btnManageAction" style="width:110px">@Model.manageAction</button>
+                    <button type="button" class="btn btnAdd" id="btnManageAction" style="width:110px">@Model.manageAction</button>
                 </form>
             </div>
         }
         <div class="col-sm-10 smallRowMargin" style="padding: 4px; margin-bottom:8px; text-align:center">
-            <span style="font-size:xx-large;">@Model.screen_Title</span>
-            <br />
-            <span style="font-size:small; color:red; font-style:italic">@Model.manageAction</span>
+            <span style="font-size:xx-large;" title="@Model.manageAction">@Model.screen_Title</span><br />
+            <div class="alert-success" id="divMessage" style="text-align:center; font-size:x-large; display:none ">
+                Data Saved Successfully
+            </div>
             @if (Model.cft_new_vers_cft_id > 0)
             {
-                <br />
                 <span style="font-size:small; color:red; font-style:italic">A new version exists for this form!  Editting is restricted.</span>
             }
         </div>
@@ -458,8 +458,10 @@
                         //location.href = "/ColFormTemplate/AddEditForm/" + formCftid;
                         //location.href = "/ColFormTemplate";
                         $("#saveMsg").show();
+                        $("#divMessage").show();
                         setTimeout(function () {
                             $("#saveMsg").hide();
+                            $("#divMessage").hide()
                         }, 3000);
                     }
                     else {
@@ -468,6 +470,14 @@
                 });
                 //--- Finished Resetting the ajax values
 
+            });
+
+            //Unpublish Form (if ajax validation passes)
+            $("#btnManageAction").click(function(){
+                //Call Ajax
+
+                //Post Form is ajax is success else alert
+            
             });
 
         });

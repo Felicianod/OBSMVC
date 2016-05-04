@@ -189,6 +189,8 @@ namespace OBSMVC.Controllers
             //    ModelState.AddModelError("", JsonObject["error"]["message"]);
             //    return false;  // Failed to authenticate the User
             //}//end of catch
+
+            string url = System.Configuration.ConfigurationManager.AppSettings["LDAPURL"];
             WebRequest request = WebRequest.Create("http://dscapidev.dsccorp.net/dscrest/api/v1/getobsemp/DSCAuthenticationSrv");
             request.Method = "POST";
             request.ContentType = "application/json";

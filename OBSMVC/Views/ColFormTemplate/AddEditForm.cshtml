@@ -212,6 +212,7 @@
         font-weight:bold;
         font-size:larger;
     }
+    .datepickerPopup{z-index:1151 !important;}  /* Used to make the datepicker show within the modal popup window*/
 </style>
 
 <script>
@@ -265,6 +266,12 @@
 
                 $(dropdownId).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");
             }
+        });
+
+        $("#confPubDates").on('hidden.bs.modal', function (){
+            // Reset the Publish Button
+            //alert("Popup was closed!");
+            $("#btnPublishForm").button('reset');
         });
 
         function resetSelAns(qId, ddlId){
@@ -755,21 +762,25 @@
             <div class="modal-body" style="margin-left:25px">
                 <br />
                 <div class="form-group row" style="margin-bottom:8px">
-                    you are publishing a form. this form will be usable "From" and "To" the dates specified below.
+                    <div class="alert-info" style="text-align:center"><h4>You are about to Publish a Form!</h4></div>
+                    <br/>
+                    <span style="font-size:large">Please confirm the "Start" and "End" Dates on which this form can be usable.</span>
+                    <br />
+                    <span style="font-size:large"> * A blank "End" Date will allow the form to have no expiration Date</span>
                 </div>                    
                 <br /><br />
                 <div class="form-group row" style="margin-bottom:8px">
-                    <div class="col-sm-4">
+                    <div class="col-sm-6" style="text-align:center; max-width:100%">
                         <div class="input-group" data-provide="datepicker">
                             <div class="input-group-addon">Usable As of:</div>
-                            <input class="datepicker form-control" id="conf_cft_eff_st_dt" style="max-width: 100%; width:100%;">
+                            <input class="datepicker datepickerPopup form-control" id="conf_cft_eff_st_dt" style="max-width: 100%; width:100%;">
                             <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-6" style="text-align:center; max-width:100%">
                         <div class="input-group" data-provide="datepicker">
                             <div class="input-group-addon">Usable Until:</div>
-                            <input class="datepicker form-control" id="conf_cft_eff_end_dt" style="max-width: 100%; width:100%;">
+                            <input class="datepicker datepickerPopup form-control" id="conf_cft_eff_end_dt" style="max-width: 100%; width:100%;">
                             <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
                         </div>
                     </div>
@@ -950,6 +961,7 @@
         if (errorMsg != "") {
             //If any validation error is found give alert and reset the Save Button
             $('#btnSaveForm').button('reset');
+            $("#btnPublishForm").button('reset');
             alert(errorMsg);
         }
         else {
@@ -1149,7 +1161,6 @@
         });
 
         function leavePage(){
-            alert("Leaving page...");
             var editMode = "@Model.manageAction";
             $("#formChanged").val("N");   //To prevent the browser to present the confirm-exit dialog.
 
@@ -1158,8 +1169,6 @@
                 var publishedDateTime = "@Model.originalPublishDate";
                 var publishedUser = "@Model.originalyPublishedBy";
                 var formCftid = "@Model.cft_id";
-
-                alert("Reseting the published date/time...");
                 $.ajax({
                     url: '@Url.Action("republishFormOnCancel", "ColFormTemplate")',
                     method: "POST",
@@ -1262,6 +1271,39 @@
                 $("#cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
             },
             useCurrent: false //Important! See issue #1075
+        });
+
+        $('#conf_cft_eff_st_dt').datepicker({
+            dateFormat: 'M dd, yy',
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            minDate: -0,
+            //minDate: -0,
+            //maxDate: "+1M +10D",
+            onClose: function (selectedDate) {
+                $("#conf_cft_eff_end_dt").datepicker("option", "minDate", selectedDate);
+            },
+            useCurrent: false //Important! See issue #1075
+        });
+
+        $('#conf_cft_eff_end_dt').datepicker({
+            dateFormat: 'M dd, yy',
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            minDate: -0,
+            onClose: function (selectedDate) {
+                $("#conf_cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
+            },
+            useCurrent: false //Important! See issue #1075
+        });
+
+        $("#btnSaveDateConf").click(function(){
+            $("#cft_eff_st_dt").val($("#conf_cft_eff_st_dt").val());
+            $("#cft_eff_end_dt").val($("#conf_cft_eff_end_dt").val());
+            $('#confPubDates').modal('toggle');
+            PostForm();        
         });
 
         $('#CreateForm').keypress(function (e) {
@@ -1802,8 +1844,9 @@
             }
         });
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        $("#btnSaveForm").click(function () {            
+        $("#btnSaveForm").click(function () {
             $(this).button('loading');
+            document.getElementById("isPublished").value = "false"      //We are saving only (Not publishing)
             $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
             PostForm();
         });

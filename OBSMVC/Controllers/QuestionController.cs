@@ -34,14 +34,14 @@ namespace OBSMVC.Controllers
             if (!String.IsNullOrWhiteSpace(search) && includeActiveOnly == "on")
             {
                 List<OBS_QUESTION> l1 = db.OBS_QUESTION.Where(ques => ques.obs_question_full_text.Contains(search) && DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt).ToList();
-                List<OBS_QUESTION> l2 = db.OBS_QUESTION.Where(ques => ques.OBS_QUEST_ASSGND_MD.Any(e => (e.OBS_QUESTION_METADATA.obs_quest_md_cat.Contains(search) || e.OBS_QUESTION_METADATA.obs_quest_md_value.Contains(search)) && DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt)).ToList();
+                List<OBS_QUESTION> l2 = db.OBS_QUESTION.Where(ques => ques.OBS_QUEST_ASSGND_MD.Any(e => ((e.OBS_QUESTION_METADATA.obs_quest_md_cat.Contains(search) || e.OBS_QUESTION_METADATA.obs_quest_md_value.Contains(search))&& (e.obs_qad_eff_st_dt<=DateTime.Today && DateTime.Today < e.obs_qad_eff_end_dt)) && DateTime.Today >= ques.obs_question_eff_st_dt && DateTime.Today < ques.obs_question_eff_end_dt)).ToList();
                 var combined = l1.Union(l2);
                 return View(combined.ToPagedList(page ?? 1, PageSize ?? 10));
             }
             else if (!String.IsNullOrWhiteSpace(search) && String.IsNullOrWhiteSpace(includeActiveOnly))
             {
                 List<OBS_QUESTION> l1 = db.OBS_QUESTION.Where(ques => ques.obs_question_full_text.Contains(search)).ToList();
-                List<OBS_QUESTION> l2 = db.OBS_QUESTION.Where(ques => ques.OBS_QUEST_ASSGND_MD.Any(e => (e.OBS_QUESTION_METADATA.obs_quest_md_cat.Contains(search)) || e.OBS_QUESTION_METADATA.obs_quest_md_value.Contains(search))).ToList();
+                List<OBS_QUESTION> l2 = db.OBS_QUESTION.Where(ques => ques.OBS_QUEST_ASSGND_MD.Any(e => ((e.OBS_QUESTION_METADATA.obs_quest_md_cat.Contains(search)) || e.OBS_QUESTION_METADATA.obs_quest_md_value.Contains(search)) && (e.obs_qad_eff_st_dt <= DateTime.Today && DateTime.Today < e.obs_qad_eff_end_dt))).ToList();
                 var combined = l1.Union(l2);
                 return View(combined.ToPagedList(page ?? 1, PageSize ?? 10));
             }

@@ -756,17 +756,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3 class="modal-title">CONFIRM THE PUBLISH DATES FOR THIS FORM</h3>
+                <h3 class="modal-title">CONFIRM THE LIVE DATES FOR THIS FORM</h3>
             </div>
             <div class="modal-body" style="margin-left:25px">
                 <br />
                 <div class="form-group row" style="margin-bottom:8px">
-                    <div class="alert-info" style="text-align:center"><h4>You are about to Publish a Form!</h4></div>
-                    <br/>
-                    <span style="font-size:large">Please confirm the "Start" and "End" Dates on which this form can be usable.</span>
                     <br />
-                    <span style="font-size:medium; font-style:italic"> *Note: A blank "Usable Until" Date will allow the form to have no expiration Date</span>
-                </div>                    
+                    <br />
+                </div>
                 <br /><br />
                 <div class="form-group row" style="margin-bottom:8px">
                     <div class="col-sm-6" style="text-align:center; max-width:100%">
@@ -787,9 +784,15 @@
                 </div>
             </div>
             <br />
+            <div>
+                <span style="font-size:medium; font-style:italic; text-align:center"> *Notes: Choosing Today's Date for "Usable as of" will make form live immediately after confirmation.</span>
+            </div>
+            <div>
+                <span style="font-size:medium; font-style:italic; text-align:center"> **     A blank "Usable Until" Date implies no Expiration</span>
+            </div>
             <div class="modal-footer">
                 <div class="col-sm-1 col-sm-offset-3">
-                    <button type="button" id="btnSaveDateConf" class="btn btn-primary" >Confirm Dates</button>
+                    <button type="button" id="btnSaveDateConf" class="btn btn-primary">Confirm Dates</button>
                 </div>
                 <div class="col-sm-1 col-sm-offset-1">
                     <button type="button" id="btnCancelDateConf" class="btn btn-default" data-dismiss="modal">Cancel</button>

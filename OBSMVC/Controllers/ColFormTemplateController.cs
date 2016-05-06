@@ -20,6 +20,13 @@ namespace OBSMVC.Controllers
         [HttpGet]
         public ActionResult Index(string title_search, string question_search, string t_search, string q_search, FormCollection form)
         {
+            try
+            {
+                title_search = title_search.Trim();
+                question_search = question_search.Trim();
+            }
+            catch { }
+            
             string onlyPublished = "N";
             try { onlyPublished = Request.QueryString["chkPublished"]; }
             catch { }

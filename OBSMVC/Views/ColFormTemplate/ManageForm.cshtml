@@ -409,144 +409,148 @@
     @* ######################  J A V A    S C R I P T S    S E C T I O N   #################################### *@
     @****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
     <script>
-    $(document).ready(function () {
-        function getATcategory() {
-            var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
-            if (selectedText == "3 Val") {
-                return "3 Val Range"
-            }
-            else if (selectedText == "5 Val") {
-                return "5 Val Range";
-            }
-            else {
-                return "Other"
-            }
-        };
-
-        var selCathegory = getATcategory();
-
-
-        $('.collapse').on('show.bs.collapse', function () {
-            $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
-        }).on('hide.bs.collapse', function () {
-            $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
-        });
-        $("#btnCancel").click(function () {
-            if ( $("#formChanged").val() == "Y")
-            {
-                $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window
-
-                $( "#dialog-confirm-reset" ).dialog({
-                    resizable: false,
-                    height:200,
-                    modal: true,
-                    buttons: {
-                        "Reset Form": function() {
-                            $("#formChanged").val("N");
-                            //isChanged.val("N");
-                            location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
-                        },
-                        Cancel: function() {
-                            $( this ).dialog( "close" );
-                        }
-                    }
-                });
-            }
-            else{
-                location.href = "/ColFormTemplate/";
-            }
-        });
-
-        $('#cft_eff_end_dt').datepicker({
-            dateFormat: 'M dd, yy',
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            minDate: -0,
-            onClose: function (selectedDate) {
-                $("#cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
-            },
-            useCurrent: false //Important! See issue #1075
-        });
-
-        $("#btnSave").click(function(){
-            //updateEndEffDate(int cft_id, DateTime end_eff_date)
-            var newEndEffDate = $("#cft_eff_end_dt").val();
-            if (newEndEffDate == "")
-            {
-                newEndEffDate = "Dec 31, 2060";
-            }
-
-            //alert("Saving form Id: " + "@colFormId" + " __ New End Date is: " + newEndEffDate);
-
-            $.ajax({
-                url: '@Url.Action("updateEndEffDate", "ColFormTemplate")',
-                method: "POST",
-                cache: false,
-                data: { cft_id: @colFormId, end_eff_date: newEndEffDate },
-                error: function () {
-                    alert("Failed to Save the Form.");  //<-- Trap and alert of any errors if they occurred
+        $(document).ready(function () {
+            function getATcategory() {
+                var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
+                if (selectedText == "3 Val") {
+                    return "3 Val Range"
                 }
-            }).done(function (d) {
-                if (d == "Success") {
-                    //alert("Data Saved Successfully!");
-
-                    //location.href = "/ColFormTemplate/AddEditForm/" + formCftid;
-                    //location.href = "/ColFormTemplate";
-                    $("#saveMsg").show();
-                    $("#divMessage").show();
-                    setTimeout(function () {
-                        $("#saveMsg").hide();
-                        $("#divMessage").hide()
-                    }, 3000);
+                else if (selectedText == "5 Val") {
+                    return "5 Val Range";
                 }
                 else {
-                    alert("ERROR Saving Form: " + d);
+                    return "Other"
+                }
+            };
+
+            var selCathegory = getATcategory();
+
+
+            $('.collapse').on('show.bs.collapse', function () {
+                $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
+            }).on('hide.bs.collapse', function () {
+                $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
+            });
+            $("#btnCancel").click(function () {
+                if ( $("#formChanged").val() == "Y")
+                {
+                    $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window
+
+                    $( "#dialog-confirm-reset" ).dialog({
+                        resizable: false,
+                        height:200,
+                        modal: true,
+                        buttons: {
+                            "Reset Form": function() {
+                                $("#formChanged").val("N");
+                                //isChanged.val("N");
+                                location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
+                            },
+                            Cancel: function() {
+                                $( this ).dialog( "close" );
+                            }
+                        }
+                    });
+                }
+                else{
+                    location.href = "/ColFormTemplate/";
                 }
             });
-            //--- Finished Resetting the ajax values
 
-        });
+            $('#cft_eff_end_dt').datepicker({
+                dateFormat: 'M dd, yy',
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                minDate: -0,
+                onClose: function (selectedDate) {
+                    $("#cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
+                },
+                useCurrent: false //Important! See issue #1075
+            });
 
-        //Unpublish Form (if ajax validation passes)
-        $("#btnManageAction").click(function(){
-            var action = "@manageAction";
-            if(action=="EDIT"){
-                //Call Ajax
+            $("#btnSave").click(function(){
+                //updateEndEffDate(int cft_id, DateTime end_eff_date)
+                var newEndEffDate = $("#cft_eff_end_dt").val();
+                if (newEndEffDate == "")
+                {
+                    newEndEffDate = "Dec 31, 2060";
+                }
+
+                //alert("Saving form Id: " + "@colFormId" + " __ New End Date is: " + newEndEffDate);
+
                 $.ajax({
-                    url: '@Url.Action("checkFormInstance", "ColFormTemplate")',
-                    method: "GET",
+                    url: '@Url.Action("updateEndEffDate", "ColFormTemplate")',
+                    method: "POST",
                     cache: false,
-                    data: { cft_id: @colFormId},
+                    data: { cft_id: @colFormId, end_eff_date: newEndEffDate },
                     error: function () {
-                        alert("Failed to Edit the Form.");  //<-- Trap and alert of any errors if they occurred
+                        alert("Failed to Save the Form.");  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
                     if (d == "Success") {
-                        // On ajax success:
-                        document.getElementById("unPublishFrm").submit();
-                        //Post Form is ajax is success else alert
+                        //alert("Data Saved Successfully!");
+
+                        //location.href = "/ColFormTemplate/AddEditForm/" + formCftid;
+                        //location.href = "/ColFormTemplate";
+                        $("#saveMsg").show();
+                        $("#divMessage").show();
+                        setTimeout(function () {
+                            $("#saveMsg").hide();
+                            $("#divMessage").hide()
+                        }, 3000);
                     }
                     else {
-                        $("#divAlertText ").html(d);    //Set the Alert Error Message returmed bythe Server for the pop up
-                        $("#frmChgdAlert").modal();      //Show the Alert Popup Window and let the window handle the rest
-                        //alert(d);
+                        alert("ERROR Saving Form: " + d);
+                    }
+                });
+                //--- Finished Resetting the ajax values
+
+            });
+
+            //Unpublish Form (if ajax validation passes)
+            $("#btnManageAction").click(function(){
+                var action = "@manageAction";
+                if(action=="EDIT"){
+                    //Call Ajax
+                    $.ajax({
+                        url: '@Url.Action("checkFormInstance", "ColFormTemplate")',
+                        method: "GET",
+                        cache: false,
+                        data: { cft_id: @colFormId},
+                        error: function () {
+                            alert("Failed to Edit the Form.");  //<-- Trap and alert of any errors if they occurred
+                        }
+                    }).done(function (d) {
+                        if (d == "Success") {
+                            // On ajax success:
+                            document.getElementById("unPublishFrm").submit();
+                            //Post Form is ajax is success else alert
+                        }
+                        else {
+                            $("#divAlertText ").html(d);    //Set the Alert Error Message returmed bythe Server for the pop up
+                            $("#frmChgdAlert").modal();      //Show the Alert Popup Window and let the window handle the rest
+                            //alert(d);
                             @*location.href = "/ColFormTemplate/AddEditForm/" + @colFormId;*@
                         }
-                });
-            }
-            else
-            {
-                document.getElementById("unPublishFrm").submit();
-            }
-        });
+                    });
+                }
+                else
+                {
+                    document.getElementById("unPublishFrm").submit();
+                }
+            });
 
-        $("#btnConfNewVersion ").click(function(){
-            //Change the form action balue to "NEW VERSION" and submit the form
-            $("#frmAction").val("NEW VERSION");
-            document.getElementById("unPublishFrm").submit()
-            @*location.href = "/ColFormTemplate/AddEditForm/" + @colFormId;*@
-        });
+            $("#btnConfNewVersion ").click(function(){
+                //Change the form action balue to "NEW VERSION" and submit the form
+                $("#frmAction").val("NEW VERSION");
+                document.getElementById("unPublishFrm").submit()
+                @*location.href = "/ColFormTemplate/AddEditForm/" + @colFormId;*@
+            });
+
+            $("#btnCancelAlert").click(function(){
+                location.href = "/ColFormTemplate/AddEditForm/" + @colFormId;
+            });
 
     });//-------- End of Document Ready --------
 </script>

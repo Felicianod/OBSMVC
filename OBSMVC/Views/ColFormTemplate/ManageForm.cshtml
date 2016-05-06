@@ -392,10 +392,10 @@
             <div class="modal-footer">
                 <div class="col-sm-6 col-sm-offset-3">
                     <div class="col-sm-5 col-sm-offset-1" style="text-align:center">
-                        <button type="button" id="btnSaveDateConf" class="btn btn-primary">Create New Version</button>
+                        <button type="button" id="btnConfNewVersion" class="btn btn-primary">Create New Version</button>
                     </div>
                     <div class="col-sm-5 col-sm-offset-1" style="text-align:center">
-                        <button type="button" id="btnCancelDateConf" class="btn btn-default" data-dismiss="modal" style="min-width:120px">Cancel</button>
+                        <button type="button" id="btnCancelAlert" class="btn btn-default" data-dismiss="modal" style="min-width:120px">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -533,20 +533,22 @@
                         //alert(d);
                             @*location.href = "/ColFormTemplate/AddEditForm/" + @colFormId;*@
                         }
-                    });
-                }
-                else
-                {
-                    document.getElementById("unPublishFrm").submit();
-                }
-            });
-
-            $("#btnSaveDateConf ").click(function(){
-                //Change the form action balue to "NEW VERSION" and submit the form
-                $("#frmAction").val("NEW VERSION");
-                location.href = "/ColFormTemplate/AddEditForm/" + @colFormId;
-            });
+                });
+            }
+            else
+            {
+                document.getElementById("unPublishFrm").submit();
+            }
         });
+
+        $("#btnConfNewVersion ").click(function(){
+            //Change the form action balue to "NEW VERSION" and submit the form
+            $("#frmAction").val("NEW VERSION");
+            document.getElementById("unPublishFrm").submit()
+            @*location.href = "/ColFormTemplate/AddEditForm/" + @colFormId;*@
+        });
+
+    });//-------- End of Document Ready --------
 </script>
 
     @*********************************************************************************************************************@

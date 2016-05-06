@@ -544,7 +544,8 @@
             $("#btnSaveDateConf ").click(function(){
                 //Change the form action balue to "NEW VERSION" and submit the form
                 $("#frmAction").val("NEW VERSION");
-                location.href = "/ColFormTemplate/AddEditForm/" + @colFormId;
+                document.getElementById("unPublishFrm").submit()
+                @*location.href = "/ColFormTemplate/AddEditForm/" + @colFormId;*@
             });
         });
 </script>

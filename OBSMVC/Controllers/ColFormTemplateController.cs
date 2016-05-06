@@ -42,9 +42,7 @@ namespace OBSMVC.Controllers
             }
             catch { }
 
-            List<ObsColFormTemplate> ObsColFormTemplateList = new List<ObsColFormTemplate>(
-                
-                );
+            List<ObsColFormTemplate> ObsColFormTemplateList = new List<ObsColFormTemplate>();
             if (selectedFunctionId > 0)
             {//case where function is selected
                 if (String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))

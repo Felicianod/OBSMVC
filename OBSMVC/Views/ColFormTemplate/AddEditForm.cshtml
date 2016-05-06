@@ -1597,41 +1597,53 @@
                 //        $(this).sortable('cancel');
                 //    }
                 //},
+                receive: function(event, ui) {
+                    // This function executes when an item is received at the target list during "sort"
+                    //alert("[" + this.id + "] received data from [" + ui.sender.attr("id") + "]");
+                    $(this).parents(".formSection").first().find(".btnDelSection").hide();
+                },
                 update: function () {
                     //This function is executed everythime an item is sorted complete (After sort)
                     var qid2 = $(this).qid;
                     $(this).find(".placeholder").remove();
                     $("#formChanged").val("Y");
                     $("#btnCancel").removeAttr('disabled');
+                    if ($(this).find(".question").length < 1){
+                        //There are no questions Left on the Source section
+                        $(this).parents(".formSection").first().find(".btnDelSection").show();
+                        
+                        //alert("No questions left on id: " + $(this).prop("id"));
+                    }
                     //updateValues("An Item was reordered." + +getTestData(qid2));  // Call function After Sorting
                 }
             }).on("click", ".dismiss", function (event) {
-                //Somehow, this function is executing twice when even is triggered.
-                //Perform the action only when the "executeCounter" is 1. To prevent doing everything more than once
+                //Somehow, this function is executing twice when even is triggered.                
                 executeCounter = executeCounter + 1;
                 event.preventDefault();
-                if (executeCounter == 1){
+                if (executeCounter == 1){   //Perform the action only when the "executeCounter" is 1. To prevent doing everything more than once
                     //var qdelId = $(this).parent().attr("id");
 
                     // Count the questions in the containing section.
                     //If the section has only one question (The current Question Being removed) then display the "Section Delete Button"
                     //and show the "Drag a question Here" Template.  Otherwise, just hide the delete button.
-                    var $itemsInParent = $(this).parents(".formSection").first();
-                    var $sectDelBtn = $itemsInParent.find("#btnDelSection");
-                    var qInSection = $itemsInParent.find(".question").length;
-                    
-                    if (qInSection == 1){
+                    var $parentFrmSection = $(this).parents(".formSection").first();
+                    var $sectDelBtn = $parentFrmSection.find("#btnDelSection");
+                    var qInSection = $parentFrmSection.find(".question").length;
+                    //      
+                    if (qInSection == 1 ){
                         $sectDelBtn.show(); 
-                        // Add code to display the "Drag a question Here" Template.
-                        var placeholderNew = $("<li class=\"list-group-item placeholder\"></li>").append('<div style="font-weight:bold; font-size:large"><br />Drag a question here...<br /><br /></div>');
-                        $(placeholderNew).appendTo( $itemsInParent.find(".targetList").first() );
+                        // Add code to display the "Drag a question Here" Template if it doesn't already exist.
+                        if ($parentFrmSection.find(".placeholder").length == 0){
+                            var placeholderNew = $("<li class=\"list-group-item placeholder\"></li>").append('<div style="font-weight:bold; font-size:large"><br />Drag a question here...<br /><br /></div>');
+                            $(placeholderNew).appendTo( $parentFrmSection.find(".targetList").first() );                        
+                        }
                     }
                     else{ 
                         $sectDelBtn.hide();
                     }
                     $(this).parent().remove();
 
-                    //alert("Parent Id is: " + $itemsInParent.prop("id") + " and it has " + qInSection + " questions." );
+                    //alert("Parent Id is: " + $parentFrmSection.prop("id") + " and it has " + qInSection + " questions." );
                     //alert("There are [" + itemsInParent + "(" + testCounter + ")" + "] Questions Left on This section!");
                 }
                 else{
@@ -1900,9 +1912,8 @@
             $('#btnAddSection').click(function () {
                 var $btn = $(this);
                 $btn.button('loading');
-                addNewSection();
-                $btn.button('reset');
-
+                addNewSection();                
+                $btn.button('reset');                
                 //Automatically Scroll to the botton of the Panel where the new Section was Inserted
                 //If we wanted to scroll to the top, we would set the "height = 0"
                 height = scrollPanel[0].scrollHeight;

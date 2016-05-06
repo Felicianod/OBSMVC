@@ -199,8 +199,11 @@
     string rowInfo = masterCounter.ToString();
     string colFormId = Model.cft_id.ToString();
     string endDateMode = "readonly disabled";
+    string actionBtnText = @Model.manageAction;
 
     if (manageAction.Equals("RESTRICTED"))  endDateMode = "";
+    if (actionBtnText.Equals("NEW VERSION")) actionBtnText = "CREATE NEW VERSION";
+    if (actionBtnText.Equals("EDIT")) actionBtnText = "EDIT THIS FORM";
 }
 
 <div class="row" style="margin-left:2px; margin-right:2px">
@@ -212,7 +215,7 @@
                     @Html.AntiForgeryToken()
                     <input type="hidden" id="id" name="id" value="@Model.cft_id.ToString()" />
                     <input type="hidden" id="frmAction" name="frmAction" value="@Model.manageAction" />
-                    <button type="button" class="btn btnAdd" id="btnManageAction" style="width:110px">@Model.manageAction</button>
+                    <button type="button" class="btn btnAdd" id="btnManageAction" style="min-width:110px">@actionBtnText</button>
                 </form>
             </div>
         }

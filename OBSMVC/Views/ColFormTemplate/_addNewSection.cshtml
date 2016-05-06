@@ -16,11 +16,14 @@
                 <span>Section Name:</span>
             </a>
             &nbsp;
-            <input type="text" id="@txtSectionName" onfocus="$(this).select();" class="form-control input-sm sectionTitle" style="width:50%" placeholder="<Enter Section Name>" value="@Model.sectionName" required />
+            <input type="text" id="@txtSectionName" onfocus="$(this).select();" class="form-control input-sm sectionTitle" style="width:55%" placeholder="<Enter Section Name>" value="@Model.sectionName" required />            
+            <button type="button" id="btnDelSection" class="btn btn-default btnDelSection" style="float:right">
+                <span class="glyphicon glyphicon-trash"></span>
+            </button>
         </h4>
     </div>
-    <div id="@sectionId" class="panel-collapse collapse in" style="margin-left:20px" @*style="border:dashed; border-width:medium"*@>
-        <div class="right row">
+    <div id="@sectionId" class="questionContainer panel-collapse collapse in" style="margin-left:20px; clear:both" @*style="border:dashed; border-width:medium"*@>
+        <div class="right row" id="dsdsds">
             <ol class="list-group targetList connected" id="@olListId" @*ondrop="addQid(event)"*@>
                   @if (Model.colFormQuestionList.Count > 0)
                   {
@@ -29,7 +32,7 @@
                       foreach (OBSMVC.Controllers.CollectionFormQuestion sectQuest in Model.colFormQuestionList)
                       {
                           string listId = "li" + questionCounter.ToString("00");
-                        <li id="@listId" >
+                        <li id="@listId" class="question ">
                             <a href='#' class='dismiss'>x</a>
                               @*@questionCounter.ToString("00"): This is Question ID=@sectQuest.cfq_questId [under Section "@Model.sectionName"]*@
                             @*/--------- --------------------------------------------------------------------\

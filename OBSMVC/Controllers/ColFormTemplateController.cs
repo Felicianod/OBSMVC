@@ -554,7 +554,7 @@ namespace OBSMVC.Controllers
             //this method checks if this form was retrieved by user while user was on Edit page
             if (db.OBS_COLLECT_FORM_INST.Any(x=>x.obs_cft_id==cft_id))
             {
-                return "Form has been used. You can no longer edit this version.\n Would you like to create a new version? ";
+                return "<h3>Form has been used. You can no longer edit this version.\n Would you like to create a new version?</h3>";
             }
             else { return "Success"; }
             
@@ -1507,7 +1507,7 @@ namespace OBSMVC.Controllers
                         template_to_save.dsc_lc_id = prev_form.dsc_lc_id;                 
                         template_to_save.obs_cft_nbr = (short)colForm.cft_Nbr;
                         template_to_save.obs_cft_ver = (short)colForm.cft_Version;
-                        //template_to_save.obs_cft_title = colForm.cft_Title;
+                        template_to_save.obs_cft_title = prev_form.obs_cft_title;
                         template_to_save.obs_cft_subtitle = colForm.cft_SubTitle;
                         template_to_save.obs_cft_eff_end_dt = (colForm.cft_eff_end_dt == null) || (colForm.cft_eff_end_dt < Convert.ToDateTime("01/01/2000")) ? Convert.ToDateTime("12/31/2060") : colForm.cft_eff_end_dt;
                         template_to_save.obs_cft_added_dtm = DateTime.Now;

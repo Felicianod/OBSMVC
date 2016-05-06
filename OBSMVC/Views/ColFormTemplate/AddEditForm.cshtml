@@ -980,7 +980,7 @@
             effStartDate.setHours(0, 0, 0, 0);
 
             if ( effStartDate < todaysDate){
-                errorMsg = errorMsg + "Warning!\nThe Effective Form Start Date [" + effStartDate.toString().substring(0, 16)  + "] \nMust be greater than Today [" + todaysDate.toString().substring(0, 16) + "].\n";
+                errorMsg = errorMsg + "Warning!\nThe Effective Form Start Date [" + effStartDate.toString().substring(0, 16)  + "] \nMust be greater or equal to Today [" + todaysDate.toString().substring(0, 16) + "].\n";
                 $('#cft_eff_st_dt').addClass("invalidField");
                 $('#cft_eff_st_dt').focus();
             }

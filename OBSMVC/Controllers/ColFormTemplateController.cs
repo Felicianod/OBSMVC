@@ -554,7 +554,7 @@ namespace OBSMVC.Controllers
             //this method checks if this form was retrieved by user while user was on Edit page
             if (db.OBS_COLLECT_FORM_INST.Any(x=>x.obs_cft_id==cft_id))
             {
-                return "This collection form is already in use! Please create a new verion";
+                return "Form has been used. You can no longer edit this version.\n Would you like to create a new version? ";
             }
             else { return "Success"; }
             

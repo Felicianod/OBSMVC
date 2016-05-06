@@ -369,7 +369,7 @@
     {
         <div id="divDelete" class="col-sm-1" style="padding: 4px; margin-bottom:8px; text-align:right">
             <button type="button" class="btn btn-danger btn-sm newBtn" id="btnDeleteForever" style="padding:2px">
-                <span class="glyphicon glyphicon-stop"></span> Delete Form Forever!
+                <span class="glyphicon glyphicon-stop"></span> Delete Form !
             </button>
         </div>
     }
@@ -842,7 +842,37 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-
+@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+@* --------------------------------------- POP UP "GENERIC CONFIRMATION" FORM --------------------------------------------------- *@
+@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+<!-- Modal -->
+<div class="modal  modal-NewQ fade" id="confPubDates" role="dialog">
+    <input type="hidden" id="funcToExec" value=""/>
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title" id="confTitle"></h3>
+            </div>
+            <div class="modal-body" style="margin-left:25px">
+                <br /><br />
+                <div class="row" id="divAlertText" style="margin-bottom:15px; font-size:x-large">
+                </div>
+            </div>
+            <br />
+            <div class="modal-footer">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div class="col-sm-5 col-sm-offset-1" style="text-align:center">
+                        <button type="button" id="btnAlertConfirm" class="btn btn-primary">Create New Version</button>
+                    </div>
+                    <div class="col-sm-5 col-sm-offset-1" style="text-align:center">
+                        <button type="button" id="btnAlertCancel" class="btn btn-default" data-dismiss="modal" style="min-width:120px">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
     <script>
         function clearNewSAbox(){
             $("#divNewSA").html("");
@@ -1421,6 +1451,7 @@
 
             $("#btnDeleteForever").click(function(){
                 // Perform an Ajax call to either hard or soft delete the current form
+
                 $.ajax({
                     url: '@Url.Action("deleteForm", "ColFormTemplate")',
                     method: "POST",

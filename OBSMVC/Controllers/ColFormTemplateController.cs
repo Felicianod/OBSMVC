@@ -1738,8 +1738,9 @@ namespace OBSMVC.Controllers
                 colFormSections = new List<CollectionFormSection>();
             }
             //Finally, set the "canBdeleted" property
-            // If the form is 'not published' and it contains zero question, it can be deleted!
-            str_cft_canBdeleted = (cft_isPublished.Equals("NOT PUBLISHED") && questCount() == 0 && id > 0 && (HttpContext.Current.User.Identity.Name == "delgado_feliciano" || HttpContext.Current.User.Identity.Name == "A_Rasul") );
+            // If the form is 'not published', it can be deleted! (and it contains zero question?)
+            //str_cft_canBdeleted = (cft_isPublished.Equals("NOT PUBLISHED") && questCount() == 0 && id > 0 && (HttpContext.Current.User.Identity.Name == "delgado_feliciano" || HttpContext.Current.User.Identity.Name == "A_Rasul") );
+            str_cft_canBdeleted = (cft_isPublished.Equals("NOT PUBLISHED") && cft_id > 0);
         }
 
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \\

@@ -193,7 +193,7 @@
 
     .modal-alert .modal-body {
         overflow-y: auto;
-        height: 200px;
+        height: 230px;
     }
 
     .modal-alert .modal-content {
@@ -277,7 +277,7 @@
             var height = $(window).height() - 200;
             $(this).find(".modal-body").css("max-height", height);
         });
-
+        
         // If the form was recently saved/posted successfuly, this indicates a change on the AT list
         // reload the drop down with the new values
         $("#editQATWindow").on('hidden.bs.modal', function () {
@@ -369,17 +369,6 @@
             $("#alertPopup").modal();
         }
 
-        function showConfirmation(alertTitle, alertMessage){
-            //Set the values to display in the alert message
-            $("#confTitle").html(alertTitle)
-            $("#divConfText").html(alertMessage)
-            //$("#funcToExec").val(callFunction)
-            $("#confirmationResult").val('true');
-
-            //Show the Confirmation Popup Form
-            $("#confPopUp").modal();
-        }
-
     });
 </script>
 
@@ -392,40 +381,42 @@
     int nextQuestion = Model.questCount() + 1;
     string form_num = Model.cft_Nbr > 0 ? Model.cft_Nbr.ToString() : String.Empty;
     string form_version = Model.cft_Nbr > 0 ? Model.cft_Version.ToString() : String.Empty;
+    //string errorMessage = (Session["exception"] == null) ? "" : Session["exception"].ToString();
+    string errorMessage = (Session["errorMessage"] == null) ? "" : Session["errorMessage"].ToString();
 }
 
 <div class="row" style="margin-left:2px; margin-right:2px">
     <div class="jumbotron smallRowMargin col-sm-12" style="padding: 4px; margin-bottom:8px; text-align:center">
-        <div class="col-sm-10 smallRowMargin" style="padding: 4px; margin-bottom:8px; text-align:center">
+        <div class="col-sm-11 smallRowMargin" style="padding: 4px; margin-bottom:8px; text-align:center">
             <span style="font-size:xx-large;" title="@Model.manageAction">@Model.screen_Title</span><br />
             <div class="alert-success" id="divMessage" style="text-align:center; font-size:x-large; display:none ">
                 Data Saved Successfully
             </div>
         </div>
+
     @if (@Model.str_cft_canBdeleted)
     {
-        <div id="divDelete" class="col-sm-1" style="padding: 4px; margin-bottom:8px; text-align:right">
+        <div id="divDelete" class="col-sm-1" style="padding: 4px; margin-bottom:8px; text-align:right; float:right">
             <button type="button" class="btn btn-danger btn-sm newBtn" id="btnDeleteForever" style="padding:2px">
-                <span class="glyphicon glyphicon-stop"></span> Delete Form !
+                <span class="glyphicon glyphicon-remove-sign" ></span> Delete Form
             </button>
         </div>
     }
+        <div id="message" style="display:none"></div>
     </div>
 </div>
+<div style="clear:both"></div>
 
 
-
-@if (!String.IsNullOrEmpty(ViewBag.exception))
+@if (!String.IsNullOrEmpty(errorMessage))
 {
     <div class="row">
         <div class="alert alert-danger col-sm-12">
-            <strong>Warning!</strong> @ViewBag.exception
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            [There are currently @Model.questCount() Questions in this Form]
+            <strong>Warning!</strong> @errorMessage
         </div>
     </div>
 }
-
+@{    Session["errorMessage"] = ""; }
 
     @* - - - - - - - - - - - - - - - - BEGINING OF THE "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
     @*// ---- Helper Hidden Fields to Control the Inner Ids ----- *@
@@ -883,7 +874,7 @@
 @* --------------------------------------- POP UP "GENERIC CONFIRMATION" FORM --------------------------------------------------- *@
 @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
 <!-- Modal -->
-<div class="modal  modal-NewQ fade" id="confPopUp" role="dialog">
+<div class="modal  modal-alert fade" id="confPopUp" role="dialog">
     <input type="hidden" id="funcToExec" value=""/>
     <input type="hidden" id="confirmationResult" value="" />
     <div class="modal-dialog ">
@@ -901,7 +892,7 @@
             <div class="modal-footer">
                 <div class="col-sm-6 col-sm-offset-3">
                     <div class="col-sm-5 col-sm-offset-1" style="text-align:center">
-                        <button type="button" id="btnAlertConfirm" class="btn btn-primary" onclick="$('#confirmationResult').val('true');">Create New Version</button>
+                        <button type="button" id="btnAlertConfirm" class="btn btn-primary" value=""></button>
                     </div>
                     <div class="col-sm-5 col-sm-offset-1" style="text-align:center">
                         <button type="button" id="btnAlertCancel" class="btn btn-default" data-dismiss="modal" style="min-width:120px">Cancel</button>
@@ -916,7 +907,7 @@
 @* --------------------------------------- POP UP "GENERIC ALERT" WINDOW --------------------------------------------------------- *@
 @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
 <!-- Modal -->
-<div class="modal  modal-NewQ fade" id="alertPopup" role="dialog">
+<div class="modal  modal-alert fade" id="alertPopup" role="dialog">
     <div class="modal-dialog ">
         <div class="modal-content">
             <div class="modal-header">
@@ -1017,10 +1008,12 @@
     </script>
 
 
-    @* ######################  J A V A    S C R I P T S    S E C T I O N   #################################### *@
-    @****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
-    <script>
-        function PostForm() {
+ @* ######################  J A V A    S C R I P T S    S E C T I O N   #################################### *@
+ @****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
+<script type="text/jscript">
+
+    $(document).ready(function () {
+        function validateForm(){
             var errorMsg = "";
             var sectionCounter = 0;
             //----------------------- Perform Front-End Form Validation ----------------------------------------
@@ -1101,132 +1094,135 @@
                 $('#btnSaveForm').button('reset');
                 $("#btnPublishForm").button('reset');
                 alert(errorMsg);
+                return false;
             }
             else {
-                //Post the Form
-                //isChanged = false;  // To prevent the alert of leaving the page from showing up
-                $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
-                document.getElementById("CreateForm").submit();
+                //Validation Passes.
+                return true;
             }
         }
 
+        function PostForm() {
+            //Post the Form
+            //isChanged = false;  // To prevent the alert of leaving the page from showing up
+            $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
+            document.getElementById("CreateForm").submit();
+        }
 
-        $(document).ready(function () {
+        function getATcategory() {
+            var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
+            if (selectedText == "3 Val") {
+                return "3 Val Range"
+            }
+            else if (selectedText == "5 Val") {
+                return "5 Val Range";
+            }
+            else {
+                return "Other"
+            }
+        };
 
-            function getATcategory() {
-                var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
-                if (selectedText == "3 Val") {
-                    return "3 Val Range"
-                }
-                else if (selectedText == "5 Val") {
-                    return "5 Val Range";
+        var selCathegory = getATcategory();
+
+        $("input:text").focus(function () { $(this).select(); });
+
+        $('.collapse').on('show.bs.collapse', function () {
+            $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
+        }).on('hide.bs.collapse', function () {
+            $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
+        });
+
+        // **** SAVE ACTION FROM MODAL POPUP QUESTION MAINTENANCE ****
+        $("#btnSaveNewSelAnswer").click(function () {
+            // ------------------- Before Saving data, validate the user input -------------------------------------------------
+            var formValidated = true;
+            var emptyBoxes = 0;
+            var textValues = "";
+            var counter = 0;
+            var validationMessage = "";
+
+            selCathegory = getATcategory();
+
+            // ----------- First verify that no boxes have been left blank and compile the New Answer String for posting ---------------
+            //var comparisonNewString = $("#divNewSA").find("#fullSelATlist").first().children("option").filter(":selected").text();  //Save the answer Type that is being added
+            $('#newQATsection').find('.selAnswerTextb').each(function () {
+                counter = counter + 1;
+                if ($(this).val() != "") {
+                    textValues = textValues + $(this).val().trim().toUpperCase() + "~";
+                    //comparisonNewString = comparisonNewString + $(this).val().trim().toUpperCase();
                 }
                 else {
-                    return "Other"
+                    emptyBoxes++;
                 }
-            };
-
-            var selCathegory = getATcategory();
-
-            $("input:text").focus(function () { $(this).select(); });
-
-            $('.collapse').on('show.bs.collapse', function () {
-                $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
-            }).on('hide.bs.collapse', function () {
-                $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
             });
 
-            // **** SAVE ACTION FROM MODAL POPUP QUESTION MAINTENANCE ****
-            $("#btnSaveNewSelAnswer").click(function () {
-                // ------------------- Before Saving data, validate the user input -------------------------------------------------
-                var formValidated = true;
-                var emptyBoxes = 0;
-                var textValues = "";
-                var counter = 0;
-                var validationMessage = "";
-
-                selCathegory = getATcategory();
-
-                // ----------- First verify that no boxes have been left blank and compile the New Answer String for posting ---------------
-                //var comparisonNewString = $("#divNewSA").find("#fullSelATlist").first().children("option").filter(":selected").text();  //Save the answer Type that is being added
-                $('#newQATsection').find('.selAnswerTextb').each(function () {
-                    counter = counter + 1;
-                    if ($(this).val() != "") {
-                        textValues = textValues + $(this).val().trim().toUpperCase() + "~";
-                        //comparisonNewString = comparisonNewString + $(this).val().trim().toUpperCase();
-                    }
-                    else {
-                        emptyBoxes++;
+            //Check if we have empty boxes, then the form is not validated.
+            var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
+            if (selCathegory == "3 Val Range" && emptyBoxes > 2) {
+                formValidated = false;
+                validationMessage = "No textbox values can be left blank";
+            }
+            else if (selCathegory == "5 Val Range" && emptyBoxes > 0) {
+                formValidated = false;
+                validationMessage = "No textbox values can be left blank";
+            }
+            else if (selectedText == "Multi" || selectedText == "Singl") {
+                //If user is entering a List, verify that the list contains at least two item
+                var filledInBoxes = 0;
+                $("#multiList").find(".selAnswerTextb").each(function () {
+                    if ($(this).val().trim() != "") {
+                        filledInBoxes = filledInBoxes + 1;
                     }
                 });
-
-                //Check if we have empty boxes, then the form is not validated.
-                var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
-                if (selCathegory == "3 Val Range" && emptyBoxes > 2) {
+                if (filledInBoxes < 2) {
                     formValidated = false;
-                    validationMessage = "No textbox values can be left blank";
+                    validationMessage = "A valid list must contain at least two elements.";
                 }
-                else if (selCathegory == "5 Val Range" && emptyBoxes > 0) {
-                    formValidated = false;
-                    validationMessage = "No textbox values can be left blank";
-                }
-                else if (selectedText == "Multi" || selectedText == "Singl") {
-                    //If user is entering a List, verify that the list contains at least two item
-                    var filledInBoxes = 0;
-                    $("#multiList").find(".selAnswerTextb").each(function () {
-                        if ($(this).val().trim() != "") {
-                            filledInBoxes = filledInBoxes + 1;
-                        }
-                    });
-                    if (filledInBoxes < 2) {
-                        formValidated = false;
-                        validationMessage = "A valid list must contain at least two elements.";
-                    }
-                }
-                // ------- Finished looking for boxes left blank------------------------------------------------
+            }
+            // ------- Finished looking for boxes left blank------------------------------------------------
 
-                //if (formValidated){...
-                //Loop through all text boxes in this section and save the answers for comparison
-                //-----------------------------------------------------------------------------------------------------------------
-                //Validate that the newly entered QAT and values do not exist in any of the other sections (Existing or to be added)
-                //Must not exist under the <div #existingQATs> and <#divaddedSA> divisions (both have a class = ".answerType"
+            //if (formValidated){...
+            //Loop through all text boxes in this section and save the answers for comparison
+            //-----------------------------------------------------------------------------------------------------------------
+            //Validate that the newly entered QAT and values do not exist in any of the other sections (Existing or to be added)
+            //Must not exist under the <div #existingQATs> and <#divaddedSA> divisions (both have a class = ".answerType"
 
-                // Answer Type duplicate values cannot be implemented here since we add just one value at a time
-                // Validation must be performed on the back-end
-                //$(".answerType").each(function () {
-                //    var existingAnswers = "";
-                //    $(this).find(".SAitem").each(function () { existingAnswers = existingAnswers.concat($(this).html()) });
-                //    if (formValidated == true) {
-                //        comparisonOldString = $(this).find("#qat").first().val() + existingAnswers;
-                //        if (comparisonNewString == comparisonOldString) {
-                //            formValidated = false;
-                //            validationMessage = "The selected values already exist for this answer.";
-                //        }
-                //    }
-                //});
+            // Answer Type duplicate values cannot be implemented here since we add just one value at a time
+            // Validation must be performed on the back-end
+            //$(".answerType").each(function () {
+            //    var existingAnswers = "";
+            //    $(this).find(".SAitem").each(function () { existingAnswers = existingAnswers.concat($(this).html()) });
+            //    if (formValidated == true) {
+            //        comparisonOldString = $(this).find("#qat").first().val() + existingAnswers;
+            //        if (comparisonNewString == comparisonOldString) {
+            //            formValidated = false;
+            //            validationMessage = "The selected values already exist for this answer.";
+            //        }
+            //    }
+            //});
 
 
-                //if (formValidated){
-                //    // Continue with rest of validation/posting only if the form Validation Status is true
-                //    //var isDefaultValue = "false";
-                //    //var postParams = "";
-                //    //var comparisonOldString = "";
-                //    //$("#fullSelATlist").find('option:selected').text().substring(0,5);
-                //}
+            //if (formValidated){
+            //    // Continue with rest of validation/posting only if the form Validation Status is true
+            //    //var isDefaultValue = "false";
+            //    //var postParams = "";
+            //    //var comparisonOldString = "";
+            //    //$("#fullSelATlist").find('option:selected').text().substring(0,5);
+            //}
 
-                //-------------- Finished Validating Form Inputs -----------------------------------------------------------------------
+            //-------------- Finished Validating Form Inputs -----------------------------------------------------------------------
 
-                // If the form input is valid, procced with saving data, else just display the Error message
-                if (formValidated) {
-                    // Proceed to Save the new Answer Type
-                    //Parameter to post are:  QuestionId~AnswerTypeId~defaultT/F~answerlist
+            // If the form input is valid, procced with saving data, else just display the Error message
+            if (formValidated) {
+                // Proceed to Save the new Answer Type
+                //Parameter to post are:  QuestionId~AnswerTypeId~defaultT/F~answerlist
 
-                    $(this).button('loading');  // Disable the button until posting is complete
+                $(this).button('loading');  // Disable the button until posting is complete
 
-                    //Build the posting parameters: "Question Id" plus "Answer Type Id" and hardcode default="false" plus sel answers from "texvalues" variable
-                    var postData = $("#popupQID").val() + "~" + $("#fullSelATlist").val() + "~false~" + textValues;
+                //Build the posting parameters: "Question Id" plus "Answer Type Id" and hardcode default="false" plus sel answers from "texvalues" variable
+                var postData = $("#popupQID").val() + "~" + $("#fullSelATlist").val() + "~false~" + textValues;
 
-                    @*$(".qatDIV").each(function(){
+                @*$(".qatDIV").each(function(){
                     var postAnsTypeId = $(this).find("#ans_type_id").first().val();
                     var postIsDefault = "false";
                     var postSelAnswers = $(this).find("#ans_type_selAns").first().val();
@@ -1236,82 +1232,162 @@
                 alert("Saving New Answer Types...\n" + postData);
                 *@
 
-                    $.ajax({
-                        url: '@Url.Action("saveNewSelAnswer", "ColFormTemplate")',
-                        method: "POST",
-                        cache: false,
-                        data: { ans_type_list : postData },
-                        error: function () {
-                            alert("ERROR: Failed to Save the New Question Answer Type Information.!!");  //<-- Trap and alert of any errors if they occurred
-                        }
-                    }).done(function (d) {
-                        if (d.substring(0,3) == "QAT") {
-                            //alert("Data posted successfully!\n" + d);
-                            // Set the popupstatus to "saved" to indicate that the post succeded and that the drop down needs to be updated.
-                            $("#popupStatus").val("saved");
-                            // Reset the list of answers that have already been saved so they do not need to be displayed anymore
-                            $("#divaddedSA").html("");
-                            $("#savedQATid").val(d.substring(6));
-                            $("#editQATWindow").modal('hide');
-                        }
-                        else {
-                            //alert("Server Response: " + d);
-                            $("#newErrorMsg").html("<span>ERROR SAVING INFORMATION:</span><br/><span> " + d + "</span>");
-                            $("#newErrorMsg").show();
-                        }
-                        //else { alert("WARNING: Failed to post!\nPlease review your input and try again: " + d); }
-                    });
+                $.ajax({
+                    url: '@Url.Action("saveNewSelAnswer", "ColFormTemplate")',
+                    method: "POST",
+                    cache: false,
+                    data: { ans_type_list : postData },
+                    error: function () {
+                        alert("ERROR: Failed to Save the New Question Answer Type Information.!!");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    if (d.substring(0,3) == "QAT") {
+                        //alert("Data posted successfully!\n" + d);
+                        // Set the popupstatus to "saved" to indicate that the post succeded and that the drop down needs to be updated.
+                        $("#popupStatus").val("saved");
+                        // Reset the list of answers that have already been saved so they do not need to be displayed anymore
+                        $("#divaddedSA").html("");
+                        $("#savedQATid").val(d.substring(6));
+                        $("#editQATWindow").modal('hide');
+                    }
+                    else {
+                        //alert("Server Response: " + d);
+                        $("#newErrorMsg").html("<span>ERROR SAVING INFORMATION:</span><br/><span> " + d + "</span>");
+                        $("#newErrorMsg").show();
+                    }
+                    //else { alert("WARNING: Failed to post!\nPlease review your input and try again: " + d); }
+                });
 
-                    // ----------- Finished Saving New Answer Type and Answer values ----------------
+                // ----------- Finished Saving New Answer Type and Answer values ----------------
+            }
+            else {
+                var errorMessage = "<span> VALIDATION ERROR: Please review your input:</span><br/>&nbsp;" + validationMessage + "<span>";
+                //errorMessage = errorMessage.concat("</span><br/>&nbsp;&nbsp;<span>You are comparing Answer Type Id and values:</span><br/>");
+                //errorMessage = errorMessage.concat("<span>'" + comparisonNewString + "'</span>" + "<span> against: </span>");
+                //errorMessage = errorMessage.concat("<span> '" + comparisonOldString + "'</span>");
+                $("#newErrorMsg").html(errorMessage);
+                $("#newErrorMsg").show();
+            }
+
+            // Finally, whether the save action failed or posted correctly, reset the "SAVE" button to avoid leaving it stcuk in "Loading..."
+            $(this).button('reset');
+
+        });
+
+        function leavePage(){
+            var editMode = "@Model.manageAction";
+            $("#formChanged").val("N");   //To prevent the browser to present the confirm-exit dialog.
+
+            // When in "MANAGE-EDIT" mode, we need to Reset the published Date/Time via Ajax to it's previous state
+            if(editMode == "MANAGE-EDIT"){
+                var publishedDateTime = "@Model.originalPublishDate";
+                var publishedUser = "@Model.originalyPublishedBy";
+                var formCftid = "@Model.cft_id";
+                $.ajax({
+                    url: '@Url.Action("republishFormOnCancel", "ColFormTemplate")',
+                    method: "POST",
+                    cache: false,
+                    data: { cft_id: formCftid, publishedBy: publishedUser, publishedOn: publishedDateTime },
+                    error: function () {
+                        alert("Failed to reset Changes...");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    if (d == "Success") {
+                        alert("Edit mode cancelled! Form has been republished.");
+                        //location.href = "/ColFormTemplate/AddEditForm/" + formCftid;
+                    }
+                    else {
+                        alert("ERROR Resetting Published Date/Time: " + d);
+                    }
+                });
+                //--- Finished Resetting the ajax values
+            }
+
+            //Finally, just leave the page and redirect to the Form Index page
+            location.href = "/ColFormTemplate/";
+        };
+
+        function delForm(){
+            // Perform an Ajax call to either hard or soft delete the current form
+            alert("Deleting...");
+            $.ajax({
+                url: '@Url.Action("deleteForm", "ColFormTemplate")',
+                method: "POST",
+                cache: false,
+                data: { cft_id: @Model.cft_id },     //<---- Data Parameters (if not already passed in the Url)
+                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                //--- On error, execute this function ------
+                error: function () {
+                    alert("Failed to Remove Form id " + @Model.cft_id+ " from Database !!");  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                //Execute this code After the Ajax call completes successfully
+                //alert("Form Id: " + @Model.cft_id + " has been Deleted!");
+                //close modal Popup
+                $('#confPopUp').modal('toggle');
+                location.href = "/ColFormTemplate/";
+            });
+        }
+
+        function showConfirmation(alertTitle, alertMessage, confBtnText, funcName){
+            //Set the values to display in the alert message
+            $("#confTitle").html(alertTitle)
+            $("#divConfText").html(alertMessage)
+            //$("#btnAlertConfirm").prop('value', confBtnText);
+            $("#btnAlertConfirm").html('Delete Form');
+
+            $("#funcToExec").val(funcName);
+            //$("#confirmationResult").val('true');
+
+            //Show the Confirmation Popup Form
+            $("#confPopUp").modal();
+        }
+
+        $("#btnAlertConfirm").click(function(){
+            ////Once the user confirms the Alert execution, call the function that was set
+            //// Retrieve String Name of function we want to run and find the object
+            //var funcToExecute = $("#funcToExec").val();
+            //var fn = window[funcToExecute];
+            //alert("You are about to Execute Funcion: " + funcToExecute);
+            //// If object a function, execute it?
+            //if (typeof fn === "function") fn();
+
+
+            // Perform an Ajax call to either hard or soft delete the current form
+            $.ajax({
+                url: '@Url.Action("deleteForm", "ColFormTemplate")',
+                method: "POST",
+                cache: false,
+                data: { cft_id: @Model.cft_id },     //<---- Data Parameters (if not already passed in the Url)
+                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                //--- On error, execute this function ------
+                error: function () {
+                    alert("Failed to Remove Form id " + @Model.cft_id+ " from Database !!");  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                //Execute this code After the Ajax call completes successfully
+                if (d=="True"){
+                    alert("Form Id: " + @Model.cft_id + " has been Deleted!");
+                    //close modal Popup
+                    $('#confPopUp').modal('toggle');
+                    location.href = "/ColFormTemplate/";
                 }
                 else {
-                    var errorMessage = "<span> VALIDATION ERROR: Please review your input:</span><br/>&nbsp;" + validationMessage + "<span>";
-                    //errorMessage = errorMessage.concat("</span><br/>&nbsp;&nbsp;<span>You are comparing Answer Type Id and values:</span><br/>");
-                    //errorMessage = errorMessage.concat("<span>'" + comparisonNewString + "'</span>" + "<span> against: </span>");
-                    //errorMessage = errorMessage.concat("<span> '" + comparisonOldString + "'</span>");
-                    $("#newErrorMsg").html(errorMessage);
-                    $("#newErrorMsg").show();
+                    alert("ERROR: Form could not be removed from the Database!" );
+                    location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;
                 }
-
-                // Finally, whether the save action failed or posted correctly, reset the "SAVE" button to avoid leaving it stcuk in "Loading..."
-                $(this).button('reset');
-
             });
+        });
 
-            function leavePage(){
-                var editMode = "@Model.manageAction";
-                $("#formChanged").val("N");   //To prevent the browser to present the confirm-exit dialog.
-
-                // When in "MANAGE-EDIT" mode, we need to Reset the published Date/Time via Ajax to it's previous state
-                if(editMode == "MANAGE-EDIT"){
-                    var publishedDateTime = "@Model.originalPublishDate";
-                    var publishedUser = "@Model.originalyPublishedBy";
-                    var formCftid = "@Model.cft_id";
-                    $.ajax({
-                        url: '@Url.Action("republishFormOnCancel", "ColFormTemplate")',
-                        method: "POST",
-                        cache: false,
-                        data: { cft_id: formCftid, publishedBy: publishedUser, publishedOn: publishedDateTime },
-                        error: function () {
-                            alert("Failed to reset Changes...");  //<-- Trap and alert of any errors if they occurred
-                        }
-                    }).done(function (d) {
-                        if (d == "Success") {
-                            alert("Edit mode cancelled! Form has been republished.");
-                            //location.href = "/ColFormTemplate/AddEditForm/" + formCftid;
-                        }
-                        else {
-                            alert("ERROR Resetting Published Date/Time: " + d);
-                        }
-                    });
-                    //--- Finished Resetting the ajax values
-                }
-
-                //Finally, just leave the page and redirect to the Form Index page
-                location.href = "/ColFormTemplate/";
-            };
-
-            $("#btnCancel").click(function () {
+        $("#btnCancel").click(function () {
                 if ( $("#formChanged").val() == "Y")
                 {
                     if ( $("#bootstrapBtnReset").val() == "N"){
@@ -1336,11 +1412,11 @@
                 else{
                     leavePage();
                 }
-            });
+        });
 
-            $("#btnReset").click(function () {
-                if ( $("#formChanged").val() == "Y")
-                {
+        $("#btnReset").click(function () {
+            if ( $("#formChanged").val() == "Y")
+            {
                     if ( $("#bootstrapBtnReset").val() == "N"){
                         $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window
                         $("#bootstrapBtnReset").val("Y");
@@ -1355,203 +1431,179 @@
                                 $("#formChanged").val("N");
                                 //isChanged.val("N");
                                 location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
-                            },
-                            "Don't Reset!": function() {
-                                $( this ).dialog( "close" );
-                            }
+                        },
+                        "Don't Reset!": function() {
+                            $( this ).dialog( "close" );
                         }
-                    });
-                }
-            });
+                    }
+                });
+            }
+        });
 
 
-            $('#cft_eff_st_dt').datepicker({
-                dateFormat: 'M dd, yy',
-                changeMonth: true,
-                changeYear: true,
-                showButtonPanel: true,
-                minDate: -0,
-                //minDate: -0,
-                //maxDate: "+1M +10D",
-                onClose: function (selectedDate) {
-                    $("#cft_eff_end_dt").datepicker("option", "minDate", selectedDate);
-                },
-                useCurrent: false //Important! See issue #1075
-            });
+        $('#cft_eff_st_dt').datepicker({
+            dateFormat: 'M dd, yy',
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            minDate: -0,
+            //minDate: -0,
+            //maxDate: "+1M +10D",
+            onClose: function (selectedDate) {
+                $("#cft_eff_end_dt").datepicker("option", "minDate", selectedDate);
+            },
+            useCurrent: false //Important! See issue #1075
+        });
 
-            $('#cft_eff_end_dt').datepicker({
-                dateFormat: 'M dd, yy',
-                changeMonth: true,
-                changeYear: true,
-                showButtonPanel: true,
-                minDate: -0,
-                onClose: function (selectedDate) {
-                    $("#cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
-                },
-                useCurrent: false //Important! See issue #1075
-            });
+        $('#cft_eff_end_dt').datepicker({
+            dateFormat: 'M dd, yy',
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            minDate: -0,
+            onClose: function (selectedDate) {
+                $("#cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
+            },
+            useCurrent: false //Important! See issue #1075
+        });
 
-            $('#conf_cft_eff_st_dt').datepicker({
-                dateFormat: 'M dd, yy',
-                changeMonth: true,
-                changeYear: true,
-                showButtonPanel: true,
-                minDate: -0,
-                //minDate: -0,
-                //maxDate: "+1M +10D",
-                onClose: function (selectedDate) {
-                    $("#conf_cft_eff_end_dt").datepicker("option", "minDate", selectedDate);
-                },
-                useCurrent: false //Important! See issue #1075
-            });
+        $('#conf_cft_eff_st_dt').datepicker({
+            dateFormat: 'M dd, yy',
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            minDate: -0,
+            //minDate: -0,
+            //maxDate: "+1M +10D",
+            onClose: function (selectedDate) {
+                $("#conf_cft_eff_end_dt").datepicker("option", "minDate", selectedDate);
+            },
+            useCurrent: false //Important! See issue #1075
+        });
 
-            $('#conf_cft_eff_end_dt').datepicker({
-                dateFormat: 'M dd, yy',
-                changeMonth: true,
-                changeYear: true,
-                showButtonPanel: true,
-                minDate: -0,
-                onClose: function (selectedDate) {
-                    $("#conf_cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
-                },
-                useCurrent: false //Important! See issue #1075
-            });
+        $('#conf_cft_eff_end_dt').datepicker({
+            dateFormat: 'M dd, yy',
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            minDate: -0,
+            onClose: function (selectedDate) {
+                $("#conf_cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
+            },
+            useCurrent: false //Important! See issue #1075
+        });
 
-            $("#btnSaveDateConf").click(function(){
-                $("#cft_eff_st_dt").val($("#conf_cft_eff_st_dt").val());
-                $("#cft_eff_end_dt").val($("#conf_cft_eff_end_dt").val());
-                $('#confPubDates').modal('toggle');
-                PostForm();
-            });
+        $("#btnSaveDateConf").click(function(){
+            $("#cft_eff_st_dt").val($("#conf_cft_eff_st_dt").val());
+            $("#cft_eff_end_dt").val($("#conf_cft_eff_end_dt").val());
+            $('#confPubDates').modal('toggle');
+            PostForm();
+        });
 
-            $('#CreateForm').keypress(function (e) {
-                if (e.keyCode == 13)
-                {
-                    $('#doSearch').click();
-                }
-            });
+        $('#CreateForm').keypress(function (e) {
+            if (e.keyCode == 13)
+            {
+                $('#doSearch').click();
+            }
+        });
 
-            $('[data-toggle="tooltip"]').tooltip();
-
-
-
-            $("#btnAddQuestionPopup").click(function () {
-                $("#addQuestionWindow").modal();
-            });
-
-            $("#btnSaveLibQuestion").click(function () {
-                if ($("#modalQFullText").val().trim() == "") {
-                    $("#msgAddQ").show();
-                    $("#btnSaveLibQuestion").prop("disabled", true);
-                    //alert("The Question Text is required.\nPlease review your input.");
-                }
-                else {
-                    $.ajax({
-                        url: '@Url.Action("addNewQuestion", "ColFormTemplate")',
-                        method: "POST",
-                        cache: false,
-                        data: { full_text: $("#modalQFullText").val(), desc: $("#modalQDesc").val() },
-                        error: function () {
-                            alert("An error occurred when saving the question information to the LIbrary Database!!");  //<-- Trap and alert of any errors if they occurred
-                        }
-                    }).done(function (d) {
-                        if (d == "True") {
-                            var searchText = '"' + $("#modalQFullText").val() + '"';
-                            $("#modalQFullText").val("");
-                            $("#modalQDesc").val("");
-                            //alert("Data Posted Successfully!");
-
-                            // Close the popup
-                            //$("#addQuestionWindow").dialog( "close" );
-                            $("#btnCancelLibQuestion").click();
-                            // Perform ajax to "search" the recently saved question
-                            $("#full_text_search").val(searchText);
-                            $('#doSearch').click();
-                            $("#full_text_search").val("");
-                        }
-                        else {
-                            alert("ERROR Saving Data: " + d);
-                        }
-                    });
-                }
-            }); //--------- End of btnSaveLibQuestion click() event
+        $('[data-toggle="tooltip"]').tooltip();
 
 
-            $('textarea').on('keydown keyup change focus blur', function(e) {
-                if (e.type === 'change') {
-                    // this event is triggered when the text is changed through drag and drop too,
-                    // or by pasting something inside the textarea;
 
-                    // remove commas with empty
-                    $(this).val($(this).val().replace(/,/,"","g"));
-                    // remove carriage returns (\r) and newlines (\n) with spaces:
-                    $(this).val($(this).val().replace(/\r?\n/g, ' '));
-                    //$textarea.val($textarea.val().replace(/[,\n\r]/," ","g");
-                }
-                // the enter key has been pressed, avoid producing a carriage return from it:
-                if (e.which === 13 || e.which === 188) {
-                    e.preventDefault();
-                }
-            });
+        $("#btnAddQuestionPopup").click(function () {
+            $("#addQuestionWindow").modal();
+        });
 
-            $('input').not(".searchBox").on('keydown keyup change ', function (e) {
-                $("#btnSaveForm").removeAttr('disabled');
-                $("#btnCancel").removeAttr('disabled');
-                $("#formChanged").val("Y");   // Re-enable the form "changed" status
-            });
-
-            $('input').not(".searchBox").not(".qInput").on('keydown keyup change ', function (e) {
-                $("#btnSaveForm").removeAttr('disabled');
-                $("#btnCancel").removeAttr('disabled');
-                $("#formChanged").val("Y");   // Re-enable the form "changed" status
-            });
-
-            $('.qInput').on('keydown keyup change ', function (e) {
-                $("#btnSaveLibQuestion").removeAttr('disabled');
-                $("#msgAddQ").hide();
-            });
-
-            $("#btnCancelLibQuestion").click(function(){
-                $(".qInput").val("");
-                $("#btnSaveLibQuestion").prop('disabled', true);
-            });
-
-            $("#btnDeleteForever").click(function(){
-                // Perform an Ajax call to either hard or soft delete the current form
-
+        $("#btnSaveLibQuestion").click(function () {
+            if ($("#modalQFullText").val().trim() == "") {
+                $("#msgAddQ").show();
+                $("#btnSaveLibQuestion").prop("disabled", true);
+                //alert("The Question Text is required.\nPlease review your input.");
+            }
+            else {
                 $.ajax({
-                    url: '@Url.Action("deleteForm", "ColFormTemplate")',
+                    url: '@Url.Action("addNewQuestion", "ColFormTemplate")',
                     method: "POST",
                     cache: false,
-                    data: { cft_id: @Model.cft_id },     //<---- Data Parameters (if not already passed in the Url)
-                    //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                    //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                    //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                    //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-                    //--- On error, execute this function ------
+                    data: { full_text: $("#modalQFullText").val(), desc: $("#modalQDesc").val() },
                     error: function () {
-                        alert("Failed to Remove Form id " + @Model.cft_id+ " from Database !!");  //<-- Trap and alert of any errors if they occurred
+                        alert("An error occurred when saving the question information to the LIbrary Database!!");  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
-                    //Execute this code After the Ajax call completes successfully
-                    //alert("Form Id: " + @Model.cft_id + " has been Deleted!")
-                    location.href = "/ColFormTemplate/";
+                    if (d == "True") {
+                        var searchText = '"' + $("#modalQFullText").val() + '"';
+                        $("#modalQFullText").val("");
+                        $("#modalQDesc").val("");
+                        //alert("Data Posted Successfully!");
+
+                        // Close the popup
+                        //$("#addQuestionWindow").dialog( "close" );
+                        $("#btnCancelLibQuestion").click();
+                        // Perform ajax to "search" the recently saved question
+                        $("#full_text_search").val(searchText);
+                        $('#doSearch').click();
+                        $("#full_text_search").val("");
+                    }
+                    else {
+                        alert("ERROR Saving Data: " + d);
+                    }
                 });
-            });
-
-
-            function removeQuestion(qRowId) {
-                $("#" + qRowId).remove();
             }
+        }); //--------- End of btnSaveLibQuestion click() event
 
-            makeSectionsDropable();
+
+        $('textarea').on('keydown keyup change focus blur', function(e) {
+            if (e.type === 'change') {
+                // this event is triggered when the text is changed through drag and drop too,
+                // or by pasting something inside the textarea;
+
+                // remove commas with empty
+                $(this).val($(this).val().replace(/,/,"","g"));
+                // remove carriage returns (\r) and newlines (\n) with spaces:
+                $(this).val($(this).val().replace(/\r?\n/g, ' '));
+                //$textarea.val($textarea.val().replace(/[,\n\r]/," ","g");
+            }
+            // the enter key has been pressed, avoid producing a carriage return from it:
+            if (e.which === 13 || e.which === 188) {
+                e.preventDefault();
+            }
         });
-    </script>
 
-    @*********************************************************************************************************************@
-    @*//- - - - - - - - -  Ajax Call to Retrieve and Display the Question List Search Results - - - - - - - - - - -\\*@
-    <script type="text/jscript">
+        $('input').not(".searchBox").on('keydown keyup change ', function (e) {
+            $("#btnSaveForm").removeAttr('disabled');
+            $("#btnCancel").removeAttr('disabled');
+            $("#formChanged").val("Y");   // Re-enable the form "changed" status
+        });
+
+        $('input').not(".searchBox").not(".qInput").on('keydown keyup change ', function (e) {
+            $("#btnSaveForm").removeAttr('disabled');
+            $("#btnCancel").removeAttr('disabled');
+            $("#formChanged").val("Y");   // Re-enable the form "changed" status
+        });
+
+        $('.qInput').on('keydown keyup change ', function (e) {
+            $("#btnSaveLibQuestion").removeAttr('disabled');
+            $("#msgAddQ").hide();
+        });
+
+        $("#btnCancelLibQuestion").click(function(){
+            $(".qInput").val("");
+            $("#btnSaveLibQuestion").prop('disabled', true);
+        });
+
+        $("#btnDeleteForever").click(function(){
+            //Have user Confirm the Delete Action
+            showConfirmation("Confirm Form Deletion", "Are you sure you want to delete this Form?", "Delete Form", "delForm");
+        });
+
+
+        function removeQuestion(qRowId) {
+            $("#" + qRowId).remove();
+        }
+
+        makeSectionsDropable();
+
         $('#doSearch').click(function () {
             var $btn = $(this);
             $btn.button('loading');
@@ -1598,11 +1650,42 @@
                 $btn.button('reset');
             });
         });
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        $("#btnSaveForm").click(function () {
+            $(this).button('loading');
+            document.getElementById("isPublished").value = "false"      //We are saving only (Not publishing)
 
-    </script>
+            if (validateForm()){
+                PostForm();
+            }
+        });
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        $("#btnPublishForm").click(function(){
+            $(this).button('loading');
+            document.getElementById("isPublished").value = "true"      //We are Publishing the form
 
+            // Validate that a valid Start Date is entered when the Form is being published
+            if ($('#cft_eff_st_dt').val() == "") {
+                $('#btnPublishForm').button('reset');
+                alert("The Effective Start Date is required when Publishing a Form");
+                $('#cft_eff_st_dt').addClass("invalidField");
+                $('#cft_eff_st_dt').focus();
+            }
+            else{
+                //Set the Pop up dates to match what is currently selected on the Form before showing the popup
+                if (validateForm())  // Validate the Form. If it's Valid proceed
+                {
+                    $("#conf_cft_eff_st_dt").val($("#cft_eff_st_dt").val());
+                    $("#conf_cft_eff_end_dt").val($("#cft_eff_end_dt").val());
+                    $("#confPubDates").modal();
+                }
+            }
+        });
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    @*//- - - - - - - - -  Ajax Call to Retrieve and Display the Question List Search Results - - - - - - - - - - -\\*@
+    });
+</script>
+
 
 
     @* --- Drag and Drop Java Script - - - - - *@
@@ -1783,79 +1866,8 @@
             });
 
         }
-        //Sample Code:
-        //looping in javascript through all the child elements of the target list
-        //var items = [];
-        //$("ul.target").children().each(function () {
-        //    var item = { manufacturer: $(this).data("stock-symbol") };
-        //    items.push(item);
-        //});
-        //var jsonData = JSON.stringify(items);
-        //
-        //or
-        //
-        //var items = [];
-        //$("ul.target").children().each(function () {
-        //    var item = { manufacturer: $(this).text() };
-        //    items.push(item);
-        //});
-        //var jsonData = JSON.stringify(items);
-        //
-        //
-        //and then we can also invoke Ajax call to manipulate/retrieve DataCue
-        //$.ajax ({
-        //    url: "dnd.xsp/setfavourites",
-        //    type: "PUT",
-        //    data: jsonData,
-        //    dataType: "json",
-        //    contentType: "application/json; charset=utf-8",
-        //    success: function(){},
-        //    error: function(){}
-        //});
 
 
-
-        @*function addQidOLD(ev) {
-            var newCounterSeq = $("#qCounter").val();
-            var qid = ev.dataTransfer.getData("Text"); // "Id" of the dragged data element
-            //var target = ev.target || ev.srcElement;
-            //var myId = $(event.target).attr("id");;
-
-            ev.target.style.border = "";
-            //event.target.appendChild(document.getElementById(dataId));
-
-
-            // ------------ Make the Ajax Call ---------------------------------------------
-            $.ajax({
-                url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
-                method: "GET",
-                cache: false,
-                data: { question_id: qid, qCounter: newCounterSeq },     //<---- Data Parameters (if not already passed in the Url)
-                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-                //--- On error, execute this function ------
-                error: function () {
-                    alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-                    //$btn.button('reset');
-                }
-            }).done(function (d) {
-                //Execute this code After the Ajax call completes successfully
-                //ev.target.append(d);
-                var targetId = $(this);
-                //alert('Source Id is: ' + qid + ' & Target Id is: ' + targetId.id);
-                $mydata = $(ev.target);
-                $mydata.append(d);
-
-                $('#qCounter').val(Number($('#qCounter').val()) + 1);
-                //alert("You jusr added question View Id: " + "qRow" + newCounterSeq)
-                //ev.target.html(d);
-                //$("#questionPnl01").append(d);
-                //$btn.button('reset');
-            });
-        }*@
 
         //------------------------------------------------------------------
         function getQinfo(questionId, questionQATid) {
@@ -1978,32 +1990,6 @@
                 }
                 else {
                     return undefined;
-                }
-            });
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            $("#btnSaveForm").click(function () {
-                $(this).button('loading');
-                document.getElementById("isPublished").value = "false"      //We are saving only (Not publishing)
-                $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
-                PostForm();
-            });
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            $("#btnPublishForm").click(function(){
-                $(this).button('loading');
-                document.getElementById("isPublished").value = "true"      //We are Publishing the form
-
-                // Validate that a valid Start Date is entered when the Form is being published
-                if ($('#cft_eff_st_dt').val() == "") {
-                    $('#btnPublishForm').button('reset');
-                    alert("The Effective Start Date is required when Publishing a Form");
-                    $('#cft_eff_st_dt').addClass("invalidField");
-                    $('#cft_eff_st_dt').focus();
-                }
-                else{
-                    //Set the Pop up dates to match what is currently selected on the Form before showing the popup
-                    $("#conf_cft_eff_st_dt").val($("#cft_eff_st_dt").val());
-                    $("#conf_cft_eff_end_dt").val($("#cft_eff_end_dt").val());
-                    $("#confPubDates").modal();
                 }
             });
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

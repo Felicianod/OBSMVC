@@ -162,11 +162,8 @@ namespace OBSMVC.Controllers
                                 obsForm.FormSubtitle = x.obs_cft_subtitle;
                                 obsForm.manageAction = obsForm.getManageAction(obsForm.isPublished, x.obs_cft_id, x.obs_cft_nbr, x.obs_cft_ver);
                                 ObsColFormTemplateList.Add(obsForm);//title search match
-
                             }
-
                         }
-
                     }//end of foreach
 
                 }
@@ -463,26 +460,46 @@ namespace OBSMVC.Controllers
         [HttpPost]
         public bool deleteForm(int cft_id)
         {
+            Session["errorMessage"] = "";
             OBS_COLLECT_FORM_TMPLT formToDelete = db.OBS_COLLECT_FORM_TMPLT.Find(cft_id);
-            int qCount = db.OBS_COL_FORM_QUESTIONS.Count(x => x.obs_cft_id == cft_id);
+            List<OBS_COL_FORM_QUESTIONS> formQuestions = db.OBS_COL_FORM_QUESTIONS.Where(x => x.obs_cft_id == cft_id).ToList();
+            //int qCount = db.OBS_COL_FORM_QUESTIONS.Count(x => x.obs_cft_id == cft_id);
 
-            if (qCount > 0 || formToDelete == null)
+            //if (qCount > 0 || formToDelete == null)
+            if (formToDelete == null)
             {
-                //The form has question on it or it was not found on the Database.  It cannot be deleted!
+                //The form was not found on the Database.  It cannot be deleted!
                 return false;
             }
             else
-            {// It is in the database and it has no questions
-                try
-                { //Try Removing it from the DB
-                    db.OBS_COLLECT_FORM_TMPLT.Remove(formToDelete);
-                    db.SaveChanges();
-                    return true;
-                }
-                catch
+            {// It is in the database. Remove The Form and all it's associated Questions using and a DB Transaction
+                using (var transaction = db.Database.BeginTransaction())
                 {
-                    return false;
-                }
+                    try
+                    {
+                        //First remove all questions from the Form
+                        //db.Database.ExecuteSqlCommand("delete from OBS_COL_FORM_QUESTIONS where obs_cft_id = {0}", cft_id);
+                        foreach (OBS_COL_FORM_QUESTIONS questionToDelete in formQuestions)
+                        {//Comment the next line for testing purposes only
+                            db.OBS_COL_FORM_QUESTIONS.Remove(questionToDelete);
+                        }
+                        db.SaveChanges();
+                        //Second Delete the form itself
+                        db.OBS_COLLECT_FORM_TMPLT.Remove(formToDelete);
+                        db.SaveChanges();
+
+                        //If all is good, commit the DB Transaction Changes 
+                        transaction.Commit();
+                        return true;
+                    }//end of try
+                    catch (Exception ex)
+                    {
+                        // On any error rollback all changes and report an error
+                        transaction.Rollback();
+                        Session["errorMessage"] = "Failed to Delete the Form: " + ex.Message;
+                        return false;
+                    }
+                }//end of  using (var transaction = db.Database.BeginTransaction())    
             }
         }
 
@@ -1418,7 +1435,12 @@ namespace OBSMVC.Controllers
                         template_to_save.dsc_cust_id = Convert.ToInt32(colForm.cft_Cust);
                         template_to_save.obs_type_id = Convert.ToInt32(colForm.cft_obsType);
                         template_to_save.dsc_lc_id = Convert.ToInt32(colForm.cft_LC);
-                        short cft_number = (short)(db.OBS_COLLECT_FORM_TMPLT.Max(x => x.obs_cft_nbr) + 1);
+                        short cft_number = 1;
+                        if (db.OBS_COLLECT_FORM_TMPLT.Count() > 0)
+                        {  // Verify that at least one form exists in the database
+                            cft_number = (short)(db.OBS_COLLECT_FORM_TMPLT.Max(x => x.obs_cft_nbr) + 1);
+                        }
+                        
                         template_to_save.obs_cft_nbr = cft_number;
                         template_to_save.obs_cft_ver = 1;
                         template_to_save.obs_cft_title = colForm.cft_Title;

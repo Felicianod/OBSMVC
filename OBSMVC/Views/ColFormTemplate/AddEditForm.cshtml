@@ -170,7 +170,7 @@
     }
 
     .modal-NewQ .modal-dialog {
-        width: 35%;
+        width: 40%;
     }
 
     .modal-NewQ .modal-body {
@@ -179,6 +179,24 @@
     }
 
     .modal-NewQ .modal-content {
+        -webkit-border-radius: 0px !important;
+        -moz-border-radius: 0px !important;
+        border-radius: 0px !important;
+        border-width: 6px;
+        border-style: double;
+        border-color: #c6e0ff;
+    }
+
+    .modal-alert .modal-dialog {
+        width: 35%;
+    }
+
+    .modal-alert .modal-body {
+        overflow-y: auto;
+        height: 200px;
+    }
+
+    .modal-alert .modal-content {
         -webkit-border-radius: 0px !important;
         -moz-border-radius: 0px !important;
         border-radius: 0px !important;
@@ -342,6 +360,25 @@
                 });
             }
         };
+
+        function showAlert(alertTitle, alertMessage){
+            //Set the values to display in the alert message
+            $("#alertTitle").html(alertTitle)
+            $("#divAlertText").html(alertMessage)
+            //Show the pop up alert
+            $("#alertPopup").modal();
+        }
+
+        function showConfirmation(alertTitle, alertMessage){
+            //Set the values to display in the alert message
+            $("#confTitle").html(alertTitle)
+            $("#divConfText").html(alertMessage)
+            //$("#funcToExec").val(callFunction)
+            $("#confirmationResult").val('true');
+
+            //Show the Confirmation Popup Form
+            $("#confPopUp").modal();
+        }
 
     });
 </script>
@@ -745,7 +782,7 @@
     @* ------------------------------------- POP UP "ADD QUESTION TO LIBRARY" FORM --------------------------------------------------- *@
     @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
     <!-- Modal -->
-    <div class="modal  modal-NewQ fade" id="addQuestionWindow" role="dialog">
+    <div class="modal  modal-alert fade" id="addQuestionWindow" role="dialog">
         <div class="modal-dialog ">
             <div class="modal-content">
                 <div class="modal-header">
@@ -795,7 +832,7 @@
     @* --------------------------------------- POP UP "CONFIRM PUBLISH DATES" FORM --------------------------------------------------- *@
     @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
     <!-- Modal -->
-    <div class="modal  modal-NewQ fade" id="confPubDates" role="dialog">
+    <div class="modal  modal-alert fade" id="confPubDates" role="dialog">
         <div class="modal-dialog ">
             <div class="modal-content">
                 <div class="modal-header">
@@ -846,8 +883,9 @@
 @* --------------------------------------- POP UP "GENERIC CONFIRMATION" FORM --------------------------------------------------- *@
 @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
 <!-- Modal -->
-<div class="modal  modal-NewQ fade" id="confPubDates" role="dialog">
+<div class="modal  modal-NewQ fade" id="confPopUp" role="dialog">
     <input type="hidden" id="funcToExec" value=""/>
+    <input type="hidden" id="confirmationResult" value="" />
     <div class="modal-dialog ">
         <div class="modal-content">
             <div class="modal-header">
@@ -856,14 +894,14 @@
             </div>
             <div class="modal-body" style="margin-left:25px">
                 <br /><br />
-                <div class="row" id="divAlertText" style="margin-bottom:15px; font-size:x-large">
+                <div class="row" id="divConfText" style="margin-bottom:15px; font-size:x-large">
                 </div>
             </div>
             <br />
             <div class="modal-footer">
                 <div class="col-sm-6 col-sm-offset-3">
                     <div class="col-sm-5 col-sm-offset-1" style="text-align:center">
-                        <button type="button" id="btnAlertConfirm" class="btn btn-primary">Create New Version</button>
+                        <button type="button" id="btnAlertConfirm" class="btn btn-primary" onclick="$('#confirmationResult').val('true');">Create New Version</button>
                     </div>
                     <div class="col-sm-5 col-sm-offset-1" style="text-align:center">
                         <button type="button" id="btnAlertCancel" class="btn btn-default" data-dismiss="modal" style="min-width:120px">Cancel</button>
@@ -873,6 +911,35 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+@* --------------------------------------- POP UP "GENERIC ALERT" WINDOW --------------------------------------------------------- *@
+@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+<!-- Modal -->
+<div class="modal  modal-NewQ fade" id="alertPopup" role="dialog">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title" id="alertTitle"></h3>
+            </div>
+            <div class="modal-body" style="margin-left:25px">
+                <br /><br />
+                <div class="row" id="divAlertText" style="margin-bottom:15px; font-size:x-large">
+                </div>
+            </div>
+            <br />
+            <div class="modal-footer">
+                <div class="col-sm-12" style="text-align:center">
+                     <button type="button" id="btnAlertOK" class="btn btn-default" data-dismiss="modal" style="min-width:120px">OK</button>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@*-------------------------------------------------------------------------------------------------------------------------------*@
+
+
     <script>
         function clearNewSAbox(){
             $("#divNewSA").html("");

@@ -8,16 +8,16 @@
 
 <div class="well well-sm"><h3>Customer Maintenance</h3></div>
 
-<table class="table table-condensed table-hover">
+<table class="table table-condensed table-hover" border="1">
     <tr style="background-color:gainsboro">
         <th style="text-align:center; width:5%">
             @Html.DisplayNameFor(model => model.First().dsc_cust_id)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().dsc_cust_name)
+            @Html.ActionLink("Customer Name","Index", new { sortBy =ViewBag.SortNameParameter, pageSize = Request["PageSize"], page = Request["page"] })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().dsc_cust_parent_name)
+            @Html.ActionLink("Customer Parent Name", "Index", new { sortBy =  ViewBag.SortParentParameter, pageSize = Request["PageSize"], page = Request["page"] })
         </th>
         <th style="text-align:center; width:5%">
             @*@Html.DisplayNameFor(model => model.active)*@
@@ -61,7 +61,7 @@
             @using (Html.BeginForm("Index", "Cust", FormMethod.Get))
             {
                 <b>Rows Per Page</b>
-                @Html.DropDownList("PageSize", new SelectList(new Dictionary<string, int> { { "10", 10 }, { "25", 25 }, { "50", 50 } }, "Key", "Value", ViewBag.CurrentItemsPerPage), new { id = "PageSize" })
+                @Html.DropDownList("PageSize", new SelectList(new Dictionary<string, int> { { "10", 10 }, { "25", 25 }, { "50", 50 } }, "Key", "Value", ViewBag.CurrentItemsPerPage), new { id = "PageSize",})
                 <script type="text/javascript">
                     $('#PageSize').on('change', function (event) {
                         var form = $(event.target).parents('form');
@@ -72,6 +72,6 @@
         </td>
     </tr>
 </table>
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page, pageSize = ViewBag.CurrentItemsPerPage}), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded })
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, pageSize = ViewBag.CurrentItemsPerPage, sortBy = Request["sortBy"]}), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded })
 
 

@@ -22,11 +22,13 @@ namespace OBSMVC.Controllers
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         // GET: Cust
         [HttpGet]
-        public ActionResult Index(int? page, int? PageSize)
+        public ActionResult Index(int? page, int? PageSize, string sortBy)
         {
             var customers = new List<DSC_CUSTOMER>();
             var viewCustomers = new List<CustViewModel>();
             ViewBag.CurrentItemsPerPage = PageSize ?? 10;
+            ViewBag.SortNameParameter = String.IsNullOrEmpty(sortBy) ? "Name desc" : "Name";
+            ViewBag.SortParentParameter = sortBy == "Parent" ? "Parent desc" : "Parent"; 
 
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
@@ -62,8 +64,22 @@ namespace OBSMVC.Controllers
 
                 viewCustomers.Add(new CustViewModel(customer.dsc_cust_id, customer.dsc_cust_name, customer.dsc_cust_parent_name, activeAction, activeAction == "YES" ? "Deactivate" : "Activate"));
             }// end of foreach
+            switch (sortBy)
+            {
+                case "Name desc":
+                    return View(viewCustomers.OrderByDescending(x=>x.dsc_cust_name).ToPagedList(page ?? 1, PageSize ?? 10));
+                case "Parent desc":
+                    return View(viewCustomers.OrderByDescending(x => x.dsc_cust_parent_name).ToPagedList(page ?? 1, PageSize ?? 10));
+                case"Name":
+                    return View(viewCustomers.OrderBy(x => x.dsc_cust_name).ToPagedList(page ?? 1, PageSize ?? 10));
+                case "Parent":
+                    return View(viewCustomers.OrderBy(x => x.dsc_cust_parent_name).ToPagedList(page ?? 1, PageSize ?? 10));
+                default: return View(viewCustomers.ToPagedList(page ?? 1, PageSize ?? 10));
 
-            return View(viewCustomers.ToPagedList(page ?? 1, PageSize ?? 10));
+
+            }
+
+            
             
         }
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 

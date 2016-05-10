@@ -170,7 +170,7 @@ namespace OBSMVC.Controllers
                 fullFuncList.Single(x => x.Value == Request.QueryString["fullFuncList"]).Selected = true;
             }// end of if(selectedFunctionId >0)
             else
-            {//case where function is NOT passed
+            {//case where function is NOT passed   
 
                 if (String.IsNullOrWhiteSpace(question_search) && String.IsNullOrWhiteSpace(title_search))
                 {//scenario where user didn't pass any search strings

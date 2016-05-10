@@ -52,11 +52,12 @@
         float: right;
         position: relative;
         top: -8px;
+        margin-top: 6px;
         line-height: 20px;
-        font-size: 14px;
+        font-size: x-large;
         font-weight: bold;
         text-decoration: none !important;
-        color: #468847;
+        color: #711313;
     }
 
     ul.sourceList, ol.targetList {
@@ -193,7 +194,7 @@
 
     .modal-alert .modal-body {
         overflow-y: auto;
-        height: 200px;
+        height: 230px;
     }
 
     .modal-alert .modal-content {
@@ -369,17 +370,6 @@
             $("#alertPopup").modal();
         }
 
-        function showConfirmation(alertTitle, alertMessage){
-            //Set the values to display in the alert message
-            $("#confTitle").html(alertTitle)
-            $("#divConfText").html(alertMessage)
-            //$("#funcToExec").val(callFunction)
-            $("#confirmationResult").val('true');
-
-            //Show the Confirmation Popup Form
-            $("#confPopUp").modal();
-        }
-
     });
 </script>
 
@@ -392,499 +382,501 @@
     int nextQuestion = Model.questCount() + 1;
     string form_num = Model.cft_Nbr > 0 ? Model.cft_Nbr.ToString() : String.Empty;
     string form_version = Model.cft_Nbr > 0 ? Model.cft_Version.ToString() : String.Empty;
+    //string errorMessage = (Session["exception"] == null) ? "" : Session["exception"].ToString();
+    string errorMessage = (Session["errorMessage"] == null) ? "" : Session["errorMessage"].ToString();
 }
 
 <div class="row" style="margin-left:2px; margin-right:2px">
     <div class="jumbotron smallRowMargin col-sm-12" style="padding: 4px; margin-bottom:8px; text-align:center">
-        <div class="col-sm-10 smallRowMargin" style="padding: 4px; margin-bottom:8px; text-align:center">
+        <div class="col-sm-11 smallRowMargin" style="padding: 4px; margin-bottom:8px; text-align:center">
             <span style="font-size:xx-large;" title="@Model.manageAction">@Model.screen_Title</span><br />
             <div class="alert-success" id="divMessage" style="text-align:center; font-size:x-large; display:none ">
                 Data Saved Successfully
             </div>
         </div>
-    @if (@Model.str_cft_canBdeleted)
-    {
-        <div id="divDelete" class="col-sm-1" style="padding: 4px; margin-bottom:8px; text-align:right">
-            <button type="button" class="btn btn-danger btn-sm newBtn" id="btnDeleteForever" style="padding:2px">
-                <span class="glyphicon glyphicon-stop"></span> Delete Form !
-            </button>
-        </div>
-    }
+
+        @if (@Model.str_cft_canBdeleted)
+        {
+            <div id="divDelete" class="col-sm-1" style="padding: 4px; margin-bottom:8px; text-align:right; float:right">
+                <button type="button" class="btn btn-danger btn-sm newBtn" id="btnDeleteForever" style="padding:2px">
+                    <span class="glyphicon glyphicon-remove-sign"></span> Delete Form
+                </button>
+            </div>
+        }
+        <div id="message" style="display:none"></div>
     </div>
 </div>
+<div style="clear:both"></div>
 
 
-
-@if (!String.IsNullOrEmpty(ViewBag.exception))
+@if (!String.IsNullOrEmpty(errorMessage))
 {
     <div class="row">
         <div class="alert alert-danger col-sm-12">
-            <strong>Warning!</strong> @ViewBag.exception
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            [There are currently @Model.questCount() Questions in this Form]
+            <strong>Warning!</strong> @errorMessage
         </div>
     </div>
 }
+@{    Session["errorMessage"] = ""; }
+
+@* - - - - - - - - - - - - - - - - BEGINING OF THE "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
+@*// ---- Helper Hidden Fields to Control the Inner Ids ----- *@
+<input type="hidden" id="masterItemCounter" value="1" />
+<input type="hidden" id="qCounter" value="@nextQuestion" />
+<input type="hidden" id="sCounter" value="@Model.colFormSections.Count" />
+<input type="hidden" id="formMode" value="@fMode" />
+<input type="hidden" id="cft_id" value="@Model.cft_id" />
+<input type="hidden" id="formChanged" value="@frmWasChanged">
+<input type="hidden" id="bootstrapBtnReset" value="N">
+@*\\ ---- End of Hidden Control Fields section ----- *@
 
 
-    @* - - - - - - - - - - - - - - - - BEGINING OF THE "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
-    @*// ---- Helper Hidden Fields to Control the Inner Ids ----- *@
-    <input type="hidden" id="masterItemCounter" value="1" />
-    <input type="hidden" id="qCounter" value="@nextQuestion" />
-    <input type="hidden" id="sCounter" value="@Model.colFormSections.Count" />
-    <input type="hidden" id="formMode" value="@fMode" />
-    <input type="hidden" id="cft_id" value="@Model.cft_id" />
-    <input type="hidden" id="formChanged" value="@frmWasChanged">
-    <input type="hidden" id="bootstrapBtnReset" value="N">
-    @*\\ ---- End of Hidden Control Fields section ----- *@
+<form class="form-horizontal" id="CreateForm" role="form" method="post" @*onkeydown="return event.keyCode!=13"*@>
+    @Html.AntiForgeryToken()
+    @*<input type="hidden" id="cft_mode" value="@fMode"  />*@
+    <input type="hidden" id="frmAction" name="frmAction" value="@Model.manageAction" />
 
-
-    <form class="form-horizontal" id="CreateForm" role="form" method="post" @*onkeydown="return event.keyCode!=13"*@>
-        @Html.AntiForgeryToken()
-        @*<input type="hidden" id="cft_mode" value="@fMode"  />*@
-        <input type="hidden" id="frmAction" name="frmAction" value="@Model.manageAction" />
-
-        <div class="panel panel-default" style="margin-bottom:8px">
-            @* - - - - - - - - - - - - - - <<<<< STARTS OF FORM HEADER >>>>> - - - - - - - - - - - - - *@
-            <div class="panel-heading header" style="margin-bottom:8px">
-                <div class="form-group row" style="margin-bottom:8px">
-                    <div class="col-sm-7">
-                        <div class="input-group">
-                            <div class="input-group-addon">Form Title:</div>
-                            @Html.EditorFor(model => model.cft_Title, new { htmlAttributes = new { @class = "form-control", required = "required", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
-                        </div>
-                        @Html.ValidationMessageFor(model => model.cft_Title, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-sm-5">
-                        <div class="input-group">
-                            <div class="input-group-addon">Subtitle:</div>
-                            @Html.EditorFor(model => model.cft_SubTitle, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group row" style="margin-bottom:8px">
-                    <div class="col-sm-4">
-                        <div class="input-group">
-                            <div class="input-group-addon">Observation Type</div>
-                            @*@Html.DropDownListFor(model => model.cft_obsType, ViewBag.cft_obsType as SelectList, new { @class = "form-control", name = "cft_obsType" })*@
-                            @if (disableDropdowns)
-                            {
-                                @Html.DropDownList("cft_obsType", null, "- Select Observation Type -", htmlAttributes: new { @class = "form-control", name = "cft_obsType", @readonly = "readonly", disabled = "disabled" })
-                            }
-                            else
-                            {
-                                @Html.DropDownList("cft_obsType", null, "- Select Observation Type -", htmlAttributes: new { @class = "form-control", name = "cft_obsType" })
-                            }
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="input-group">
-                            <div class="input-group-addon">Customer</div>
-                            @*@Html.DropDownListFor(model => model.cft_Cust, ViewBag.cft_Cust as SelectList, new { @class = "form-control", name = "cft_Cust" })*@
-                            @if (disableDropdowns)
-                            {
-                                @Html.DropDownList("cft_Cust", null, htmlAttributes: new { @class = "form-control", name = "cft_Cust", @readonly = "readonly", disabled = "disabled" })
-                            }
-                            else
-                            {
-                                @Html.DropDownList("cft_Cust", null, htmlAttributes: new { @class = "form-control", name = "cft_Cust" })
-                            }
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="input-group">
-                            <div class="input-group-addon">Whse Location</div>
-                            @*@Html.DropDownListFor(model => model.cft_LC, ViewBag.cft_LC as SelectList, new { @class = "form-control", name = "cft_LC" })*@
-                            @if (disableDropdowns)
-                            {
-                                @Html.DropDownList("cft_LC", null, htmlAttributes: new { @class = "form-control", name = "cft_LC", @readonly = "readonly", disabled = "disabled" })
-                            }
-                            else
-                            {
-                                @Html.DropDownList("cft_LC", null, htmlAttributes: new { @class = "form-control", name = "cft_LC" })
-                            }
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group row" style="margin-bottom:8px">
-                    <div class="col-sm-4">
-                        <div class="input-group" data-provide="datepicker">
-                            <div class="input-group-addon">Usable As of:</div>
-                            <input class="datepicker form-control" id="cft_eff_st_dt" name="cft_eff_st_dt" value="@Model.str_cft_eff_st_dt" style="max-width: 100%; width:100%;">
-                            <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                            @Html.ValidationMessageFor(model => model.cft_eff_st_dt, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="col-sm-4 ">
-                        <div class="input-group" data-provide="datepicker">
-                            <div class="input-group-addon">Usable Until:</div>
-                            @*@{
-                                  var endEffDate = "";
-                                  if (Model.cft_eff_end_dt < Convert.ToDateTime("12/31/2060")) { endEffDate = Model.cft_eff_end_dt.ToString("MMM dd, yyyy"); }
-                                }*@
-                            <input class="datepicker form-control" id="cft_eff_end_dt" name="cft_eff_end_dt" value="@Model.str_cft_eff_end_dt" style="max-width: 100%; width:100%;">
-                            <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                            @Html.ValidationMessageFor(model => model.cft_eff_end_dt, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
+    <div class="panel panel-default" style="margin-bottom:8px">
+        @* - - - - - - - - - - - - - - <<<<< STARTS OF FORM HEADER >>>>> - - - - - - - - - - - - - *@
+        <div class="panel-heading header" style="margin-bottom:8px">
+            <div class="form-group row" style="margin-bottom:8px">
+                <div class="col-sm-7">
                     <div class="input-group">
-                        <div class="input-group-addon">Form Number:</div>
-                        <input type="text" id="cft_Nbr" name="cft_Nbr" readonly class="form-control" value="@form_num" style="max-width: 60%; width:60%" />
-                        @*@Html.EditorFor(model => model.cft_Nbr, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly="readonly"} })*@
-                        <div class="input-group-addon @attentionCalss">Version:</div>
-                        <input type="text" id="cft_Version" name="cft_Version" readonly class="form-control @attentionCalss" value="@form_version" style="max-width: 60%; width:60%" />
-                        @*@Html.EditorFor(model => model.cft_Version, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly = "readonly" } })*@
+                        <div class="input-group-addon">Form Title:</div>
+                        @Html.EditorFor(model => model.cft_Title, new { htmlAttributes = new { @class = "form-control", required = "required", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
                     </div>
+                    @Html.ValidationMessageFor(model => model.cft_Title, "", new { @class = "text-danger" })
                 </div>
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            </div>  @*- - - - END of panel-heading Section - - - - -*@
-
-            @* - - - - - - - - - - - - - - <<<<< START OF FORM BODY >>>>> - - - - - - - - - - - - - *@
-            <div class="panel-body content" style="margin-bottom:4px;">
-                <div class="row" style="margin-bottom:0px;">
-                    @*/---------------- Below is the MAIN FORM QUESTION DETAIL DISPLAY PANEL ----------------------\*@
-                    <div class="col-md-7 personal-info">
-                        <div class="row" id="qFormList" style="max-width:100%; height:550px; overflow-y:scroll; margin-left:0px; ">
-                            <div class="panel-group" id="accordion" style="width:98%">
-                                @foreach (OBSMVC.Controllers.CollectionFormSection obsFormSection in Model.colFormSections)
-                                {
-                                    Html.RenderAction("addNewSection", new { sCounter = obsFormSection.sectionNumber, colFormSection = obsFormSection });
-                                }
-                                @*//Inside the Acordion Panel we place all the sections that will be added to the Form
-                                    /----------------------------------------------------\
-                                    |                                                    |
-                                    |             FORM SECTIONS GO HERE                  |
-                                    |             POPULATED BY AJAX CALL                 |
-                                    |  @Url.Action("addNewSection", "ColFormTemplate")   |
-                                    |    params: sCounter, (opt. ModelSections)          |
-                                    \----------------------------------------------------/*@
-                            </div> @* - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - -*@
-
-                            @* - - - - - - - - - - FORM FOOTER SECTION (ALWAYS VISIBLE) - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
-                            @*<div class="panel-group" id="accordion">
-
-                                    <div class="panel panel-default formSection" id="FOOTER_SECTION">
-                                        <div class="panel-heading form-inline" style="background-color:lightblue">
-                                            <h4 class="panel-title">
-                                                <a class="accordion-toggle" data-toggle="collapse" href="#footerSection">
-                                                    <span class="glyphicon glyphicon-minus">&nbsp; </span>
-                                                    <span>Footer Section:</span>
-                                                </a>
-                                                &nbsp;&nbsp;
-                                                <input type="text" id="FORM FOOTER" class="form-control input-sm sectionTitle" style="width:50%" placeholder="<Enter Section Name>" value="Thank you for your participation and cooperation"  />
-                                            </h4>
-                                        </div>
-                                        <div id="footerSection" class="panel-collapse collapse in" style="margin-left:20px" >
-                                            <div class="footer_right row">
-                                                <table style="width:100%">
-                                                    <tr>
-                                                        <td style ="width:75%">Employee Signature: _______________________________________</td>
-                                                        <td style="width:25%">Date: _______________</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Observer Signature: _______________________________________</td>
-                                                        <td>Date: _______________</td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </div>*@
-
-                            @* - - - - - - - END OF THE PAPER FORM FOOTER SECTION - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
-                            <br /><br /><br /><br />
-                        </div>
-                        <div class="row" style="margin-top:0px">
-                            <div class="col-sm-10 ">
-                                @*When This button is clicked, add a new view to the "accordion" <DIV> section*@
-                                <input type="button" id="btnAddSection" value="Add New Section" />
-                            </div>
-                        </div>
-                    </div>  @*End of Left Form Questions Pannel (7 column Pannel)*@
-
-                    @*// -------------- Below is the Panel with the Question's Library ---------------- *@
-                    <div class="col-md-5 personal-info">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <div class="row" style="text-align:center; font-size:large">
-                                    QUESTION LIBRARY
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-10" style="padding-left:3px">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control searchBox" id="full_text_search" name="full_text_search" placeholder="Search Question Library for..." style="max-width: 100%; width:100%;" title="Hint: Use Double Quotes to search for literal text!">
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-secondary" type="button" id="doSearch" data-loading-text="Please Wait...">Search!</button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-2 right" style="padding:0px">
-                                        <button type="button" class="btn btn-primary btn-sm newBtn" id="btnAddQuestionPopup" style="padding:2px">
-                                            <span class="glyphicon glyphicon-plus-sign"></span> Add New
-                                        </button>
-                                        @*<a href="/Question/QuestionAddUpdate/0" class="btn btn-primary btn-sm newBtn" style="padding:2px">
-                                                <span class="glyphicon glyphicon-plus-sign"></span> Add New
-                                            </a>*@
-                                    </div>
-                                </div>
-                                @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
-                                            HttpMethod = "GET",
-                                            UpdateTargetId = "resultPanel",
-                                            InsertionMode = InsertionMode.Replace,
-                                            LoadingElementId = "divLoading"
-                                    })*@
-                            </div>
-
-                            @* -------- <Body Section> This section is Used to Render all the Question Library list Results ---------------- *@
-                            <div class="panel-body">
-                                <div id="dummyResults" class="left" style="max-width: 100%; width:100%; display:none">
-                                    <ul class="list-group sourceList" id="libraryQuestions">
-                                        <li id="7" class="list-group-item" data-toggle="tooltip" title="Drag to the left to Add!" data-qid="7"><span class="badge" style="width:48px">Id: 007</span>This is dummy Question 1</li>
-                                        <li id="127" class="list-group-item" data-toggle="tooltip" title="Drag to the left to Add!" data-qid="127"><span class="badge" style="width:48px">Id: 127</span>Some other Question too</li>
-                                        <li id="16" class="list-group-item" data-toggle="tooltip" title="Drag to the left to Add!" data-qid="16"><span class="badge" style="width:48px">Id: 016</span>last question</li>
-                                    </ul>
-                                </div>
-
-                                <div id="resultPanel" class="left" style="max-width: 100%; width:100%; height:440px; overflow-y:scroll">
-
-                                    @* ****************************************************************************************************
-                                            Results from Ajax Call to Display Question Search Result List will be displayed here!!
-                                        ****************************************************************************************************@
-                                </div>
-
-
-                                <div id="divLoading" style="display:none">
-                                    @*<img src="@Url.Content("~/Images/LoadingData.gif")" alt="" />*@
-                                    <img src="~/Images/LoadingData.gif" />
-                                </div>
-                            </div>
-
-                            @* ---------<Body Section> End of section Used to Render all the Question LIbrary list Results ---------------- *@
-                        </div> @*------------- End of Question Library Panel ---------------*@
-                    </div>
-                </div>
-            </div>@*---- END OF FORM BODY -------*@
-
-            @*\\ - - - - - - - - - - - - - <<<<< END OF FORM BODY >>>>> - - - - - - - - - - - - //*@
-
-            @*// - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - \\*@
-            <div class="row" style="margin-left:20px; margin-right:20px;">
-                <div class="col-sm-4 col-sm-offset-3">
-                    <div class="col-sm-6" style="text-align:center">
-                        <input id="btnSaveForm" type="button" value="Save Form" style="min-width:120px; min-height:34px" @*disabled="disabled"*@ />
-                    </div>
-                    <div class="col-sm-6" style="text-align:center">
-                        <input id="btnPublishForm" type="button" value="Publish Form" style="min-width:120px; min-height:34px" @if (@Model.cft_isPublished == "PUBLISHED") { <text> disabled="disabled" readonly</text>   } />
-                    </div>
-                </div>
-
-                <div class="col-sm-3 col-sm-offset-2">
-                    <div class="col-sm-6" style="text-align:center">
-                        <button type="button" class="btn btn-warning" id="btnReset" style="min-width:130px" @cancelEnabled>Reset Form</button>
-                    </div>
-                    <div class="col-sm-6" style="text-align:center">
-                        <button type="button" class="btn btn-warning" id="btnCancel" style="min-width:120px">Cancel/Back to List</button>
+                <div class="col-sm-5">
+                    <div class="input-group">
+                        <div class="input-group-addon">Subtitle:</div>
+                        @Html.EditorFor(model => model.cft_SubTitle, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
                     </div>
                 </div>
             </div>
-            <input type="hidden" id="isPublished" name="isPublished" value="false">
-            <input type="hidden" id="previous_vers_cft_id" name="previous_vers_cft_id" value="@Model.previous_vers_cft_id">
-            @*\\ - - - - - - - - - - - - - <<<<< END OF FORM FOOTER SECTION >>>>> - - - - - - - - - - - - //*@
 
-        </div> @* ----- END OF FORM PANEL*@
-    </form>
-    @* - - - - - - - - - - - - - - - - END OF "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
+            <div class="form-group row" style="margin-bottom:8px">
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-addon">Observation Type</div>
+                        @*@Html.DropDownListFor(model => model.cft_obsType, ViewBag.cft_obsType as SelectList, new { @class = "form-control", name = "cft_obsType" })*@
+                        @if (disableDropdowns)
+                        {
+                            @Html.DropDownList("cft_obsType", null, "- Select Observation Type -", htmlAttributes: new { @class = "form-control", name = "cft_obsType", @readonly = "readonly", disabled = "disabled" })
+                        }
+                        else
+                        {
+                            @Html.DropDownList("cft_obsType", null, "- Select Observation Type -", htmlAttributes: new { @class = "form-control", name = "cft_obsType" })
+                        }
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-addon">Customer</div>
+                        @*@Html.DropDownListFor(model => model.cft_Cust, ViewBag.cft_Cust as SelectList, new { @class = "form-control", name = "cft_Cust" })*@
+                        @if (disableDropdowns)
+                        {
+                            @Html.DropDownList("cft_Cust", null, htmlAttributes: new { @class = "form-control", name = "cft_Cust", @readonly = "readonly", disabled = "disabled" })
+                        }
+                        else
+                        {
+                            @Html.DropDownList("cft_Cust", null, htmlAttributes: new { @class = "form-control", name = "cft_Cust" })
+                        }
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-addon">Whse Location</div>
+                        @*@Html.DropDownListFor(model => model.cft_LC, ViewBag.cft_LC as SelectList, new { @class = "form-control", name = "cft_LC" })*@
+                        @if (disableDropdowns)
+                        {
+                            @Html.DropDownList("cft_LC", null, htmlAttributes: new { @class = "form-control", name = "cft_LC", @readonly = "readonly", disabled = "disabled" })
+                        }
+                        else
+                        {
+                            @Html.DropDownList("cft_LC", null, htmlAttributes: new { @class = "form-control", name = "cft_LC" })
+                        }
+                    </div>
+                </div>
+            </div>
 
-    <div>
-        @Html.ActionLink("Back to List", "Index")
+            <div class="form-group row" style="margin-bottom:8px">
+                <div class="col-sm-4">
+                    <div class="input-group" data-provide="datepicker">
+                        <div class="input-group-addon">Usable As of:</div>
+                        <input class="datepicker form-control" id="cft_eff_st_dt" name="cft_eff_st_dt" value="@Model.str_cft_eff_st_dt" style="max-width: 100%; width:100%;">
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                        @Html.ValidationMessageFor(model => model.cft_eff_st_dt, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4 ">
+                    <div class="input-group" data-provide="datepicker">
+                        <div class="input-group-addon">Usable Until:</div>
+                        @*@{
+                              var endEffDate = "";
+                              if (Model.cft_eff_end_dt < Convert.ToDateTime("12/31/2060")) { endEffDate = Model.cft_eff_end_dt.ToString("MMM dd, yyyy"); }
+                            }*@
+                        <input class="datepicker form-control" id="cft_eff_end_dt" name="cft_eff_end_dt" value="@Model.str_cft_eff_end_dt" style="max-width: 100%; width:100%;">
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                        @Html.ValidationMessageFor(model => model.cft_eff_end_dt, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon">Form Number:</div>
+                    <input type="text" id="cft_Nbr" name="cft_Nbr" readonly class="form-control" value="@form_num" style="max-width: 60%; width:60%" />
+                    @*@Html.EditorFor(model => model.cft_Nbr, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly="readonly"} })*@
+                    <div class="input-group-addon @attentionCalss">Version:</div>
+                    <input type="text" id="cft_Version" name="cft_Version" readonly class="form-control @attentionCalss" value="@form_version" style="max-width: 60%; width:60%" />
+                    @*@Html.EditorFor(model => model.cft_Version, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly = "readonly" } })*@
+                </div>
+            </div>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </div>  @*- - - - END of panel-heading Section - - - - -*@
+
+        @* - - - - - - - - - - - - - - <<<<< START OF FORM BODY >>>>> - - - - - - - - - - - - - *@
+        <div class="panel-body content" style="margin-bottom:4px;">
+            <div class="row" style="margin-bottom:0px;">
+                @*/---------------- Below is the MAIN FORM QUESTION DETAIL DISPLAY PANEL ----------------------\*@
+                <div class="col-md-7 personal-info">
+                    <div class="row" id="qFormList" style="max-width:100%; height:550px; overflow-y:scroll; margin-left:0px; ">
+                        <div class="panel-group" id="accordion" style="width:98%">
+                            @foreach (OBSMVC.Controllers.CollectionFormSection obsFormSection in Model.colFormSections)
+                            {
+                                Html.RenderAction("addNewSection", new { sCounter = obsFormSection.sectionNumber, colFormSection = obsFormSection });
+                            }
+                            @*//Inside the Acordion Panel we place all the sections that will be added to the Form
+                                /----------------------------------------------------\
+                                |                                                    |
+                                |             FORM SECTIONS GO HERE                  |
+                                |             POPULATED BY AJAX CALL                 |
+                                |  @Url.Action("addNewSection", "ColFormTemplate")   |
+                                |    params: sCounter, (opt. ModelSections)          |
+                                \----------------------------------------------------/*@
+                        </div> @* - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - -*@
+
+                        @* - - - - - - - - - - FORM FOOTER SECTION (ALWAYS VISIBLE) - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+                        @*<div class="panel-group" id="accordion">
+
+                                <div class="panel panel-default formSection" id="FOOTER_SECTION">
+                                    <div class="panel-heading form-inline" style="background-color:lightblue">
+                                        <h4 class="panel-title">
+                                            <a class="accordion-toggle" data-toggle="collapse" href="#footerSection">
+                                                <span class="glyphicon glyphicon-minus">&nbsp; </span>
+                                                <span>Footer Section:</span>
+                                            </a>
+                                            &nbsp;&nbsp;
+                                            <input type="text" id="FORM FOOTER" class="form-control input-sm sectionTitle" style="width:50%" placeholder="<Enter Section Name>" value="Thank you for your participation and cooperation"  />
+                                        </h4>
+                                    </div>
+                                    <div id="footerSection" class="panel-collapse collapse in" style="margin-left:20px" >
+                                        <div class="footer_right row">
+                                            <table style="width:100%">
+                                                <tr>
+                                                    <td style ="width:75%">Employee Signature: _______________________________________</td>
+                                                    <td style="width:25%">Date: _______________</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Observer Signature: _______________________________________</td>
+                                                    <td>Date: _______________</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>*@
+
+                        @* - - - - - - - END OF THE PAPER FORM FOOTER SECTION - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+                        <br /><br /><br /><br />
+                    </div>
+                    <div class="row" style="margin-top:0px">
+                        <div class="col-sm-10 ">
+                            @*When This button is clicked, add a new view to the "accordion" <DIV> section*@
+                            <input type="button" id="btnAddSection" value="Add New Section" />
+                        </div>
+                    </div>
+                </div>  @*End of Left Form Questions Pannel (7 column Pannel)*@
+
+                @*// -------------- Below is the Panel with the Question's Library ---------------- *@
+                <div class="col-md-5 personal-info">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div class="row" style="text-align:center; font-size:large">
+                                QUESTION LIBRARY
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-10" style="padding-left:3px">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control searchBox" id="full_text_search" name="full_text_search" placeholder="Search Question Library for..." style="max-width: 100%; width:100%;" title="Hint: Use Double Quotes to search for literal text!">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-secondary" type="button" id="doSearch" data-loading-text="Please Wait...">Search!</button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 right" style="padding:0px">
+                                    <button type="button" class="btn btn-primary btn-sm newBtn" id="btnAddQuestionPopup" style="padding:2px">
+                                        <span class="glyphicon glyphicon-plus-sign"></span> Add New
+                                    </button>
+                                    @*<a href="/Question/QuestionAddUpdate/0" class="btn btn-primary btn-sm newBtn" style="padding:2px">
+                                            <span class="glyphicon glyphicon-plus-sign"></span> Add New
+                                        </a>*@
+                                </div>
+                            </div>
+                            @*@Ajax.ActionLink("Search", "getQuestions", new { full_text_search = "", metadata_search = "" }, new AjaxOptions{
+                                        HttpMethod = "GET",
+                                        UpdateTargetId = "resultPanel",
+                                        InsertionMode = InsertionMode.Replace,
+                                        LoadingElementId = "divLoading"
+                                })*@
+                        </div>
+
+                        @* -------- <Body Section> This section is Used to Render all the Question Library list Results ---------------- *@
+                        <div class="panel-body">
+                            <div id="dummyResults" class="left" style="max-width: 100%; width:100%; display:none">
+                                <ul class="list-group sourceList" id="libraryQuestions">
+                                    <li id="7" class="list-group-item" data-toggle="tooltip" title="Drag to the left to Add!" data-qid="7"><span class="badge" style="width:48px">Id: 007</span>This is dummy Question 1</li>
+                                    <li id="127" class="list-group-item" data-toggle="tooltip" title="Drag to the left to Add!" data-qid="127"><span class="badge" style="width:48px">Id: 127</span>Some other Question too</li>
+                                    <li id="16" class="list-group-item" data-toggle="tooltip" title="Drag to the left to Add!" data-qid="16"><span class="badge" style="width:48px">Id: 016</span>last question</li>
+                                </ul>
+                            </div>
+
+                            <div id="resultPanel" class="left" style="max-width: 100%; width:100%; height:440px; overflow-y:scroll">
+
+                                @* ****************************************************************************************************
+                                        Results from Ajax Call to Display Question Search Result List will be displayed here!!
+                                    ****************************************************************************************************@
+                            </div>
+
+
+                            <div id="divLoading" style="display:none">
+                                @*<img src="@Url.Content("~/Images/LoadingData.gif")" alt="" />*@
+                                <img src="~/Images/LoadingData.gif" />
+                            </div>
+                        </div>
+
+                        @* ---------<Body Section> End of section Used to Render all the Question LIbrary list Results ---------------- *@
+                    </div> @*------------- End of Question Library Panel ---------------*@
+                </div>
+            </div>
+        </div>@*---- END OF FORM BODY -------*@
+
+        @*\\ - - - - - - - - - - - - - <<<<< END OF FORM BODY >>>>> - - - - - - - - - - - - //*@
+
+        @*// - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - \\*@
+        <div class="row" style="margin-left:20px; margin-right:20px;">
+            <div class="col-sm-4 col-sm-offset-3">
+                <div class="col-sm-6" style="text-align:center">
+                    <input id="btnSaveForm" type="button" value="Save Form" style="min-width:120px; min-height:34px" @*disabled="disabled"*@ />
+                </div>
+                <div class="col-sm-6" style="text-align:center">
+                    <input id="btnPublishForm" type="button" value="Publish Form" style="min-width:120px; min-height:34px" @if (@Model.cft_isPublished == "PUBLISHED") { <text> disabled="disabled" readonly</text>   } />
+                </div>
+            </div>
+
+            <div class="col-sm-3 col-sm-offset-2">
+                <div class="col-sm-6" style="text-align:center">
+                    <button type="button" class="btn btn-warning" id="btnReset" style="min-width:130px" @cancelEnabled>Reset Form</button>
+                </div>
+                <div class="col-sm-6" style="text-align:center">
+                    <button type="button" class="btn btn-warning" id="btnCancel" style="min-width:120px">Cancel/Back to List</button>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="isPublished" name="isPublished" value="false">
+        <input type="hidden" id="previous_vers_cft_id" name="previous_vers_cft_id" value="@Model.previous_vers_cft_id">
+        @*\\ - - - - - - - - - - - - - <<<<< END OF FORM FOOTER SECTION >>>>> - - - - - - - - - - - - //*@
+
+    </div> @* ----- END OF FORM PANEL*@
+</form>
+@* - - - - - - - - - - - - - - - - END OF "CREATE COLLECTION FORM" FORM - - - - - - - - - - - - - *@
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+    <br />
+</div>
+
+<input type="hidden" id="DatesConfirmed" value="" />
+<div id="dialog-confirm-reset" title="Please Confirm" style="display:none">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+        Your form has been modified.<br /> Are you sure you want to reset all changes?
+    </p>
+</div>
+<div id="dialog-confirm-exit" title="Please Confirm" style="display:none">
+    <p>
         <br />
-    </div>
-
-    <input type="hidden" id="DatesConfirmed" value="" />
-    <div id="dialog-confirm-reset" title="Please Confirm" style="display:none">
-        <p>
-            <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-            Your form has been modified.<br /> Are you sure you want to reset all changes?
-        </p>
-    </div>
-    <div id="dialog-confirm-exit" title="Please Confirm" style="display:none">
-        <p>
-            <br />
-            <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-            Your form has been modified.<br /> Exit and discard all changes?
-        </p>
-    </div>
-    @* ------------------------ END OF "Add New Metadata Tag" FORM ------------------------- *@
+        <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+        Your form has been modified.<br /> Exit and discard all changes?
+    </p>
+</div>
+@* ------------------------ END OF "Add New Metadata Tag" FORM ------------------------- *@
 
 
-    <div id="remoteWindow">
-    </div>
+<div id="remoteWindow">
+</div>
 
-    @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
-    @* ------------------------------------- MODAL "QUESTION MAINTENANCE LIGHT" FORM WINDOW ------------------------------------------ *@
-    @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
-    <!-- Modal -->
-    <div class="modal  modal-wide fade" id="editQATWindow" role="dialog">
-        <div class="modal-dialog ">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h3 class="modal-title">ADD NEW ANSWER TYPE</h3>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="windowType" value="MODAL" />
-                    <input type="hidden" id="popupStatus" value="" />
-                    <input type="hidden" id="popupFormChanged" value="N" />
-                    <input type="hidden" id="popupQID" value="" />
-                    <input type="hidden" id="popupDDLid" value="" />
-                    <input type="hidden" id="savedQATid" value="" />
-                    <div class="row">
-                        <div class="input-group" style="margin-left:25px">
-                            <div class="input-group-addon" style="max-width:100%">
-                                <span style="font-weight:bold; font-size:larger; max-width:100%; width:100%">Question Full Text: </span>
-                            </div>
-                            @*<input type="text" id="selQText" class="form-control" style="font-weight:bold; font-size:larger; margin-left:10px; max-width: 90%; width:80%;" />*@
-                            <span style="font-weight:bold; font-size:x-large; margin-left:10px;  padding:2px" id="selQText"> </span>
+@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+@* ------------------------------------- MODAL "QUESTION MAINTENANCE LIGHT" FORM WINDOW ------------------------------------------ *@
+@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+<!-- Modal -->
+<div class="modal  modal-wide fade" id="editQATWindow" role="dialog">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">ADD NEW ANSWER TYPE</h3>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="windowType" value="MODAL" />
+                <input type="hidden" id="popupStatus" value="" />
+                <input type="hidden" id="popupFormChanged" value="N" />
+                <input type="hidden" id="popupQID" value="" />
+                <input type="hidden" id="popupDDLid" value="" />
+                <input type="hidden" id="savedQATid" value="" />
+                <div class="row">
+                    <div class="input-group" style="margin-left:25px">
+                        <div class="input-group-addon" style="max-width:100%">
+                            <span style="font-weight:bold; font-size:larger; max-width:100%; width:100%">Question Full Text: </span>
                         </div>
-                    </div>
-                    <br />
-                    <div id="divATLoading" style="display:none; text-align:center;">
-                        <br /><br />
-                        <img src="~/Images/ui-anim_basic_16x16.gif" />
-                    </div>
-                    <div class="row" id="divNewSA" style="max-width:100%; width:100%;">
-                        @*-------------------------------------------------------------------------------------------
-                                           Placeholder for ADD MODE for new Questions Answer Types
-                                 Populated before modal window is opened based on the selection within the main form
-                            --------------------------------------------------------------------------------------------*@
-                        @*@Html.Action("addQuestionAnswerInfo", "Question")*@
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="col-sm-1 col-sm-offset-3">
-                        <button type="button" class="btn btn-primary" id="btnSaveNewSelAnswer" disabled="disabled">Save changes</button>
-                    </div>
-                    <div class="col-sm-1 col-sm-offset-1">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
-                    </div>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-    @*------------------------------ END OF POP UP FOR QUESTION MAINTENANCE --------------------------*@
-
-
-    @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
-    @* ------------------------------------- POP UP "ADD QUESTION TO LIBRARY" FORM --------------------------------------------------- *@
-    @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
-    <!-- Modal -->
-    <div class="modal  modal-alert fade" id="addQuestionWindow" role="dialog">
-        <div class="modal-dialog ">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h3 class="modal-title">ADD QUESTION TO QUESTION LIBRARY</h3>
-                </div>
-                <div class="modal-body" style="margin-left:25px">
-                    <br /><br />
-
-                    <div class="row" style="margin-bottom:15px">
-                        <div class="input-group">
-                            <div class="input-group-addon stdAddonWidth">
-                                Question Full Text:
-                            </div>
-                            <textarea id="modalQFullText" class="form-control qInput" cols="400" rows="3" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" required></textarea>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="input-group">
-                            <div class="input-group-addon stdAddonWidth">
-                                Question Description:
-                            </div>
-                            <input type="text" id="modalQDesc" class="form-control qInput" placeholder="Enter Question Description" style="max-width: 100%; width:95%;" />
-                        </div>
-                    </div>
-                    <br />
-                    <div id="msgAddQ" class="alert alert-danger" style="font-weight:bold; display:none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        The Question Text is required.<br />Please review your input.
-
+                        @*<input type="text" id="selQText" class="form-control" style="font-weight:bold; font-size:larger; margin-left:10px; max-width: 90%; width:80%;" />*@
+                        <span style="font-weight:bold; font-size:x-large; margin-left:10px;  padding:2px" id="selQText"> </span>
                     </div>
                 </div>
                 <br />
-                <div class="modal-footer">
-                    <div class="col-sm-1 col-sm-offset-3">
-                        <button type="button" id="btnSaveLibQuestion" class="btn btn-primary" disabled="disabled">Save changes</button>
-                    </div>
-                    <div class="col-sm-1 col-sm-offset-1">
-                        <button type="button" id="btnCancelLibQuestion" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    </div>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-    @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
-    @* --------------------------------------- POP UP "CONFIRM PUBLISH DATES" FORM --------------------------------------------------- *@
-    @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
-    <!-- Modal -->
-    <div class="modal  modal-alert fade" id="confPubDates" role="dialog">
-        <div class="modal-dialog ">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h3 class="modal-title">CONFIRM THE LIVE DATES FOR THIS FORM</h3>
-                </div>
-                <div class="modal-body" style="margin-left:25px">
+                <div id="divATLoading" style="display:none; text-align:center;">
                     <br /><br />
-                    <div class="form-group row" style="margin-bottom:8px">
-                        <div class="col-sm-6" style="text-align:center; max-width:100%">
-                            <div class="input-group" data-provide="datepicker">
-                                <div class="input-group-addon">Usable As of:</div>
-                                <input class="datepicker datepickerPopup form-control" id="conf_cft_eff_st_dt" style="max-width: 100%; width:100%;">
-                                <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6" style="text-align:center; max-width:100%">
-                            <div class="input-group" data-provide="datepicker">
-                                <div class="input-group-addon">Usable Until:</div>
-                                <input class="datepicker datepickerPopup form-control" id="conf_cft_eff_end_dt" style="max-width: 100%; width:100%;">
-                                <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
-                            </div>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row" style="text-align:center">
-                        <span style="font-size:medium; font-style:italic; text-align:center"> <strong>NOTES:</strong> <br/>* Choosing Today's Date for "Usable as of" will make the form 'live' immediately after confirmation.</span>
-                    </div>
-                    <div class="row" style="text-align:center">
-                        <span style="font-size:medium; font-style:italic; text-align:center">  ** A blank "Usable Until" Date implies no Expiration</span>
-                    </div>
-                    <br />
+                    <img src="~/Images/ui-anim_basic_16x16.gif" />
                 </div>
-                <div class="modal-footer">
-                        <div class="col-sm-6 col-sm-offset-3"  >
-                            <div class="col-sm-5 col-sm-offset-1" style="text-align:center">
-                                <button type="button" id="btnSaveDateConf" class="btn btn-primary">Confirm Dates</button>
-                            </div>
-                            <div class="col-sm-5 col-sm-offset-1" style="text-align:center">
-                                <button type="button" id="btnCancelDateConf" class="btn btn-default" data-dismiss="modal" style="min-width:120px">Cancel</button>
-                            </div>
-                        </div>
+                <div class="row" id="divNewSA" style="max-width:100%; width:100%;">
+                    @*-------------------------------------------------------------------------------------------
+                                       Placeholder for ADD MODE for new Questions Answer Types
+                             Populated before modal window is opened based on the selection within the main form
+                        --------------------------------------------------------------------------------------------*@
+                    @*@Html.Action("addQuestionAnswerInfo", "Question")*@
                 </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-1 col-sm-offset-3">
+                    <button type="button" class="btn btn-primary" id="btnSaveNewSelAnswer" disabled="disabled">Save changes</button>
+                </div>
+                <div class="col-sm-1 col-sm-offset-1">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@*------------------------------ END OF POP UP FOR QUESTION MAINTENANCE --------------------------*@
+
+
+@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+@* ------------------------------------- POP UP "ADD QUESTION TO LIBRARY" FORM --------------------------------------------------- *@
+@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+<!-- Modal -->
+<div class="modal  modal-alert fade" id="addQuestionWindow" role="dialog">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">ADD QUESTION TO QUESTION LIBRARY</h3>
+            </div>
+            <div class="modal-body" style="margin-left:25px">
+                <br /><br />
+
+                <div class="row" style="margin-bottom:15px">
+                    <div class="input-group">
+                        <div class="input-group-addon stdAddonWidth">
+                            Question Full Text:
+                        </div>
+                        <textarea id="modalQFullText" class="form-control qInput" cols="400" rows="3" style="max-width: 100%; width:95% " placeholder="Enter The Question Full Text" required></textarea>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-group">
+                        <div class="input-group-addon stdAddonWidth">
+                            Question Description:
+                        </div>
+                        <input type="text" id="modalQDesc" class="form-control qInput" placeholder="Enter Question Description" style="max-width: 100%; width:95%;" />
+                    </div>
+                </div>
+                <br />
+                <div id="msgAddQ" class="alert alert-danger" style="font-weight:bold; display:none">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    The Question Text is required.<br />Please review your input.
+
+                </div>
+            </div>
+            <br />
+            <div class="modal-footer">
+                <div class="col-sm-1 col-sm-offset-3">
+                    <button type="button" id="btnSaveLibQuestion" class="btn btn-primary" disabled="disabled">Save changes</button>
+                </div>
+                <div class="col-sm-1 col-sm-offset-1">
+                    <button type="button" id="btnCancelLibQuestion" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+@* --------------------------------------- POP UP "CONFIRM PUBLISH DATES" FORM --------------------------------------------------- *@
+@* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
+<!-- Modal -->
+<div class="modal  modal-alert fade" id="confPubDates" role="dialog">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">CONFIRM THE LIVE DATES FOR THIS FORM</h3>
+            </div>
+            <div class="modal-body" style="margin-left:25px">
+                <br /><br />
+                <div class="form-group row" style="margin-bottom:8px">
+                    <div class="col-sm-6" style="text-align:center; max-width:100%">
+                        <div class="input-group" data-provide="datepicker">
+                            <div class="input-group-addon">Usable As of:</div>
+                            <input class="datepicker datepickerPopup form-control" id="conf_cft_eff_st_dt" style="max-width: 100%; width:100%;">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" style="text-align:center; max-width:100%">
+                        <div class="input-group" data-provide="datepicker">
+                            <div class="input-group-addon">Usable Until:</div>
+                            <input class="datepicker datepickerPopup form-control" id="conf_cft_eff_end_dt" style="max-width: 100%; width:100%;">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row" style="text-align:center">
+                    <span style="font-size:medium; font-style:italic; text-align:center"> <strong>NOTES:</strong> <br />* Choosing Today's Date for "Usable as of" will make the form 'live' immediately after confirmation.</span>
+                </div>
+                <div class="row" style="text-align:center">
+                    <span style="font-size:medium; font-style:italic; text-align:center">  ** A blank "Usable Until" Date implies no Expiration</span>
+                </div>
+                <br />
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div class="col-sm-5 col-sm-offset-1" style="text-align:center">
+                        <button type="button" id="btnSaveDateConf" class="btn btn-primary">Confirm Dates</button>
+                    </div>
+                    <div class="col-sm-5 col-sm-offset-1" style="text-align:center">
+                        <button type="button" id="btnCancelDateConf" class="btn btn-default" data-dismiss="modal" style="min-width:120px">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
 @* --------------------------------------- POP UP "GENERIC CONFIRMATION" FORM --------------------------------------------------- *@
 @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
 <!-- Modal -->
-<div class="modal  modal-NewQ fade" id="confPopUp" role="dialog">
-    <input type="hidden" id="funcToExec" value=""/>
+<div class="modal  modal-alert fade" id="confPopUp" role="dialog">
+    <input type="hidden" id="funcToExec" value="" />
     <input type="hidden" id="confirmationResult" value="" />
     <div class="modal-dialog ">
         <div class="modal-content">
@@ -901,7 +893,7 @@
             <div class="modal-footer">
                 <div class="col-sm-6 col-sm-offset-3">
                     <div class="col-sm-5 col-sm-offset-1" style="text-align:center">
-                        <button type="button" id="btnAlertConfirm" class="btn btn-primary" onclick="$('#confirmationResult').val('true');">Create New Version</button>
+                        <button type="button" id="btnAlertConfirm" class="btn btn-primary" value=""></button>
                     </div>
                     <div class="col-sm-5 col-sm-offset-1" style="text-align:center">
                         <button type="button" id="btnAlertCancel" class="btn btn-default" data-dismiss="modal" style="min-width:120px">Cancel</button>
@@ -911,12 +903,11 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
 @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
 @* --------------------------------------- POP UP "GENERIC ALERT" WINDOW --------------------------------------------------------- *@
 @* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *@
 <!-- Modal -->
-<div class="modal  modal-NewQ fade" id="alertPopup" role="dialog">
+<div class="modal  modal-alert fade" id="alertPopup" role="dialog">
     <div class="modal-dialog ">
         <div class="modal-content">
             <div class="modal-header">
@@ -931,7 +922,7 @@
             <br />
             <div class="modal-footer">
                 <div class="col-sm-12" style="text-align:center">
-                     <button type="button" id="btnAlertOK" class="btn btn-default" data-dismiss="modal" style="min-width:120px">OK</button>
+                    <button type="button" id="btnAlertOK" class="btn btn-default" data-dismiss="modal" style="min-width:120px">OK</button>
                 </div>
             </div>
         </div><!-- /.modal-content -->
@@ -940,35 +931,35 @@
 @*-------------------------------------------------------------------------------------------------------------------------------*@
 
 
-    <script>
-        function clearNewSAbox(){
-            $("#divNewSA").html("");
-            $("#divATLoading").show();
-            $.ajax({
-                url: '@Url.Action("addFormQAInfo", "colFormTemplate")',
-                method: "GET",
-                cache: false,
-                //data: { question_id: questionId, dropdownID: ddlId},
-                error: function () {
-                    alert("Failed to reload Selectable Answer Data Entry Form!!");  //<-- Trap and alert of any errors if they occurred
-                }
-            }).done(function (d) {
-                $("#divATLoading").hide();
-                $("#divNewSA").html(d);
-            });
-        }
+<script>
+    function clearNewSAbox(){
+        $("#divNewSA").html("");
+        $("#divATLoading").show();
+        $.ajax({
+            url: '@Url.Action("addFormQAInfo", "colFormTemplate")',
+            method: "GET",
+            cache: false,
+            //data: { question_id: questionId, dropdownID: ddlId},
+            error: function () {
+                alert("Failed to reload Selectable Answer Data Entry Form!!");  //<-- Trap and alert of any errors if they occurred
+            }
+        }).done(function (d) {
+            $("#divATLoading").hide();
+            $("#divNewSA").html(d);
+        });
+    }
 
-        // Not used anymore
-        //function loadModal(questionId, ddlId) {
-        //    //var questionId = btnClkd.attr('id').substring(8);
-        //    //alert("Load Modal for Question Id: " + questionId);
-        //    //var url = "/Question/QuestionAddUpdate/" + questionId;
-        //    var cft_id = $('#cft_id').val();
-        //    var url = "/LightQuestion/QuestionAddUpdateLight/" + questionId + "?cft_id="+cft_id;
-        //    opendialog(url, questionId, ddlId);
-        //}
+    // Not used anymore
+    //function loadModal(questionId, ddlId) {
+    //    //var questionId = btnClkd.attr('id').substring(8);
+    //    //alert("Load Modal for Question Id: " + questionId);
+    //    //var url = "/Question/QuestionAddUpdate/" + questionId;
+    //    var cft_id = $('#cft_id').val();
+    //    var url = "/LightQuestion/QuestionAddUpdateLight/" + questionId + "?cft_id="+cft_id;
+    //    opendialog(url, questionId, ddlId);
+    //}
 
-        @*//Not Used for the light version built-in pop up 04/16/2016
+    @*//Not Used for the light version built-in pop up 04/16/2016
     function opendialog(pageURL, questionId, ddlId) {
         var $dialog = $('#remoteWindow')
         .html('<iframe style="border-style:double; border-width:4px; " src="' + pageURL + '" width="100%" height="100%"></iframe>')
@@ -1014,13 +1005,15 @@
 
         $dialog.dialog('open');
     }*@
-    </script>
+</script>
 
 
-    @* ######################  J A V A    S C R I P T S    S E C T I O N   #################################### *@
-    @****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
-    <script>
-        function PostForm() {
+@* ######################  J A V A    S C R I P T S    S E C T I O N   #################################### *@
+@****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
+<script type="text/jscript">
+
+    $(document).ready(function () {
+        function validateForm(){
             var errorMsg = "";
             var sectionCounter = 0;
             //----------------------- Perform Front-End Form Validation ----------------------------------------
@@ -1101,132 +1094,135 @@
                 $('#btnSaveForm').button('reset');
                 $("#btnPublishForm").button('reset');
                 alert(errorMsg);
+                return false;
             }
             else {
-                //Post the Form
-                //isChanged = false;  // To prevent the alert of leaving the page from showing up
-                $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
-                document.getElementById("CreateForm").submit();
+                //Validation Passes.
+                return true;
             }
         }
 
+        function PostForm() {
+            //Post the Form
+            //isChanged = false;  // To prevent the alert of leaving the page from showing up
+            $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
+            document.getElementById("CreateForm").submit();
+        }
 
-        $(document).ready(function () {
+        function getATcategory() {
+            var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
+            if (selectedText == "3 Val") {
+                return "3 Val Range"
+            }
+            else if (selectedText == "5 Val") {
+                return "5 Val Range";
+            }
+            else {
+                return "Other"
+            }
+        };
 
-            function getATcategory() {
-                var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
-                if (selectedText == "3 Val") {
-                    return "3 Val Range"
-                }
-                else if (selectedText == "5 Val") {
-                    return "5 Val Range";
+        var selCathegory = getATcategory();
+
+        $("input:text").focus(function () { $(this).select(); });
+
+        $('.collapse').on('show.bs.collapse', function () {
+            $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
+        }).on('hide.bs.collapse', function () {
+            $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
+        });
+
+        // **** SAVE ACTION FROM MODAL POPUP QUESTION MAINTENANCE ****
+        $("#btnSaveNewSelAnswer").click(function () {
+            // ------------------- Before Saving data, validate the user input -------------------------------------------------
+            var formValidated = true;
+            var emptyBoxes = 0;
+            var textValues = "";
+            var counter = 0;
+            var validationMessage = "";
+
+            selCathegory = getATcategory();
+
+            // ----------- First verify that no boxes have been left blank and compile the New Answer String for posting ---------------
+            //var comparisonNewString = $("#divNewSA").find("#fullSelATlist").first().children("option").filter(":selected").text();  //Save the answer Type that is being added
+            $('#newQATsection').find('.selAnswerTextb').each(function () {
+                counter = counter + 1;
+                if ($(this).val() != "") {
+                    textValues = textValues + $(this).val().trim().toUpperCase() + "~";
+                    //comparisonNewString = comparisonNewString + $(this).val().trim().toUpperCase();
                 }
                 else {
-                    return "Other"
+                    emptyBoxes++;
                 }
-            };
-
-            var selCathegory = getATcategory();
-
-            $("input:text").focus(function () { $(this).select(); });
-
-            $('.collapse').on('show.bs.collapse', function () {
-                $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
-            }).on('hide.bs.collapse', function () {
-                $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
             });
 
-            // **** SAVE ACTION FROM MODAL POPUP QUESTION MAINTENANCE ****
-            $("#btnSaveNewSelAnswer").click(function () {
-                // ------------------- Before Saving data, validate the user input -------------------------------------------------
-                var formValidated = true;
-                var emptyBoxes = 0;
-                var textValues = "";
-                var counter = 0;
-                var validationMessage = "";
-
-                selCathegory = getATcategory();
-
-                // ----------- First verify that no boxes have been left blank and compile the New Answer String for posting ---------------
-                //var comparisonNewString = $("#divNewSA").find("#fullSelATlist").first().children("option").filter(":selected").text();  //Save the answer Type that is being added
-                $('#newQATsection').find('.selAnswerTextb').each(function () {
-                    counter = counter + 1;
-                    if ($(this).val() != "") {
-                        textValues = textValues + $(this).val().trim().toUpperCase() + "~";
-                        //comparisonNewString = comparisonNewString + $(this).val().trim().toUpperCase();
-                    }
-                    else {
-                        emptyBoxes++;
+            //Check if we have empty boxes, then the form is not validated.
+            var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
+            if (selCathegory == "3 Val Range" && emptyBoxes > 2) {
+                formValidated = false;
+                validationMessage = "No textbox values can be left blank";
+            }
+            else if (selCathegory == "5 Val Range" && emptyBoxes > 0) {
+                formValidated = false;
+                validationMessage = "No textbox values can be left blank";
+            }
+            else if (selectedText == "Multi" || selectedText == "Singl") {
+                //If user is entering a List, verify that the list contains at least two item
+                var filledInBoxes = 0;
+                $("#multiList").find(".selAnswerTextb").each(function () {
+                    if ($(this).val().trim() != "") {
+                        filledInBoxes = filledInBoxes + 1;
                     }
                 });
-
-                //Check if we have empty boxes, then the form is not validated.
-                var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
-                if (selCathegory == "3 Val Range" && emptyBoxes > 2) {
+                if (filledInBoxes < 2) {
                     formValidated = false;
-                    validationMessage = "No textbox values can be left blank";
+                    validationMessage = "A valid list must contain at least two elements.";
                 }
-                else if (selCathegory == "5 Val Range" && emptyBoxes > 0) {
-                    formValidated = false;
-                    validationMessage = "No textbox values can be left blank";
-                }
-                else if (selectedText == "Multi" || selectedText == "Singl") {
-                    //If user is entering a List, verify that the list contains at least two item
-                    var filledInBoxes = 0;
-                    $("#multiList").find(".selAnswerTextb").each(function () {
-                        if ($(this).val().trim() != "") {
-                            filledInBoxes = filledInBoxes + 1;
-                        }
-                    });
-                    if (filledInBoxes < 2) {
-                        formValidated = false;
-                        validationMessage = "A valid list must contain at least two elements.";
-                    }
-                }
-                // ------- Finished looking for boxes left blank------------------------------------------------
+            }
+            // ------- Finished looking for boxes left blank------------------------------------------------
 
-                //if (formValidated){...
-                //Loop through all text boxes in this section and save the answers for comparison
-                //-----------------------------------------------------------------------------------------------------------------
-                //Validate that the newly entered QAT and values do not exist in any of the other sections (Existing or to be added)
-                //Must not exist under the <div #existingQATs> and <#divaddedSA> divisions (both have a class = ".answerType"
+            //if (formValidated){...
+            //Loop through all text boxes in this section and save the answers for comparison
+            //-----------------------------------------------------------------------------------------------------------------
+            //Validate that the newly entered QAT and values do not exist in any of the other sections (Existing or to be added)
+            //Must not exist under the <div #existingQATs> and <#divaddedSA> divisions (both have a class = ".answerType"
 
-                // Answer Type duplicate values cannot be implemented here since we add just one value at a time
-                // Validation must be performed on the back-end
-                //$(".answerType").each(function () {
-                //    var existingAnswers = "";
-                //    $(this).find(".SAitem").each(function () { existingAnswers = existingAnswers.concat($(this).html()) });
-                //    if (formValidated == true) {
-                //        comparisonOldString = $(this).find("#qat").first().val() + existingAnswers;
-                //        if (comparisonNewString == comparisonOldString) {
-                //            formValidated = false;
-                //            validationMessage = "The selected values already exist for this answer.";
-                //        }
-                //    }
-                //});
+            // Answer Type duplicate values cannot be implemented here since we add just one value at a time
+            // Validation must be performed on the back-end
+            //$(".answerType").each(function () {
+            //    var existingAnswers = "";
+            //    $(this).find(".SAitem").each(function () { existingAnswers = existingAnswers.concat($(this).html()) });
+            //    if (formValidated == true) {
+            //        comparisonOldString = $(this).find("#qat").first().val() + existingAnswers;
+            //        if (comparisonNewString == comparisonOldString) {
+            //            formValidated = false;
+            //            validationMessage = "The selected values already exist for this answer.";
+            //        }
+            //    }
+            //});
 
 
-                //if (formValidated){
-                //    // Continue with rest of validation/posting only if the form Validation Status is true
-                //    //var isDefaultValue = "false";
-                //    //var postParams = "";
-                //    //var comparisonOldString = "";
-                //    //$("#fullSelATlist").find('option:selected').text().substring(0,5);
-                //}
+            //if (formValidated){
+            //    // Continue with rest of validation/posting only if the form Validation Status is true
+            //    //var isDefaultValue = "false";
+            //    //var postParams = "";
+            //    //var comparisonOldString = "";
+            //    //$("#fullSelATlist").find('option:selected').text().substring(0,5);
+            //}
 
-                //-------------- Finished Validating Form Inputs -----------------------------------------------------------------------
+            //-------------- Finished Validating Form Inputs -----------------------------------------------------------------------
 
-                // If the form input is valid, procced with saving data, else just display the Error message
-                if (formValidated) {
-                    // Proceed to Save the new Answer Type
-                    //Parameter to post are:  QuestionId~AnswerTypeId~defaultT/F~answerlist
+            // If the form input is valid, procced with saving data, else just display the Error message
+            if (formValidated) {
+                // Proceed to Save the new Answer Type
+                //Parameter to post are:  QuestionId~AnswerTypeId~defaultT/F~answerlist
 
-                    $(this).button('loading');  // Disable the button until posting is complete
+                $(this).button('loading');  // Disable the button until posting is complete
 
-                    //Build the posting parameters: "Question Id" plus "Answer Type Id" and hardcode default="false" plus sel answers from "texvalues" variable
-                    var postData = $("#popupQID").val() + "~" + $("#fullSelATlist").val() + "~false~" + textValues;
+                //Build the posting parameters: "Question Id" plus "Answer Type Id" and hardcode default="false" plus sel answers from "texvalues" variable
+                var postData = $("#popupQID").val() + "~" + $("#fullSelATlist").val() + "~false~" + textValues;
 
-                    @*$(".qatDIV").each(function(){
+                @*$(".qatDIV").each(function(){
                     var postAnsTypeId = $(this).find("#ans_type_id").first().val();
                     var postIsDefault = "false";
                     var postSelAnswers = $(this).find("#ans_type_selAns").first().val();
@@ -1236,322 +1232,378 @@
                 alert("Saving New Answer Types...\n" + postData);
                 *@
 
-                    $.ajax({
-                        url: '@Url.Action("saveNewSelAnswer", "ColFormTemplate")',
-                        method: "POST",
-                        cache: false,
-                        data: { ans_type_list : postData },
-                        error: function () {
-                            alert("ERROR: Failed to Save the New Question Answer Type Information.!!");  //<-- Trap and alert of any errors if they occurred
-                        }
-                    }).done(function (d) {
-                        if (d.substring(0,3) == "QAT") {
-                            //alert("Data posted successfully!\n" + d);
-                            // Set the popupstatus to "saved" to indicate that the post succeded and that the drop down needs to be updated.
-                            $("#popupStatus").val("saved");
-                            // Reset the list of answers that have already been saved so they do not need to be displayed anymore
-                            $("#divaddedSA").html("");
-                            $("#savedQATid").val(d.substring(6));
-                            $("#editQATWindow").modal('hide');
-                        }
-                        else {
-                            //alert("Server Response: " + d);
-                            $("#newErrorMsg").html("<span>ERROR SAVING INFORMATION:</span><br/><span> " + d + "</span>");
-                            $("#newErrorMsg").show();
-                        }
-                        //else { alert("WARNING: Failed to post!\nPlease review your input and try again: " + d); }
-                    });
-
-                    // ----------- Finished Saving New Answer Type and Answer values ----------------
-                }
-                else {
-                    var errorMessage = "<span> VALIDATION ERROR: Please review your input:</span><br/>&nbsp;" + validationMessage + "<span>";
-                    //errorMessage = errorMessage.concat("</span><br/>&nbsp;&nbsp;<span>You are comparing Answer Type Id and values:</span><br/>");
-                    //errorMessage = errorMessage.concat("<span>'" + comparisonNewString + "'</span>" + "<span> against: </span>");
-                    //errorMessage = errorMessage.concat("<span> '" + comparisonOldString + "'</span>");
-                    $("#newErrorMsg").html(errorMessage);
-                    $("#newErrorMsg").show();
-                }
-
-                // Finally, whether the save action failed or posted correctly, reset the "SAVE" button to avoid leaving it stcuk in "Loading..."
-                $(this).button('reset');
-
-            });
-
-            function leavePage(){
-                var editMode = "@Model.manageAction";
-                $("#formChanged").val("N");   //To prevent the browser to present the confirm-exit dialog.
-
-                // When in "MANAGE-EDIT" mode, we need to Reset the published Date/Time via Ajax to it's previous state
-                if(editMode == "MANAGE-EDIT"){
-                    var publishedDateTime = "@Model.originalPublishDate";
-                    var publishedUser = "@Model.originalyPublishedBy";
-                    var formCftid = "@Model.cft_id";
-                    $.ajax({
-                        url: '@Url.Action("republishFormOnCancel", "ColFormTemplate")',
-                        method: "POST",
-                        cache: false,
-                        data: { cft_id: formCftid, publishedBy: publishedUser, publishedOn: publishedDateTime },
-                        error: function () {
-                            alert("Failed to reset Changes...");  //<-- Trap and alert of any errors if they occurred
-                        }
-                    }).done(function (d) {
-                        if (d == "Success") {
-                            alert("Edit mode cancelled! Form has been republished.");
-                            //location.href = "/ColFormTemplate/AddEditForm/" + formCftid;
-                        }
-                        else {
-                            alert("ERROR Resetting Published Date/Time: " + d);
-                        }
-                    });
-                    //--- Finished Resetting the ajax values
-                }
-
-                //Finally, just leave the page and redirect to the Form Index page
-                location.href = "/ColFormTemplate/";
-            };
-
-            $("#btnCancel").click(function () {
-                if ( $("#formChanged").val() == "Y")
-                {
-                    if ( $("#bootstrapBtnReset").val() == "N"){
-                        $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window. Must be done only once (at most) to prevent js errors
-                        $("#bootstrapBtnReset").val("Y");   // Set it to "Y" so we don't try to reset it again which would cause an error
-                    }
-
-                    $( "#dialog-confirm-exit" ).dialog({
-                        resizable: false,
-                        height:250,
-                        modal: true,
-                        buttons: {
-                            "Discard Changes": function() {
-                                leavePage();
-                            },
-                            "Continue Working": function() {
-                                $( this ).dialog( "close" );
-                            }
-                        }
-                    });
-                }
-                else{
-                    leavePage();
-                }
-            });
-
-            $("#btnReset").click(function () {
-                if ( $("#formChanged").val() == "Y")
-                {
-                    if ( $("#bootstrapBtnReset").val() == "N"){
-                        $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window
-                        $("#bootstrapBtnReset").val("Y");
-                    }
-
-                    $( "#dialog-confirm-reset" ).dialog({
-                        resizable: false,
-                        height:200,
-                        modal: true,
-                        buttons: {
-                            "Reset Form": function() {
-                                $("#formChanged").val("N");
-                                //isChanged.val("N");
-                                location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
-                            },
-                            "Don't Reset!": function() {
-                                $( this ).dialog( "close" );
-                            }
-                        }
-                    });
-                }
-            });
-
-
-            $('#cft_eff_st_dt').datepicker({
-                dateFormat: 'M dd, yy',
-                changeMonth: true,
-                changeYear: true,
-                showButtonPanel: true,
-                minDate: -0,
-                //minDate: -0,
-                //maxDate: "+1M +10D",
-                onClose: function (selectedDate) {
-                    $("#cft_eff_end_dt").datepicker("option", "minDate", selectedDate);
-                },
-                useCurrent: false //Important! See issue #1075
-            });
-
-            $('#cft_eff_end_dt').datepicker({
-                dateFormat: 'M dd, yy',
-                changeMonth: true,
-                changeYear: true,
-                showButtonPanel: true,
-                minDate: -0,
-                onClose: function (selectedDate) {
-                    $("#cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
-                },
-                useCurrent: false //Important! See issue #1075
-            });
-
-            $('#conf_cft_eff_st_dt').datepicker({
-                dateFormat: 'M dd, yy',
-                changeMonth: true,
-                changeYear: true,
-                showButtonPanel: true,
-                minDate: -0,
-                //minDate: -0,
-                //maxDate: "+1M +10D",
-                onClose: function (selectedDate) {
-                    $("#conf_cft_eff_end_dt").datepicker("option", "minDate", selectedDate);
-                },
-                useCurrent: false //Important! See issue #1075
-            });
-
-            $('#conf_cft_eff_end_dt').datepicker({
-                dateFormat: 'M dd, yy',
-                changeMonth: true,
-                changeYear: true,
-                showButtonPanel: true,
-                minDate: -0,
-                onClose: function (selectedDate) {
-                    $("#conf_cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
-                },
-                useCurrent: false //Important! See issue #1075
-            });
-
-            $("#btnSaveDateConf").click(function(){
-                $("#cft_eff_st_dt").val($("#conf_cft_eff_st_dt").val());
-                $("#cft_eff_end_dt").val($("#conf_cft_eff_end_dt").val());
-                $('#confPubDates').modal('toggle');
-                PostForm();
-            });
-
-            $('#CreateForm').keypress(function (e) {
-                if (e.keyCode == 13)
-                {
-                    $('#doSearch').click();
-                }
-            });
-
-            $('[data-toggle="tooltip"]').tooltip();
-
-
-
-            $("#btnAddQuestionPopup").click(function () {
-                $("#addQuestionWindow").modal();
-            });
-
-            $("#btnSaveLibQuestion").click(function () {
-                if ($("#modalQFullText").val().trim() == "") {
-                    $("#msgAddQ").show();
-                    $("#btnSaveLibQuestion").prop("disabled", true);
-                    //alert("The Question Text is required.\nPlease review your input.");
-                }
-                else {
-                    $.ajax({
-                        url: '@Url.Action("addNewQuestion", "ColFormTemplate")',
-                        method: "POST",
-                        cache: false,
-                        data: { full_text: $("#modalQFullText").val(), desc: $("#modalQDesc").val() },
-                        error: function () {
-                            alert("An error occurred when saving the question information to the LIbrary Database!!");  //<-- Trap and alert of any errors if they occurred
-                        }
-                    }).done(function (d) {
-                        if (d == "True") {
-                            var searchText = '"' + $("#modalQFullText").val() + '"';
-                            $("#modalQFullText").val("");
-                            $("#modalQDesc").val("");
-                            //alert("Data Posted Successfully!");
-
-                            // Close the popup
-                            //$("#addQuestionWindow").dialog( "close" );
-                            $("#btnCancelLibQuestion").click();
-                            // Perform ajax to "search" the recently saved question
-                            $("#full_text_search").val(searchText);
-                            $('#doSearch').click();
-                            $("#full_text_search").val("");
-                        }
-                        else {
-                            alert("ERROR Saving Data: " + d);
-                        }
-                    });
-                }
-            }); //--------- End of btnSaveLibQuestion click() event
-
-
-            $('textarea').on('keydown keyup change focus blur', function(e) {
-                if (e.type === 'change') {
-                    // this event is triggered when the text is changed through drag and drop too,
-                    // or by pasting something inside the textarea;
-
-                    // remove commas with empty
-                    $(this).val($(this).val().replace(/,/,"","g"));
-                    // remove carriage returns (\r) and newlines (\n) with spaces:
-                    $(this).val($(this).val().replace(/\r?\n/g, ' '));
-                    //$textarea.val($textarea.val().replace(/[,\n\r]/," ","g");
-                }
-                // the enter key has been pressed, avoid producing a carriage return from it:
-                if (e.which === 13 || e.which === 188) {
-                    e.preventDefault();
-                }
-            });
-
-            $('input').not(".searchBox").on('keydown keyup change ', function (e) {
-                $("#btnSaveForm").removeAttr('disabled');
-                $("#btnCancel").removeAttr('disabled');
-                $("#formChanged").val("Y");   // Re-enable the form "changed" status
-            });
-
-            $('input').not(".searchBox").not(".qInput").on('keydown keyup change ', function (e) {
-                $("#btnSaveForm").removeAttr('disabled');
-                $("#btnCancel").removeAttr('disabled');
-                $("#formChanged").val("Y");   // Re-enable the form "changed" status
-            });
-
-            $('.qInput').on('keydown keyup change ', function (e) {
-                $("#btnSaveLibQuestion").removeAttr('disabled');
-                $("#msgAddQ").hide();
-            });
-
-            $("#btnCancelLibQuestion").click(function(){
-                $(".qInput").val("");
-                $("#btnSaveLibQuestion").prop('disabled', true);
-            });
-
-            $("#btnDeleteForever").click(function(){
-                // Perform an Ajax call to either hard or soft delete the current form
-
                 $.ajax({
-                    url: '@Url.Action("deleteForm", "ColFormTemplate")',
+                    url: '@Url.Action("saveNewSelAnswer", "ColFormTemplate")',
                     method: "POST",
                     cache: false,
-                    data: { cft_id: @Model.cft_id },     //<---- Data Parameters (if not already passed in the Url)
-                    //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                    //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                    //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                    //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-                    //--- On error, execute this function ------
+                    data: { ans_type_list : postData },
                     error: function () {
-                        alert("Failed to Remove Form id " + @Model.cft_id+ " from Database !!");  //<-- Trap and alert of any errors if they occurred
+                        alert("ERROR: Failed to Save the New Question Answer Type Information.!!");  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
-                    //Execute this code After the Ajax call completes successfully
-                    //alert("Form Id: " + @Model.cft_id + " has been Deleted!")
-                    location.href = "/ColFormTemplate/";
+                    if (d.substring(0,3) == "QAT") {
+                        //alert("Data posted successfully!\n" + d);
+                        // Set the popupstatus to "saved" to indicate that the post succeded and that the drop down needs to be updated.
+                        $("#popupStatus").val("saved");
+                        // Reset the list of answers that have already been saved so they do not need to be displayed anymore
+                        $("#divaddedSA").html("");
+                        $("#savedQATid").val(d.substring(6));
+                        $("#editQATWindow").modal('hide');
+                    }
+                    else {
+                        //alert("Server Response: " + d);
+                        $("#newErrorMsg").html("<span>ERROR SAVING INFORMATION:</span><br/><span> " + d + "</span>");
+                        $("#newErrorMsg").show();
+                    }
+                    //else { alert("WARNING: Failed to post!\nPlease review your input and try again: " + d); }
                 });
-            });
 
-
-            function removeQuestion(qRowId) {
-                $("#" + qRowId).remove();
+                // ----------- Finished Saving New Answer Type and Answer values ----------------
+            }
+            else {
+                var errorMessage = "<span> VALIDATION ERROR: Please review your input:</span><br/>&nbsp;" + validationMessage + "<span>";
+                //errorMessage = errorMessage.concat("</span><br/>&nbsp;&nbsp;<span>You are comparing Answer Type Id and values:</span><br/>");
+                //errorMessage = errorMessage.concat("<span>'" + comparisonNewString + "'</span>" + "<span> against: </span>");
+                //errorMessage = errorMessage.concat("<span> '" + comparisonOldString + "'</span>");
+                $("#newErrorMsg").html(errorMessage);
+                $("#newErrorMsg").show();
             }
 
-            makeSectionsDropable();
-        });
-    </script>
+            // Finally, whether the save action failed or posted correctly, reset the "SAVE" button to avoid leaving it stcuk in "Loading..."
+            $(this).button('reset');
 
-    @*********************************************************************************************************************@
-    @*//- - - - - - - - -  Ajax Call to Retrieve and Display the Question List Search Results - - - - - - - - - - -\\*@
-    <script type="text/jscript">
+        });
+
+        function leavePage(){
+            var editMode = "@Model.manageAction";
+            $("#formChanged").val("N");   //To prevent the browser to present the confirm-exit dialog.
+
+            // When in "MANAGE-EDIT" mode, we need to Reset the published Date/Time via Ajax to it's previous state
+            if(editMode == "MANAGE-EDIT"){
+                var publishedDateTime = "@Model.originalPublishDate";
+                var publishedUser = "@Model.originalyPublishedBy";
+                var formCftid = "@Model.cft_id";
+                $.ajax({
+                    url: '@Url.Action("republishFormOnCancel", "ColFormTemplate")',
+                    method: "POST",
+                    cache: false,
+                    data: { cft_id: formCftid, publishedBy: publishedUser, publishedOn: publishedDateTime },
+                    error: function () {
+                        alert("Failed to reset Changes...");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    if (d == "Success") {
+                        alert("Edit mode cancelled! Form has been republished.");
+                        //location.href = "/ColFormTemplate/AddEditForm/" + formCftid;
+                    }
+                    else {
+                        alert("ERROR Resetting Published Date/Time: " + d);
+                    }
+                });
+                //--- Finished Resetting the ajax values
+            }
+
+            //Finally, just leave the page and redirect to the Form Index page
+            location.href = "/ColFormTemplate/";
+        };
+
+        function delForm(){
+            // Perform an Ajax call to either hard or soft delete the current form
+            alert("Deleting...");
+            $.ajax({
+                url: '@Url.Action("deleteForm", "ColFormTemplate")',
+                method: "POST",
+                cache: false,
+                data: { cft_id: @Model.cft_id },     //<---- Data Parameters (if not already passed in the Url)
+                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                //--- On error, execute this function ------
+                error: function () {
+                    alert("Failed to Remove Form id " + @Model.cft_id+ " from Database !!");  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                //Execute this code After the Ajax call completes successfully
+                //alert("Form Id: " + @Model.cft_id + " has been Deleted!");
+                //close modal Popup
+                $('#confPopUp').modal('toggle');
+                location.href = "/ColFormTemplate/";
+            });
+        }
+
+        function showConfirmation(alertTitle, alertMessage, confBtnText, funcName){
+            //Set the values to display in the alert message
+            $("#confTitle").html(alertTitle)
+            $("#divConfText").html(alertMessage)
+            //$("#btnAlertConfirm").prop('value', confBtnText);
+            $("#btnAlertConfirm").html('Delete Form');
+
+            $("#funcToExec").val(funcName);
+            //$("#confirmationResult").val('true');
+
+            //Show the Confirmation Popup Form
+            $("#confPopUp").modal();
+        }
+
+        $("#btnAlertConfirm").click(function(){
+            ////Once the user confirms the Alert execution, call the function that was set
+            //// Retrieve String Name of function we want to run and find the object
+            //var funcToExecute = $("#funcToExec").val();
+            //var fn = window[funcToExecute];
+            //alert("You are about to Execute Funcion: " + funcToExecute);
+            //// If object a function, execute it?
+            //if (typeof fn === "function") fn();
+
+
+            // Perform an Ajax call to either hard or soft delete the current form
+            $.ajax({
+                url: '@Url.Action("deleteForm", "ColFormTemplate")',
+                method: "POST",
+                cache: false,
+                data: { cft_id: @Model.cft_id },     //<---- Data Parameters (if not already passed in the Url)
+                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                //--- On error, execute this function ------
+                error: function () {
+                    alert("Failed to Remove Form id " + @Model.cft_id+ " from Database !!");  //<-- Trap and alert of any errors if they occurred
+                }
+            }).done(function (d) {
+                //Execute this code After the Ajax call completes successfully
+                if (d=="True"){
+                    alert("Form Id: " + @Model.cft_id + " has been Deleted!");
+                    //close modal Popup
+                    $('#confPopUp').modal('toggle');
+                    location.href = "/ColFormTemplate/";
+                }
+                else {
+                    alert("ERROR: Form could not be removed from the Database!" );
+                    location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;
+                }
+            });
+        });
+
+        $("#btnCancel").click(function () {
+            if ( $("#formChanged").val() == "Y")
+            {
+                if ( $("#bootstrapBtnReset").val() == "N"){
+                    $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window. Must be done only once (at most) to prevent js errors
+                    $("#bootstrapBtnReset").val("Y");   // Set it to "Y" so we don't try to reset it again which would cause an error
+                }
+
+                $( "#dialog-confirm-exit" ).dialog({
+                    resizable: false,
+                    height:250,
+                    modal: true,
+                    buttons: {
+                        "Discard Changes": function() {
+                            leavePage();
+                        },
+                        "Continue Working": function() {
+                            $( this ).dialog( "close" );
+                        }
+                    }
+                });
+            }
+            else{
+                leavePage();
+            }
+        });
+
+        $("#btnReset").click(function () {
+            if ( $("#formChanged").val() == "Y")
+            {
+                if ( $("#bootstrapBtnReset").val() == "N"){
+                    $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window
+                    $("#bootstrapBtnReset").val("Y");
+                }
+
+                $( "#dialog-confirm-reset" ).dialog({
+                    resizable: false,
+                    height:200,
+                    modal: true,
+                    buttons: {
+                        "Reset Form": function() {
+                            $("#formChanged").val("N");
+                            //isChanged.val("N");
+                            location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;  //cft_id
+                        },
+                        "Don't Reset!": function() {
+                            $( this ).dialog( "close" );
+                        }
+                    }
+                });
+            }
+        });
+
+
+        $('#cft_eff_st_dt').datepicker({
+            dateFormat: 'M dd, yy',
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            minDate: -0,
+            //minDate: -0,
+            //maxDate: "+1M +10D",
+            onClose: function (selectedDate) {
+                $("#cft_eff_end_dt").datepicker("option", "minDate", selectedDate);
+            },
+            useCurrent: false //Important! See issue #1075
+        });
+
+        $('#cft_eff_end_dt').datepicker({
+            dateFormat: 'M dd, yy',
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            minDate: -0,
+            onClose: function (selectedDate) {
+                $("#cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
+            },
+            useCurrent: false //Important! See issue #1075
+        });
+
+        $('#conf_cft_eff_st_dt').datepicker({
+            dateFormat: 'M dd, yy',
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            minDate: -0,
+            //minDate: -0,
+            //maxDate: "+1M +10D",
+            onClose: function (selectedDate) {
+                $("#conf_cft_eff_end_dt").datepicker("option", "minDate", selectedDate);
+            },
+            useCurrent: false //Important! See issue #1075
+        });
+
+        $('#conf_cft_eff_end_dt').datepicker({
+            dateFormat: 'M dd, yy',
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            minDate: -0,
+            onClose: function (selectedDate) {
+                $("#conf_cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
+            },
+            useCurrent: false //Important! See issue #1075
+        });
+
+        $("#btnSaveDateConf").click(function(){
+            $("#cft_eff_st_dt").val($("#conf_cft_eff_st_dt").val());
+            $("#cft_eff_end_dt").val($("#conf_cft_eff_end_dt").val());
+            $('#confPubDates').modal('toggle');
+            PostForm();
+        });
+
+        $('#CreateForm').keypress(function (e) {
+            if (e.keyCode == 13)
+            {
+                $('#doSearch').click();
+            }
+        });
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+
+
+        $("#btnAddQuestionPopup").click(function () {
+            $("#addQuestionWindow").modal();
+        });
+
+        $("#btnSaveLibQuestion").click(function () {
+            if ($("#modalQFullText").val().trim() == "") {
+                $("#msgAddQ").show();
+                $("#btnSaveLibQuestion").prop("disabled", true);
+                //alert("The Question Text is required.\nPlease review your input.");
+            }
+            else {
+                $.ajax({
+                    url: '@Url.Action("addNewQuestion", "ColFormTemplate")',
+                    method: "POST",
+                    cache: false,
+                    data: { full_text: $("#modalQFullText").val(), desc: $("#modalQDesc").val() },
+                    error: function () {
+                        alert("An error occurred when saving the question information to the LIbrary Database!!");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    if (d == "True") {
+                        var searchText = '"' + $("#modalQFullText").val() + '"';
+                        $("#modalQFullText").val("");
+                        $("#modalQDesc").val("");
+                        //alert("Data Posted Successfully!");
+
+                        // Close the popup
+                        //$("#addQuestionWindow").dialog( "close" );
+                        $("#btnCancelLibQuestion").click();
+                        // Perform ajax to "search" the recently saved question
+                        $("#full_text_search").val(searchText);
+                        $('#doSearch').click();
+                        $("#full_text_search").val("");
+                    }
+                    else {
+                        alert("ERROR Saving Data: " + d);
+                    }
+                });
+            }
+        }); //--------- End of btnSaveLibQuestion click() event
+
+
+        $('textarea').on('keydown keyup change focus blur', function(e) {
+            if (e.type === 'change') {
+                // this event is triggered when the text is changed through drag and drop too,
+                // or by pasting something inside the textarea;
+
+                // remove commas with empty
+                $(this).val($(this).val().replace(/,/,"","g"));
+                // remove carriage returns (\r) and newlines (\n) with spaces:
+                $(this).val($(this).val().replace(/\r?\n/g, ' '));
+                //$textarea.val($textarea.val().replace(/[,\n\r]/," ","g");
+            }
+            // the enter key has been pressed, avoid producing a carriage return from it:
+            if (e.which === 13 || e.which === 188) {
+                e.preventDefault();
+            }
+        });
+
+        $('input').not(".searchBox").on('keydown keyup change ', function (e) {
+            $("#btnSaveForm").removeAttr('disabled');
+            $("#btnCancel").removeAttr('disabled');
+            $("#formChanged").val("Y");   // Re-enable the form "changed" status
+        });
+
+        $('input').not(".searchBox").not(".qInput").on('keydown keyup change ', function (e) {
+            $("#btnSaveForm").removeAttr('disabled');
+            $("#btnCancel").removeAttr('disabled');
+            $("#formChanged").val("Y");   // Re-enable the form "changed" status
+        });
+
+        $('.qInput').on('keydown keyup change ', function (e) {
+            $("#btnSaveLibQuestion").removeAttr('disabled');
+            $("#msgAddQ").hide();
+        });
+
+        $("#btnCancelLibQuestion").click(function(){
+            $(".qInput").val("");
+            $("#btnSaveLibQuestion").prop('disabled', true);
+        });
+
+        $("#btnDeleteForever").click(function(){
+            //Have user Confirm the Delete Action
+            showConfirmation("Confirm Form Deletion", "Are you sure you want to delete this Form?", "Delete Form", "delForm");
+        });
+
+
+        function removeQuestion(qRowId) {
+            $("#" + qRowId).remove();
+        }
+
+        makeSectionsDropable();
+
         $('#doSearch').click(function () {
             var $btn = $(this);
             $btn.button('loading');
@@ -1598,574 +1650,506 @@
                 $btn.button('reset');
             });
         });
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        $("#btnSaveForm").click(function () {
+            $(this).button('loading');
+            document.getElementById("isPublished").value = "false"      //We are saving only (Not publishing)
 
-    </script>
+            if (validateForm()){
+                PostForm();
+            }
+        });
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        $("#btnPublishForm").click(function(){
+            $(this).button('loading');
+            document.getElementById("isPublished").value = "true"      //We are Publishing the form
 
-
-    @*//- - - - - - - - -  Ajax Call to Retrieve and Display the Question List Search Results - - - - - - - - - - -\\*@
-
-
-    @* --- Drag and Drop Java Script - - - - - *@
-    <script type="text/javascript">
-        var executeCounter = 0;  //(Used by the Question Delete/Remove Button)
-        // Function to call everytime we do a drag and drop
-        function updateValues(msg) {
-            alert(msg);
-
-            //var items = [];
-            //$("ul.target").children().each(function () {
-            //    var item = { manufacturer: $(this).text() };
-            //    items.push(item);
-            //});
-            //var jsonData = JSON.stringify(items);
-            //$.ajax({
-            //    url: "dnd.xsp/setfavourites",
-            //    type: "PUT",
-            //    data: jsonData,
-            //    dataType: "json",
-            //    contentType: "application/json; charset=utf-8",
-            //    success: function () { },
-            //    error: function () { }
-            //});
-        };
-
-        function makeSectionsDropable() {
-            $(".targetList").droppable({
-                addClasses: false,
-                activeClass: "listActive",
-                accept: ":not(.ui-sortable-helper)",
-                drop: function (event, ui) {
-                    //This function is executed everytime an item is dragged and dropped (After drop)
-                    $(this).find(".placeholder").remove();
-
-                    var link = $("<a href='#' class='dismiss'>x</a>");
-
-                    var qid = ui.draggable.attr("id");
-                    //var listId = "liID" + qid;
-
-                    //var list = $("<li></li>").text(ui.draggable.text());
-                    //var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text("Question Id is: " + qid); //    .setAttribute('class', 'newliItem');
-                    var list = $("<li id=\"li" + qid + "\" class=\"newliItem question\"></li>").text(""); //    .setAttribute('class', 'newliItem');
-
-                    //list.setAttribute('class', 'newliItem');
-                    //alert($(list).attr("id"));   //It works, the Id is "li99" (99=qid)
-                    $(list).append(link);
-                    $(list).appendTo(this);
-
-                    //getQinfo(qid);
-                    //updateValues(ui.draggable.text().substring(3, 5));
-
-                    // updateValues("Question Added Successfully: " + getTestData(qid));   //Method invoked when action is dropped successfully
-
-                    //Added second parameter to keep original state of the selected QAT in the dropdown
-                    getQinfo(qid, 0);
-                    $("#formChanged").val("Y");
-                    $("#btnCancel").removeAttr('disabled');
-                    //Remove the Section Delete Button. When Question is added, Itis no longer empty
-                    $(this).parents(".formSection").find("#btnDelSection").hide();
-
-
-                    //Scroll the Panel to the botton
-                    // Check if we added a question to the last section. If so, scroll the panel to the button
-                    //panel id = qFormList
-                    //alert("Id: " + $(this).attr("id") + " Was selected.")  //The olListxx Id were the question was dropped
-                    //alert("This is panel " + $(this).attr("id").substring(6) + " out of " + $("#qFormList").find(".targetList").length);
-                }
-            }).sortable({
-                connectWith: ".connected",
-                items: "li:not(.placeholder)",
-                //start: function (event, ui) {
-                //},
-                //stop: function (event, ui) {
-                //    var item = $(ui.item);
-                //    alert($(this).attr("id"));
-                //    var to = item.parent().is("#droppable_widget");
-                //    var siblingsCount = item.siblings().size();
-                //    if (to && siblingsCount > 0) {
-                //        alert("only one item allowed here");
-                //        return false;
-                //    }
-                //},
-
-                sort: function () {
-                    $(this).removeClass("listActive");
-                },
-                //beforeStop: function(ev, ui) {
-                //    if ($(ui.item).hasClass('innerListItem') ) {
-                //        $(this).sortable('cancel');
-                //    }
-                //},
-                receive: function(event, ui) {
-                    // This function executes when an item is received at the target list during "sort"
-                    //alert("[" + this.id + "] received data from [" + ui.sender.attr("id") + "]");
-                    $(this).parents(".formSection").first().find(".btnDelSection").hide();
-                },
-                update: function () {
-                    //This function is executed everythime an item is sorted complete (After sort)
-                    var qid2 = $(this).qid;
-                    $(this).find(".placeholder").remove();
-                    $("#formChanged").val("Y");
-                    $("#btnCancel").removeAttr('disabled');
-                    if ($(this).find(".question").length < 1){
-                        //There are no questions Left on the Source section
-                        $(this).parents(".formSection").first().find(".btnDelSection").show();
-                        
-                        //alert("No questions left on id: " + $(this).prop("id"));
-                    }
-                    //updateValues("An Item was reordered." + +getTestData(qid2));  // Call function After Sorting
-                }
-            }).on("click", ".dismiss", function (event) {
-                //Somehow, this function is executing twice when even is triggered.                
-                executeCounter = executeCounter + 1;
-                event.preventDefault();
-                if (executeCounter == 1){   //Perform the action only when the "executeCounter" is 1. To prevent doing everything more than once
-                    //var qdelId = $(this).parent().attr("id");
-
-                    // Count the questions in the containing section.
-                    //If the section has only one question (The current Question Being removed) then display the "Section Delete Button"
-                    //and show the "Drag a question Here" Template.  Otherwise, just hide the delete button.
-                    var $parentFrmSection = $(this).parents(".formSection").first();
-                    var $sectDelBtn = $parentFrmSection.find("#btnDelSection");
-                    var qInSection = $parentFrmSection.find(".question").length;
-                    //      
-                    if (qInSection == 1 ){
-                        $sectDelBtn.show(); 
-                        // Add code to display the "Drag a question Here" Template if it doesn't already exist.
-                        if ($parentFrmSection.find(".placeholder").length == 0){
-                            var placeholderNew = $("<li class=\"list-group-item placeholder\"></li>").append('<div style="font-weight:bold; font-size:large"><br />Drag a question here...<br /><br /></div>');
-                            $(placeholderNew).appendTo( $parentFrmSection.find(".targetList").first() );                        
-                        }
-                    }
-                    else{ 
-                        $sectDelBtn.hide();
-                    }
-                    $(this).parent().remove();
-
-                    //alert("Parent Id is: " + $parentFrmSection.prop("id") + " and it has " + qInSection + " questions." );
-                    //alert("There are [" + itemsInParent + "(" + testCounter + ")" + "] Questions Left on This section!");
-                }
-                else{
-                    executeCounter =0;  //Reset the counter to Zero so this function can be executed when the event is called again by the user
-                }
-
-            });
-
-            //Finally make sure the Section Title are autocomplete
-            $(".sectionTitle").autocomplete({
-                source: "/ColFormTemplate/SectionNameLookup",
-                minLength: 1,
-                select: function( event, ui ) {
-                    //Perform 'error reset' steps after a valid selection is done from the autocomplete list
-                    $('#btnSaveForm').button('reset');
-                    $(this).css({
-                        "color": "black",
-                        "background-color": "white"
-                    });
-                }
-            });
-
-            $(".sectionTitle").on("change", function(){
-                if ($(this).val() == "")
+            // Validate that a valid Start Date is entered when the Form is being published
+            if ($('#cft_eff_st_dt').val() == "") {
+                $('#btnPublishForm').button('reset');
+                alert("The Effective Start Date is required when Publishing a Form");
+                $('#cft_eff_st_dt').addClass("invalidField");
+                $('#cft_eff_st_dt').focus();
+            }
+            else{
+                //Set the Pop up dates to match what is currently selected on the Form before showing the popup
+                if (validateForm())  // Validate the Form. If it's Valid proceed
                 {
-                    $(this).css({
-                        "color": "white",
-                        "background-color": "red"
-                    });
+                    $("#conf_cft_eff_st_dt").val($("#cft_eff_st_dt").val());
+                    $("#conf_cft_eff_end_dt").val($("#cft_eff_end_dt").val());
+                    $("#confPubDates").modal();
                 }
-                else{
-                    //Perform 'error reset' steps after a valid selection is done from the autocomplete list
-                    $('#btnSaveForm').button('reset');
-                    $(this).css({
-                        "color": "black",
-                        "background-color": "white"
-                    });
-                }
-            });
+            }
+        });
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-        }
-        //Sample Code:
-        //looping in javascript through all the child elements of the target list
-        //var items = [];
-        //$("ul.target").children().each(function () {
-        //    var item = { manufacturer: $(this).data("stock-symbol") };
-        //    items.push(item);
-        //});
-        //var jsonData = JSON.stringify(items);
-        //
-        //or
-        //
+    });
+</script>
+
+
+
+@* --- Drag and Drop Java Script - - - - - *@
+<script type="text/javascript">
+    var executeCounter = 0;  //(Used by the Question Delete/Remove Button)
+    // Function to call everytime we do a drag and drop
+    function updateValues(msg) {
+        alert(msg);
+
         //var items = [];
         //$("ul.target").children().each(function () {
         //    var item = { manufacturer: $(this).text() };
         //    items.push(item);
         //});
         //var jsonData = JSON.stringify(items);
-        //
-        //
-        //and then we can also invoke Ajax call to manipulate/retrieve DataCue
-        //$.ajax ({
+        //$.ajax({
         //    url: "dnd.xsp/setfavourites",
         //    type: "PUT",
         //    data: jsonData,
         //    dataType: "json",
         //    contentType: "application/json; charset=utf-8",
-        //    success: function(){},
-        //    error: function(){}
+        //    success: function () { },
+        //    error: function () { }
         //});
+    };
 
+    function makeSectionsDropable() {
+        $(".targetList").droppable({
+            addClasses: false,
+            activeClass: "listActive",
+            accept: ":not(.ui-sortable-helper)",
+            drop: function (event, ui) {
+                //This function is executed everytime an item is dragged and dropped (After drop)
+                $(this).find(".placeholder").remove();
+                var link = $("<a href='#' class='dismiss' >&nbsp;&times;&nbsp;</a>");
+                var qid = ui.draggable.attr("id");
+                //var listId = "liID" + qid;
 
+                //var list = $("<li></li>").text(ui.draggable.text());
+                //var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text("Question Id is: " + qid); //    .setAttribute('class', 'newliItem');
+                var list = $("<li id=\"li" + qid + "\" class=\"newliItem question\"></li>").text(""); //    .setAttribute('class', 'newliItem');
 
-        @*function addQidOLD(ev) {
-            var newCounterSeq = $("#qCounter").val();
-            var qid = ev.dataTransfer.getData("Text"); // "Id" of the dragged data element
-            //var target = ev.target || ev.srcElement;
-            //var myId = $(event.target).attr("id");;
+                //list.setAttribute('class', 'newliItem');
+                //alert($(list).attr("id"));   //It works, the Id is "li99" (99=qid)
+                $(list).append(link);
+                $(list).appendTo(this);
 
-            ev.target.style.border = "";
-            //event.target.appendChild(document.getElementById(dataId));
+                //getQinfo(qid);
+                //updateValues(ui.draggable.text().substring(3, 5));
 
+                // updateValues("Question Added Successfully: " + getTestData(qid));   //Method invoked when action is dropped successfully
 
-            // ------------ Make the Ajax Call ---------------------------------------------
-            $.ajax({
-                url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
-                method: "GET",
-                cache: false,
-                data: { question_id: qid, qCounter: newCounterSeq },     //<---- Data Parameters (if not already passed in the Url)
-                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-                //--- On error, execute this function ------
-                error: function () {
-                    alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-                    //$btn.button('reset');
-                }
-            }).done(function (d) {
-                //Execute this code After the Ajax call completes successfully
-                //ev.target.append(d);
-                var targetId = $(this);
-                //alert('Source Id is: ' + qid + ' & Target Id is: ' + targetId.id);
-                $mydata = $(ev.target);
-                $mydata.append(d);
-
-                $('#qCounter').val(Number($('#qCounter').val()) + 1);
-                //alert("You jusr added question View Id: " + "qRow" + newCounterSeq)
-                //ev.target.html(d);
-                //$("#questionPnl01").append(d);
-                //$btn.button('reset');
-            });
-        }*@
-
-        //------------------------------------------------------------------
-        function getQinfo(questionId, questionQATid) {
-            var newCounterSeq = $("#qCounter").val();
-            //var newCounterSeq = 1;
-            var qid = questionId
-            var ajaxResult = "Sample Data";
-            //var target = ev.target || ev.srcElement;
-            //var myId = $(event.target).attr("id");;
-
-            //alert("Retrieving Information via Ajax for Question Id: " + qid);
-            // ------------ Make the Ajax Call ---------------------------------------------
-            $.ajax({
-                url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
-                method: "GET",
-                cache: false,
-                data: { question_id: qid, question_QATid: questionQATid, qCounter: newCounterSeq },     //<---- Data Parameters (if not already passed in the Url)
-                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-                //beforeSend: function( xhr ) {
-                //    //xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-                //    alert("Ready to Submit Ajax call" );
-                //},
-
-
-                //--- On error, execute this function ------
-                error: function () {
-                    alert("Can't find data for question id " + qid + " !!");  //<-- Trap and alert of any errors if they occurred
-                    //$btn.button('reset');
-                }
-            }).done(function (d) {
-                //Execute this code After the Ajax call completes successfully
-
-                //Put the retrieved source code inside a <DIV> tag
-                //Add the Division tag to the newly created "Li"
-                var newDIV = document.createElement('div');
-                newDIV.innerHTML = d;  // (If we want to just add some inner html text)
-                //newDIV.appendChild(d);   // (If we want to add a child element)
-                var liCreated = $('.newliItem').append(newDIV);
-
-                //Once the New List Item has been completed remove its "newli" atribbute
-                liCreated.removeClass("newliItem");
-                //$('#ajaxSample').html(d)
-
-                $('#qCounter').val(Number($('#qCounter').val()) + 1);
-                //ajaxResult = d;
-                //alert("Ajax call completed. result: " + d);
-                //return ajaxResult;
-                //alert("You jusr added question View Id: " + "qRow" + newCounterSeq)
-                //ev.target.html(d);
-                //$("#questionPnl01").append(d);
-                //$btn.button('reset');
-                //return d;
-            });
-        }
-
-
-        function getTestData(questionId) {
-            return "[You Selected Question Id: " + questionId + "]";
-        }
-
-        function removeSection(qSectionId) {
-            $("#" + qSectionId).remove();
-        }
-    </script>
-
-    @* - - - - - - - SCRIPT TO ADD A NEW SECTION TO THE FORM AND SET THE "FORM CHANGED" STATUS when form is modified- - - - - - - - - - *@
-    <script type="text/jscript">
-        $(document).ready(function(){
-            // Variables and a Function Used to Scroll Down the sections/question panel (Can be Invoked later on from any section inside this script)
-            var height = 0;
-            function scroll(height) {
-                this.stop().animate({ scrollTop: height }, 1000);
-            };
-            var scrollPanel = $('#qFormList');
-            // ----- End of Variables and a Function Used to Scroll Down the sectons/question panel -------
-
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-            $('input, select, textarea').not(".qInput").change(function () {
-                //$("input[type='submit']").removeAttr("disabled");
-
-                if ($('#btnSaveForm').val() != "Save Form") {
-                    $('#btnSaveForm').button('reset');
-                }
-                $("#btnSaveForm").removeAttr('disabled');
+                //Added second parameter to keep original state of the selected QAT in the dropdown
+                getQinfo(qid, 0);
+                $("#formChanged").val("Y");
                 $("#btnCancel").removeAttr('disabled');
-                $("#btnReset").removeAttr('disabled');
-                //alert('Button Text is:' + btnText);
-                $("#formChanged").val("Y");   // Re-enable the form "changed" status
+                //Remove the Section Delete Button. When Question is added, Itis no longer empty
+                $(this).parents(".formSection").find("#btnDelSection").hide();
+
+
+                //Scroll the Panel to the botton
+                // Check if we added a question to the last section. If so, scroll the panel to the button
+                //panel id = qFormList
+                //alert("Id: " + $(this).attr("id") + " Was selected.")  //The olListxx Id were the question was dropped
+                //alert("This is panel " + $(this).attr("id").substring(6) + " out of " + $("#qFormList").find(".targetList").length);
+            }
+        }).sortable({
+            connectWith: ".connected",
+            items: "li:not(.placeholder)",
+            //start: function (event, ui) {
+            //},
+            //stop: function (event, ui) {
+            //    var item = $(ui.item);
+            //    alert($(this).attr("id"));
+            //    var to = item.parent().is("#droppable_widget");
+            //    var siblingsCount = item.siblings().size();
+            //    if (to && siblingsCount > 0) {
+            //        alert("only one item allowed here");
+            //        return false;
+            //    }
+            //},
+
+            sort: function () {
+                $(this).removeClass("listActive");
+            },
+            //beforeStop: function(ev, ui) {
+            //    if ($(ui.item).hasClass('innerListItem') ) {
+            //        $(this).sortable('cancel');
+            //    }
+            //},
+            receive: function(event, ui) {
+                // This function executes when an item is received at the target list during "sort"
+                //alert("[" + this.id + "] received data from [" + ui.sender.attr("id") + "]");
+                $(this).parents(".formSection").first().find(".btnDelSection").hide();
+            },
+            update: function () {
+                //This function is executed everythime an item is sorted complete (After sort)
+                var qid2 = $(this).qid;
+                $(this).find(".placeholder").remove();
+                $("#formChanged").val("Y");
+                $("#btnCancel").removeAttr('disabled');
+                if ($(this).find(".question").length < 1){
+                    //There are no questions Left on the Source section
+                    $(this).parents(".formSection").first().find(".btnDelSection").show();
+
+                    //alert("No questions left on id: " + $(this).prop("id"));
+                }
+                //updateValues("An Item was reordered." + +getTestData(qid2));  // Call function After Sorting
+            }
+        }).on("click", ".dismiss", function (event) {
+            //Somehow, this function is executing twice when even is triggered.
+            executeCounter = executeCounter + 1;
+            event.preventDefault();
+            if (executeCounter == 1){   //Perform the action only when the "executeCounter" is 1. To prevent doing everything more than once
+                //var qdelId = $(this).parent().attr("id");
+
+                // Count the questions in the containing section.
+                //If the section has only one question (The current Question Being removed) then display the "Section Delete Button"
+                //and show the "Drag a question Here" Template.  Otherwise, just hide the delete button.
+                var $parentFrmSection = $(this).parents(".formSection").first();
+                var $sectDelBtn = $parentFrmSection.find("#btnDelSection");
+                var qInSection = $parentFrmSection.find(".question").length;
+                //
+                if (qInSection == 1 ){
+                    $sectDelBtn.show();
+                    // Add code to display the "Drag a question Here" Template if it doesn't already exist.
+                    if ($parentFrmSection.find(".placeholder").length == 0){
+                        var placeholderNew = $("<li class=\"list-group-item placeholder\"></li>").append('<div style="font-weight:bold; font-size:large"><br />Drag a question here...<br /><br /></div>');
+                        $(placeholderNew).appendTo( $parentFrmSection.find(".targetList").first() );
+                    }
+                }
+                else{
+                    $sectDelBtn.hide();
+                }
+                $(this).parent().remove();
+
+                //alert("Parent Id is: " + $parentFrmSection.prop("id") + " and it has " + qInSection + " questions." );
+                //alert("There are [" + itemsInParent + "(" + testCounter + ")" + "] Questions Left on This section!");
+            }
+            else{
+                executeCounter =0;  //Reset the counter to Zero so this function can be executed when the event is called again by the user
+            }
+
+        });
+
+        //Finally make sure the Section Title are autocomplete
+        $(".sectionTitle").autocomplete({
+            source: "/ColFormTemplate/SectionNameLookup",
+            minLength: 1,
+            select: function( event, ui ) {
+                //Perform 'error reset' steps after a valid selection is done from the autocomplete list
+                $('#btnSaveForm').button('reset');
+                $(this).css({
+                    "color": "black",
+                    "background-color": "white"
+                });
+            }
+        });
+
+        $(".sectionTitle").on("change", function(){
+            if ($(this).val() == "")
+            {
+                $(this).css({
+                    "color": "white",
+                    "background-color": "red"
+                });
+            }
+            else{
+                //Perform 'error reset' steps after a valid selection is done from the autocomplete list
+                $('#btnSaveForm').button('reset');
+                $(this).css({
+                    "color": "black",
+                    "background-color": "white"
+                });
+            }
+        });
+
+    }
+
+
+
+    //------------------------------------------------------------------
+    function getQinfo(questionId, questionQATid) {
+        var newCounterSeq = $("#qCounter").val();
+        //var newCounterSeq = 1;
+        var qid = questionId
+        var ajaxResult = "Sample Data";
+        //var target = ev.target || ev.srcElement;
+        //var myId = $(event.target).attr("id");;
+
+        //alert("Retrieving Information via Ajax for Question Id: " + qid);
+        // ------------ Make the Ajax Call ---------------------------------------------
+        $.ajax({
+            url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
+            method: "GET",
+            cache: false,
+            data: { question_id: qid, question_QATid: questionQATid, qCounter: newCounterSeq },     //<---- Data Parameters (if not already passed in the Url)
+            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+            //beforeSend: function( xhr ) {
+            //    //xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+            //    alert("Ready to Submit Ajax call" );
+            //},
+
+
+            //--- On error, execute this function ------
+            error: function () {
+                alert("Can't find data for question id " + qid + " !!");  //<-- Trap and alert of any errors if they occurred
+                //$btn.button('reset');
+            }
+        }).done(function (d) {
+            //Execute this code After the Ajax call completes successfully
+
+            //Put the retrieved source code inside a <DIV> tag
+            //Add the Division tag to the newly created "Li"
+            var newDIV = document.createElement('div');
+            newDIV.innerHTML = d;  // (If we want to just add some inner html text)
+            //newDIV.appendChild(d);   // (If we want to add a child element)
+            var liCreated = $('.newliItem').append(newDIV);
+
+            //Once the New List Item has been completed remove its "newli" atribbute
+            liCreated.removeClass("newliItem");
+            //$('#ajaxSample').html(d)
+
+            $('#qCounter').val(Number($('#qCounter').val()) + 1);
+            //ajaxResult = d;
+            //alert("Ajax call completed. result: " + d);
+            //return ajaxResult;
+            //alert("You jusr added question View Id: " + "qRow" + newCounterSeq)
+            //ev.target.html(d);
+            //$("#questionPnl01").append(d);
+            //$btn.button('reset');
+            //return d;
+        });
+    }
+
+
+    function getTestData(questionId) {
+        return "[You Selected Question Id: " + questionId + "]";
+    }
+
+    function removeSection(qSectionId) {
+        $("#" + qSectionId).remove();
+    }
+</script>
+
+@* - - - - - - - SCRIPT TO ADD A NEW SECTION TO THE FORM AND SET THE "FORM CHANGED" STATUS when form is modified- - - - - - - - - - *@
+<script type="text/jscript">
+    $(document).ready(function(){
+        // Variables and a Function Used to Scroll Down the sections/question panel (Can be Invoked later on from any section inside this script)
+        var height = 0;
+        function scroll(height) {
+            this.stop().animate({ scrollTop: height }, 1000);
+        };
+        var scrollPanel = $('#qFormList');
+        // ----- End of Variables and a Function Used to Scroll Down the sectons/question panel -------
+
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        $('input, select, textarea').not(".qInput").change(function () {
+            //$("input[type='submit']").removeAttr("disabled");
+
+            if ($('#btnSaveForm').val() != "Save Form") {
+                $('#btnSaveForm').button('reset');
+            }
+            $("#btnSaveForm").removeAttr('disabled');
+            $("#btnCancel").removeAttr('disabled');
+            $("#btnReset").removeAttr('disabled');
+            //alert('Button Text is:' + btnText);
+            $("#formChanged").val("Y");   // Re-enable the form "changed" status
+            //isChanged = true;
+            $(this).removeClass("invalidField");
+        });
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        $(window).bind('beforeunload', function () {
+            if($("#formChanged").val() == "Y") {
+                //if (isChanged) {
+                return 'There are unsaved changed. Do you want to discard Changes and Exit?';
+                //var response =
+                //$( "#dialog-confirm-exit" ).dialog({
+                //    resizable: false,
+                //    height:250,
+                //    modal: true,
+                //    buttons: {
+                //        "Discard Changes": function() {
+                //            //$("#formChanged").val("N");
+                //            //isChanged.val("N");
+                //            response = true;
+                //        },
+                //        Cancel: function() {
+                //            //$( this ).dialog( "close" );
+                //            response = false;
+                //        }
+                //    }
+                //});
+                //return response;
+            }
+            else {
+                return undefined;
+            }
+        });
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        $('#btnAddSection').click(function () {
+            var $btn = $(this);
+            $btn.button('loading');
+            addNewSection();
+            $btn.button('reset');
+            //Automatically Scroll to the botton of the Panel where the new Section was Inserted
+            //If we wanted to scroll to the top, we would set the "height = 0"
+            height = scrollPanel[0].scrollHeight;
+            scroll.call(scrollPanel, height);
+            //$('#qFormList').scrollTop($('#qFormList').scrollHeight);
+        })
+
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        $("#accordion").on('click', '.btnDelSection', function(){
+            var sectionsLeft = $("#accordion").find(".formSection").length;
+
+            $(this).parents(".formSection").first().remove();
+            if (sectionsLeft == 1){ //The one section we are removing
+                addNewSection();
+            }
+        });
+
+        // -------- STARTUP ACTION TO PERFORM WHEN THE FORM FIRST LOADS --------------
+        var currentFormId = parseInt( @colFormId);
+        //Perform an automatic "Question Search"  to load all library question as a default action
+        $('#doSearch').click();
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        //If there are no Sections Defined on the current Form (Or it's a new Form), create a new empty section by Default
+        if(  $("#accordion").find(".formSection").length == 0) {
+            addNewSection();
+            $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing-up after a section was added on first load
+        }
+        //if (currentFormId > 0){ alert("You are editing Id: " + currentFormId); }
+        //else{ alert("You are Creating a New Form! [Id: " + currentFormId + "]"); }
+
+
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    });  // END Of document Ready Startup Scripts
+
+
+    function addNewSection() {
+        $('#sCounter').val(Number($('#sCounter').val()) + 1);
+        // ------------ Make the Ajax Call ---------------------------------------------
+        $.ajax({
+            url: '@Url.Action("addNewSection", "ColFormTemplate")',
+            method: "GET",
+            cache: false,
+            data: { sCounter: $('#sCounter').val() },     //<---- Data Parameters (if not already passed in the Url)
+            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+            //--- On error, execute this function ------
+            error: function () {
+                alert("An Error has Occurred. Unable to Add New Sections to Form!!");  //<-- Trap and alert of any errors if they occurred
+                $btn.button('reset');
+            }
+        }).done(function (d) {
+            //Execute this code After the Ajax call completes successfully
+            $("#accordion").append(d);
+            makeSectionsDropable();
+            // Reenable the "form change" validation on the newly created section
+            $('input').change(function () {
+                $("#formChanged").val("Y");
                 //isChanged = true;
+                $("#btnSaveForm").removeAttr('disabled');
+                $('#btnSaveForm').button('reset');
                 $(this).removeClass("invalidField");
             });
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            $(window).bind('beforeunload', function () {
-                if($("#formChanged").val() == "Y") {
-                    //if (isChanged) {
-                    return 'There are unsaved changed. Do you want to discard Changes and Exit?';
-                    //var response =
-                    //$( "#dialog-confirm-exit" ).dialog({
-                    //    resizable: false,
-                    //    height:250,
-                    //    modal: true,
-                    //    buttons: {
-                    //        "Discard Changes": function() {
-                    //            //$("#formChanged").val("N");
-                    //            //isChanged.val("N");
-                    //            response = true;
-                    //        },
-                    //        Cancel: function() {
-                    //            //$( this ).dialog( "close" );
-                    //            response = false;
-                    //        }
-                    //    }
-                    //});
-                    //return response;
-                }
-                else {
-                    return undefined;
-                }
-            });
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            $("#btnSaveForm").click(function () {
-                $(this).button('loading');
-                document.getElementById("isPublished").value = "false"      //We are saving only (Not publishing)
-                $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
-                PostForm();
-            });
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            $("#btnPublishForm").click(function(){
-                $(this).button('loading');
-                document.getElementById("isPublished").value = "true"      //We are Publishing the form
+        });
 
-                // Validate that a valid Start Date is entered when the Form is being published
-                if ($('#cft_eff_st_dt').val() == "") {
-                    $('#btnPublishForm').button('reset');
-                    alert("The Effective Start Date is required when Publishing a Form");
-                    $('#cft_eff_st_dt').addClass("invalidField");
-                    $('#cft_eff_st_dt').focus();
-                }
-                else{
-                    //Set the Pop up dates to match what is currently selected on the Form before showing the popup
-                    $("#conf_cft_eff_st_dt").val($("#cft_eff_st_dt").val());
-                    $("#conf_cft_eff_end_dt").val($("#cft_eff_end_dt").val());
-                    $("#confPubDates").modal();
-                }
-            });
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            $('#btnAddSection').click(function () {
-                var $btn = $(this);
-                $btn.button('loading');
-                addNewSection();                
-                $btn.button('reset');                
-                //Automatically Scroll to the botton of the Panel where the new Section was Inserted
-                //If we wanted to scroll to the top, we would set the "height = 0"
-                height = scrollPanel[0].scrollHeight;
-                scroll.call(scrollPanel, height);
-                //$('#qFormList').scrollTop($('#qFormList').scrollHeight);
-            })
+    } // ------ End of addNewSection() function -----
 
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    function enableDropDown(dropdown) {
+        //var $drop_down = $(this);
+        var selectedId = dropdown.val();
+        var selectedText = dropdown.children("option:selected").text();
+        var ddlId = dropdown.prop("id");
 
-            $("#accordion").on('click', '.btnDelSection', function(){
-                var sectionsLeft = $("#accordion").find(".formSection").length;
+        var selansDiv = dropdown.parents(".divFormQuestion").first().find(".selAnsSection").first();
+        var qid = dropdown.parents(".divFormQuestion").first().find("#qid").val();
+        //alert("Selected Text is: " + selectedText);
+        //alert("Before opening modal window, the ddl id is: " + ddlId);
+        if (selectedId == '') {
+            selectedId = "-1";
+            @*$("#@Model.uniqueCounter").html("");*@
+            selansDiv.html("");
+        }
+        else if(selectedId == 'New'){
+            //alert("A New Question request has been issued!");
+            $("#popupStatus").val("");
+            $(this).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");  // Reset Sel Answers
+            //Reset the modal Window contents
+            clearNewSAbox();
 
-                $(this).parents(".formSection").first().remove();
-                if (sectionsLeft == 1){ //The one section we are removing
-                    addNewSection();
-                }
-            });
+            // Following code not used anymore as we will no longer keep a list of AT to add (New functionality
+            // will only save one AT at a time)
+            ////Set the Hidden Field Values that will be used in Edit Mode
+            //if ($("#popupDDLid").val() != ddlId)
+            //{  // This indicates that a new Dropdown is being selected for edition!
+            //    //Reset the old values from the "added" section, as they do not need to be kept from a previous different Selectable Answer
+            //    $("#divaddedSA").html("");
+            //}
 
-            // -------- STARTUP ACTION TO PERFORM WHEN THE FORM FIRST LOADS --------------
-            var currentFormId = parseInt( @colFormId);
-            //Perform an automatic "Question Search"  to load all library question as a default action
-            $('#doSearch').click();
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            //If there are no Sections Defined on the current Form (Or it's a new Form), create a new empty section by Default
-            if(  $("#accordion").find(".formSection").length == 0) {
-                addNewSection();
-                $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing-up after a section was added on first load
-            }
-            //if (currentFormId > 0){ alert("You are editing Id: " + currentFormId); }
-            //else{ alert("You are Creating a New Form! [Id: " + currentFormId + "]"); }
-
-
-            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        });  // END Of document Ready Startup Scripts
-
-
-        function addNewSection() {
-            $('#sCounter').val(Number($('#sCounter').val()) + 1);
-            // ------------ Make the Ajax Call ---------------------------------------------
-            $.ajax({
-                url: '@Url.Action("addNewSection", "ColFormTemplate")',
-                method: "GET",
-                cache: false,
-                data: { sCounter: $('#sCounter').val() },     //<---- Data Parameters (if not already passed in the Url)
-                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-                //--- On error, execute this function ------
-                error: function () {
-                    alert("An Error has Occurred. Unable to Add New Sections to Form!!");  //<-- Trap and alert of any errors if they occurred
-                    $btn.button('reset');
-                }
-            }).done(function (d) {
-                //Execute this code After the Ajax call completes successfully
-                $("#accordion").append(d);
-                makeSectionsDropable();
-                // Reenable the "form change" validation on the newly created section
-                $('input').change(function () {
-                    $("#formChanged").val("Y");
-                    //isChanged = true;
-                    $("#btnSaveForm").removeAttr('disabled');
-                    $('#btnSaveForm').button('reset');
-                    $(this).removeClass("invalidField");
-                });
-            });
-
-        } // ------ End of addNewSection() function -----
-
-        function enableDropDown(dropdown) {
-            //var $drop_down = $(this);
-            var selectedId = dropdown.val();
-            var selectedText = dropdown.children("option:selected").text();
-            var ddlId = dropdown.prop("id");
-
-            var selansDiv = dropdown.parents(".divFormQuestion").first().find(".selAnsSection").first();
-            var qid = dropdown.parents(".divFormQuestion").first().find("#qid").val();
-            //alert("Selected Text is: " + selectedText);
-            //alert("Before opening modal window, the ddl id is: " + ddlId);
-            if (selectedId == '') {
-                selectedId = "-1";
-                @*$("#@Model.uniqueCounter").html("");*@
-                selansDiv.html("");
-            }
-            else if(selectedId == 'New'){
-                //alert("A New Question request has been issued!");
-                $("#popupStatus").val("");
-                $(this).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");  // Reset Sel Answers
-                //Reset the modal Window contents
-                clearNewSAbox();
-
-                // Following code not used anymore as we will no longer keep a list of AT to add (New functionality
-                // will only save one AT at a time)
-                ////Set the Hidden Field Values that will be used in Edit Mode
-                //if ($("#popupDDLid").val() != ddlId)
-                //{  // This indicates that a new Dropdown is being selected for edition!
-                //    //Reset the old values from the "added" section, as they do not need to be kept from a previous different Selectable Answer
-                //    $("#divaddedSA").html("");
-                //}
-
-                $("#popupDDLid").val(ddlId);
-                var questionText = dropdown.parents(".divFormQuestion").first().find(qText).text();
-                $("#selQText").html(questionText);
-                //$("#selQText").text(questionText);
-                $("#editQATWindow").modal();
-                //selansDiv.html("");
-            }else
+            $("#popupDDLid").val(ddlId);
+            var questionText = dropdown.parents(".divFormQuestion").first().find(qText).text();
+            $("#selQText").html(questionText);
+            //$("#selQText").text(questionText);
+            $("#editQATWindow").modal();
+            //selansDiv.html("");
+        }else
+        {
+            if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")
             {
-                if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")
-                {
-                    selansDiv.html('<span style="color:blue">No Selectable Answers Required for this Selection</span>')
-                }
-                else{
-                    //alert("Selected ID "+selectedId);
-                    $.ajax({
-                        url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
-                        method: "GET",
-                        cache: false,
-                        data: { qat_id: selectedId },
-                        error: function () {
-                            alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-                        }
-                    }).done(function (d) {
-                        //alert("Retrieved Data is: " + d);
-                        selansDiv.html(d);
-                    });
-                }
+                selansDiv.html('<span style="color:blue">No Selectable Answers Required for this Selection</span>')
             }
-            @*var cur_sel = document.getElementById("currentSelectedQAT"+@Model.uniqueCounter);
+            else{
+                //alert("Selected ID "+selectedId);
+                $.ajax({
+                    url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
+                    method: "GET",
+                    cache: false,
+                    data: { qat_id: selectedId },
+                    error: function () {
+                        alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
+                    }
+                }).done(function (d) {
+                    //alert("Retrieved Data is: " + d);
+                    selansDiv.html(d);
+                });
+            }
+        }
+        @*var cur_sel = document.getElementById("currentSelectedQAT"+@Model.uniqueCounter);
             cur_sel.value = selectedId;*@
 
-            $(this).css({
-                "color": "black",
-                "background-color": "white"
-            });
-        }
+        $(this).css({
+            "color": "black",
+            "background-color": "white"
+        });
+    }
 
-        // Function to load the selected template values into the Edit Mode ANswer Types
-        function loadTemplate(callerBtn, selAnslist) {
-            //Create an array of values (From parameter selAnslist value) to apply to the text boxes
-            var templateList = selAnslist.split(",");
+    // Function to load the selected template values into the Edit Mode ANswer Types
+    function loadTemplate(callerBtn, selAnslist) {
+        //Create an array of values (From parameter selAnslist value) to apply to the text boxes
+        var templateList = selAnslist.split(",");
 
-            // Loops through all textboxes of the upper level parent DIV and set their values accordingly
-            var textBoxCounter = 0;
-            $("#newQATsection").find(".selAnswerTextb").each(function () {
-                $(this).val(templateList[textBoxCounter]);
-                textBoxCounter = textBoxCounter + 1;
-            });
+        // Loops through all textboxes of the upper level parent DIV and set their values accordingly
+        var textBoxCounter = 0;
+        $("#newQATsection").find(".selAnswerTextb").each(function () {
+            $(this).val(templateList[textBoxCounter]);
+            textBoxCounter = textBoxCounter + 1;
+        });
 
-            //$('.saveSA').prop('disabled', false);
-            $("#btnSaveNewSelAnswer").removeAttr('disabled');
-            $("#btnSaveNewSelAnswer").button('reset');
-            $("#newErrorMsg").html("");
-        }
+        //$('.saveSA').prop('disabled', false);
+        $("#btnSaveNewSelAnswer").removeAttr('disabled');
+        $("#btnSaveNewSelAnswer").button('reset');
+        $("#newErrorMsg").html("");
+    }
 
-    </script>
+</script>

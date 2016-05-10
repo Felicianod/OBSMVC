@@ -529,7 +529,6 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Login\OBSLogin.cshtml" />
     <Content Include="Views\Cust\Create.cshtml" />
     <Content Include="Views\Cust\Delete.cshtml" />
     <Content Include="Views\Cust\Details.cshtml" />

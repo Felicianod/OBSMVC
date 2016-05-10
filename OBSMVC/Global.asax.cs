@@ -31,6 +31,7 @@ namespace OBSMVC
                 context.Response.SuppressFormsAuthenticationRedirect = true;
             }
         }
+        
         protected void Application_AuthenticateRequest(Object sender, EventArgs e)
         {
             HttpCookie authCookie = Context.Request.Cookies[FormsAuthentication.FormsCookieName];

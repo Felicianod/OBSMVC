@@ -18,9 +18,6 @@ namespace OBSMVC.Controllers
     {
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
 
-        [HttpGet]
-        public ActionResult OBSLogin() { return View(); }    
-  
         [HttpPost]
         public ActionResult OBSLogin(FormCollection login_info, string ReturnUrl)
         {

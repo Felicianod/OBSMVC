@@ -1,18 +1,15 @@
-﻿using System;
+﻿using OBSMVC.Models;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Web.Script.Serialization;
-using System.Net;
-using System.IO;
-using System.Text;
 using System.Web.Security;
-using OBSMVC.Models;
-using System.Threading.Tasks;
-using System.Configuration;
 
 namespace OBSMVC.Controllers
 {
@@ -20,8 +17,10 @@ namespace OBSMVC.Controllers
     public class LoginController : Controller
     {
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
+
         [HttpGet]
-        public ActionResult OBSLogin() { return View(); }      
+        public ActionResult OBSLogin() { return View(); }    
+  
         [HttpPost]
         public ActionResult OBSLogin(FormCollection login_info, string ReturnUrl)
         {
@@ -262,6 +261,7 @@ namespace OBSMVC.Controllers
                 return false;  // Failed to authenticate the User
             }//end of catch
         }
+
         private void setUserRoles(string userName, string[] roles)
         {
             string userRoles = String.Join(";",roles);

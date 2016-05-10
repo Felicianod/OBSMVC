@@ -18,7 +18,6 @@ namespace OBSMVC.Models
         public OBS_INST()
         {
             this.OBS_COLLECT_FORM_INST = new HashSet<OBS_COLLECT_FORM_INST>();
-            this.OBS_INST_EVENT_LOG = new HashSet<OBS_INST_EVENT_LOG>();
             this.OBS_RVW_FORM_INST = new HashSet<OBS_RVW_FORM_INST>();
         }
     
@@ -37,8 +36,6 @@ namespace OBSMVC.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_COLLECT_FORM_INST> OBS_COLLECT_FORM_INST { get; set; }
         public virtual OBS_TYPE OBS_TYPE { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OBS_INST_EVENT_LOG> OBS_INST_EVENT_LOG { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_RVW_FORM_INST> OBS_RVW_FORM_INST { get; set; }
         public virtual DSC_CUSTOMER DSC_CUSTOMER { get; set; }

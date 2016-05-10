@@ -41,11 +41,9 @@ namespace OBSMVC.Models
         public virtual DbSet<OBS_COL_FORM_INST_SIGS> OBS_COL_FORM_INST_SIGS { get; set; }
         public virtual DbSet<OBS_COL_FORM_TMPLT_ATTRIBS> OBS_COL_FORM_TMPLT_ATTRIBS { get; set; }
         public virtual DbSet<OBS_COLLECT_FORM_INST> OBS_COLLECT_FORM_INST { get; set; }
-        public virtual DbSet<OBS_EVENT_TYPE> OBS_EVENT_TYPE { get; set; }
         public virtual DbSet<OBS_FORM_ATTRIBS> OBS_FORM_ATTRIBS { get; set; }
         public virtual DbSet<OBS_FORM_SECTION> OBS_FORM_SECTION { get; set; }
         public virtual DbSet<OBS_INST> OBS_INST { get; set; }
-        public virtual DbSet<OBS_INST_EVENT_LOG> OBS_INST_EVENT_LOG { get; set; }
         public virtual DbSet<OBS_MULTIMEDIA_TYPE> OBS_MULTIMEDIA_TYPE { get; set; }
         public virtual DbSet<OBS_RVW_FORM_INST> OBS_RVW_FORM_INST { get; set; }
         public virtual DbSet<OBS_TYPE_SUB_TYPES> OBS_TYPE_SUB_TYPES { get; set; }
@@ -58,5 +56,7 @@ namespace OBSMVC.Models
         public virtual DbSet<OBS_ROLE> OBS_ROLE { get; set; }
         public virtual DbSet<OBS_USER_AUTH> OBS_USER_AUTH { get; set; }
         public virtual DbSet<OBS_USER_ROLE> OBS_USER_ROLE { get; set; }
+        public virtual DbSet<OBS_COL_FORM_INST_QUEST> OBS_COL_FORM_INST_QUEST { get; set; }
+        public virtual DbSet<OBS_COL_FORM_INST_ANS> OBS_COL_FORM_INST_ANS { get; set; }
     }
 }

@@ -83,6 +83,19 @@
           <Property Name="obs_attrib_data_type_name" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="obs_attrib_data_type_len_yn" Type="varchar" MaxLength="1" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="OBS_COL_FORM_INST_ANS">
+          <Key>
+            <PropertyRef Name="obs_cfia_id" />
+            <PropertyRef Name="obs_cfia_ans_val" />
+          </Key>
+          <Property Name="obs_cfia_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="obs_cfiq_id" Type="bigint" />
+          <Property Name="obs_cfia_ans_val" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="obs_cfia_ans_wgt" Type="smallint" />
+          <Property Name="obs_cfia_ans_order" Type="smallint" />
+        </EntityType>
         <EntityType Name="OBS_COL_FORM_INST_ATTRIB_VALS">
           <Key>
             <PropertyRef Name="obs_cfiav_id" />
@@ -103,6 +116,27 @@
           <Property Name="obs_cfima_ntwk_path" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="obs_cfima_filename" Type="varchar" MaxLength="75" Nullable="false" />
           <Property Name="obs_cfima_add_dt" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OBS_COL_FORM_INST_QUEST">
+          <Key>
+            <PropertyRef Name="obs_cfiq_id" />
+          </Key>
+          <Property Name="obs_cfiq_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="obs_col_form_quest_id" Type="bigint" Nullable="false" />
+          <Property Name="obs_cfi_id" Type="bigint" Nullable="false" />
+          <Property Name="obs_question_id" Type="int" Nullable="false" />
+          <Property Name="obs_cfiq_quest_full_text" Type="varchar" MaxLength="500" />
+          <Property Name="obs_cfiq_quest_wgt" Type="smallint" />
+          <Property Name="obs_cfiq_comment" Type="varchar" MaxLength="1000" />
+          <Property Name="obs_cfiq_quest_order" Type="smallint" Nullable="false" />
+          <Property Name="obs_cfiq_form_sect_name" Type="varchar" MaxLength="40" />
+          <Property Name="obs_cfiq_form_sub_sect_name" Type="varchar" MaxLength="40" />
+          <Property Name="obs_cfiq_comment_mand_yn" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="obs_cfiq_na_yn" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="obs_cfiq_mult_ans_yn" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="obs_cfiq_init_ans_dtm" Type="datetime" />
+          <Property Name="obs_cfiq_version" Type="smallint" Nullable="false" />
+          <Property Name="obs_cfiq_upd_dtm" Type="datetime" />
         </EntityType>
         <EntityType Name="OBS_COL_FORM_INST_SIGS">
           <Key>
@@ -178,14 +212,6 @@
           <Property Name="obs_cft_upd_uid" Type="varchar" MaxLength="70" />
           <Property Name="obs_cft_upd_dtm" Type="datetime" />
         </EntityType>
-        <EntityType Name="OBS_EVENT_TYPE">
-          <Key>
-            <PropertyRef Name="obs_event_type_id" />
-          </Key>
-          <Property Name="obs_event_type_id" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="obs_event_type_name" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="obs_event_type_desc" Type="varchar" MaxLength="250" />
-        </EntityType>
         <EntityType Name="OBS_FORM_ATTRIBS">
           <Key>
             <PropertyRef Name="obs_form_attrib_id" />
@@ -220,16 +246,6 @@
           <Property Name="obs_inst_del_yn" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="obs_inst_del_date" Type="datetime" />
           <Property Name="obs_inst_del_reason" Type="varchar" MaxLength="200" />
-        </EntityType>
-        <EntityType Name="OBS_INST_EVENT_LOG">
-          <Key>
-            <PropertyRef Name="obs_inst_event_log_id" />
-          </Key>
-          <Property Name="obs_inst_event_log_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="obs_event_type_id" Type="smallint" Nullable="false" />
-          <Property Name="obs_inst_id" Type="bigint" Nullable="false" />
-          <Property Name="obs_cfi_id" Type="bigint" />
-          <Property Name="obs_inst_event_text" Type="varchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="OBS_MULTIMEDIA_TYPE">
           <Key>
@@ -384,6 +400,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="rel_col_form_quest">
+          <End Role="OBS_COL_FORM_QUESTIONS" Type="Self.OBS_COL_FORM_QUESTIONS" Multiplicity="1" />
+          <End Role="OBS_COL_FORM_INST_QUEST" Type="Self.OBS_COL_FORM_INST_QUEST" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_COL_FORM_QUESTIONS">
+              <PropertyRef Name="obs_col_form_quest_id" />
+            </Principal>
+            <Dependent Role="OBS_COL_FORM_INST_QUEST">
+              <PropertyRef Name="obs_col_form_quest_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="rel_col_from_questions">
           <End Role="OBS_COLLECT_FORM_TMPLT" Type="Self.OBS_COLLECT_FORM_TMPLT" Multiplicity="1" />
           <End Role="OBS_COL_FORM_QUESTIONS" Type="Self.OBS_COL_FORM_QUESTIONS" Multiplicity="*" />
@@ -393,6 +421,30 @@
             </Principal>
             <Dependent Role="OBS_COL_FORM_QUESTIONS">
               <PropertyRef Name="obs_cft_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rel_col_inst_col_inst_quest">
+          <End Role="OBS_COLLECT_FORM_INST" Type="Self.OBS_COLLECT_FORM_INST" Multiplicity="1" />
+          <End Role="OBS_COL_FORM_INST_QUEST" Type="Self.OBS_COL_FORM_INST_QUEST" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_COLLECT_FORM_INST">
+              <PropertyRef Name="obs_cfi_id" />
+            </Principal>
+            <Dependent Role="OBS_COL_FORM_INST_QUEST">
+              <PropertyRef Name="obs_cfi_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rel_inst_quest_ans">
+          <End Role="OBS_COL_FORM_INST_QUEST" Type="Self.OBS_COL_FORM_INST_QUEST" Multiplicity="0..1" />
+          <End Role="OBS_COL_FORM_INST_ANS" Type="Self.OBS_COL_FORM_INST_ANS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_COL_FORM_INST_QUEST">
+              <PropertyRef Name="obs_cfiq_id" />
+            </Principal>
+            <Dependent Role="OBS_COL_FORM_INST_ANS">
+              <PropertyRef Name="obs_cfiq_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -428,6 +480,18 @@
               <PropertyRef Name="obs_question_id" />
             </Principal>
             <Dependent Role="OBS_QUEST_ASSGND_MD">
+              <PropertyRef Name="obs_question_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rel_quest_inst_quest">
+          <End Role="OBS_QUESTION" Type="Self.OBS_QUESTION" Multiplicity="1" />
+          <End Role="OBS_COL_FORM_INST_QUEST" Type="Self.OBS_COL_FORM_INST_QUEST" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_QUESTION">
+              <PropertyRef Name="obs_question_id" />
+            </Principal>
+            <Dependent Role="OBS_COL_FORM_INST_QUEST">
               <PropertyRef Name="obs_question_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -576,42 +640,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="relationship20">
-          <End Role="OBS_INST" Type="Self.OBS_INST" Multiplicity="1" />
-          <End Role="OBS_INST_EVENT_LOG" Type="Self.OBS_INST_EVENT_LOG" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_INST">
-              <PropertyRef Name="obs_inst_id" />
-            </Principal>
-            <Dependent Role="OBS_INST_EVENT_LOG">
-              <PropertyRef Name="obs_inst_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="relationship21">
-          <End Role="OBS_COLLECT_FORM_INST" Type="Self.OBS_COLLECT_FORM_INST" Multiplicity="0..1" />
-          <End Role="OBS_INST_EVENT_LOG" Type="Self.OBS_INST_EVENT_LOG" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_COLLECT_FORM_INST">
-              <PropertyRef Name="obs_cfi_id" />
-            </Principal>
-            <Dependent Role="OBS_INST_EVENT_LOG">
-              <PropertyRef Name="obs_cfi_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="relationship22">
-          <End Role="OBS_EVENT_TYPE" Type="Self.OBS_EVENT_TYPE" Multiplicity="1" />
-          <End Role="OBS_INST_EVENT_LOG" Type="Self.OBS_INST_EVENT_LOG" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_EVENT_TYPE">
-              <PropertyRef Name="obs_event_type_id" />
-            </Principal>
-            <Dependent Role="OBS_INST_EVENT_LOG">
-              <PropertyRef Name="obs_event_type_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="relationship23">
           <End Role="OBS_INST" Type="Self.OBS_INST" Multiplicity="1" />
           <End Role="OBS_COLLECT_FORM_INST" Type="Self.OBS_COLLECT_FORM_INST" Multiplicity="*" />
@@ -744,18 +772,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="relationship37">
-          <End Role="OBS_RVW_FORM_INST" Type="Self.OBS_RVW_FORM_INST" Multiplicity="0..1" />
-          <End Role="OBS_INST_EVENT_LOG" Type="Self.OBS_INST_EVENT_LOG" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_RVW_FORM_INST">
-              <PropertyRef Name="obs_cfi_id" />
-            </Principal>
-            <Dependent Role="OBS_INST_EVENT_LOG">
-              <PropertyRef Name="obs_cfi_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="relationship39">
           <End Role="DSC_EMPLOYEE" Type="Self.DSC_EMPLOYEE" Multiplicity="1" />
           <End Role="OBS_RVW_FORM_INST" Type="Self.OBS_RVW_FORM_INST" Multiplicity="*" />
@@ -874,16 +890,15 @@
           <EntitySet Name="OBS_ATTRIB_DATA_TYPES" EntityType="Self.OBS_ATTRIB_DATA_TYPES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_COL_FORM_INST_ATTRIB_VALS" EntityType="Self.OBS_COL_FORM_INST_ATTRIB_VALS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_COL_FORM_INST_MM_ATTACH" EntityType="Self.OBS_COL_FORM_INST_MM_ATTACH" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OBS_COL_FORM_INST_QUEST" EntityType="Self.OBS_COL_FORM_INST_QUEST" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_COL_FORM_INST_SIGS" EntityType="Self.OBS_COL_FORM_INST_SIGS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_COL_FORM_QUESTIONS" EntityType="Self.OBS_COL_FORM_QUESTIONS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_COL_FORM_TMPLT_ATTRIBS" EntityType="Self.OBS_COL_FORM_TMPLT_ATTRIBS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_COLLECT_FORM_INST" EntityType="Self.OBS_COLLECT_FORM_INST" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_COLLECT_FORM_TMPLT" EntityType="Self.OBS_COLLECT_FORM_TMPLT" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OBS_EVENT_TYPE" EntityType="Self.OBS_EVENT_TYPE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_FORM_ATTRIBS" EntityType="Self.OBS_FORM_ATTRIBS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_FORM_SECTION" EntityType="Self.OBS_FORM_SECTION" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_INST" EntityType="Self.OBS_INST" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OBS_INST_EVENT_LOG" EntityType="Self.OBS_INST_EVENT_LOG" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_MULTIMEDIA_TYPE" EntityType="Self.OBS_MULTIMEDIA_TYPE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_QUEST_ANS_TYPES" EntityType="Self.OBS_QUEST_ANS_TYPES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_QUEST_ASSGND_MD" EntityType="Self.OBS_QUEST_ASSGND_MD" Schema="dbo" store:Type="Tables" />
@@ -898,13 +913,34 @@
           <EntitySet Name="OBS_TYPE_SUB_TYPES" EntityType="Self.OBS_TYPE_SUB_TYPES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_USER_AUTH" EntityType="Self.OBS_USER_AUTH" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_USER_ROLE" EntityType="Self.OBS_USER_ROLE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OBS_COL_FORM_INST_ANS" EntityType="Self.OBS_COL_FORM_INST_ANS" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [OBS_COL_FORM_INST_ANS].[obs_cfia_id] AS [obs_cfia_id], 
+    [OBS_COL_FORM_INST_ANS].[obs_cfiq_id] AS [obs_cfiq_id], 
+    [OBS_COL_FORM_INST_ANS].[obs_cfia_ans_val] AS [obs_cfia_ans_val], 
+    [OBS_COL_FORM_INST_ANS].[obs_cfia_ans_wgt] AS [obs_cfia_ans_wgt], 
+    [OBS_COL_FORM_INST_ANS].[obs_cfia_ans_order] AS [obs_cfia_ans_order]
+    FROM [dbo].[OBS_COL_FORM_INST_ANS] AS [OBS_COL_FORM_INST_ANS]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="obs_super_type_type" Association="Self.obs_super_type_type">
             <End Role="OBS_SUPER_TYPE" EntitySet="OBS_SUPER_TYPE" />
             <End Role="OBS_TYPE" EntitySet="OBS_TYPE" />
           </AssociationSet>
+          <AssociationSet Name="rel_col_form_quest" Association="Self.rel_col_form_quest">
+            <End Role="OBS_COL_FORM_QUESTIONS" EntitySet="OBS_COL_FORM_QUESTIONS" />
+            <End Role="OBS_COL_FORM_INST_QUEST" EntitySet="OBS_COL_FORM_INST_QUEST" />
+          </AssociationSet>
           <AssociationSet Name="rel_col_from_questions" Association="Self.rel_col_from_questions">
             <End Role="OBS_COLLECT_FORM_TMPLT" EntitySet="OBS_COLLECT_FORM_TMPLT" />
             <End Role="OBS_COL_FORM_QUESTIONS" EntitySet="OBS_COL_FORM_QUESTIONS" />
+          </AssociationSet>
+          <AssociationSet Name="rel_col_inst_col_inst_quest" Association="Self.rel_col_inst_col_inst_quest">
+            <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
+            <End Role="OBS_COL_FORM_INST_QUEST" EntitySet="OBS_COL_FORM_INST_QUEST" />
+          </AssociationSet>
+          <AssociationSet Name="rel_inst_quest_ans" Association="Self.rel_inst_quest_ans">
+            <End Role="OBS_COL_FORM_INST_QUEST" EntitySet="OBS_COL_FORM_INST_QUEST" />
+            <End Role="OBS_COL_FORM_INST_ANS" EntitySet="OBS_COL_FORM_INST_ANS" />
           </AssociationSet>
           <AssociationSet Name="rel_metadata_quest_assgnd" Association="Self.rel_metadata_quest_assgnd">
             <End Role="OBS_QUESTION_METADATA" EntitySet="OBS_QUESTION_METADATA" />
@@ -917,6 +953,10 @@
           <AssociationSet Name="rel_quest_assgnd_meta" Association="Self.rel_quest_assgnd_meta">
             <End Role="OBS_QUESTION" EntitySet="OBS_QUESTION" />
             <End Role="OBS_QUEST_ASSGND_MD" EntitySet="OBS_QUEST_ASSGND_MD" />
+          </AssociationSet>
+          <AssociationSet Name="rel_quest_inst_quest" Association="Self.rel_quest_inst_quest">
+            <End Role="OBS_QUESTION" EntitySet="OBS_QUESTION" />
+            <End Role="OBS_COL_FORM_INST_QUEST" EntitySet="OBS_COL_FORM_INST_QUEST" />
           </AssociationSet>
           <AssociationSet Name="rel_role_user_role" Association="Self.rel_role_user_role">
             <End Role="OBS_ROLE" EntitySet="OBS_ROLE" />
@@ -966,18 +1006,6 @@
             <End Role="OBS_TYPE" EntitySet="OBS_TYPE" />
             <End Role="OBS_INST" EntitySet="OBS_INST" />
           </AssociationSet>
-          <AssociationSet Name="relationship20" Association="Self.relationship20">
-            <End Role="OBS_INST" EntitySet="OBS_INST" />
-            <End Role="OBS_INST_EVENT_LOG" EntitySet="OBS_INST_EVENT_LOG" />
-          </AssociationSet>
-          <AssociationSet Name="relationship21" Association="Self.relationship21">
-            <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
-            <End Role="OBS_INST_EVENT_LOG" EntitySet="OBS_INST_EVENT_LOG" />
-          </AssociationSet>
-          <AssociationSet Name="relationship22" Association="Self.relationship22">
-            <End Role="OBS_EVENT_TYPE" EntitySet="OBS_EVENT_TYPE" />
-            <End Role="OBS_INST_EVENT_LOG" EntitySet="OBS_INST_EVENT_LOG" />
-          </AssociationSet>
           <AssociationSet Name="relationship23" Association="Self.relationship23">
             <End Role="OBS_INST" EntitySet="OBS_INST" />
             <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
@@ -1021,10 +1049,6 @@
           <AssociationSet Name="relationship36" Association="Self.relationship36">
             <End Role="OBS_INST" EntitySet="OBS_INST" />
             <End Role="OBS_RVW_FORM_INST" EntitySet="OBS_RVW_FORM_INST" />
-          </AssociationSet>
-          <AssociationSet Name="relationship37" Association="Self.relationship37">
-            <End Role="OBS_RVW_FORM_INST" EntitySet="OBS_RVW_FORM_INST" />
-            <End Role="OBS_INST_EVENT_LOG" EntitySet="OBS_INST_EVENT_LOG" />
           </AssociationSet>
           <AssociationSet Name="relationship39" Association="Self.relationship39">
             <End Role="DSC_EMPLOYEE" EntitySet="DSC_EMPLOYEE" />
@@ -1158,11 +1182,9 @@
           <EntitySet Name="OBS_COL_FORM_INST_SIGS" EntityType="Models.OBS_COL_FORM_INST_SIGS" />
           <EntitySet Name="OBS_COL_FORM_TMPLT_ATTRIBS" EntityType="Models.OBS_COL_FORM_TMPLT_ATTRIBS" />
           <EntitySet Name="OBS_COLLECT_FORM_INST" EntityType="Models.OBS_COLLECT_FORM_INST" />
-          <EntitySet Name="OBS_EVENT_TYPE" EntityType="Models.OBS_EVENT_TYPE" />
           <EntitySet Name="OBS_FORM_ATTRIBS" EntityType="Models.OBS_FORM_ATTRIBS" />
           <EntitySet Name="OBS_FORM_SECTION" EntityType="Models.OBS_FORM_SECTION" />
           <EntitySet Name="OBS_INST" EntityType="Models.OBS_INST" />
-          <EntitySet Name="OBS_INST_EVENT_LOG" EntityType="Models.OBS_INST_EVENT_LOG" />
           <EntitySet Name="OBS_MULTIMEDIA_TYPE" EntityType="Models.OBS_MULTIMEDIA_TYPE" />
           <EntitySet Name="OBS_RVW_FORM_INST" EntityType="Models.OBS_RVW_FORM_INST" />
           <EntitySet Name="OBS_TYPE_SUB_TYPES" EntityType="Models.OBS_TYPE_SUB_TYPES" />
@@ -1198,33 +1220,17 @@
             <End Role="OBS_FORM_ATTRIBS" EntitySet="OBS_FORM_ATTRIBS" />
             <End Role="OBS_COL_FORM_TMPLT_ATTRIBS" EntitySet="OBS_COL_FORM_TMPLT_ATTRIBS" />
           </AssociationSet>
-          <AssociationSet Name="relationship21" Association="Models.relationship21">
-            <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
-            <End Role="OBS_INST_EVENT_LOG" EntitySet="OBS_INST_EVENT_LOG" />
-          </AssociationSet>
           <AssociationSet Name="relationship23" Association="Models.relationship23">
             <End Role="OBS_INST" EntitySet="OBS_INST" />
             <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
-          </AssociationSet>
-          <AssociationSet Name="relationship22" Association="Models.relationship22">
-            <End Role="OBS_EVENT_TYPE" EntitySet="OBS_EVENT_TYPE" />
-            <End Role="OBS_INST_EVENT_LOG" EntitySet="OBS_INST_EVENT_LOG" />
           </AssociationSet>
           <AssociationSet Name="relationship19" Association="Models.relationship19">
             <End Role="OBS_TYPE" EntitySet="OBS_TYPE" />
             <End Role="OBS_INST" EntitySet="OBS_INST" />
           </AssociationSet>
-          <AssociationSet Name="relationship20" Association="Models.relationship20">
-            <End Role="OBS_INST" EntitySet="OBS_INST" />
-            <End Role="OBS_INST_EVENT_LOG" EntitySet="OBS_INST_EVENT_LOG" />
-          </AssociationSet>
           <AssociationSet Name="relationship36" Association="Models.relationship36">
             <End Role="OBS_INST" EntitySet="OBS_INST" />
             <End Role="OBS_RVW_FORM_INST" EntitySet="OBS_RVW_FORM_INST" />
-          </AssociationSet>
-          <AssociationSet Name="relationship37" Association="Models.relationship37">
-            <End Role="OBS_RVW_FORM_INST" EntitySet="OBS_RVW_FORM_INST" />
-            <End Role="OBS_INST_EVENT_LOG" EntitySet="OBS_INST_EVENT_LOG" />
           </AssociationSet>
           <AssociationSet Name="rel_sub_type_types" Association="Models.rel_sub_type_types">
             <End Role="OBS_SUB_TYPE" EntitySet="OBS_SUB_TYPE" />
@@ -1326,6 +1332,24 @@
           <AssociationSet Name="rel_user_auth_user_role" Association="Models.rel_user_auth_user_role">
             <End Role="OBS_USER_AUTH" EntitySet="OBS_USER_AUTH" />
             <End Role="OBS_USER_ROLE" EntitySet="OBS_USER_ROLE" />
+          </AssociationSet>
+          <EntitySet Name="OBS_COL_FORM_INST_QUEST" EntityType="Models.OBS_COL_FORM_INST_QUEST" />
+          <EntitySet Name="OBS_COL_FORM_INST_ANS" EntityType="Models.OBS_COL_FORM_INST_ANS" />
+          <AssociationSet Name="rel_col_form_quest" Association="Models.rel_col_form_quest">
+            <End Role="OBS_COL_FORM_QUESTIONS" EntitySet="OBS_COL_FORM_QUESTIONS" />
+            <End Role="OBS_COL_FORM_INST_QUEST" EntitySet="OBS_COL_FORM_INST_QUEST" />
+          </AssociationSet>
+          <AssociationSet Name="rel_col_inst_col_inst_quest" Association="Models.rel_col_inst_col_inst_quest">
+            <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
+            <End Role="OBS_COL_FORM_INST_QUEST" EntitySet="OBS_COL_FORM_INST_QUEST" />
+          </AssociationSet>
+          <AssociationSet Name="rel_inst_quest_ans" Association="Models.rel_inst_quest_ans">
+            <End Role="OBS_COL_FORM_INST_QUEST" EntitySet="OBS_COL_FORM_INST_QUEST" />
+            <End Role="OBS_COL_FORM_INST_ANS" EntitySet="OBS_COL_FORM_INST_ANS" />
+          </AssociationSet>
+          <AssociationSet Name="rel_quest_inst_quest" Association="Models.rel_quest_inst_quest">
+            <End Role="OBS_QUESTION" EntitySet="OBS_QUESTION" />
+            <End Role="OBS_COL_FORM_INST_QUEST" EntitySet="OBS_COL_FORM_INST_QUEST" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="OBS_QUEST_ANS_TYPES">
@@ -1492,19 +1516,10 @@
           <NavigationProperty Name="OBS_COL_FORM_INST_ATTRIB_VALS" Relationship="Models.relationship28" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_COL_FORM_INST_ATTRIB_VALS" />
           <NavigationProperty Name="OBS_COL_FORM_INST_MM_ATTACH" Relationship="Models.relationship30" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_COL_FORM_INST_MM_ATTACH" />
           <NavigationProperty Name="OBS_COL_FORM_INST_SIGS" Relationship="Models.relationship33" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_COL_FORM_INST_SIGS" />
-          <NavigationProperty Name="OBS_INST_EVENT_LOG" Relationship="Models.relationship21" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_INST_EVENT_LOG" />
           <NavigationProperty Name="OBS_INST" Relationship="Models.relationship23" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_INST" />
           <NavigationProperty Name="OBS_COLLECT_FORM_TMPLT" Relationship="Models.relationship14" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_COLLECT_FORM_TMPLT" />
           <NavigationProperty Name="DSC_EMPLOYEE" Relationship="Models.relationship15" FromRole="OBS_COLLECT_FORM_INST" ToRole="DSC_EMPLOYEE" />
-        </EntityType>
-        <EntityType Name="OBS_EVENT_TYPE">
-          <Key>
-            <PropertyRef Name="obs_event_type_id" />
-          </Key>
-          <Property Name="obs_event_type_id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="obs_event_type_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="obs_event_type_desc" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="OBS_INST_EVENT_LOG" Relationship="Models.relationship22" FromRole="OBS_EVENT_TYPE" ToRole="OBS_INST_EVENT_LOG" />
+          <NavigationProperty Name="OBS_COL_FORM_INST_QUEST" Relationship="Models.rel_col_inst_col_inst_quest" FromRole="OBS_COLLECT_FORM_INST" ToRole="OBS_COL_FORM_INST_QUEST" />
         </EntityType>
         <EntityType Name="OBS_FORM_ATTRIBS">
           <Key>
@@ -1548,24 +1563,9 @@
           <NavigationProperty Name="DSC_LC" Relationship="Models.relationship35" FromRole="OBS_INST" ToRole="DSC_LC" />
           <NavigationProperty Name="OBS_COLLECT_FORM_INST" Relationship="Models.relationship23" FromRole="OBS_INST" ToRole="OBS_COLLECT_FORM_INST" />
           <NavigationProperty Name="OBS_TYPE" Relationship="Models.relationship19" FromRole="OBS_INST" ToRole="OBS_TYPE" />
-          <NavigationProperty Name="OBS_INST_EVENT_LOG" Relationship="Models.relationship20" FromRole="OBS_INST" ToRole="OBS_INST_EVENT_LOG" />
           <NavigationProperty Name="OBS_RVW_FORM_INST" Relationship="Models.relationship36" FromRole="OBS_INST" ToRole="OBS_RVW_FORM_INST" />
           <NavigationProperty Name="DSC_CUSTOMER" Relationship="Models.relationship34" FromRole="OBS_INST" ToRole="DSC_CUSTOMER" />
           <NavigationProperty Name="DSC_EMPLOYEE" Relationship="Models.relationship40" FromRole="OBS_INST" ToRole="DSC_EMPLOYEE" />
-        </EntityType>
-        <EntityType Name="OBS_INST_EVENT_LOG">
-          <Key>
-            <PropertyRef Name="obs_inst_event_log_id" />
-          </Key>
-          <Property Name="obs_inst_event_log_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="obs_event_type_id" Type="Int16" Nullable="false" />
-          <Property Name="obs_inst_id" Type="Int64" Nullable="false" />
-          <Property Name="obs_cfi_id" Type="Int64" />
-          <Property Name="obs_inst_event_text" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="OBS_COLLECT_FORM_INST" Relationship="Models.relationship21" FromRole="OBS_INST_EVENT_LOG" ToRole="OBS_COLLECT_FORM_INST" />
-          <NavigationProperty Name="OBS_EVENT_TYPE" Relationship="Models.relationship22" FromRole="OBS_INST_EVENT_LOG" ToRole="OBS_EVENT_TYPE" />
-          <NavigationProperty Name="OBS_INST" Relationship="Models.relationship20" FromRole="OBS_INST_EVENT_LOG" ToRole="OBS_INST" />
-          <NavigationProperty Name="OBS_RVW_FORM_INST" Relationship="Models.relationship37" FromRole="OBS_INST_EVENT_LOG" ToRole="OBS_RVW_FORM_INST" />
         </EntityType>
         <EntityType Name="OBS_MULTIMEDIA_TYPE">
           <Key>
@@ -1585,7 +1585,6 @@
           <Property Name="obs_inst_id" Type="Int64" Nullable="false" />
           <Property Name="dsc_reviewer_emp_id" Type="Int32" Nullable="false" />
           <NavigationProperty Name="OBS_INST" Relationship="Models.relationship36" FromRole="OBS_RVW_FORM_INST" ToRole="OBS_INST" />
-          <NavigationProperty Name="OBS_INST_EVENT_LOG" Relationship="Models.relationship37" FromRole="OBS_RVW_FORM_INST" ToRole="OBS_INST_EVENT_LOG" />
           <NavigationProperty Name="DSC_EMPLOYEE" Relationship="Models.relationship39" FromRole="OBS_RVW_FORM_INST" ToRole="DSC_EMPLOYEE" />
         </EntityType>
         <EntityType Name="OBS_TYPE_SUB_TYPES">
@@ -1695,18 +1694,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="relationship21">
-          <End Type="Models.OBS_COLLECT_FORM_INST" Role="OBS_COLLECT_FORM_INST" Multiplicity="0..1" />
-          <End Type="Models.OBS_INST_EVENT_LOG" Role="OBS_INST_EVENT_LOG" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_COLLECT_FORM_INST">
-              <PropertyRef Name="obs_cfi_id" />
-            </Principal>
-            <Dependent Role="OBS_INST_EVENT_LOG">
-              <PropertyRef Name="obs_cfi_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="relationship23">
           <End Type="Models.OBS_INST" Role="OBS_INST" Multiplicity="1" />
           <End Type="Models.OBS_COLLECT_FORM_INST" Role="OBS_COLLECT_FORM_INST" Multiplicity="*" />
@@ -1716,18 +1703,6 @@
             </Principal>
             <Dependent Role="OBS_COLLECT_FORM_INST">
               <PropertyRef Name="obs_inst_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="relationship22">
-          <End Type="Models.OBS_EVENT_TYPE" Role="OBS_EVENT_TYPE" Multiplicity="1" />
-          <End Type="Models.OBS_INST_EVENT_LOG" Role="OBS_INST_EVENT_LOG" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_EVENT_TYPE">
-              <PropertyRef Name="obs_event_type_id" />
-            </Principal>
-            <Dependent Role="OBS_INST_EVENT_LOG">
-              <PropertyRef Name="obs_event_type_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1743,18 +1718,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="relationship20">
-          <End Type="Models.OBS_INST" Role="OBS_INST" Multiplicity="1" />
-          <End Type="Models.OBS_INST_EVENT_LOG" Role="OBS_INST_EVENT_LOG" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_INST">
-              <PropertyRef Name="obs_inst_id" />
-            </Principal>
-            <Dependent Role="OBS_INST_EVENT_LOG">
-              <PropertyRef Name="obs_inst_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="relationship36">
           <End Type="Models.OBS_INST" Role="OBS_INST" Multiplicity="1" />
           <End Type="Models.OBS_RVW_FORM_INST" Role="OBS_RVW_FORM_INST" Multiplicity="*" />
@@ -1764,18 +1727,6 @@
             </Principal>
             <Dependent Role="OBS_RVW_FORM_INST">
               <PropertyRef Name="obs_inst_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="relationship37">
-          <End Type="Models.OBS_RVW_FORM_INST" Role="OBS_RVW_FORM_INST" Multiplicity="0..1" />
-          <End Type="Models.OBS_INST_EVENT_LOG" Role="OBS_INST_EVENT_LOG" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_RVW_FORM_INST">
-              <PropertyRef Name="obs_cfi_id" />
-            </Principal>
-            <Dependent Role="OBS_INST_EVENT_LOG">
-              <PropertyRef Name="obs_cfi_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1845,6 +1796,7 @@
           <NavigationProperty Name="OBS_FORM_SECTION1" Relationship="Models.rel_sub_section_form_question" FromRole="OBS_COL_FORM_QUESTIONS" ToRole="OBS_FORM_SECTION" />
           <NavigationProperty Name="OBS_QUEST_ANS_TYPES" Relationship="Models.relationship42" FromRole="OBS_COL_FORM_QUESTIONS" ToRole="OBS_QUEST_ANS_TYPES" />
           <NavigationProperty Name="OBS_COLLECT_FORM_TMPLT" Relationship="Models.rel_col_from_questions" FromRole="OBS_COL_FORM_QUESTIONS" ToRole="OBS_COLLECT_FORM_TMPLT" />
+          <NavigationProperty Name="OBS_COL_FORM_INST_QUEST" Relationship="Models.rel_col_form_quest" FromRole="OBS_COL_FORM_QUESTIONS" ToRole="OBS_COL_FORM_INST_QUEST" />
         </EntityType>
         <Association Name="rel_section_from_question">
           <End Type="Models.OBS_FORM_SECTION" Role="OBS_FORM_SECTION" Multiplicity="1" />
@@ -1901,6 +1853,7 @@
           <NavigationProperty Name="OBS_COL_FORM_INST_MM_ATTACH" Relationship="Models.relationship29" FromRole="OBS_QUESTION" ToRole="OBS_COL_FORM_INST_MM_ATTACH" />
           <NavigationProperty Name="OBS_QUEST_ANS_TYPES" Relationship="Models.relationship41" FromRole="OBS_QUESTION" ToRole="OBS_QUEST_ANS_TYPES" />
           <NavigationProperty Name="OBS_QUEST_ASSGND_MD" Relationship="Models.rel_quest_assgnd_meta" FromRole="OBS_QUESTION" ToRole="OBS_QUEST_ASSGND_MD" />
+          <NavigationProperty Name="OBS_COL_FORM_INST_QUEST" Relationship="Models.rel_quest_inst_quest" FromRole="OBS_QUESTION" ToRole="OBS_COL_FORM_INST_QUEST" />
         </EntityType>
         <Association Name="relationship29">
           <End Type="Models.OBS_QUESTION" Role="OBS_QUESTION" Multiplicity="0..1" />
@@ -2207,6 +2160,91 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="OBS_COL_FORM_INST_QUEST">
+          <Key>
+            <PropertyRef Name="obs_cfiq_id" />
+          </Key>
+          <Property Name="obs_cfiq_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="obs_col_form_quest_id" Type="Int64" Nullable="false" />
+          <Property Name="obs_cfi_id" Type="Int64" Nullable="false" />
+          <Property Name="obs_question_id" Type="Int32" Nullable="false" />
+          <Property Name="obs_cfiq_quest_full_text" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="obs_cfiq_quest_wgt" Type="Int16" />
+          <Property Name="obs_cfiq_comment" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="obs_cfiq_quest_order" Type="Int16" Nullable="false" />
+          <Property Name="obs_cfiq_form_sect_name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="obs_cfiq_form_sub_sect_name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="obs_cfiq_comment_mand_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="obs_cfiq_na_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="obs_cfiq_mult_ans_yn" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="obs_cfiq_init_ans_dtm" Type="DateTime" Precision="3" />
+          <Property Name="obs_cfiq_version" Type="Int16" Nullable="false" />
+          <Property Name="obs_cfiq_upd_dtm" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="OBS_COL_FORM_QUESTIONS" Relationship="Models.rel_col_form_quest" FromRole="OBS_COL_FORM_INST_QUEST" ToRole="OBS_COL_FORM_QUESTIONS" />
+          <NavigationProperty Name="OBS_COLLECT_FORM_INST" Relationship="Models.rel_col_inst_col_inst_quest" FromRole="OBS_COL_FORM_INST_QUEST" ToRole="OBS_COLLECT_FORM_INST" />
+          <NavigationProperty Name="OBS_COL_FORM_INST_ANS" Relationship="Models.rel_inst_quest_ans" FromRole="OBS_COL_FORM_INST_QUEST" ToRole="OBS_COL_FORM_INST_ANS" />
+          <NavigationProperty Name="OBS_QUESTION" Relationship="Models.rel_quest_inst_quest" FromRole="OBS_COL_FORM_INST_QUEST" ToRole="OBS_QUESTION" />
+        </EntityType>
+        <EntityType Name="OBS_COL_FORM_INST_ANS">
+          <Key>
+            <PropertyRef Name="obs_cfia_id" />
+            <PropertyRef Name="obs_cfia_ans_val" />
+          </Key>
+          <Property Name="obs_cfia_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="obs_cfiq_id" Type="Int64" />
+          <Property Name="obs_cfia_ans_val" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="obs_cfia_ans_wgt" Type="Int16" />
+          <Property Name="obs_cfia_ans_order" Type="Int16" />
+          <NavigationProperty Name="OBS_COL_FORM_INST_QUEST" Relationship="Models.rel_inst_quest_ans" FromRole="OBS_COL_FORM_INST_ANS" ToRole="OBS_COL_FORM_INST_QUEST" />
+        </EntityType>
+        <Association Name="rel_col_form_quest">
+          <End Type="Models.OBS_COL_FORM_QUESTIONS" Role="OBS_COL_FORM_QUESTIONS" Multiplicity="1" />
+          <End Type="Models.OBS_COL_FORM_INST_QUEST" Role="OBS_COL_FORM_INST_QUEST" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_COL_FORM_QUESTIONS">
+              <PropertyRef Name="obs_col_form_quest_id" />
+            </Principal>
+            <Dependent Role="OBS_COL_FORM_INST_QUEST">
+              <PropertyRef Name="obs_col_form_quest_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rel_col_inst_col_inst_quest">
+          <End Type="Models.OBS_COLLECT_FORM_INST" Role="OBS_COLLECT_FORM_INST" Multiplicity="1" />
+          <End Type="Models.OBS_COL_FORM_INST_QUEST" Role="OBS_COL_FORM_INST_QUEST" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_COLLECT_FORM_INST">
+              <PropertyRef Name="obs_cfi_id" />
+            </Principal>
+            <Dependent Role="OBS_COL_FORM_INST_QUEST">
+              <PropertyRef Name="obs_cfi_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rel_inst_quest_ans">
+          <End Type="Models.OBS_COL_FORM_INST_QUEST" Role="OBS_COL_FORM_INST_QUEST" Multiplicity="0..1" />
+          <End Type="Models.OBS_COL_FORM_INST_ANS" Role="OBS_COL_FORM_INST_ANS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_COL_FORM_INST_QUEST">
+              <PropertyRef Name="obs_cfiq_id" />
+            </Principal>
+            <Dependent Role="OBS_COL_FORM_INST_ANS">
+              <PropertyRef Name="obs_cfiq_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rel_quest_inst_quest">
+          <End Type="Models.OBS_QUESTION" Role="OBS_QUESTION" Multiplicity="1" />
+          <End Type="Models.OBS_COL_FORM_INST_QUEST" Role="OBS_COL_FORM_INST_QUEST" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_QUESTION">
+              <PropertyRef Name="obs_question_id" />
+            </Principal>
+            <Dependent Role="OBS_COL_FORM_INST_QUEST">
+              <PropertyRef Name="obs_question_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2390,15 +2428,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OBS_EVENT_TYPE">
-            <EntityTypeMapping TypeName="Models.OBS_EVENT_TYPE">
-              <MappingFragment StoreEntitySet="OBS_EVENT_TYPE">
-                <ScalarProperty Name="obs_event_type_desc" ColumnName="obs_event_type_desc" />
-                <ScalarProperty Name="obs_event_type_name" ColumnName="obs_event_type_name" />
-                <ScalarProperty Name="obs_event_type_id" ColumnName="obs_event_type_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="OBS_FORM_ATTRIBS">
             <EntityTypeMapping TypeName="Models.OBS_FORM_ATTRIBS">
               <MappingFragment StoreEntitySet="OBS_FORM_ATTRIBS">
@@ -2434,17 +2463,6 @@
                 <ScalarProperty Name="dsc_lc_id" ColumnName="dsc_lc_id" />
                 <ScalarProperty Name="obs_type_id" ColumnName="obs_type_id" />
                 <ScalarProperty Name="obs_inst_id" ColumnName="obs_inst_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OBS_INST_EVENT_LOG">
-            <EntityTypeMapping TypeName="Models.OBS_INST_EVENT_LOG">
-              <MappingFragment StoreEntitySet="OBS_INST_EVENT_LOG">
-                <ScalarProperty Name="obs_inst_event_text" ColumnName="obs_inst_event_text" />
-                <ScalarProperty Name="obs_cfi_id" ColumnName="obs_cfi_id" />
-                <ScalarProperty Name="obs_inst_id" ColumnName="obs_inst_id" />
-                <ScalarProperty Name="obs_event_type_id" ColumnName="obs_event_type_id" />
-                <ScalarProperty Name="obs_inst_event_log_id" ColumnName="obs_inst_event_log_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2610,6 +2628,39 @@
                 <ScalarProperty Name="obs_role_id" ColumnName="obs_role_id" />
                 <ScalarProperty Name="obs_user_auth_id" ColumnName="obs_user_auth_id" />
                 <ScalarProperty Name="obs_user_role_id" ColumnName="obs_user_role_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OBS_COL_FORM_INST_QUEST">
+            <EntityTypeMapping TypeName="Models.OBS_COL_FORM_INST_QUEST">
+              <MappingFragment StoreEntitySet="OBS_COL_FORM_INST_QUEST">
+                <ScalarProperty Name="obs_cfiq_upd_dtm" ColumnName="obs_cfiq_upd_dtm" />
+                <ScalarProperty Name="obs_cfiq_version" ColumnName="obs_cfiq_version" />
+                <ScalarProperty Name="obs_cfiq_init_ans_dtm" ColumnName="obs_cfiq_init_ans_dtm" />
+                <ScalarProperty Name="obs_cfiq_mult_ans_yn" ColumnName="obs_cfiq_mult_ans_yn" />
+                <ScalarProperty Name="obs_cfiq_na_yn" ColumnName="obs_cfiq_na_yn" />
+                <ScalarProperty Name="obs_cfiq_comment_mand_yn" ColumnName="obs_cfiq_comment_mand_yn" />
+                <ScalarProperty Name="obs_cfiq_form_sub_sect_name" ColumnName="obs_cfiq_form_sub_sect_name" />
+                <ScalarProperty Name="obs_cfiq_form_sect_name" ColumnName="obs_cfiq_form_sect_name" />
+                <ScalarProperty Name="obs_cfiq_quest_order" ColumnName="obs_cfiq_quest_order" />
+                <ScalarProperty Name="obs_cfiq_comment" ColumnName="obs_cfiq_comment" />
+                <ScalarProperty Name="obs_cfiq_quest_wgt" ColumnName="obs_cfiq_quest_wgt" />
+                <ScalarProperty Name="obs_cfiq_quest_full_text" ColumnName="obs_cfiq_quest_full_text" />
+                <ScalarProperty Name="obs_question_id" ColumnName="obs_question_id" />
+                <ScalarProperty Name="obs_cfi_id" ColumnName="obs_cfi_id" />
+                <ScalarProperty Name="obs_col_form_quest_id" ColumnName="obs_col_form_quest_id" />
+                <ScalarProperty Name="obs_cfiq_id" ColumnName="obs_cfiq_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OBS_COL_FORM_INST_ANS">
+            <EntityTypeMapping TypeName="Models.OBS_COL_FORM_INST_ANS">
+              <MappingFragment StoreEntitySet="OBS_COL_FORM_INST_ANS">
+                <ScalarProperty Name="obs_cfia_ans_order" ColumnName="obs_cfia_ans_order" />
+                <ScalarProperty Name="obs_cfia_ans_wgt" ColumnName="obs_cfia_ans_wgt" />
+                <ScalarProperty Name="obs_cfia_ans_val" ColumnName="obs_cfia_ans_val" />
+                <ScalarProperty Name="obs_cfiq_id" ColumnName="obs_cfiq_id" />
+                <ScalarProperty Name="obs_cfia_id" ColumnName="obs_cfia_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

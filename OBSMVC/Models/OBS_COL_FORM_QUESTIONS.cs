@@ -14,6 +14,12 @@ namespace OBSMVC.Models
     
     public partial class OBS_COL_FORM_QUESTIONS
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public OBS_COL_FORM_QUESTIONS()
+        {
+            this.OBS_COL_FORM_INST_QUEST = new HashSet<OBS_COL_FORM_INST_QUEST>();
+        }
+    
         public long obs_col_form_quest_id { get; set; }
         public int obs_cft_id { get; set; }
         public int obs_form_section_id { get; set; }
@@ -27,5 +33,7 @@ namespace OBSMVC.Models
         public virtual OBS_FORM_SECTION OBS_FORM_SECTION1 { get; set; }
         public virtual OBS_QUEST_ANS_TYPES OBS_QUEST_ANS_TYPES { get; set; }
         public virtual OBS_COLLECT_FORM_TMPLT OBS_COLLECT_FORM_TMPLT { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OBS_COL_FORM_INST_QUEST> OBS_COL_FORM_INST_QUEST { get; set; }
     }
 }

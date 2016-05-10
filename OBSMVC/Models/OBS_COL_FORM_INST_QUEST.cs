@@ -21,6 +21,7 @@ namespace OBSMVC.Models
         }
     
         public long obs_cfiq_id { get; set; }
+        public long obs_col_form_quest_id { get; set; }
         public long obs_cfi_id { get; set; }
         public int obs_question_id { get; set; }
         public string obs_cfiq_quest_full_text { get; set; }
@@ -36,9 +37,10 @@ namespace OBSMVC.Models
         public short obs_cfiq_version { get; set; }
         public Nullable<System.DateTime> obs_cfiq_upd_dtm { get; set; }
     
+        public virtual OBS_COL_FORM_QUESTIONS OBS_COL_FORM_QUESTIONS { get; set; }
+        public virtual OBS_COLLECT_FORM_INST OBS_COLLECT_FORM_INST { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_COL_FORM_INST_ANS> OBS_COL_FORM_INST_ANS { get; set; }
-        public virtual OBS_COLLECT_FORM_INST OBS_COLLECT_FORM_INST { get; set; }
         public virtual OBS_QUESTION OBS_QUESTION { get; set; }
     }
 }

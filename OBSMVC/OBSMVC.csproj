@@ -265,14 +265,18 @@
     <Compile Include="Models\OBS_COLLECT_FORM_TMPLT.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\OBS_COL_FORM_INST_ANS.cs" />
+    <Compile Include="Models\OBS_COL_FORM_INST_ANS.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OBS_COL_FORM_INST_ATTRIB_VALS.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OBS_COL_FORM_INST_MM_ATTACH.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\OBS_COL_FORM_INST_QUEST.cs" />
+    <Compile Include="Models\OBS_COL_FORM_INST_QUEST.cs">
+      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OBS_COL_FORM_INST_SIGS.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
@@ -282,9 +286,6 @@
     <Compile Include="Models\OBS_COL_FORM_TMPLT_ATTRIBS.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\OBS_EVENT_TYPE.cs">
-      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\OBS_FORM_ATTRIBS.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
@@ -292,9 +293,6 @@
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OBS_INST.cs">
-      <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\OBS_INST_EVENT_LOG.cs">
       <DependentUpon>DSC_OBS_ENTITY.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OBS_MULTIMEDIA_TYPE.cs">

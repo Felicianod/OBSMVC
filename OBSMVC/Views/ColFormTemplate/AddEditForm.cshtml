@@ -1642,7 +1642,8 @@
                     // Simply set the "appendTo" attribute to  "#myContainerName" or similar.
                     addClasses: false,
                     appendTo: "body",
-                    helper: "clone"
+                    helper: "clone",
+                    revert: true
                 });
 
                 //Make the Target List Dropable and force it to accept newly created source List
@@ -1716,10 +1717,17 @@
         $(".targetList").droppable({
             addClasses: false,
             activeClass: "listActive",
+            hoverClass: "ui-state-active",
             accept: ":not(.ui-sortable-helper)",
+            //accept: function(d) { 
+            //    //if(d.hasClass("foo")||(d.attr("id")=="bar")){ 
+            //    //    return true;
+            //    //}
+            //},
             drop: function (event, ui) {
                 //This function is executed everytime an item is dragged and dropped (After drop)
                 $(this).find(".placeholder").remove();
+
                 var link = $("<a href='#' class='dismiss' >&nbsp;&times;&nbsp;</a>");
                 var qid = ui.draggable.attr("id");
                 //var listId = "liID" + qid;
@@ -1731,26 +1739,42 @@
                 //list.setAttribute('class', 'newliItem');
                 //alert($(list).attr("id"));   //It works, the Id is "li99" (99=qid)
                 $(list).append(link);
+                
+
+                //---- Now create a DIV section with a loading placeholder and attach it to the list -----
+                var loadingDIV = document.createElement('div');
+                loadingDIV.setAttribute("id", "qLoadingDiv");
+                loadingDIV.setAttribute("style", "text-align:center");
+                loadingDIV.innerHTML = '<br />Please Wait... <br/><img src="/Images/ui-anim_basic_16x16.gif" /><br\><br\>';
+                $(list).append(loadingDIV);                
+                //-- Done attaching DIV Loading placeholder which will be removed after the ajax call is complete---
+
+                // Add the new List Item to the Target Questions List (Add "LI" to "OL")
                 $(list).appendTo(this);
 
-                //getQinfo(qid);
                 //updateValues(ui.draggable.text().substring(3, 5));
 
                 // updateValues("Question Added Successfully: " + getTestData(qid));   //Method invoked when action is dropped successfully
 
                 //Added second parameter to keep original state of the selected QAT in the dropdown
+                
                 getQinfo(qid, 0);
+                
                 $("#formChanged").val("Y");
                 $("#btnCancel").removeAttr('disabled');
                 //Remove the Section Delete Button. When Question is added, Itis no longer empty
                 $(this).parents(".formSection").find("#btnDelSection").hide();
-
+                $('.ui-draggable-dragging').hide();  // To not show the "Revert" effect when dropped successfully
 
                 //Scroll the Panel to the botton
                 // Check if we added a question to the last section. If so, scroll the panel to the button
                 //panel id = qFormList
                 //alert("Id: " + $(this).attr("id") + " Was selected.")  //The olListxx Id were the question was dropped
                 //alert("This is panel " + $(this).attr("id").substring(6) + " out of " + $("#qFormList").find(".targetList").length);
+                
+                //if ( $(this).attr("id").substring(6) == $("#qFormList").find(".targetList").length){
+                //alert("Question Dropped on the last Section!")
+                //}
             }
         }).sortable({
             connectWith: ".connected",
@@ -1782,7 +1806,7 @@
                 $(this).parents(".formSection").first().find(".btnDelSection").hide();
             },
             update: function () {
-                //This function is executed everythime an item is sorted complete (After sort)
+                //This function is executed every time an item is sorted complete (After sort)
                 var qid2 = $(this).qid;
                 $(this).find(".placeholder").remove();
                 $("#formChanged").val("Y");
@@ -1907,6 +1931,10 @@
             var newDIV = document.createElement('div');
             newDIV.innerHTML = d;  // (If we want to just add some inner html text)
             //newDIV.appendChild(d);   // (If we want to add a child element)
+
+            //Remove the DIV that has the "Loading Placeholder" of the new List Question entry 
+            $('.newliItem').find("#qLoadingDiv").first().remove();
+            //Add the new DIV with the rendered partial view
             var liCreated = $('.newliItem').append(newDIV);
 
             //Once the New List Item has been completed remove its "newli" atribbute

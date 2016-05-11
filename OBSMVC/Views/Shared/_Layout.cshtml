@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>@ViewBag.Title - DSC Observations</title>
 
     <link href="~/Content/jquery-ui.css" rel="stylesheet" />
@@ -12,87 +12,87 @@
     <script src="~/Scripts/jquery.js"></script>
     <script src="~/Scripts/jquery-ui.min.js"></script>
 
-        <style>
-            #foot {
-                position: fixed !important;
-                width: 100%;
-                bottom: 0;
-                text-align: center;
-                padding: 5px 0;
-                background: #f0f0f0;
-                border-top: 1px solid #666;
-            }
+    <style>
+        #foot {
+            position: fixed !important;
+            width: 100%;
+            bottom: 0;
+            text-align: center;
+            padding: 5px 0;
+            background: #f0f0f0;
+            border-top: 1px solid #666;
+        }
 
-            .btnAdd {
-                background: #3d85c6;
-                background: -webkit-linear-gradient(#073763, #3d85c6 50%, #073763);
-                background: linear-gradient(#073763, #3d85c6 50%, #073763);
-                border: 1px solid #569;
-                border-radius: 9px;
-                box-shadow: -2px 2px 0 0 #444;
-                color: #fff;
-                display: inline-block;
-                padding: 5px 13px;
+        .btnAdd {
+            background: #3d85c6;
+            background: -webkit-linear-gradient(#073763, #3d85c6 50%, #073763);
+            background: linear-gradient(#073763, #3d85c6 50%, #073763);
+            border: 1px solid #569;
+            border-radius: 9px;
+            box-shadow: -2px 2px 0 0 #444;
+            color: #fff;
+            display: inline-block;
+            padding: 5px 13px;
+            font: normal 700 14px/1 "Calibri", sans-serif;
+            text-align: center;
+            text-shadow: 2px 2px 0 #070550;
+        }
+
+            .btnAdd:hover {
+                background: #3498db;
+                background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+                background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
                 font: normal 700 14px/1 "Calibri", sans-serif;
-                text-align: center;
-                text-shadow: 2px 2px 0 #070550;
+                color: white;
             }
 
-                .btnAdd:hover {
-                    background: #3498db;
-                    background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
-                    background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
-                    font: normal 700 14px/1 "Calibri", sans-serif;
-                    color: white;
-                }
-
-                .btnAdd:focus {
-                    font: normal 700 14px/1 "Calibri", sans-serif;
-                    color: white;
-                }
-
-            .container-fluid {
-                max-width: 1400px;
-                padding: 25px; /*Whitespace or outside gutter*/
+            .btnAdd:focus {
+                font: normal 700 14px/1 "Calibri", sans-serif;
+                color: white;
             }
 
-            .wellDSC {
-                padding: 1px;
-                font-size: xx-large;
-                margin-bottom: 5px;
-                margin-top: 1px;
-            }
+        .container-fluid {
+            max-width: 1400px;
+            padding: 25px; /*Whitespace or outside gutter*/
+        }
 
-            .nopadding {
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-        </style>
-    </head>
-    <body>
-        <div style="text-align:center">
-            @Html.Partial("_NavMenu")
-        </div>
-        <div class="container-fluid body-content ">
-            @RenderBody()
-        </div>
-        <div id="foot">
-            <table style="width:100%">
-                <tr>
-                    <td style="text-align:center"></td>
-                    <td style="text-align:center">
-                        Questions? &nbsp;&nbsp;&nbsp;&nbsp; <a href="mailto:dsclogistics@service-now.com">dsclogistics@service-now.com</a>
-                    </td>
-                    <td style="text-align:right">
-                        <b>v.Sprint 7 &nbsp;&nbsp;&nbsp;&nbsp;</b>
-                    </td>
-                </tr>
-            </table>
-        </div>
+        .wellDSC {
+            padding: 1px;
+            font-size: xx-large;
+            margin-bottom: 5px;
+            margin-top: 1px;
+        }
 
-        @*@Scripts.Render("~/bundles/jquery")*@
-        @Scripts.Render("~/bundles/bootstrap")
-        @*@Scripts.Render("~/bundles/jqueryUI")*@
-        @RenderSection("scripts", required: false)
-    </body>
+        .nopadding {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align:center">
+        @Html.Partial("_NavMenu")
+    </div>
+    <div class="container-fluid body-content ">
+        @RenderBody()
+    </div>
+    <div id="foot">
+        <table style="width:100%">
+            <tr>
+                <td style="text-align:center"></td>
+                <td style="text-align:center">
+                    Questions? &nbsp;&nbsp;&nbsp;&nbsp; <a href="mailto:dsclogistics@service-now.com">dsclogistics@service-now.com</a>
+                </td>
+                <td style="text-align:right">
+                    <b>v.Sprint 7 &nbsp;&nbsp;&nbsp;&nbsp;</b>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    @*@Scripts.Render("~/bundles/jquery")*@
+    @Scripts.Render("~/bundles/bootstrap")
+    @*@Scripts.Render("~/bundles/jqueryUI")*@
+    @RenderSection("scripts", required: false)
+</body>
 </html>

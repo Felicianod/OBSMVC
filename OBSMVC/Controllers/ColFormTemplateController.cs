@@ -657,12 +657,19 @@ namespace OBSMVC.Controllers
                 List<AvailableQuestions> temp_questions_list = new List<AvailableQuestions>();
                 List<AvailableQuestions> temp_md_list = new List<AvailableQuestions>();
                 List<OBS_QUESTION> list_of_questions = new List<OBS_QUESTION>() ;
-                
-                string[] individual_strings = full_text_search.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                //first lets search for question text
-                foreach (string s in individual_strings)
+
+                //string[] individual_strings = full_text_search.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                ////first lets search for question text
+                //foreach (string s in individual_strings)
+                //{
+                //    list_of_questions.AddRange(db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.ToLower().Contains(s.ToLower())));                   
+                //}
+                foreach(OBS_QUESTION q in db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now))
                 {
-                    list_of_questions.AddRange(db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.ToLower().Contains(s.ToLower())));                   
+                    if (matchesSearchCriteria(full_text_search, q.obs_question_full_text, "All"))
+                    {
+                        list_of_questions.Add(q);
+                    }
                 }
                 list_of_questions = list_of_questions.Distinct().ToList();
                 if (list_of_questions.Count > 0)
@@ -688,9 +695,8 @@ namespace OBSMVC.Controllers
                         md_quest.assigned_metadata = md_quest.getAssignedMetadata(q.obs_question_id);
                         foreach (string s in md_quest.assigned_metadata)
                         {
-                            foreach(string str in individual_strings)
-                            {
-                                if (s.ToLower().Contains(str.ToLower()) && (temp_questions_list.Where(x => x.obs_question_id == q.obs_question_id).Count() == 0))
+
+                                if (matchesSearchCriteria(full_text_search,s,"All") && (temp_questions_list.Where(x => x.obs_question_id == q.obs_question_id).Count() == 0))
                                 {
                                     md_quest.obs_question_id = q.obs_question_id;
                                     md_quest.obs_question_full_text = q.obs_question_full_text;
@@ -698,7 +704,7 @@ namespace OBSMVC.Controllers
                                     break;
                                 }
                                 else { continue; }
-                            }
+                            
 
                         }
                     }

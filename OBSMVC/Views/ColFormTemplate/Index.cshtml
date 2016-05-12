@@ -125,7 +125,7 @@
             { @Html.ActionLink("Manage", "AddEditForm", new { id = item.OBSformID })}
         </td>
         <td>
-            @Html.ActionLink(item.FormTitle, "Details", new { id = item.OBSformID })            
+            @Html.DisplayFor(modelItem => item.FormTitle)            
         </td>
         <td style="text-align:center">
             @Html.DisplayFor(modelItem => item.FormNumber)

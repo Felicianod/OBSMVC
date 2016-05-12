@@ -194,7 +194,7 @@ namespace OBSMVC.Controllers
             WebRequest request = WebRequest.Create(ldaurl);
             request.Method = "POST";
             request.ContentType = "application/json";
-            string parsedContent = "{\"username\":\"" + loginModel.Username.Trim() + "\",\"password\":\"" + loginModel.Password + "\"}";
+            string parsedContent = "{\"username\":\"" + loginModel.Username.Trim() + "\",\"password\":\"" + loginModel.Password + "\",\"appid\":\"DM\"}";
             ASCIIEncoding encoding = new ASCIIEncoding();
             string JsonString;
             //string errorJsonString;

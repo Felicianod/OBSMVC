@@ -415,8 +415,7 @@
         <div id="message" style="display:none"></div>
     </div>
 </div>
-<div style="clear:both"></div>
-
+<div style="clear:both;"></div>
 
 @if (!String.IsNullOrEmpty(errorMessage))
 {
@@ -1789,7 +1788,9 @@
         }).sortable({
             connectWith: ".connected",
             items: "li:not(.placeholder)",
-            //start: function (event, ui) {
+            //start: function (event, ui) { 
+            //    // modify ui.placeholder Text however you like
+            //    ui.placeholder.html("I'm modifying the placeholder element!");
             //},
             //stop: function (event, ui) {
             //    var item = $(ui.item);
@@ -1801,6 +1802,14 @@
             //        return false;
             //    }
             //},
+            placeholder: {
+                element: function(currentItem) {
+                    return $('<li><div style="background-color:#deecff; text-align:center""><br/><br/>DROP ITEM HERE<br/><br/></div></li>')[0];
+                },
+                update: function(container, p) {
+                    return;
+                }
+            },
 
             sort: function () {
                 $(this).removeClass("listActive");

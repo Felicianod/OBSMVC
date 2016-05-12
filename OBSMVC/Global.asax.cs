@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Http;
@@ -33,6 +31,7 @@ namespace OBSMVC
                 context.Response.SuppressFormsAuthenticationRedirect = true;
             }
         }
+        
         protected void Application_AuthenticateRequest(Object sender, EventArgs e)
         {
             HttpCookie authCookie = Context.Request.Cookies[FormsAuthentication.FormsCookieName];

@@ -1191,7 +1191,24 @@ namespace OBSMVC.Controllers
             }
             public DateTime? getLastCompleteDate(int cft_id)
             {
-                return OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date).Equals(null) ? null : OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date);
+                List<DateTime> all_dates = new List<DateTime>();              
+                try
+                {
+                    all_dates.Add((DateTime)OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date));
+                }
+                catch { }
+                try
+                {
+                    all_dates.Add((DateTime)OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_start_dt));
+                }
+                catch { }
+                try
+                {
+                    all_dates.Add((DateTime)OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_last_upd_dt));
+                }
+                catch { }
+              
+                return all_dates.Count()>0? all_dates.Max():all_dates.FirstOrDefault();
 
             }
             public List<int> getAssignedFunctions(int cft_if)

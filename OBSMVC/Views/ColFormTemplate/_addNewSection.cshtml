@@ -67,6 +67,23 @@
             //isChanged = true;
             $(this).removeClass("invalidField");
         });
+
+        //Finally make sure the Section Title are autocomplete
+        $(".sectionTitle").autocomplete({
+            source: "/ColFormTemplate/SectionNameLookup",
+            minLength: 1,
+            select: function( event, ui ) {
+                //Perform 'error reset' steps after a valid selection is done from the autocomplete list
+                $('#btnSaveForm').button('reset');
+                $(this).css({
+                    "color": "black",
+                    "background-color": "white"
+                });
+            }
+        });
+
+
+
     });
     
 

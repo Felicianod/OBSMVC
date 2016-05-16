@@ -437,6 +437,7 @@
       <DependentUpon>DSC_OBS_ENTITY.edmx</DependentUpon>
       <LastGenOutput>DSC_OBS_ENTITY.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\AddEditForm.js" />
     <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

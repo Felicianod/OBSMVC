@@ -1,6 +1,6 @@
 ﻿@* ===== THIS PARTIAL VIEW REPRESENTS THE 'ADD NEW SELECTABLE ANSWER' VIEW USED IN THE FORM POPUP WINDOW ======= *@
 <div class="row answerType divText" id="newQATsection" style="border-style:double; border-width:2px; font-family:Arial; min-height:300px; margin-left:10px">
-    <div class="col-sm-6" >
+    <div class="col-sm-6">
         <div class="row">
             <br />
             <div class="col-sm-12 form-inline" style="max-width:100%; width:100%; margin-left:10px">
@@ -41,31 +41,34 @@
         </div>
 
         <div class="row form-inline" id="multiList" style="display:none;  margin-left:20px">
-            <button type="button" class="addTextBox btn btn-success" style="text-align:left; margin-bottom:7px; margin-top:5px"> <span class="glyphicon glyphicon-plus"> Add New Answer</span></button>
+            <input type="hidden" id="eventCounter" value="0" />
+            <button type="button" id="addNewTextBoxControl" class="addTextBox btn btn-success" style="text-align:left; margin-bottom:7px; margin-top:5px"> <span class="glyphicon glyphicon-plus"> Add New Answer</span></button>
             <div id="newTB" class="row form-inline mlSection">
                 @* ------------ This is a placeholder ----- New Text boxes Created Dynamically are placed here ------------- *@
             </div>
         </div>
 
         <br />
-
-
         <div id="newErrorMsg" style="font-size:medium; font-weight:bold; color:red; display:none">
             @*---------------- Placeholder for Error Messages ---------------*@
         </div>
 
     </div>
-    <div id="divTemplateLoading" style="display:none">
-        <div style="margin:30px; text-align:center">
-            <img src="~/Images/LoadingData.gif" />
+    <div class="col-sm-6">
+        <div id="divTemplateLoading" class="row" style="display:none">
+            <div style="margin:30px; text-align:center">
+                <br /><br />
+                <span>Retrieving Templates...</span><br /><br />
+                <img src="~/Images/ui-anim_basic_16x16.gif" />
+            </div>
         </div>
-    </div>
-    <div id="divTemplates" class="col-sm-6" style="margin-top:10px">
-        @*  // - - - - - -- - - - - INSERT HERE The Selectable Answers Templates Panel (From External Partial View) --------
-            //--------------------------------------------------------------------------------------------------------------
-            // - - - - - - - END OF Selectable Answers Templates Panel (From External Partial View) ------------------------
-        //------------------------------------------------------------------------------------------------------------------
-        *@
+        <div id="divTemplates" class="row" style="margin-top:10px">
+            @*  // - - - - - -- - - - - INSERT HERE The Selectable Answers Templates Panel (From External Partial View) --------
+                //--------------------------------------------------------------------------------------------------------------
+                // - - - - - - - END OF Selectable Answers Templates Panel (From External Partial View) ------------------------
+            //------------------------------------------------------------------------------------------------------------------
+            *@
+        </div>
     </div>
 </div>
 <br />
@@ -76,14 +79,23 @@
 <script>
     $(document).ready(function () {
         var selCathegory = "Other";
-        $(".selAnswerTextb").change(function () {
+
+        //We use this version To allow Dinamically Created element to inherit the event (Event attached to the static parent section)
+        $("#newQATsection").on('change', '.selAnswerTextb', function () {
             $("#newErrorMsg").hide();
             $("#btnSaveNewSelAnswer").removeAttr('disabled');
             $("#btnSaveNewSelAnswer").button('reset');
         });
 
+        ////Below 'click' version does not work for dynamically created elements defined after the page is created the first time
+        //$(".selAnswerTextb").change(function () {
+        //    $("#newErrorMsg").hide();
+        //    $("#btnSaveNewSelAnswer").removeAttr('disabled');
+        //    $("#btnSaveNewSelAnswer").button('reset');
+        //});
+
         $("#fullSelATlist").change(function () {
-            var selectedText = $(this).find('option:selected').text().substring(0,5);
+            var selectedText = $(this).find('option:selected').text().substring(0, 5);
             var selectedValue = $(this).val();
 
             //var selectedValue = $('#fullSelATlist').val();
@@ -114,7 +126,7 @@
                 selCathegory = "5 Val Range";
                 $('#noSelection').hide();
                 $('#ValRange3').show();
-                $('#ValRange3').children('.selAnswerTextb').val("") ;
+                $('#ValRange3').children('.selAnswerTextb').val("");
                 $('#multiList').hide();
                 $('#multiList').children('.selAnswerTextb').val("");
                 $('#ValRange5').show();
@@ -128,14 +140,14 @@
                 $('#ValRange5').hide();
                 $('#multiList').show();
                 //var divToAdd = '<div class="row form-inline newTB"> <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /> </div>'
-                var addTextBox = '<input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />'
+                var addTextBoxContent = '<input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" />'
                 var addDelButton = $('<button  type="button" ><span class="glyphicon glyphicon-trash"></span></button>').click(function () {
                     $(this).parent().remove();
                 });
                 //$('#multiList').append(divToAdd).children(".newTB").last().append(delButton);
                 // Clear all previously created Text boxes if any and Add the TextBox-Del Buttons
                 $('#newTB').html("");
-                $('#newTB').append(addTextBox);
+                $('#newTB').append(addTextBoxContent);
                 $('#newTB').append(addDelButton);
             }
             else {
@@ -158,7 +170,8 @@
             //Only for the "non-Other" cathegories
             //alert("Retrieving Templates for the '" + selCathegory + "' Category");
             if (selCathegory != "Other") {
-                $("#divTemplates").show();
+                $("#divTemplateLoading").show();   //Show the "Loading Section"
+                $("#divTemplates").show();         //Show the "Templates Section"
                 $.ajax({
                     url: '@Url.Action("selAnsTemplates", "Question")',
                     method: "GET",
@@ -172,15 +185,16 @@
 
                     //--- On error, execute this function ------
                     error: function () {
+                        $("#divTemplateLoading").hide();
                         $("#divTemplates").hide();
                         alert("Failed to retrieve appropriate Templates for Selection! [" + "selCathegory" + "]");  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
                     //Execute this code After the Ajax call completes successfully
-                    //Adjust the Columns widts and show the templates column
+                    //Adjust the Columns widths and show the templates column
                     //$("#newATcol01").removeClass("col-sm-10");
                     //$("#newATcol01").addClass("col-sm-6");
-                    $("#divTemplates").hide();
+                    $("#divTemplateLoading").hide();
                     $("#divTemplates").show();
                     $("#divTemplates").html(d);
                 });
@@ -192,19 +206,6 @@
                 $("#divTemplates").hide();
             }
         });
-
-
-        $('.addTextBox').click(function () {
-            addNewTextBox();
-        });
-
-        function addNewTextBox() {
-            var divToAdd = '<div class="row form-inline newTB"> <input type="text" value="" class="form-control selAnswerTextb" placeholder="Enter a Value" /></div>'
-            var delButton = $('<button  type="button" ><span class="glyphicon glyphicon-trash"></span></button>').click(function () {
-                $(this).parent().remove();
-            });
-            $('#multiList').append(divToAdd).children(".newTB").last().append(delButton);
-        }
 
     });
 </script>

@@ -1655,8 +1655,7 @@ namespace OBSMVC.Controllers
         //--- CONSTRUCTOR------------------
         public oCollectionForm() : this(0) { }
         public oCollectionForm(int id)
-        {//Create the Collection Form Data (Header Info) from the Id passed as a parameter
-
+        {//Create the Collection Form Data (Header Info) from the Id passed as a parameter            
             cft_id = id;
             var q = (from A in db.OBS_COLLECT_FORM_TMPLT
                      join B in db.OBS_TYPE                          //First Table Left join

@@ -1,20 +1,8 @@
 ﻿@model OBSMVC.Controllers.oCollectionForm
 
 @{ ViewBag.Title = "Create/Edit Form"; }
-
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-@{
-    var cancelEnabled = "";
-    var frmWasChanged = "N";
-    var attentionCalss = "";
-    bool disableDropdowns = false;
-    if (!@Model.manageAction.Contains("MANAGE")) { cancelEnabled = "disabled"; }
-    if (@Model.manageAction.Equals("MANAGE-NEW-VERSION")) { attentionCalss = "lookatMe"; }
-    if (@Model.cft_Version > 1) { disableDropdowns = true; }
-}
-
-
 <style>
     body > li {
         width: 320px;
@@ -280,110 +268,17 @@
     }
     /* Used to make the datepicker show within the modal popup window*/
 </style>
-
-<script>
-    $(document).ready(function(){
-        $(".modal-wide").on("show.bs.modal", function() {
-            var height = $(window).height() - 200;
-            $(this).find(".modal-body").css("max-height", height);
-        });
-
-        // If the form was recently saved/posted successfuly, this indicates a change on the AT list
-        // reload the drop down with the new values
-        $("#editQATWindow").on('hidden.bs.modal', function () {
-            var dropdownId = "#" + $("#popupDDLid").val();
-
-            if ($("#popupStatus").val() == "saved"){
-                //alert('Selectable Answer Edit Mode completed for drop down control id ' + modalddlId + "\nList is being refreshed...");
-                var questionId = $("#popupQID").val();
-                var modalddlId = $("#popupDDLid").val();
-
-                //alert("Modal is closed, question ID = " + questionId + ", drpdown Id=" + modalddlId + " and selected QATid= '" + $("#savedQATid").val() + "' will be reloaded");
-
-                $.ajax({
-                    url: '@Url.Action("reloadQuestionDropdown", "ColFormTemplate")',
-                    method: "GET",
-                    cache: false,
-                    data: { question_id: questionId, dropdownID: modalddlId, selectedQATid: $("#savedQATid").val()},
-                    error: function () {
-                        alert("Failed to reload the Answer Type Values!!");  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    //alert("Retrieved Data is: " + d);
-
-                    $(dropdownId).parents(".reloadDDL").first().html(d);
-                    //alert("Dropdown Id handle is: " + $(dropdownId).attr("id"));
-
-                    //After Dropdown is loaded, retrieve the selectable answers for the item that is selected on the dropdown
-                    resetSelAns(questionId, dropdownId);
-                });
-            }
-            else{
-                //Modal Form was nor saved, so we just need to restore the previusly selected value on the dropdown list
-                var dropDownIdused = "#" + $("#popupDDLid").val();
-                var dropDownStoredValue = $("#ddlSelValue").val();
-                //var stringUsed = dropDownIdused + " option[value='" + dropDownStoredValue + "']";
-                //alert(stringUsed);
-                //alert("Changes aborted... Restoring value for dropdown '" + dropDownIdused + "' to: " + dropDownStoredValue );
-
-                //$(stringUsed).attr('selected', 'selected'); // added single quotes
-                //For NOw default the selected Option to the first index
-                $(dropDownIdused + " option:contains(" + "Answer" + ")").attr('selected', 'selected');  //Reset dropdown to the first index
-
-                $(dropdownId).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");
-            }
-        });
-
-        $("#confPubDates").on('hidden.bs.modal', function (){
-            // Reset the Publish Button
-            //alert("Popup was closed!");
-            $("#btnPublishForm").button('reset');
-        });
-
-        function resetSelAns(qId, ddlId){
-
-            $qatDIV = $(ddlId).parents(".divFormQuestion").first();
-            $qatDIV.find("#ddlSelValue").val($(ddlId).find('option:selected').val())
-
-            var selectedText = $(ddlId).children("option:selected").text();
-            var selectedQATid = $(ddlId).children("option:selected").val();
-
-            //alert("Refreshing SelAns: Selected Text: " + selectedText + " and QAT id is: " + selectedQATid);
-
-            if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")
-            {
-                $qatDIV.find(".selAnsSection").first().html('<span style="color:blue">No Selectable Answers Required for this Selection</span>')
-            }
-            else{
-                //alert("Selected ID "+selectedId);
-                $.ajax({
-                    url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
-                    method: "GET",
-                    cache: false,
-                    data: { qat_id: selectedQATid },
-                    error: function () {
-                        alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    //alert("Retrieved Data is: " + d);
-                    $qatDIV.find(".selAnsSection").first().html(d);
-                });
-            }
-        };
-
-        function showAlert(alertTitle, alertMessage){
-            //Set the values to display in the alert message
-            $("#alertTitle").html(alertTitle)
-            $("#divAlertText").html(alertMessage)
-            //Show the pop up alert
-            $("#alertPopup").modal();
-        }
-
-    });
-</script>
+<script src="~/Scripts/AddEditForm.js"></script>
 
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
 @{
+    var cancelEnabled = "";
+    var frmWasChanged = "N";
+    var attentionCalss = "";
+    bool disableDropdowns = false;
+    if (!@Model.manageAction.Contains("MANAGE")) { cancelEnabled = "disabled"; }
+    if (@Model.manageAction.Equals("MANAGE-NEW-VERSION")) { attentionCalss = "lookatMe"; }
+    if (@Model.cft_Version > 1) { disableDropdowns = true; }
     string fMode = @Model.cft_editMode;
     int masterCounter = 1;
     string rowInfo = masterCounter.ToString();
@@ -436,6 +331,7 @@
 <input type="hidden" id="cft_id" value="@Model.cft_id" />
 <input type="hidden" id="formChanged" value="@frmWasChanged">
 <input type="hidden" id="bootstrapBtnReset" value="N">
+<input type="hidden" id="frmEventCounter" value="0">
 @*\\ ---- End of Hidden Control Fields section ----- *@
 
 
@@ -640,7 +536,7 @@
                         </div>
 
                         @* -------- <Body Section> This section is Used to Render all the Question Library list Results ---------------- *@
-                        <div class="panel-body">
+                        <div class="panel-body" style="margin:0px auto">
                             <div id="dummyResults" class="left" style="max-width: 100%; width:100%; display:none">
                                 <ul class="list-group sourceList" id="libraryQuestions">
                                     <li id="7" class="list-group-item" data-toggle="tooltip" title="Drag to the left to Add!" data-qid="7"><span class="badge" style="width:48px">Id: 007</span>This is dummy Question 1</li>
@@ -649,7 +545,7 @@
                                 </ul>
                             </div>
 
-                            <div id="resultPanel" class="left" style="max-width: 100%; width:100%; height:440px; overflow-y:scroll">
+                            <div id="resultPanel" class="left" style="max-width: 100%; width:100%; height:440px; overflow-y:scroll; margin:0 auto">
 
                                 @* ****************************************************************************************************
                                         Results from Ajax Call to Display Question Search Result List will be displayed here!!
@@ -744,18 +640,14 @@
                 <input type="hidden" id="savedQATid" value="" />
                 <div class="row">
                     <div class="input-group" style="margin-left:25px">
-                        <div class="input-group-addon" style="max-width:100%">
-                            <span style="font-weight:bold; font-size:larger; max-width:100%; width:100%">Question Full Text: </span>
+                        <div class="input-group-addon" style="max-width:100%; border:1px solid gray; margin:0px">
+                            <span style="font-weight:bold; font-size:larger; max-width:100%; width:100%;">Question Full Text: </span>
                         </div>
                         @*<input type="text" id="selQText" class="form-control" style="font-weight:bold; font-size:larger; margin-left:10px; max-width: 90%; width:80%;" />*@
-                        <span style="font-weight:bold; font-size:x-large; margin-left:10px;  padding:2px" id="selQText"> </span>
+                        <span style="font-weight:bold; font-size:x-large; margin-left:0px;  padding:2px; border:1px solid gray; padding:3px 10px; min-width:100%" id="selQText"> </span>
                     </div>
                 </div>
                 <br />
-                <div id="divATLoading" style="display:none; text-align:center;">
-                    <br /><br />
-                    <img src="~/Images/ui-anim_basic_16x16.gif" />
-                </div>
                 <div class="row" id="divNewSA" style="max-width:100%; width:100%;">
                     @*-------------------------------------------------------------------------------------------
                                        Placeholder for ADD MODE for new Questions Answer Types
@@ -818,10 +710,9 @@
             </div>
             <br />
             <div class="modal-footer">
-                <div class="col-sm-1 col-sm-offset-3">
-                    <button type="button" id="btnSaveLibQuestion" class="btn btn-primary" disabled="disabled">Save changes</button>
-                </div>
-                <div class="col-sm-1 col-sm-offset-1">
+                <div class="col-sm-12" style="text-align:center">
+                    <button type="button" id="btnSaveLibQuestion" class="btn btn-primary" disabled="disabled">ADD QUESTION</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
                     <button type="button" id="btnCancelLibQuestion" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
@@ -939,489 +830,328 @@
 @*-------------------------------------------------------------------------------------------------------------------------------*@
 
 
-<script>
-    function clearNewSAbox(){
-        $("#divNewSA").html("");
-        $("#divATLoading").show();
-        $.ajax({
-            url: '@Url.Action("addFormQAInfo", "colFormTemplate")',
-            method: "GET",
-            cache: false,
-            //data: { question_id: questionId, dropdownID: ddlId},
-            error: function () {
-                alert("Failed to reload Selectable Answer Data Entry Form!!");  //<-- Trap and alert of any errors if they occurred
-            }
-        }).done(function (d) {
-            $("#divATLoading").hide();
-            $("#divNewSA").html(d);
-        });
-    }
-
-    // Not used anymore
-    //function loadModal(questionId, ddlId) {
-    //    //var questionId = btnClkd.attr('id').substring(8);
-    //    //alert("Load Modal for Question Id: " + questionId);
-    //    //var url = "/Question/QuestionAddUpdate/" + questionId;
-    //    var cft_id = $('#cft_id').val();
-    //    var url = "/LightQuestion/QuestionAddUpdateLight/" + questionId + "?cft_id="+cft_id;
-    //    opendialog(url, questionId, ddlId);
-    //}
-
-    @*//Not Used for the light version built-in pop up 04/16/2016
-    function opendialog(pageURL, questionId, ddlId) {
-        var $dialog = $('#remoteWindow')
-        .html('<iframe style="border-style:double; border-width:4px; " src="' + pageURL + '" width="100%" height="100%"></iframe>')
-        .dialog({
-            title: "Question Maintenance",
-            autoOpen: false,
-            //dialogClass: 'dialog_fixed, ui-widget-header',
-            modal: true,
-            height: 620,
-            width: 1400,
-            minWidth: 800,
-            minHeight: 450,
-            draggable: false,
-            closeOnEscape: false,
-            //show: {
-            //    effect: "blind",
-            //    duration: 1000
-            //},
-            //hide: {
-            //    effect: "explode",
-            //    duration: 1000
-            //},
-            close: function() {
-                //alert("You have closed the popup for dropdown for ddl id =  " + ddlId);
-                $.ajax({
-                    url: '@Url.Action("reloadQuestionDropdown", "ColFormTemplate")',
-                    method: "GET",
-                    cache: false,
-                    data: { question_id: questionId, dropdownID: ddlId},
-                    error: function () {
-                        alert("Failed to reload the Answer Type Values!!");  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    //alert("Retrieved Data is: " + d);
-                    var dropdownId = "#" + ddlId;
-                    $(dropdownId).parents(".reloadDDL").first().html(d);
-                    //alert("Dropdown Id handle is: " + $(dropdownId).attr("id"));
-                });
-            },
-            /*close: function () { $(this).remove(); },*/
-            //buttons: { "Close": function () { $(this).dialog("close"); } }
-        });
-
-        $dialog.dialog('open');
-    }*@
-</script>
-
-
 @* ######################  J A V A    S C R I P T S    S E C T I O N   #################################### *@
-@****************** GENERIC MISCELANEOUS JQUERY AND JAVASCRIPT METHODS **************************************@
+
+
+@* - - - - - - - SCRIPT TO ADD A NEW SECTION TO THE FORM AND SET THE "FORM CHANGED" STATUS when form is modified- - - - - - - - - - *@
+
 <script type="text/jscript">
-
-    $(document).ready(function () {
-        function validateForm(){
-            var errorMsg = "";
-            var sectionCounter = 0;
-            //----------------------- Perform Front-End Form Validation ----------------------------------------
-            //Process all the form Sections to get Data to post
-            $("div.formSection").each(function () {
-                var formSection = $(this);
-                //var sectionTitleBox = $($(this).find("input.sectionTitle").first()).val();
-                var sectionTitleBox = formSection.find("input.sectionTitle").first();
-                var sectionName = sectionTitleBox.val().trim();
-                //Loopt thorugh all Dropdowns in this section to ensure that they have a valid selection
-                formSection.find(".viewDropDown").each(function () {
-                    if ($(this).val() == "" || $(this).val() == "New") {
-                        $(this).css({
-                            "color": "white",
-                            "background-color": "red"
-                        });
-                        errorMsg = errorMsg + "One Dropdown has an invalid Selection\n";
-                    }
-                });
-
-                //var dropdownArray = formSection.find(".viewDropDown");
-                //alert("Section " + sectionName + " has " + dropdownArray + " dropdowns.")
-
-                sectionCounter++;
-                if (sectionName == "") {
-                    errorMsg = errorMsg + " Form Section " + sectionCounter + " is missing the Title.\n";
-                    sectionTitleBox.addClass("invalidField");
-                    sectionTitleBox.focus();
-                }
-                else {
-                    formSection.find('.divFormQuestion').each(function () {
-                        // Process data for each of the QATs in the form
-                        var qatDDL = $(this).find(".viewDropDown").first();
-                        var selectedQAT = qatDDL.val();
-                        var isOptional = $(this).find("#cbOptional").prop("checked");
-
-                        if (isOptional) { isOptional = "Y"; }
-                        else { isOptional = "N" }
-                        //var trtrt = ""; //hdnFormQuestion
-                        //alert("A checkbox was found. Value : " + isOptional);
-                        var qatHiddenField = $(this).find(".hdnFormQuestion").first();
-                        qatHiddenField.val(selectedQAT + "~" + sectionName + "~" + isOptional);
-                        //alert("A question was found!\nSelected QATid = " + selectedQAT + "\nSection Name = " + sectionName + "\nFull Posting String: " + qatHiddenField.val());
-                        //alert("Question value to post = " + qatHiddenField.val());
-                    });
-                }
-            });  // Finished Processing all Form Sections
-
-            // ---- Validate that the start Date must not be in the past -----
-            var todaysDate = new Date();                              // It includes the current Time
-            var effStartDate = new Date($('#cft_eff_st_dt').val());   // It does not contain a time
-            //var todayDateOnly = new Date(todaysDate.getFullYear(),todaysDate.getMonth(),todaysDate.getDate()); //This will write a Date with time set to 00:00:00 so you kind of have date only
-            todaysDate.setHours(0, 0, 0, 0);          //Clear the times so the comparison will be based on date only
-            effStartDate.setHours(0, 0, 0, 0);
-
-            if ( effStartDate < todaysDate){
-                errorMsg = errorMsg + "Warning!\nThe Effective Form Start Date [" + effStartDate.toString().substring(0, 16)  + "] \nMust be greater or equal to Today [" + todaysDate.toString().substring(0, 16) + "].\n";
-                $('#cft_eff_st_dt').addClass("invalidField");
-                $('#cft_eff_st_dt').focus();
-            }
-
-            //Validate the Observation Type
-            if (document.getElementById("cft_obsType").value == "") {
-                errorMsg = errorMsg + "The Observation Type is invalid.\n";
-                $("#cft_obsType").addClass("invalidField");
-                $("#cft_obsType").focus();
-            }
-
-            //Validate the Form Title
-            if (document.getElementById("cft_Title").value.trim() == "") {
-                errorMsg = errorMsg + "The form Title is Required\n";
-                $("#cft_Title").addClass("invalidField");
-                $("#cft_Title").focus();
-            }
-
-            if (errorMsg != "") {
-                //If any validation error is found give alert and reset the Save Button
-                $('#btnSaveForm').button('reset');
-                $("#btnPublishForm").button('reset');
-                alert(errorMsg);
-                return false;
-            }
-            else {
-                //Validation Passes.
-                return true;
-            }
+    $(document).ready(function(){
+        // Variables and a Function Used to Scroll Down the sections/question panel (Can be Invoked later on from any section inside this script)
+        function scroll(height) {
+            this.stop().animate({ scrollTop: height }, 1000);
         }
+        // ----- End of Variables and a Function Used to Scroll Down the sections/question panel -------
 
-        function PostForm() {
-            //Post the Form
-            //isChanged = false;  // To prevent the alert of leaving the page from showing up
-            $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing up
-            document.getElementById("CreateForm").submit();
-        }
-
-        function getATcategory() {
-            var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
-            if (selectedText == "3 Val") {
-                return "3 Val Range"
-            }
-            else if (selectedText == "5 Val") {
-                return "5 Val Range";
-            }
-            else {
-                return "Other"
-            }
-        };
-
-        var selCathegory = getATcategory();
-
-        $("input:text").focus(function () { $(this).select(); });
-
-        $('.collapse').on('show.bs.collapse', function () {
-            $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
-        }).on('hide.bs.collapse', function () {
-            $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
-        });
-
-        // **** SAVE ACTION FROM MODAL POPUP QUESTION MAINTENANCE ****
-        $("#btnSaveNewSelAnswer").click(function () {
-            // ------------------- Before Saving data, validate the user input -------------------------------------------------
-            var formValidated = true;
-            var emptyBoxes = 0;
-            var textValues = "";
-            var counter = 0;
-            var validationMessage = "";
-
-            selCathegory = getATcategory();
-
-            // ----------- First verify that no boxes have been left blank and compile the New Answer String for posting ---------------
-            //var comparisonNewString = $("#divNewSA").find("#fullSelATlist").first().children("option").filter(":selected").text();  //Save the answer Type that is being added
-            $('#newQATsection').find('.selAnswerTextb').each(function () {
-                counter = counter + 1;
-                if ($(this).val() != "") {
-                    textValues = textValues + $(this).val().trim().toUpperCase() + "~";
-                    //comparisonNewString = comparisonNewString + $(this).val().trim().toUpperCase();
-                }
-                else {
-                    emptyBoxes++;
-                }
-            });
-
-            //Check if we have empty boxes, then the form is not validated.
-            var selectedText = $("#fullSelATlist").find('option:selected').text().substring(0, 5);
-            if (selCathegory == "3 Val Range" && emptyBoxes > 2) {
-                formValidated = false;
-                validationMessage = "No textbox values can be left blank";
-            }
-            else if (selCathegory == "5 Val Range" && emptyBoxes > 0) {
-                formValidated = false;
-                validationMessage = "No textbox values can be left blank";
-            }
-            else if (selectedText == "Multi" || selectedText == "Singl") {
-                //If user is entering a List, verify that the list contains at least two item
-                var filledInBoxes = 0;
-                $("#multiList").find(".selAnswerTextb").each(function () {
-                    if ($(this).val().trim() != "") {
-                        filledInBoxes = filledInBoxes + 1;
-                    }
-                });
-                if (filledInBoxes < 2) {
-                    formValidated = false;
-                    validationMessage = "A valid list must contain at least two elements.";
-                }
-            }
-            // ------- Finished looking for boxes left blank------------------------------------------------
-
-            //if (formValidated){...
-            //Loop through all text boxes in this section and save the answers for comparison
-            //-----------------------------------------------------------------------------------------------------------------
-            //Validate that the newly entered QAT and values do not exist in any of the other sections (Existing or to be added)
-            //Must not exist under the <div #existingQATs> and <#divaddedSA> divisions (both have a class = ".answerType"
-
-            // Answer Type duplicate values cannot be implemented here since we add just one value at a time
-            // Validation must be performed on the back-end
-            //$(".answerType").each(function () {
-            //    var existingAnswers = "";
-            //    $(this).find(".SAitem").each(function () { existingAnswers = existingAnswers.concat($(this).html()) });
-            //    if (formValidated == true) {
-            //        comparisonOldString = $(this).find("#qat").first().val() + existingAnswers;
-            //        if (comparisonNewString == comparisonOldString) {
-            //            formValidated = false;
-            //            validationMessage = "The selected values already exist for this answer.";
-            //        }
-            //    }
-            //});
-
-
-            //if (formValidated){
-            //    // Continue with rest of validation/posting only if the form Validation Status is true
-            //    //var isDefaultValue = "false";
-            //    //var postParams = "";
-            //    //var comparisonOldString = "";
-            //    //$("#fullSelATlist").find('option:selected').text().substring(0,5);
-            //}
-
-            //-------------- Finished Validating Form Inputs -----------------------------------------------------------------------
-
-            // If the form input is valid, procced with saving data, else just display the Error message
-            if (formValidated) {
-                // Proceed to Save the new Answer Type
-                //Parameter to post are:  QuestionId~AnswerTypeId~defaultT/F~answerlist
-
-                $(this).button('loading');  // Disable the button until posting is complete
-
-                //Build the posting parameters: "Question Id" plus "Answer Type Id" and hardcode default="false" plus sel answers from "texvalues" variable
-                var postData = $("#popupQID").val() + "~" + $("#fullSelATlist").val() + "~false~" + textValues;
-
-                @*$(".qatDIV").each(function(){
-                    var postAnsTypeId = $(this).find("#ans_type_id").first().val();
-                    var postIsDefault = "false";
-                    var postSelAnswers = $(this).find("#ans_type_selAns").first().val();
-                    postData = postData + postQid +  "~" + postAnsTypeId + "~" + postIsDefault + "~" + postSelAnswers + ",";
-                });
-
-                alert("Saving New Answer Types...\n" + postData);
-                *@
-
-                $.ajax({
-                    url: '@Url.Action("saveNewSelAnswer", "ColFormTemplate")',
-                    method: "POST",
-                    cache: false,
-                    data: { ans_type_list : postData },
-                    error: function () {
-                        alert("ERROR: Failed to Save the New Question Answer Type Information.!!");  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    if (d.substring(0,3) == "QAT") {
-                        //alert("Data posted successfully!\n" + d);
-                        // Set the popupstatus to "saved" to indicate that the post succeded and that the drop down needs to be updated.
-                        $("#popupStatus").val("saved");
-                        // Reset the list of answers that have already been saved so they do not need to be displayed anymore
-                        $("#divaddedSA").html("");
-                        $("#savedQATid").val(d.substring(6));
-                        $("#editQATWindow").modal('hide');
-                    }
-                    else {
-                        //alert("Server Response: " + d);
-                        $("#newErrorMsg").html("<span>ERROR SAVING INFORMATION:</span><br/><span> " + d + "</span>");
-                        $("#newErrorMsg").show();
-                    }
-                    //else { alert("WARNING: Failed to post!\nPlease review your input and try again: " + d); }
-                });
-
-                // ----------- Finished Saving New Answer Type and Answer values ----------------
-            }
-            else {
-                var errorMessage = "<span> VALIDATION ERROR: Please review your input:</span><br/>&nbsp;" + validationMessage + "<span>";
-                //errorMessage = errorMessage.concat("</span><br/>&nbsp;&nbsp;<span>You are comparing Answer Type Id and values:</span><br/>");
-                //errorMessage = errorMessage.concat("<span>'" + comparisonNewString + "'</span>" + "<span> against: </span>");
-                //errorMessage = errorMessage.concat("<span> '" + comparisonOldString + "'</span>");
-                $("#newErrorMsg").html(errorMessage);
-                $("#newErrorMsg").show();
-            }
-
-            // Finally, whether the save action failed or posted correctly, reset the "SAVE" button to avoid leaving it stcuk in "Loading..."
-            $(this).button('reset');
-
-        });
-
-        function leavePage(){
-            var editMode = "@Model.manageAction";
-            $("#formChanged").val("N");   //To prevent the browser to present the confirm-exit dialog.
-
-            // When in "MANAGE-EDIT" mode, we need to Reset the published Date/Time via Ajax to it's previous state
-            if(editMode == "MANAGE-EDIT"){
-                var publishedDateTime = "@Model.originalPublishDate";
-                var publishedUser = "@Model.originalyPublishedBy";
-                var formCftid = "@Model.cft_id";
-                $.ajax({
-                    url: '@Url.Action("republishFormOnCancel", "ColFormTemplate")',
-                    method: "POST",
-                    cache: false,
-                    data: { cft_id: formCftid, publishedBy: publishedUser, publishedOn: publishedDateTime },
-                    error: function () {
-                        alert("Failed to reset Changes...");  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    if (d == "Success") {
-                        alert("Edit mode cancelled! Form has been republished.");
-                        //location.href = "/ColFormTemplate/AddEditForm/" + formCftid;
-                    }
-                    else {
-                        alert("ERROR Resetting Published Date/Time: " + d);
-                    }
-                });
-                //--- Finished Resetting the ajax values
-            }
-
-            //Finally, just leave the page and redirect to the Form Index page
-            location.href = "/ColFormTemplate/";
-        };
-
-        function delForm(){
-            // Perform an Ajax call to either hard or soft delete the current form
-            alert("Deleting...");
+        function addNewSection() {
+            $('#sCounter').val(Number($('#sCounter').val()) + 1);
+            // ------------ Make the Ajax Call ---------------------------------------------
             $.ajax({
-                url: '@Url.Action("deleteForm", "ColFormTemplate")',
-                method: "POST",
+                url: '@Url.Action("addNewSection", "ColFormTemplate")',
+                method: "GET",
                 cache: false,
-                data: { cft_id: @Model.cft_id },     //<---- Data Parameters (if not already passed in the Url)
+                data: { sCounter: $('#sCounter').val() },     //<---- Data Parameters (if not already passed in the Url)
                 //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
                 //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
                 //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
                 //traditional: true,                                       //<--- In case we wanted to post a JSON data object
 
                 //--- On error, execute this function ------
-                error: function () {
-                    alert("Failed to Remove Form id " + @Model.cft_id+ " from Database !!");  //<-- Trap and alert of any errors if they occurred
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("An Error has Occurred. Unable to Add New Sections to Form!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                    $('#btnAddSection').button('reset');
                 }
             }).done(function (d) {
                 //Execute this code After the Ajax call completes successfully
-                //alert("Form Id: " + @Model.cft_id + " has been Deleted!");
-                //close modal Popup
-                $('#confPopUp').modal('toggle');
-                location.href = "/ColFormTemplate/";
+                $("#accordion").append(d);
+                makeSectionsDropable();
+                // Reenable the "form change" validation on the newly created section
+                $('input').change(function () {
+                    $("#formChanged").val("Y");
+                    //isChanged = true;
+                    $("#btnSaveForm").removeAttr('disabled');
+                    $('#btnSaveForm').button('reset');
+                    $(this).removeClass("invalidField");
+                });
             });
-        }
 
-        function showConfirmation(alertTitle, alertMessage, confBtnText, funcName){
-            //Set the values to display in the alert message
-            $("#confTitle").html(alertTitle)
-            $("#divConfText").html(alertMessage)
-            //$("#btnAlertConfirm").prop('value', confBtnText);
-            $("#btnAlertConfirm").html('Delete Form');
+        } // ------ End of addNewSection() function -----
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        function makeSectionsDropable() {
+            var executeCounter = 0;  //(Used by the Question Delete/Remove Button)
 
-            $("#funcToExec").val(funcName);
-            //$("#confirmationResult").val('true');
+            $(".targetList").droppable({
+                addClasses: false,
+                activeClass: "listActive",
+                hoverClass: "list-drag-hover",
+                accept: ":not(.ui-sortable-helper)",
+                //accept: function(d) {
+                //    //if(d.hasClass("foo")||(d.attr("id")=="bar")){
+                //    //    return true;
+                //    //}
+                //},
+                drop: function (event, ui) {
+                    //This function is executed everytime an item is dragged and dropped (After drop)
+                    $(this).find(".placeholder").remove();
 
-            //Show the Confirmation Popup Form
-            $("#confPopUp").modal();
-        }
+                    var link = $("<a href='#' class='dismiss' >&nbsp;&times;&nbsp;</a>");
+                    var qid = ui.draggable.attr("id");
+                    //var listId = "liID" + qid;
 
-        $("#btnAlertConfirm").click(function(){
-            ////Once the user confirms the Alert execution, call the function that was set
-            //// Retrieve String Name of function we want to run and find the object
-            //var funcToExecute = $("#funcToExec").val();
-            //var fn = window[funcToExecute];
-            //alert("You are about to Execute Funcion: " + funcToExecute);
-            //// If object a function, execute it?
-            //if (typeof fn === "function") fn();
+                    //var list = $("<li></li>").text(ui.draggable.text());
+                    //var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text("Question Id is: " + qid); //    .setAttribute('class', 'newliItem');
+                    var list = $("<li id=\"li" + qid + "\" class=\"newliItem question\"></li>").text(""); //    .setAttribute('class', 'newliItem');
+
+                    //list.setAttribute('class', 'newliItem');
+                    //alert($(list).attr("id"));   //It works, the Id is "li99" (99=qid)
+                    $(list).append(link);
 
 
-            // Perform an Ajax call to either hard or soft delete the current form
-            $.ajax({
-                url: '@Url.Action("deleteForm", "ColFormTemplate")',
-                method: "POST",
-                cache: false,
-                data: { cft_id: @Model.cft_id },     //<---- Data Parameters (if not already passed in the Url)
-                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+                    //---- Now create a DIV section with a loading placeholder and attach it to the list -----
+                    var loadingDIV = document.createElement('div');
+                    loadingDIV.setAttribute("id", "qLoadingDiv");
+                    loadingDIV.setAttribute("style", "text-align:center");
+                    loadingDIV.innerHTML = '<br />Please Wait... <br/><img src="/Images/ui-anim_basic_16x16.gif" /><br\><br\>';
+                    $(list).append(loadingDIV);
+                    //-- Done attaching DIV Loading placeholder which will be removed after the ajax call is complete---
 
-                //--- On error, execute this function ------
-                error: function () {
-                    alert("Failed to Remove Form id " + @Model.cft_id+ " from Database !!");  //<-- Trap and alert of any errors if they occurred
+                    // Add the new List Item to the Target Questions List (Add "LI" to "OL")
+                    $(list).appendTo(this);
+
+                    //updateValues(ui.draggable.text().substring(3, 5));
+
+                    //Added second parameter to keep original state of the selected QAT in the dropdown
+                    getQinfo(qid, 0);
+
+                    $("#formChanged").val("Y");
+                    $("#btnReset").removeAttr('disabled');
+                    //Remove the Section Delete Button. When Question is added, It is no longer empty
+                    $(this).parents(".formSection").find("#btnDelSection").hide();
+                    //$('.ui-draggable-dragging').hide();  // To not show the "Revert" effect when dropped successfully (Not needed if draggable revert="invalid"
+
+                    //Scroll the Panel to the botton
+                    // Check if we added a question to the last section. If so, scroll the panel to the button
+                    //panel id = qFormList
+                    //alert("Id: " + $(this).attr("id") + " Was selected.")  //The olListxx Id were the question was dropped
+                    //alert("This is panel " + $(this).attr("id").substring(6) + " out of " + $("#qFormList").find(".targetList").length);
+
+                    //if ( $(this).attr("id").substring(6) == $("#qFormList").find(".targetList").length){
+                    //alert("Question Dropped on the last Section!")
+                    //}
                 }
-            }).done(function (d) {
-                //Execute this code After the Ajax call completes successfully
-                if (d=="True"){
-                    alert("Form Id: " + @Model.cft_id + " has been Deleted!");
-                    //close modal Popup
-                    $('#confPopUp').modal('toggle');
-                    location.href = "/ColFormTemplate/";
-                }
-                else {
-                    alert("ERROR: Form could not be removed from the Database!" );
-                    location.href = "/ColFormTemplate/AddEditForm/" + @Model.cft_id;
-                }
-            });
-        });
+            }).sortable({
+                connectWith: ".connected",
+                items: "li:not(.placeholder)",
+                //start: function (event, ui) {
+                //    // modify ui.placeholder Text however you like
+                //    ui.placeholder.html("I'm modifying the placeholder element!");
+                //},
+                //stop: function (event, ui) {
+                //    var item = $(ui.item);
+                //    alert($(this).attr("id"));
+                //    var to = item.parent().is("#droppable_widget");
+                //    var siblingsCount = item.siblings().size();
+                //    if (to && siblingsCount > 0) {
+                //        alert("only one item allowed here");
+                //        return false;
+                //    }
+                //},
+                placeholder: {
+                    element: function(currentItem) {
+                        return $('<li><div style="background-color:#deecff; text-align:center""><br/><br/>DROP ITEM HERE<br/><br/></div></li>')[0];
+                    },
+                    update: function(container, p) {
+                        return;
+                    }
+                },
+                sort: function () {
+                    $(this).removeClass("listActive");
+                },
+                //beforeStop: function(ev, ui) {
+                //    if ($(ui.item).hasClass('innerListItem') ) {
+                //        $(this).sortable('cancel');
+                //    }
+                //},
+                receive: function(event, ui) {
+                    // This function executes when an item is received at the target list during "sort"
+                    //alert("[" + this.id + "] received data from [" + ui.sender.attr("id") + "]");
+                    $(this).parents(".formSection").first().find(".btnDelSection").hide();
+                },
+                update: function () {
+                    //This function is executed every time an item is sorted complete (After sort)
+                    var qid2 = $(this).qid;
+                    $(this).find(".placeholder").remove();
+                    $("#formChanged").val("Y");
+                    $("#btnCancel").removeAttr('disabled');
+                    if ($(this).find(".question").length < 1){
+                        //There are no questions Left on the Source section
+                        $(this).parents(".formSection").first().find(".btnDelSection").show();
 
-        $("#btnCancel").click(function () {
-            if ( $("#formChanged").val() == "Y")
-            {
-                if ( $("#bootstrapBtnReset").val() == "N"){
-                    $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window. Must be done only once (at most) to prevent js errors
-                    $("#bootstrapBtnReset").val("Y");   // Set it to "Y" so we don't try to reset it again which would cause an error
+                        //alert("No questions left on id: " + $(this).prop("id"));
+                    }
                 }
+            }).on("click", ".dismiss", function (event) {
+                //Somehow, this function is executing twice when even is triggered.
+                executeCounter = executeCounter + 1;
+                event.preventDefault();
+                if (executeCounter == 1){   //Perform the action only when the "executeCounter" is 1. To prevent doing everything more than once
+                    //var qdelId = $(this).parent().attr("id");
 
-                $( "#dialog-confirm-exit" ).dialog({
-                    resizable: false,
-                    height:250,
-                    modal: true,
-                    buttons: {
-                        "Discard Changes": function() {
-                            leavePage();
-                        },
-                        "Continue Working": function() {
-                            $( this ).dialog( "close" );
+                    // Count the questions in the containing section.
+                    //If the section has only one question (The current Question Being removed) then display the "Section Delete Button"
+                    //and show the "Drag a question Here" Template.  Otherwise, just hide the delete button.
+                    var $parentFrmSection = $(this).parents(".formSection").first();
+                    var $sectDelBtn = $parentFrmSection.find("#btnDelSection");
+                    var qInSection = $parentFrmSection.find(".question").length;
+                    //
+                    if (qInSection == 1 ){
+                        $sectDelBtn.show();
+                        // Add code to display the "Drag a question Here" Template if it doesn't already exist.
+                        if ($parentFrmSection.find(".placeholder").length == 0){
+                            var placeholderNew = $("<li class=\"list-group-item placeholder\"></li>").append('<div style="font-weight:bold; font-size:large"><br />Drag a question here...<br /><br /></div>');
+                            $(placeholderNew).appendTo( $parentFrmSection.find(".targetList").first() );
                         }
                     }
-                });
-            }
-            else{
-                leavePage();
-            }
-        });
+                    else{
+                        $sectDelBtn.hide();
+                    }
+                    $(this).parent().remove();
 
+                    //alert("Parent Id is: " + $parentFrmSection.prop("id") + " and it has " + qInSection + " questions." );
+                    //alert("There are [" + itemsInParent + "(" + testCounter + ")" + "] Questions Left on This section!");
+                }
+                else{
+                    executeCounter =0;  //Reset the counter to Zero so this function can be executed when the event is called again by the user
+                }
+
+            });
+        }
+        //-----------------------------------------------------------------------------------------------
+        function getQinfo(questionId, questionQATid) {
+            var newCounterSeq = $("#qCounter").val();
+            //var newCounterSeq = 1;
+            var qid = questionId
+            var ajaxResult = "Sample Data";
+            //var target = ev.target || ev.srcElement;
+            //var myId = $(event.target).attr("id");;
+
+            //alert("Retrieving Information via Ajax for Question Id: " + qid);
+            // ------------ Make the Ajax Call ---------------------------------------------
+            $.ajax({
+                url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
+                method: "GET",
+                cache: false,
+                data: { question_id: qid, question_QATid: questionQATid, qCounter: newCounterSeq },     //<---- Data Parameters (if not already passed in the Url)
+                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                //beforeSend: function( xhr ) {
+                //    //xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+                //    alert("Ready to Submit Ajax call" );
+                //},
+
+
+                //--- On error, execute this function ------
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Can't find data for question id " + qid + " !!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                    //$btn.button('reset');
+                }
+            }).done(function (d) {
+                //Execute this code After the Ajax call completes successfully
+
+                //Put the retrieved source code inside a <DIV> tag
+                //Add the Division tag to the newly created "Li"
+                var newDIV = document.createElement('div');
+                newDIV.innerHTML = d;  // (If we want to just add some inner html text)
+                //newDIV.appendChild(d);   // (If we want to add a child element)
+
+                //Remove the DIV that has the "Loading Placeholder" of the new List Question entry
+                $('.newliItem').find("#qLoadingDiv").first().remove();
+                //Add the new DIV with the rendered partial view
+                var liCreated = $('.newliItem').append(newDIV);
+
+                //Once the New List Item has been completed remove its "newli" atribbute
+                liCreated.removeClass("newliItem");
+                //$('#ajaxSample').html(d)
+
+                $('#qCounter').val(Number($('#qCounter').val()) + 1);
+                //ajaxResult = d;
+                //alert("Ajax call completed. result: " + d);
+                //return ajaxResult;
+                //alert("You jusr added question View Id: " + "qRow" + newCounterSeq)
+                //ev.target.html(d);
+                //$("#questionPnl01").append(d);
+                //$btn.button('reset');
+                //return d;
+            });
+        }
+        //-----------------------------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------------------------
+
+
+        //-----------------------------------------------------------------------------------------------
+
+
+        //-----------------------------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------------------------
+        //===================================== CONTROL EVENTS ===========================================
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        $('#doSearch').click(function () {
+            var $btn = $(this);
+            $btn.button('loading');
+            var waitMsg = '<div style="text-align:center; font-weight:bold"><br /><br />Please wait while we retrieve the questions...<br /><br /><img src="../../Images/ui-anim_basic_16x16.gif" /></div>'
+
+            $("#resultPanel").html(waitMsg);
+
+            // ---- Fetch the Values that wil be used as parameters on the AJAX call -------
+            var searchText = $("#full_text_search").val();
+            //var searchMD = $("#metadata_search").val();
+            // ------------ Make the Ajax Call ---------------------------------------------
+            $.ajax({
+                url: '@Url.Action("getQuestionsList", "ColFormTemplate")',
+                method: "GET",
+                cache: false,
+                //data: { full_text_search: searchText, metadata_search: searchMD, page: 1, pageSize: 30 },     //<---- Data Parameters (if not already passed in the Url)
+                data: { full_text_search: searchText, page: 1, pageSize: 30 },   //<---- Data Parameters (if not already passed in the Url)
+                //                                                               // parameters can be passed in url as an extra param:  new { full_text_search = searchText, metadata_search = searchMD }
+                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
+                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
+                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
+                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
+
+                //--- On error, execute this function ------
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Failed to render the Question List from the Database !!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                    $btn.button('reset');
+                }
+            }).done(function (d) {
+                //Execute this code After the Ajax call completes successfully
+                $("#resultPanel").html(d);
+                //$("#dummyResults ul").append('<li id="qId017" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 017</span>last question New</li>');
+
+                //Make the New Source List Dragable
+                $(".sourceList li").draggable({
+                    //If you want to limit the area inside which a user can drag elements,
+                    // Simply set the "appendTo" attribute to  "#myContainerName" or similar.
+                    addClasses: false,
+                    appendTo: "body",
+                    helper: "clone",
+                    revert: "invalid",
+                    containment: "#dragDropSection", scroll: false
+                });
+
+                //Make the Target List Dropable and force it to accept newly created source List
+                makeSectionsDropable();
+                $btn.button('reset');
+            });
+        }); // ---- End of "doSearch" Function
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         $("#btnReset").click(function () {
             if ( $("#formChanged").val() == "Y")
             {
@@ -1433,6 +1163,7 @@
                 $( "#dialog-confirm-reset" ).dialog({
                     resizable: false,
                     height:200,
+                    width: 350,
                     modal: true,
                     buttons: {
                         "Reset Form": function() {
@@ -1447,82 +1178,29 @@
                 });
             }
         });
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        $("#accordion").on('click', '.btnDelSection', function(){
+            var sectionsLeft = $("#accordion").find(".formSection").length;
 
-
-        $('#cft_eff_st_dt').datepicker({
-            dateFormat: 'M dd, yy',
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            minDate: -0,
-            //minDate: -0,
-            //maxDate: "+1M +10D",
-            onClose: function (selectedDate) {
-                $("#cft_eff_end_dt").datepicker("option", "minDate", selectedDate);
-            },
-            useCurrent: false //Important! See issue #1075
-        });
-
-        $('#cft_eff_end_dt').datepicker({
-            dateFormat: 'M dd, yy',
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            minDate: -0,
-            onClose: function (selectedDate) {
-                $("#cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
-            },
-            useCurrent: false //Important! See issue #1075
-        });
-
-        $('#conf_cft_eff_st_dt').datepicker({
-            dateFormat: 'M dd, yy',
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            minDate: -0,
-            //minDate: -0,
-            //maxDate: "+1M +10D",
-            onClose: function (selectedDate) {
-                $("#conf_cft_eff_end_dt").datepicker("option", "minDate", selectedDate);
-            },
-            useCurrent: false //Important! See issue #1075
-        });
-
-        $('#conf_cft_eff_end_dt').datepicker({
-            dateFormat: 'M dd, yy',
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            minDate: -0,
-            onClose: function (selectedDate) {
-                $("#conf_cft_eff_st_dt").datepicker("option", "maxDate", selectedDate);
-            },
-            useCurrent: false //Important! See issue #1075
-        });
-
-        $("#btnSaveDateConf").click(function(){
-            $("#cft_eff_st_dt").val($("#conf_cft_eff_st_dt").val());
-            $("#cft_eff_end_dt").val($("#conf_cft_eff_end_dt").val());
-            $('#confPubDates').modal('toggle');
-            PostForm();
-        });
-
-        $('#CreateForm').keypress(function (e) {
-            if (e.keyCode == 13)
-            {
-                $('#doSearch').click();
+            $(this).parents(".formSection").first().remove();
+            if (sectionsLeft == 1){ //The one section we are removing
+                addNewSection();
             }
         });
-
-        $('[data-toggle="tooltip"]').tooltip();
-
-
-
-        $("#btnAddQuestionPopup").click(function () {
-            $("#addQuestionWindow").modal();
-        });
-
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        $('#btnAddSection').click(function () {
+            var scrollPanel = $('#qFormList');
+            var $btn = $(this);
+            $btn.button('loading');
+            addNewSection();
+            $btn.button('reset');
+            //Automatically Scroll to the botton of the Panel where the new Section was Inserted
+            //If we wanted to scroll to the top, we would set the "height = 0"
+            height = scrollPanel[0].scrollHeight;
+            scroll.call(scrollPanel, height);
+            //$('#qFormList').scrollTop($('#qFormList').scrollHeight);
+        })
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         $("#btnSaveLibQuestion").click(function () {
             if ($("#modalQFullText").val().trim() == "") {
                 $("#msgAddQ").show();
@@ -1535,8 +1213,8 @@
                     method: "POST",
                     cache: false,
                     data: { full_text: $("#modalQFullText").val(), desc: $("#modalQDesc").val() },
-                    error: function () {
-                        alert("An error occurred when saving the question information to the LIbrary Database!!");  //<-- Trap and alert of any errors if they occurred
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("An error occurred when saving the question information to the LIbrary Database!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
                     if (d == "True") {
@@ -1559,510 +1237,75 @@
                 });
             }
         }); //--------- End of btnSaveLibQuestion click() event
+        ////- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        ////Finally make sure the Section Title are autocomplete
+        //$(".sectionTitle").autocomplete({
+        //    source: "/ColFormTemplate/SectionNameLookup",
+        //    minLength: 1,
+        //    select: function( event, ui ) {
+        //        //Perform 'error reset' steps after a valid selection is done from the autocomplete list
+        //        $('#btnSaveForm').button('reset');
+        //        $(this).css({
+        //            "color": "black",
+        //            "background-color": "white"
+        //        });
+        //    }
+        //});
+
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-        $('textarea').on('keydown keyup change focus blur', function(e) {
-            if (e.type === 'change') {
-                // this event is triggered when the text is changed through drag and drop too,
-                // or by pasting something inside the textarea;
-
-                // remove commas with empty
-                $(this).val($(this).val().replace(/,/,"","g"));
-                // remove carriage returns (\r) and newlines (\n) with spaces:
-                $(this).val($(this).val().replace(/\r?\n/g, ' '));
-                //$textarea.val($textarea.val().replace(/[,\n\r]/," ","g");
-            }
-            // the enter key has been pressed, avoid producing a carriage return from it:
-            if (e.which === 13 || e.which === 188) {
-                e.preventDefault();
-            }
-        });
-
-        $('input').not(".searchBox").on('keydown keyup change ', function (e) {
-            $("#btnSaveForm").removeAttr('disabled');
-            $("#btnCancel").removeAttr('disabled');
-            $("#formChanged").val("Y");   // Re-enable the form "changed" status
-        });
-
-        $('input').not(".searchBox").not(".qInput").on('keydown keyup change ', function (e) {
-            $("#btnSaveForm").removeAttr('disabled');
-            $("#btnCancel").removeAttr('disabled');
-            $("#formChanged").val("Y");   // Re-enable the form "changed" status
-        });
-
-        $('.qInput').on('keydown keyup change ', function (e) {
-            $("#btnSaveLibQuestion").removeAttr('disabled');
-            $("#msgAddQ").hide();
-        });
-
-        $("#btnCancelLibQuestion").click(function(){
-            $(".qInput").val("");
-            $("#btnSaveLibQuestion").prop('disabled', true);
-        });
-
-        $("#btnDeleteForever").click(function(){
-            //Have user Confirm the Delete Action
-            showConfirmation("Confirm Form Deletion", "Are you sure you want to delete this Form?", "Delete Form", "delForm");
-        });
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-        function removeQuestion(qRowId) {
-            $("#" + qRowId).remove();
-        }
-
-        makeSectionsDropable();
-
-        $('#doSearch').click(function () {
-            var $btn = $(this);
-            $btn.button('loading');
-            var waitMsg = '<div style="text-align:center"><br /><br />Please wait while we retrieve the questions...<br /><br /><img src="../../Images/ui-anim_basic_16x16.gif" /></div>'
-
-            $("#resultPanel").html(waitMsg);
-
-            // ---- Fetch the Values that wil be used as parameters on the AJAX call -------
-            var searchText = $("#full_text_search").val();
-            var searchMD = $("#metadata_search").val();
-            // ------------ Make the Ajax Call ---------------------------------------------
-            $.ajax({
-                @*url: '@Url.Action("getQuestions", "ColFormTemplate", new { full_text_search = searchText, metadata_search = searchMD })',*@
-                url: '@Url.Action("getQuestionsList", "ColFormTemplate")',
-                method: "GET",
-                cache: false,
-                data: { full_text_search: searchText, metadata_search: searchMD, page: 1, pageSize: 30 },     //<---- Data Parameters (if not already passed in the Url)
-                //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-                //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-                //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-                //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-                //--- On error, execute this function ------
-                error: function () {
-                    alert("Failed to render the Question List from the Database !!");  //<-- Trap and alert of any errors if they occurred
-                    $btn.button('reset');
-                }
-            }).done(function (d) {
-                //Execute this code After the Ajax call completes successfully
-                $("#resultPanel").html(d);
-                //$("#dummyResults ul").append('<li id="qId017" class="list-group-item" data-toggle="tooltip" title="Drag inside form to Add!"><span class="badge" style="width:48px">Id: 017</span>last question New</li>');
-
-                //Make the New Source List Dragable
-                $(".sourceList li").draggable({
-                    //If you want to limit the area inside which a user can drag elements,
-                    // Simply set the "appendTo" attribute to  "#myContainerName" or similar.
-                    addClasses: false,
-                    appendTo: "body",
-                    helper: "clone",
-                    revert: "invalid",
-                    containment: "#dragDropSection", scroll: false                    
-                });
-
-                //Make the Target List Dropable and force it to accept newly created source List
-                makeSectionsDropable();
-                $btn.button('reset');
-            });
-        });
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         $("#btnSaveForm").click(function () {
+            //Somehow the click event gets always triggered twice. Only execute the action on the first execution an ignore the second
+            //alert('Saving..');
             $(this).button('loading');
             document.getElementById("isPublished").value = "false"      //We are saving only (Not publishing)
-
-            if (validateForm()){
+            if (validateForm()) {
                 PostForm();
             }
-        });
-        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        $("#btnPublishForm").click(function(){
-            $(this).button('loading');
-            document.getElementById("isPublished").value = "true"      //We are Publishing the form
-
-            // Validate that a valid Start Date is entered when the Form is being published
-            if ($('#cft_eff_st_dt').val() == "") {
-                $('#btnPublishForm').button('reset');
-                alert("The Effective Start Date is required when Publishing a Form");
-                $('#cft_eff_st_dt').addClass("invalidField");
-                $('#cft_eff_st_dt').focus();
-            }
-            else{
-                //Set the Pop up dates to match what is currently selected on the Form before showing the popup
-                if (validateForm())  // Validate the Form. If it's Valid proceed
-                {
-                    $("#conf_cft_eff_st_dt").val($("#cft_eff_st_dt").val());
-                    $("#conf_cft_eff_end_dt").val($("#cft_eff_end_dt").val());
-                    $("#confPubDates").modal();
-                }
-            }
-        });
-        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    });
-</script>
 
 
 
-@* --- Drag and Drop Java Script - - - - - *@
-<script type="text/javascript">
-    var executeCounter = 0;  //(Used by the Question Delete/Remove Button)
-    // Function to call everytime we do a drag and drop
-    function updateValues(msg) {
-        alert(msg);
 
-        //var items = [];
-        //$("ul.target").children().each(function () {
-        //    var item = { manufacturer: $(this).text() };
-        //    items.push(item);
-        //});
-        //var jsonData = JSON.stringify(items);
-        //$.ajax({
-        //    url: "dnd.xsp/setfavourites",
-        //    type: "PUT",
-        //    data: jsonData,
-        //    dataType: "json",
-        //    contentType: "application/json; charset=utf-8",
-        //    success: function () { },
-        //    error: function () { }
-        //});
-    };
+            //if ($("#frmEventCounter").val() == "0") {
+            //    //alert("Saving Form..." + $("#frmEventCounter").val() + " times.\nEvent is being executed!");
+            //    $("#frmEventCounter").val("1");  //Increase/change the counter so the next time the events is fired it will be ignored
+            //}
+            //else {
+            //    //alert("Saving a second time.... EVENT IGNORED!!");
+            //    $("#frmEventCounter").val("0");   //Reset the counter for next time a button on the pop up is clicked
+            //}
 
-    function makeSectionsDropable() {
-        $(".targetList").droppable({
-            addClasses: false,
-            activeClass: "listActive",
-            hoverClass: "list-drag-hover",
-            accept: ":not(.ui-sortable-helper)",
-            //accept: function(d) { 
-            //    //if(d.hasClass("foo")||(d.attr("id")=="bar")){ 
-            //    //    return true;
-            //    //}
-            //},
-            drop: function (event, ui) {
-                //This function is executed everytime an item is dragged and dropped (After drop)
-                $(this).find(".placeholder").remove();
 
-                var link = $("<a href='#' class='dismiss' >&nbsp;&times;&nbsp;</a>");
-                var qid = ui.draggable.attr("id");
-                //var listId = "liID" + qid;
 
-                //var list = $("<li></li>").text(ui.draggable.text());
-                //var list = $("<li id=\"li" + qid + "\" class=\"newliItem\"></li>").text("Question Id is: " + qid); //    .setAttribute('class', 'newliItem');
-                var list = $("<li id=\"li" + qid + "\" class=\"newliItem question\"></li>").text(""); //    .setAttribute('class', 'newliItem');
+            //var executionResult = isCascadeEvent();
+            //alert("Function Returned: " + executionResult);
+            //if (!isCascadeEvent()) {
+            //    //If this is the first time this event is triggered in the last few seconds, execute it
+            //    alert("Saving in progress!!");
+            //}
+            //else {
+            //    alert("Saving Skipped.");
+            //    //Ignore Event
+            //}
 
-                //list.setAttribute('class', 'newliItem');
-                //alert($(list).attr("id"));   //It works, the Id is "li99" (99=qid)
-                $(list).append(link);
-                
-
-                //---- Now create a DIV section with a loading placeholder and attach it to the list -----
-                var loadingDIV = document.createElement('div');
-                loadingDIV.setAttribute("id", "qLoadingDiv");
-                loadingDIV.setAttribute("style", "text-align:center");
-                loadingDIV.innerHTML = '<br />Please Wait... <br/><img src="/Images/ui-anim_basic_16x16.gif" /><br\><br\>';
-                $(list).append(loadingDIV);                
-                //-- Done attaching DIV Loading placeholder which will be removed after the ajax call is complete---
-
-                // Add the new List Item to the Target Questions List (Add "LI" to "OL")
-                $(list).appendTo(this);
-
-                //updateValues(ui.draggable.text().substring(3, 5));
-
-                // updateValues("Question Added Successfully: " + getTestData(qid));   //Method invoked when action is dropped successfully
-
-                //Added second parameter to keep original state of the selected QAT in the dropdown
-                
-                getQinfo(qid, 0);
-                
-                $("#formChanged").val("Y");
-                $("#btnCancel").removeAttr('disabled');
-                //Remove the Section Delete Button. When Question is added, It is no longer empty
-                $(this).parents(".formSection").find("#btnDelSection").hide();
-                //$('.ui-draggable-dragging').hide();  // To not show the "Revert" effect when dropped successfully (Not needed if draggable revert="invalid"
-
-                //Scroll the Panel to the botton
-                // Check if we added a question to the last section. If so, scroll the panel to the button
-                //panel id = qFormList
-                //alert("Id: " + $(this).attr("id") + " Was selected.")  //The olListxx Id were the question was dropped
-                //alert("This is panel " + $(this).attr("id").substring(6) + " out of " + $("#qFormList").find(".targetList").length);
-                
-                //if ( $(this).attr("id").substring(6) == $("#qFormList").find(".targetList").length){
-                //alert("Question Dropped on the last Section!")
-                //}
-            }
-        }).sortable({
-            connectWith: ".connected",
-            items: "li:not(.placeholder)",
-            //start: function (event, ui) { 
-            //    // modify ui.placeholder Text however you like
-            //    ui.placeholder.html("I'm modifying the placeholder element!");
-            //},
-            //stop: function (event, ui) {
-            //    var item = $(ui.item);
-            //    alert($(this).attr("id"));
-            //    var to = item.parent().is("#droppable_widget");
-            //    var siblingsCount = item.siblings().size();
-            //    if (to && siblingsCount > 0) {
-            //        alert("only one item allowed here");
-            //        return false;
-            //    }
-            //},
-            placeholder: {
-                element: function(currentItem) {
-                    return $('<li><div style="background-color:#deecff; text-align:center""><br/><br/>DROP ITEM HERE<br/><br/></div></li>')[0];
-                },
-                update: function(container, p) {
-                    return;
-                }
-            },
-
-            sort: function () {
-                $(this).removeClass("listActive");
-            },
-            //beforeStop: function(ev, ui) {
-            //    if ($(ui.item).hasClass('innerListItem') ) {
-            //        $(this).sortable('cancel');
-            //    }
-            //},
-            receive: function(event, ui) {
-                // This function executes when an item is received at the target list during "sort"
-                //alert("[" + this.id + "] received data from [" + ui.sender.attr("id") + "]");
-                $(this).parents(".formSection").first().find(".btnDelSection").hide();
-            },
-            update: function () {
-                //This function is executed every time an item is sorted complete (After sort)
-                var qid2 = $(this).qid;
-                $(this).find(".placeholder").remove();
-                $("#formChanged").val("Y");
-                $("#btnCancel").removeAttr('disabled');
-                if ($(this).find(".question").length < 1){
-                    //There are no questions Left on the Source section
-                    $(this).parents(".formSection").first().find(".btnDelSection").show();
-
-                    //alert("No questions left on id: " + $(this).prop("id"));
-                }
-                //updateValues("An Item was reordered." + +getTestData(qid2));  // Call function After Sorting
-            }
-        }).on("click", ".dismiss", function (event) {
-            //Somehow, this function is executing twice when even is triggered.
-            executeCounter = executeCounter + 1;
-            event.preventDefault();
-            if (executeCounter == 1){   //Perform the action only when the "executeCounter" is 1. To prevent doing everything more than once
-                //var qdelId = $(this).parent().attr("id");
-
-                // Count the questions in the containing section.
-                //If the section has only one question (The current Question Being removed) then display the "Section Delete Button"
-                //and show the "Drag a question Here" Template.  Otherwise, just hide the delete button.
-                var $parentFrmSection = $(this).parents(".formSection").first();
-                var $sectDelBtn = $parentFrmSection.find("#btnDelSection");
-                var qInSection = $parentFrmSection.find(".question").length;
-                //
-                if (qInSection == 1 ){
-                    $sectDelBtn.show();
-                    // Add code to display the "Drag a question Here" Template if it doesn't already exist.
-                    if ($parentFrmSection.find(".placeholder").length == 0){
-                        var placeholderNew = $("<li class=\"list-group-item placeholder\"></li>").append('<div style="font-weight:bold; font-size:large"><br />Drag a question here...<br /><br /></div>');
-                        $(placeholderNew).appendTo( $parentFrmSection.find(".targetList").first() );
-                    }
-                }
-                else{
-                    $sectDelBtn.hide();
-                }
-                $(this).parent().remove();
-
-                //alert("Parent Id is: " + $parentFrmSection.prop("id") + " and it has " + qInSection + " questions." );
-                //alert("There are [" + itemsInParent + "(" + testCounter + ")" + "] Questions Left on This section!");
-            }
-            else{
-                executeCounter =0;  //Reset the counter to Zero so this function can be executed when the event is called again by the user
-            }
 
         });
-
-        //Finally make sure the Section Title are autocomplete
-        $(".sectionTitle").autocomplete({
-            source: "/ColFormTemplate/SectionNameLookup",
-            minLength: 1,
-            select: function( event, ui ) {
-                //Perform 'error reset' steps after a valid selection is done from the autocomplete list
-                $('#btnSaveForm').button('reset');
-                $(this).css({
-                    "color": "black",
-                    "background-color": "white"
-                });
-            }
-        });
-
-        $(".sectionTitle").on("change", function(){
-            if ($(this).val() == "")
-            {
-                $(this).css({
-                    "color": "white",
-                    "background-color": "red"
-                });
-            }
-            else{
-                //Perform 'error reset' steps after a valid selection is done from the autocomplete list
-                $('#btnSaveForm').button('reset');
-                $(this).css({
-                    "color": "black",
-                    "background-color": "white"
-                });
-            }
-        });
-
-    }
-
-
-
-    //------------------------------------------------------------------
-    function getQinfo(questionId, questionQATid) {
-        var newCounterSeq = $("#qCounter").val();
-        //var newCounterSeq = 1;
-        var qid = questionId
-        var ajaxResult = "Sample Data";
-        //var target = ev.target || ev.srcElement;
-        //var myId = $(event.target).attr("id");;
-
-        //alert("Retrieving Information via Ajax for Question Id: " + qid);
-        // ------------ Make the Ajax Call ---------------------------------------------
-        $.ajax({
-            url: '@Url.Action("getQuestionInfo", "ColFormTemplate")',
-            method: "GET",
-            cache: false,
-            data: { question_id: qid, question_QATid: questionQATid, qCounter: newCounterSeq },     //<---- Data Parameters (if not already passed in the Url)
-            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-            //beforeSend: function( xhr ) {
-            //    //xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-            //    alert("Ready to Submit Ajax call" );
-            //},
-
-
-            //--- On error, execute this function ------
-            error: function () {
-                alert("Can't find data for question id " + qid + " !!");  //<-- Trap and alert of any errors if they occurred
-                //$btn.button('reset');
-            }
-        }).done(function (d) {
-            //Execute this code After the Ajax call completes successfully
-
-            //Put the retrieved source code inside a <DIV> tag
-            //Add the Division tag to the newly created "Li"
-            var newDIV = document.createElement('div');
-            newDIV.innerHTML = d;  // (If we want to just add some inner html text)
-            //newDIV.appendChild(d);   // (If we want to add a child element)
-
-            //Remove the DIV that has the "Loading Placeholder" of the new List Question entry 
-            $('.newliItem').find("#qLoadingDiv").first().remove();
-            //Add the new DIV with the rendered partial view
-            var liCreated = $('.newliItem').append(newDIV);
-
-            //Once the New List Item has been completed remove its "newli" atribbute
-            liCreated.removeClass("newliItem");
-            //$('#ajaxSample').html(d)
-
-            $('#qCounter').val(Number($('#qCounter').val()) + 1);
-            //ajaxResult = d;
-            //alert("Ajax call completed. result: " + d);
-            //return ajaxResult;
-            //alert("You jusr added question View Id: " + "qRow" + newCounterSeq)
-            //ev.target.html(d);
-            //$("#questionPnl01").append(d);
-            //$btn.button('reset');
-            //return d;
-        });
-    }
-
-
-    function getTestData(questionId) {
-        return "[You Selected Question Id: " + questionId + "]";
-    }
-
-    function removeSection(qSectionId) {
-        $("#" + qSectionId).remove();
-    }
-</script>
-
-@* - - - - - - - SCRIPT TO ADD A NEW SECTION TO THE FORM AND SET THE "FORM CHANGED" STATUS when form is modified- - - - - - - - - - *@
-<script type="text/jscript">
-    $(document).ready(function(){
-        // Variables and a Function Used to Scroll Down the sections/question panel (Can be Invoked later on from any section inside this script)
-        var height = 0;
-        function scroll(height) {
-            this.stop().animate({ scrollTop: height }, 1000);
-        };
-        var scrollPanel = $('#qFormList');
-        // ----- End of Variables and a Function Used to Scroll Down the sectons/question panel -------
 
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-        $('input, select, textarea').not(".qInput").change(function () {
-            //$("input[type='submit']").removeAttr("disabled");
 
-            if ($('#btnSaveForm').val() != "Save Form") {
-                $('#btnSaveForm').button('reset');
-            }
-            $("#btnSaveForm").removeAttr('disabled');
-            $("#btnCancel").removeAttr('disabled');
-            $("#btnReset").removeAttr('disabled');
-            //alert('Button Text is:' + btnText);
-            $("#formChanged").val("Y");   // Re-enable the form "changed" status
-            //isChanged = true;
-            $(this).removeClass("invalidField");
-        });
-        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        $(window).bind('beforeunload', function () {
-            if($("#formChanged").val() == "Y") {
-                //if (isChanged) {
-                return 'There are unsaved changed. Do you want to discard Changes and Exit?';
-                //var response =
-                //$( "#dialog-confirm-exit" ).dialog({
-                //    resizable: false,
-                //    height:250,
-                //    modal: true,
-                //    buttons: {
-                //        "Discard Changes": function() {
-                //            //$("#formChanged").val("N");
-                //            //isChanged.val("N");
-                //            response = true;
-                //        },
-                //        Cancel: function() {
-                //            //$( this ).dialog( "close" );
-                //            response = false;
-                //        }
-                //    }
-                //});
-                //return response;
-            }
-            else {
-                return undefined;
-            }
-        });
-        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        $('#btnAddSection').click(function () {
-            var $btn = $(this);
-            $btn.button('loading');
-            addNewSection();
-            $btn.button('reset');
-            //Automatically Scroll to the botton of the Panel where the new Section was Inserted
-            //If we wanted to scroll to the top, we would set the "height = 0"
-            height = scrollPanel[0].scrollHeight;
-            scroll.call(scrollPanel, height);
-            //$('#qFormList').scrollTop($('#qFormList').scrollHeight);
-        })
 
-        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-        $("#accordion").on('click', '.btnDelSection', function(){
-            var sectionsLeft = $("#accordion").find(".formSection").length;
 
-            $(this).parents(".formSection").first().remove();
-            if (sectionsLeft == 1){ //The one section we are removing
-                addNewSection();
-            }
-        });
-
-        // -------- STARTUP ACTION TO PERFORM WHEN THE FORM FIRST LOADS --------------
-        var currentFormId = parseInt( @colFormId);
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        // ------------------ STARTUP ACTION TO PERFORM WHEN THE FORM FIRST LOADS ---------------------
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         //Perform an automatic "Question Search"  to load all library question as a default action
         $('#doSearch').click();
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2071,132 +1314,13 @@
             addNewSection();
             $("#formChanged").val("N");   // To prevent the alert of leaving the page from showing-up after a section was added on first load
         }
-        //if (currentFormId > 0){ alert("You are editing Id: " + currentFormId); }
-        //else{ alert("You are Creating a New Form! [Id: " + currentFormId + "]"); }
-
-
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        //Enable all section (Even those dynamically created) to be Dragable/Dropable
+        makeSectionsDropable();
+        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
     });  // END Of document Ready Startup Scripts
 
-
-    function addNewSection() {
-        $('#sCounter').val(Number($('#sCounter').val()) + 1);
-        // ------------ Make the Ajax Call ---------------------------------------------
-        $.ajax({
-            url: '@Url.Action("addNewSection", "ColFormTemplate")',
-            method: "GET",
-            cache: false,
-            data: { sCounter: $('#sCounter').val() },     //<---- Data Parameters (if not already passed in the Url)
-            //data: JSON.stringify({ 'Options': someData }),           //<--- In case we wanted to post a JSON data object
-            //dataType: "json",                                        //<--- In case we wanted to post a JSON data object
-            //contentType: "application/json; charset=utf-8",          //<--- In case we wanted to post a JSON data object
-            //traditional: true,                                       //<--- In case we wanted to post a JSON data object
-
-            //--- On error, execute this function ------
-            error: function () {
-                alert("An Error has Occurred. Unable to Add New Sections to Form!!");  //<-- Trap and alert of any errors if they occurred
-                $btn.button('reset');
-            }
-        }).done(function (d) {
-            //Execute this code After the Ajax call completes successfully
-            $("#accordion").append(d);
-            makeSectionsDropable();
-            // Reenable the "form change" validation on the newly created section
-            $('input').change(function () {
-                $("#formChanged").val("Y");
-                //isChanged = true;
-                $("#btnSaveForm").removeAttr('disabled');
-                $('#btnSaveForm').button('reset');
-                $(this).removeClass("invalidField");
-            });
-        });
-
-    } // ------ End of addNewSection() function -----
-
-    function enableDropDown(dropdown) {
-        //var $drop_down = $(this);
-        var selectedId = dropdown.val();
-        var selectedText = dropdown.children("option:selected").text();
-        var ddlId = dropdown.prop("id");
-
-        var selansDiv = dropdown.parents(".divFormQuestion").first().find(".selAnsSection").first();
-        var qid = dropdown.parents(".divFormQuestion").first().find("#qid").val();
-        //alert("Selected Text is: " + selectedText);
-        //alert("Before opening modal window, the ddl id is: " + ddlId);
-        if (selectedId == '') {
-            selectedId = "-1";
-            @*$("#@Model.uniqueCounter").html("");*@
-            selansDiv.html("");
-        }
-        else if(selectedId == 'New'){
-            //alert("A New Question request has been issued!");
-            $("#popupStatus").val("");
-            $(this).parents(".divFormQuestion").first().find(".selAnsSection").first().html("");  // Reset Sel Answers
-            //Reset the modal Window contents
-            clearNewSAbox();
-
-            // Following code not used anymore as we will no longer keep a list of AT to add (New functionality
-            // will only save one AT at a time)
-            ////Set the Hidden Field Values that will be used in Edit Mode
-            //if ($("#popupDDLid").val() != ddlId)
-            //{  // This indicates that a new Dropdown is being selected for edition!
-            //    //Reset the old values from the "added" section, as they do not need to be kept from a previous different Selectable Answer
-            //    $("#divaddedSA").html("");
-            //}
-
-            $("#popupDDLid").val(ddlId);
-            var questionText = dropdown.parents(".divFormQuestion").first().find(qText).text();
-            $("#selQText").html(questionText);
-            //$("#selQText").text(questionText);
-            $("#editQATWindow").modal();
-            //selansDiv.html("");
-        }else
-        {
-            if (selectedText.substring(0,2) == "YN" || selectedText.substring(0,2) == "Fr")
-            {
-                selansDiv.html('<span style="color:blue">No Selectable Answers Required for this Selection</span>')
-            }
-            else{
-                //alert("Selected ID "+selectedId);
-                $.ajax({
-                    url: '@Url.Action("GetSelectableAnswers", "ColFormTemplate")',
-                    method: "GET",
-                    cache: false,
-                    data: { qat_id: selectedId },
-                    error: function () {
-                        alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
-                    }
-                }).done(function (d) {
-                    //alert("Retrieved Data is: " + d);
-                    selansDiv.html(d);
-                });
-            }
-        }
-        @*var cur_sel = document.getElementById("currentSelectedQAT"+@Model.uniqueCounter);
-            cur_sel.value = selectedId;*@
-
-        $(this).css({
-            "color": "black",
-            "background-color": "white"
-        });
-    }
-
-    // Function to load the selected template values into the Edit Mode ANswer Types
-    function loadTemplate(callerBtn, selAnslist) {
-        //Create an array of values (From parameter selAnslist value) to apply to the text boxes
-        var templateList = selAnslist.split(",");
-
-        // Loops through all textboxes of the upper level parent DIV and set their values accordingly
-        var textBoxCounter = 0;
-        $("#newQATsection").find(".selAnswerTextb").each(function () {
-            $(this).val(templateList[textBoxCounter]);
-            textBoxCounter = textBoxCounter + 1;
-        });
-
-        //$('.saveSA').prop('disabled', false);
-        $("#btnSaveNewSelAnswer").removeAttr('disabled');
-        $("#btnSaveNewSelAnswer").button('reset');
-        $("#newErrorMsg").html("");
-    }
 
 </script>

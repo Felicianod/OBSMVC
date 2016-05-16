@@ -154,12 +154,14 @@
         <td style="text-align:center">
             @Html.DisplayFor(modelItem => item.ObservationCount)
         </td>
-        <td>
+        <td style="text-align:center">
             @*@Html.DisplayFor(modelItem => item.LastCompleteDate)*@
             @if(item.LastCompleteDate > Convert.ToDateTime("12/31/1900"))
             {
                 @Html.DisplayFor(modelItem => item.LastCompleteDate);
             }
+            else
+            {<text>Never</text> }
         </td>
     
     </tr>

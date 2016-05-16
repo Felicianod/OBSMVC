@@ -335,7 +335,6 @@ function leavePage() {
 function delForm(){
     // Perform an Ajax call to either hard or soft delete the current form
     var cft_id = $("#cft_id").val();
-    alert("Deleting...");
     $.ajax({
         //url: '@Url.Action("deleteForm", "ColFormTemplate")',
         url: '/ColFormTemplate/deleteForm',
@@ -606,6 +605,7 @@ $(document).ready(function () {
         showConfirmation("Confirm Form Deletion", "Are you sure you want to delete this Form?", "Delete Form", "delForm");
     });
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     $("#btnAlertConfirm").click(function () {
         ////Once the user confirms the Alert execution, call the function that was set
         //// Retrieve String Name of function we want to run and find the object
@@ -614,7 +614,7 @@ $(document).ready(function () {
         //alert("You are about to Execute Funcion: " + funcToExecute);
         //// If object a function, execute it?
         //if (typeof fn === "function") fn();
-
+        alert("Deleting...");
         var cft_id = $("#cft_id").val();
         // Perform an Ajax call to either hard or soft delete the current form
         $.ajax({
@@ -638,6 +638,7 @@ $(document).ready(function () {
                 //alert("Form Id: " + cft_id + " has been Deleted!");
                 //close modal Popup
                 $('#confPopUp').modal('toggle');
+                $("#formChanged").val("N");
                 location.href = "/ColFormTemplate/";
             }
             else {
@@ -817,7 +818,18 @@ $(document).ready(function () {
             //--------------------------------------------------------------------------------------------------------
         }
     });
+    //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    $("#btnSaveForm").click(function () {
+        //Somehow the click event gets always triggered twice. Only execute the action on the first execution an ignore the second
+        //alert('Saving..');
+        $(this).button('loading');
+        document.getElementById("isPublished").value = "false"      //We are saving only (Not publishing)
+        if (validateForm()) {
+            PostForm();
+        }
+    });
 
+    //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     $("#btnPublishForm").click(function(){
         $(this).button('loading');

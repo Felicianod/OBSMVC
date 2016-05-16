@@ -911,7 +911,7 @@
                     var loadingDIV = document.createElement('div');
                     loadingDIV.setAttribute("id", "qLoadingDiv");
                     loadingDIV.setAttribute("style", "text-align:center");
-                    loadingDIV.innerHTML = '<br />Please Wait... <br/><img src="/Images/ui-anim_basic_16x16.gif" /><br\><br\>';
+                    loadingDIV.innerHTML = '<br />Loading... <br/><img src="/Images/ui-anim_basic_16x16.gif" /><br\><br\>';
                     $(list).append(loadingDIV);
                     //-- Done attaching DIV Loading placeholder which will be removed after the ajax call is complete---
 
@@ -1155,10 +1155,10 @@
         $("#btnReset").click(function () {
             if ( $("#formChanged").val() == "Y")
             {
-                if ( $("#bootstrapBtnReset").val() == "N"){
-                    $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window
-                    $("#bootstrapBtnReset").val("Y");
-                }
+                //if ( $("#bootstrapBtnReset").val() == "N"){
+                //    $.fn.bootstrapBtn = $.fn.button.noConflict();  // To restore the "X" close button of the alert window
+                //    $("#bootstrapBtnReset").val("Y");
+                //}
 
                 $( "#dialog-confirm-reset" ).dialog({
                     resizable: false,
@@ -1255,49 +1255,10 @@
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        $("#btnSaveForm").click(function () {
-            //Somehow the click event gets always triggered twice. Only execute the action on the first execution an ignore the second
-            //alert('Saving..');
-            $(this).button('loading');
-            document.getElementById("isPublished").value = "false"      //We are saving only (Not publishing)
-            if (validateForm()) {
-                PostForm();
-            }
 
-
-
-
-            //if ($("#frmEventCounter").val() == "0") {
-            //    //alert("Saving Form..." + $("#frmEventCounter").val() + " times.\nEvent is being executed!");
-            //    $("#frmEventCounter").val("1");  //Increase/change the counter so the next time the events is fired it will be ignored
-            //}
-            //else {
-            //    //alert("Saving a second time.... EVENT IGNORED!!");
-            //    $("#frmEventCounter").val("0");   //Reset the counter for next time a button on the pop up is clicked
-            //}
-
-
-
-            //var executionResult = isCascadeEvent();
-            //alert("Function Returned: " + executionResult);
-            //if (!isCascadeEvent()) {
-            //    //If this is the first time this event is triggered in the last few seconds, execute it
-            //    alert("Saving in progress!!");
-            //}
-            //else {
-            //    alert("Saving Skipped.");
-            //    //Ignore Event
-            //}
-
-
-        });
-
-        //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
 

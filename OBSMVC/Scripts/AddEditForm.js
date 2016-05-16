@@ -614,7 +614,7 @@ $(document).ready(function () {
         //alert("You are about to Execute Funcion: " + funcToExecute);
         //// If object a function, execute it?
         //if (typeof fn === "function") fn();
-        alert("Deleting...");
+        
         var cft_id = $("#cft_id").val();
         // Perform an Ajax call to either hard or soft delete the current form
         $.ajax({

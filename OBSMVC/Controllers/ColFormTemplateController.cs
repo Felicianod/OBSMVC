@@ -333,8 +333,17 @@ namespace OBSMVC.Controllers
         public ActionResult AddEditForm(int? id)
         {
             int cftid = id ?? 0;
-
-            oCollectionForm selectedColForm = new oCollectionForm(cftid);
+            oCollectionForm selectedColForm;
+            
+            // Try creating an instance of the form
+            try {
+                selectedColForm = new oCollectionForm(cftid);
+            }
+            catch (Exception ex)
+            {
+                selectedColForm = new oCollectionForm(0);
+                ViewBag.errorMessage = "ERROR Found: " + ex.Message;
+            }
             
             if (cftid > 0)
             {                
@@ -657,12 +666,19 @@ namespace OBSMVC.Controllers
                 List<AvailableQuestions> temp_questions_list = new List<AvailableQuestions>();
                 List<AvailableQuestions> temp_md_list = new List<AvailableQuestions>();
                 List<OBS_QUESTION> list_of_questions = new List<OBS_QUESTION>() ;
-                
-                string[] individual_strings = full_text_search.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                //first lets search for question text
-                foreach (string s in individual_strings)
+
+                //string[] individual_strings = full_text_search.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                ////first lets search for question text
+                //foreach (string s in individual_strings)
+                //{
+                //    list_of_questions.AddRange(db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.ToLower().Contains(s.ToLower())));                   
+                //}
+                foreach(OBS_QUESTION q in db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now))
                 {
-                    list_of_questions.AddRange(db.OBS_QUESTION.Where(item => item.obs_question_eff_st_dt <= DateTime.Now && item.obs_question_eff_end_dt > DateTime.Now && item.obs_question_full_text.ToLower().Contains(s.ToLower())));                   
+                    if (matchesSearchCriteria(full_text_search, q.obs_question_full_text, "All"))
+                    {
+                        list_of_questions.Add(q);
+                    }
                 }
                 list_of_questions = list_of_questions.Distinct().ToList();
                 if (list_of_questions.Count > 0)
@@ -688,9 +704,8 @@ namespace OBSMVC.Controllers
                         md_quest.assigned_metadata = md_quest.getAssignedMetadata(q.obs_question_id);
                         foreach (string s in md_quest.assigned_metadata)
                         {
-                            foreach(string str in individual_strings)
-                            {
-                                if (s.ToLower().Contains(str.ToLower()) && (temp_questions_list.Where(x => x.obs_question_id == q.obs_question_id).Count() == 0))
+
+                                if (matchesSearchCriteria(full_text_search,s,"All") && (temp_questions_list.Where(x => x.obs_question_id == q.obs_question_id).Count() == 0))
                                 {
                                     md_quest.obs_question_id = q.obs_question_id;
                                     md_quest.obs_question_full_text = q.obs_question_full_text;
@@ -698,7 +713,7 @@ namespace OBSMVC.Controllers
                                     break;
                                 }
                                 else { continue; }
-                            }
+                            
 
                         }
                     }
@@ -1185,7 +1200,24 @@ namespace OBSMVC.Controllers
             }
             public DateTime? getLastCompleteDate(int cft_id)
             {
-                return OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date).Equals(null) ? null : OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date);
+                List<DateTime> all_dates = new List<DateTime>();              
+                try
+                {
+                    all_dates.Add((DateTime)OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_comp_date));
+                }
+                catch { }
+                try
+                {
+                    all_dates.Add((DateTime)OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_start_dt));
+                }
+                catch { }
+                try
+                {
+                    all_dates.Add((DateTime)OBSdb.OBS_COLLECT_FORM_INST.Where(item => item.obs_cft_id == cft_id).Max(x => x.obs_cfi_last_upd_dt));
+                }
+                catch { }
+              
+                return all_dates.Count()>0? all_dates.Max():all_dates.FirstOrDefault();
 
             }
             public List<int> getAssignedFunctions(int cft_if)
@@ -1655,9 +1687,31 @@ namespace OBSMVC.Controllers
         //--- CONSTRUCTOR------------------
         public oCollectionForm() : this(0) { }
         public oCollectionForm(int id)
-        {//Create the Collection Form Data (Header Info) from the Id passed as a parameter            
+        {//Create the Collection Form Data (Header Info) from the Id passed as a parameter
             cft_id = id;
-            var q = (from A in db.OBS_COLLECT_FORM_TMPLT
+            //Initialize required values (Default values for when Id=0 or Id not found in the database)
+            //The Assumpsion is that we are in "add" mode
+            screen_Title = "Collection Form Creation";
+            cft_editMode = "add";
+            cft_Title = "";
+            cft_SubTitle = "";
+            //cft_obsType = q.cft_obsType;
+            //cft_Cust = q.cft_Cust;
+            //cft_LC = q.cft_LC;
+            //cft_Status = q.cft_Status;
+            cft_isPublished = "NOT PUBLISHED";
+            hasInstances = false;
+            //hasNewVersion = false;
+            cft_new_vers_cft_id = 0;
+            previous_vers_cft_id = 0;
+            manageAction = "";
+            cft_Nbr = 0;
+            cft_Version = 0;
+            colFormSections = new List<CollectionFormSection>();
+
+            // If the Form Id is greater than zero, populate all values fron the Database
+            if (cft_id > 0) {
+                var q = (from A in db.OBS_COLLECT_FORM_TMPLT
                      join B in db.OBS_TYPE                          //First Table Left join
                          on A.obs_type_id equals B.obs_type_id
                          into tl_b
@@ -1684,82 +1738,65 @@ namespace OBSMVC.Controllers
                          cft_eff_st_dt = A.obs_cft_eff_st_dt,
                          cft_eff_end_dt = A.obs_cft_eff_end_dt
                      }).ToList().FirstOrDefault();
-            // Set the properties from query result
-            if (q != null)
-            { // A matching cft form was found in the database. Assume we are in "edit" mode
-                screen_Title = "Collection Form Maintenance";
-                cft_editMode = "edit";
-                hasInstances = db.OBS_COLLECT_FORM_INST.Count(x => x.obs_cft_id == cft_id) > 0 ? true:false;
-                //hasNewVersion = db.OBS_COLLECT_FORM_TMPLT.Count(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver > q.cft_Version) > 0 ? true : false;
-                cft_Title = q.cft_Title;
-                cft_SubTitle = q.cft_SubTitle;
-                cft_obsType = q.cft_obsType;
-                cft_Cust = q.cft_Cust;
-                cft_LC = q.cft_LC;
-                cft_Status = q.cft_Status;
-                cft_isPublished = q.cft_isPublished;
-                cft_Nbr = q.cft_Nbr;
-                cft_Version = q.cft_Version;
-                cft_eff_st_dt = q.cft_eff_st_dt;
-                cft_eff_end_dt = q.cft_eff_end_dt;
-                previous_vers_cft_id = 0;
-                OBS_COLLECT_FORM_TMPLT next_version = new OBS_COLLECT_FORM_TMPLT();
-                if (db.OBS_COLLECT_FORM_TMPLT.Any(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1))
-                {
-                     next_version = db.OBS_COLLECT_FORM_TMPLT.Single(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1);
-                    cft_new_vers_cft_id = next_version.obs_cft_id;                    
-                }
-                //Retrieve the cft_id of the new form's version (If any) (Value greater than zero means that this forms has a newer version)
-                //cft_new_vers_cft_id = db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1).Select(y => y.obs_cft_id).FirstOrDefault();
-                if (cft_Version>1)
-                {
-                    OBS_COLLECT_FORM_TMPLT prev_version = db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version -1).FirstOrDefault();
-                    previous_vers_cft_id = prev_version.obs_cft_id;
-                    previous_vers_end_eff_dt = (DateTime)prev_version.obs_cft_pub_dtm;
-                }
-                //previous_vers_cft_id =
-                colFormSections = new List<CollectionFormSection>();
-                retrieveQuestionData();
-                if (cft_isPublished.Equals("PUBLISHED"))
-                {
-                    if(cft_new_vers_cft_id>0)
-                    {
-                        manageAction = next_version.obs_cft_pub_dtm == null ? "RESTRICTED" : "VIEW-ONLY";
-                    }
-                    else
-                    {
-                        manageAction = hasInstances ? "NEW VERSION" : "EDIT";//  "VIEW-ONLY", "RESTRICTED"
-                    }
-                    
-                }
-                else { manageAction = ""; }
 
-               
-                //int cft_new_vers_cft_id =  db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1).Select(y => y.obs_cft_id).FirstOrDefault();
+                // Set the properties from query result
+                if (q != null)
+                { // A matching cft form was found in the database. Assume we are in "edit" mode
+                    screen_Title = "Collection Form Maintenance";
+                    cft_editMode = "edit";
+                    hasInstances = db.OBS_COLLECT_FORM_INST.Count(x => x.obs_cft_id == cft_id) > 0 ? true : false;
+                    //hasNewVersion = db.OBS_COLLECT_FORM_TMPLT.Count(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver > q.cft_Version) > 0 ? true : false;
+                    cft_Title = q.cft_Title;
+                    cft_SubTitle = q.cft_SubTitle;
+                    cft_obsType = q.cft_obsType;
+                    cft_Cust = q.cft_Cust;
+                    cft_LC = q.cft_LC;
+                    cft_Status = q.cft_Status;
+                    cft_isPublished = q.cft_isPublished;
+                    cft_Nbr = q.cft_Nbr;
+                    cft_Version = q.cft_Version;
+                    cft_eff_st_dt = q.cft_eff_st_dt;
+                    cft_eff_end_dt = q.cft_eff_end_dt;
+                    previous_vers_cft_id = 0;
+                    OBS_COLLECT_FORM_TMPLT next_version = new OBS_COLLECT_FORM_TMPLT();
+                    if (db.OBS_COLLECT_FORM_TMPLT.Any(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1))
+                    {
+                        next_version = db.OBS_COLLECT_FORM_TMPLT.Single(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1);
+                        cft_new_vers_cft_id = next_version.obs_cft_id;
+                    }
+                    //Retrieve the cft_id of the new form's version (If any) (Value greater than zero means that this forms has a newer version)
+                    //cft_new_vers_cft_id = db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1).Select(y => y.obs_cft_id).FirstOrDefault();
+                    if (cft_Version > 1)
+                    {
+                        OBS_COLLECT_FORM_TMPLT prev_version = db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version - 1).FirstOrDefault();
+                        previous_vers_cft_id = prev_version.obs_cft_id;
+                        previous_vers_end_eff_dt = (DateTime)prev_version.obs_cft_pub_dtm;
+                    }
+                    //previous_vers_cft_id =
+                    colFormSections = new List<CollectionFormSection>();
+                    retrieveQuestionData();
+                    if (cft_isPublished.Equals("PUBLISHED"))
+                    {
+                        if (cft_new_vers_cft_id > 0)
+                        {
+                            manageAction = next_version.obs_cft_pub_dtm == null ? "RESTRICTED" : "VIEW-ONLY";
+                        }
+                        else
+                        {
+                            manageAction = hasInstances ? "NEW VERSION" : "EDIT";//  "VIEW-ONLY", "RESTRICTED"
+                        }
 
-            }
-            else { 
-            // Form Id not found in the database, leave all values empty or use defaults. The Assumpsion is that we are in "add" mode
-                screen_Title = "Collection Form Creation";
-                cft_editMode = "add";
-                cft_Title = "";
-                cft_SubTitle = "";
-                //cft_obsType = q.cft_obsType;
-                //cft_Cust = q.cft_Cust;
-                //cft_LC = q.cft_LC;
-                //cft_Status = q.cft_Status;
-                cft_isPublished = "NOT PUBLISHED";
-                hasInstances = false;
-                //hasNewVersion = false;
-                cft_new_vers_cft_id = 0;
-                previous_vers_cft_id = 0;
-                manageAction = "";
-                cft_Nbr = 0;
-                cft_Version = 0;
-                colFormSections = new List<CollectionFormSection>();
-            }
+                    }
+                    else { manageAction = ""; }
+
+
+                    //int cft_new_vers_cft_id =  db.OBS_COLLECT_FORM_TMPLT.Where(x => x.obs_cft_nbr == q.cft_Nbr && x.obs_cft_ver == q.cft_Version + 1).Select(y => y.obs_cft_id).FirstOrDefault();
+
+                }
+            } // End of getting values from DB when cft_id > 0
+
             //Finally, set the "canBdeleted" property
-            // If the form is 'not published', it can be deleted! (and it contains zero question?)
+            // If the form is 'not published', it can be deleted!
             //str_cft_canBdeleted = (cft_isPublished.Equals("NOT PUBLISHED") && questCount() == 0 && id > 0 && (HttpContext.Current.User.Identity.Name == "delgado_feliciano" || HttpContext.Current.User.Identity.Name == "A_Rasul") );
             str_cft_canBdeleted = (cft_isPublished.Equals("NOT PUBLISHED") && cft_id > 0);
         }

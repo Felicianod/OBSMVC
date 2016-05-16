@@ -125,7 +125,7 @@
             { @Html.ActionLink("Manage", "AddEditForm", new { id = item.OBSformID })}
         </td>
         <td>
-            @Html.ActionLink(item.FormTitle, "Details", new { id = item.OBSformID })            
+            @Html.DisplayFor(modelItem => item.FormTitle)            
         </td>
         <td style="text-align:center">
             @Html.DisplayFor(modelItem => item.FormNumber)
@@ -155,7 +155,11 @@
             @Html.DisplayFor(modelItem => item.ObservationCount)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.LastCompleteDate)
+            @*@Html.DisplayFor(modelItem => item.LastCompleteDate)*@
+            @if(item.LastCompleteDate > Convert.ToDateTime("12/31/1900"))
+            {
+                @Html.DisplayFor(modelItem => item.LastCompleteDate);
+            }
         </td>
     
     </tr>

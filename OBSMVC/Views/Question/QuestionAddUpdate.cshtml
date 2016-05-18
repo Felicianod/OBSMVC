@@ -671,7 +671,7 @@
             });
         }
 
-        function loadTemplate(callerBtn, selAnslist) {
+        function loadTemplate(callerBtn, selAnslist) {            
             //Transverse up to the parent "DIV" and then loop through all its "Textbox" children
             //to set their values based on the selected Template
            
@@ -688,11 +688,20 @@
             //    textBoxCounter = textBoxCounter + 1;
             //});
 
-            $("#divNewAT").find(".selAnswerTextb").each(function () {
-                $(this).val(templateList[textBoxCounter]);
-                textBoxCounter = textBoxCounter + 1;
-            });
-            $('.saveSA').prop('disabled', false);
+            if ($("#divNewAT").prop("id") == "divNewAT") {
+                $("#divNewAT").find(".selAnswerTextb").each(function () {
+                    $(this).val(templateList[textBoxCounter]);
+                    textBoxCounter = textBoxCounter + 1;
+                });
+                $('.saveSA').prop('disabled', false);
+            }
+            else {
+                callerBtn.parents(".divText").first().find(".selAnswerTextb").each(function () {
+                    $(this).val(templateList[textBoxCounter]);
+                    textBoxCounter = textBoxCounter + 1;
+                });
+            }
+
         }
 
     </script>

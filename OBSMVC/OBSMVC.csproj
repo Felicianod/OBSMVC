@@ -420,6 +420,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Images\bgDeleted.png" />
     <Content Include="Images\Button-Add-icon.png" />
+    <Content Include="Images\confused-emoticon.jpg" />
     <Content Include="Images\DSCHome_Logo.gif" />
     <Content Include="Images\DSCHOME_Logo.png" />
     <Content Include="Images\iconNoAvatar.png" />
@@ -604,6 +605,7 @@
     <Content Include="Views\ColFormTemplate\_addFormQAInfo.cshtml" />
     <Content Include="Views\ColFormTemplate\ManageForm.cshtml" />
     <Content Include="Views\ColFormTemplate\_addReadOnlySection.cshtml" />
+    <Content Include="Views\Error\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -614,7 +616,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Error\" />
     <Folder Include="Views\LightQuestion\" />
     <Folder Include="Views\Shared\EditorTemplates\" />
   </ItemGroup>

@@ -158,7 +158,8 @@ namespace OBSMVC.Controllers
                                         short order = 1;
                                         for (int i = 1; i < ans_type_elements.Length; i++)
                                         {
-                                            OBS_QUEST_SLCT_ANS oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Single(item => item.obs_qat_id == intQATid && item.obs_qsa_text == ans_type_elements[i] && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now);
+                                            string sel_ans_element = ans_type_elements[i];
+                                            OBS_QUEST_SLCT_ANS oBS_QUEST_SLCT_ANS = db.OBS_QUEST_SLCT_ANS.Single(item => item.obs_qat_id == intQATid && item.obs_qsa_text == sel_ans_element && item.obs_qsa_eff_st_dt <= DateTime.Now && item.obs_qsa_eff_end_dt > DateTime.Now);
                                             oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
                                             db.SaveChanges();
                                             order++;
@@ -175,7 +176,7 @@ namespace OBSMVC.Controllers
                                             UPDATED_oBS_QUEST_SLCT_ANS.obs_qat_id = intQATid;
                                             UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_text = ans_type_elements[i].ToUpper();
                                             UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_order = order;
-                                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_wt = order;
+                                            UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_wt = 1;
                                             UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_dflt_yn = "N";
                                             UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_eff_st_dt = DateTime.Now;
                                             UPDATED_oBS_QUEST_SLCT_ANS.obs_qsa_eff_end_dt = Convert.ToDateTime("12/31/2060");
@@ -264,12 +265,13 @@ namespace OBSMVC.Controllers
                                         new_sel_ans.obs_qat_id = new_assigned_ans_type.obs_qat_id;
                                         new_sel_ans.obs_qsa_text = single_sel_ans_info[i];
                                         new_sel_ans.obs_qsa_order = order;
-                                        new_sel_ans.obs_qsa_wt = order;
+                                        new_sel_ans.obs_qsa_wt = 1;
                                         new_sel_ans.obs_qsa_dflt_yn = "N";
                                         new_sel_ans.obs_qsa_eff_st_dt = DateTime.Now;
                                         new_sel_ans.obs_qsa_eff_end_dt = Convert.ToDateTime("12/31/2060");
                                         db.OBS_QUEST_SLCT_ANS.Add(new_sel_ans);
                                         db.SaveChanges();
+                                        order++;
                                     }
                                 }
                             }

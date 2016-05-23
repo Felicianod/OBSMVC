@@ -229,7 +229,7 @@
                 <span class="alert-danger" style="font-size:small; color:red; font-style:italic; padding:3px">A new published version exists for this form!  Editting is restricted.</span>
             }
             else {
-                <div class="alert-success">This form is Published</div>
+                <div class="alert-success" style="color:red">This form is Published</div>
             }
         </div>
     </div>
@@ -254,13 +254,13 @@
                 <div class="col-sm-7">
                     <div class="input-group">
                         <div class="input-group-addon">Form Title:</div>
-                        @Html.EditorFor(model => model.cft_Title, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", disabled = "disabled", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold"} })
+                        @Html.EditorFor(model => model.cft_Title, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", disabled = "disabled", style = "max-width: 100%; width:100%; font-size:large; font-weight:bold"} })
                     </div>
                 </div>
                 <div class="col-sm-5">
                     <div class="input-group">
                         <div class="input-group-addon">Subtitle:</div>
-                        @Html.EditorFor(model => model.cft_SubTitle, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", disabled = "disabled", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold"} })
+                        @Html.EditorFor(model => model.cft_SubTitle, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", disabled = "disabled", style = "max-width: 100%; width:100%; font-size:large; font-weight:bold"} })
                     </div>
                 </div>
             </div>

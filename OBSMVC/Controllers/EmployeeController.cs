@@ -90,22 +90,32 @@ namespace OBSMVC.Controllers
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
                 //var employee = db.EMPLOYEEs.Single(x => x.dsc_emp_id == formEmployee.dsc_emp_id);
-                DSC_EMPLOYEE employee = db.DSC_EMPLOYEE.Find(formEmployee.dsc_emp_id);
-                employee.dsc_emp_title = formEmployee.dsc_emp_title;
-                employee.dsc_emp_perm_id = formEmployee.dsc_emp_perm_id;
-                employee.dsc_assigned_lc_id = formEmployee.dsc_assigned_lc_id;
-                employee.dsc_emp_can_be_obs_yn = formEmployee.dsc_emp_can_be_obs_yn=="on"?"Y":"N";
-                employee.dsc_emp_hourly_yn = formEmployee.dsc_emp_hourly_yn == "on" ? "Y" : "N";
-                employee.dsc_emp_temp_yn = formEmployee.dsc_emp_temp_yn == "on" ? "Y" : "N";
-                employee.dsc_emp_hire_dt = formEmployee.dsc_emp_hire_dt;
-                employee.dsc_emp_term_dt = formEmployee.dsc_emp_term_dt;
-                employee.dsc_emp_upd_dtm = DateTime.Now;
-                employee.dsc_emp_upd_uid = User.Identity.Name;
+                DSC_EMPLOYEE employee = formEmployee;
+                //if (!ModelState.IsValid) {
+                //    return View(formEmployee);
+                //}
+                try {
+                    employee = db.DSC_EMPLOYEE.Find(formEmployee.dsc_emp_id);
+                    employee.dsc_emp_title = formEmployee.dsc_emp_title;
+                    employee.dsc_emp_perm_id = formEmployee.dsc_emp_perm_id;
+                    employee.dsc_assigned_lc_id = formEmployee.dsc_assigned_lc_id;
+                    employee.dsc_emp_can_be_obs_yn = formEmployee.dsc_emp_can_be_obs_yn == "on" ? "Y" : "N";
+                    employee.dsc_emp_hourly_yn = formEmployee.dsc_emp_hourly_yn == "on" ? "Y" : "N";
+                    employee.dsc_emp_temp_yn = formEmployee.dsc_emp_temp_yn == "on" ? "Y" : "N";
+                    //employee.dsc_emp_hire_dt = formEmployee.dsc_emp_hire_dt;
+                    employee.dsc_emp_term_dt = formEmployee.dsc_emp_term_dt;
+                    employee.dsc_emp_email_addr = formEmployee.dsc_emp_email_addr;
+                    employee.dsc_emp_upd_dtm = DateTime.Now;
+                    employee.dsc_emp_upd_uid = User.Identity.Name;
+                    formEmployee = employee;
+                    db.SaveChanges();
+                    ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id > 0 && x.dsc_lc_eff_end_date.Equals(null)).ToList(), "dsc_lc_id", "dsc_lc_name", formEmployee.dsc_assigned_lc_id);
+                    ViewBag.ConfMsg = "Employee Information Saved Successfully.";
+                }
+                catch(Exception ex){
+                    ViewBag.ConfMsg = "ERROR: " + ex.Message;
+                }
 
-                db.SaveChanges();
-                formEmployee = employee;
-                ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id > 0 && x.dsc_lc_eff_end_date.Equals(null)).ToList(), "dsc_lc_id", "dsc_lc_name", formEmployee.dsc_assigned_lc_id);
-                ViewBag.ConfMsg = "Success";
                 return View(employee);
             }
             //==========================================================

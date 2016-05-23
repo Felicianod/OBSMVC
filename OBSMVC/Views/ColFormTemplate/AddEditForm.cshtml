@@ -134,9 +134,9 @@
         box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
     }
 
-        .newBtn:hover {
+    .newBtn:hover {
             box-shadow: 0 4px 4px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-        }
+    }
 
     .modal-header, .close {
         background-color: #444444;
@@ -222,21 +222,20 @@
         text-shadow: 2px 2px 0 #070550;
     }
 
-        .btnYES:hover {
-            background: #3498db;
-            background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
-            background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
-            font: normal 700 14px/1 "Calibri", sans-serif;
-            color: white;
-        }
-
-        .btnYES:focus {
-            background: #3498db;
-            background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
-            background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
-            font: normal 700 14px/1 "Calibri", sans-serif;
-            color: white;
-        }
+    .btnYES:hover {
+        background: #3498db;
+        background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+        background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+        font: normal 700 14px/1 "Calibri", sans-serif;
+        color: white;
+    }
+    .btnYES:focus {
+        background: #3498db;
+        background: -webkit-linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+        background: linear-gradient(#3d85c6, #3498db 50%, #3d85c6);
+        font: normal 700 14px/1 "Calibri", sans-serif;
+        color: white;
+    }
 
     .selAnswerTextb {
         background-color: #eaf2f9;
@@ -347,14 +346,14 @@
                 <div class="col-sm-7">
                     <div class="input-group">
                         <div class="input-group-addon">Form Title:</div>
-                        @Html.EditorFor(model => model.cft_Title, new { htmlAttributes = new { @class = "form-control", required = "required", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
+                        @Html.EditorFor(model => model.cft_Title, new { htmlAttributes = new { @class = "form-control", required = "required", style = "max-width: 100%; width:100%; font-size:large; font-weight:bold" } })
                     </div>
                     @Html.ValidationMessageFor(model => model.cft_Title, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-sm-5">
                     <div class="input-group">
                         <div class="input-group-addon">Subtitle:</div>
-                        @Html.EditorFor(model => model.cft_SubTitle, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%; color:cadetblue; font-size:large; font-weight:bold" } })
+                        @Html.EditorFor(model => model.cft_SubTitle, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%; width:100%; font-size:large; font-weight:bold" } })
                     </div>
                 </div>
             </div>
@@ -425,13 +424,15 @@
                         @Html.ValidationMessageFor(model => model.cft_eff_end_dt, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="input-group">
-                    <div class="input-group-addon">Form Number:</div>
-                    <input type="text" id="cft_Nbr" name="cft_Nbr" readonly class="form-control" value="@form_num" style="max-width: 60%; width:60%" />
-                    @*@Html.EditorFor(model => model.cft_Nbr, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly="readonly"} })*@
-                    <div class="input-group-addon @attentionCalss">Version:</div>
-                    <input type="text" id="cft_Version" name="cft_Version" readonly class="form-control @attentionCalss" value="@form_version" style="max-width: 60%; width:60%" />
-                    @*@Html.EditorFor(model => model.cft_Version, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly = "readonly" } })*@
+                <div class="col-sm-4 ">
+                    <div class="input-group">
+                        <div class="input-group-addon">Form Number:</div>
+                        <input type="text" id="cft_Nbr" name="cft_Nbr" readonly class="form-control" value="@form_num" style="max-width: 60%; width:60%" />
+                        @*@Html.EditorFor(model => model.cft_Nbr, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly="readonly"} })*@
+                        <div class="input-group-addon @attentionCalss">Version:</div>
+                        <input type="text" id="cft_Version" name="cft_Version" readonly class="form-control @attentionCalss" value="@form_version" style="max-width: 60%; width:60%" />
+                        @*@Html.EditorFor(model => model.cft_Version, new { htmlAttributes = new { @class = "form-control", style = "max-width: 60%; width:60%", @readonly = "readonly" } })*@
+                    </div>
                 </div>
             </div>
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })

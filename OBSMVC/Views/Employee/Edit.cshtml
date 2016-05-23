@@ -136,8 +136,8 @@
             </div>
             <div class="row">
                 <h3>@Model.dsc_emp_first_name @Model.dsc_emp_last_name</h3>
-                <h5>@Model.dsc_emp_email_addr</h5>
                 <h5>ADP ID: @Model.dsc_emp_adp_id</h5>
+                <h5>Hire Date: @hireDate</h5>
             </div>
         </div>
         <!-- Right Column Employee editable Data -->
@@ -167,16 +167,19 @@
                     @Html.DropDownList("dsc_assigned_lc_id", null, htmlAttributes: new { @class = "form-control", style = "min-width:50%; max-width:500px" })
                 </div>
             </div>
-
             <div class="form-group row">
+                <div class="input-group" style="min-width:50%; max-width:500px">
+                    <span class="input-group-addon" style="min-width:150px">E-mail Address:</span>
+                    <input class="form-control" type="text" value="@Model.dsc_emp_email_addr" name="dsc_emp_email_addr" id="dsc_emp_email_addr" style="min-width:50%; max-width:500px">
+                </div>
+            </div>
+            @*<div class="form-group row">
                 <div class="input-group " style="min-width:50%; max-width:500px">
                     <span class="input-group-addon" style="min-width:150px">Hire Date</span>
                     <input class="datepickerReadOnly form-control" id="dsc_emp_hire_dt" name="dsc_emp_hire_dt" style="min-width:50%; max-width:100%" value="@hireDate" readonly="readonly">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
                 </div>
-                @Html.ValidationMessageFor(model => model.dsc_emp_hire_dt, "", new { @class = "text-danger" })
-            </div>
-
+            </div>*@
             <div class="form-group row">
                 <div class="input-group " style="min-width:50%; max-width:500px">
                     <span class="input-group-addon" style="min-width:150px">Termination Date</span>
@@ -225,7 +228,7 @@
 { 
     <div class="row" style="text-align:center">
         <div class="col-sm-9 col-sm-offset-3" id="ConfMsg" style="font-weight: bold; color:green">
-            <h2>Employee Information Saved Successfully.</h2>
+            <h2>@ViewBag.ConfMsg</h2>
         </div>
     </div>
     <script>

@@ -330,11 +330,11 @@ namespace OBSMVC.Controllers
 
         // GET: ColFormTemplate/AddEdit
         [HttpGet]
-        public ActionResult AddEditForm(int? id,bool isCopy)
+        public ActionResult AddEditForm(int? id, string isCopy)
         {
             int cftid = id ?? 0;
             oCollectionForm selectedColForm;
-            
+            isCopy = String.IsNullOrEmpty(isCopy) ? "false" : isCopy;
             // Try creating an instance of the form
             try {
                 selectedColForm = new oCollectionForm(cftid);
@@ -344,7 +344,7 @@ namespace OBSMVC.Controllers
                 selectedColForm = new oCollectionForm(0);
                 ViewBag.errorMessage = "ERROR Found: " + ex.Message;
             }
-            if (isCopy)
+            if (isCopy=="true")
             {
                 selectedColForm.cft_id = 0;
                 selectedColForm.cft_Title=String.Empty;

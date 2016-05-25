@@ -330,7 +330,7 @@ namespace OBSMVC.Controllers
 
         // GET: ColFormTemplate/AddEdit
         [HttpGet]
-        public ActionResult AddEditForm(int? id)
+        public ActionResult AddEditForm(int? id,bool isCopy)
         {
             int cftid = id ?? 0;
             oCollectionForm selectedColForm;
@@ -344,8 +344,16 @@ namespace OBSMVC.Controllers
                 selectedColForm = new oCollectionForm(0);
                 ViewBag.errorMessage = "ERROR Found: " + ex.Message;
             }
-            
-            if (cftid > 0)
+            if (isCopy)
+            {
+                selectedColForm.cft_id = 0;
+                selectedColForm.cft_Title=String.Empty;
+                selectedColForm.cft_SubTitle = String.Empty;
+                selectedColForm.cft_Nbr = 0;
+                selectedColForm.cft_Version = 0;
+                selectedColForm.previous_vers_cft_id = 0;
+            }
+            else if (cftid > 0)
             {                
                 string frmAction = String.Empty;
                 try
@@ -389,7 +397,7 @@ namespace OBSMVC.Controllers
 
                 selectedColForm.str_cft_eff_st_dt = selectedColForm.cft_eff_st_dt.HasValue ? selectedColForm.cft_eff_st_dt.Value.ToString("MMM dd, yyyy") : String.Empty;
                 selectedColForm.str_cft_eff_end_dt = selectedColForm.cft_eff_end_dt < Convert.ToDateTime("12/31/2060") ? selectedColForm.cft_eff_end_dt.ToString("MMM dd, yyyy") : String.Empty;
-            }
+            }//end of "else if (cftid > 0)"
             else
             {
                 selectedColForm.cft_eff_st_dt = DateTime.Now;

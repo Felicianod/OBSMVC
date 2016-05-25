@@ -12,7 +12,7 @@ namespace OBSMVC.Models
     {
         [Required]
         [Display(Name = "LC ID")]
-        public int dsc_lc_id { get; }
+        public int dsc_lc_id { get; set; }
         [Display(Name = "LC Name")]
         public string dsc_lc_name { get; set; }
         [Display(Name = "LC Code")]

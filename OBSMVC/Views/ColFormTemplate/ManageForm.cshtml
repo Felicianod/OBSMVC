@@ -232,6 +232,9 @@
                 <div class="alert-success" style="color:red">This form is Published</div>
             }
         </div>
+        <div>
+            <input type="button" id="btnCopy" value="Make Copy"/>
+        </div>
     </div>
 </div>
 
@@ -553,6 +556,10 @@
 
             $("#btnCancelAlert").click(function(){
                 location.href = "/ColFormTemplate/AddEditForm/" + @colFormId;
+            });
+
+            $("#btnCopy").click(function(){
+                location.href = "/ColFormTemplate/AddEditForm/" + @colFormId + "?isCopy=true";
             });
 
     });//-------- End of Document Ready --------

@@ -44,14 +44,17 @@
                               \------------------------------------------------------------------------------/*@
                             @Html.Action("getQuestionInfo", new { question_id = @sectQuest.cfq_questId, question_QATid = sectQuest.cfq_qatId, qCounter = @sectQuest.cfq_seqInForm + 1, isOptional = @sectQuest.cfq_na_yn })
                         </li>
-                        questionCounter++;
+                          questionCounter++;
                       }
                   }
-                <li class="list-group-item placeholder">
-                    <div style="font-weight:bold; font-size:large">
-                        <br />Drag a question here...<br /><br />
-                    </div>
-                </li>
+                  else
+                  {
+                    <li class="list-group-item placeholder">
+                        <div style="font-weight:bold; font-size:large">
+                            <br />Drag a question here...<br /><br />
+                        </div>
+                    </li>
+                  }
             </ol>
         </div>
     </div> @*End of Section*@

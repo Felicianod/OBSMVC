@@ -379,6 +379,7 @@
     <Content Include="Content\jquery-ui.structure.min.css" />
     <Content Include="Content\jquery-ui.theme.css" />
     <Content Include="Content\jquery-ui.theme.min.css" />
+    <Content Include="Content\pageCSS\addEditForm.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\smart-forms.css" />
     <Content Include="Content\themes\base\accordion.css" />

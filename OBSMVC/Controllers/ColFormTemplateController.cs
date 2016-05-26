@@ -364,6 +364,7 @@ namespace OBSMVC.Controllers
                 selectedColForm.previous_vers_cft_id = 0;
                 selectedColForm.cft_new_vers_cft_id = 0;
                 selectedColForm.manageAction = String.Empty;
+                selectedColForm.screen_Title = "CREATE NEW FORM";
             }
             else if (cftid > 0)
             {                

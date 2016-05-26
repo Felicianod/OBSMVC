@@ -1,44 +1,80 @@
 ﻿@using PagedList;
 @using PagedList.Mvc;
 @model IPagedList<OBSMVC.Models.OBS_QUESTION>
+<style>
+    .newBtn {
+        padding: 3px 5px;
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+
+        .newBtn:hover {
+            padding: 3px 5px;
+            box-shadow: 0 4px 4px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+        }
+</style>
 
 @{  ViewBag.Title = "Question Maintenance";  }
 
-
+@{
+    var searchText = Request.QueryString["search"];
+    //var activeChkd = String.IsNullOrEmpty(Request.QueryString["includeActiveOnly"])?"":"checked";
+}
 <div class="well well-sm smallRowMargin" style="padding: 4px; font-size:xx-large; text-align:center">
     <span> Question Maintenance </span>
 </div>
 
 @{
-    if (ViewBag.firstPageDisplay == null )
+    if (ViewBag.firstPageDisplay == null)
     {
         ViewBag.searchActiveOnly = "Y";
-    }    
+    }
 }
-<p>
+
 @using (Html.BeginForm("Index", "Question", FormMethod.Get))
 {
-    <table style="width:100%">
-       
-       <tr>
-           <td style="text-align:left">
-               @Html.TextBox("search") <input type="submit" value="Search" />
-               &nbsp;
-               <label><input type="checkbox" name="includeActiveOnly" id="includeActiveOnly" @if (ViewBag.searchActiveOnly == "Y") { <text> checked="checked" </text>  }>
+    <div class="row" style="margin: 0px 0px 10px 0px;">
+        <div class="col-sm-3" style="margin-left:0px; padding: 0px 0px">
+            <div class="input-group" style="margin-left: 0px; ">
+                <input type="text" id="search" name="search" class="form-control" placeholder="Search for..." value="@searchText">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </span>
+            </div><!-- /input-group -->
+        </div><!-- /.col-sm-6 -->
+        <div class="col-sm-4">
+            <label>
+                <input type="checkbox" name="includeActiveOnly" id="includeActiveOnly" @if (ViewBag.searchActiveOnly == "Y") { <text> checked="checked" </text>       }>
                 Search Active Questions Only
-               </label>
-           </td>
-           <td style="text-align:right">
-               @*<b>@Html.ActionLink("Add New Question", "Create")</b>*@
-               <button type="button" class="btnAdd" onclick="window.location.href = '/Question/QuestionAddUpdate/'">
-                   <img src="~/Images/Button-Add-icon.png" height="25" />
-                   Add New Question
-               </button>
-           </td>
-       </tr>   
-     </table>
+            </label>
+        </div><!-- /.col-sm-4 -->
+        <div class="col-sm-5" style="height:34px;">
+            <button type="button" class="btn btn-primary btn-sm newBtn" style="float:right; margin-top: 3px" onclick=" window.location.href='/Question/QuestionAddUpdate/' ">
+                <span class=" glyphicon glyphicon-plus-sign"></span> Add New Question
+            </button>
+        </div><!-- /.col-sm-5 -->
+    </div><!-- row -->
+
+
+
+
+
+    @*<table style="width:100%">
+
+            <tr>
+                <td style="text-align:left">
+                    @Html.TextBox("search") <input type="submit" value="Search" />
+                    &nbsp;
+
+                </td>
+                <td style="text-align:right">
+                    /// <b>@Html.ActionLink("Add New Question", "Create")</b>
+                </td>
+            </tr>
+        </table>*@
+
+
 }
-</p>
+
 
 <table class="table table-condensed table-hover" border="1">
     <tr style="background-color:gainsboro">
@@ -71,13 +107,13 @@
                     @*@Html.DisplayFor(modelItem => item.obs_question_full_text)*@
                 </td>
                 <td style="text-align:center">
-                    <input type="checkbox" disabled="disabled" @if (DateTime.Today >= item.obs_question_eff_st_dt && DateTime.Today < item.obs_question_eff_end_dt) { <TEXT> checked="checked" </TEXT>       } />
+                    <input type="checkbox" disabled="disabled" @if (DateTime.Today >= item.obs_question_eff_st_dt && DateTime.Today < item.obs_question_eff_end_dt) { <TEXT> checked="checked" </TEXT>          } />
                 </td>
                 <td>
                     @Html.ActionLink("Details", "Details", new { id = item.obs_question_id })
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "QuestionAddUpdate", new { id = item.obs_question_id})
+                    @Html.ActionLink("Edit", "QuestionAddUpdate", new { id = item.obs_question_id })
                 </td>
             </tr>
         }

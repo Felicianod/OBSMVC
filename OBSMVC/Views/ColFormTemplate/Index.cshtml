@@ -9,12 +9,26 @@
     .centered {
         text-align:center
     }
+    .obsBtn {
+        padding:3px 5px;
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+
+    .obsBtn:hover {
+        padding:3px 5px;
+        box-shadow: 0 4px 4px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    }
 </style>
 
 
 
 <div class="well well-sm smallRowMargin" style="padding: 4px; font-size:xx-large; text-align:center">
     <span> Form Templates Search</span>
+    <span style="float:right">
+        <button type="button" class="btn btn-primary btn-sm obsBtn" id="btnNewForm" onclick="window.location = '/ColFormTemplate/AddEditForm/0';">
+            <span class="glyphicon glyphicon-plus-sign"></span> Start New Form
+        </button>
+    </span>
 </div>
 
 @using (Html.BeginForm("Index", "ColFormTemplate", FormMethod.Get))
@@ -78,11 +92,6 @@
                         </label>
                     </div>
                 </div>
-            </div>
-            <div class="row" style="text-align:right">
-                <button type="button" class="btn btnAdd" id="btnNewForm" onclick="window.location = '/ColFormTemplate/AddEditForm/0';">
-                    <img src="~/Images/Button-Add-icon.png" height="25" /> Start New Form
-                </button>
             </div>
         </div>
     </div>

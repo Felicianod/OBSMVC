@@ -1,9 +1,9 @@
-﻿
-@{
-    bool authorized = false; 
+﻿@{
+    bool authorized = false;
     bool isAdmin = User.IsInRole("Admin");
-    try {
-        if (User.IsInRole("Admin")|| User.IsInRole("Super User")|| User.IsInRole("Editor") || User.IsInRole("Viewer"))
+    try
+    {
+        if (User.IsInRole("Admin") || User.IsInRole("Super User") || User.IsInRole("Editor") || User.IsInRole("Viewer"))
         {
             authorized = true;
         }
@@ -12,29 +12,29 @@
     {
         authorized = false;
     }
-   
+
 }
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <a style="position:fixed; top:0; left:0" href="/home">
         <img class="img-responsive" src="~/Images/DSCHOME_Logo.png" />
     </a>
-    <div class="navbar-header" >
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            @*<a class="navbar-brand" href="/home">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        @*<a class="navbar-brand" href="/home">
                 Observations DM Tool&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 //<img class="img-responsive" src="~/Images/DSCHome_Logo.gif"/>
             </a>*@
     </div>
 
-    <div class="collapse navbar-collapse" id="myNavbar" style="font-size:large" >
+    <div class="collapse navbar-collapse" id="myNavbar" style="font-size:large">
         @if (authorized)
         {
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-7 col-md-offset-2">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -46,7 +46,7 @@
                             <li>@Html.ActionLink("Logistic Center", "Index", "LC")</li>
                             <li>@Html.ActionLink("Employees", "Index", "Employee")</li>
                             @*<li class="disabled">@Html.ActionLink("Observation Types", "Index", "OBSTYPE")</li>
-                            <li class="disabled">@Html.ActionLink("Observation Subtypes", "Index", "OBSsubtype")</li>*@
+                                <li class="disabled">@Html.ActionLink("Observation Subtypes", "Index", "OBSsubtype")</li>*@
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -72,20 +72,22 @@
                     <li class="dropdown disabled"><a data-toggle="tab" href="#">Review Forms</a></li>
                 </ul>
             </div>
-
         }
         else
         {
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-7 col-md-offset-2">
             </div>
         }
-                <div class="col-md-1">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <span class="glyphicon glyphicon-log-in" style="font-size:large; color:white">@Html.ActionLink(" Logout |", "OBSLogout", "Login", null, new { style = "color:white" })</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-<br />
+        <div class="col-md-2" style="margin-right: 10px">
+            @Html.Partial("_LoginPartial");
+
+            @*<ul class="nav navbar-nav navbar-right">
+                <li>
+                    <span class="glyphicon glyphicon-log-in" style="font-size:large; color:white">@Html.ActionLink(" Logout ", "OBSLogout", "Login", null, new { style = "color:white" })</span>
+                </li>
+            </ul>*@
+
+        </div>
+    </div>
+    <br />
 </nav>

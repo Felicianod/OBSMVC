@@ -115,17 +115,8 @@
     .editSA:disabled {
         background-color: lightgray;
     }
-    .obsBtn {
-        padding:3px 5px;
-        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-    }
-
-    .obsBtn:hover {
-        padding:3px 5px;
-        box-shadow: 0 4px 4px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-    }
-
 </style>
+
 <script>
     function toggleDefault(btnClicked) {
         if (btnClicked.hasClass('btnYES')) {
@@ -889,7 +880,7 @@
 
                 //--- On error, execute this function ------
                 error: function () {
-                    alert("An Error has Occurred. Unable to Add!!");  //<-- Trap and alert of any errors if they occurred
+                    obsAlert("An Error has Occurred. Unable to Add!!");  //<-- Trap and alert of any errors if they occurred
                 }
             }).done(function (d) {
                 //Execute this code After the Ajax call completes successfully

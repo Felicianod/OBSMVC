@@ -7,16 +7,14 @@
 <link href="~/Content/chkboxRadio.css" rel="stylesheet" />
 <style>
     .centered {
-        text-align:center
+        text-align: center;
     }
-    .obsBtn {
-        padding:3px 5px;
-        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-    }
-
-    .obsBtn:hover {
-        padding:3px 5px;
+    .obsStd {
+        border:1px solid black; 
         box-shadow: 0 4px 4px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+    .obsStd:hover {
+        box-shadow: none;
     }
 </style>
 
@@ -31,151 +29,169 @@
     </span>
 </div>
 
-@using (Html.BeginForm("Index", "ColFormTemplate", FormMethod.Get))
-{
-    <div class="form-group row" style="margin-bottom:6px">
-        <div class="col-sm-7">
-            <div class="row">
-                <div class="col-sm-8">
-                    <div class="input-group">
-                        <div class="input-group-addon" style="min-width:156px"><span style="font-weight:bold">Search by Title</span></div>
-                        @Html.TextBox("title_search", null, new { @class = "form-control", style = "min-width:100%" })
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    @Html.RadioButton("t_search", "Any")  <text>Any</text>
-                    @Html.RadioButton("t_search", "All", true)  <text>All</text><br />
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-8">
-                    <div class="input-group" style="min-width:100%">
-                        <div class="input-group-addon" style="min-width:156px"><span style="font-weight:bold">Search by Question</span></div>
-                        @Html.TextBox("question_search", null, new { @class = "form-control", style = "min-width:100%" })
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    @Html.RadioButton("q_search", "Any")  <text>Any</text>
-                    @Html.RadioButton("q_search", "All", true) <text> All </text>
-                    @Html.RadioButton("q_search", "Exact")<text> Exact </text><br />
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-offset-11 col-sm-offset-1">
-                    <input type="submit" value="Search" style="min-width:200px; font-weight:bold">
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-5">
-            <div class="row">
-                <div class="input-group">
-                    <div class="input-group-addon"><span style="font-weight:bold">Function</span></div>
-                    @Html.DropDownList("fullFuncList", ViewBag.fullFuncList as SelectList, "All", new { @class = "form-control", style="max-width:87%" })
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-4" @*style="border:solid; border-width: 1px"*@>
-                    <div class="checkbox">
-                        <label style="font-size: 1.5em">
-                            <input type="checkbox" class="form-control" id="chkLive" name="chkLive">
-                            <span class="cr"><i class="cr-icon fa fa-check"></i></span>
-                            Only Live
-                        </label>
-                    </div>
-                </div>
-                <div class="col-sm-5" @*style="border:solid; border-width: 1px"*@>
-                    <div class="checkbox">
-                        <label style="font-size: 1.5em">
-                            <input type="checkbox" class="form-control input-sm" id="chkPublished" name="chkPublished">
-                            <span class="cr"><i class="cr-icon fa fa-check"></i></span>
-                            Only Published
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-}
 
-<table class="table table-condensed table-hover" border="1">
-    <tr style="background-color:gainsboro">
-        <th class="centered"> @Html.DisplayNameFor(model => model.OBSformID)  </th>
-        <th class="centered"> Action        </th>
-        <th> @Html.DisplayNameFor(model => model.FormTitle)        </th>
-        <th class="centered"> @Html.DisplayNameFor(model => model.FormNumber) </th>
-        <th class="centered"> @Html.DisplayNameFor(model => model.FormVersion)</th>
-        <th> @Html.DisplayNameFor(model => model.Customer)   </th>
-        <th> @Html.DisplayNameFor(model => model.LC)         </th>
-        <th> @Html.DisplayNameFor(model => model.OBS_Type)   </th>
-        <th> @Html.DisplayNameFor(model => model.isPublished)</th>
-        <th> @Html.DisplayNameFor(model => model.isActive)   </th>
-        <th class="centered"> @Html.DisplayNameFor(model => model.QuestionCount)   </th>
-        <th class="centered"> @Html.DisplayNameFor(model => model.ObservationCount)</th>
-        <th class="centered"> @Html.DisplayNameFor(model => model.LastCompleteDate)</th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.OBSformID)
-        </td>
-        <td style="text-align:center">
-            @*@if (item.isActive || item.isPublished)*@
-            @if (item.manageAction== "VIEW-ONLY")
-            {
-                @Html.ActionLink("View", "AddEditForm", new { id = item.OBSformID })
-                @*<text>Manage</text>*@
-            }
-            else if (item.manageAction == "")
-            {
-                @Html.ActionLink("Edit", "AddEditForm", new { id = item.OBSformID })
-            }
-            else
-            { @Html.ActionLink("Manage", "AddEditForm", new { id = item.OBSformID })}
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FormTitle)            
-        </td>
-        <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.FormNumber)
-        </td>
-        <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.FormVersion)
-        </td>
-        <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.Customer)
-        </td>
-        <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.LC)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OBS_Type)
-        </td>
-        <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.isPublished)
-        </td>
-        <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.isActive)
-        </td>
-        <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.QuestionCount)
-        </td>
-        <td style="text-align:center">
-            @Html.DisplayFor(modelItem => item.ObservationCount)
-        </td>
-        <td style="text-align:center">
-            @*@Html.DisplayFor(modelItem => item.LastCompleteDate)*@
-            @if(item.LastCompleteDate > Convert.ToDateTime("12/31/1900"))
-            {
-                @Html.DisplayFor(modelItem => item.LastCompleteDate);
-            }
-            else
-            {<text>Never</text> }
-        </td>
-    
-    </tr>
-}
-</table>
+<!------------------------------------------ FORM PANEL ---------------------------------------------------------------->
+<div class="panel panel-default" style="margin-bottom:8px">
+    @* - - - - - - - - - - - - - - <<<<< STARTS OF FORM HEADER >>>>> - - - - - - - - - - - - - *@
+    <div class="panel-heading header" style="margin-bottom:0px; ">
+        <!--- The Header Constains a Submit Form in the first row ---->
+        @using (Html.BeginForm("Index", "ColFormTemplate", FormMethod.Get))
+        {
+            <div class="form-group row" style="margin-bottom:6px">
+                <div class="col-sm-7">
+                    <div class="row" style="margin-bottom:7px">
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <div class="input-group-addon" style="min-width:156px"><span style="font-weight:bold">Search by Title</span></div>
+                                @Html.TextBox("title_search", null, new { @class = "form-control", style = "min-width:100%" })
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            @Html.RadioButton("t_search", "Any")  <text>Any</text>
+                            @Html.RadioButton("t_search", "All", true)  <text>All</text><br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="input-group" style="min-width:100%">
+                                <div class="input-group-addon" style="min-width:156px"><span style="font-weight:bold">Search by Question</span></div>
+                                @Html.TextBox("question_search", null, new { @class = "form-control", style = "min-width:100%" })
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            @Html.RadioButton("q_search", "Any")  <text>Any</text>
+                            @Html.RadioButton("q_search", "All", true) <text> All </text>
+                            @Html.RadioButton("q_search", "Exact")<text> Exact </text><br />
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:7px">
+                        <div class="col-sm-offset-8 col-sm-offset-3">
+                            <input type="submit" value="Search" class="btn btn-primary obsStd" style="min-width:200px; font-weight:bold">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <div class="row">
+                        <div class="input-group">
+                            <div class="input-group-addon"><span style="font-weight:bold">Function</span></div>
+                            @Html.DropDownList("fullFuncList", ViewBag.fullFuncList as SelectList, "All", new { @class = "form-control", style = "max-width:87%" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4" @*style="border:solid; border-width: 1px"*@>
+                            <div class="checkbox">
+                                <label style="font-size: 1.1em">
+                                    <input type="checkbox" class="form-control" id="chkLive" name="chkLive">
+                                    <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                                    Only Live
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-5" @*style="border:solid; border-width: 1px"*@>
+                            <div class="checkbox">
+                                <label style="font-size: 1.1em">
+                                    <input type="checkbox" class="form-control input-sm" id="chkPublished" name="chkPublished">
+                                    <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                                    Only Published
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>  @*- - END of panel-heading Section - - -*@
+
+    @* - - - - - - - - - - - - - - <<<<< START OF FORM BODY >>>>> - - - - - - - - - - - - - *@
+    <div class="panel-body content" id="dragDropSection" style="margin-bottom:4px; padding-top:0px">
+        <div class="row" style="margin-bottom:0px;">
+            <table class="table table-condensed table-hover table-responsive table-bordered" >
+                <tr style="background-color:gainsboro">
+                    <th class="centered"> @Html.DisplayNameFor(model => model.OBSformID)  </th>
+                    <th class="centered"> Action        </th>
+                    <th> @Html.DisplayNameFor(model => model.FormTitle)        </th>
+                    <th class="centered"> @Html.DisplayNameFor(model => model.FormNumber) </th>
+                    <th class="centered"> @Html.DisplayNameFor(model => model.FormVersion)</th>
+                    <th> @Html.DisplayNameFor(model => model.Customer)   </th>
+                    <th> @Html.DisplayNameFor(model => model.LC)         </th>
+                    <th> @Html.DisplayNameFor(model => model.OBS_Type)   </th>
+                    <th> @Html.DisplayNameFor(model => model.isPublished)</th>
+                    <th> @Html.DisplayNameFor(model => model.isActive)   </th>
+                    <th class="centered"> @Html.DisplayNameFor(model => model.QuestionCount)   </th>
+                    <th class="centered"> @Html.DisplayNameFor(model => model.ObservationCount)</th>
+                    <th class="centered"> @Html.DisplayNameFor(model => model.LastCompleteDate)</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.OBSformID)
+                        </td>
+                        <td style="text-align:center">
+                            @*@if (item.isActive || item.isPublished)*@
+                            @if (item.manageAction == "VIEW-ONLY")
+                            {
+                                @Html.ActionLink("View", "AddEditForm", new { id = item.OBSformID })
+                                @*<text>Manage</text>*@
+                            }
+                            else if (item.manageAction == "")
+                            {
+                                @Html.ActionLink("Edit", "AddEditForm", new { id = item.OBSformID })
+                            }
+                            else
+                            { @Html.ActionLink("Manage", "AddEditForm", new { id = item.OBSformID })}
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FormTitle)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.FormNumber)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.FormVersion)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.Customer)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.LC)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OBS_Type)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.isPublished)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.isActive)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.QuestionCount)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.ObservationCount)
+                        </td>
+                        <td style="text-align:center">
+                            @*@Html.DisplayFor(modelItem => item.LastCompleteDate)*@
+                            @if (item.LastCompleteDate > Convert.ToDateTime("12/31/1900"))
+                            {
+                                @Html.DisplayFor(modelItem => item.LastCompleteDate);
+                            }
+                            else
+                            {<text>Never</text> }
+                        </td>
+
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>@*---- END OF FORM BODY -------*@
+</div> @* ----- END OF FORM PANEL*@
+
+
+
 
 <script>
     $(document).ready(function () {

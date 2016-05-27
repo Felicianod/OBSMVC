@@ -4,8 +4,15 @@
 @*=======================================  STYLES, SCRIPTS AND ANNOTATIONS ===============================================*@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <style>
-    
+    .obsStd {
+        border:1px solid; 
+        background-color: ThreeDFace;    
+    }
+    .obsStd:hover {
+        background-color: cornsilk;
+    }
 </style>
+
 <link href="~/Content/pageCSS/addEditForm.css" rel="stylesheet" />
 <script src="~/Scripts/AddEditForm.js"></script>
 
@@ -239,7 +246,7 @@
                     <div class="row" style="margin-top:0px">
                         <div class="col-sm-10 ">
                             @*When This button is clicked, add a new view to the "accordion" <DIV> section*@
-                            <input type="button" id="btnAddSection" value="Add New Section" />
+                            <input type="button" id="btnAddSection" class="btn obsStd"  value="Add New Section" />
                         </div>
                     </div>
                 </div>  @*End of Left Form Questions Pannel (7 column Pannel)*@
@@ -261,7 +268,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-2 right" style="padding:0px">
-                                    <button type="button" class="btn btn-primary btn-sm newBtn" id="btnAddQuestionPopup" >
+                                    <button type="button" class="btn btn-primary btn-sm obsBtn" id="btnAddQuestionPopup" >
                                         <span class="glyphicon glyphicon-plus-sign"></span> Add New
                                     </button>
                                     @*<a href="/Question/QuestionAddUpdate/0" class="btn btn-primary btn-sm newBtn" style="padding:2px">
@@ -310,22 +317,22 @@
         @*\\ - - - - - - - - - - - - - <<<<< END OF FORM BODY >>>>> - - - - - - - - - - - - //*@
 
         @*// - - - - - - - - - - - - - <<<<< FORM FOOTER >>>>> - - - - - - - - - - - - \\*@
-        <div class="row" style="margin-left:20px; margin-right:20px;">
-            <div class="col-sm-4 col-sm-offset-3">
+        <div class="row" style="margin: 0px 20px 10px 20px">
+            <div class="col-sm-4 col-sm-offset-3" >
                 <div class="col-sm-6" style="text-align:center">
-                    <input id="btnSaveForm" type="button" value="Save Form" style="min-width:120px; min-height:34px" @*disabled="disabled"*@ />
+                    <input id="btnSaveForm" type="button" class="btn btn-primary obsBtn" value="Save Form" style="min-width:120px; min-height:34px" @*disabled="disabled"*@ />
                 </div>
                 <div class="col-sm-6" style="text-align:center">
-                    <input id="btnPublishForm" type="button" value="Publish Form" style="min-width:120px; min-height:34px" @if (@Model.cft_isPublished == "PUBLISHED") { <text> disabled="disabled" readonly</text>   } />
+                    <input id="btnPublishForm" type="button" class="btn btn-primary obsBtn" value="Publish Form" style="min-width:120px; min-height:34px" @if (@Model.cft_isPublished == "PUBLISHED") { <text> disabled="disabled" readonly</text>   } />
                 </div>
             </div>
 
             <div class="col-sm-3 col-sm-offset-2">
                 <div class="col-sm-6" style="text-align:center">
-                    <button type="button" class="btn btn-warning" id="btnReset" style="min-width:130px" @cancelEnabled>Reset Form</button>
+                    <button type="button" class="btn btn-warning obsBtn" id="btnReset" style="min-width:130px" @cancelEnabled>Reset Form</button>
                 </div>
                 <div class="col-sm-6" style="text-align:center">
-                    <button type="button" class="btn btn-warning" id="btnCancel" style="min-width:120px">Cancel/Back to List</button>
+                    <button type="button" class="btn btn-warning obsBtn" id="btnCancel" style="min-width:120px">Cancel/Back to List</button>
                 </div>
             </div>
         </div>
@@ -677,9 +684,16 @@
                     //alert("Id: " + $(this).attr("id") + " Was selected.")  //The olListxx Id were the question was dropped
                     //alert("This is panel " + $(this).attr("id").substring(6) + " out of " + $("#qFormList").find(".targetList").length);
 
-                    //if ( $(this).attr("id").substring(6) == $("#qFormList").find(".targetList").length){
-                    //alert("Question Dropped on the last Section!")
-                    //}
+
+                    //Finally id dropped on the last section, Scroll the panel to the botton so the newly added question is always visible
+                    if ( $(this).attr("id").substring(6) == $("#qFormList").find(".targetList").length){
+                        //alert("Question Dropped on the last Section!")
+                        var scrollPanel = $('#qFormList');
+                        //Automatically Scroll to the botton of the Panel where the new Section was Inserted
+                        //If we wanted to scroll to the top, we would set the "height = 0"
+                        height = scrollPanel[0].scrollHeight;
+                        scroll.call(scrollPanel, height);
+                    }
                 }
             }).sortable({
                 connectWith: ".connected",

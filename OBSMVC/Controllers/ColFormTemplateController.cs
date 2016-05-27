@@ -18,8 +18,11 @@ namespace OBSMVC.Controllers
         
         // GET: ColFormTemplate
         [HttpGet]
-        public ActionResult Index(string title_search, string question_search, string t_search, string q_search, FormCollection form)
+        public ActionResult Index(string title_search, string question_search, string t_search, string q_search, FormCollection form, string sortBy)
         {
+            ViewBag.sortTypeParameter = sortBy == "Type" ? "Type desc" : "";
+            ViewBag.sortTitleParameter = sortBy == "Title" ? "Title desc" : "Title";
+
             try
             {
                 title_search = title_search.Trim();
@@ -293,7 +296,22 @@ namespace OBSMVC.Controllers
                 }
             }
             ViewBag.fullFuncList = fullFuncList;
-            return View(ObsColFormTemplateList.OrderBy(x=>x.OBS_Type).ThenBy(y=>y.FormNumber).ThenBy(z=>z.FormVersion).ToList());
+            switch (sortBy)
+            {
+                case "Title":
+                    ObsColFormTemplateList = ObsColFormTemplateList.OrderBy(x => x.FormTitle).ToList();
+                    break;
+                case "Title desc":
+                    ObsColFormTemplateList = ObsColFormTemplateList.OrderByDescending(x => x.FormTitle).ToList();
+                    break;
+                case "Type":
+                    ObsColFormTemplateList = ObsColFormTemplateList.OrderByDescending(x => x.OBS_Type).ToList();
+                    break;
+                default:
+                    ObsColFormTemplateList = ObsColFormTemplateList.OrderBy(x => x.OBS_Type).ThenBy(y => y.FormNumber).ThenBy(z => z.FormVersion).ToList();
+                    break;
+            }
+            return View(ObsColFormTemplateList.ToList());
         }
 
         [HttpGet]

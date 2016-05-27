@@ -101,12 +101,12 @@
     <tr style="background-color:gainsboro">
         <th class="centered"> @Html.DisplayNameFor(model => model.OBSformID)  </th>
         <th class="centered"> Action        </th>
-        <th> @Html.DisplayNameFor(model => model.FormTitle)        </th>
+        <th> @Html.ActionLink("Form Title", "Index", new { sortBy = ViewBag.sortTitleParameter, title_search = Request["title_search"], t_search = Request["t_search"], question_search = Request["question_search"], q_search = Request["q_search"] })</th>
         <th class="centered"> @Html.DisplayNameFor(model => model.FormNumber) </th>
         <th class="centered"> @Html.DisplayNameFor(model => model.FormVersion)</th>
         <th> @Html.DisplayNameFor(model => model.Customer)   </th>
         <th> @Html.DisplayNameFor(model => model.LC)         </th>
-        <th> @Html.DisplayNameFor(model => model.OBS_Type)   </th>
+        <th> @Html.ActionLink("Observation Type", "Index", new { sortBy = ViewBag.sortTypeParameter, title_search = Request["title_search"], t_search = Request["t_search"], question_search = Request["question_search"], q_search = Request["q_search"] })</th>
         <th> @Html.DisplayNameFor(model => model.isPublished)</th>
         <th> @Html.DisplayNameFor(model => model.isActive)   </th>
         <th class="centered"> @Html.DisplayNameFor(model => model.QuestionCount)   </th>

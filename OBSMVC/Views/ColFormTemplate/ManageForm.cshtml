@@ -491,7 +491,7 @@
                 cache: false,
                 data: { cft_id: @colFormId, end_eff_date: newEndEffDate },
                 error: function () {
-                    alert("Failed to Save the Form.");  //<-- Trap and alert of any errors if they occurred
+                    obsAlert("Failed to Save the Form.");  //<-- Trap and alert of any errors if they occurred
                 }
             }).done(function (d) {
                 if (d == "Success") {
@@ -507,7 +507,7 @@
                     }, 3000);
                 }
                 else {
-                    alert("ERROR Saving Form: " + d);
+                    obsAlert("ERROR Saving Form: " + d);
                 }
             });
             //--- Finished Resetting the ajax values
@@ -525,7 +525,7 @@
                     cache: false,
                     data: { cft_id: @colFormId},
                     error: function () {
-                        alert("Failed to Edit the Form.");  //<-- Trap and alert of any errors if they occurred
+                        obsAlert("Failed to Edit the Form.");  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
                     if (d == "Success") {

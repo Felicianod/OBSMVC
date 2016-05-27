@@ -12,11 +12,6 @@
     <script src="~/Scripts/jquery.js"></script>
     <script src="~/Scripts/jquery-ui.min.js"></script>
     
-    @* == References Used for the Alert and Confirmation popup dialogs === *@
-    <link href="~/Content/bootstrap-dialog.css" rel="stylesheet" />
-    <script src="~/Scripts/bootstrap-dialog.js"></script>
-    <script src="~/Scripts/obsGlobal.js"></script>
-
     <style>
         #foot {
             position: fixed !important;
@@ -99,5 +94,10 @@
     @Scripts.Render("~/bundles/bootstrap")
     @*@Scripts.Render("~/bundles/jqueryUI")*@
     @RenderSection("scripts", required: false)
+    @* == References Used for the Alert and Confirmation popup dialogs === *@
+    <link href="~/Content/bootstrap-dialog.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap-dialog.js"></script>
+    <script src="~/Scripts/obsGlobal.js"></script>
+
 </body>
 </html>

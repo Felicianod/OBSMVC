@@ -138,7 +138,7 @@
                         cache: false,
                         data: { qat_id: selectedId },
                         error: function () {
-                            alert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
+                            obsAlert("Can't find data for this question!!");  //<-- Trap and alert of any errors if they occurred
                         }
                     }).done(function (d) {
                         //alert("Retrieved Data is: " + d);

@@ -3,24 +3,7 @@
 // ++++++++++++++++++++++++++++++++++++++++ JAVASCRIPT FUNCTIONS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // ++++   Must be Available before any element is rendered and they are outside the "document.ready" section      ++++++++++
 //==========================================================================================================================
-function isCascadeEvent(){
-    //Check if the control field is blank, if so, this is the first time this event if fired
-    if ($("#frmEventCounter").val() == "0") {
-        $("#frmEventCounter").val(new Date());
-        return false;    
-    }
 
-    var currentDate = new Date();
-    var lastDate = new Date($("#frmEventCounter").val());
-    var elapsedSeconds = (currentDate - lastDate) / 1000
-    alert("Comparing Current: " + currentDate + "\nVersus Last: " + lastDate);
-    alert("Time Elapsed: " + elapsedSeconds + " Seconds.");
-    $("#frmEventCounter").val(new Date());   // Reset the Control Field
-    if (elapsedSeconds > 20) {
-        return false;
-    }
-    return true;
-}
 function loadTemplate(callerBtn, selAnslist) {
     // Function to load the selected template values into the Edit Mode ANswer Types
 
@@ -48,7 +31,7 @@ function clearNewSAbox() {
         cache: false,
         //data: { question_id: questionId, dropdownID: ddlId},
         error: function (jqXHR, textStatus, errorThrown) {
-            alert("Failed to reload Selectable Answer Data Entry Form!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and give an alert of any errors if they occurred
+            obsAlert("Failed to reload Selectable Answer Data Entry Form!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and give an alert of any errors if they occurred
         }
     }).done(function (d) {
         $("#divNewSA").html(d);
@@ -113,7 +96,7 @@ function enableDropDown(dropdown) {
                 cache: false,
                 data: { qat_id: selectedId },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Failed to retrieve data for this question!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                    obsAlert("Failed to retrieve data for this question!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                 }
             }).done(function (d) {
                 //alert("Retrieved Data is: " + d);
@@ -150,7 +133,7 @@ function resetSelAns(qId, ddlId) {
             cache: false,
             data: { qat_id: selectedQATid },
             error: function (jqXHR, textStatus, errorThrown) {
-                alert("Can't find data for this question!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                obsAlert("Can't find data for this question!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
             }
         }).done(function (d) {
             //alert("Retrieved Data is: " + d);
@@ -259,7 +242,7 @@ function validateForm() {
         //If any validation error is found give alert and reset the Save Button
         $('#btnSaveForm').button('reset');
         $("#btnPublishForm").button('reset');
-        alert(errorMsg);
+        obsAlert(errorMsg);
         return false;
     }
     else {
@@ -314,15 +297,15 @@ function leavePage() {
             cache: false,
             data: { cft_id: formCftid, publishedBy: publishedUser, publishedOn: publishedDateTime },
             error: function (jqXHR, textStatus, errorThrown) {
-                alert("Failed to reset Changes...\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                obsAlert("Failed to reset Changes...\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
             }
         }).done(function (d) {
             if (d == "Success") {
-                alert("Edit mode cancelled! Form has been republished.");
+                //obsAlert("Edit mode cancelled! Form has been republished.");
                 //location.href = "/ColFormTemplate/AddEditForm/" + formCftid;
             }
             else {
-                alert("ERROR Resetting Published Date/Time: " + d);
+                obsAlert("ERROR Resetting Published Date/Time: " + d);
             }
         });
         //--- Finished Resetting the ajax values
@@ -348,7 +331,7 @@ function delForm(){
 
         //--- On error, execute this function ------
         error: function (jqXHR, textStatus, errorThrown) {
-            alert("Failed to Remove Form id " + cft_id+ " from Database !!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+            obsAlert("Failed to Remove Form id " + cft_id + " from Database !!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
         }
     }).done(function (d) {
         //Execute this code After the Ajax call completes successfully
@@ -400,7 +383,7 @@ $(document).ready(function () {
                 cache: false,
                 data: { question_id: questionId, dropdownID: modalddlId, selectedQATid: $("#savedQATid").val() },
                 error: function () {
-                    alert("Failed to reload the Answer Type Values!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                    obsAlert("Failed to reload the Answer Type Values!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                 }
             }).done(function (d) {
                 //alert("Retrieved Data is: " + d);
@@ -630,7 +613,7 @@ $(document).ready(function () {
 
             //--- On error, execute this function ------
             error: function (jqXHR, textStatus, errorThrown) {
-                alert("Failed to Remove Form id " + cft_id + " from Database !!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                obsAlert("Failed to Remove Form id " + cft_id + " from Database !!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
             }
         }).done(function (d) {
             //Execute this code After the Ajax call completes successfully
@@ -642,7 +625,7 @@ $(document).ready(function () {
                 location.href = "/ColFormTemplate/";
             }
             else {
-                alert("ERROR: Form could not be removed from the Database!\Error: " + d);
+                obsAlert("ERROR: Form could not be removed from the Database!\Error: " + d);
                 location.href = "/ColFormTemplate/AddEditForm/" + cft_id;
             }
         });
@@ -774,7 +757,7 @@ $(document).ready(function () {
                     cache: false,
                     data: { ans_type_list: postData },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        alert("ERROR: Failed to Save the New Question Answer Type Information.!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                        obsAlert("ERROR: Failed to Save the New Question Answer Type Information.!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
                     if (d.substring(0, 3) == "QAT") {
@@ -838,7 +821,7 @@ $(document).ready(function () {
         // Validate that a valid Start Date is entered when the Form is being published
         if ($('#cft_eff_st_dt').val() == "") {
             $('#btnPublishForm').button('reset');
-            alert("The Effective Start Date is required when Publishing a Form");
+            obsAlert("The Effective Start Date is required when Publishing a Form");
             $('#cft_eff_st_dt').addClass("invalidField");
             $('#cft_eff_st_dt').focus();
         }

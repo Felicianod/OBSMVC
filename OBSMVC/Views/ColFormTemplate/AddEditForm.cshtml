@@ -600,7 +600,7 @@
 
                 //--- On error, execute this function ------
                 error: function (jqXHR, textStatus, errorThrown) {
-                    alert("An Error has Occurred. Unable to Add New Sections to Form!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                    obsAlert("An Error has Occurred. Unable to Add New Sections to Form!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                     $('#btnAddSection').button('reset');
                 }
             }).done(function (d) {
@@ -797,7 +797,7 @@
 
                 //--- On error, execute this function ------
                 error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Can't find data for question id " + qid + " !!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                    obsAlert("Can't find data for question id " + qid + " !!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                     //$btn.button('reset');
                 }
             }).done(function (d) {
@@ -869,7 +869,7 @@
 
                 //--- On error, execute this function ------
                 error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Failed to render the Question List from the Database !!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                    obsAlert("Failed to render the Question List from the Database !!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                     $btn.button('reset');
                 }
             }).done(function (d) {
@@ -956,7 +956,7 @@
                     cache: false,
                     data: { full_text: $("#modalQFullText").val(), desc: $("#modalQDesc").val() },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        alert("An error occurred when saving the question information to the LIbrary Database!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
+                        obsAlert("An error occurred when saving the question information to the LIbrary Database!!\nError:" + textStatus + "," + errorThrown);  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
                     if (d == "True") {
@@ -974,7 +974,7 @@
                         $("#full_text_search").val("");
                     }
                     else {
-                        alert("ERROR Saving Data: " + d);
+                        obsAlert("ERROR Saving Data: " + d);
                     }
                 });
             }

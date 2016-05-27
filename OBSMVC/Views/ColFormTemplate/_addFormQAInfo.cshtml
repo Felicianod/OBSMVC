@@ -187,7 +187,7 @@
                     error: function () {
                         $("#divTemplateLoading").hide();
                         $("#divTemplates").hide();
-                        alert("Failed to retrieve appropriate Templates for Selection! [" + "selCathegory" + "]");  //<-- Trap and alert of any errors if they occurred
+                        obsAlert("Failed to retrieve appropriate Templates for Selection! [" + "selCathegory" + "]");  //<-- Trap and alert of any errors if they occurred
                     }
                 }).done(function (d) {
                     //Execute this code After the Ajax call completes successfully

@@ -201,8 +201,7 @@
     string endDateMode = "readonly disabled";
     string actionBtnText = @Model.manageAction;
 
-    if (manageAction.Equals("NEW VERSION")) endDateMode = "";
-    if (manageAction.Equals("RESTRICTED"))  endDateMode = "";
+    if (manageAction.Equals("NEW VERSION") || manageAction.Equals("RESTRICTED")) endDateMode = "";
     if (actionBtnText.Equals("NEW VERSION")) actionBtnText = "CREATE NEW VERSION";
     if (actionBtnText.Equals("EDIT")) actionBtnText = "EDIT THIS FORM";
 }
@@ -216,7 +215,7 @@
                     @Html.AntiForgeryToken()
                     <input type="hidden" id="id" name="id" value="@Model.cft_id.ToString()" />
                     <input type="hidden" id="frmAction" name="frmAction" value="@Model.manageAction" />
-                    <button type="button" class="btn btnAdd" id="btnManageAction" style="min-width:110px">@actionBtnText</button>
+                    <button type="button" class="btn btn-primary obsBtn" id="btnManageAction" style="min-width:110px">@actionBtnText</button>
                 </form>
             </div>
         }
@@ -234,7 +233,7 @@
             }
         </div>
         <div>
-            <input type="button" id="btnCopy" value="Make Copy"/>
+            <input type="button" id="btnCopy" class="btn btn-primary obsBtn" value="Make Copy" />
         </div>
     </div>
 </div>

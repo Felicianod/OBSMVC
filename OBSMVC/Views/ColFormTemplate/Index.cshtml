@@ -108,19 +108,19 @@
         <div class="row" style="margin-bottom:0px;">
             <table class="table table-condensed table-hover table-responsive table-bordered" >
     <tr style="background-color:gainsboro">
-        <th class="centered"> @Html.DisplayNameFor(model => model.OBSformID)  </th>
-        <th class="centered"> Action        </th>
-        <th> @Html.ActionLink("Form Title", "Index", new { sortBy = ViewBag.sortTitleParameter, title_search = Request["title_search"], t_search = Request["t_search"], question_search = Request["question_search"], q_search = Request["q_search"] })</th>
-        <th class="centered"> @Html.DisplayNameFor(model => model.FormNumber) </th>
-        <th class="centered"> @Html.DisplayNameFor(model => model.FormVersion)</th>
-        <th> @Html.DisplayNameFor(model => model.Customer)   </th>
-        <th> @Html.DisplayNameFor(model => model.LC)         </th>
-        <th> @Html.ActionLink("Observation Type", "Index", new { sortBy = ViewBag.sortTypeParameter, title_search = Request["title_search"], t_search = Request["t_search"], question_search = Request["question_search"], q_search = Request["q_search"] })</th>
-        <th> @Html.DisplayNameFor(model => model.isPublished)</th>
-        <th> @Html.DisplayNameFor(model => model.isActive)   </th>
-        <th class="centered"> @Html.DisplayNameFor(model => model.QuestionCount)   </th>
-        <th class="centered"> @Html.DisplayNameFor(model => model.ObservationCount)</th>
-        <th class="centered"> @Html.DisplayNameFor(model => model.LastCompleteDate)</th>
+        <th class="centered"> @Html.ActionLink("Form ID", "Index", new { sortBy = ViewBag.sortFormIDParameter, title_search = Request["title_search"], t_search = Request["t_search"], question_search = Request["question_search"], q_search = Request["q_search"], chkPublished = Request["chkPublished"], chkLive = Request["chkLive"], fullFuncList=Request["fullFuncList"] })</th>
+        <th class="centered"><a href="#">Action</a></th>
+        <th class="centered"> @Html.ActionLink("Form Title", "Index", new { sortBy = ViewBag.sortTitleParameter, title_search = Request["title_search"], t_search = Request["t_search"], question_search = Request["question_search"], q_search = Request["q_search"], chkPublished =Request["chkPublished"], chkLive=Request["chkLive"], fullFuncList = Request["fullFuncList"] })</th>
+        <th class="centered"> @Html.ActionLink("Form Number", "Index", new { sortBy = ViewBag.sortFormNumParameter, title_search = Request["title_search"], t_search = Request["t_search"], question_search = Request["question_search"], q_search = Request["q_search"], chkPublished = Request["chkPublished"], chkLive = Request["chkLive"], fullFuncList = Request["fullFuncList"] })</th>
+        <th class="centered"> <a href="#">Form Version</a></th>
+        <th class="centered"> @Html.ActionLink("Customer", "Index", new { sortBy = ViewBag.sortCustomerParameter, title_search = Request["title_search"], t_search = Request["t_search"], question_search = Request["question_search"], q_search = Request["q_search"], chkPublished = Request["chkPublished"], chkLive = Request["chkLive"], fullFuncList = Request["fullFuncList"] })</th>
+        <th class="centered"> @Html.ActionLink("LC", "Index", new { sortBy = ViewBag.sortLCParameter, title_search = Request["title_search"], t_search = Request["t_search"], question_search = Request["question_search"], q_search = Request["q_search"], chkPublished = Request["chkPublished"], chkLive = Request["chkLive"], fullFuncList = Request["fullFuncList"] })</th>
+        <th class="centered"> @Html.ActionLink("Observation Type", "Index", new { sortBy = ViewBag.sortTypeParameter, title_search = Request["title_search"], t_search = Request["t_search"], question_search = Request["question_search"], q_search = Request["q_search"], fullFuncList = Request["fullFuncList"] })</th>
+        <th class="centered"> @Html.ActionLink("Published", "Index", new { sortBy = ViewBag.sortPublishedParameter, title_search = Request["title_search"], t_search = Request["t_search"], question_search = Request["question_search"], q_search = Request["q_search"], chkPublished = Request["chkPublished"], chkLive = Request["chkLive"], fullFuncList = Request["fullFuncList"] })</th>
+        <th class="centered"> @Html.ActionLink("Live", "Index", new { sortBy = ViewBag.sortLiveParameter, title_search = Request["title_search"], t_search = Request["t_search"], question_search = Request["question_search"], q_search = Request["q_search"], chkPublished = Request["chkPublished"], chkLive = Request["chkLive"], fullFuncList = Request["fullFuncList"] })</th>
+        <th class="centered"><a href="#">Number of Questions</a></th>
+        <th class="centered"><a href="#">Number of Observarions</a></th>
+        <th class="centered"><a href="#">Last Used on</a></th>
     </tr>
 
                 @foreach (var item in Model)

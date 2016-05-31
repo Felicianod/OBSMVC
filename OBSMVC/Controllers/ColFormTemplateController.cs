@@ -22,7 +22,12 @@ namespace OBSMVC.Controllers
         {
             ViewBag.sortTypeParameter = sortBy == "Type" ? "Type desc" : "";
             ViewBag.sortTitleParameter = sortBy == "Title" ? "Title desc" : "Title";
-
+            ViewBag.sortLCParameter = sortBy == "LC" ? "LC desc" : "LC";
+            ViewBag.sortCustomerParameter = sortBy == "Customer" ? "Customer desc" : "Customer";
+            ViewBag.sortFormNumParameter = sortBy == "FormNum" ? "FormNum desc" : "FormNum";
+            ViewBag.sortFormIDParameter = sortBy == "FormID" ? "FormID desc" : "FormID";
+            ViewBag.sortPublishedParameter = sortBy == "Published" ? "Published desc" : "Published";
+            ViewBag.sortLiveParameter = sortBy == "Live" ? "Live desc" : "Live";
             try
             {
                 title_search = title_search.Trim();
@@ -307,8 +312,45 @@ namespace OBSMVC.Controllers
                 case "Type":
                     ObsColFormTemplateList = ObsColFormTemplateList.OrderByDescending(x => x.OBS_Type).ToList();
                     break;
+                case "LC":
+                    ObsColFormTemplateList = ObsColFormTemplateList.OrderBy(x => x.LC).ToList();
+                    break;
+                case "LC desc":
+                    ObsColFormTemplateList = ObsColFormTemplateList.OrderByDescending(x => x.LC).ToList();
+                    break;
+                case "Customer":
+                    ObsColFormTemplateList = ObsColFormTemplateList.OrderBy(x => x.Customer).ToList();
+                    break;
+                case "Customer desc":
+                    ObsColFormTemplateList = ObsColFormTemplateList.OrderByDescending(x => x.Customer).ToList();
+                    break;
+                case "FormNum":
+                    ObsColFormTemplateList = ObsColFormTemplateList.OrderBy(x => x.FormNumber).ToList();
+                    break;
+                case "FormNum desc":
+                    ObsColFormTemplateList = ObsColFormTemplateList.OrderByDescending(x => x.FormNumber).ToList();
+                    break;
+                case "FormID":
+                    ObsColFormTemplateList = ObsColFormTemplateList.OrderBy(x => x.OBSformID).ToList();
+                    break;
+                case "FormID desc":
+                    ObsColFormTemplateList = ObsColFormTemplateList.OrderByDescending(x => x.OBSformID).ToList();
+                    break;
+                case "Published":
+                    ObsColFormTemplateList = ObsColFormTemplateList.OrderBy(x => x.isPublished).ToList();
+                    break;
+                case "Published desc":
+                    ObsColFormTemplateList = ObsColFormTemplateList.OrderByDescending(x => x.isPublished).ToList();
+                    break;
+                case "Live":
+                    ObsColFormTemplateList = ObsColFormTemplateList.OrderBy(x => x.isActive).ToList();
+                    break;
+                case "Live desc":
+                    ObsColFormTemplateList = ObsColFormTemplateList.OrderByDescending(x => x.isActive).ToList();
+                    break;
+
                 default:
-                    ObsColFormTemplateList = ObsColFormTemplateList.OrderBy(x => x.OBS_Type).ThenBy(y => y.FormNumber).ThenBy(z => z.FormVersion).ToList();
+                    ObsColFormTemplateList = ObsColFormTemplateList.OrderBy(x => x.OBS_Type).ThenBy(y => y.FormNumber).ThenBy(z => z.FormVersion).ToList();                  
                     break;
             }
             return View(ObsColFormTemplateList.ToList());

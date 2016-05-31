@@ -732,17 +732,28 @@
                     // or by pasting something inside the textarea;
 
                     // remove commas with empty
-                    $(this).val($(this).val().replace(/,/, "", "g"));
+                    //$(this).val($(this).val().replace(/,/, "", "g"));               //// TEMP CHANGE 5/31
+
                     // remove carriage returns (\r) and newlines (\n) with spaces:
                     $(this).val($(this).val().replace(/\r?\n/g, ' '));
                     //$textarea.val($textarea.val().replace(/[,\n\r]/," ","g");
                 }
                 // the enter key has been pressed, avoid producing a carriage return from it:
-                if (e.which === 13 || e.which === 188) {
+                //if (e.which === 13 || e.which === 188) {
+                if (e.which === 13 ) {
                     e.preventDefault();
                 }
             });
 
+            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+            $('#divNewSA').on('keydown keyup change ', '.selAnswerTextb', function (e) {
+                //$("#btnSaveLibQuestion").removeAttr('disabled');
+                //$("#msgAddQ").hide();
+                if (e.which === 13 || e.which === 188) {
+                    e.preventDefault();
+                }
+            });
+            //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             //var isChanged = $("#formChanged");
 
             //var isChanged = false;

@@ -550,16 +550,19 @@ $(document).ready(function () {
             // or by pasting something inside the textarea;
 
             // remove commas with empty
-            $(this).val($(this).val().replace(/,/,"","g"));
+            //$(this).val($(this).val().replace(/,/,"","g"));            //No need to Replace commas for question Text
+
             // remove carriage returns (\r) and newlines (\n) with spaces:
             $(this).val($(this).val().replace(/\r?\n/g, ' '));
             //$textarea.val($textarea.val().replace(/[,\n\r]/," ","g");
         }
         // the enter key has been pressed, avoid producing a carriage return from it:
-        if (e.which === 13 || e.which === 188) {
+        //if (e.which === 13 || e.which === 188) {
+        if (e.which === 13 ) {
             e.preventDefault();
         }
     });
+
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     $('input').not(".searchBox").on('keydown keyup change ', function (e) {
         $("#btnSaveForm").removeAttr('disabled');
@@ -576,6 +579,14 @@ $(document).ready(function () {
     $('.qInput').on('keydown keyup change ', function (e) {
         $("#btnSaveLibQuestion").removeAttr('disabled');
         $("#msgAddQ").hide();
+    });
+    //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    $('#divNewSA').on('keydown keyup change ', '.selAnswerTextb', function (e) {
+        //$("#btnSaveLibQuestion").removeAttr('disabled');
+        //$("#msgAddQ").hide();
+        if (e.which === 13 || e.which === 188) {
+            e.preventDefault();
+        }
     });
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     $("#btnCancelLibQuestion").click(function(){

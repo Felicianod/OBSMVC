@@ -22,7 +22,8 @@
     var frmWasChanged = "N";
     var attentionCalss = "";
     bool disableDropdowns = false;
-    if (!@Model.manageAction.Contains("MANAGE")) { cancelEnabled = "disabled"; }
+    bool 
+    if (!@Model.manageAction.Contains("MANAGE")) { cancelEnabled = "disabled"; }    
     if (@Model.manageAction.Equals("MANAGE-NEW-VERSION")) { attentionCalss = "lookatMe"; }
     if (@Model.cft_Version > 1) { disableDropdowns = true; }
     string fMode = @Model.cft_editMode;

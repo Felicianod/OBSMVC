@@ -201,6 +201,7 @@
     string endDateMode = "readonly disabled";
     string actionBtnText = @Model.manageAction;
 
+    if (manageAction.Equals("NEW VERSION")) endDateMode = "";
     if (manageAction.Equals("RESTRICTED"))  endDateMode = "";
     if (actionBtnText.Equals("NEW VERSION")) actionBtnText = "CREATE NEW VERSION";
     if (actionBtnText.Equals("EDIT")) actionBtnText = "EDIT THIS FORM";
@@ -356,7 +357,7 @@
         <div class="row">
             <div class="col-sm-7" style="text-align:right">
 
-                @if (manageAction.Equals("RESTRICTED"))
+                @if (manageAction.Equals("RESTRICTED") || endDateMode == "")
                 {
                     <button type="button" class="btn btn-success" id="btnSave">Save</button>
                     <text>&nbsp;&nbsp;&nbsp;</text>

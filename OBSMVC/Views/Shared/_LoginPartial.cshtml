@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNet.Identity
 @{
-    string userName = "Not Signed In";
+    string userName = "";
     try { userName = @Session["first_name"].ToString() + " " + @Session["last_name"].ToString(); }
     catch{
         userName = "Not Signed In";

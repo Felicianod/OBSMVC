@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Web.Mvc;
 
 namespace OBSMVC.Controllers
@@ -10,8 +11,8 @@ namespace OBSMVC.Controllers
         {
             //Check whether this server needs to redirect the default "Index" entry point to the App Menu Selection Page or not            
             try
-            {
-                if (ConfigurationManager.AppSettings["ServerType"].ToString().Equals("Development")) { return RedirectToAction("AppSelection", "Home"); }
+            {                
+                if ( ConfigurationManager.AppSettings["ServerType"].ToString().Equals("Development") ) { return RedirectToAction("AppSelection", "Home"); }
             }
             catch
             {
@@ -29,13 +30,16 @@ namespace OBSMVC.Controllers
             //catch{}
             //return RedirectToAction("OBSLogin", "Login");
 
-
-            
-            return View();
+            return RedirectToAction("Home", "Home");
         }
 
         [AllowAnonymous]
         public ActionResult AppSelection()
+        {
+            return View();
+        }
+
+        public ActionResult Home()
         {
             return View();
         }

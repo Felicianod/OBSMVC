@@ -115,6 +115,10 @@ namespace OBSMVC.Controllers
                 catch(Exception ex){
                     ViewBag.ConfMsg = "ERROR: " + ex.Message;
                 }
+                if (employee.dsc_emp_hire_dt == null)
+                {
+                    employee.dsc_emp_hire_dt = employee.dsc_emp_init_work_dt;
+                }
 
                 return View(employee);
             }

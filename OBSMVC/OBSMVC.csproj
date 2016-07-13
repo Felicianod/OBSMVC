@@ -424,10 +424,14 @@
     <Content Include="Images\confused-emoticon.jpg" />
     <Content Include="Images\DSCHome_Logo.gif" />
     <Content Include="Images\DSCHOME_Logo.png" />
+    <Content Include="Images\DSCHOME_Logo_Plain.png" />
     <Content Include="Images\iconNoAvatar.png" />
     <Content Include="Images\KPogany.jpg" />
     <Content Include="Images\loading.gif" />
     <Content Include="Images\LoadingData.gif" />
+    <Content Include="Images\Observations_icon.jpg" />
+    <Content Include="Images\Red-Zone_Icon.png" />
+    <Content Include="Images\Resources_Tools_icon-250x250.jpg" />
     <Content Include="Images\ui-anim_basic_16x16.gif" />
     <Content Include="Models\DSC_OBS_ENTITY.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -508,7 +512,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Home.cshtml" />
     <Content Include="Views\Customer\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Customer\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Customer\Account\ExternalLoginConfirmation.cshtml" />
@@ -608,6 +612,7 @@
     <Content Include="Views\ColFormTemplate\ManageForm.cshtml" />
     <Content Include="Views\ColFormTemplate\_addReadOnlySection.cshtml" />
     <Content Include="Views\Error\Error.cshtml" />
+    <Content Include="Views\Home\AppSelection.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

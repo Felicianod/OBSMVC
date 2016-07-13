@@ -29,9 +29,14 @@ namespace OBSMVC.Controllers
         }
 
         // GET: Error
-        public ActionResult NotFound()
+        public ActionResult NotFound(string aspxerrorpath)
         {
-            Exception ex = new Exception("Page not found or invalid URL Entry point used");
+            string errorMessage = "Page not found or invalid URL Entry point used.";
+            if (!String.IsNullOrEmpty(aspxerrorpath)) { errorMessage += "Error Path: " + aspxerrorpath; }
+
+            //Exception ex = new Exception("Page not found or invalid URL Entry point used." );
+            Exception ex = new Exception(errorMessage);
+
             return View("Error", ex);
         }
 

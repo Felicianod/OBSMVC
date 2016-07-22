@@ -11,10 +11,18 @@
     .obsStd:hover {
         background-color: cornsilk;
     }
+    .sectionPH {
+        color:blue;
+        font-weight:bold;
+        background-color:#deecff;
+        text-align:center;
+        border:4px double green;
+    }
 </style>
 
 <link href="~/Content/pageCSS/addEditForm.css" rel="stylesheet" />
 <script src="~/Scripts/AddEditForm.js"></script>
+<script src="~/Scripts/obsGlobal.js"></script>
 
 @*===========================================  MAIN VIEW PAGE CODE =======================================================*@
 @{
@@ -189,15 +197,17 @@
         @* - - - - - - - - - - - - - - <<<<< START OF FORM BODY >>>>> - - - - - - - - - - - - - *@
         <div class="panel-body content" id="dragDropSection" style="margin-bottom:4px;">
             <div class="row" style="margin-bottom:0px;">
-                @*/---------------- Below is the MAIN FORM QUESTION DETAIL DISPLAY PANEL ----------------------\*@
+                @*/---------- Below is the Left Hand Side MAIN FORM QUESTION DETAIL DISPLAY PANEL ----------------------\*@
                 <div class="col-md-7 personal-info">
                     <div class="row" id="qFormList" style="max-width:100%; height:550px; overflow-y:scroll; margin-left:0px; ">
-                        <div class="panel-group" id="accordion" style="width:98%">
+                        <div class="panel-group colFormBody sectConnected" id="accordion" style="width:98%">
+                            @* - - - - Render all the existing Section from the database (If Any) - - - - *@
                             @foreach (OBSMVC.Controllers.CollectionFormSection obsFormSection in Model.colFormSections)
                             {
                                 Html.RenderAction("addNewSection", new { sCounter = obsFormSection.sectionNumber, colFormSection = obsFormSection });
                             }
-                            @*//Inside the Acordion Panel we place all the sections that will be added to the Form
+                            @*//Inside the Acordion Panel we place all the New sections that will be added to the Form
+                                immediatly after those existing section autocreated from the Database
                                 /----------------------------------------------------\
                                 |                                                    |
                                 |             FORM SECTIONS GO HERE                  |
@@ -251,7 +261,7 @@
                     </div>
                 </div>  @*End of Left Form Questions Pannel (7 column Pannel)*@
 
-                @*// -------------- Below is the Panel with the Question's Library ---------------- *@
+                @*// -------------- Below is the Right Hand Side Panel with the Question's Library ---------------- *@
                 <div class="col-md-5 personal-info">
                     <div class="panel panel-info">
                         <div class="panel-heading">
@@ -1036,8 +1046,55 @@
         makeSectionsDropable();
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-
+        //Make Sections Sortable Within the form
+        $(".colFormBody").sortable({
+            connectWith: ".sectConnected",
+            items: ".formSection",
+            start: function (event, ui) {
+                // modify ui.placeholder Text however you like
+                //ui.placeholder.html("I'm modifying the placeholder element!");
+                $('.panel-collapse.in').collapse('hide');
+            },
+            //start: function (event, ui) {
+            //    // modify ui.placeholder Text however you like
+            //    ui.placeholder.html("I'm modifying the placeholder element!");
+            //},
+            //stop: function (event, ui) {
+            //    var item = $(ui.item);
+            //    alert($(this).attr("id"));
+            //    var to = item.parent().is("#droppable_widget");
+            //    var siblingsCount = item.siblings().size();
+            //    if (to && siblingsCount > 0) {
+            //        alert("only one item allowed here");
+            //        return false;
+            //    }
+            //},
+            placeholder: {
+                element: function(currentItem) {
+                    return $('<div class="sectionPH"><br/><br/>DROP SECTION HERE!!<br/><br/></div>')[0];
+                },
+                update: function(container, p) {
+                    return;
+                }
+            },
+            sort: function () {
+                //$(this).removeClass("listActive");
+            },
+            //beforeStop: function(ev, ui) {
+            //    if ($(ui.item).hasClass('innerListItem') ) {
+            //        $(this).sortable('cancel');
+            //    }
+            //},
+            receive: function(event, ui) {
+                // This function executes when an item is received at the target list during "sort"
+                //alert("[" + this.id + "] received data from [" + ui.sender.attr("id") + "]");
+            },
+            update: function () {
+                //This function is executed every time an item is sorted complete (After sort)
+                $(this).find(".placeholder").remove();
+                $("#formChanged").val("Y");
+                $("#btnCancel").removeAttr('disabled');
+            }
+        }).disableSelection();
     });  // END Of document Ready Startup Scripts
-
-
 </script>

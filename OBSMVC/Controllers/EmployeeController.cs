@@ -119,7 +119,6 @@ namespace OBSMVC.Controllers
                 {
                     employee.dsc_emp_hire_dt = employee.dsc_emp_init_work_dt;
                 }
-
                 return View(employee);
             }
             //==========================================================

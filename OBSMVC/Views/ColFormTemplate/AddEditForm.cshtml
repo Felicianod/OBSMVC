@@ -17,6 +17,7 @@
         background-color:#deecff;
         text-align:center;
         border:4px double green;
+        margin:0;
     }
 </style>
 
@@ -44,7 +45,7 @@
     string errorMessage = (Session["errorMessage"] == null) ? "" : Session["errorMessage"].ToString();
 }
 
-<div class="row" style="margin-left:2px; margin-right:2px">
+<div class="row" style="margin-left:2px; margin-right:2px; margin-top:3px">
     <div class="jumbotron smallRowMargin col-sm-12" style="padding: 4px; margin-bottom:8px; text-align:center">
         <div class="col-sm-11 smallRowMargin" style="padding: 4px; margin-bottom:8px; text-align:center">
             <span style="font-size:xx-large;" title="@Model.manageAction">@Model.screen_Title</span><br />
@@ -947,11 +948,15 @@
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         $("#accordion").on('click', '.btnDelSection', function(){
             var sectionsLeft = $("#accordion").find(".formSection").length;
-
-            $(this).parents(".formSection").first().remove();
-            if (sectionsLeft == 1){ //The one section we are removing
-                addNewSection();
+            //$(".sectionTitle").prop("readonly",false); 
+            //$(".sectionTitle").prop("disabled",false);
+            if (sectionsLeft > 1){ //Only remove the section if there are more than one left (Last Section is not removable)
+                $(this).parents(".formSection").first().remove();
             }
+            //else{
+            //    alert("This is the last section and it will not be removed!");
+            //    //addNewSection();                
+            //}
         });
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         $('#btnAddSection').click(function () {
@@ -1021,13 +1026,7 @@
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-
-
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-
-
-
 
 
         //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1095,6 +1094,6 @@
                 $("#formChanged").val("Y");
                 $("#btnCancel").removeAttr('disabled');
             }
-        }).disableSelection();
+        });
     });  // END Of document Ready Startup Scripts
 </script>

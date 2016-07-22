@@ -5,7 +5,7 @@
     string sectionIdHandle = "#" + sectionId;
 }
 
-<div class="panel panel-default formSection" id="TEST_SECTION">
+<div class="panel panel-default formSection" id="sectHDRId00">
     <div class="panel-heading form-inline" style="background-color:lightblue">
         <h4 class="panel-title">
             @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
@@ -47,7 +47,7 @@
                                     <div class="col-sm-2 col-sm-offset-2">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" id="cbOptional" value="" @if (@sectQuest.cfq_na_yn == "Y") { <text> checked="checked" </text>   } disabled>
+                                                <input type="checkbox" id="cbOptional" value="" @if (@sectQuest.cfq_na_yn == "Y") { <text> checked="checked" </text>    } disabled>
                                                 Optional
                                             </label>
                                         </div>
@@ -80,7 +80,7 @@
                             </div>
 
                         </li>
-                      questionCounter++;
+                                                questionCounter++;
                     }
                 }
             </ol>

@@ -3,12 +3,13 @@
     var sectionNbr = @ViewData["sNumber"].ToString();
     string txtSectionName = "txtSectionName" + sectionNbr;
     string sectionId = "sectionId" + sectionNbr;
+    string sectionHdrId = "sectHDRId" + sectionNbr;
     string sectionIdHandle = "#" + sectionId;
     string olListId = "olList" + sectionNbr;
 }
 
-<div class="panel panel-default formSection" id="@sectionId">
-    <div class="panel-heading form-inline" style="background-color:lightblue">
+<div class="panel panel-default formSection" id="@sectionHdrId">
+    <div class="panel-heading form-inline" style="background-color:lightblue; overflow:auto">
         <h4 class="panel-title">
             @* If we need to autoclose all section when one is opened use <a>property ->  'data-parent="#accordion"' *@
             <a class="accordion-toggle" data-toggle="collapse" href="@sectionIdHandle">

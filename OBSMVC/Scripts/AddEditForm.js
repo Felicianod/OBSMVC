@@ -242,6 +242,10 @@ function validateForm() {
         //If any validation error is found give alert and reset the Save Button
         $('#btnSaveForm').button('reset');
         $("#btnPublishForm").button('reset');
+        alert("Disp sections...");
+        //$('.panel-collapse.in').collapse('show');
+        $('.panel-collapse').collapse('show');
+
         obsAlert(errorMsg);
         return false;
     }

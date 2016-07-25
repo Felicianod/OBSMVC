@@ -9,26 +9,18 @@ namespace OBSMVC.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            //Check whether this server needs to redirect the default "Index" entry point to the App Menu Selection Page or not            
-            try
-            {                
-                if ( ConfigurationManager.AppSettings["ServerType"].ToString().Equals("Development") ) { return RedirectToAction("AppSelection", "Home"); }
-            }
-            catch
+            string environment = "";
+            //Verify whether we are running in DEV environemnt or not
+            if (!(ConfigurationManager.AppSettings["ServerType"] == null))
             {
+                environment = ConfigurationManager.AppSettings["ServerType"].ToString();
+                if (environment.Equals("Development") || environment.Equals("QA")) { return RedirectToAction("AppSelection", "Home"); }
             }
 
-            if (!Request.IsAuthenticated)
+            if (!Request.IsAuthenticated || Session["first_name"] == null)
             {
                 return RedirectToAction("Login", "Login");
             }
-
-            //try
-            //{
-            //    if (!String.IsNullOrEmpty(Session["session_id"].ToString()))   { return View();}
-            //}
-            //catch{}
-            //return RedirectToAction("OBSLogin", "Login");
 
             return RedirectToAction("Home", "Home");
         }
@@ -41,6 +33,8 @@ namespace OBSMVC.Controllers
 
         public ActionResult Home()
         {
+            //if (!Request.IsAuthenticated) { return RedirectToAction("Login", "Login"); }
+
             return View();
         }
 

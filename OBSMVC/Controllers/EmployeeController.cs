@@ -69,13 +69,14 @@ namespace OBSMVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             DSC_EMPLOYEE employeeToUpdate = db.DSC_EMPLOYEE.Find(id);
+            if (employeeToUpdate == null)
+            {
+                throw new Exception("Selected Employee Id does not Exist. Review your input");
+                //return HttpNotFound();
+            }
             if(employeeToUpdate.dsc_emp_hire_dt==null)
             {
                 employeeToUpdate.dsc_emp_hire_dt = employeeToUpdate.dsc_emp_init_work_dt;
-            }
-            if (employeeToUpdate == null)
-            {
-                return HttpNotFound();
             }
             ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id>0 && x.dsc_lc_eff_end_date.Equals(null)), "dsc_lc_id", "dsc_lc_name", employeeToUpdate.dsc_assigned_lc_id);
             return View(employeeToUpdate);

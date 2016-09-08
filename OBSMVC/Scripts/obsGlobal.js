@@ -26,7 +26,7 @@ function obsConfirm(myMessage) {
 //Function to replace the browser Alert popup with a nicer bootstraps formatted alert.
 function obsAlert(myMessage) {
     BootstrapDialog.show({
-        title: 'Observations PRO Alert',
+        title: 'Observations Management Tools Alert',
         size: BootstrapDialog.SIZE_LARGE,   // options: BootstrapDialog.SIZE_NORMAL, .SIZE_SMALL, .SIZE_WIDE, .SIZE_LARGE
         //type: BootstrapDialog.TYPE_PRIMARY,  //TYPE_PRIMARY is the default
         //cssClass: 'myStyle',        //If we want to give the modal dialog window a custom style (Must define the class "myStyle" in the STYLES section as ".myStyle .modal-dialog" )

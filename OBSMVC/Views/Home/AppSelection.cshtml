@@ -2,237 +2,100 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>DSC APPS WEB-PORTAL</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jquery")
+   <meta name="viewport" content="width=device-width" />
+   <title>DSC APPS WEB-PORTAL</title>
+   @Styles.Render("~/Content/css")
+   @Scripts.Render("~/bundles/modernizr")
+   @Scripts.Render("~/bundles/jquery")
 
-    <style>
-        .environment {
-            color: white;
-            background-color: #424141;
-            /*border-bottom: 1px solid white;*/
-            border: none;
-            border-bottom: 1px solid #928d8d;
-            width: 100%;
-            padding: 10px;
-            margin: 20px, 10px;
-            text-align: center;
-            min-width: 100%;
-            height: 80px;
-            font-size: x-large;
-            -webkit-transition: background-color 1.3s; /* For Safari 3.1 to 6.0 */
-            transition: background-color 1.3s;
-        }
+   <style>
+     .btnEnvironment {
+         color: white;
+         background-color: #424141;
+         /*border-bottom: 1px solid white;*/
+         border: none;
+         /*border-bottom: 1px solid #928d8d;*/
+         width: 100%;
+         padding: 7px;
+         margin: 20px, 10px;
+         text-align: center;
+         min-width: 100%;
+         height: 65px;
+         font-size: x-large;
+         -webkit-transition: background-color 1.0s; /* For Safari 3.1 to 6.0 */
+         transition: background-color 1.0s;
+     }
+     .btnEnvironment:hover {
+         background-color: black;
+         color: antiquewhite;
+     }
+     .btnEnvironment:focus {
+         background-color: #05022b;
+         color: antiquewhite;
+     }
+     .app-Frame {
+         border: 4px double #222222;
+         margin:0;
+         padding: 0px;
+         text-align: left;
+         -webkit-box-shadow: 14px 16px 15px -10px rgba(0,0,0,1);
+         -moz-box-shadow: 14px 16px 15px -10px rgba(0,0,0,1);
+         box-shadow: 14px 16px 15px -10px rgba(0,0,0,1);
+     }
 
-            .environment:hover {
-                background-color: black;
-                color: antiquewhite;
-            }
-
-            .environment:focus {
-                background-color: #05022b;
-                color: antiquewhite;
-            }
-
-        .app-selector {
-            border: 6px double #222222;
-            padding: 0px;
-            text-align: left;
-        }
-
-        .clickable:hover {
-            background-color: blue;
-        }
-    </style>
+     .app-Frame:hover {
+         font-weight:bold;
+         cursor: pointer;
+         border-color: #0718a5;  /*dark-blue*/
+     }
+     .app-Frame-Header {
+         color:white;
+         font-size:medium;
+         text-align:center;
+         padding:8px !important;
+     }
+     .app-Frame-Body {
+       background-color:white; 
+       color:black; 
+       font-size:x-large;
+       text-align:center;
+     }
+     .no-Margins {
+       margin:0; 
+       padding:0;
+     }
+  </style>
 </head>
 <body style="background-color: #424141">
     <div class="container container-fluid" style="margin-left:20px; margin-right:20px; min-width:98%">
         @*<div class="row" style="background-color: darkred; padding: 10px 10px">
                 TEST
             </div>*@
-        <div class="row">
+        <div class="row" style="margin:0; padding:0; width:100%;">
             @* ------------------------ Left Menu - Environment Selection ----------------------------- *@
-            <div class="col-sm-2">
+            <div class="col-sm-2" >
                 <div class="row">
                     <img src="~/Images/DSCHOME_Logo_Plain.png" style="width:100%" />
                 </div>
-                <div class="row">
-                    <input type="button" id="btnPROD" class="btn environment" value="Production">
+                <div class="row" style="padding-top:15px">
+                    <input type="button" id="btnPROD" class="btn btnEnvironment" value="Production">
                 </div>
                 <div class="row">
-                    <input type="button" id="btnDEV" class="btn environment" value="Development">
+                    <input type="button" id="btnDEV" class="btn btnEnvironment" value="Development">
                 </div>
                 <div class="row">
-                    <input type="button" id="btnQA" class="btn environment" value="QA">
+                    <input type="button" id="btnQA" class="btn btnEnvironment" value="QA">
                 </div>
             </div>
 
             @*Right Side of the Screen - Panel Links Content *@
-            <div class="col-sm-9 col-sm-offset-1" style="color:white; text-align:center">
-                <br /><br /><br /><br /><br /><br />
-                @*--------------------------------------- PRODUCTION SECTION -----------------------------------*@
-                <div class="row" id="divPROD" style="display:none">
-                    <div class="col-sm-3 app-selector">
-                        <button id="tblOBSDM" style="width:100%; padding: 0px 0px" onclick="window.location = 'http://OBSDM/Home/Home'">
-                            <table class="clickable" style="max-width:100%; width:100%; margin: 0 auto">
-                                <tr><td colspan="2" style="background-color:black; color:white; font-size:medium; padding:10px 10px; text-align:center">http://OBSDM/Home/Index</td></tr>
-                                <tr>
-                                    <td style="" width="120px">
-                                        <img style="width:120px; height:130px" src="~/Images/Resources_Tools_icon-250x250.jpg" />
-                                    </td>
-                                    <td style="background-color:white; color:black; text-align:center; font-size:x-large">
-                                        OBSDM TOOLS<br />
-                                        <span style="font-size:medium">[Production]</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </button>
-                    </div>
-
-                    <div class="col-sm-3 col-sm-offset-1 app-selector">
-                        <button id="tblOBSPRODEV" style="width:100%; padding: 0px 0px" onclick="window.location = 'http://OBSPRO/Home/Index'">
-                            <table class="clickable" style="max-width:100%; width:100%; margin: 0 auto">
-                                <tr><td colspan="2" style="background-color:black; color:white; font-size:medium; padding:10px 10px; text-align:center">http://OBSPRO/Home/Index</td></tr>
-                                <tr>
-                                    <td style="" width="120px">
-                                        <img style="width:120px; height:130px" src="~/Images/Observations_icon.jpg" />
-                                    </td>
-                                    <td style="background-color:white; color:black; text-align:center; font-size:x-large">
-                                        OBS PRO<br />
-                                        <span style="font-size:medium">[Production]</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </button>
-                    </div>
-
-                    <div class="col-sm-3 col-sm-offset-1 app-selector">
-                        <button id="tblRedZoneDEV" style="width:100%; padding: 0px 0px" onclick="window.location = 'http://RedZone/Home/Index'">
-                            <table class="clickable" style="max-width:100%; width:100%; margin: 0 auto">
-                                <tr><td colspan="2" style="background-color:black; color:white; font-size:medium; padding:10px 10px; text-align:center">http://RedZone/Home/Index</td></tr>
-                                <tr>
-                                    <td style="" width="120px">
-                                        <img style="width:120px; height:130px" src="~/Images/Red-Zone_Icon.png" />
-                                    </td>
-                                    <td style="background-color:white; color:black; text-align:center; font-size:x-large">
-                                        Red-Zone<br />
-                                        <span style="font-size:medium">[Production]</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </button>
-                    </div>
-                </div>
-                @*-------------------------------------- DEVELOPMENT SECTION -----------------------------------*@
-                <div class="row" id="divDEV" @*style="display:none"*@>
-                    <div class="col-sm-3 app-selector">
-                        <button id="tblOBSDMDEV" style="width:100%; padding: 0px 0px" onclick="window.location = 'http://DSCAPPDEV/Home/Home'">
-                            <table class="clickable" style="max-width:100%; width:100%; margin: 0 auto">
-                                <tr><td colspan="2" style="background-color:green; color:white; font-size:medium; padding:10px 10px; text-align:center">http://DSCAPPDEV/Home/Index</td></tr>
-                                <tr>
-                                    <td style="" width="120px">
-                                        <img style="width:120px; height:130px" src="~/Images/Resources_Tools_icon-250x250.jpg" />
-                                    </td>
-                                    <td style="background-color:white; color:black; text-align:center; font-size:x-large">
-                                        OBSDM TOOLS<br />
-                                        <span style="font-size:medium">[Development]</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </button>
-                    </div>
-
-                    <div class="col-sm-3 col-sm-offset-1 app-selector">
-                        <button id="tblOBSPRODEV" style="width:100%; padding: 0px 0px" onclick="window.location = 'http://DSCAPPDEV:81/Home/Index'">
-                            <table class="clickable" style="max-width:100%; width:100%; margin: 0 auto">
-                                <tr><td colspan="2" style="background-color:green; color:white; font-size:medium; padding:10px 10px; text-align:center">http://DSCAPPDEV:81/Home/Index</td></tr>
-                                <tr>
-                                    <td style="" width="120px">
-                                        <img style="width:120px; height:130px" src="~/Images/Observations_icon.jpg" />
-                                    </td>
-                                    <td style="background-color:white; color:black; text-align:center; font-size:x-large">
-                                        OBS PRO<br />
-                                        <span style="font-size:medium">[Development]</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </button>
-                    </div>
-
-                    <div class="col-sm-3 col-sm-offset-1 app-selector">
-                        <button id="tblRedZoneDEV" style="width:100%; padding: 0px 0px" onclick="window.location = 'http://DSCAPPDEV:82/Home/Index'">
-                            <table class="clickable" style="max-width:100%; width:100%; margin: 0 auto">
-                                <tr><td colspan="2" style="background-color:green; color:white; font-size:medium; padding:10px 10px; text-align:center">http://DSCAPPDEV:82/Home/Index</td></tr>
-                                <tr>
-                                    <td style="" width="120px">
-                                        <img style="width:120px; height:130px" src="~/Images/Red-Zone_Icon.png" />
-                                    </td>
-                                    <td style="background-color:white; color:black; text-align:center; font-size:x-large">
-                                        Red-Zone<br />
-                                        <span style="font-size:medium">[Development]</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </button>
-                    </div>
-                </div>
-                @*------------------------------------------ QA SECTION ----------------------------------------*@
-                <div class="row" id="divQA" style="display:none">
-                    <div class="col-sm-3 app-selector">
-                        <button id="tblOBSDMDEV" style="width:100%; padding: 0px 0px" onclick="window.location = 'http://DSCAPPQA/Home/Home'">
-                            <table class="clickable" style="max-width:100%; width:100%; margin: 0 auto">
-                                <tr><td colspan="2" style="background-color:darkred; color:white; font-size:medium; padding:10px 10px; text-align:center">http://DSCAPPQA/Home/Dashboard</td></tr>
-                                <tr>
-                                    <td style="" width="120px">
-                                        <img style="width:120px; height:130px" src="~/Images/Resources_Tools_icon-250x250.jpg" />
-                                    </td>
-                                    <td style="background-color:white; color:black; text-align:center; font-size:x-large">
-                                        OBSDM TOOLS<br />
-                                        <span style="font-size:medium">[ QA ]</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </button>
-                    </div>
-
-                    <div class="col-sm-3 col-sm-offset-1 app-selector">
-                        <button id="tblOBSPRODEV" style="width:100%; padding: 0px 0px" onclick="window.location = 'http://DSCAPPQA:81/Home/Index'">
-                            <table class="clickable" style="max-width:100%; width:100%; margin: 0 auto">
-                                <tr><td colspan="2" style="background-color:darkred; color:white; font-size:medium; padding:10px 10px; text-align:center">http://DSCAPPQA:81/Home/Index</td></tr>
-                                <tr>
-                                    <td style="" width="120px">
-                                        <img style="width:120px; height:130px" src="~/Images/Observations_icon.jpg" />
-                                    </td>
-                                    <td style="background-color:white; color:black; text-align:center; font-size:x-large">
-                                        OBS PRO<br />
-                                        <span style="font-size:medium">[ QA ]</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </button>
-                    </div>
-
-                    <div class="col-sm-3 col-sm-offset-1 app-selector">
-                        <button id="tblRedZoneDEV" style="width:100%; padding: 0px 0px" onclick="window.location = 'http://DSCAPPQA:82/Home/Index'">
-                            <table class="clickable" style="max-width:100%; width:100%; margin: 0 auto">
-                                <tr><td colspan="2" style="background-color:darkred; color:white; font-size:medium; padding:10px 10px; text-align:center">http://DSCAPPQA:82/Home/Index</td></tr>
-                                <tr>
-                                    <td style="" width="120px">
-                                        <img style="width:120px; height:130px" src="~/Images/Red-Zone_Icon.png" />
-                                    </td>
-                                    <td style="background-color:white; color:black; text-align:center; font-size:x-large">
-                                        Red-Zone<br />
-                                        <span style="font-size:medium">[ QA ]</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </button>
-                    </div>
-                </div>
-
-            </div>  @* ----- Right Side Pannel ---- *@
+            <div class="col-xs-10" style="margin:0; padding:0; color:white; text-align:center; padding-top:70px;">
+      @*--------------------------------------- PRODUCTION SECTION ----------------------------------------------------------------*@
+              @Html.Action("_AppSelectionEnvironment", new { environmentRow = "PROD" })
+      @*-------------------------------------- DEVELOPMENT SECTION ----------------------------------------------------------------*@
+              @Html.Action("_AppSelectionEnvironment", new { environmentRow = "DEV" })
+      @*------------------------------------------ QA SECTION ---------------------------------------------------------------------*@
+              @Html.Action("_AppSelectionEnvironment", new { environmentRow = "QA" })            </div>  @* ----- Right Side Pannel ---- *@
         </div>
         <br />
     </div>
@@ -241,6 +104,7 @@
     @Scripts.Render("~/bundles/bootstrap")
     <script>
         $(document).ready(function () {
+            $('#divDEV').show();
             $("#btnDEV").focus();
 
             $("#btnPROD").click(function () {
@@ -264,9 +128,11 @@
             //$("#tblOBSDM").click(function () { location.href = 'http://OBSDM/Home/Index'; });
             //$("#tblOBSPRO").click(function () { location.href = 'http://OBSPRO/Home/Index'; });
             //$("#tblRedZone").click(function () { location.href = 'http://RedZone/Home/Index'; });
+
             //$("#tblOBSDMDEV").click(function () { location.href = 'http://DSCAPPDEV/Home/Index'; });
             //$("#tblOBSPRODEV").click(function () { location.href = 'http://DSCAPPDEV:81/Home/Index'; });
             //$("#tblRedZoneDEV").click(function () { location.href = 'http://DSCAPPDEV:82/Home/Index'; });
+
             //$("#tblOBSDMQA").click(function () { location.href = 'http://DSCAPPQA/Home/Dashboard'; });
             //$("#tblOBSPROQA").click(function () { location.href = 'http://DSCAPPQA:81/Home/Index'; });
             //$("#tblRedZoneQA").click(function () { location.href = 'http://DSCAPPQA:82/Home/Index'; });

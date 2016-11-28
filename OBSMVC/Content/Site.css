@@ -34,3 +34,16 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.bordered {
+    border: 1px solid black;
+}
+.bordered-red {
+    border: 1px solid red;
+}
+.bordered-blue {
+    border: 1px solid blue;
+}
+.bordered-green {
+    border: 1px solid green;
+}

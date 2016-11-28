@@ -429,7 +429,8 @@
     <Content Include="Images\KPogany.jpg" />
     <Content Include="Images\loading.gif" />
     <Content Include="Images\LoadingData.gif" />
-    <Content Include="Images\Observations_icon.jpg" />
+    <Content Include="Images\MetricDM_icon.jpg" />
+    <Content Include="Images\Observations_Icon.jpg" />
     <Content Include="Images\Red-Zone_Icon.png" />
     <Content Include="Images\Resources_Tools_icon-250x250.jpg" />
     <Content Include="Images\ui-anim_basic_16x16.gif" />
@@ -614,6 +615,7 @@
     <Content Include="Views\ColFormTemplate\_addReadOnlySection.cshtml" />
     <Content Include="Views\Error\Error.cshtml" />
     <Content Include="Views\Home\AppSelection.cshtml" />
+    <Content Include="Views\Home\_AppSelectionEnvironment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -1,0 +1,20 @@
+﻿@model OBSMVC.Controllers.environmentApps
+
+<div class="row" id="@Model.envDIVid" style="display:none; margin:0; padding:0; padding-left:20px">
+    @foreach (OBSMVC.Controllers.environmentApp dscApp in Model.envAppList)
+    {
+        <div class="col-xs-12 col-sm-6 col-lg-4 " onclick="window.location = '@dscApp.appURL'" style="height:200px">
+            <div class="row app-Frame">
+                <div class="row no-Margins app-Frame-Header" style="background-color:@Model.envColorScheme">
+                    @dscApp.appURL_display
+                </div>
+                <div class="row no-Margins app-Frame-Body">
+                    <img style="width:120px; height:130px; float:left" src="@dscApp.imageURL" />
+                    <br />
+                    <span>@dscApp.appName</span><br />
+                    <span style="font-size:medium">[ @Model.envName ]</span>
+                </div>
+            </div>
+        </div>
+    }
+</div>

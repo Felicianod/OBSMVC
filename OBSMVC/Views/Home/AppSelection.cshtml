@@ -77,25 +77,26 @@
                 <div class="row">
                     <img src="~/Images/DSCHOME_Logo_Plain.png" style="width:100%" />
                 </div>
-                <div class="row" style="padding-top:15px">
-                    <input type="button" id="btnPROD" class="btn btnEnvironment" value="Production">
-                </div>
                 <div class="row">
                     <input type="button" id="btnDEV" class="btn btnEnvironment" value="Development">
                 </div>
                 <div class="row">
                     <input type="button" id="btnQA" class="btn btnEnvironment" value="QA">
                 </div>
+                <div class="row" style="padding-top:15px">
+                    <input type="button" id="btnPROD" class="btn btnEnvironment" value="Production">
+                </div>
             </div>
 
             @*Right Side of the Screen - Panel Links Content *@
             <div class="col-xs-10" style="margin:0; padding:0; color:white; text-align:center; padding-top:70px;">
-      @*--------------------------------------- PRODUCTION SECTION ----------------------------------------------------------------*@
-              @Html.Action("_AppSelectionEnvironment", new { environmentRow = "PROD" })
       @*-------------------------------------- DEVELOPMENT SECTION ----------------------------------------------------------------*@
               @Html.Action("_AppSelectionEnvironment", new { environmentRow = "DEV" })
       @*------------------------------------------ QA SECTION ---------------------------------------------------------------------*@
-              @Html.Action("_AppSelectionEnvironment", new { environmentRow = "QA" })            </div>  @* ----- Right Side Pannel ---- *@
+              @Html.Action("_AppSelectionEnvironment", new { environmentRow = "QA" })            
+      @*--------------------------------------- PRODUCTION SECTION ----------------------------------------------------------------*@
+             @Html.Action("_AppSelectionEnvironment", new { environmentRow = "PROD" })
+            </div>  @* ----- Right Side Pannel ---- *@
         </div>
         <br />
     </div>

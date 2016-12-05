@@ -117,7 +117,7 @@ namespace OBSMVC.Controllers
             switch (app_Name)
             {
                 case "OBS-DM":
-                    appName = "OBSDM TOOLS";
+                    appName = "OBS DM TOOLS";
                     imageURL = "/Images/Resources_Tools_icon-250x250.jpg";
                     break;
                 default:
@@ -126,11 +126,11 @@ namespace OBSMVC.Controllers
                     imageURL = "/Images/Observations_icon.jpg";
                     break;
                 case "RED-ZONE":
-                    appName = "Red-Zone";
+                    appName = "Red Zone";
                     imageURL = "/Images/Red-Zone_Icon.png";
                     break;
                 case "METRIC-DM":
-                    appName = "Metric DM";
+                    appName = "Metric DM Tools";
                     imageURL = "/Images/MetricDM_icon.jpg";
                     break;
             }

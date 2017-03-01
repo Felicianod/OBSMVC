@@ -18,11 +18,17 @@ namespace OBSMVC
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
             GlobalFilters.Filters.Add(new System.Web.Mvc.AuthorizeAttribute());
             GlobalFilters.Filters.Add(new HandleErrorAttribute());
             ViewEngines.Engines.Add(new RazorViewEngine());
         }
-        
+
+        protected void Session_Start(object sender, EventArgs e)
+        {
+
+        }
+
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
             HttpContextWrapper context = new HttpContextWrapper(this.Context);

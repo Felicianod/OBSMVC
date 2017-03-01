@@ -14,6 +14,10 @@ namespace OBSMVC.Models
     
     public partial class OBS_APPLICATION
     {
-        public short obs_application_id { get; set; }
+        public short obs_app_id { get; set; }
+        public string obs_app_name { get; set; }
+        public string obs_app_name_token { get; set; }
+        public string obs_app_type { get; set; }
+        public System.DateTime obs_app_in_svc_dt { get; set; }
     }
 }

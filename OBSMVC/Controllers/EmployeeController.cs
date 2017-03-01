@@ -11,13 +11,14 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace OBSMVC.Controllers
-{   [Authorize]
+{
+    [Authorize]
     public class EmployeeController : Controller
     {
         private DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY();
 
         // GET: Employee
-        public ActionResult Index( string search, int? page, int? PageSize)
+        public ActionResult Index(string search, int? page, int? PageSize)
         {
             ViewBag.CurrentItemsPerPage = PageSize ?? 10;
 
@@ -30,7 +31,8 @@ namespace OBSMVC.Controllers
                 }
                 else
                 {
-                    try {
+                    try
+                    {
                         string[] words = search.Split(' ');
                         string word0 = words[0];
                         string word1 = words[1];
@@ -38,14 +40,14 @@ namespace OBSMVC.Controllers
                     }
                     catch
                     {
-                        return View(employeeList.Where(emp => emp.dsc_emp_last_name.Contains(search) || emp.dsc_emp_first_name.Contains(search) || emp.DSC_LC.dsc_lc_name.Contains(search) || emp.dsc_emp_perm_id.ToString().Contains(search) || emp.dsc_emp_adp_id.Contains(search) || emp.dsc_emp_email_addr.Contains(search)).OrderBy(x =>  x.dsc_emp_last_name).ThenBy(y=>y.dsc_emp_first_name).ToList().ToPagedList(page ?? 1, PageSize ?? 10));
+                        return View(employeeList.Where(emp => emp.dsc_emp_last_name.Contains(search) || emp.dsc_emp_first_name.Contains(search) || emp.DSC_LC.dsc_lc_name.Contains(search) || emp.dsc_emp_perm_id.ToString().Contains(search) || emp.dsc_emp_adp_id.Contains(search) || emp.dsc_emp_email_addr.Contains(search)).OrderBy(x => x.dsc_emp_last_name).ThenBy(y => y.dsc_emp_first_name).ToList().ToPagedList(page ?? 1, PageSize ?? 10));
                     }
                 }
             }
             else
             {
                 var employeeList = db.DSC_EMPLOYEE.Include(e => e.DSC_LC).OrderBy(x => x.dsc_emp_last_name).ThenBy(y => y.dsc_emp_first_name);
-               return View(employeeList.ToList().ToPagedList(page ?? 1, PageSize ?? 10));               
+                return View(employeeList.ToList().ToPagedList(page ?? 1, PageSize ?? 10));
             }
         }
 
@@ -74,11 +76,11 @@ namespace OBSMVC.Controllers
                 throw new Exception("Selected Employee Id does not Exist. Review your input");
                 //return HttpNotFound();
             }
-            if(employeeToUpdate.dsc_emp_hire_dt==null)
+            if (employeeToUpdate.dsc_emp_hire_dt == null)
             {
                 employeeToUpdate.dsc_emp_hire_dt = employeeToUpdate.dsc_emp_init_work_dt;
             }
-            ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id>0 && x.dsc_lc_eff_end_date.Equals(null)), "dsc_lc_id", "dsc_lc_name", employeeToUpdate.dsc_assigned_lc_id);
+            ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id > 0 && x.dsc_lc_eff_end_date.Equals(null)), "dsc_lc_id", "dsc_lc_name", employeeToUpdate.dsc_assigned_lc_id);
             return View(employeeToUpdate);
         }
 
@@ -95,7 +97,8 @@ namespace OBSMVC.Controllers
                 //if (!ModelState.IsValid) {
                 //    return View(formEmployee);
                 //}
-                try {
+                try
+                {
                     employee = db.DSC_EMPLOYEE.Find(formEmployee.dsc_emp_id);
                     employee.dsc_emp_title = formEmployee.dsc_emp_title;
                     employee.dsc_emp_perm_id = formEmployee.dsc_emp_perm_id;
@@ -113,7 +116,8 @@ namespace OBSMVC.Controllers
                     ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id > 0 && x.dsc_lc_eff_end_date.Equals(null)).ToList(), "dsc_lc_id", "dsc_lc_name", formEmployee.dsc_assigned_lc_id);
                     ViewBag.ConfMsg = "Employee Information Saved Successfully.";
                 }
-                catch(Exception ex){
+                catch (Exception ex)
+                {
                     ViewBag.ConfMsg = "ERROR: " + ex.Message;
                 }
                 if (employee.dsc_emp_hire_dt == null)
@@ -201,6 +205,31 @@ namespace OBSMVC.Controllers
             db.DSC_EMPLOYEE.Remove(eMPLOYEE);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+
+        // POST: Employee/_EmpBldgAssign
+        [HttpPost]
+        public ActionResult _EmpBldgAssign(int? app_user_id)
+        {
+            //DSC_EMPLOYEE eMPLOYEE = db.DSC_EMPLOYEE.Find(id);
+            //db.DSC_EMPLOYEE.Remove(eMPLOYEE);
+            //db.SaveChanges();
+
+            //List<string> buildings = db.
+            //BldgAsgnViewModel bldgAsgnViewModel = new BldgAsgnViewModel();
+
+            //if (app_user_id == null || app_user_id == 0)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            //else
+            //{
+            //    bldgAsgnViewModel.userBldgList = getUserBuildingList(app_user_id);
+            //    bldgAsgnViewModel.unassignedBldgList = getAllBuildingList().Except(bldgAsgnViewModel.userBldgList).ToList();
+            //}
+
+            return PartialView();
         }
 
         protected override void Dispose(bool disposing)

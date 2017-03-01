@@ -71,9 +71,13 @@
         </EntityType>
         <EntityType Name="OBS_APPLICATION">
           <Key>
-            <PropertyRef Name="obs_application_id" />
+            <PropertyRef Name="obs_app_id" />
           </Key>
-          <Property Name="obs_application_id" Type="smallint" Nullable="false" />
+          <Property Name="obs_app_id" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="obs_app_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="obs_app_name_token" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="obs_app_type" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="obs_app_in_svc_dt" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="OBS_ATTRIB_DATA_TYPES">
           <Key>
@@ -83,15 +87,12 @@
           <Property Name="obs_attrib_data_type_name" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="obs_attrib_data_type_len_yn" Type="varchar" MaxLength="1" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="OBS_COL_FORM_INST_ANS">
           <Key>
             <PropertyRef Name="obs_cfia_id" />
-            <PropertyRef Name="obs_cfia_ans_val" />
           </Key>
           <Property Name="obs_cfia_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="obs_cfiq_id" Type="bigint" />
+          <Property Name="obs_cfiq_id" Type="bigint" Nullable="false" />
           <Property Name="obs_cfia_ans_val" Type="varchar" MaxLength="1000" Nullable="false" />
           <Property Name="obs_cfia_ans_wgt" Type="smallint" />
           <Property Name="obs_cfia_ans_order" Type="smallint" />
@@ -211,6 +212,14 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
           <Property Name="obs_cft_added_dtm" Type="datetime" Nullable="false" />
           <Property Name="obs_cft_upd_uid" Type="varchar" MaxLength="70" />
           <Property Name="obs_cft_upd_dtm" Type="datetime" />
+        </EntityType>
+        <EntityType Name="OBS_EMP_ASSGND_LC">
+          <Key>
+            <PropertyRef Name="obs_eal_id" />
+          </Key>
+          <Property Name="obs_eal_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="dsc_emp_id" Type="int" Nullable="false" />
+          <Property Name="dsc_lc_id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="OBS_FORM_ATTRIBS">
           <Key>
@@ -436,8 +445,20 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="rel_emp_emp_assgnd_lc">
+          <End Role="DSC_EMPLOYEE" Type="Self.DSC_EMPLOYEE" Multiplicity="1" />
+          <End Role="OBS_EMP_ASSGND_LC" Type="Self.OBS_EMP_ASSGND_LC" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DSC_EMPLOYEE">
+              <PropertyRef Name="dsc_emp_id" />
+            </Principal>
+            <Dependent Role="OBS_EMP_ASSGND_LC">
+              <PropertyRef Name="dsc_emp_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="rel_inst_quest_ans">
-          <End Role="OBS_COL_FORM_INST_QUEST" Type="Self.OBS_COL_FORM_INST_QUEST" Multiplicity="0..1" />
+          <End Role="OBS_COL_FORM_INST_QUEST" Type="Self.OBS_COL_FORM_INST_QUEST" Multiplicity="1" />
           <End Role="OBS_COL_FORM_INST_ANS" Type="Self.OBS_COL_FORM_INST_ANS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="OBS_COL_FORM_INST_QUEST">
@@ -445,6 +466,18 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
             </Principal>
             <Dependent Role="OBS_COL_FORM_INST_ANS">
               <PropertyRef Name="obs_cfiq_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rel_lc_emp_assgnd_lc">
+          <End Role="DSC_LC" Type="Self.DSC_LC" Multiplicity="1" />
+          <End Role="OBS_EMP_ASSGND_LC" Type="Self.OBS_EMP_ASSGND_LC" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DSC_LC">
+              <PropertyRef Name="dsc_lc_id" />
+            </Principal>
+            <Dependent Role="OBS_EMP_ASSGND_LC">
+              <PropertyRef Name="dsc_lc_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -888,6 +921,7 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
           <EntitySet Name="OBS_APP_EVENT_LOG" EntityType="Self.OBS_APP_EVENT_LOG" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_APPLICATION" EntityType="Self.OBS_APPLICATION" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_ATTRIB_DATA_TYPES" EntityType="Self.OBS_ATTRIB_DATA_TYPES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OBS_COL_FORM_INST_ANS" EntityType="Self.OBS_COL_FORM_INST_ANS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_COL_FORM_INST_ATTRIB_VALS" EntityType="Self.OBS_COL_FORM_INST_ATTRIB_VALS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_COL_FORM_INST_MM_ATTACH" EntityType="Self.OBS_COL_FORM_INST_MM_ATTACH" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_COL_FORM_INST_QUEST" EntityType="Self.OBS_COL_FORM_INST_QUEST" Schema="dbo" store:Type="Tables" />
@@ -896,6 +930,7 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
           <EntitySet Name="OBS_COL_FORM_TMPLT_ATTRIBS" EntityType="Self.OBS_COL_FORM_TMPLT_ATTRIBS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_COLLECT_FORM_INST" EntityType="Self.OBS_COLLECT_FORM_INST" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_COLLECT_FORM_TMPLT" EntityType="Self.OBS_COLLECT_FORM_TMPLT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OBS_EMP_ASSGND_LC" EntityType="Self.OBS_EMP_ASSGND_LC" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_FORM_ATTRIBS" EntityType="Self.OBS_FORM_ATTRIBS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_FORM_SECTION" EntityType="Self.OBS_FORM_SECTION" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_INST" EntityType="Self.OBS_INST" Schema="dbo" store:Type="Tables" />
@@ -913,15 +948,6 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
           <EntitySet Name="OBS_TYPE_SUB_TYPES" EntityType="Self.OBS_TYPE_SUB_TYPES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_USER_AUTH" EntityType="Self.OBS_USER_AUTH" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OBS_USER_ROLE" EntityType="Self.OBS_USER_ROLE" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OBS_COL_FORM_INST_ANS" EntityType="Self.OBS_COL_FORM_INST_ANS" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [OBS_COL_FORM_INST_ANS].[obs_cfia_id] AS [obs_cfia_id], 
-    [OBS_COL_FORM_INST_ANS].[obs_cfiq_id] AS [obs_cfiq_id], 
-    [OBS_COL_FORM_INST_ANS].[obs_cfia_ans_val] AS [obs_cfia_ans_val], 
-    [OBS_COL_FORM_INST_ANS].[obs_cfia_ans_wgt] AS [obs_cfia_ans_wgt], 
-    [OBS_COL_FORM_INST_ANS].[obs_cfia_ans_order] AS [obs_cfia_ans_order]
-    FROM [dbo].[OBS_COL_FORM_INST_ANS] AS [OBS_COL_FORM_INST_ANS]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="obs_super_type_type" Association="Self.obs_super_type_type">
             <End Role="OBS_SUPER_TYPE" EntitySet="OBS_SUPER_TYPE" />
             <End Role="OBS_TYPE" EntitySet="OBS_TYPE" />
@@ -938,9 +964,17 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
             <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
             <End Role="OBS_COL_FORM_INST_QUEST" EntitySet="OBS_COL_FORM_INST_QUEST" />
           </AssociationSet>
+          <AssociationSet Name="rel_emp_emp_assgnd_lc" Association="Self.rel_emp_emp_assgnd_lc">
+            <End Role="DSC_EMPLOYEE" EntitySet="DSC_EMPLOYEE" />
+            <End Role="OBS_EMP_ASSGND_LC" EntitySet="OBS_EMP_ASSGND_LC" />
+          </AssociationSet>
           <AssociationSet Name="rel_inst_quest_ans" Association="Self.rel_inst_quest_ans">
             <End Role="OBS_COL_FORM_INST_QUEST" EntitySet="OBS_COL_FORM_INST_QUEST" />
             <End Role="OBS_COL_FORM_INST_ANS" EntitySet="OBS_COL_FORM_INST_ANS" />
+          </AssociationSet>
+          <AssociationSet Name="rel_lc_emp_assgnd_lc" Association="Self.rel_lc_emp_assgnd_lc">
+            <End Role="DSC_LC" EntitySet="DSC_LC" />
+            <End Role="OBS_EMP_ASSGND_LC" EntitySet="OBS_EMP_ASSGND_LC" />
           </AssociationSet>
           <AssociationSet Name="rel_metadata_quest_assgnd" Association="Self.rel_metadata_quest_assgnd">
             <End Role="OBS_QUESTION_METADATA" EntitySet="OBS_QUESTION_METADATA" />
@@ -1103,6 +1137,7 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
           <NavigationProperty Name="OBS_INST" Relationship="Models.relationship35" FromRole="DSC_LC" ToRole="OBS_INST" />
           <NavigationProperty Name="OBS_COLLECT_FORM_TMPLT" Relationship="Models.relationship9" FromRole="DSC_LC" ToRole="OBS_COLLECT_FORM_TMPLT" />
           <NavigationProperty Name="DSC_EMPLOYEE" Relationship="Models.relationship45" FromRole="DSC_LC" ToRole="DSC_EMPLOYEE" />
+          <NavigationProperty Name="OBS_EMP_ASSGND_LC" Relationship="Models.rel_lc_emp_assgnd_lc" FromRole="DSC_LC" ToRole="OBS_EMP_ASSGND_LC" />
         </EntityType>
         <EntityType Name="OBS_SUB_TYPE">
           <Key>
@@ -1175,7 +1210,6 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
             <End Role="OBS_QUEST_ANS_TYPES" EntitySet="OBS_QUEST_ANS_TYPES" />
           </AssociationSet>
           <EntitySet Name="OBS_APP_EVENT_LOG" EntityType="Models.OBS_APP_EVENT_LOG" />
-          <EntitySet Name="OBS_APPLICATION" EntityType="Models.OBS_APPLICATION" />
           <EntitySet Name="OBS_ATTRIB_DATA_TYPES" EntityType="Models.OBS_ATTRIB_DATA_TYPES" />
           <EntitySet Name="OBS_COL_FORM_INST_ATTRIB_VALS" EntityType="Models.OBS_COL_FORM_INST_ATTRIB_VALS" />
           <EntitySet Name="OBS_COL_FORM_INST_MM_ATTACH" EntityType="Models.OBS_COL_FORM_INST_MM_ATTACH" />
@@ -1333,8 +1367,21 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
             <End Role="OBS_USER_AUTH" EntitySet="OBS_USER_AUTH" />
             <End Role="OBS_USER_ROLE" EntitySet="OBS_USER_ROLE" />
           </AssociationSet>
-          <EntitySet Name="OBS_COL_FORM_INST_QUEST" EntityType="Models.OBS_COL_FORM_INST_QUEST" />
+          <EntitySet Name="OBS_EMP_ASSGND_LC" EntityType="Models.OBS_EMP_ASSGND_LC" />
+          <AssociationSet Name="rel_emp_emp_assgnd_lc" Association="Models.rel_emp_emp_assgnd_lc">
+            <End Role="DSC_EMPLOYEE" EntitySet="DSC_EMPLOYEE" />
+            <End Role="OBS_EMP_ASSGND_LC" EntitySet="OBS_EMP_ASSGND_LC" />
+          </AssociationSet>
+          <AssociationSet Name="rel_lc_emp_assgnd_lc" Association="Models.rel_lc_emp_assgnd_lc">
+            <End Role="DSC_LC" EntitySet="DSC_LC" />
+            <End Role="OBS_EMP_ASSGND_LC" EntitySet="OBS_EMP_ASSGND_LC" />
+          </AssociationSet>
           <EntitySet Name="OBS_COL_FORM_INST_ANS" EntityType="Models.OBS_COL_FORM_INST_ANS" />
+          <EntitySet Name="OBS_COL_FORM_INST_QUEST" EntityType="Models.OBS_COL_FORM_INST_QUEST" />
+          <AssociationSet Name="rel_inst_quest_ans" Association="Models.rel_inst_quest_ans">
+            <End Role="OBS_COL_FORM_INST_QUEST" EntitySet="OBS_COL_FORM_INST_QUEST" />
+            <End Role="OBS_COL_FORM_INST_ANS" EntitySet="OBS_COL_FORM_INST_ANS" />
+          </AssociationSet>
           <AssociationSet Name="rel_col_form_quest" Association="Models.rel_col_form_quest">
             <End Role="OBS_COL_FORM_QUESTIONS" EntitySet="OBS_COL_FORM_QUESTIONS" />
             <End Role="OBS_COL_FORM_INST_QUEST" EntitySet="OBS_COL_FORM_INST_QUEST" />
@@ -1343,14 +1390,11 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
             <End Role="OBS_COLLECT_FORM_INST" EntitySet="OBS_COLLECT_FORM_INST" />
             <End Role="OBS_COL_FORM_INST_QUEST" EntitySet="OBS_COL_FORM_INST_QUEST" />
           </AssociationSet>
-          <AssociationSet Name="rel_inst_quest_ans" Association="Models.rel_inst_quest_ans">
-            <End Role="OBS_COL_FORM_INST_QUEST" EntitySet="OBS_COL_FORM_INST_QUEST" />
-            <End Role="OBS_COL_FORM_INST_ANS" EntitySet="OBS_COL_FORM_INST_ANS" />
-          </AssociationSet>
           <AssociationSet Name="rel_quest_inst_quest" Association="Models.rel_quest_inst_quest">
             <End Role="OBS_QUESTION" EntitySet="OBS_QUESTION" />
             <End Role="OBS_COL_FORM_INST_QUEST" EntitySet="OBS_COL_FORM_INST_QUEST" />
           </AssociationSet>
+          <EntitySet Name="OBS_APPLICATION" EntityType="Models.OBS_APPLICATION" />
         </EntityContainer>
         <EntityType Name="OBS_QUEST_ANS_TYPES">
           <Key>
@@ -1429,12 +1473,6 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
             <PropertyRef Name="obs_app_event_log_id" />
           </Key>
           <Property Name="obs_app_event_log_id" Type="Int64" Nullable="false" />
-        </EntityType>
-        <EntityType Name="OBS_APPLICATION">
-          <Key>
-            <PropertyRef Name="obs_application_id" />
-          </Key>
-          <Property Name="obs_application_id" Type="Int16" Nullable="false" />
         </EntityType>
         <EntityType Name="OBS_ATTRIB_DATA_TYPES">
           <Key>
@@ -2045,6 +2083,7 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
           <NavigationProperty Name="OBS_RVW_FORM_INST" Relationship="Models.relationship39" FromRole="DSC_EMPLOYEE" ToRole="OBS_RVW_FORM_INST" />
           <NavigationProperty Name="OBS_INST" Relationship="Models.relationship40" FromRole="DSC_EMPLOYEE" ToRole="OBS_INST" />
           <NavigationProperty Name="DSC_LC" Relationship="Models.relationship45" FromRole="DSC_EMPLOYEE" ToRole="DSC_LC" />
+          <NavigationProperty Name="OBS_EMP_ASSGND_LC" Relationship="Models.rel_emp_emp_assgnd_lc" FromRole="DSC_EMPLOYEE" ToRole="OBS_EMP_ASSGND_LC" />
         </EntityType>
         <Association Name="relationship15">
           <End Type="Models.DSC_EMPLOYEE" Role="DSC_EMPLOYEE" Multiplicity="1" />
@@ -2160,6 +2199,51 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="OBS_EMP_ASSGND_LC">
+          <Key>
+            <PropertyRef Name="obs_eal_id" />
+          </Key>
+          <Property Name="obs_eal_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dsc_emp_id" Type="Int32" Nullable="false" />
+          <Property Name="dsc_lc_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DSC_EMPLOYEE" Relationship="Models.rel_emp_emp_assgnd_lc" FromRole="OBS_EMP_ASSGND_LC" ToRole="DSC_EMPLOYEE" />
+          <NavigationProperty Name="DSC_LC" Relationship="Models.rel_lc_emp_assgnd_lc" FromRole="OBS_EMP_ASSGND_LC" ToRole="DSC_LC" />
+        </EntityType>
+        <Association Name="rel_emp_emp_assgnd_lc">
+          <End Type="Models.DSC_EMPLOYEE" Role="DSC_EMPLOYEE" Multiplicity="1" />
+          <End Type="Models.OBS_EMP_ASSGND_LC" Role="OBS_EMP_ASSGND_LC" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DSC_EMPLOYEE">
+              <PropertyRef Name="dsc_emp_id" />
+            </Principal>
+            <Dependent Role="OBS_EMP_ASSGND_LC">
+              <PropertyRef Name="dsc_emp_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rel_lc_emp_assgnd_lc">
+          <End Type="Models.DSC_LC" Role="DSC_LC" Multiplicity="1" />
+          <End Type="Models.OBS_EMP_ASSGND_LC" Role="OBS_EMP_ASSGND_LC" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DSC_LC">
+              <PropertyRef Name="dsc_lc_id" />
+            </Principal>
+            <Dependent Role="OBS_EMP_ASSGND_LC">
+              <PropertyRef Name="dsc_lc_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="OBS_COL_FORM_INST_ANS">
+          <Key>
+            <PropertyRef Name="obs_cfia_id" />
+          </Key>
+          <Property Name="obs_cfia_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="obs_cfiq_id" Type="Int64" Nullable="false" />
+          <Property Name="obs_cfia_ans_val" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="obs_cfia_ans_wgt" Type="Int16" />
+          <Property Name="obs_cfia_ans_order" Type="Int16" />
+          <NavigationProperty Name="OBS_COL_FORM_INST_QUEST" Relationship="Models.rel_inst_quest_ans" FromRole="OBS_COL_FORM_INST_ANS" ToRole="OBS_COL_FORM_INST_QUEST" />
+        </EntityType>
         <EntityType Name="OBS_COL_FORM_INST_QUEST">
           <Key>
             <PropertyRef Name="obs_cfiq_id" />
@@ -2180,23 +2264,23 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
           <Property Name="obs_cfiq_init_ans_dtm" Type="DateTime" Precision="3" />
           <Property Name="obs_cfiq_version" Type="Int16" Nullable="false" />
           <Property Name="obs_cfiq_upd_dtm" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="OBS_COL_FORM_INST_ANS" Relationship="Models.rel_inst_quest_ans" FromRole="OBS_COL_FORM_INST_QUEST" ToRole="OBS_COL_FORM_INST_ANS" />
           <NavigationProperty Name="OBS_COL_FORM_QUESTIONS" Relationship="Models.rel_col_form_quest" FromRole="OBS_COL_FORM_INST_QUEST" ToRole="OBS_COL_FORM_QUESTIONS" />
           <NavigationProperty Name="OBS_COLLECT_FORM_INST" Relationship="Models.rel_col_inst_col_inst_quest" FromRole="OBS_COL_FORM_INST_QUEST" ToRole="OBS_COLLECT_FORM_INST" />
-          <NavigationProperty Name="OBS_COL_FORM_INST_ANS" Relationship="Models.rel_inst_quest_ans" FromRole="OBS_COL_FORM_INST_QUEST" ToRole="OBS_COL_FORM_INST_ANS" />
           <NavigationProperty Name="OBS_QUESTION" Relationship="Models.rel_quest_inst_quest" FromRole="OBS_COL_FORM_INST_QUEST" ToRole="OBS_QUESTION" />
         </EntityType>
-        <EntityType Name="OBS_COL_FORM_INST_ANS">
-          <Key>
-            <PropertyRef Name="obs_cfia_id" />
-            <PropertyRef Name="obs_cfia_ans_val" />
-          </Key>
-          <Property Name="obs_cfia_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="obs_cfiq_id" Type="Int64" />
-          <Property Name="obs_cfia_ans_val" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
-          <Property Name="obs_cfia_ans_wgt" Type="Int16" />
-          <Property Name="obs_cfia_ans_order" Type="Int16" />
-          <NavigationProperty Name="OBS_COL_FORM_INST_QUEST" Relationship="Models.rel_inst_quest_ans" FromRole="OBS_COL_FORM_INST_ANS" ToRole="OBS_COL_FORM_INST_QUEST" />
-        </EntityType>
+        <Association Name="rel_inst_quest_ans">
+          <End Type="Models.OBS_COL_FORM_INST_QUEST" Role="OBS_COL_FORM_INST_QUEST" Multiplicity="1" />
+          <End Type="Models.OBS_COL_FORM_INST_ANS" Role="OBS_COL_FORM_INST_ANS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBS_COL_FORM_INST_QUEST">
+              <PropertyRef Name="obs_cfiq_id" />
+            </Principal>
+            <Dependent Role="OBS_COL_FORM_INST_ANS">
+              <PropertyRef Name="obs_cfiq_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="rel_col_form_quest">
           <End Type="Models.OBS_COL_FORM_QUESTIONS" Role="OBS_COL_FORM_QUESTIONS" Multiplicity="1" />
           <End Type="Models.OBS_COL_FORM_INST_QUEST" Role="OBS_COL_FORM_INST_QUEST" Multiplicity="*" />
@@ -2221,18 +2305,6 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="rel_inst_quest_ans">
-          <End Type="Models.OBS_COL_FORM_INST_QUEST" Role="OBS_COL_FORM_INST_QUEST" Multiplicity="0..1" />
-          <End Type="Models.OBS_COL_FORM_INST_ANS" Role="OBS_COL_FORM_INST_ANS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OBS_COL_FORM_INST_QUEST">
-              <PropertyRef Name="obs_cfiq_id" />
-            </Principal>
-            <Dependent Role="OBS_COL_FORM_INST_ANS">
-              <PropertyRef Name="obs_cfiq_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="rel_quest_inst_quest">
           <End Type="Models.OBS_QUESTION" Role="OBS_QUESTION" Multiplicity="1" />
           <End Type="Models.OBS_COL_FORM_INST_QUEST" Role="OBS_COL_FORM_INST_QUEST" Multiplicity="*" />
@@ -2245,6 +2317,16 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="OBS_APPLICATION">
+          <Key>
+            <PropertyRef Name="obs_app_id" />
+          </Key>
+          <Property Name="obs_app_id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="obs_app_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="obs_app_name_token" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="obs_app_type" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="obs_app_in_svc_dt" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2344,13 +2426,6 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
             <EntityTypeMapping TypeName="Models.OBS_APP_EVENT_LOG">
               <MappingFragment StoreEntitySet="OBS_APP_EVENT_LOG">
                 <ScalarProperty Name="obs_app_event_log_id" ColumnName="obs_app_event_log_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OBS_APPLICATION">
-            <EntityTypeMapping TypeName="Models.OBS_APPLICATION">
-              <MappingFragment StoreEntitySet="OBS_APPLICATION">
-                <ScalarProperty Name="obs_application_id" ColumnName="obs_application_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2631,6 +2706,26 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="OBS_EMP_ASSGND_LC">
+            <EntityTypeMapping TypeName="Models.OBS_EMP_ASSGND_LC">
+              <MappingFragment StoreEntitySet="OBS_EMP_ASSGND_LC">
+                <ScalarProperty Name="dsc_lc_id" ColumnName="dsc_lc_id" />
+                <ScalarProperty Name="dsc_emp_id" ColumnName="dsc_emp_id" />
+                <ScalarProperty Name="obs_eal_id" ColumnName="obs_eal_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OBS_COL_FORM_INST_ANS">
+            <EntityTypeMapping TypeName="Models.OBS_COL_FORM_INST_ANS">
+              <MappingFragment StoreEntitySet="OBS_COL_FORM_INST_ANS">
+                <ScalarProperty Name="obs_cfia_ans_order" ColumnName="obs_cfia_ans_order" />
+                <ScalarProperty Name="obs_cfia_ans_wgt" ColumnName="obs_cfia_ans_wgt" />
+                <ScalarProperty Name="obs_cfia_ans_val" ColumnName="obs_cfia_ans_val" />
+                <ScalarProperty Name="obs_cfiq_id" ColumnName="obs_cfiq_id" />
+                <ScalarProperty Name="obs_cfia_id" ColumnName="obs_cfia_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="OBS_COL_FORM_INST_QUEST">
             <EntityTypeMapping TypeName="Models.OBS_COL_FORM_INST_QUEST">
               <MappingFragment StoreEntitySet="OBS_COL_FORM_INST_QUEST">
@@ -2653,14 +2748,14 @@ warning 6002: The table/view 'DSC_OBS_DEV.dbo.OBS_COL_FORM_INST_ANS' does not ha
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OBS_COL_FORM_INST_ANS">
-            <EntityTypeMapping TypeName="Models.OBS_COL_FORM_INST_ANS">
-              <MappingFragment StoreEntitySet="OBS_COL_FORM_INST_ANS">
-                <ScalarProperty Name="obs_cfia_ans_order" ColumnName="obs_cfia_ans_order" />
-                <ScalarProperty Name="obs_cfia_ans_wgt" ColumnName="obs_cfia_ans_wgt" />
-                <ScalarProperty Name="obs_cfia_ans_val" ColumnName="obs_cfia_ans_val" />
-                <ScalarProperty Name="obs_cfiq_id" ColumnName="obs_cfiq_id" />
-                <ScalarProperty Name="obs_cfia_id" ColumnName="obs_cfia_id" />
+          <EntitySetMapping Name="OBS_APPLICATION">
+            <EntityTypeMapping TypeName="Models.OBS_APPLICATION">
+              <MappingFragment StoreEntitySet="OBS_APPLICATION">
+                <ScalarProperty Name="obs_app_in_svc_dt" ColumnName="obs_app_in_svc_dt" />
+                <ScalarProperty Name="obs_app_type" ColumnName="obs_app_type" />
+                <ScalarProperty Name="obs_app_name_token" ColumnName="obs_app_name_token" />
+                <ScalarProperty Name="obs_app_name" ColumnName="obs_app_name" />
+                <ScalarProperty Name="obs_app_id" ColumnName="obs_app_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -21,6 +21,7 @@ namespace OBSMVC.Models
             this.OBS_COL_FORM_INST_SIGS = new HashSet<OBS_COL_FORM_INST_SIGS>();
             this.OBS_RVW_FORM_INST = new HashSet<OBS_RVW_FORM_INST>();
             this.OBS_INST = new HashSet<OBS_INST>();
+            this.OBS_EMP_ASSGND_LC = new HashSet<OBS_EMP_ASSGND_LC>();
         }
     
         public int dsc_emp_id { get; set; }
@@ -55,5 +56,7 @@ namespace OBSMVC.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OBS_INST> OBS_INST { get; set; }
         public virtual DSC_LC DSC_LC { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OBS_EMP_ASSGND_LC> OBS_EMP_ASSGND_LC { get; set; }
     }
 }

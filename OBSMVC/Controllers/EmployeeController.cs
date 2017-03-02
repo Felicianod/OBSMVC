@@ -212,24 +212,34 @@ namespace OBSMVC.Controllers
         [HttpGet]
         public ActionResult _EmpBldgAssignment(int? app_user_id)
         {
+            int empId = app_user_id ?? 0;
             //DSC_EMPLOYEE eMPLOYEE = db.DSC_EMPLOYEE.Find(id);
             //db.DSC_EMPLOYEE.Remove(eMPLOYEE);
             //db.SaveChanges();
 
-            //List<string> buildings = db.
+            ////--- Using LINQ Lambda Syntax ---
+            //List<string> AssignedBuildings = new List<string>();
+            //using (DSC_OBS_DB_ENTITY dbs = new DSC_OBS_DB_ENTITY())
+            //{
+            //    AssignedBuildings = db.OBS_EMP_ASSGND_LC
+            //        .Join(db.DSC_LC, e => e.dsc_lc_id, w => w.dsc_lc_id, (e, w) => new { e, w})
+            //        .Where( e => e.e.dsc_emp_id == empId)
+            //        .OrderBy(x => x.w.dsc_lc_name)
+            //        .Select(lc => lc.w.dsc_lc_name)
+            //        .ToList();
+            //}
+
+            ////--- Using LINQ declarative query syntax ---
+            List<string> AssignedBuildings = (
+                from a in db.OBS_EMP_ASSGND_LC
+                join c in db.DSC_LC  on a.dsc_lc_id equals c.dsc_lc_id
+                where a.dsc_emp_id == empId
+                select c.dsc_lc_name)
+                .OrderBy(x => x).ToList();
+
             //BldgAsgnViewModel bldgAsgnViewModel = new BldgAsgnViewModel();
 
-            //if (app_user_id == null || app_user_id == 0)
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
-            //else
-            //{
-            //    bldgAsgnViewModel.userBldgList = getUserBuildingList(app_user_id);
-            //    bldgAsgnViewModel.unassignedBldgList = getAllBuildingList().Except(bldgAsgnViewModel.userBldgList).ToList();
-            //}
-            List<string> temp = new List<string> { "123", "123", "789" };
-            return PartialView(temp);
+            return PartialView(AssignedBuildings);
         }
 
         protected override void Dispose(bool disposing)

@@ -8,10 +8,10 @@
         <div class="col-md-5">
             <div class="row"><span>Unassigned:</span></div>
             <select name="leftBldgList" id="unasgndBldgList" multiple="multiple" size="10" style="min-width:300px">
-                @foreach (string bldg in Model)
+                @*@foreach (string bldg in Model)
                 {
                     <option value="@bldg">@bldg</option>
-                }
+                }*@
             </select>
         </div>
         <div class="col-md-2" style="margin-top:50px; margin-bottom:50px">
@@ -26,10 +26,10 @@
         <div class="col-md-5">
             <div class="row"><span>Assigned:</span></div>
             <select name="asgndBldgList" id="asgndBldgList" multiple="multiple" size="10" style="min-width:300px">
-                @*@foreach (var bldg in Model.userBldgList)
+                @foreach (string bldg in Model)
                 {
-                    <option value="@bldg.dsc_mtrc_lc_bldg_id">@bldg.dsc_mtrc_lc_bldg_name</option>
-                }*@
+                    <option value="@bldg">@bldg</option>
+                }
             </select>
         </div>
     </div>

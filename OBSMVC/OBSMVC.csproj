@@ -632,6 +632,7 @@
     <Content Include="Views\Error\Error.cshtml" />
     <Content Include="Views\Home\AppSelection.cshtml" />
     <Content Include="Views\Home\_AppSelectionEnvironment.cshtml" />
+    <Content Include="Views\Employee\_EmpBldgAssignment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

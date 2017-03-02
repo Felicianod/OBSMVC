@@ -208,9 +208,9 @@ namespace OBSMVC.Controllers
         }
 
 
-        // POST: Employee/_EmpBldgAssign
-        [HttpPost]
-        public ActionResult _EmpBldgAssign(int? app_user_id)
+        // GET: Employee/_EmpBldgAssign
+        [HttpGet]
+        public ActionResult _EmpBldgAssignment(int? app_user_id)
         {
             //DSC_EMPLOYEE eMPLOYEE = db.DSC_EMPLOYEE.Find(id);
             //db.DSC_EMPLOYEE.Remove(eMPLOYEE);
@@ -228,8 +228,8 @@ namespace OBSMVC.Controllers
             //    bldgAsgnViewModel.userBldgList = getUserBuildingList(app_user_id);
             //    bldgAsgnViewModel.unassignedBldgList = getAllBuildingList().Except(bldgAsgnViewModel.userBldgList).ToList();
             //}
-
-            return PartialView();
+            List<string> temp = new List<string> { "123", "123", "789" };
+            return PartialView(temp);
         }
 
         protected override void Dispose(bool disposing)

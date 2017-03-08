@@ -5,6 +5,8 @@
 <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css"> @* <!---Used for Icons --> *@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">       @* <!---Used To Stylize the Alert popup message --> *@
 
+<script src="~/Scripts/Employee_Edit.js"></script>
+
 <style>
     .checkbox label:after, 
 .radio label:after {
@@ -82,36 +84,6 @@
 .ui-dialog .ui-state-error { padding: .3em; }
 
 </style>
-<script>
-    $(document).ready(function () {
-        //var isChanged = false;
-        $('input, select, textarea').change(function () {
-            //$("input[type='submit']").removeAttr("disabled");
-            $("#btnSubmit").removeAttr('disabled');
-            $("#frmModified").val("true");
-            //isChanged = true;
-        });
-
-        $(window).bind('beforeunload', function () {
-            if ($("#frmModified").val() == "true") {
-                //return 'There are unsaved changed. Do you want to discard Changes and Exit?';
-                return "false";
-            } else {
-                return undefined;
-            }
-        });
-
-        $("#btnSubmit").click(function () {
-            $("#frmModified").val("false");
-            $(this).button('loading');
-        });
-
-        $('input').on('keydown keyup change ', function (e) {
-            $("#btnSubmit").removeAttr('disabled');
-            $("#frmModified").val("true");
-        });
-    });
-</script>
 
 @{
     var hireDate = @Model.dsc_emp_hire_dt.Value.ToString("MMM dd, yyyy");
@@ -121,7 +93,7 @@
 <hr>
 <!-- Form Edit State Change Validation -->
 
-<form class="form-horizontal" role="form" method="post">
+<form class="form-horizontal" role="form" method="post">   
     <div class="row">
         <!-- left column Employee Label Info -->
         <div class="col-sm-4">
@@ -169,6 +141,7 @@
             <div class="form-group row" >
                 <input type="hidden" value="@Model.dsc_emp_id" name="dsc_emp_id" id="dsc_emp_id">
                 <input type="hidden" id="frmModified" value="false" />
+                <input type="hidden" id="asgnd_lc_list" name="asgnd_lc_list" />
             </div>
             @*<div class="form-group row " >
                 <div class="input-group" style="min-width:50%; max-width:500px">
@@ -236,7 +209,9 @@
                 </div>
             </div>*@
 
-            @Html.Action("_EmpBldgAssignment", "Employee", new { app_user_id = @Model.dsc_emp_id })
+            <div id="divLCAsgn">
+                @Html.Action("_EmpBldgAssignment", "Employee", new { app_user_id = @Model.dsc_emp_id })
+            </div>
         </div>
     </div>
     <br />
@@ -277,57 +252,6 @@
         <span>Discard changes and Exit?</span>
     </p>
 </div>
-
-
-<script>
-    $(document).ready(function () {
-        $("input:text").focus(function () { $(this).select(); });
-
-        //$('.collapse').on('show.bs.collapse', function () {
-        //    $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
-        //}).on('hide.bs.collapse', function () {
-        //    $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
-        //});
-
-        $('.datepicker').datepicker({
-            dateFormat: 'M dd, yy',
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true
-        });
-
-        $("#dialog-confirm").dialog({
-            autoOpen: false,
-            resizable: false,
-            height: 300,
-            width: 500,
-            modal: true,
-            buttons: {
-                "Exit": function () {
-                    $("#frmModified").val("false");
-                    //isChanged.val("N");
-                    location.href = "/Employee/Index/";
-                },
-                Cancel: function () {
-                    $(this).dialog("close");
-                }
-            }
-        });
-
-        $("#btnCancel").click(function (event) {
-            if ($("#frmModified").val() == "true") {
-                // If form was modified display confirmation message
-                $("#dialog-confirm").dialog("open");
-            }
-            else {
-                // Just redirect back to the Employee Listing Page
-                location.href = "/Employee/Index/";
-            }
-        });
-
-    });
-</script>
-
 
 @*<div class="form-group row">
         <ul class="list-group checked-list-box">

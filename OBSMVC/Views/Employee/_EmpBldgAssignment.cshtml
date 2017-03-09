@@ -5,8 +5,8 @@
     @Html.AntiForgeryToken()*@
 
     <div class="row">
-        <div class="col-md-5">
-            <div class="row"><span>Unassigned:</span></div>
+        <div class="col-md-5" style="text-align:center">
+            <div class="row" style="text-align:center"><span style="font-weight:bold">Unassigned:</span></div>
             <select name="unasgndLCList" id="unasgndLCList" multiple="multiple" size="10" style="min-width:300px">
                 @foreach (var lc in Model.unassignedLCList)
                 {
@@ -14,7 +14,7 @@
                 }
             </select>   
         </div>
-        <div class="col-md-2" style="margin-top:50px; margin-bottom:50px">
+        <div class="col-md-2" style="margin-top:50px; margin-bottom:50px; text-align:center">
             <div class="row">
                 <button type="button" class="btn" id="btnAsgnLC">></button>
             </div>
@@ -23,8 +23,8 @@
                 <button type="button" class="btn" id="btnUnasgnLC"><</button>
             </div>
         </div>
-        <div class="col-md-5">
-            <div class="row"><span>Assigned:</span></div>
+        <div class="col-md-5" style="text-align:center">
+            <div class="row" style="text-align:center"><span style="font-weight:bold">Assigned:</span></div>
             <select name="asgndLCList" id="asgndLCList" multiple="multiple" size="10" style="min-width:300px">
                 @foreach (var lc in Model.userLCList)
                 {

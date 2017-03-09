@@ -10,7 +10,7 @@ namespace OBSMVC.Models
 {
     [MetadataType(typeof(EmployeeMetaData))]
     public partial class DSC_EMPLOYEE {
-        //public string asgnd_lc_list { get; set; }
+        public string asgnd_lc_list { get; set; }
     }
 
     public class EmployeeMetaData

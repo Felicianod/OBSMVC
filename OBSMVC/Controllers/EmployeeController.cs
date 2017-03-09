@@ -88,7 +88,7 @@ namespace OBSMVC.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Edit([Bind(Include = "dsc_emp_id,dsc_assigned_lc_id,dsc_emp_perm_id,dsc_emp_wms_clock_nbr,dsc_emp_first_name,dsc_emp_last_name,dsc_emp_email_addr,dsc_emp_title,dsc_emp_adp_id,dsc_emp_hire_dt,dsc_emp_init_work_dt,dsc_emp_term_dt,dsc_emp_can_be_obs_yn,dsc_emp_temp_yn,dsc_emp_hourly_yn,dsc_emp_added_id,dsc_emp_added_dtm,dsc_emp_upd_uid,dsc_emp_upd_dtm")] DSC_EMPLOYEE formEmployee)
+        public ActionResult Edit([Bind(Include = "dsc_emp_id,dsc_assigned_lc_id,dsc_emp_perm_id,dsc_emp_wms_clock_nbr,dsc_emp_first_name,dsc_emp_last_name,dsc_emp_email_addr,dsc_emp_title,dsc_emp_adp_id,dsc_emp_hire_dt,dsc_emp_init_work_dt,dsc_emp_term_dt,dsc_emp_can_be_obs_yn,dsc_emp_temp_yn,dsc_emp_hourly_yn,dsc_emp_added_id,dsc_emp_added_dtm,dsc_emp_upd_uid,dsc_emp_upd_dtm,asgnd_lc_list")] DSC_EMPLOYEE formEmployee)
         {
             using (DSC_OBS_DB_ENTITY db = new DSC_OBS_DB_ENTITY())
             {
@@ -99,6 +99,9 @@ namespace OBSMVC.Controllers
                 //}
                 try
                 {
+                    List<string> asgndLCList = new List<string>();
+                    if (!String.IsNullOrEmpty(formEmployee.asgnd_lc_list)) { asgndLCList = formEmployee.asgnd_lc_list.Split(',').ToList(); }
+
                     employee = db.DSC_EMPLOYEE.Find(formEmployee.dsc_emp_id);
                     employee.dsc_emp_title = formEmployee.dsc_emp_title;
                     employee.dsc_emp_perm_id = formEmployee.dsc_emp_perm_id;
@@ -112,6 +115,9 @@ namespace OBSMVC.Controllers
                     employee.dsc_emp_upd_dtm = DateTime.Now;
                     employee.dsc_emp_upd_uid = User.Identity.Name;
                     formEmployee = employee;
+
+                    updateUserLCListWithoutCommit(formEmployee.dsc_emp_id, asgndLCList.Select(int.Parse).ToList());
+
                     db.SaveChanges();
                     ViewBag.dsc_assigned_lc_id = new SelectList(db.DSC_LC.Where(x => x.dsc_lc_id > 0 && x.dsc_lc_eff_end_date.Equals(null)).ToList(), "dsc_lc_id", "dsc_lc_name", formEmployee.dsc_assigned_lc_id);
                     ViewBag.ConfMsg = "Employee Information Saved Successfully.";
@@ -246,6 +252,20 @@ namespace OBSMVC.Controllers
             //return PartialView(AssignedBuildings);
         }
 
+        // POST: Employee/_EmpBldgAssign
+        [HttpPost][ActionName("_EmpBldgAssignment")]
+        public ActionResult _EmpBldgAssignmentPost(int? app_user_id)
+        {
+            int empId = app_user_id ?? 0;
+
+            empLCAsgnViewModel empLCAsgnViewModel = new empLCAsgnViewModel();
+
+            empLCAsgnViewModel.userLCList = getUserLCList(app_user_id).OrderBy(x => x.dsc_lc_name).ToList();
+            empLCAsgnViewModel.unassignedLCList = getAllLCList().Except(empLCAsgnViewModel.userLCList).OrderBy(x => x.dsc_lc_name).ToList();
+
+            return PartialView(empLCAsgnViewModel);
+        }
+
         // Return a list of all buildings
         private List<DSC_LC> getAllLCList()
         {
@@ -290,6 +310,73 @@ namespace OBSMVC.Controllers
             }
 
             return lcList;
+        }
+
+        // Updates the assigned building list for a particular app_user_id
+        private string updateUserLCListWithoutCommit(int app_user_id, List<int> asgndLCList)
+        {
+            string notused = "Success";
+
+            try
+            {
+                if (app_user_id == 0)
+                {
+                    notused = "User Id = 0";
+                    //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                else
+                {
+                    List<int> userLCList = new List<int>();
+                    List<int> newUserLCList = asgndLCList;
+
+                    userLCList = getUserLCList(app_user_id).Select(x => Convert.ToInt32(x.dsc_lc_id)).ToList();
+
+                    //Begin Add Transaction
+                    try
+                    {
+                        //Add Rows
+                        foreach (int bldgId in newUserLCList.Except(userLCList))
+                        {
+                            var addRow = new OBS_EMP_ASSGND_LC
+                            {
+                                dsc_emp_id = app_user_id,
+                                dsc_lc_id = Convert.ToInt16(bldgId)
+                            };
+
+                            //if (ModelState.IsValid)
+                            //{
+                                db.OBS_EMP_ASSGND_LC.Add(addRow);
+                            //}
+                        }
+
+                        //Delete Rows
+                        foreach (int lcId in userLCList.Except(newUserLCList))
+                        {
+                            var removeRow = db.OBS_EMP_ASSGND_LC.Where(x => x.dsc_emp_id == app_user_id &&
+                                                                x.dsc_lc_id == lcId).First();
+
+                            //if (ModelState.IsValid)
+                            //{
+                                db.OBS_EMP_ASSGND_LC.Remove(removeRow);
+                            //}
+                        }
+
+                        db.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        notused = e.Message;
+                        throw;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                notused = e.Message;
+                throw;
+            }
+
+            return notused;
         }
 
         protected override void Dispose(bool disposing)

@@ -110,7 +110,7 @@ function moveListItems(fromListId, toListId, byId) {
         sortSelect(toList);
     }
 
-    alert(getAsgndLCListValues());
+    //alert(getAsgndLCListValues());
 }
 
 function sortSelect(selElem) {
@@ -163,13 +163,13 @@ function getAsgndLCListValues() {
         if (i != lcList.length - 1)
         { listResult = listResult + ","; }
     }
-    //alert(tagList);
+    //alert(lcList);
     return listResult;
 };
 
 function compilePostValues() {
     var lcList = getAsgndLCListValues();
     document.getElementById("asgnd_lc_list").setAttribute("Value", lcList);
-    alert(lcList);
-    alert(document.getElementById("asgnd_lc_list").value)
+    //alert(lcList);
+    //alert(document.getElementById("asgnd_lc_list").value)
 }

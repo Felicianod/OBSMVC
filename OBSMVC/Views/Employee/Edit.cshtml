@@ -115,7 +115,7 @@
                 <h5>ADP ID: @Model.dsc_emp_adp_id</h5>
                 <h5>JDE ID: @Model.dsc_emp_perm_id</h5>
                 <h5>Hire Date: @hireDate</h5>
-            @*@if (@Model.dsc_emp_term_dt == null)
+            @if (@Model.dsc_emp_term_dt == null)
             {
                 <h5>Status: <span style="color:blue">Active</span></h5>
             }
@@ -130,11 +130,11 @@
                     Hourly<br />
                     <input type="checkbox" id="dsc_emp_temp_yn" style="margin-left:30px" @if (Model.dsc_emp_temp_yn == "Y") { <text> checked="checked" </text>         } name="dsc_emp_temp_yn">
                     Temp<br />
-                </div>*@
-
+                </div>
 
             </div>
         </div>
+
         <!-- Right Column Employee editable Data -->
         <div class="col-sm-8 personal-info">
             <!-- First Row is for hidden fields -->
@@ -143,43 +143,44 @@
                 <input type="hidden" id="frmModified" value="false" />
                 <input type="hidden" id="asgnd_lc_list" name="asgnd_lc_list" />
             </div>
-            @*start*@
-            <div class="form-group row " >
+
+            <div class="form-group row " style="display:none">
                 <div class="input-group" style="min-width:50%; max-width:500px">
                     <span class="input-group-addon" style="min-width:150px">JDE ID</span>
                     <input class="form-control" type="text" value="@Model.dsc_emp_perm_id" name="dsc_emp_perm_id" id="dsc_emp_perm_id" readonly="readonly" style="min-width:50%; max-width:500px">
                 </div>
             </div>
 
-            <div class="form-group row">
+            <div class="form-group row" style="display:none">
                 <div class="input-group" style="min-width:50%; max-width:500px">
                     <span class="input-group-addon" style="min-width:150px">Title</span>
                     <input class="form-control" type="text" value="@Model.dsc_emp_title" name="dsc_emp_title" id="dsc_emp_title" style="min-width:50%; max-width:500px">
                 </div>
             </div>
-            @*end*@
 
+            <h4 style="margin-left:-15px">Employee can be observed at this location:</h4>
             <div class="form-group row">
                 <div class="input-group" style="min-width:50%; max-width:500px">
                     <span class="input-group-addon" style="min-width:150px">Facility</span>
                     @Html.DropDownList("dsc_assigned_lc_id", null, htmlAttributes: new { @class = "form-control", style = "min-width:50%; max-width:500px" })
                 </div>
             </div>
+            <h4 style="margin-left:-15px">Employee must have e-mail address to perform observations:</h4>
             <div class="form-group row">
                 <div class="input-group" style="min-width:50%; max-width:500px">
                     <span class="input-group-addon" style="min-width:150px">E-mail Address:</span>
                     <input class="form-control" type="text" value="@Model.dsc_emp_email_addr" name="dsc_emp_email_addr" id="dsc_emp_email_addr" style="min-width:50%; max-width:500px">
                 </div>
             </div>
-            @*start*@
-            <div class="form-group row">
+            
+            <div class="form-group row" style="display:none">
                 <div class="input-group " style="min-width:50%; max-width:500px">
                     <span class="input-group-addon" style="min-width:150px">Hire Date</span>
                     <input class="datepickerReadOnly form-control" id="dsc_emp_hire_dt" name="dsc_emp_hire_dt" style="min-width:50%; max-width:100%" value="@hireDate" readonly="readonly">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row" style="display:none">
                 <div class="input-group " style="min-width:50%; max-width:500px">
                     <span class="input-group-addon" style="min-width:150px">Termination Date</span>
                     <input class="datepickerReadOnly form-control" id="dsc_emp_term_dt" name="dsc_emp_term_dt" style="min-width:50%; max-width:100%" value="@Model.dsc_emp_term_dt" readonly="readonly">
@@ -188,7 +189,7 @@
                 @Html.ValidationMessageFor(model => model.dsc_emp_term_dt, "", new { @class = "text-danger" })
             </div>
 
-            <div class="form-group row">
+            @*<div class="form-group row">
                 <div class="checkbox">
                     <label style="font-size: 1.5em">
                         <input type="checkbox" class="form-control input-sm" id="dsc_emp_can_be_obs_yn" @if (Model.dsc_emp_can_be_obs_yn == "Y") { <text> checked="checked" </text>      } name="dsc_emp_can_be_obs_yn">
@@ -210,10 +211,11 @@
                         Temp
                     </label>
                 </div>
-            </div>
-            @*end*@
+            </div>*@
+
 
             <div id="divLCAsgn">
+                <h4 style="margin-left:-15px">Employee can view observations in these buildings:</h4>
                 @Html.Action("_EmpBldgAssignment", "Employee", new { app_user_id = @Model.dsc_emp_id })
             </div>
         </div>
@@ -221,7 +223,7 @@
     <br />
     <!-- Form Action Buttons Row -->
     <div class="row" style="text-align:center">
-        <button type="submit" class="btn btn-primary" disabled="disabled" id="btnSubmit">Save Changes</button>
+        <button type="submit" class="btn btn-primary" disabled="disabled" id="btnSubmit" onclick="return compilePostValues();">Save Changes</button>
         &nbsp;&nbsp;
         <button type="button" id="btnCancel" class="btn btn-default" style="min-width:120px;">CANCEL</button>
     </div>

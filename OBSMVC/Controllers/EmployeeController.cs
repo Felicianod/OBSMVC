@@ -207,7 +207,6 @@ namespace OBSMVC.Controllers
             return RedirectToAction("Index");
         }
 
-
         // GET: Employee/_EmpBldgAssign
         [HttpGet]
         public ActionResult _EmpBldgAssignment(int? app_user_id)
@@ -230,16 +229,67 @@ namespace OBSMVC.Controllers
             //}
 
             ////--- Using LINQ declarative query syntax ---
-            List<string> AssignedBuildings = (
-                from a in db.OBS_EMP_ASSGND_LC
-                join c in db.DSC_LC  on a.dsc_lc_id equals c.dsc_lc_id
-                where a.dsc_emp_id == empId
-                select c.dsc_lc_name)
-                .OrderBy(x => x).ToList();
+            //List<string> AssignedBuildings = (
+            //    from a in db.OBS_EMP_ASSGND_LC
+            //    join c in db.DSC_LC  on a.dsc_lc_id equals c.dsc_lc_id
+            //    where a.dsc_emp_id == empId
+            //    select c.dsc_lc_name)
+            //    .OrderBy(x => x).ToList();
 
-            //BldgAsgnViewModel bldgAsgnViewModel = new BldgAsgnViewModel();
+            empLCAsgnViewModel empLCAsgnViewModel = new empLCAsgnViewModel();
 
-            return PartialView(AssignedBuildings);
+            empLCAsgnViewModel.userLCList = getUserLCList(app_user_id).OrderBy(x => x.dsc_lc_name).ToList();
+            empLCAsgnViewModel.unassignedLCList = getAllLCList().Except(empLCAsgnViewModel.userLCList).OrderBy(x => x.dsc_lc_name).ToList();
+
+            return PartialView(empLCAsgnViewModel);
+
+            //return PartialView(AssignedBuildings);
+        }
+
+        // Return a list of all buildings
+        private List<DSC_LC> getAllLCList()
+        {
+            List<DSC_LC> lcList = new List<DSC_LC>();
+
+            //Query Style 1 - SQL notation
+            var query1 =
+                from a in db.DSC_LC
+                where a.dsc_lc_id >= 1
+                select a;
+
+            lcList = query1.ToList();
+
+            return lcList;
+        }
+
+        // Return a list of buildings associated with a particular app user id
+        private List<DSC_LC> getUserLCList(int? appUserId)
+        {
+            List<DSC_LC> lcList = new List<DSC_LC>();
+            if (appUserId == null || appUserId == 0)
+            {
+
+            }
+            else
+            {
+                ////Query Style 1 - SQL notation
+                //var query1 =
+                //    from a in db.DSC_MTRC_LC_BLDG
+                //    join b in db.RZ_BLDG_AUTHORIZATION on a.dsc_mtrc_lc_bldg_id equals b.dsc_mtrc_lc_bldg_id
+                //    join c in db.DSC_APP_USER on b.app_user_id equals c.app_user_id
+                //    where c.app_user_id == appUserId
+                //    select a;
+
+                //Query Style 2 - Dot notation
+                var query2 =
+                    from child in db.OBS_EMP_ASSGND_LC
+                    where child.DSC_EMPLOYEE.dsc_emp_id == appUserId
+                    select child.DSC_LC;
+
+                lcList = query2.ToList();
+            }
+
+            return lcList;
         }
 
         protected override void Dispose(bool disposing)

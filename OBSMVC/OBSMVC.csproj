@@ -477,6 +477,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\jquery-ui.css" />
+    <Content Include="Scripts\Employee_Edit.js" />
     <Content Include="Scripts\images\ui-icons_444444_256x240.png" />
     <Content Include="Scripts\images\ui-icons_555555_256x240.png" />
     <Content Include="Scripts\images\ui-icons_777620_256x240.png" />

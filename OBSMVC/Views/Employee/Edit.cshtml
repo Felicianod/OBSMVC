@@ -5,6 +5,8 @@
 <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css"> @* <!---Used for Icons --> *@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">       @* <!---Used To Stylize the Alert popup message --> *@
 
+<script src="~/Scripts/Employee_Edit.js"></script>
+
 <style>
     .checkbox label:after, 
 .radio label:after {
@@ -82,36 +84,6 @@
 .ui-dialog .ui-state-error { padding: .3em; }
 
 </style>
-<script>
-    $(document).ready(function () {
-        //var isChanged = false;
-        $('input, select, textarea').change(function () {
-            //$("input[type='submit']").removeAttr("disabled");
-            $("#btnSubmit").removeAttr('disabled');
-            $("#frmModified").val("true");
-            //isChanged = true;
-        });
-
-        $(window).bind('beforeunload', function () {
-            if ($("#frmModified").val() == "true") {
-                //return 'There are unsaved changed. Do you want to discard Changes and Exit?';
-                return "false";
-            } else {
-                return undefined;
-            }
-        });
-
-        $("#btnSubmit").click(function () {
-            $("#frmModified").val("false");
-            $(this).button('loading');
-        });
-
-        $('input').on('keydown keyup change ', function (e) {
-            $("#btnSubmit").removeAttr('disabled');
-            $("#frmModified").val("true");
-        });
-    });
-</script>
 
 @{
     var hireDate = @Model.dsc_emp_hire_dt.Value.ToString("MMM dd, yyyy");
@@ -121,7 +93,7 @@
 <hr>
 <!-- Form Edit State Change Validation -->
 
-<form class="form-horizontal" role="form" method="post">
+<form class="form-horizontal" role="form" method="post">   
     <div class="row">
         <!-- left column Employee Label Info -->
         <div class="col-sm-4">
@@ -143,7 +115,7 @@
                 <h5>ADP ID: @Model.dsc_emp_adp_id</h5>
                 <h5>JDE ID: @Model.dsc_emp_perm_id</h5>
                 <h5>Hire Date: @hireDate</h5>
-            @if (@Model.dsc_emp_term_dt == null)
+            @*@if (@Model.dsc_emp_term_dt == null)
             {
                 <h5>Status: <span style="color:blue">Active</span></h5>
             }
@@ -158,7 +130,7 @@
                     Hourly<br />
                     <input type="checkbox" id="dsc_emp_temp_yn" style="margin-left:30px" @if (Model.dsc_emp_temp_yn == "Y") { <text> checked="checked" </text>         } name="dsc_emp_temp_yn">
                     Temp<br />
-                </div>
+                </div>*@
 
 
             </div>
@@ -169,20 +141,23 @@
             <div class="form-group row" >
                 <input type="hidden" value="@Model.dsc_emp_id" name="dsc_emp_id" id="dsc_emp_id">
                 <input type="hidden" id="frmModified" value="false" />
+                <input type="hidden" id="asgnd_lc_list" name="asgnd_lc_list" />
             </div>
-            @*<div class="form-group row " >
+            @*start*@
+            <div class="form-group row " >
                 <div class="input-group" style="min-width:50%; max-width:500px">
                     <span class="input-group-addon" style="min-width:150px">JDE ID</span>
                     <input class="form-control" type="text" value="@Model.dsc_emp_perm_id" name="dsc_emp_perm_id" id="dsc_emp_perm_id" readonly="readonly" style="min-width:50%; max-width:500px">
                 </div>
-            </div>*@
+            </div>
 
-            @*<div class="form-group row">
+            <div class="form-group row">
                 <div class="input-group" style="min-width:50%; max-width:500px">
                     <span class="input-group-addon" style="min-width:150px">Title</span>
                     <input class="form-control" type="text" value="@Model.dsc_emp_title" name="dsc_emp_title" id="dsc_emp_title" style="min-width:50%; max-width:500px">
                 </div>
-            </div>*@
+            </div>
+            @*end*@
 
             <div class="form-group row">
                 <div class="input-group" style="min-width:50%; max-width:500px">
@@ -196,23 +171,24 @@
                     <input class="form-control" type="text" value="@Model.dsc_emp_email_addr" name="dsc_emp_email_addr" id="dsc_emp_email_addr" style="min-width:50%; max-width:500px">
                 </div>
             </div>
-            @*<div class="form-group row">
+            @*start*@
+            <div class="form-group row">
                 <div class="input-group " style="min-width:50%; max-width:500px">
                     <span class="input-group-addon" style="min-width:150px">Hire Date</span>
                     <input class="datepickerReadOnly form-control" id="dsc_emp_hire_dt" name="dsc_emp_hire_dt" style="min-width:50%; max-width:100%" value="@hireDate" readonly="readonly">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
                 </div>
-            </div>*@
-            @*<div class="form-group row">
+            </div>
+            <div class="form-group row">
                 <div class="input-group " style="min-width:50%; max-width:500px">
                     <span class="input-group-addon" style="min-width:150px">Termination Date</span>
                     <input class="datepickerReadOnly form-control" id="dsc_emp_term_dt" name="dsc_emp_term_dt" style="min-width:50%; max-width:100%" value="@Model.dsc_emp_term_dt" readonly="readonly">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
                 </div>
                 @Html.ValidationMessageFor(model => model.dsc_emp_term_dt, "", new { @class = "text-danger" })
-            </div>*@
+            </div>
 
-            @*<div class="form-group row">
+            <div class="form-group row">
                 <div class="checkbox">
                     <label style="font-size: 1.5em">
                         <input type="checkbox" class="form-control input-sm" id="dsc_emp_can_be_obs_yn" @if (Model.dsc_emp_can_be_obs_yn == "Y") { <text> checked="checked" </text>      } name="dsc_emp_can_be_obs_yn">
@@ -234,9 +210,12 @@
                         Temp
                     </label>
                 </div>
-            </div>*@
+            </div>
+            @*end*@
 
-            @Html.Action("_EmpBldgAssignment", "Employee", new { app_user_id = @Model.dsc_emp_id })
+            <div id="divLCAsgn">
+                @Html.Action("_EmpBldgAssignment", "Employee", new { app_user_id = @Model.dsc_emp_id })
+            </div>
         </div>
     </div>
     <br />
@@ -277,57 +256,6 @@
         <span>Discard changes and Exit?</span>
     </p>
 </div>
-
-
-<script>
-    $(document).ready(function () {
-        $("input:text").focus(function () { $(this).select(); });
-
-        //$('.collapse').on('show.bs.collapse', function () {
-        //    $(this).parent().find(".glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-minus");
-        //}).on('hide.bs.collapse', function () {
-        //    $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-collapse-down");
-        //});
-
-        $('.datepicker').datepicker({
-            dateFormat: 'M dd, yy',
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true
-        });
-
-        $("#dialog-confirm").dialog({
-            autoOpen: false,
-            resizable: false,
-            height: 300,
-            width: 500,
-            modal: true,
-            buttons: {
-                "Exit": function () {
-                    $("#frmModified").val("false");
-                    //isChanged.val("N");
-                    location.href = "/Employee/Index/";
-                },
-                Cancel: function () {
-                    $(this).dialog("close");
-                }
-            }
-        });
-
-        $("#btnCancel").click(function (event) {
-            if ($("#frmModified").val() == "true") {
-                // If form was modified display confirmation message
-                $("#dialog-confirm").dialog("open");
-            }
-            else {
-                // Just redirect back to the Employee Listing Page
-                location.href = "/Employee/Index/";
-            }
-        });
-
-    });
-</script>
-
 
 @*<div class="form-group row">
         <ul class="list-group checked-list-box">

@@ -9,7 +9,9 @@ using System.Web.Mvc;
 namespace OBSMVC.Models
 {
     [MetadataType(typeof(EmployeeMetaData))]
-    public partial class DSC_EMPLOYEE {}
+    public partial class DSC_EMPLOYEE {
+        //public string asgnd_lc_list { get; set; }
+    }
 
     public class EmployeeMetaData
     {
@@ -57,5 +59,18 @@ namespace OBSMVC.Models
         [Display(Name = "Emp Updated Date-Time")]
         [DisplayFormat(DataFormatString = ("{0:MMM dd, yyyy}"))]
         public DateTime? dsc_emp_upd_dtm { get; set; }
+    }
+
+    //View Model for User Building Assignment Partial View
+    public class empLCAsgnViewModel
+    {
+        public List<DSC_LC> userLCList { get; set; }
+        public List<DSC_LC> unassignedLCList { get; set; }
+
+        public empLCAsgnViewModel()
+        {
+            userLCList = new List<DSC_LC>();
+            unassignedLCList = new List<DSC_LC>();
+        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity
-@{string userName = @Session["first_name"].ToString() + " " + @Session["last_name"].ToString();}
+@{    string userName = (@Session["first_name"] == null)? "" : @Session["first_name"].ToString() + " " + @Session["last_name"].ToString();    }
 <style>
     .user-menu {
         border-radius: 7px;

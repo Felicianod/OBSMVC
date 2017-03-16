@@ -13,7 +13,7 @@ namespace OBSMVC.Controllers
         public ActionResult Index()
         {
             Exception ex = new HttpUnhandledException();
-            return View("Error", ex);
+            return View("Error", "NE - " + ex);
         }
         // GET: Error
         public ActionResult Index(string ErrorMsg)

@@ -65,19 +65,60 @@ namespace OBSMVC
 
         protected void Application_Error(Object sender, EventArgs e)
         {
-            var raisedException = Server.GetLastError();
-            string errorMessage = raisedException.Message;
-            // Process exception...
+            // Code that runs when an unhandled error occurs
+            // Get the exception object.
+            Exception exc = Server.GetLastError();
+
+            if (exc == null) { exc = new Exception("An Unknown Error occurred."); }
+
+            //System.Diagnostics.Debug.WriteLine(exc);
+            string errorMessage = exc.Message.TrimEnd(System.Environment.NewLine.ToCharArray());  //Remove the Carriage returns from the String
+
+            // ----------- Handle the HTTP errors ----------------------------
+            if (exc.GetType() == typeof(HttpException))
+            {
+                // The Complete Error Handling Example generates some errors using URLs with "NoCatch" in them;
+                // ignore these here to simulate what would happen if a global.asax handler were not implemented.
+                if (exc.Message.Contains("NoCatch") || exc.Message.Contains("maxUrlLength"))
+                    return;
+
+
+                // Process exception...
+                if (exc.Message.Contains("ServerExecuteHttpHandlerAsyncWrapper") || !Request.IsAuthenticated)
+                {
+                    Response.Redirect("/Account/Login");
+                }
+
+
+                //Redirect HTTP errors to HttpError page
+                //Server.Transfer("HttpErrorPage.aspx");     //For Standard ASPX Error Handling Page
+                //Or do a Response Redirect to a controller View (MVC)
+            }
+
+
+            // For other kinds of errors give the user some information but stay on the default page
+            Response.Write("<h2>Global Page Error</h2>\n");
+            Response.Write("<p>" + exc.Message + "</p>\n");
+            Response.Write(@"Return to the <a href='\Home\Index\'>Default Page</a>\n");
+
+            //// Log the exception and notify system operators
+            //ExceptionUtility.LogException(exc, "DefaultPage");
+            //ExceptionUtility.NotifySystemOps(exc);
 
             //// We've handled the error, so clear it from the Server. 
             ////Leaving the server in an error state can cause unintended side effects as the server continues its attempts to handle the error.
-            //Server.ClearError();
+            Server.ClearError();
 
             //// Possible that a partially rendered page has already been written to response buffer before encountering error, so clear it.
             //Response.Clear();
 
-            //// Finally redirect, transfer, or render a error view
-            //Response.Redirect("~/Error/Index?ErroMsg=" + errorMessage);
+            //// Finally redirect, transfer, or render an error view if Unhandled
+
+            //Session["ErrorMessage"] = errorMessage;            
+            //Server.Transfer("~/Error/ErrorMsg");
+            //Server.Transfer("~/Account/Login");
+            //Response.Redirect("~/Error/ErrorMsg");
+
         }
 
 

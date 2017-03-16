@@ -30,7 +30,23 @@ namespace OBSMVC.Controllers
         [AllowAnonymous]
         public ActionResult AppSelection()
         {
-            return View();
+            string environment = "";
+            switch (Environment.MachineName.ToUpper())
+            {
+                case "DSCAPPSQA1":                //QA Server    192.168.43.192
+                    environment = "QA";
+                    break; 
+                case "DSCAPPSPROD1":              //PROD Server  192.168.1.181,  192.168.1.183 and 192.168.1.184
+                    environment = "PROD";
+                    break;
+                case "L-9L28F12":
+                    environment = "DEV";
+                    break;
+                default:                          //Default to the Development Server   192.168.43.43
+                    environment = "DEV";
+                    break;
+            }
+            return View("AppSelection", (object)environment);
         }
 
         // GET: Home/_AppSelectionEnvironment

@@ -11,20 +11,17 @@ namespace OBSMVC.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            string environment = "";
-            //Verify whether we are running in DEV environemnt or not
-            if (!(ConfigurationManager.AppSettings["ServerType"] == null))
-            {
-                environment = ConfigurationManager.AppSettings["ServerType"].ToString();
-                if (environment.Equals("Development") || environment.Equals("QA")) { return RedirectToAction("AppSelection", "Home"); }
-            }
+            string environment = getCurrentEnvironment();
+            
+            ////Verify whether we are running in DEV environemnt or not
+            //if (!(ConfigurationManager.AppSettings["ServerType"] == null))
+            //{
+            //    environment = ConfigurationManager.AppSettings["ServerType"].ToString();
+            //    if (environment.Equals("Development") || environment.Equals("QA")) { return RedirectToAction("AppSelection", "Home"); }
+            //}
 
-            if (!Request.IsAuthenticated || Session["first_name"] == null)
-            {
-                return RedirectToAction("Login", "Login");
-            }
-
-            return RedirectToAction("Home", "Home");
+            if (environment.Equals("DEV") || environment.Equals("QA")) { return RedirectToAction("AppSelection", "Home"); }
+            else { return RedirectToAction("Home", "Home"); }
         }
 
         [AllowAnonymous]
@@ -60,9 +57,6 @@ namespace OBSMVC.Controllers
         }
 
 
-
-
-
         public ActionResult Home()
         {
             //if (!Request.IsAuthenticated) { return RedirectToAction("Login", "Login"); }
@@ -70,7 +64,28 @@ namespace OBSMVC.Controllers
             return View();
         }
 
+        private string getCurrentEnvironment()
+        {
+            //Returns the Environment ("DEV", "QA", "PROD" or "LOCAL" Vased on the Server Machine Name)
+            string environment = String.Empty;
+            switch (Environment.MachineName.ToUpper())
+            {
+                case "DSCAPPSQA1":              //QA Server 192.168.43.192
+                    environment = "QA";
+                    break;
+                case "DSCAPPSPROD1":            //PROD Server  192.168.1.181,  192.168.1.183 and 192.168.1.184
+                    environment = "PROD";
+                    break;
+                case "L-9L28F12":               // FD Local Host
+                    environment = "LOCAL";
+                    break;
+                default:                        //Default to the Development Server   192.168.43.43
+                    environment = "DEV";
+                    break;
+            }
 
+            return environment;
+        }
 
 
     }

@@ -10,8 +10,6 @@ namespace OBSMVC.App_Code
     {
         public static List<OBS_QUESTION> SearchQuestion(string search, string includeActiveOnly, DSC_OBS_DB_ENTITY db)
         {
-
-
             if (!String.IsNullOrWhiteSpace(search) && includeActiveOnly == "on")
             {
               
